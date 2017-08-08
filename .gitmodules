@@ -1,0 +1,3 @@
+[submodule "common-java"]
+	path = common-java
+	url = https://git.oschina.net/l0km/common-java.git
