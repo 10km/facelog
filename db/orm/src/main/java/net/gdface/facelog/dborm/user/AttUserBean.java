@@ -9,13 +9,13 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db.user;
+package net.gdface.facelog.dborm.user;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.gdface.facelog.db.GeneratedBean;
+import net.gdface.facelog.dborm.GeneratedBean;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -30,7 +30,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class AttUserBean
     implements Serializable, GeneratedBean
 {
-	private static final long serialVersionUID = -1869043638161225441L;
+	private static final long serialVersionUID = 7030264002914549629L;
 	
     private byte[] grayimage;
     private boolean grayimageIsModified = false;

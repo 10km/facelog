@@ -9,19 +9,19 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db.exception;
+package net.gdface.facelog.dborm.exception;
 
 /**
  * @author sql2java
  */
-public class DataRetrievalException extends DataAccessException
+public class OptimisticLockingException extends DataAccessException
 {
-    private static final long serialVersionUID = -1628427750056759044L;
+    private static final long serialVersionUID = -1348627690415864134L;
 
 	/**
      * contructor
      */
-    public DataRetrievalException()
+    public OptimisticLockingException()
     {
         super();
     }
@@ -29,7 +29,7 @@ public class DataRetrievalException extends DataAccessException
     /**
      * contructor
      */
-    public DataRetrievalException(String message)
+    public OptimisticLockingException(String message)
     {
         super(message);
     }
@@ -37,7 +37,7 @@ public class DataRetrievalException extends DataAccessException
     /**
      * contructor
      */
-    public DataRetrievalException(Throwable cause)
+    public OptimisticLockingException(Throwable cause)
     {
         super(cause);
     }
@@ -45,7 +45,7 @@ public class DataRetrievalException extends DataAccessException
     /**
      * contructor
      */
-    public DataRetrievalException(String message, Throwable cause)
+    public OptimisticLockingException(String message, Throwable cause)
     {
         super(message, cause);
     }

@@ -9,9 +9,9 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db.user;
+package net.gdface.facelog.dborm.user;
 
-import net.gdface.facelog.db.exception.DAOException;
+import net.gdface.facelog.dborm.exception.DAOException;
 
 /**
  * Listener that is notified of att_user table changes.

@@ -9,7 +9,7 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db;
+package net.gdface.facelog.dborm;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.PropertyResourceBundle;
 
 import javax.sql.DataSource;
 
-import net.gdface.facelog.db.exception.DAOException;
+import net.gdface.facelog.dborm.exception.DAOException;
 
 /**
  * The Manager provides connections and manages transactions transparently.
@@ -84,7 +84,7 @@ public final class Manager
      */
     public void defaultConfigure() throws DAOException
     {
-        this.configure("net/gdface/facelog/db/database.properties");
+        this.configure("net/gdface/facelog/dborm/database.properties");
     }
 
     /**

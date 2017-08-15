@@ -9,21 +9,19 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db.exception;
-
-import java.sql.SQLException;
+package net.gdface.facelog.dborm.exception;
 
 /**
  * @author sql2java
  */
-public class DAOException extends SQLException
+public class DataRetrievalException extends DataAccessException
 {
-    private static final long serialVersionUID = 5165438223391151142L;
+    private static final long serialVersionUID = -1628427750056759044L;
 
-    /**
+	/**
      * contructor
      */
-    public DAOException()
+    public DataRetrievalException()
     {
         super();
     }
@@ -31,7 +29,7 @@ public class DAOException extends SQLException
     /**
      * contructor
      */
-    public DAOException(String message)
+    public DataRetrievalException(String message)
     {
         super(message);
     }
@@ -39,7 +37,7 @@ public class DAOException extends SQLException
     /**
      * contructor
      */
-    public DAOException(Throwable cause)
+    public DataRetrievalException(Throwable cause)
     {
         super(cause);
     }
@@ -47,7 +45,7 @@ public class DAOException extends SQLException
     /**
      * contructor
      */
-    public DAOException(String message, Throwable cause)
+    public DataRetrievalException(String message, Throwable cause)
     {
         super(message, cause);
     }
