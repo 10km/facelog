@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>facelog-db</artifactId>
+  <artifactId>facelog-db-orm</artifactId>
   <packaging>jar</packaging>
-  <name>facelog-db</name>
+  <name>facelog-db-orm</name>
 
   <dependencies>
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
