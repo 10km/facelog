@@ -1,3 +1,7 @@
 [submodule "common-java"]
 	path = common-java
 	url = https://git.oschina.net/l0km/common-java.git
+[submodule "db/orm/sql2java"]
+	path = db/orm/sql2java
+	url = https://github.com/10km/sql2java-2-6-7.git
+	branch = custom
