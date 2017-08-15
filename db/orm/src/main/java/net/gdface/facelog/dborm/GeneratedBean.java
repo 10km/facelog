@@ -9,7 +9,7 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db;
+package net.gdface.facelog.dborm;
 
 import java.util.Map;
 

@@ -9,7 +9,7 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db.user;
+package net.gdface.facelog.dborm.user;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,10 +20,10 @@ import java.sql.Types;
 import java.util.List;
 import java.util.ArrayList;
 
-import net.gdface.facelog.db.Manager;
-import net.gdface.facelog.db.exception.DAOException;
-import net.gdface.facelog.db.exception.DataAccessException;
-import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.dborm.Manager;
+import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.DataAccessException;
+import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 
 /**
  * Handles database calls (save, load, count, etc...) for the att_user table.

@@ -9,7 +9,7 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-package net.gdface.facelog.db.user;
+package net.gdface.facelog.dborm.user;
 
 import java.util.Comparator;
 
