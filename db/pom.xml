@@ -3,22 +3,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>facelog-db</artifactId>
-  <packaging>jar</packaging>
-  <name>facelog-db</name>
+  <packaging>pom</packaging>
+  <name>facelog-db aggregator</name>
 
   <dependencies>
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>5.1.43</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-		<dependency>
-		    <groupId>commons-lang</groupId>
-		    <artifactId>commons-lang</artifactId>
-		    <version>2.1</version>
-		</dependency>
   </dependencies>
   <parent>
   	  <groupId>net.gdface.facelog</groupId>
@@ -26,4 +14,7 @@
       <version>1.0-SNAPSHOT</version>
       <relativePath>..</relativePath>
   </parent>  
+  <modules>
+  	<module>orm</module>
+  </modules>  
 </project>
