@@ -20,6 +20,31 @@
 		    <version>2.1</version>
 		</dependency>
   </dependencies>
+	<build>
+	    <plugins>        
+	        <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>build-helper-maven-plugin</artifactId>
+	            <version>3.0.0</version>
+	                        
+	            <executions>
+	                <!-- 配置ORM文件夹,用于保存sql2java生成的ORM代码 -->
+	                <execution>
+	                    <id>add-source</id>
+	                    <phase>generate-sources</phase>
+	                    <goals>
+	                        <goal>add-source</goal>
+	                    </goals>
+	                    <configuration>
+	                        <sources>
+	                            <source>src/orm/java</source>
+	                        </sources>
+	                    </configuration>
+	                </execution> 
+	            </executions>
+	        </plugin>
+	    </plugins>
+	</build>
   <parent>
   	  <groupId>net.gdface.facelog</groupId>
       <artifactId>facelog-db</artifactId>

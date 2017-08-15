@@ -30,7 +30,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class AttUserBean
     implements Serializable, GeneratedBean
 {
-	private static final long serialVersionUID = 7030264002914549629L;
+	private static final long serialVersionUID = -7333798374514230293L;
 	
     private byte[] grayimage;
     private boolean grayimageIsModified = false;
