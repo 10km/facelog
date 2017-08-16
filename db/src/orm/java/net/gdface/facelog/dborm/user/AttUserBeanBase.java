@@ -25,7 +25,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class AttUserBeanBase
     implements Serializable,BaseBean<AttUserBeanBase>
 {
-	private static final long serialVersionUID = -5898176248233637884L;
+	private static final long serialVersionUID = -5615183222933689827L;
 	
     protected byte[] grayimage;
 

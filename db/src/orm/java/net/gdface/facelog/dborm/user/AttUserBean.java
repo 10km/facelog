@@ -21,7 +21,7 @@ public class AttUserBean
     extends AttUserBeanBase
     implements FullBean<AttUserBeanBase>
 {
-	private static final long serialVersionUID = -2880271600323685287L;
+	private static final long serialVersionUID = 5939682475938786157L;
 	
     private boolean grayimageIsModified = false;
     private boolean grayimageIsInitialized = false;
