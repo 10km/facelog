@@ -17,12 +17,11 @@ import net.gdface.facelog.dborm.FullBean;
  * AttUserBean is a mapping of att_user Table.
  * @author sql2java
 */
-@SuppressWarnings("unchecked")
 public class AttUserBean
     extends AttUserBeanBase
     implements FullBean<AttUserBeanBase>
 {
-	private static final long serialVersionUID = -3100534190122709681L;
+	private static final long serialVersionUID = -2880271600323685287L;
 	
     private boolean grayimageIsModified = false;
     private boolean grayimageIsInitialized = false;
@@ -59,7 +58,7 @@ public class AttUserBean
     /**
      * Prefered methods to create a AttUserBean is via the createAttUserBean method in AttUserManager or
      * via the factory class AttUserFactory create method
-     * ????????webservice?????????��????????protected????public
+     * 为了能在webservice中传递对象，此处从protected改为public
      */
     public AttUserBean(){
         super();
