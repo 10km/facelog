@@ -9,7 +9,15 @@
 //   http://sourceforge.net/forum/forum.php?forum_id=182208
 // ______________________________________________________
 
-jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/test
-jdbc.username=gdface
-jdbc.password=gdface
+package net.gdface.facelog.dborm;
+
+/**
+ * @author guyadong
+ */
+public interface FullBean <B> extends BaseBean<B>{
+    public abstract boolean isModified();
+    public abstract void resetIsModified();
+    public abstract boolean isInitialized(String column);
+    public abstract boolean isModified(String column);
+
+}

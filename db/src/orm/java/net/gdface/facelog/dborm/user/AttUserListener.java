@@ -12,12 +12,12 @@
 package net.gdface.facelog.dborm.user;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
+import net.gdface.facelog.dborm.TableListener;
 /**
  * Listener that is notified of att_user table changes.
  * @author sql2java
  */
-public interface AttUserListener
+public interface AttUserListener extends TableListener
 {
     /**
      * Invoked just before inserting a AttUserBean record into the database.

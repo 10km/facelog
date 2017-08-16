@@ -10,7 +10,7 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.user;
-
+import java.lang.ref.SoftReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import net.gdface.facelog.dborm.Manager;
+import net.gdface.facelog.dborm.TableListener;
+import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
@@ -29,7 +31,7 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  * Handles database calls (save, load, count, etc...) for the att_user table.
  * @author sql2java
  */
-public class AttUserManager 
+public class AttUserManager implements TableManager<AttUserBeanBase,AttUserBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -92,9 +94,13 @@ public class AttUserManager
     public static final int ID_ID = 9;
 
     /**
+     * Tablename.
+     */
+		public static final String TABLE_NAME="att_user";
+    /**
      * Contains all the full fields of the att_user table.
      */
-    private static final String[] FULL_FIELD_NAMES =
+    public static final String[] FULL_FIELD_NAMES =
     {
         "att_user.grayimage"
         ,"att_user.colorimage"
@@ -124,7 +130,13 @@ public class AttUserManager
         ,"company"
         ,"id"
     };
-
+   /**
+     * Contains all the primarykey fields of the att_user table.
+     */
+    public static final String[] PRIMARYKEY_NAMES =
+    {
+        "id"
+    };
     /**
      * Field that contains the comma separated fields of the att_user table.
      */
@@ -153,6 +165,32 @@ public class AttUserManager
                             + ",company"
                             + ",id";
 
+    public static interface Action{
+          void call(AttUserBean bean);
+          AttUserBean getBean();
+     }
+
+    /**
+    * @return tableName
+    */
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    /**
+    * @return fieldNames
+    */
+    public String[] getFieldNames() {
+        return FIELD_NAMES;
+    }
+
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return PRIMARYKEY_NAMES;
+    }
+	
     private static AttUserManager singleton = new AttUserManager();
 
     /**
@@ -171,7 +209,7 @@ public class AttUserManager
      *
      * @return the new AttUserBean
      */
-    public AttUserBean createAttUserBean()
+    public AttUserBean createBean()
     {
         return new AttUserBean();
     }
@@ -220,6 +258,21 @@ public class AttUserManager
     }
 
     /**
+     * Get Primary Key fileds as parameters from the parameter{@code bean},
+     * then call {@link #loadByPrimaryKey(Integer id)},loads a AttUserBean from the att_user.
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the AttUserBean with key fields
+     * @return a unique AttUserBean
+     * @throws DAOException
+     */
+    //1.1
+    public AttUserBean loadByPrimaryKey(AttUserBeanBase bean) throws DAOException
+    {
+        return bean==null?null:loadByPrimaryKey( bean.getId());
+    }
+
+    /**
      * Deletes rows according to its keys.
      *
      * @param id Integer - PK# 1
@@ -233,6 +286,9 @@ public class AttUserManager
         PreparedStatement ps = null;
         try
         {
+            AttUserBean bean=createBean();
+            bean.setId(id);
+            this.beforeDelete(bean); // listener callback
             c = this.getConnection();
             StringBuilder sql = new StringBuilder("DELETE FROM att_user WHERE id=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
@@ -240,7 +296,10 @@ public class AttUserManager
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
-            return ps.executeUpdate();
+            int _rows=ps.executeUpdate();
+            if(_rows>0)
+                this.afterDelete(bean); // listener callback
+            return _rows;
         }
         catch(SQLException e)
         {
@@ -251,6 +310,20 @@ public class AttUserManager
             this.getManager().close(ps);
             this.freeConnection(c);
         }
+    }
+    /**
+     * Get Primary Key fileds as parameters from the parameter{@code bean},
+     * then call {@link #deleteByPrimaryKey(Integer id)}.<br>
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the AttUserBean with key fields
+     * @return the number of deleted rows
+     * @throws DAOException
+     */
+    //2.1
+    public int deleteByPrimaryKey(AttUserBeanBase bean) throws DAOException
+    {
+        return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
 
 
@@ -270,14 +343,24 @@ public class AttUserManager
     {
         return this.loadUsingTemplate(null);
     }
-
+    /**
+     * Loads each row from att_user and dealt with action.
+     * @param action  Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //5-1
+    public int loadAll(Action action) throws DAOException
+    {
+        return this.loadUsingTemplate(null,action);
+    }
     /**
      * Loads all the rows from att_user.
      *
      * @return a list of AttUserManager bean
      * @throws DAOException
      */
-    //5
+    //5-2
     public List<AttUserBean> loadAllAsList() throws DAOException
     {
         return this.loadUsingTemplateAsList(null);
@@ -297,7 +380,19 @@ public class AttUserManager
     {
         return this.loadUsingTemplate(null, startRow, numRows);
     }
-
+    /**
+     *  Loads the given number of rows from att_user, given the start row and dealt with action.
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param action  Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //6-1
+    public int loadAll(int startRow, int numRows,Action action) throws DAOException
+    {
+        return this.loadUsingTemplate(null, startRow, numRows,action);
+    }
     /**
      * Loads the given number of rows from att_user, given the start row.
      *
@@ -306,7 +401,7 @@ public class AttUserManager
      * @return a list of AttUserManager bean
      * @throws DAOException
      */
-    //6
+    //6-2
     public List<AttUserBean> loadAllAsList(int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -325,7 +420,7 @@ public class AttUserManager
     //7
     public AttUserBean[] loadByWhere(String where) throws DAOException
     {
-        return this.loadByWhere(where, null);
+        return this.loadByWhere(where, (int[])null);
     }
     /**
      * Retrieves a list of AttUserBean given a sql 'where' clause.
@@ -339,7 +434,18 @@ public class AttUserManager
     {
         return this.loadByWhereAsList(where, null);
     }
-
+    /**
+     * Retrieves each row of AttUserBean given a sql 'where' clause and dealt with action.
+     * @param where the sql 'where' clause
+     * @param action  Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //7-1
+    public int loadByWhere(String where,Action action) throws DAOException
+    {
+        return this.loadByWhere(where, null,action);
+    }
     /**
      * Retrieves an array of AttUserBean given a sql where clause, and a list of fields.
      * It is up to you to pass the 'WHERE' in your where clausis.
@@ -370,15 +476,30 @@ public class AttUserManager
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
     }
+    /**
+     * Retrieves each row of AttUserBean given a sql where clause, and a list of fields,
+     * and dealt with action.
+     * It is up to you to pass the 'WHERE' in your where clausis.
+     * @param where the sql 'WHERE' clause
+     * @param fieldList array of field's ID
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //8-1
+    public int loadByWhere(String where, int[] fieldList,Action action) throws DAOException
+    {
+        return this.loadByWhere(where, fieldList, 1, -1,action);
+    }
 
     /**
      * Retrieves an array of AttUserBean given a sql where clause and a list of fields, and startRow and numRows.
      * It is up to you to pass the 'WHERE' in your where clausis.
      *
      * @param where the sql 'where' clause
+     * @param fieldList table of the field's associated constants
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
      * @return the resulting AttUserBean table
      * @throws DAOException
      */
@@ -387,60 +508,63 @@ public class AttUserManager
     {
         return (AttUserBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new AttUserBean[0]);
     }
+    /**
+     * Retrieves each row of  AttUserBean given a sql where clause and a list of fields, and startRow and numRows,
+     * and dealt wity action.
+     * It is up to you to pass the 'WHERE' in your where clausis.
+     *
+     * @param where the sql 'where' clause
+     * @param fieldList table of the field's associated constants
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //9-1
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    {
+        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
+    }
 
     /**
      * Retrieves a list of AttUserBean given a sql where clause and a list of fields, and startRow and numRows.
      * It is up to you to pass the 'WHERE' in your where clausis.
      *
      * @param where the sql 'where' clause
+     * @param fieldList table of the field's associated constants
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
      * @return the resulting AttUserBean table
      * @throws DAOException
      */
-    //9
+    //9-2
     public List<AttUserBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-        StringBuffer sql = new StringBuffer(128);
-        if(fieldList == null) {
-            sql.append("SELECT ").append(ALL_FIELDS).append(" FROM att_user ").append(where);
-        } else
-        {
-            sql.append("SELECT ");
-            for(int i = 0; i < fieldList.length; i++)
-            {
-                if(i != 0) {
-                    sql.append(",");
-                }
-                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
-            }
-            sql.append(" FROM att_user ");
-            sql.append(where);
-        }
-        Connection c = null;
-        Statement st = null;
-        ResultSet rs =  null;
-        // System.out.println("loadByWhere: " + sql);
-        try
-        {
-            c = this.getConnection();
-            st = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = st.executeQuery(sql.toString());
-            return this.decodeResultSetAsList(rs, fieldList, startRow, numRows);
-        }
-        catch(SQLException e)
-        {
-            throw new ObjectRetrievalException(e);
-        }
-        finally
-        {
-            sql = null;
-            this.getManager().close(st, rs);
-            this.freeConnection(c);
-        }
+        ListAction action = new ListAction();
+        loadByWhereForAction(where,fieldList,startRow,numRows,action);              
+        return action.getList();
     }
-
+    /**
+     * Retrieves each row of AttUserBean given a sql where clause and a list of fields, and startRow and numRows,
+     * and dealt wity action
+     * It is up to you to pass the 'WHERE' in your where clausis.
+     *
+     * @param where the sql 'where' clause
+     * @param fieldList table of the field's associated constants
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //9-3
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    {
+        String sql=createSqlString(fieldList, where);
+        // System.out.println("loadByWhere: " + sql);
+        return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
+    }
 
     /**
      * Deletes all rows from att_user table.
@@ -921,7 +1045,7 @@ public class AttUserManager
      * @throws DAOException
      */
     //18
-    public AttUserBean loadUniqueUsingTemplate(AttUserBean bean) throws DAOException
+    public AttUserBean loadUniqueUsingTemplate(AttUserBeanBase bean) throws DAOException
     {
          AttUserBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -941,9 +1065,22 @@ public class AttUserManager
      * @throws DAOException
      */
     //19
-    public AttUserBean[] loadUsingTemplate(AttUserBean bean) throws DAOException
+    public AttUserBean[] loadUsingTemplate(AttUserBeanBase bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
+    }
+    /**
+     * Loads each row from a template one and dealt with action.
+     *
+     * @param bean the AttUserBean template to look for
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //19-1
+    public int loadUsingTemplate(AttUserBeanBase bean,Action action) throws DAOException
+    {
+        return this.loadUsingTemplate(bean, 1, -1,action);
     }
 
     /**
@@ -953,8 +1090,8 @@ public class AttUserManager
      * @return all the AttUserBean matching the template
      * @throws DAOException
      */
-    //19
-    public List<AttUserBean> loadUsingTemplateAsList(AttUserBean bean) throws DAOException
+    //19-2
+    public List<AttUserBean> loadUsingTemplateAsList(AttUserBeanBase bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -969,11 +1106,25 @@ public class AttUserManager
      * @throws DAOException
      */
     //20
-    public AttUserBean[] loadUsingTemplate(AttUserBean bean, int startRow, int numRows) throws DAOException
+    public AttUserBean[] loadUsingTemplate(AttUserBeanBase bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
-
+    /**
+     * Loads each row from a template one, given the start row and number of rows and dealt with action.
+     *
+     * @param bean the AttUserBean template to look for
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //20-1
+    public int loadUsingTemplate(AttUserBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    {
+        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
+    }
     /**
      * Loads a list of AttUserBean from a template one, given the start row and number of rows.
      *
@@ -983,8 +1134,8 @@ public class AttUserManager
      * @return all the AttUserBean matching the template
      * @throws DAOException
      */
-    //20
-    public List<AttUserBean> loadUsingTemplateAsList(AttUserBean bean, int startRow, int numRows) throws DAOException
+    //20-2
+    public List<AttUserBean> loadUsingTemplateAsList(AttUserBeanBase bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -999,8 +1150,8 @@ public class AttUserManager
      * @return all the AttUserBean matching the template
      * @throws DAOException
      */
-    //20
-    public AttUserBean[] loadUsingTemplate(AttUserBean bean, int startRow, int numRows, int searchType) throws DAOException
+    //20-3
+    public AttUserBean[] loadUsingTemplate(AttUserBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (AttUserBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new AttUserBean[0]);
     }
@@ -1015,54 +1166,51 @@ public class AttUserManager
      * @return all the AttUserBean matching the template
      * @throws DAOException
      */
-    //20
-    public List<AttUserBean> loadUsingTemplateAsList(AttUserBean bean, int startRow, int numRows, int searchType) throws DAOException
+    //20-4
+    public List<AttUserBean> loadUsingTemplateAsList(AttUserBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
     {
+        ListAction action = new ListAction();
+        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        return (List<AttUserBean>) action.getList();
+        
+    }
+    /**
+     * Loads each row from a template one, given the start row and number of rows and dealt with action.
+     *
+     * @param bean the AttUserBean template to look for
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param searchType exact ?  like ? starting like ?
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    //20-5
+    public int loadUsingTemplate(AttUserBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    {
+        AttUserBean bean=AttUserBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuffer sql = new StringBuffer(128);
-        sql.append("SELECT ").append(ALL_FIELDS).append(" FROM att_user ");
         StringBuilder sqlWhere = new StringBuilder("");
-
-        try
-        {
-            if (this.fillWhere(sqlWhere, bean, searchType) > 0)
-            {
-                sql.append(" WHERE ").append(sqlWhere);
-            }
-            else
-            {
-                // System.out.println("The bean to look is not initialized... loading all");
-            }
-            // System.out.println("loadUsingTemplate: " + sql.toString());
-
-            c = this.getConnection();
-            int scrollType = ResultSet.TYPE_SCROLL_INSENSITIVE;
-            if (startRow != 1) {
-                scrollType = ResultSet.TYPE_SCROLL_SENSITIVE;
-            }
-            ps = c.prepareStatement(sql.toString(),
-                                    scrollType,
-                                    ResultSet.CONCUR_READ_ONLY);
+        String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
+        PreparedStatement ps = null;
+        Connection connection = null;
+        // logger.debug("sql string:\n" + sql + "\n");
+        try {
+            connection = this.getConnection();
+            ps = connection.prepareStatement(sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
             this.fillPreparedStatement(ps, bean, searchType);
-
-            ps.executeQuery();
-            return this.loadByPreparedStatementAsList(ps, null, startRow, numRows);
-        }
-        catch(SQLException e)
-        {
-            throw new ObjectRetrievalException(e);
-        }
-        finally
-        {
+            return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
+        } catch (DAOException e) {
+            throw e;
+        }catch (SQLException e) {
+            throw new DataAccessException(e);
+        } finally {
             this.getManager().close(ps);
-            this.freeConnection(c);
-            sql = null;
-            sqlWhere = null;
+            this.freeConnection(connection);
         }
     }
-
     /**
      * Deletes rows using a AttUserBean template.
      *
@@ -1071,8 +1219,9 @@ public class AttUserManager
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(AttUserBean bean) throws DAOException
+    public int deleteUsingTemplate(AttUserBeanBase beanBase) throws DAOException
     {
+        AttUserBean bean=AttUserBeanBase.toFullBean(beanBase);
         if (bean.isIdInitialized()) {
             return this.deleteByPrimaryKey(bean.getId());
         }
@@ -1101,7 +1250,8 @@ public class AttUserManager
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            this.afterDelete(bean); // listener callback
+            if(_rows>0)
+                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -1220,7 +1370,7 @@ public class AttUserManager
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(AttUserBean bean) throws DAOException
+    public int countUsingTemplate(AttUserBeanBase bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -1235,7 +1385,7 @@ public class AttUserManager
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(AttUserBean bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(AttUserBeanBase bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1251,8 +1401,9 @@ public class AttUserManager
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(AttUserBean bean, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(AttUserBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
     {
+        AttUserBean bean=AttUserBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM att_user");
@@ -1538,7 +1689,7 @@ public class AttUserManager
     //28
     public AttUserBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-    	return (AttUserBean[])this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new AttUserBean[0]);
+    	return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new AttUserBean[0]);
     }
 
     /**
@@ -1551,34 +1702,53 @@ public class AttUserManager
      * @return the resulting AttUserBean table
      * @throws DAOException
      */
-    //28
+    //28-1
     public List<AttUserBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-        List<AttUserBean> v = new ArrayList<AttUserBean>();
-        try
-        {
-            if (rs.absolute(startRow) && numRows!=0)
-            {
-                int count = 0;
-                if(fieldList == null) {
-                    do
-                    {
-                        v.add(decodeRow(rs));
-                        count++;
-                    } while ( (count<numRows||numRows<0) && rs.next() );
-                }
-                else {
-                    do
-                    {
-                        v.add(decodeRow(rs, fieldList));
-                        count++;
-                    } while ( (count<numRows||numRows<0) && rs.next() );
+        ListAction action = new ListAction();
+        actionOnResultSet(rs, fieldList, numRows, numRows, action);
+        return action.getList();
+    }
+    /** decode a resultset and call action
+     * @param rs the resultset to decode
+     * @param fieldList table of the field's associated constants
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param action interface obj for do something
+     * @return the count dealt by action  
+     * @throws DAOException
+     * @throws IllegalArgumentException
+     */
+    //28-2
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action action) throws DAOException{
+        try{
+            int count = 0;
+            if(0!=numRows){
+                if( startRow<1 )
+                    throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
+                if( null==action || null==rs )
+                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
+                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
+                if (fieldList == null) {
+                    if(numRows<0)
+                        for(;rs.next();++count)
+                            action.call(decodeRow(rs, action.getBean()));
+                    else
+                        for(;rs.next() && count<numRows;++count)
+                            action.call(decodeRow(rs, action.getBean()));
+                }else {
+                    if(numRows<0)
+                        for(;rs.next();++count)
+                            action.call(decodeRow(rs, fieldList,action.getBean()));
+                    else
+                        for(;rs.next() && count<numRows;++count)
+                            action.call(decodeRow(rs, fieldList,action.getBean()));
                 }
             }
-            return v;
-        }
-        catch(SQLException e)
-        {
+            return count;
+        }catch(DAOException e){
+            throw e;
+        }catch(SQLException e){
             throw new DataAccessException(e);
         }
     }
@@ -1591,9 +1761,10 @@ public class AttUserManager
      * @throws DAOException
      */
     //29
-    public AttUserBean decodeRow(ResultSet rs) throws DAOException
+    public AttUserBean decodeRow(ResultSet rs,AttUserBean bean) throws DAOException
     {
-        AttUserBean bean = this.createAttUserBean();
+        if(null==bean)
+            bean = this.createBean();
         try
         {
             bean.setGrayimage(rs.getBytes(1));
@@ -1626,9 +1797,10 @@ public class AttUserManager
      * @throws DAOException
      */
     //30
-    public AttUserBean decodeRow(ResultSet rs, int[] fieldList) throws DAOException
+    public AttUserBean decodeRow(ResultSet rs, int[] fieldList,AttUserBean bean) throws DAOException
     {
-        AttUserBean bean = this.createAttUserBean();
+        if(null==bean)
+            bean = this.createBean();
         int pos = 0;
         try
         {
@@ -1701,7 +1873,7 @@ public class AttUserManager
     //31
     public AttUserBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
-        AttUserBean bean = this.createAttUserBean();
+        AttUserBean bean = this.createBean();
         try
         {
             bean.setGrayimage(rs.getBytes("grayimage"));
@@ -1767,7 +1939,7 @@ public class AttUserManager
     //33
     public AttUserBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
-        return (AttUserBean[])this.loadByPreparedStatementAsList(ps, fieldList).toArray(new AttUserBean[0]);
+        return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new AttUserBean[0]);
     }
 
     /**
@@ -1780,34 +1952,8 @@ public class AttUserManager
      */
     //33
     public List<AttUserBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
-    {		        
-        ResultSet rs =  null;
-		List<AttUserBean> v =  null;
-        try
-        {
-            rs =  ps.executeQuery();
-            v = new ArrayList<AttUserBean>();
-			if(fieldList == null) {
-				while(rs.next()) {
-					v.add(decodeRow(rs));
-				}
-			}
-			else {
-				while(rs.next()) {
-					v.add(decodeRow(rs, fieldList));
-				}
-			}
-
-			return v;
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            getManager().close(rs);
-        }
+    { 
+        return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
 
     /**
@@ -1824,20 +1970,7 @@ public class AttUserManager
     //34
     public AttUserBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-        ResultSet rs =  null;
-        try
-        {
-            rs = ps.executeQuery();
-            return this.decodeResultSet(rs, fieldList, startRow, numRows);
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(rs);
-        }
+        return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new AttUserBean[0]);
     }
 
     /**
@@ -1851,25 +1984,42 @@ public class AttUserManager
      * @return an array of AttUserBean
      * @throws DAOException
      */
-    //34
+    //34-1
     public List<AttUserBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
+        ListAction action = new ListAction();
+        loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
+        return action.getList();
+    }
+    /**
+     * Loads each element using a prepared statement specifying a list of fields to be retrieved,
+     * and specifying the start row and the number of rows 
+     * and dealt by action.
+     *
+     * @param ps the PreparedStatement to be used
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param fieldList table of the field's associated constants
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */     
+    //34-2
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    {
         ResultSet rs =  null;
-        try
-        {
+        try {
+            ps.setFetchSize(100);
             rs = ps.executeQuery();
-            return this.decodeResultSetAsList(rs, fieldList, startRow, numRows);
-        }
-        catch(SQLException e)
-        {
+            return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
+        } catch (DAOException e) {
+            throw e;
+        } catch (SQLException e) {
             throw new DataAccessException(e);
-        }
-        finally
-        {
+        } finally {
             this.getManager().close(rs);
         }
     }
-
     //_____________________________________________________________________
     //
     // LISTENER
@@ -1880,9 +2030,9 @@ public class AttUserManager
      * Registers a unique AttUserListener listener.
      */
     //35
-    public void registerListener(AttUserListener listener)
+    public void registerListener(TableListener listener)
     {
-        this.listener = listener;
+        this.listener = (AttUserListener)listener;
     }
 
     /**
@@ -2001,6 +2151,150 @@ public class AttUserManager
         catch(SQLException e)
         {
             throw new DataAccessException(e);
+        }
+    }
+    /**
+     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
+     * return false if @{code column} is null or empty 
+     * @param column
+     * @return
+     * @author guyadong
+     */
+    //43
+    public static boolean isPrimaryKey(String column){
+        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
+        return false;
+    }
+    /**
+     * Fill the given prepared statement with the values in argList
+     * @param ps the PreparedStatement that will be filled
+     * @param argList the arguments to use fill given prepared statement
+     * @throws DAOException
+     */
+    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DAOException{
+        try {
+            if (!(argList == null || ps == null)) {
+                for (int i = 0; i < argList.length; i++) {
+                    if (argList[i].getClass().equals(byte[].class)) {
+                        ps.setBytes(i + 1, (byte[]) argList[i]);
+                    } else
+                        ps.setObject(i + 1, argList[i]);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+    
+    /**
+     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
+     * @param sql the SQL statement for retrieving
+     * @param argList the arguments to use fill given prepared statement,may be null
+     * @param fieldList table of the field's associated constants
+     * @return an array of AttUserBean
+     * @throws DAOException 
+     */
+    public AttUserBean[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException {
+        return loadBySqlAsList(sql, argList, fieldList).toArray(new AttUserBean[0]);
+    }
+    /**
+     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
+     * @param sql the SQL statement for retrieving
+     * @param argList the arguments to use fill given prepared statement,may be null
+     * @param fieldList table of the field's associated constants
+     * @return an list of AttUserBean
+     * @throws DAOException
+     */
+    public List<AttUserBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException{
+        ListAction action = new ListAction();
+        loadBySqlForAction(sql,argList,fieldList,1,-1,action);
+        return action.getList();
+    }
+    /**
+     * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
+     * @param sql the SQL statement for retrieving
+     * @param argList the arguments to use fill given prepared statement,may be null
+     * @param fieldList table of the field's associated constants
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @param action Action object for do something(not null)
+     * @return the count dealt by action
+     * @throws DAOException
+     */
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+        PreparedStatement ps = null;
+        Connection connection = null;
+        // logger.debug("sql string:\n" + sql + "\n");
+        try {
+            connection = this.getConnection();
+            ps = connection.prepareStatement(sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
+            fillPrepareStatement(ps, argList);
+            return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
+        } catch (DAOException e) {
+            throw e;
+        }catch (SQLException e) {
+            throw new DataAccessException(e);
+        } finally {
+            this.getManager().close(ps);
+            this.freeConnection(connection);
+        }
+    }
+    private String createSqlString(int[] fieldList,String where){
+        StringBuffer sql = new StringBuffer(128);
+        if(fieldList == null) {
+            sql.append("SELECT ").append(ALL_FIELDS);
+        } else{
+            sql.append("SELECT ");
+            for(int i = 0; i < fieldList.length; ++i){
+                if(i != 0) {
+                    sql.append(",");
+                }
+                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
+            }            
+        }
+        sql.append(" FROM att_user ");
+        if(null!=where)
+            sql.append(where);
+        return sql.toString();
+    }
+    
+    class ListAction implements Action {
+        final List<AttUserBean> list;
+        protected ListAction(List<AttUserBean> list) {
+            if(null==list)
+                throw new IllegalArgumentException("list must not be null");
+            this.list = list;
+        }
+
+        protected ListAction() {
+            list=new ArrayList<AttUserBean>();
+        }
+
+        public List<AttUserBean> getList() {
+            return list;
+        }
+
+        @Override
+        public void call(AttUserBean bean) {
+            list.add(bean);
+        }
+
+        @Override
+        public AttUserBean getBean() {
+            return null;
+        }
+    }
+    public static abstract class NoListAction implements Action {
+        SoftReference<AttUserBean> sf=new SoftReference<AttUserBean>(new AttUserBean());
+        @Override
+        public final AttUserBean getBean() {
+            AttUserBean bean = sf.get();
+            if(null==bean){
+                sf=new SoftReference<AttUserBean>(bean=new AttUserBean());
+            }
+            return bean.clean();
         }
     }
 }

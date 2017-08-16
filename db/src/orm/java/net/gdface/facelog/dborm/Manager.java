@@ -11,11 +11,7 @@
 
 package net.gdface.facelog.dborm;
 
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,11 +20,15 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.PropertyResourceBundle;
-
+import java.util.Properties;
 import javax.sql.DataSource;
+//guyadong change datasource pool to c3p0 2014/10/09
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
+//guyadong added to use slf4j
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import net.gdface.facelog.dborm.exception.DAOException;
 
 /**
  * The Manager provides connections and manages transactions transparently.
@@ -44,29 +44,29 @@ import net.gdface.facelog.dborm.exception.DAOException;
  */
 public final class Manager
 {
+	private static Logger logger = LoggerFactory.getLogger(Manager.class);    
     private static Manager instance = new Manager();
     private static InheritableThreadLocal<Connection> transactionConnection = new InheritableThreadLocal<Connection>();
-
-    private PrintWriter pw = new PrintWriter(System.out);
     private DataSource ds = null;
     private String jdbcDriver = null;
     private String jdbcUrl = null;
     private String jdbcUsername = null;
     private String jdbcPassword = null;
-
+    private static String maxIdleTime;
+    private static String idleConnectionTestPeriod;
+    private static String maxPoolSize;
+    private static String minPoolSize;
+    
     /**
      * Returns the manager singleton instance.
      */
     private Manager()
     {
-        try
-        {
-            this.defaultConfigure();
-        }
-        catch(DAOException de)
-        {
-            System.err.println(de.getMessage());
-        }
+        String envVar="config_folder";
+        String propFile="database.properties";
+        String confFolder="conf";
+        Properties properties = ConfigUtils.loadAllProperties(propFile, confFolder, envVar, Manager.class, false);
+        loadProperties(properties);
     }
 
     /**
@@ -76,109 +76,64 @@ public final class Manager
     {
         return instance;
     }
-
-    /**
-     * database configuration with the default property values set in .
-     * com/capgemini/scp/generated/Manager.properties
-     * @throws Exception
-     */
-    public void defaultConfigure() throws DAOException
-    {
-        this.configure("net/gdface/facelog/dborm/database.properties");
-    }
-
-    /**
-     * configure with the parameters given in the given resource filename
-     * @param fileName the resource filename to be used
-     * @throws Exception
-     */
-    public void configure(String fileName) throws DAOException
-    {
-        try
-        {
-            InputStream inputStream = Manager.class.getClassLoader().getResourceAsStream(fileName);
-            PropertyResourceBundle bundle = new PropertyResourceBundle(inputStream);
-            this.setJdbcDriver(bundle.getString("jdbc.driver"));
-            this.setJdbcUrl(bundle.getString("jdbc.url"));
-            this.setJdbcUsername(bundle.getString("jdbc.username"));
-            this.setJdbcPassword(bundle.getString("jdbc.password"));
-        }
-        catch(IOException ioe)
-        {
-            System.err.println("The property file " + fileName + " could not be found.");
-            throw new DAOException(ioe.getMessage(), ioe);
-        }
-        catch(ClassNotFoundException cnfe)
-        {
-            System.err.println("The driver class " + this.jdbcDriver + " could not be found.");
-            throw new DAOException(cnfe.getMessage(), cnfe);
-        }
-        catch(InstantiationException ie)
-        {
-            System.err.println("The driver class " + this.jdbcDriver + " could not be instantiated.");
-            throw new DAOException(ie.getMessage(), ie);
-        }
-        catch(IllegalAccessException iae)
-        {
-            System.err.println("The driver class " + this.jdbcDriver + " could not be instantiated.");
-            throw new DAOException(iae.getMessage(), iae);
+    
+    //dispose pool
+    public void disposePool(){
+        try{
+            DataSources.destroy(ds);
+        }catch (Exception e) {
+            logger.error("dispose pool wrong ..." + e);
         }
     }
-
-    /**
-     * Sets the datasource to be used by the manager.
-     * <br>
-     * A good datasource manages a pool of connections.
-     *
-     * @param ds the data source
+    
+    /**configure with the parameters given in the properties object
+     * @param properties the properties object to be used
      */
-    public void setDataSource(DataSource ds)
-    {
-        this.ds = ds;
+    public void loadProperties(Properties properties){
+        boolean isDebug = properties.getProperty("isDebug").trim().equalsIgnoreCase("true");
+        String prefix=isDebug?"debug":"work";            
+        jdbcDriver = properties.getProperty(prefix+".jdbc.driver").trim();
+        jdbcUrl = properties.getProperty(prefix+".jdbc.url").trim();
+        jdbcUsername = properties.getProperty(prefix+".jdbc.username").trim();
+        jdbcPassword = properties.getProperty(prefix+".jdbc.password").trim();
+        maxPoolSize = properties.getProperty(prefix+".c3p0.maxPoolSize").trim();
+        minPoolSize = properties.getProperty(prefix+".c3p0.minPoolSize").trim();
+        maxIdleTime = properties.getProperty(prefix+".c3p0.maxIdleTime").trim();
+        idleConnectionTestPeriod = properties.getProperty(prefix+".c3p0.idleConnectionTestPeriod").trim();
+        
+        logger.info(String.format("database using %s environment parameter: ",prefix));
+        logger.info("jdbcUrl = " +jdbcUrl);
+        logger.info("jdbcUsername = " +jdbcUsername);
+        logger.info("jdbcPassword = " +jdbcPassword);
+        logger.info("maxPoolSize = " +maxPoolSize);
+        logger.info("minPoolSize = " +minPoolSize);
+        logger.info("maxIdleTime = " +maxIdleTime);
+        logger.info("idleConnectionTestPeriod = " +idleConnectionTestPeriod);
     }
-
+    
     /**
-     * Loads the passed jdbc driver.
-     * <br>
-     * Only needed if the datasource is not set.
+     * use key synchronized to be sure the ds created once 
      */
-    public void setJdbcDriver(String jdbcDriver) 
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException
-    {
-        this.jdbcDriver = jdbcDriver;
-        Class.forName(jdbcDriver).newInstance();
+    private synchronized void initDataSource(){
+        try{
+            if (ds == null){
+                //set C3P0 properties
+                ComboPooledDataSource cpds = new ComboPooledDataSource();				
+                cpds.setDriverClass(jdbcDriver);
+                cpds.setUser(jdbcUsername);
+                cpds.setPassword(jdbcPassword);
+                cpds.setJdbcUrl(jdbcUrl);
+                cpds.setMaxPoolSize(Integer.parseInt(maxPoolSize));
+                cpds.setMinPoolSize(Integer.parseInt(minPoolSize));
+                cpds.setMaxIdleTime(Integer.parseInt(maxIdleTime));
+                cpds.setIdleConnectionTestPeriod(Integer.parseInt(idleConnectionTestPeriod));
+                ds = cpds; 
+            }
+        }catch (Exception e){
+            throw new IllegalArgumentException(String.format("can't get connection by argument...driver/url/username/password[%s/%s/%s/%s]",jdbcDriver,jdbcUrl,jdbcUsername,jdbcPassword),e);
+        }
     }
-
-    /**
-     * Sets the jdbc url.
-     * <br>
-     * Only needed if the datasource is not set.
-     */
-    public void setJdbcUrl(String jdbcUrl)
-    {
-        this.jdbcUrl = jdbcUrl;
-    }
-
-    /**
-     * Sets the username used to access the database.
-     * <br>
-     * Only needed if the datasource is not set.
-     */
-    public void setJdbcUsername(String jdbcUsername)
-    {
-        this.jdbcUsername = jdbcUsername;
-    }
-
-    /**
-     * Sets the password used to access the database.
-     * <br>
-     * Only needed if the datasource is not set.
-     */
-    public void setJdbcPassword(String jdbcPassword)
-    {
-        this.jdbcPassword = jdbcPassword;
-    }
-
+    
     /**
      * Gets an auto commit connection.
      * <br>
@@ -188,20 +143,14 @@ public final class Manager
      */
     public Connection getConnection() throws SQLException
     {
-    	synchronized (transactionConnection) {
-            Connection tc = transactionConnection.get();
-            if (tc != null) {
-                return tc;
-            }
-
-            if (ds!=null) {
-                return ds.getConnection();
-            } else if (jdbcDriver != null && jdbcUrl != null && jdbcUsername != null && jdbcPassword != null) {
-                return DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-            } else {
-                throw new IllegalStateException("Please set a datasource or a jdbc driver/url/username/password");
-            }
+        Connection tc = transactionConnection.get();
+        if (tc != null) {
+            return tc;
         }
+        if (ds == null){
+            initDataSource();
+        }
+        return ds.getConnection();
     }
 
     /**
@@ -211,24 +160,16 @@ public final class Manager
      */
     public void releaseConnection(Connection c)
     {
-    	synchronized (transactionConnection) {
-            Connection tc = transactionConnection.get();
-            if (tc != null)
-            {
-                return;
+        Connection tc = transactionConnection.get();
+        if (tc != null){
+            return;
+        }
+        try{
+            if (c != null){
+                c.close();
             }
-
-            try
-            {
-                if (c != null)
-                {
-                    c.close();
-                }
-            }
-            catch (SQLException x)
-            {
-                log("Could not release the connection: "+x.toString());
-            }
+        }catch (SQLException x){
+            logger.error("Could not release the connection: "+x.toString());
         }
     }
 
@@ -272,7 +213,11 @@ public final class Manager
             {
                 c.rollback();
             }
-        }
+        }catch (SQLException e) {
+			// TODO: handle exception
+        	logger.error(e.getMessage(),e);
+        	throw e;
+		}
         finally
         {
             c.setAutoCommit(true);
@@ -281,17 +226,7 @@ public final class Manager
         }
     }
 
-    /**
-     * Sets the PrintWriter where logs are printed.
-     * <br>
-     * You may pass 'null' to disable logging.
-     *
-     * @param pw the PrintWriter for log messages
-     */
-    public void setLogWriter(PrintWriter pw)
-    {
-        this.pw = pw;
-    }
+    
 
 ////////////////////////////////////////////////////
 // cleaning method
@@ -302,11 +237,9 @@ public final class Manager
      */
     public void log(String message)
     {
-        if (pw != null) {
-            pw.println(message);
-        }
+        logger.error(message);
     }
-
+    
     /**
      * Closes the passed Statement.
      */
@@ -320,7 +253,7 @@ public final class Manager
         }
         catch (SQLException x)
         {
-            log("Could not close statement!: " + x.toString());
+            logger.error("Could not close statement!: " + x.toString());
         }
     }
 
@@ -337,7 +270,7 @@ public final class Manager
         }
         catch (SQLException x)
         {
-            log("Could not close result set!: " + x.toString());
+            logger.error("Could not close result set!: " + x.toString());
         }
     }
 
@@ -551,7 +484,6 @@ public final class Manager
             ps.setClob(pos, new java.io.StringReader(clob));
         }
     }
-
 
     /**
      * Retrieves a boolean value from the passed result set as a Boolean object.
@@ -910,5 +842,56 @@ public final class Manager
 			sb.setLength(sb.length()-1);
 		}
 		return sb.append(")}").toString();
+	}
+		/**
+	 * ?????¡§??SQL?????¨¦??task??????
+	 * 
+	 * @param sql
+	 *            sql????¡Á?¡¤???
+	 * @param argList
+	 *            sql?????????¨²¡À¨ª????????¡Á¨¦?????¨°¡À?????sql????????????????????¨°¡À???????
+	 * @return ¡ã¨¹???¨¦???¨¢???????¨®??¡Á¨¦
+	 */
+	public boolean runSql(String sql, Object[] argList) {
+		PreparedStatement ps = null;
+		Connection c = null;
+		if (sql == null)
+			return false;
+		logger.info("sql string:\n" + sql + "\n");
+		try {
+			c = getConnection();
+			ps = c.prepareStatement(sql);
+			fillPrepareStatement(ps, argList);
+			return ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.warn(e.getMessage(), e.getCause());
+		} finally {
+			close(ps);
+			releaseConnection(c);
+		}
+		return false;
+	}
+	/**
+	 * ????PreparedStatement???????????¨®
+	 * 
+	 * @param ps
+	 * @param argList
+	 * @return ???¨ª?¨°¡¤???null;
+	 */
+	private void fillPrepareStatement(PreparedStatement ps, Object[] argList) {
+		try {
+			if (!(argList == null || ps == null)) {
+				for (int i = 0; i < argList.length; i++) {
+					if (argList[i].getClass().equals(byte[].class)) {
+						ps.setBytes(i + 1, (byte[]) argList[i]);
+					} else
+						ps.setObject(i + 1, argList[i]);
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
+		}
 	}
 }

@@ -11,77 +11,66 @@
 
 package net.gdface.facelog.dborm.user;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.gdface.facelog.dborm.GeneratedBean;
-
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import net.gdface.facelog.dborm.FullBean;
 
 /**
  * AttUserBean is a mapping of att_user Table.
  * @author sql2java
 */
+@SuppressWarnings("unchecked")
 public class AttUserBean
-    implements Serializable, GeneratedBean
+    extends AttUserBeanBase
+    implements FullBean<AttUserBeanBase>
 {
-	private static final long serialVersionUID = -7333798374514230293L;
+	private static final long serialVersionUID = -3100534190122709681L;
 	
-    private byte[] grayimage;
     private boolean grayimageIsModified = false;
     private boolean grayimageIsInitialized = false;
 
-    private byte[] colorimage;
     private boolean colorimageIsModified = false;
     private boolean colorimageIsInitialized = false;
 
-    private Integer permission;
     private boolean permissionIsModified = false;
     private boolean permissionIsInitialized = false;
 
-    private String updatetime;
     private boolean updatetimeIsModified = false;
     private boolean updatetimeIsInitialized = false;
 
-    private Integer graylen;
     private boolean graylenIsModified = false;
     private boolean graylenIsInitialized = false;
 
-    private Integer colorlen;
     private boolean colorlenIsModified = false;
     private boolean colorlenIsInitialized = false;
 
-    private Integer isonjob;
     private boolean isonjobIsModified = false;
     private boolean isonjobIsInitialized = false;
 
-    private String userno;
     private boolean usernoIsModified = false;
     private boolean usernoIsInitialized = false;
 
-    private String company;
     private boolean companyIsModified = false;
     private boolean companyIsInitialized = false;
 
-    private Integer id;
     private boolean idIsModified = false;
     private boolean idIsInitialized = false;
 
-    private boolean _isNew = true;
+
 
     /**
      * Prefered methods to create a AttUserBean is via the createAttUserBean method in AttUserManager or
      * via the factory class AttUserFactory create method
+     * ????????webservice?????????ио????????protected????public
      */
-    protected AttUserBean()
-    {
+    public AttUserBean(){
+        super();
     }
-
+    /**
+     * create a AttUserBean from a instance
+     */
+    AttUserBean(AttUserBeanBase bean){
+        super();
+        copy(bean);
+    }
     /**
      * Getter method for grayimage.
      * <br>
@@ -94,11 +83,9 @@ public class AttUserBean
      *
      * @return the value of grayimage
      */
-    public byte[] getGrayimage()
-    {
+    public byte[] getGrayimage(){
         return grayimage;
     }
-
     /**
      * Setter method for grayimage.
      * <br>
@@ -109,7 +96,7 @@ public class AttUserBean
      */
     public void setGrayimage(byte[] newVal)
     {
-        grayimage = newVal;
+        super.setGrayimage(newVal);
         grayimageIsModified = true;
         grayimageIsInitialized = true;
     }
@@ -148,11 +135,9 @@ public class AttUserBean
      *
      * @return the value of colorimage
      */
-    public byte[] getColorimage()
-    {
+    public byte[] getColorimage(){
         return colorimage;
     }
-
     /**
      * Setter method for colorimage.
      * <br>
@@ -163,7 +148,7 @@ public class AttUserBean
      */
     public void setColorimage(byte[] newVal)
     {
-        colorimage = newVal;
+        super.setColorimage(newVal);
         colorimageIsModified = true;
         colorimageIsInitialized = true;
     }
@@ -202,11 +187,9 @@ public class AttUserBean
      *
      * @return the value of permission
      */
-    public Integer getPermission()
-    {
+    public Integer getPermission(){
         return permission;
     }
-
     /**
      * Setter method for permission.
      * <br>
@@ -222,7 +205,7 @@ public class AttUserBean
             (newVal == null && permission == null && permissionIsInitialized)) {
             return;
         }
-        permission = newVal;
+        super.setPermission(newVal);
         permissionIsModified = true;
         permissionIsInitialized = true;
     }
@@ -273,11 +256,9 @@ public class AttUserBean
      *
      * @return the value of updatetime
      */
-    public String getUpdatetime()
-    {
+    public String getUpdatetime(){
         return updatetime;
     }
-
     /**
      * Setter method for updatetime.
      * <br>
@@ -293,7 +274,7 @@ public class AttUserBean
             (newVal == null && updatetime == null && updatetimeIsInitialized)) {
             return;
         }
-        updatetime = newVal;
+        super.setUpdatetime(newVal);
         updatetimeIsModified = true;
         updatetimeIsInitialized = true;
     }
@@ -332,11 +313,9 @@ public class AttUserBean
      *
      * @return the value of graylen
      */
-    public Integer getGraylen()
-    {
+    public Integer getGraylen(){
         return graylen;
     }
-
     /**
      * Setter method for graylen.
      * <br>
@@ -352,7 +331,7 @@ public class AttUserBean
             (newVal == null && graylen == null && graylenIsInitialized)) {
             return;
         }
-        graylen = newVal;
+        super.setGraylen(newVal);
         graylenIsModified = true;
         graylenIsInitialized = true;
     }
@@ -403,11 +382,9 @@ public class AttUserBean
      *
      * @return the value of colorlen
      */
-    public Integer getColorlen()
-    {
+    public Integer getColorlen(){
         return colorlen;
     }
-
     /**
      * Setter method for colorlen.
      * <br>
@@ -423,7 +400,7 @@ public class AttUserBean
             (newVal == null && colorlen == null && colorlenIsInitialized)) {
             return;
         }
-        colorlen = newVal;
+        super.setColorlen(newVal);
         colorlenIsModified = true;
         colorlenIsInitialized = true;
     }
@@ -474,11 +451,9 @@ public class AttUserBean
      *
      * @return the value of isonjob
      */
-    public Integer getIsonjob()
-    {
+    public Integer getIsonjob(){
         return isonjob;
     }
-
     /**
      * Setter method for isonjob.
      * <br>
@@ -494,7 +469,7 @@ public class AttUserBean
             (newVal == null && isonjob == null && isonjobIsInitialized)) {
             return;
         }
-        isonjob = newVal;
+        super.setIsonjob(newVal);
         isonjobIsModified = true;
         isonjobIsInitialized = true;
     }
@@ -545,11 +520,9 @@ public class AttUserBean
      *
      * @return the value of userno
      */
-    public String getUserno()
-    {
+    public String getUserno(){
         return userno;
     }
-
     /**
      * Setter method for userno.
      * <br>
@@ -565,7 +538,7 @@ public class AttUserBean
             (newVal == null && userno == null && usernoIsInitialized)) {
             return;
         }
-        userno = newVal;
+        super.setUserno(newVal);
         usernoIsModified = true;
         usernoIsInitialized = true;
     }
@@ -604,11 +577,9 @@ public class AttUserBean
      *
      * @return the value of company
      */
-    public String getCompany()
-    {
+    public String getCompany(){
         return company;
     }
-
     /**
      * Setter method for company.
      * <br>
@@ -624,7 +595,7 @@ public class AttUserBean
             (newVal == null && company == null && companyIsInitialized)) {
             return;
         }
-        company = newVal;
+        super.setCompany(newVal);
         companyIsModified = true;
         companyIsInitialized = true;
     }
@@ -664,11 +635,9 @@ public class AttUserBean
      *
      * @return the value of id
      */
-    public Integer getId()
-    {
+    public Integer getId(){
         return id;
     }
-
     /**
      * Setter method for id.
      * <br>
@@ -684,7 +653,7 @@ public class AttUserBean
             (newVal == null && id == null && idIsInitialized)) {
             return;
         }
-        id = newVal;
+        super.setId(newVal);
         idIsModified = true;
         idIsInitialized = true;
     }
@@ -723,25 +692,7 @@ public class AttUserBean
         return idIsInitialized;
     }
 
-    /**
-     * Determines if the current object is new.
-     *
-     * @return true if the current object is new, false if the object is not new
-     */
-    public boolean isNew()
-    {
-        return _isNew;
-    }
 
-    /**
-     * Specifies to the object if it has been set as new.
-     *
-     * @param isNew the boolean value to be assigned to the isNew field
-     */
-    public void isNew(boolean isNew)
-    {
-        this._isNew = isNew;
-    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -754,7 +705,75 @@ public class AttUserBean
     {
         return grayimageIsModified 		|| colorimageIsModified  		|| permissionIsModified  		|| updatetimeIsModified  		|| graylenIsModified  		|| colorlenIsModified  		|| isonjobIsModified  		|| usernoIsModified  		|| companyIsModified  		|| idIsModified  ;
     }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){
+        if (null == column || "".equals(column)) {
+            return false;
+        } else if ("grayimage".equalsIgnoreCase(column) || "grayimage".equalsIgnoreCase(column)) {
+            return isGrayimageModified();
+        } else if ("colorimage".equalsIgnoreCase(column) || "colorimage".equalsIgnoreCase(column)) {
+            return isColorimageModified();
+        } else if ("permission".equalsIgnoreCase(column) || "permission".equalsIgnoreCase(column)) {
+            return isPermissionModified();
+        } else if ("updatetime".equalsIgnoreCase(column) || "updatetime".equalsIgnoreCase(column)) {
+            return isUpdatetimeModified();
+        } else if ("graylen".equalsIgnoreCase(column) || "graylen".equalsIgnoreCase(column)) {
+            return isGraylenModified();
+        } else if ("colorlen".equalsIgnoreCase(column) || "colorlen".equalsIgnoreCase(column)) {
+            return isColorlenModified();
+        } else if ("isonjob".equalsIgnoreCase(column) || "isonjob".equalsIgnoreCase(column)) {
+            return isIsonjobModified();
+        } else if ("userno".equalsIgnoreCase(column) || "userno".equalsIgnoreCase(column)) {
+            return isUsernoModified();
+        } else if ("company".equalsIgnoreCase(column) || "company".equalsIgnoreCase(column)) {
+            return isCompanyModified();
+        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
+            return isIdModified();
+        }
+        return false;		
+    }
 
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        if (null == column || "".equals(column)) {
+            return false;
+        } else if ("grayimage".equalsIgnoreCase(column) || "grayimage".equalsIgnoreCase(column)) {
+            return isGrayimageInitialized();
+        } else if ("colorimage".equalsIgnoreCase(column) || "colorimage".equalsIgnoreCase(column)) {
+            return isColorimageInitialized();
+        } else if ("permission".equalsIgnoreCase(column) || "permission".equalsIgnoreCase(column)) {
+            return isPermissionInitialized();
+        } else if ("updatetime".equalsIgnoreCase(column) || "updatetime".equalsIgnoreCase(column)) {
+            return isUpdatetimeInitialized();
+        } else if ("graylen".equalsIgnoreCase(column) || "graylen".equalsIgnoreCase(column)) {
+            return isGraylenInitialized();
+        } else if ("colorlen".equalsIgnoreCase(column) || "colorlen".equalsIgnoreCase(column)) {
+            return isColorlenInitialized();
+        } else if ("isonjob".equalsIgnoreCase(column) || "isonjob".equalsIgnoreCase(column)) {
+            return isIsonjobInitialized();
+        } else if ("userno".equalsIgnoreCase(column) || "userno".equalsIgnoreCase(column)) {
+            return isUsernoInitialized();
+        } else if ("company".equalsIgnoreCase(column) || "company".equalsIgnoreCase(column)) {
+            return isCompanyInitialized();
+        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
+            return isIdInitialized();
+        }
+        return false;		
+    }
+    
     /**
      * Resets the object modification status to 'not modified'.
      */
@@ -773,173 +792,14 @@ public class AttUserBean
     }
 
     /**
-     * Copies the passed bean into the current bean.
-     *
-     * @param bean the bean to copy into the current bean
+     * set all field to null and reset all modification status
+     * @see #resetIsModified() 
      */
-    public void copy(AttUserBean bean)
+    public AttUserBean clean()
     {
-        setGrayimage(bean.getGrayimage());
-        setColorimage(bean.getColorimage());
-        setPermission(bean.getPermission());
-        setUpdatetime(bean.getUpdatetime());
-        setGraylen(bean.getGraylen());
-        setColorlen(bean.getColorlen());
-        setIsonjob(bean.getIsonjob());
-        setUserno(bean.getUserno());
-        setCompany(bean.getCompany());
-        setId(bean.getId());
+        super.clean();
+        resetIsModified();
+        return this;
     }
 
-    /**
-     * return a dictionnary of the object
-     */
-    public Map<String,String> getDictionnary()
-    {
-        Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("grayimage", getGrayimage() == null ? "" : getGrayimage().toString());
-        dictionnary.put("colorimage", getColorimage() == null ? "" : getColorimage().toString());
-        dictionnary.put("permission", getPermission() == null ? "" : getPermission().toString());
-        dictionnary.put("updatetime", getUpdatetime() == null ? "" : getUpdatetime().toString());
-        dictionnary.put("graylen", getGraylen() == null ? "" : getGraylen().toString());
-        dictionnary.put("colorlen", getColorlen() == null ? "" : getColorlen().toString());
-        dictionnary.put("isonjob", getIsonjob() == null ? "" : getIsonjob().toString());
-        dictionnary.put("userno", getUserno() == null ? "" : getUserno().toString());
-        dictionnary.put("company", getCompany() == null ? "" : getCompany().toString());
-        dictionnary.put("id", getId() == null ? "" : getId().toString());
-        return dictionnary;
-    }
-
-    /**
-     * return a dictionnary of the pk columns
-     */
-    public Map<String,String> getPkDictionnary()
-    {
-        Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("id", getId() == null ? "" : getId().toString());
-        return dictionnary;
-    }
-
-    /**
-     * return a the value string representation of the given field
-     */
-    public String getValue(String column)
-    {
-        if (null == column || "".equals(column)) {
-            return "";
-        } else if ("grayimage".equalsIgnoreCase(column) || "grayimage".equalsIgnoreCase(column)) {
-            return getGrayimage() == null ? "" : getGrayimage().toString();
-        } else if ("colorimage".equalsIgnoreCase(column) || "colorimage".equalsIgnoreCase(column)) {
-            return getColorimage() == null ? "" : getColorimage().toString();
-        } else if ("permission".equalsIgnoreCase(column) || "permission".equalsIgnoreCase(column)) {
-            return getPermission() == null ? "" : getPermission().toString();
-        } else if ("updatetime".equalsIgnoreCase(column) || "updatetime".equalsIgnoreCase(column)) {
-            return getUpdatetime() == null ? "" : getUpdatetime().toString();
-        } else if ("graylen".equalsIgnoreCase(column) || "graylen".equalsIgnoreCase(column)) {
-            return getGraylen() == null ? "" : getGraylen().toString();
-        } else if ("colorlen".equalsIgnoreCase(column) || "colorlen".equalsIgnoreCase(column)) {
-            return getColorlen() == null ? "" : getColorlen().toString();
-        } else if ("isonjob".equalsIgnoreCase(column) || "isonjob".equalsIgnoreCase(column)) {
-            return getIsonjob() == null ? "" : getIsonjob().toString();
-        } else if ("userno".equalsIgnoreCase(column) || "userno".equalsIgnoreCase(column)) {
-            return getUserno() == null ? "" : getUserno().toString();
-        } else if ("company".equalsIgnoreCase(column) || "company".equalsIgnoreCase(column)) {
-            return getCompany() == null ? "" : getCompany().toString();
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return getId() == null ? "" : getId().toString();
-        }
-        return "";
-    }
-
-    /**
-	 * @see java.lang.Object#equals(Object)
-	 */
-	public boolean equals(Object object)
-	{
-		if (!(object instanceof AttUserBean)) {
-			return false;
-		}
-
-		AttUserBean obj = (AttUserBean) object;
-		return new EqualsBuilder()
-            .append(getGrayimage(), obj.getGrayimage())
-            .append(getColorimage(), obj.getColorimage())
-            .append(getPermission(), obj.getPermission())
-            .append(getUpdatetime(), obj.getUpdatetime())
-            .append(getGraylen(), obj.getGraylen())
-            .append(getColorlen(), obj.getColorlen())
-            .append(getIsonjob(), obj.getIsonjob())
-            .append(getUserno(), obj.getUserno())
-            .append(getCompany(), obj.getCompany())
-            .append(getId(), obj.getId())
-            .isEquals();
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode()
-	{
-		return new HashCodeBuilder(-82280557, -700257973)
-            .append(getGrayimage())
-            .append(getColorimage())
-            .append(getPermission())
-            .append(getUpdatetime())
-            .append(getGraylen())
-            .append(getColorlen())
-            .append(getIsonjob())
-            .append(getUserno())
-            .append(getCompany())
-            .append(getId())
-            .toHashCode();
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString()
-	{
-	    return toString(ToStringStyle.MULTI_LINE_STYLE);
-	}
-
-	/**
-	 * you can use the following styles:
-	 * <li>ToStringStyle.DEFAULT_STYLE</li>
-	 * <li>ToStringStyle.MULTI_LINE_STYLE</li>
-     * <li>ToStringStyle.NO_FIELD_NAMES_STYLE</li>
-     * <li>ToStringStyle.SHORT_PREFIX_STYLE</li>
-     * <li>ToStringStyle.SIMPLE_STYLE</li>
-	 */
-	public String toString(ToStringStyle style) {
-		return new ToStringBuilder(this, style)
-            .append("grayimage", getGrayimage())
-            .append("colorimage", getColorimage())
-            .append("permission", getPermission())
-            .append("updatetime", getUpdatetime())
-            .append("graylen", getGraylen())
-            .append("colorlen", getColorlen())
-            .append("isonjob", getIsonjob())
-            .append("userno", getUserno())
-            .append("company", getCompany())
-            .append("id", getId())
-            .toString();
-	}
-
-
-    public int compareTo(Object object)
-    {
-        AttUserBean obj = (AttUserBean) object;
-        return new CompareToBuilder()
-            .append(getGrayimage(), obj.getGrayimage())
-            .append(getColorimage(), obj.getColorimage())
-            .append(getPermission(), obj.getPermission())
-            .append(getUpdatetime(), obj.getUpdatetime())
-            .append(getGraylen(), obj.getGraylen())
-            .append(getColorlen(), obj.getColorlen())
-            .append(getIsonjob(), obj.getIsonjob())
-            .append(getUserno(), obj.getUserno())
-            .append(getCompany(), obj.getCompany())
-            .append(getId(), obj.getId())
-            .toComparison();
-   }
 }
