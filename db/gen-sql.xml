@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>facelog-sql</artifactId>
+  <packaging>maven-plugin</packaging>
+  <name>facelog-sql</name>
+	<build>
+	    <plugins>        
+	        <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>sql-maven-plugin</artifactId>
+	            <version>1.5</version>
+						  <dependencies>
+								<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+								<dependency>
+								    <groupId>mysql</groupId>
+								    <artifactId>mysql-connector-java</artifactId>
+								    <version>5.1.43</version>
+								</dependency>  
+							</dependencies>
+							<configuration>
+							  <driver>com.mysql.jdbc.Driver</driver>
+							  <url>jdbc:mysql://localhost:3306/test</url>
+							  <username>root</username>
+							  <password></password>
+                <srcFiles>
+                    <srcFile>${project.basedir}/sql/create_table.sql</srcFile>
+                </srcFiles>
+							</configuration>
+							<!--
+	            <executions>
+	                <execution>
+	                    <id>clean-tables</id>
+	                    <configuration>
+	                        <srcFiles>
+	                            <srcFile>${project.basedir}/sql/create_table.sql</srcFile>
+	                        </srcFiles>
+	                    </configuration>
+	                </execution> 
+	            </executions>
+	            -->
+	        </plugin>
+	    </plugins>
+	</build>
+  <parent>
+  	  <groupId>net.gdface.facelog</groupId>
+      <artifactId>facelog</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <relativePath>..</relativePath>
+  </parent>  
+</project>
