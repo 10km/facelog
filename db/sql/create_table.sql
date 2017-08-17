@@ -124,9 +124,10 @@ CREATE TABLE IF NOT EXISTS fl_feature (
 CREATE VIEW fl_feature AS SELECT md5,person_id,img_md5,feature,create_time FROM fl_face WHERE feature IS NOT NULL;
 # 创建不包含特征数据的 view (减少数据长度)
 CREATE VIEW fl_face_light AS SELECT md5,person_id,img_md5,
-	face_left,face_top,face_width,face_height,
+  	face_left,face_top,face_width,face_height,
     eye_leftx,eye_lefty,eye_rightx,eye_righty,
-    mouth_x,mouth_y,nose_x,nose_y,
+    mouth_x,mouth_y,
+    nose_x,nose_y,
     angle_yaw,angle_pitch,angle_roll,
     ext_info,
     create_time
