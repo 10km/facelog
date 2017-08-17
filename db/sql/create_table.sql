@@ -1,24 +1,22 @@
-#######################
-# delete all tables ###
-#######################
+############################
+# delete all table/view  ###
+############################
 DROP VIEW IF EXISTS fl_face_light ;
 DROP VIEW IF EXISTS fl_feature ;
 #DROP TABLE IF EXISTS fl_feature ;
 DROP TABLE IF EXISTS fl_log ;
 DROP TABLE IF EXISTS fl_face ;
 DROP TABLE IF EXISTS fl_person ;
+DROP TABLE IF EXISTS fl_imae_store ;
 DROP TABLE IF EXISTS fl_image ;
 DROP TABLE IF EXISTS fl_device ;
-DROP TABLE IF EXISTS fl_store ;
 
-#######################
-# create all tables ###
-#######################
-CREATE TABLE IF NOT EXISTS fl_store (
-  `md5`      char(32) NOT NULL PRIMARY KEY COMMENT '主键,md5检验码',
-  `encoding` varchar(16) COMMENT '编码类型,GBK,UTF8...',
-  `data`     blob COMMENT '二进制数据'
-) COMMENT '二进制大数据存储表' ;
+############################
+# create all table/view  ###
+############################
+# 所有表中
+# create_time 记录创建时间戳 (默认提供数据库服务器时间)
+# update_time 记录创建时间戳 (默认提供数据库服务器时间)
 
 CREATE TABLE IF NOT EXISTS fl_device (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备id',
@@ -26,23 +24,28 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `online`      tinyint(1) DEFAULT NULL COMMENT '设备是否在线标记',
   `group_id`    int(11) DEFAULT NULL COMMENT '设备所属组id',
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
-  `create_time` timestamp(3)NULL DEFAULT NULL,
-  `update_time` timestamp(3)NULL DEFAULT NULL   
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) COMMENT '前端设备基本信息' ;
 
 CREATE TABLE IF NOT EXISTS fl_image (
-  `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,同时也是外键fl_store(md5)',
+  `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,图像数据存储在fl_imae_store(md5)',
   `format`      varchar(32) COMMENT '图像格式', 
   `width`       int COMMENT '图像宽度',
   `height`      int COMMENT '图像高度',
   `depth`       int COMMENT '通道数',
   `face_num`    int default 0 NOT NULL COMMENT '图像中的人脸数目',
-  `thumbnail`   char(32) DEFAULT NULL COMMENT '外键,缩略图id',
+  `thumb_md5`   char(32) DEFAULT NULL COMMENT '缩略图md5,图像数据存储在fl_imae_store(md5)',
   `device_id`   int(11) DEFAULT NULL COMMENT '外键,图像来源设备',
-  FOREIGN KEY (md5)  REFERENCES fl_store(md5) ON DELETE CASCADE, 
-  FOREIGN KEY (thumbnail)  REFERENCES fl_store(md5) ON DELETE SET NULL,
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (device_id)  REFERENCES fl_device(id) ON DELETE SET NULL
 ) COMMENT '图像存储表,用于存储系统中所有用到的图像数据' ;
+
+CREATE TABLE IF NOT EXISTS fl_imae_store (
+  `md5`      char(32) NOT NULL PRIMARY KEY COMMENT '主键,md5检验码',
+  `data`     blob COMMENT '图像数据',
+  FOREIGN KEY (md5)  REFERENCES fl_image(md5) ON DELETE CASCADE
+) COMMENT '图像数据存储表,用于fl_image表中图像数据存储' ;
 
 CREATE TABLE IF NOT EXISTS fl_person (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户识别码',
@@ -50,15 +53,15 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `name`        varchar(32) NOT NULL COMMENT '姓名',
   `sex`         varchar(2) DEFAULT NULL COMMENT '性别',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
-  `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:身份证,1:护照,2:台胞证,3:港澳通行证,4:军官证,5:外国人居留证,6:员工卡,7:其他',
+  `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他',
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
-  `photo_id`    char(32) DEFAULT NULL COMMENT '用户照片的md5校验码,外键',
-  `disable`      tinyint(1) DEFAULT 0 COMMENT '用户是否被禁用标志' ,
-  `create_time` timestamp(3)NULL DEFAULT NULL,
-  `update_time` timestamp(3)NULL DEFAULT NULL,
+  `photo_id`    char(32) DEFAULT NULL COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
+  `expiry_date` date DEFAULT '2050-12-31' COMMENT '验证有效期限(超过期限不能通过验证)',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (photo_id)  REFERENCES fl_image(md5) ON DELETE SET NULL,
-  INDEX `disable` (`disable` ASC),
-  CHECK(papers_type>=0 AND papers_type<7)
+  INDEX `expiry_date` (`expiry_date` ASC),
+  CHECK(papers_type>=0 AND papers_type<=8)
 ) COMMENT '基本用户信息' ;
 
 CREATE TABLE IF NOT EXISTS fl_face (
@@ -89,25 +92,26 @@ CREATE TABLE IF NOT EXISTS fl_face (
   ###### 人脸检测基本信息 >> 
   `ext_info`    blob DEFAULT NULL COMMENT '扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析',
   `feature`     blob DEFAULT NULL COMMENT '二进制特征数据',
-  `create_time` timestamp(3) NULL DEFAULT NULL,
-  FOREIGN KEY (img_md5)  REFERENCES fl_image(md5) ON DELETE CASCADE,
-  FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE SET NULL
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (img_md5)     REFERENCES fl_image(md5) ON DELETE CASCADE,
+  FOREIGN KEY (person_id)   REFERENCES fl_person(id) ON DELETE SET NULL
 ) COMMENT '人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)' ;
 
 
 CREATE TABLE IF NOT EXISTS fl_log (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '日志id',
   `person_id`   int(11) NOT NULL COMMENT '外键,用户id',
-  `device_id`   int(11) DEFAULT NULL COMMENT '外键,设备id',
-  `verify_image`   varchar(32) DEFAULT NULL COMMENT '外键,登录人脸信息id',
-  `compare_face` varchar(32) DEFAULT NULL COMMENT '外键,对比人脸id',
-  `similarty`	double NOT NULL COMMENT '验证相似度',
-  `verify_time` timestamp(3)NOT NULL,
-  FOREIGN KEY (device_id)  REFERENCES fl_device(id) ON DELETE SET NULL,
-  FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE CASCADE,
-  FOREIGN KEY (verify_image)  REFERENCES fl_image(md5) ON DELETE SET NULL,
-  FOREIGN KEY (compare_face)  REFERENCES fl_face(md5) ON DELETE SET NULL
-) COMMENT '验证日志,记录所有通过验证的人员' ;
+  `device_id`   int(11) DEFAULT NULL COMMENT '外键,图像来源设备id',
+  `verify_face` varchar(32) DEFAULT NULL COMMENT '外键,验证人脸信息id',
+  `compare_face`varchar(32) DEFAULT NULL COMMENT '外键,数据库中最相似的对比人脸id',
+  `similarty`	double DEFAULT NULL COMMENT '验证相似度',
+  `verify_time` timestamp(3)NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (person_id)       REFERENCES fl_person(id) ON DELETE CASCADE,
+  FOREIGN KEY (device_id)       REFERENCES fl_device(id) ON DELETE SET NULL,
+  FOREIGN KEY (verify_face)     REFERENCES fl_face(md5)  ON DELETE SET NULL,
+  FOREIGN KEY (compare_face)    REFERENCES fl_face(md5)  ON DELETE SET NULL
+) COMMENT '人脸验证日志,记录所有通过验证的人员' ;
 
 /*
 CREATE TABLE IF NOT EXISTS fl_feature (
