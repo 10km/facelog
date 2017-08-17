@@ -5,6 +5,16 @@
   <artifactId>facelog-sql</artifactId>
   <packaging>maven-plugin</packaging>
   <name>facelog-sql</name>
+  <properties>
+  	<!-- 
+  		数据库连接参数,可命令行重新定义,如:
+  		mvn -f gen-sql.xml sql:execute -Ddb.url=jdbc:mysql://localhost:3306/test  		
+  	-->
+	  <db.driver>com.mysql.jdbc.Driver</db.driver>
+	  <db.url>jdbc:mysql://localhost:3306/test</db.url>
+	  <db.username>root</db.username>
+	  <db.password></db.password>
+  </properties>
 	<build>
 	    <plugins>        
 	        <plugin>
@@ -20,18 +30,24 @@
 								</dependency>  
 							</dependencies>
 							<configuration>
-							  <driver>com.mysql.jdbc.Driver</driver>
-							  <url>jdbc:mysql://localhost:3306/test</url>
-							  <username>root</username>
-							  <password></password>
+							  <driver>${db.driver}</driver>
+							  <url>${db.url}</url>
+							  <username>${db.username}</username>
+							  <password>${db.password}</password>
+							  <!--
                 <srcFiles>
                     <srcFile>${project.basedir}/sql/create_table.sql</srcFile>
-                </srcFiles>
+                </srcFiles>\
+                -->
 							</configuration>
-							<!--
+							
 	            <executions>
 	                <execution>
-	                    <id>clean-tables</id>
+	                    <!--<id>create-tables</id>-->
+	                    <id>default-cli</id>
+                      <goals>
+                          <goal>execute</goal>
+                      </goals>
 	                    <configuration>
 	                        <srcFiles>
 	                            <srcFile>${project.basedir}/sql/create_table.sql</srcFile>
@@ -39,7 +55,7 @@
 	                    </configuration>
 	                </execution> 
 	            </executions>
-	            -->
+	            
 	        </plugin>
 	    </plugins>
 	</build>
