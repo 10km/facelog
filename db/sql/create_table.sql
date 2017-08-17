@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `verify_face` varchar(32) DEFAULT NULL COMMENT '外键,验证人脸信息id',
   `compare_face`varchar(32) DEFAULT NULL COMMENT '外键,数据库中最相似的对比人脸id',
   `similarty`	double DEFAULT NULL COMMENT '验证相似度',
-  `verify_time` timestamp(3)NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
+  `verify_time` timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id)       REFERENCES fl_person(id) ON DELETE CASCADE,
   FOREIGN KEY (device_id)       REFERENCES fl_device(id) ON DELETE SET NULL,
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS fl_feature (
   `person_id`   int(11) DEFAULT NULL COMMENT '外键,所属用户id',
   `img_md5`     char(32) NOT NULL COMMENT '外键,所属图像id',
   `feature`     blob NOT NULL COMMENT '二进制特征数据',
-  `create_time` timestamp(3) NULL DEFAULT NULL,
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (img_md5)  REFERENCES fl_image(md5) ON DELETE CASCADE,
   FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE SET NULL
 ) COMMENT '人脸特征数据表' ;
