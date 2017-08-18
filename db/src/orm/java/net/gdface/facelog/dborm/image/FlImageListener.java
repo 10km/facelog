@@ -20,6 +20,35 @@ import net.gdface.facelog.dborm.TableListener;
 public interface FlImageListener extends TableListener
 {
     /**
+     * This adapter class provides default implementations for the
+     * methods described by the {@link FlImageListener} interface.<br>
+     * 
+     * @see FlImageListener
+     * @author sql2java
+     *
+     */
+    public static class Adapter implements FlImageListener{
+
+        @Override
+        public void beforeInsert(FlImageBean bean) throws DAOException {}
+
+        @Override
+        public void afterInsert(FlImageBean bean) throws DAOException {
+        }
+
+        @Override
+        public void beforeUpdate(FlImageBean bean) throws DAOException {}
+
+        @Override
+        public void afterUpdate(FlImageBean bean) throws DAOException {}
+
+        @Override
+        public void beforeDelete(FlImageBean bean) throws DAOException {}
+
+        @Override
+        public void afterDelete(FlImageBean bean) throws DAOException {}
+    }
+    /**
      * Invoked just before inserting a FlImageBean record into the database.
      *
      * @param bean the FlImageBean that is about to be inserted

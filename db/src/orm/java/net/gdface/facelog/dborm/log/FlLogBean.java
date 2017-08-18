@@ -12,9 +12,6 @@
 package net.gdface.facelog.dborm.log;
 
 import net.gdface.facelog.dborm.FullBean;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.face.FlFaceBean;
 
 /**
  * FlLogBean is a mapping of fl_log Table.
@@ -24,7 +21,7 @@ public class FlLogBean
     extends FlLogBeanBase
     implements FullBean<FlLogBeanBase>
 {
-	private static final long serialVersionUID = -2903043490529636315L;
+	private static final long serialVersionUID = 7403954765328119430L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

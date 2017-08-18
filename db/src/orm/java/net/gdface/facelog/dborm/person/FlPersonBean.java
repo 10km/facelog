@@ -12,7 +12,6 @@
 package net.gdface.facelog.dborm.person;
 
 import net.gdface.facelog.dborm.FullBean;
-import net.gdface.facelog.dborm.image.FlImageBean;
 
 /**
  * FlPersonBean is a mapping of fl_person Table.
@@ -22,7 +21,7 @@ public class FlPersonBean
     extends FlPersonBeanBase
     implements FullBean<FlPersonBeanBase>
 {
-	private static final long serialVersionUID = -2898086036584616635L;
+	private static final long serialVersionUID = 7403954765328119430L;
 	
     private boolean updateTimeIsModified = false;
     private boolean updateTimeIsInitialized = false;

@@ -12,8 +12,6 @@
 package net.gdface.facelog.dborm.face;
 
 import net.gdface.facelog.dborm.FullBean;
-import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.person.FlPersonBean;
 
 /**
  * FlFaceBean is a mapping of fl_face Table.
@@ -23,7 +21,7 @@ public class FlFaceBean
     extends FlFaceBeanBase
     implements FullBean<FlFaceBeanBase>
 {
-	private static final long serialVersionUID = -2903043490529636315L;
+	private static final long serialVersionUID = 7403954765328119430L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

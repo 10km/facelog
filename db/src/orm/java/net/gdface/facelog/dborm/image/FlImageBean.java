@@ -12,8 +12,6 @@
 package net.gdface.facelog.dborm.image;
 
 import net.gdface.facelog.dborm.FullBean;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.device.FlDeviceBean;
 
 /**
  * FlImageBean is a mapping of fl_image Table.
@@ -23,7 +21,7 @@ public class FlImageBean
     extends FlImageBeanBase
     implements FullBean<FlImageBeanBase>
 {
-	private static final long serialVersionUID = -2903043490529636315L;
+	private static final long serialVersionUID = 7403954765328119430L;
 	
     private boolean deviceIdIsModified = false;
     private boolean deviceIdIsInitialized = false;

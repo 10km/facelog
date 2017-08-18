@@ -20,6 +20,35 @@ import net.gdface.facelog.dborm.TableListener;
 public interface FlFaceListener extends TableListener
 {
     /**
+     * This adapter class provides default implementations for the
+     * methods described by the {@link FlFaceListener} interface.<br>
+     * 
+     * @see FlFaceListener
+     * @author sql2java
+     *
+     */
+    public static class Adapter implements FlFaceListener{
+
+        @Override
+        public void beforeInsert(FlFaceBean bean) throws DAOException {}
+
+        @Override
+        public void afterInsert(FlFaceBean bean) throws DAOException {
+        }
+
+        @Override
+        public void beforeUpdate(FlFaceBean bean) throws DAOException {}
+
+        @Override
+        public void afterUpdate(FlFaceBean bean) throws DAOException {}
+
+        @Override
+        public void beforeDelete(FlFaceBean bean) throws DAOException {}
+
+        @Override
+        public void afterDelete(FlFaceBean bean) throws DAOException {}
+    }
+    /**
      * Invoked just before inserting a FlFaceBean record into the database.
      *
      * @param bean the FlFaceBean that is about to be inserted

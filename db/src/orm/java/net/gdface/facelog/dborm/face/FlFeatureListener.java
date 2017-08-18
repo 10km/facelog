@@ -20,6 +20,35 @@ import net.gdface.facelog.dborm.TableListener;
 public interface FlFeatureListener extends TableListener
 {
     /**
+     * This adapter class provides default implementations for the
+     * methods described by the {@link FlFeatureListener} interface.<br>
+     * 
+     * @see FlFeatureListener
+     * @author sql2java
+     *
+     */
+    public static class Adapter implements FlFeatureListener{
+
+        @Override
+        public void beforeInsert(FlFeatureBean bean) throws DAOException {}
+
+        @Override
+        public void afterInsert(FlFeatureBean bean) throws DAOException {
+        }
+
+        @Override
+        public void beforeUpdate(FlFeatureBean bean) throws DAOException {}
+
+        @Override
+        public void afterUpdate(FlFeatureBean bean) throws DAOException {}
+
+        @Override
+        public void beforeDelete(FlFeatureBean bean) throws DAOException {}
+
+        @Override
+        public void afterDelete(FlFeatureBean bean) throws DAOException {}
+    }
+    /**
      * Invoked just before inserting a FlFeatureBean record into the database.
      *
      * @param bean the FlFeatureBean that is about to be inserted
