@@ -1843,7 +1843,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getCompareFace() + "]");
-                        if (bean.getCompareFace() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getCompareFace() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getCompareFace() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1865,7 +1865,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFace() + "]");
-                        if (bean.getVerifyFace() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFace() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getVerifyFace() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

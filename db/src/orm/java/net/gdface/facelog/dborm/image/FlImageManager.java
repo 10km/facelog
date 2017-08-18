@@ -1786,7 +1786,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "]");
-                        if (bean.getThumbMd5() + "%" == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getThumbMd5() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1824,7 +1824,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFormat() + "]");
-                        if (bean.getFormat() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getFormat() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1846,7 +1846,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if (bean.getMd5() + "%" == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getMd5() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

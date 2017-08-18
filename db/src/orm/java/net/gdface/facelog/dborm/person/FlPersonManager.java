@@ -1978,7 +1978,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "]");
-                        if (bean.getFaceMd5() + "%" == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getFaceMd5() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2000,7 +2000,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPhotoId() + "]");
-                        if (bean.getPhotoId() + "%" == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getPhotoId() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getPhotoId() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2022,7 +2022,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if (bean.getPapersNum() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getPapersNum() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2052,7 +2052,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSex() + "]");
-                        if (bean.getSex() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSex() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getSex() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2074,7 +2074,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if (bean.getName() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getName() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

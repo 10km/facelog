@@ -1328,7 +1328,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if (bean.getPapersNum() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getPapersNum() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1354,7 +1354,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if (bean.getName() + "%" == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
+                        ps.setString(++_dirtyCount, bean.getName() + "%");
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
