@@ -3,13 +3,14 @@
 ############################
 DROP VIEW IF EXISTS fl_face_light ;
 DROP VIEW IF EXISTS fl_feature ;
+DROP VIEW IF EXISTS fl_log_light;
 #DROP TABLE IF EXISTS fl_feature ;
 DROP TABLE IF EXISTS fl_log ;
 DROP TABLE IF EXISTS fl_face ;
 DROP TABLE IF EXISTS fl_person ;
-DROP TABLE IF EXISTS fl_imae_store ;
 DROP TABLE IF EXISTS fl_image ;
 DROP TABLE IF EXISTS fl_device ;
+DROP TABLE IF EXISTS fl_store ;
 
 ############################
 # create all table/view  ###
@@ -17,6 +18,12 @@ DROP TABLE IF EXISTS fl_device ;
 # 所有表中
 # create_time 记录创建时间戳 (默认提供数据库服务器时间)
 # update_time 记录创建时间戳 (默认提供数据库服务器时间)
+
+CREATE TABLE IF NOT EXISTS fl_store (
+  `md5`      char(32) NOT NULL PRIMARY KEY COMMENT '主键,md5检验码',
+  `encoding` varchar(16) COMMENT '编码类型,GBK,UTF8...',
+  `data`     blob COMMENT '二进制数据'
+) COMMENT '二进制大数据存储表' ;
 
 CREATE TABLE IF NOT EXISTS fl_device (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备id',
@@ -28,25 +35,28 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) COMMENT '前端设备基本信息' ;
 
+/*
+md5外键引用fl_store(md5),所以删除 fl_store 中对应的md5,会导致 fl_image 中的记录同步删除(ON DELETE CASCADE),
+所以删除图像最方便的方式是删除 fl_store 中对应的md5
+删除 fl_image 中记录时会同步级联删除 fl_face 中 md5 对应的所有记录
+*/
 CREATE TABLE IF NOT EXISTS fl_image (
-  `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,图像数据存储在fl_imae_store(md5)',
+  `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,同时也是外键fl_store(md5)',
   `format`      varchar(32) COMMENT '图像格式', 
   `width`       int COMMENT '图像宽度',
   `height`      int COMMENT '图像高度',
   `depth`       int COMMENT '通道数',
   `face_num`    int default 0 NOT NULL COMMENT '图像中的人脸数目',
-  `thumb_md5`   char(32) DEFAULT NULL COMMENT '缩略图md5,图像数据存储在fl_imae_store(md5)',
+  `thumb_md5`   char(32) DEFAULT NULL COMMENT '外键,缩略图md5,图像数据存储在fl_imae_store(md5)',
   `device_id`   int(11) DEFAULT NULL COMMENT '外键,图像来源设备',
-  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (md5)        REFERENCES fl_store(md5) ON DELETE CASCADE, 
+  FOREIGN KEY (thumb_md5)  REFERENCES fl_store(md5) ON DELETE SET NULL,
   FOREIGN KEY (device_id)  REFERENCES fl_device(id) ON DELETE SET NULL
 ) COMMENT '图像存储表,用于存储系统中所有用到的图像数据' ;
 
-CREATE TABLE IF NOT EXISTS fl_imae_store (
-  `md5`      char(32) NOT NULL PRIMARY KEY COMMENT '主键,md5检验码',
-  `data`     blob COMMENT '图像数据',
-  FOREIGN KEY (md5)  REFERENCES fl_image(md5) ON DELETE CASCADE
-) COMMENT '图像数据存储表,用于fl_image表中图像数据存储' ;
-
+/* 
+删除 fl_person 中记录时会同步级联删除 fl_log中id对应的所有记录
+*/
 CREATE TABLE IF NOT EXISTS fl_person (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户识别码',
   `group_id`    int(11) DEFAULT NULL COMMENT '用户所属组id',
@@ -55,12 +65,14 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
   `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他',
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
-  `photo_id`    char(32) DEFAULT NULL COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
-  `expiry_date` date DEFAULT '2050-12-31' COMMENT '验证有效期限(超过期限不能通过验证)',
+  `photo_id`    char(32) DEFAULT NULL UNIQUE COMMENT '用户默认照片(证件照,标准照)的md5校验码,外键',
+  `face_md5`    char(32) DEFAULT NULL UNIQUE COMMENT '从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新',
+  `expiry_date` date DEFAULT '2050-12-31' COMMENT '验证有效期限(超过期限不能通过验证),为NULL永久有效',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (photo_id)  REFERENCES fl_image(md5) ON DELETE SET NULL,
   INDEX `expiry_date` (`expiry_date` ASC),
+  # 验证 papers_type 字段有效性
   CHECK(papers_type>=0 AND papers_type<=8)
 ) COMMENT '基本用户信息' ;
 
@@ -124,6 +136,16 @@ CREATE TABLE IF NOT EXISTS fl_feature (
   FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE SET NULL
 ) COMMENT '人脸特征数据表' ;
 */
+
+# 创建简单日志 view
+CREATE VIEW fl_log_light AS SELECT log.id,
+	person.id AS person_id,
+    person.name,
+    person.papers_type,
+    person.papers_num,
+    log.verify_time 
+    FROM fl_log AS log JOIN fl_person AS person ON log.person_id = person.id;
+
 # 创建只包含特征数据的 view
 CREATE VIEW fl_feature AS SELECT md5,person_id,img_md5,feature,create_time FROM fl_face WHERE feature IS NOT NULL;
 # 创建不包含特征数据的 view (减少数据长度)
