@@ -1860,15 +1860,15 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "%]");
-                        ps.setString(++_dirtyCount, "%" + bean.getImgMd5() + "%");
+                        if ( bean.getImgMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImgMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "%]");
-                        ps.setString(++_dirtyCount, "%" + bean.getImgMd5());
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "]");
+                        if ( bean.getImgMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImgMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "]");
-                        ps.setString(++_dirtyCount, bean.getImgMd5() + "%");
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "%]");
+                        if (bean.getImgMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImgMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1886,15 +1886,15 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%");
+                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        ps.setString(++_dirtyCount, "%" + bean.getMd5());
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        ps.setString(++_dirtyCount, bean.getMd5() + "%");
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
