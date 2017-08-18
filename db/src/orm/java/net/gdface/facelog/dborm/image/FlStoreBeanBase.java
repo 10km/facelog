@@ -20,12 +20,16 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlStoreBean is a mapping of fl_store Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 二进制大数据存储表 </li>
+ * </ul>
  * @author guyadong
 */
 public class FlStoreBeanBase
     implements Serializable,BaseBean<FlStoreBeanBase>
 {
-	private static final long serialVersionUID = -8498230326198160600L;
+	private static final long serialVersionUID = -7175187016051546557L;
 	
     protected byte[] data;
 

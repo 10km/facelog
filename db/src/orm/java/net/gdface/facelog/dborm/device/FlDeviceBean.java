@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlDeviceBean is a mapping of fl_device Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 前端设备基本信息 </li>
+ * </ul>
  * @author sql2java
 */
 public class FlDeviceBean
     extends FlDeviceBeanBase
     implements FullBean<FlDeviceBeanBase>
 {
-	private static final long serialVersionUID = -257613791326498187L;
+	private static final long serialVersionUID = -6923379562491679902L;
 	
     private boolean updateTimeIsModified = false;
     private boolean updateTimeIsInitialized = false;
@@ -334,26 +338,27 @@ public class FlDeviceBean
      * <ul>
      * <li>full name: fl_device.online</li>
      * <li>comments: 设备是否在线标记</li>
-     * <li>column size: 0</li>
-     * <li>jdbc type returned by the driver: Types.BIT</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of online
      */
-    public Boolean getOnline(){
+    public Integer getOnline(){
         return online;
     }
     /**
      * Setter method for online.
      * <br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(Boolean newVal)
+    public void setOnline(Integer newVal)
     {
-        if ((newVal != null && online != null && newVal.equals(online)) ||
+        if ((newVal != null && online != null && (newVal.compareTo(online) == 0)) ||
             (newVal == null && online == null && onlineIsInitialized)) {
             return;
         }
@@ -369,9 +374,9 @@ public class FlDeviceBean
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(boolean newVal)
+    public void setOnline(int newVal)
     {
-        setOnline(new Boolean(newVal));
+        setOnline(new Integer(newVal));
     }
 
     /**

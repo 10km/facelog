@@ -26,12 +26,12 @@ import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceManager;
+import net.gdface.facelog.dborm.person.FlPersonBean;
+import net.gdface.facelog.dborm.person.FlPersonManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.
@@ -319,52 +319,6 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlPersonBean object from the fl_log.person_id field.
-     *
-     * @param bean the FlLogBean
-     * @return the associated FlPersonBean bean
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED VALUES
-    public FlPersonBean getFlPersonBean(FlLogBean bean) throws DAOException
-    {
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setId(bean.getPersonId()); 
-        bean.setFlPersonBean(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlPersonBean();
-    }
-
-    /**
-     * Associates the FlLogBean object to the FlPersonBean object.
-     *
-     * @param bean the FlLogBean object to use
-     * @param beanToSet the FlPersonBean object to associate to the FlLogBean
-     * @return the associated FlPersonBean bean
-     * @throws Exception
-     */
-    //4.2 ADD IMPORTED VALUE
-    public FlPersonBean addFlPersonBean(FlPersonBean beanToSet, FlLogBean bean) throws Exception
-    {
-        beanToSet.setId(bean.getPersonId());
-        return FlPersonManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Associates the FlLogBean object to the FlPersonBean object.
-     *
-     * @param bean the FlLogBean object to use
-     * @param beanToSet the FlPersonBean object to associate to the FlLogBean
-     * @return the associated FlPersonBean bean
-     * @throws Exception
-     */
-    //5.2 SET IMPORTED
-    public FlPersonBean setFlPersonBean(FlLogBean bean, FlPersonBean beanToSet) throws Exception
-    {
-        bean.setPersonId(beanToSet.getId());
-        return FlPersonManager.getInstance().save(beanToSet);
-    }
-
-    /**
      * Retrieves the FlDeviceBean object from the fl_log.device_id field.
      *
      * @param bean the FlLogBean
@@ -455,6 +409,52 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         bean.setVerifyFace(beanToSet.getMd5());
         return FlFaceManager.getInstance().save(beanToSet);
+    }
+
+    /**
+     * Retrieves the FlPersonBean object from the fl_log.person_id field.
+     *
+     * @param bean the FlLogBean
+     * @return the associated FlPersonBean bean
+     * @throws DAOException
+     */
+    //3.2 GET IMPORTED VALUES
+    public FlPersonBean getFlPersonBean(FlLogBean bean) throws DAOException
+    {
+        FlPersonBean other = FlPersonManager.getInstance().createBean();
+        other.setId(bean.getPersonId()); 
+        bean.setFlPersonBean(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getFlPersonBean();
+    }
+
+    /**
+     * Associates the FlLogBean object to the FlPersonBean object.
+     *
+     * @param bean the FlLogBean object to use
+     * @param beanToSet the FlPersonBean object to associate to the FlLogBean
+     * @return the associated FlPersonBean bean
+     * @throws Exception
+     */
+    //4.2 ADD IMPORTED VALUE
+    public FlPersonBean addFlPersonBean(FlPersonBean beanToSet, FlLogBean bean) throws Exception
+    {
+        beanToSet.setId(bean.getPersonId());
+        return FlPersonManager.getInstance().save(beanToSet);
+    }
+
+    /**
+     * Associates the FlLogBean object to the FlPersonBean object.
+     *
+     * @param bean the FlLogBean object to use
+     * @param beanToSet the FlPersonBean object to associate to the FlLogBean
+     * @return the associated FlPersonBean bean
+     * @throws Exception
+     */
+    //5.2 SET IMPORTED
+    public FlPersonBean setFlPersonBean(FlLogBean bean, FlPersonBean beanToSet) throws Exception
+    {
+        bean.setPersonId(beanToSet.getId());
+        return FlPersonManager.getInstance().save(beanToSet);
     }
 
 

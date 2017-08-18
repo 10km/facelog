@@ -2030,7 +2030,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             }
             if (bean.isPapersTypeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
-                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.BIT); } else { Manager.setBoolean(ps, ++_dirtyCount, bean.getPapersType()); }
+                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
             }
             if (bean.isBirthdateModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getBirthdate() + "]");
@@ -2199,7 +2199,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             bean.setFaceMd5(rs.getString(4));
             bean.setPhotoId(rs.getString(5));
             bean.setPapersNum(rs.getString(6));
-            bean.setPapersType(Manager.getBoolean(rs, 7));
+            bean.setPapersType(Manager.getInteger(rs, 7));
             bean.setBirthdate(rs.getDate(8));
             bean.setSex(rs.getString(9));
             bean.setName(rs.getString(10));
@@ -2262,7 +2262,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case ID_PAPERS_TYPE:
                         ++pos;
-                        bean.setPapersType(Manager.getBoolean(rs, pos));
+                        bean.setPapersType(Manager.getInteger(rs, pos));
                         break;
                     case ID_BIRTHDATE:
                         ++pos;
@@ -2318,7 +2318,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             bean.setFaceMd5(rs.getString("face_md5"));
             bean.setPhotoId(rs.getString("photo_id"));
             bean.setPapersNum(rs.getString("papers_num"));
-            bean.setPapersType(Manager.getBoolean(rs, "papers_type"));
+            bean.setPapersType(Manager.getInteger(rs, "papers_type"));
             bean.setBirthdate(rs.getDate("birthdate"));
             bean.setSex(rs.getString("sex"));
             bean.setName(rs.getString("name"));

@@ -46,6 +46,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
      *   <li>FlPersonManager.ID_FACE_MD5
      *   <li>FlPersonManager.ID_PHOTO_ID
      *   <li>FlPersonManager.ID_PAPERS_NUM
+     *   <li>FlPersonManager.ID_PAPERS_TYPE
      *   <li>FlPersonManager.ID_BIRTHDATE
      *   <li>FlPersonManager.ID_SEX
      *   <li>FlPersonManager.ID_NAME
@@ -163,6 +164,17 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = 1;
                 } else {
                     iReturn = b1.getPapersNum().compareTo(b2.getPapersNum());
+                }
+                break;
+            case FlPersonManager.ID_PAPERS_TYPE:
+                if (b1.getPapersType() == null && b2.getPapersType() != null) {
+                    iReturn = -1;
+                } else if (b1.getPapersType() == null && b2.getPapersType() == null) {
+                    iReturn = 0;
+                } else if (b1.getPapersType() != null && b2.getPapersType() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getPapersType().compareTo(b2.getPapersType());
                 }
                 break;
             case FlPersonManager.ID_BIRTHDATE:

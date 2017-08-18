@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlImageBean is a mapping of fl_image Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 图像存储表,用于存储系统中所有用到的图像数据 </li>
+ * </ul>
  * @author sql2java
 */
 public class FlImageBean
     extends FlImageBeanBase
     implements FullBean<FlImageBeanBase>
 {
-	private static final long serialVersionUID = -259266274543182315L;
+	private static final long serialVersionUID = -6926684533220015454L;
 	
     private boolean deviceIdIsModified = false;
     private boolean deviceIdIsInitialized = false;

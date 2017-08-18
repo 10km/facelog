@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlLogBean is a mapping of fl_log Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 人脸验证日志,记录所有通过验证的人员 </li>
+ * </ul>
  * @author sql2java
 */
 public class FlLogBean
     extends FlLogBeanBase
     implements FullBean<FlLogBeanBase>
 {
-	private static final long serialVersionUID = -254308829188097227L;
+	private static final long serialVersionUID = -6926684533220015454L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

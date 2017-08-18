@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlFaceLightBean is a mapping of fl_face_light Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: VIEW </li>
+ * </ul>
  * @author sql2java
 */
 public class FlFaceLightBean
     extends FlFaceLightBeanBase
     implements FullBean<FlFaceLightBeanBase>
 {
-	private static final long serialVersionUID = -255961308109814059L;
+	private static final long serialVersionUID = -6936599436815087518L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

@@ -42,6 +42,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
      * <ul>
      *   <li>FlLogLightManager.ID_VERIFY_TIME
      *   <li>FlLogLightManager.ID_PAPERS_NUM
+     *   <li>FlLogLightManager.ID_PAPERS_TYPE
      *   <li>FlLogLightManager.ID_NAME
      *   <li>FlLogLightManager.ID_PERSON_ID
      *   <li>FlLogLightManager.ID_ID
@@ -107,6 +108,17 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
                     iReturn = 1;
                 } else {
                     iReturn = b1.getPapersNum().compareTo(b2.getPapersNum());
+                }
+                break;
+            case FlLogLightManager.ID_PAPERS_TYPE:
+                if (b1.getPapersType() == null && b2.getPapersType() != null) {
+                    iReturn = -1;
+                } else if (b1.getPapersType() == null && b2.getPapersType() == null) {
+                    iReturn = 0;
+                } else if (b1.getPapersType() != null && b2.getPapersType() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getPapersType().compareTo(b2.getPapersType());
                 }
                 break;
             case FlLogLightManager.ID_NAME:

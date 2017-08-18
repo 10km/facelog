@@ -30,10 +30,10 @@ import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreManager;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
+import net.gdface.facelog.dborm.image.FlStoreBean;
+import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_image table.
@@ -413,6 +413,52 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
     /**
+     * Retrieves the FlDeviceBean object from the fl_image.device_id field.
+     *
+     * @param bean the FlImageBean
+     * @return the associated FlDeviceBean bean
+     * @throws DAOException
+     */
+    //3.2 GET IMPORTED VALUES
+    public FlDeviceBean getFlDeviceBean(FlImageBean bean) throws DAOException
+    {
+        FlDeviceBean other = FlDeviceManager.getInstance().createBean();
+        other.setId(bean.getDeviceId()); 
+        bean.setFlDeviceBean(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getFlDeviceBean();
+    }
+
+    /**
+     * Associates the FlImageBean object to the FlDeviceBean object.
+     *
+     * @param bean the FlImageBean object to use
+     * @param beanToSet the FlDeviceBean object to associate to the FlImageBean
+     * @return the associated FlDeviceBean bean
+     * @throws Exception
+     */
+    //4.2 ADD IMPORTED VALUE
+    public FlDeviceBean addFlDeviceBean(FlDeviceBean beanToSet, FlImageBean bean) throws Exception
+    {
+        beanToSet.setId(bean.getDeviceId());
+        return FlDeviceManager.getInstance().save(beanToSet);
+    }
+
+    /**
+     * Associates the FlImageBean object to the FlDeviceBean object.
+     *
+     * @param bean the FlImageBean object to use
+     * @param beanToSet the FlDeviceBean object to associate to the FlImageBean
+     * @return the associated FlDeviceBean bean
+     * @throws Exception
+     */
+    //5.2 SET IMPORTED
+    public FlDeviceBean setFlDeviceBean(FlImageBean bean, FlDeviceBean beanToSet) throws Exception
+    {
+        bean.setDeviceId(beanToSet.getId());
+        return FlDeviceManager.getInstance().save(beanToSet);
+    }
+
+    /**
      * Retrieves the FlStoreBean object from the fl_image.md5 field.
      *
      * @param bean the FlImageBean
@@ -457,52 +503,6 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     {
         bean.setMd5(beanToSet.getMd5());
         return FlStoreManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Retrieves the FlDeviceBean object from the fl_image.device_id field.
-     *
-     * @param bean the FlImageBean
-     * @return the associated FlDeviceBean bean
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED VALUES
-    public FlDeviceBean getFlDeviceBean(FlImageBean bean) throws DAOException
-    {
-        FlDeviceBean other = FlDeviceManager.getInstance().createBean();
-        other.setId(bean.getDeviceId()); 
-        bean.setFlDeviceBean(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlDeviceBean();
-    }
-
-    /**
-     * Associates the FlImageBean object to the FlDeviceBean object.
-     *
-     * @param bean the FlImageBean object to use
-     * @param beanToSet the FlDeviceBean object to associate to the FlImageBean
-     * @return the associated FlDeviceBean bean
-     * @throws Exception
-     */
-    //4.2 ADD IMPORTED VALUE
-    public FlDeviceBean addFlDeviceBean(FlDeviceBean beanToSet, FlImageBean bean) throws Exception
-    {
-        beanToSet.setId(bean.getDeviceId());
-        return FlDeviceManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Associates the FlImageBean object to the FlDeviceBean object.
-     *
-     * @param bean the FlImageBean object to use
-     * @param beanToSet the FlDeviceBean object to associate to the FlImageBean
-     * @return the associated FlDeviceBean bean
-     * @throws Exception
-     */
-    //5.2 SET IMPORTED
-    public FlDeviceBean setFlDeviceBean(FlImageBean bean, FlDeviceBean beanToSet) throws Exception
-    {
-        bean.setDeviceId(beanToSet.getId());
-        return FlDeviceManager.getInstance().save(beanToSet);
     }
 
 

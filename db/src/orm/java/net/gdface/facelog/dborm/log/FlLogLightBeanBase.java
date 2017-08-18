@@ -20,18 +20,22 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlLogLightBean is a mapping of fl_log_light Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: VIEW </li>
+ * </ul>
  * @author guyadong
 */
 public class FlLogLightBeanBase
     implements Serializable,BaseBean<FlLogLightBeanBase>
 {
-	private static final long serialVersionUID = -5370688240785933316L;
+	private static final long serialVersionUID = -4047644930639319274L;
 	
     protected java.util.Date verifyTime;
 
     protected String papersNum;
 
-    protected Boolean papersType;
+    protected Integer papersType;
 
     protected String name;
 
@@ -160,24 +164,25 @@ public class FlLogLightBeanBase
      * <ul>
      * <li>full name: fl_log_light.papers_type</li>
      * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
-     * <li>column size: 0</li>
-     * <li>jdbc type returned by the driver: Types.BIT</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of papersType
      */
-    public Boolean getPapersType(){
+    public Integer getPapersType(){
         return papersType;
     }
     /**
      * Setter method for papersType.
      * <br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(Boolean newVal){    
+    public void setPapersType(Integer newVal){    
         papersType = newVal;
     }
 
@@ -188,8 +193,8 @@ public class FlLogLightBeanBase
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(boolean newVal){
-        setPapersType(new Boolean(newVal));
+    public void setPapersType(int newVal){
+        setPapersType(new Integer(newVal));
     }
 
 
@@ -564,7 +569,7 @@ public class FlLogLightBeanBase
         } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
             setPapersNum((String)object);
         } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            setPapersType((Boolean)object);
+            setPapersType((Integer)object);
         } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
             setName((String)object);
         } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {

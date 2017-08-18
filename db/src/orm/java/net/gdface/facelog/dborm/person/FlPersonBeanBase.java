@@ -21,12 +21,16 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlPersonBean is a mapping of fl_person Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 基本用户信息 </li>
+ * </ul>
  * @author guyadong
 */
 public class FlPersonBeanBase
     implements Serializable,BaseBean<FlPersonBeanBase>
 {
-	private static final long serialVersionUID = -8498230326198160600L;
+	private static final long serialVersionUID = -4366153377993065951L;
 	
     protected java.util.Date updateTime;
 
@@ -40,7 +44,7 @@ public class FlPersonBeanBase
 
     protected String papersNum;
 
-    protected Boolean papersType;
+    protected Integer papersType;
 
     protected java.util.Date birthdate;
 
@@ -316,24 +320,25 @@ public class FlPersonBeanBase
      * <ul>
      * <li>full name: fl_person.papers_type</li>
      * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
-     * <li>column size: 0</li>
-     * <li>jdbc type returned by the driver: Types.BIT</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of papersType
      */
-    public Boolean getPapersType(){
+    public Integer getPapersType(){
         return papersType;
     }
     /**
      * Setter method for papersType.
      * <br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(Boolean newVal){    
+    public void setPapersType(Integer newVal){    
         papersType = newVal;
     }
 
@@ -344,8 +349,8 @@ public class FlPersonBeanBase
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(boolean newVal){
-        setPapersType(new Boolean(newVal));
+    public void setPapersType(int newVal){
+        setPapersType(new Integer(newVal));
     }
 
 
@@ -892,7 +897,7 @@ public class FlPersonBeanBase
         } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
             setPapersNum((String)object);
         } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            setPapersType((Boolean)object);
+            setPapersType((Integer)object);
         } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
             setBirthdate((java.util.Date)object);
         } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {

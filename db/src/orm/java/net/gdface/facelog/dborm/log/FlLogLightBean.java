@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlLogLightBean is a mapping of fl_log_light Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: VIEW </li>
+ * </ul>
  * @author sql2java
 */
 public class FlLogLightBean
     extends FlLogLightBeanBase
     implements FullBean<FlLogLightBeanBase>
 {
-	private static final long serialVersionUID = -255961308109814059L;
+	private static final long serialVersionUID = -6938251920031771646L;
 	
     private boolean verifyTimeIsModified = false;
     private boolean verifyTimeIsInitialized = false;
@@ -193,26 +197,27 @@ public class FlLogLightBean
      * <ul>
      * <li>full name: fl_log_light.papers_type</li>
      * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
-     * <li>column size: 0</li>
-     * <li>jdbc type returned by the driver: Types.BIT</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of papersType
      */
-    public Boolean getPapersType(){
+    public Integer getPapersType(){
         return papersType;
     }
     /**
      * Setter method for papersType.
      * <br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(Boolean newVal)
+    public void setPapersType(Integer newVal)
     {
-        if ((newVal != null && papersType != null && newVal.equals(papersType)) ||
+        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
             (newVal == null && papersType == null && papersTypeIsInitialized)) {
             return;
         }
@@ -228,9 +233,9 @@ public class FlLogLightBean
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(boolean newVal)
+    public void setPapersType(int newVal)
     {
-        setPapersType(new Boolean(newVal));
+        setPapersType(new Integer(newVal));
     }
 
     /**

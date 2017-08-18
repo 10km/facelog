@@ -14,21 +14,25 @@ import net.gdface.facelog.dborm.BaseBean;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.face.FlFaceBean;
+import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlLogBean is a mapping of fl_log Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 人脸验证日志,记录所有通过验证的人员 </li>
+ * </ul>
  * @author guyadong
 */
 public class FlLogBeanBase
     implements Serializable,BaseBean<FlLogBeanBase>
 {
-	private static final long serialVersionUID = -8498230326198160600L;
+	private static final long serialVersionUID = -7493695467700260531L;
 	
     protected java.util.Date createTime;
 
@@ -400,16 +404,6 @@ public class FlLogBeanBase
     }
 
 
-    /** The FlPerson referenced by this bean. */
-    private FlPersonBean referencedFlPerson;
-    /** Getter method for FlPersonBean. */
-    public FlPersonBean getFlPersonBean() {
-        return this.referencedFlPerson;
-    }
-    /** Setter method for FlPersonBean. */
-    public void setFlPersonBean(FlPersonBean reference) {
-        this.referencedFlPerson = reference;
-    }    
     /** The FlDevice referenced by this bean. */
     private FlDeviceBean referencedFlDevice;
     /** Getter method for FlDeviceBean. */
@@ -429,6 +423,16 @@ public class FlLogBeanBase
     /** Setter method for FlFaceBean. */
     public void setFlFaceBean(FlFaceBean reference) {
         this.referencedFlFace = reference;
+    }    
+    /** The FlPerson referenced by this bean. */
+    private FlPersonBean referencedFlPerson;
+    /** Getter method for FlPersonBean. */
+    public FlPersonBean getFlPersonBean() {
+        return this.referencedFlPerson;
+    }
+    /** Setter method for FlPersonBean. */
+    public void setFlPersonBean(FlPersonBean reference) {
+        this.referencedFlPerson = reference;
     }    
     /**
      * @see java.lang.Object#equals(Object)

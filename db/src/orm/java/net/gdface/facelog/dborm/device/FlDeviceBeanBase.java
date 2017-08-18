@@ -20,12 +20,16 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlDeviceBean is a mapping of fl_device Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 前端设备基本信息 </li>
+ * </ul>
  * @author guyadong
 */
 public class FlDeviceBeanBase
     implements Serializable,BaseBean<FlDeviceBeanBase>
 {
-	private static final long serialVersionUID = -2243146151078738737L;
+	private static final long serialVersionUID = 4697964435184836518L;
 	
     protected java.util.Date updateTime;
 
@@ -35,7 +39,7 @@ public class FlDeviceBeanBase
 
     protected Integer groupId;
 
-    protected Boolean online;
+    protected Integer online;
 
     protected String name;
 
@@ -242,24 +246,25 @@ public class FlDeviceBeanBase
      * <ul>
      * <li>full name: fl_device.online</li>
      * <li>comments: 设备是否在线标记</li>
-     * <li>column size: 0</li>
-     * <li>jdbc type returned by the driver: Types.BIT</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of online
      */
-    public Boolean getOnline(){
+    public Integer getOnline(){
         return online;
     }
     /**
      * Setter method for online.
      * <br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(Boolean newVal){    
+    public void setOnline(Integer newVal){    
         online = newVal;
     }
 
@@ -270,8 +275,8 @@ public class FlDeviceBeanBase
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(boolean newVal){
-        setOnline(new Boolean(newVal));
+    public void setOnline(int newVal){
+        setOnline(new Integer(newVal));
     }
 
 
@@ -626,7 +631,7 @@ public class FlDeviceBeanBase
         } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
             setGroupId((Integer)object);
         } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            setOnline((Boolean)object);
+            setOnline((Integer)object);
         } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
             setName((String)object);
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {

@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlFeatureBean is a mapping of fl_feature Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: VIEW </li>
+ * </ul>
  * @author sql2java
 */
 public class FlFeatureBean
     extends FlFeatureBeanBase
     implements FullBean<FlFeatureBeanBase>
 {
-	private static final long serialVersionUID = -255961308109814059L;
+	private static final long serialVersionUID = -6938251920031771646L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

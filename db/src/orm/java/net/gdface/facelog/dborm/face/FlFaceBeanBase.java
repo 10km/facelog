@@ -22,12 +22,16 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlFaceBean is a mapping of fl_face Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外) </li>
+ * </ul>
  * @author guyadong
 */
 public class FlFaceBeanBase
     implements Serializable,BaseBean<FlFaceBeanBase>
 {
-	private static final long serialVersionUID = 884395934333488547L;
+	private static final long serialVersionUID = 1888930797126355912L;
 	
     protected java.util.Date createTime;
 

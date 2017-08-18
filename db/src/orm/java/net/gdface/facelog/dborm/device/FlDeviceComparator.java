@@ -44,6 +44,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
      *   <li>FlDeviceManager.ID_CREATE_TIME
      *   <li>FlDeviceManager.ID_VERSION
      *   <li>FlDeviceManager.ID_GROUP_ID
+     *   <li>FlDeviceManager.ID_ONLINE
      *   <li>FlDeviceManager.ID_NAME
      *   <li>FlDeviceManager.ID_ID
      * </ul>
@@ -131,6 +132,17 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = 1;
                 } else {
                     iReturn = b1.getGroupId().compareTo(b2.getGroupId());
+                }
+                break;
+            case FlDeviceManager.ID_ONLINE:
+                if (b1.getOnline() == null && b2.getOnline() != null) {
+                    iReturn = -1;
+                } else if (b1.getOnline() == null && b2.getOnline() == null) {
+                    iReturn = 0;
+                } else if (b1.getOnline() != null && b2.getOnline() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getOnline().compareTo(b2.getOnline());
                 }
                 break;
             case FlDeviceManager.ID_NAME:

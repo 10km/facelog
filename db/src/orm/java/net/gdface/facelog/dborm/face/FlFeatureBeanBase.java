@@ -20,12 +20,16 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlFeatureBean is a mapping of fl_feature Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: VIEW </li>
+ * </ul>
  * @author guyadong
 */
 public class FlFeatureBeanBase
     implements Serializable,BaseBean<FlFeatureBeanBase>
 {
-	private static final long serialVersionUID = -5370688240785933316L;
+	private static final long serialVersionUID = -4047644930639319274L;
 	
     protected java.util.Date createTime;
 

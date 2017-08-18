@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlStoreBean is a mapping of fl_store Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 二进制大数据存储表 </li>
+ * </ul>
  * @author sql2java
 */
 public class FlStoreBean
     extends FlStoreBeanBase
     implements FullBean<FlStoreBeanBase>
 {
-	private static final long serialVersionUID = -254308829188097227L;
+	private static final long serialVersionUID = -6936599436815087518L;
 	
     private boolean dataIsModified = false;
     private boolean dataIsInitialized = false;

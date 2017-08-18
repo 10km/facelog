@@ -15,13 +15,17 @@ import net.gdface.facelog.dborm.FullBean;
 
 /**
  * FlFaceBean is a mapping of fl_face Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外) </li>
+ * </ul>
  * @author sql2java
 */
 public class FlFaceBean
     extends FlFaceBeanBase
     implements FullBean<FlFaceBeanBase>
 {
-	private static final long serialVersionUID = -259266274543182315L;
+	private static final long serialVersionUID = -6931641987165035134L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

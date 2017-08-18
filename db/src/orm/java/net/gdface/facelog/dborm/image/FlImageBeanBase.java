@@ -14,20 +14,24 @@ import net.gdface.facelog.dborm.BaseBean;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
+import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
 
 /**
  * FlImageBean is a mapping of fl_image Table.
+ * <br>Meta Data Information (in progress):
+ * <ul>
+ *    <li>comments: 图像存储表,用于存储系统中所有用到的图像数据 </li>
+ * </ul>
  * @author guyadong
 */
 public class FlImageBeanBase
     implements Serializable,BaseBean<FlImageBeanBase>
 {
-	private static final long serialVersionUID = 884395934333488547L;
+	private static final long serialVersionUID = -7493695467700260531L;
 	
     protected Integer deviceId;
 
@@ -391,16 +395,6 @@ public class FlImageBeanBase
 
 
 
-    /** The FlStore referenced by this bean. */
-    private FlStoreBean referencedFlStore;
-    /** Getter method for FlStoreBean. */
-    public FlStoreBean getFlStoreBean() {
-        return this.referencedFlStore;
-    }
-    /** Setter method for FlStoreBean. */
-    public void setFlStoreBean(FlStoreBean reference) {
-        this.referencedFlStore = reference;
-    }    
     /** The FlDevice referenced by this bean. */
     private FlDeviceBean referencedFlDevice;
     /** Getter method for FlDeviceBean. */
@@ -410,6 +404,16 @@ public class FlImageBeanBase
     /** Setter method for FlDeviceBean. */
     public void setFlDeviceBean(FlDeviceBean reference) {
         this.referencedFlDevice = reference;
+    }    
+    /** The FlStore referenced by this bean. */
+    private FlStoreBean referencedFlStore;
+    /** Getter method for FlStoreBean. */
+    public FlStoreBean getFlStoreBean() {
+        return this.referencedFlStore;
+    }
+    /** Setter method for FlStoreBean. */
+    public void setFlStoreBean(FlStoreBean reference) {
+        this.referencedFlStore = reference;
     }    
     /**
      * @see java.lang.Object#equals(Object)

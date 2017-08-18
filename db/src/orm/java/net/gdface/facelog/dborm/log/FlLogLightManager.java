@@ -1336,7 +1336,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
             }
             if (bean.isPapersTypeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
-                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.BIT); } else { Manager.setBoolean(ps, ++_dirtyCount, bean.getPapersType()); }
+                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
             }
             if (bean.isNameModified()) {
                 switch (searchType) {
@@ -1475,7 +1475,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
         {
             bean.setVerifyTime(rs.getTimestamp(1));
             bean.setPapersNum(rs.getString(2));
-            bean.setPapersType(Manager.getBoolean(rs, 3));
+            bean.setPapersType(Manager.getInteger(rs, 3));
             bean.setName(rs.getString(4));
             bean.setPersonId(Manager.getInteger(rs, 5));
             bean.setId(Manager.getInteger(rs, 6));
@@ -1520,7 +1520,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
                         break;
                     case ID_PAPERS_TYPE:
                         ++pos;
-                        bean.setPapersType(Manager.getBoolean(rs, pos));
+                        bean.setPapersType(Manager.getInteger(rs, pos));
                         break;
                     case ID_NAME:
                         ++pos;
@@ -1564,7 +1564,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
         {
             bean.setVerifyTime(rs.getTimestamp("verify_time"));
             bean.setPapersNum(rs.getString("papers_num"));
-            bean.setPapersType(Manager.getBoolean(rs, "papers_type"));
+            bean.setPapersType(Manager.getInteger(rs, "papers_type"));
             bean.setName(rs.getString("name"));
             bean.setPersonId(Manager.getInteger(rs, "person_id"));
             bean.setId(Manager.getInteger(rs, "id"));
