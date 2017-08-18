@@ -25,7 +25,7 @@ public class FlPersonBean
     extends FlPersonBeanBase
     implements FullBean<FlPersonBeanBase>
 {
-	private static final long serialVersionUID = -6928337016436699582L;
+	private static final long serialVersionUID = 179156941348465977L;
 	
     private boolean updateTimeIsModified = false;
     private boolean updateTimeIsInitialized = false;
