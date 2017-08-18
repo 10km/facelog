@@ -18,7 +18,7 @@ import java.util.Comparator;
  * Comparator class is used to sort the FlPersonBean objects.
  * @author sql2java
  */
-public class FlPersonComparator implements Comparator
+public class FlPersonComparator implements Comparator<FlPersonBean>
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -94,10 +94,8 @@ public class FlPersonComparator implements Comparator
     /**
      * Implementation of the compare method.
      */
-    public int compare(Object pObj1, Object pObj2)
+    public int compare(FlPersonBean b1, FlPersonBean b2)
     {
-        FlPersonBean b1 = (FlPersonBean)pObj1;
-        FlPersonBean b2 = (FlPersonBean)pObj2;
         int iReturn = 0;
         switch(iType)
         {

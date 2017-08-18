@@ -18,7 +18,7 @@ import java.util.Comparator;
  * Comparator class is used to sort the FlFeatureBean objects.
  * @author sql2java
  */
-public class FlFeatureComparator implements Comparator
+public class FlFeatureComparator implements Comparator<FlFeatureBean>
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -80,10 +80,8 @@ public class FlFeatureComparator implements Comparator
     /**
      * Implementation of the compare method.
      */
-    public int compare(Object pObj1, Object pObj2)
+    public int compare(FlFeatureBean b1, FlFeatureBean b2)
     {
-        FlFeatureBean b1 = (FlFeatureBean)pObj1;
-        FlFeatureBean b2 = (FlFeatureBean)pObj2;
         int iReturn = 0;
         switch(iType)
         {

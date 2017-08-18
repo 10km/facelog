@@ -18,7 +18,7 @@ import java.util.Comparator;
  * Comparator class is used to sort the FlFaceLightBean objects.
  * @author sql2java
  */
-public class FlFaceLightComparator implements Comparator
+public class FlFaceLightComparator implements Comparator<FlFaceLightBean>
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -110,10 +110,8 @@ public class FlFaceLightComparator implements Comparator
     /**
      * Implementation of the compare method.
      */
-    public int compare(Object pObj1, Object pObj2)
+    public int compare(FlFaceLightBean b1, FlFaceLightBean b2)
     {
-        FlFaceLightBean b1 = (FlFaceLightBean)pObj1;
-        FlFaceLightBean b2 = (FlFaceLightBean)pObj2;
         int iReturn = 0;
         switch(iType)
         {
