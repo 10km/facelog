@@ -76,6 +76,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
     /**
      * Implementation of the compare method.
      */
+    @Override
     public int compare(FlFeatureBean b1, FlFeatureBean b2)
     {
         int iReturn = 0;

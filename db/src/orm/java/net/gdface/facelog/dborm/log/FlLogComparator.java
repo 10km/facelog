@@ -83,6 +83,7 @@ public class FlLogComparator implements Comparator<FlLogBean>
     /**
      * Implementation of the compare method.
      */
+    @Override
     public int compare(FlLogBean b1, FlLogBean b2)
     {
         int iReturn = 0;

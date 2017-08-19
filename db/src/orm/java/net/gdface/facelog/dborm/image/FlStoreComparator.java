@@ -72,6 +72,7 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
     /**
      * Implementation of the compare method.
      */
+    @Override
     public int compare(FlStoreBean b1, FlStoreBean b2)
     {
         int iReturn = 0;

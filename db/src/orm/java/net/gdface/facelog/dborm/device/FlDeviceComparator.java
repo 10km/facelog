@@ -78,9 +78,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
         this.bReverse = bReverse;
     }
 
-    /**
-     * Implementation of the compare method.
-     */
+    @Override
     public int compare(FlDeviceBean b1, FlDeviceBean b2)
     {
         int iReturn = 0;

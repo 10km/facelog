@@ -21,7 +21,7 @@ public class FlFaceLightBean
     extends FlFaceLightBeanBase
     implements FullBean<FlFaceLightBeanBase>
 {
-	private static final long serialVersionUID = 7918220874431935590L;
+	private static final long serialVersionUID = 917847484745011193L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;

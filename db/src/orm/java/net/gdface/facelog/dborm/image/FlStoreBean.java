@@ -21,7 +21,7 @@ public class FlStoreBean
     extends FlStoreBeanBase
     implements FullBean<FlStoreBeanBase>
 {
-	private static final long serialVersionUID = 7919873353353652422L;
+	private static final long serialVersionUID = 919499972256662618L;
 	
     private boolean dataIsModified = false;
     private boolean dataIsInitialized = false;

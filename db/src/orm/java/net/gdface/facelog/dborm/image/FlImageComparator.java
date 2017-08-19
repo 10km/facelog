@@ -83,6 +83,7 @@ public class FlImageComparator implements Comparator<FlImageBean>
     /**
      * Implementation of the compare method.
      */
+    @Override
     public int compare(FlImageBean b1, FlImageBean b2)
     {
         int iReturn = 0;

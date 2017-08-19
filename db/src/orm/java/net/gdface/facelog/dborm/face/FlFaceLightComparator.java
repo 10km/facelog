@@ -106,6 +106,7 @@ public class FlFaceLightComparator implements Comparator<FlFaceLightBean>
     /**
      * Implementation of the compare method.
      */
+    @Override
     public int compare(FlFaceLightBean b1, FlFaceLightBean b2)
     {
         int iReturn = 0;
