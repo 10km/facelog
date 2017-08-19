@@ -13,7 +13,7 @@ import net.gdface.facelog.dborm.FullBean;
  * FlPersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 基本用户信息 </li>
+ *    <li>comments: 人员基本描述信息 </li>
  * </ul>
  * @author sql2java
 */
@@ -21,7 +21,7 @@ public class FlPersonBean
     extends FlPersonBeanBase
     implements FullBean<FlPersonBeanBase>
 {
-	private static final long serialVersionUID = 4571730927916398204L;
+	private static final long serialVersionUID = 7162509492338167572L;
 	
     private boolean updateTimeIsModified = false;
     private boolean updateTimeIsInitialized = false;
@@ -605,14 +605,14 @@ public class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.sex</li>
-     * <li>comments: 性别</li>
-     * <li>column size: 2</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>comments: 性别,0:女,1:男</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of sex
      */
-    public String getSex(){
+    public Integer getSex(){
         return sex;
     }
     /**
@@ -624,7 +624,7 @@ public class FlPersonBean
      *
      * @param newVal the new value to be assigned to sex
      */
-    public void setSex(String newVal)
+    public void setSex(Integer newVal)
     {
         if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
             (newVal == null && sex == null && sexIsInitialized)) {
@@ -633,6 +633,18 @@ public class FlPersonBean
         super.setSex(newVal);
         sexIsModified = true;
         sexIsInitialized = true;
+    }
+
+    /**
+     * Setter method for sex.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to sex
+     */
+    public void setSex(int newVal)
+    {
+        setSex(new Integer(newVal));
     }
 
     /**

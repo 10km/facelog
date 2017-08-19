@@ -19,14 +19,14 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * FlPersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 基本用户信息 </li>
+ *    <li>comments: 人员基本描述信息 </li>
  * </ul>
  * @author guyadong
 */
 public class FlPersonBeanBase
     implements Serializable,BaseBean<FlPersonBeanBase>
 {
-	private static final long serialVersionUID = -3253353575386576857L;
+	private static final long serialVersionUID = 5215134106814122962L;
 	
     protected java.util.Date updateTime;
 
@@ -44,7 +44,7 @@ public class FlPersonBeanBase
 
     protected java.util.Date birthdate;
 
-    protected String sex;
+    protected Integer sex;
 
     protected String name;
 
@@ -397,14 +397,14 @@ public class FlPersonBeanBase
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.sex</li>
-     * <li>comments: 性别</li>
-     * <li>column size: 2</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>comments: 性别,0:女,1:男</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of sex
      */
-    public String getSex(){
+    public Integer getSex(){
         return sex;
     }
     /**
@@ -416,10 +416,20 @@ public class FlPersonBeanBase
      *
      * @param newVal the new value to be assigned to sex
      */
-    public void setSex(String newVal){    
+    public void setSex(Integer newVal){    
         sex = newVal;
     }
 
+    /**
+     * Setter method for sex.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to sex
+     */
+    public void setSex(int newVal){
+        setSex(new Integer(newVal));
+    }
 
 
     /**
@@ -897,7 +907,7 @@ public class FlPersonBeanBase
         } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
             setBirthdate((java.util.Date)object);
         } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
-            setSex((String)object);
+            setSex((Integer)object);
         } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
             setName((String)object);
         } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {

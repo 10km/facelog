@@ -1895,7 +1895,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                 if (bean.getSex() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex = ?");
                 }
             }
             if (bean.isNameModified()) {
@@ -2033,26 +2033,8 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                 if (bean.getBirthdate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
             }
             if (bean.isSexModified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
-                        if (bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSex()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSex() + "%]");
-                        if ( bean.getSex()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getSex() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSex() + "]");
-                        if ( bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getSex()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "%]");
-                        if (bean.getSex()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSex() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
+                if (bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getSex()); }
             }
             if (bean.isNameModified()) {
                 switch (searchType) {
@@ -2197,7 +2179,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             bean.setPapersNum(rs.getString(6));
             bean.setPapersType(Manager.getInteger(rs, 7));
             bean.setBirthdate(rs.getDate(8));
-            bean.setSex(rs.getString(9));
+            bean.setSex(Manager.getInteger(rs, 9));
             bean.setName(rs.getString(10));
             bean.setGroupId(Manager.getInteger(rs, 11));
             bean.setId(Manager.getInteger(rs, 12));
@@ -2266,7 +2248,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         break;
                     case ID_SEX:
                         ++pos;
-                        bean.setSex(rs.getString(pos));
+                        bean.setSex(Manager.getInteger(rs, pos));
                         break;
                     case ID_NAME:
                         ++pos;
@@ -2316,7 +2298,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             bean.setPapersNum(rs.getString("papers_num"));
             bean.setPapersType(Manager.getInteger(rs, "papers_type"));
             bean.setBirthdate(rs.getDate("birthdate"));
-            bean.setSex(rs.getString("sex"));
+            bean.setSex(Manager.getInteger(rs, "sex"));
             bean.setName(rs.getString("name"));
             bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setId(Manager.getInteger(rs, "id"));

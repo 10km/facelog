@@ -25,7 +25,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlStoreBeanBase
     implements Serializable,BaseBean<FlStoreBeanBase>
 {
-	private static final long serialVersionUID = -125811489974349574L;
+	private static final long serialVersionUID = 2812947725062831816L;
 	
     protected byte[] data;
 
@@ -143,8 +143,8 @@ public class FlStoreBeanBase
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.md5</li>
-     * <li> imported key: fl_image.md5</li>
      * <li> imported key: fl_image.thumb_md5</li>
+     * <li> imported key: fl_image.md5</li>
      * <li>comments: 主键,md5检验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>

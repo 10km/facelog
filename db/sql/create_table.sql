@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS fl_device (
 ) COMMENT '前端设备基本信息' ;
 
 /*
-md5外键引用fl_store(md5),所以删除 fl_store 中对应的md5,会导致 fl_image 中的记录同步删除(ON DELETE CASCADE),
-所以删除图像最方便的方式是删除 fl_store 中对应的md5
-删除 fl_image 中记录时会同步级联删除 fl_face 中 md5 对应的所有记录
+ md5外键引用fl_store(md5),所以删除 fl_store 中对应的md5,会导致 fl_image 中的记录同步删除(ON DELETE CASCADE),
+ 所以删除图像最方便的方式是删除 fl_store 中对应的md5
+ 删除 fl_image 中记录时会同步级联删除 fl_face 中 md5 对应的所有记录
 */
 CREATE TABLE IF NOT EXISTS fl_image (
   `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,同时也是外键fl_store(md5)',
@@ -55,13 +55,13 @@ CREATE TABLE IF NOT EXISTS fl_image (
 ) COMMENT '图像存储表,用于存储系统中所有用到的图像数据' ;
 
 /* 
-删除 fl_person 中记录时会同步级联删除 fl_log中id对应的所有记录
+ 删除 fl_person 中记录时会同步级联删除 fl_log中id对应的所有记录
 */
 CREATE TABLE IF NOT EXISTS fl_person (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户识别码',
   `group_id`    int(11) DEFAULT NULL COMMENT '用户所属组id',
   `name`        varchar(32) NOT NULL COMMENT '姓名',
-  `sex`         varchar(2) DEFAULT NULL COMMENT '性别',
+  `sex`         tinyint(1) DEFAULT NULL COMMENT '性别,0:女,1:男',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
   `papers_type` tinyint(1) DEFAULT NULL COMMENT '证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他',
   `papers_num`  varchar(32) DEFAULT NULL UNIQUE COMMENT '证件号码' ,
@@ -73,8 +73,10 @@ CREATE TABLE IF NOT EXISTS fl_person (
   FOREIGN KEY (photo_id)  REFERENCES fl_image(md5) ON DELETE SET NULL,
   INDEX `expiry_date` (`expiry_date` ASC),
   # 验证 papers_type 字段有效性
-  CHECK(papers_type>=0 AND papers_type<=8)
-) COMMENT '基本用户信息' ;
+  CHECK(papers_type>=0 AND papers_type<=8),
+  # 验证 sex 字段有效性
+  CHECK(sex>=0 AND sex<=1)
+) COMMENT '人员基本描述信息' ;
 
 CREATE TABLE IF NOT EXISTS fl_face (
   `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,特征数据md5校验码',
@@ -119,6 +121,8 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `similarty`	double DEFAULT NULL COMMENT '验证相似度',
   `verify_time` timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  INDEX `person_id` (`person_id` ASC),
+  INDEX `device_id` (`device_id` ASC),
   FOREIGN KEY (person_id)       REFERENCES fl_person(id) ON DELETE CASCADE,
   FOREIGN KEY (device_id)       REFERENCES fl_device(id) ON DELETE SET NULL,
   FOREIGN KEY (verify_face)     REFERENCES fl_face(md5)  ON DELETE SET NULL,

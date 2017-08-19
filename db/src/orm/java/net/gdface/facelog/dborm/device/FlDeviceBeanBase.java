@@ -25,7 +25,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlDeviceBeanBase
     implements Serializable,BaseBean<FlDeviceBeanBase>
 {
-	private static final long serialVersionUID = 8619797871554838921L;
+	private static final long serialVersionUID = -4167492153717526184L;
 	
     protected java.util.Date updateTime;
 

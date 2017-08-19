@@ -21,7 +21,7 @@ public class FlDeviceBean
     extends FlDeviceBeanBase
     implements FullBean<FlDeviceBeanBase>
 {
-	private static final long serialVersionUID = 4584950802239805821L;
+	private static final long serialVersionUID = 7167466946283187252L;
 	
     private boolean updateTimeIsModified = false;
     private boolean updateTimeIsInitialized = false;
