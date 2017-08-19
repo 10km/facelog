@@ -23,12 +23,15 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlFaceLightBeanBase
-    implements Serializable,BaseBean<FlFaceLightBeanBase>
+    implements Serializable,BaseBean<FlFaceLightBeanBase>,Comparable<FlFaceLightBean>
 {
-	private static final long serialVersionUID = 5940489810475059099L;
+	private static final long serialVersionUID = 5168233877000483700L;
 	
     protected java.util.Date createTime;
 
+    /**
+     * comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析
+     */
     protected byte[] extInfo;
 
     protected Integer angleRoll;
@@ -61,10 +64,19 @@ public class FlFaceLightBeanBase
 
     protected Integer faceLeft;
 
+    /**
+     * comments:外键,所属图像id
+     */
     protected String imgMd5;
 
+    /**
+     * comments:外键,所属用户id
+     */
     protected Integer personId;
 
+    /**
+     * comments:主键,特征数据md5校验码
+     */
     protected String md5;
 
     private boolean _isNew = true;
@@ -110,8 +122,7 @@ public class FlFaceLightBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.create_time</li>
@@ -125,8 +136,7 @@ public class FlFaceLightBeanBase
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -138,8 +148,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -150,8 +159,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for extInfo.
-     * <br>
+     * Getter method for {@link #extInfo}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.ext_info</li>
@@ -166,8 +174,7 @@ public class FlFaceLightBeanBase
         return extInfo;
     }
     /**
-     * Setter method for extInfo.
-     * <br>
+     * Setter method for {@link #extInfo}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -180,8 +187,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for angleRoll.
-     * <br>
+     * Getter method for {@link #angleRoll}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.angle_roll</li>
@@ -195,8 +201,7 @@ public class FlFaceLightBeanBase
         return angleRoll;
     }
     /**
-     * Setter method for angleRoll.
-     * <br>
+     * Setter method for {@link #angleRoll}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -208,8 +213,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for angleRoll.
-     * <br>
+     * Setter method for {@link #angleRoll}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to angleRoll
@@ -220,8 +224,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for anglePitch.
-     * <br>
+     * Getter method for {@link #anglePitch}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.angle_pitch</li>
@@ -235,8 +238,7 @@ public class FlFaceLightBeanBase
         return anglePitch;
     }
     /**
-     * Setter method for anglePitch.
-     * <br>
+     * Setter method for {@link #anglePitch}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -248,8 +250,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for anglePitch.
-     * <br>
+     * Setter method for {@link #anglePitch}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to anglePitch
@@ -260,8 +261,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for angleYaw.
-     * <br>
+     * Getter method for {@link #angleYaw}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.angle_yaw</li>
@@ -275,8 +275,7 @@ public class FlFaceLightBeanBase
         return angleYaw;
     }
     /**
-     * Setter method for angleYaw.
-     * <br>
+     * Setter method for {@link #angleYaw}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -288,8 +287,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for angleYaw.
-     * <br>
+     * Setter method for {@link #angleYaw}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to angleYaw
@@ -300,8 +298,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for noseY.
-     * <br>
+     * Getter method for {@link #noseY}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.nose_y</li>
@@ -315,8 +312,7 @@ public class FlFaceLightBeanBase
         return noseY;
     }
     /**
-     * Setter method for noseY.
-     * <br>
+     * Setter method for {@link #noseY}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -328,8 +324,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for noseY.
-     * <br>
+     * Setter method for {@link #noseY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to noseY
@@ -340,8 +335,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for noseX.
-     * <br>
+     * Getter method for {@link #noseX}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.nose_x</li>
@@ -355,8 +349,7 @@ public class FlFaceLightBeanBase
         return noseX;
     }
     /**
-     * Setter method for noseX.
-     * <br>
+     * Setter method for {@link #noseX}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -368,8 +361,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for noseX.
-     * <br>
+     * Setter method for {@link #noseX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to noseX
@@ -380,8 +372,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for mouthY.
-     * <br>
+     * Getter method for {@link #mouthY}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.mouth_y</li>
@@ -395,8 +386,7 @@ public class FlFaceLightBeanBase
         return mouthY;
     }
     /**
-     * Setter method for mouthY.
-     * <br>
+     * Setter method for {@link #mouthY}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -408,8 +398,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for mouthY.
-     * <br>
+     * Setter method for {@link #mouthY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to mouthY
@@ -420,8 +409,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for mouthX.
-     * <br>
+     * Getter method for {@link #mouthX}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.mouth_x</li>
@@ -435,8 +423,7 @@ public class FlFaceLightBeanBase
         return mouthX;
     }
     /**
-     * Setter method for mouthX.
-     * <br>
+     * Setter method for {@link #mouthX}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -448,8 +435,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for mouthX.
-     * <br>
+     * Setter method for {@link #mouthX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to mouthX
@@ -460,8 +446,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for eyeRighty.
-     * <br>
+     * Getter method for {@link #eyeRighty}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.eye_righty</li>
@@ -475,8 +460,7 @@ public class FlFaceLightBeanBase
         return eyeRighty;
     }
     /**
-     * Setter method for eyeRighty.
-     * <br>
+     * Setter method for {@link #eyeRighty}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -488,8 +472,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for eyeRighty.
-     * <br>
+     * Setter method for {@link #eyeRighty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeRighty
@@ -500,8 +483,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for eyeRightx.
-     * <br>
+     * Getter method for {@link #eyeRightx}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.eye_rightx</li>
@@ -515,8 +497,7 @@ public class FlFaceLightBeanBase
         return eyeRightx;
     }
     /**
-     * Setter method for eyeRightx.
-     * <br>
+     * Setter method for {@link #eyeRightx}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -528,8 +509,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for eyeRightx.
-     * <br>
+     * Setter method for {@link #eyeRightx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeRightx
@@ -540,8 +520,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for eyeLefty.
-     * <br>
+     * Getter method for {@link #eyeLefty}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.eye_lefty</li>
@@ -555,8 +534,7 @@ public class FlFaceLightBeanBase
         return eyeLefty;
     }
     /**
-     * Setter method for eyeLefty.
-     * <br>
+     * Setter method for {@link #eyeLefty}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -568,8 +546,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for eyeLefty.
-     * <br>
+     * Setter method for {@link #eyeLefty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeLefty
@@ -580,8 +557,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for eyeLeftx.
-     * <br>
+     * Getter method for {@link #eyeLeftx}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.eye_leftx</li>
@@ -595,8 +571,7 @@ public class FlFaceLightBeanBase
         return eyeLeftx;
     }
     /**
-     * Setter method for eyeLeftx.
-     * <br>
+     * Setter method for {@link #eyeLeftx}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -608,8 +583,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for eyeLeftx.
-     * <br>
+     * Setter method for {@link #eyeLeftx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeLeftx
@@ -620,8 +594,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for faceHeight.
-     * <br>
+     * Getter method for {@link #faceHeight}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.face_height</li>
@@ -635,8 +608,7 @@ public class FlFaceLightBeanBase
         return faceHeight;
     }
     /**
-     * Setter method for faceHeight.
-     * <br>
+     * Setter method for {@link #faceHeight}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -648,8 +620,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for faceHeight.
-     * <br>
+     * Setter method for {@link #faceHeight}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceHeight
@@ -660,8 +631,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for faceWidth.
-     * <br>
+     * Getter method for {@link #faceWidth}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.face_width</li>
@@ -675,8 +645,7 @@ public class FlFaceLightBeanBase
         return faceWidth;
     }
     /**
-     * Setter method for faceWidth.
-     * <br>
+     * Setter method for {@link #faceWidth}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -688,8 +657,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for faceWidth.
-     * <br>
+     * Setter method for {@link #faceWidth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceWidth
@@ -700,8 +668,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for faceTop.
-     * <br>
+     * Getter method for {@link #faceTop}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.face_top</li>
@@ -715,8 +682,7 @@ public class FlFaceLightBeanBase
         return faceTop;
     }
     /**
-     * Setter method for faceTop.
-     * <br>
+     * Setter method for {@link #faceTop}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -728,8 +694,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for faceTop.
-     * <br>
+     * Setter method for {@link #faceTop}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceTop
@@ -740,8 +705,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for faceLeft.
-     * <br>
+     * Getter method for {@link #faceLeft}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.face_left</li>
@@ -755,8 +719,7 @@ public class FlFaceLightBeanBase
         return faceLeft;
     }
     /**
-     * Setter method for faceLeft.
-     * <br>
+     * Setter method for {@link #faceLeft}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -768,8 +731,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for faceLeft.
-     * <br>
+     * Setter method for {@link #faceLeft}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceLeft
@@ -780,8 +742,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for imgMd5.
-     * <br>
+     * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.img_md5</li>
@@ -796,8 +757,7 @@ public class FlFaceLightBeanBase
         return imgMd5;
     }
     /**
-     * Setter method for imgMd5.
-     * <br>
+     * Setter method for {@link #imgMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -811,8 +771,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.person_id</li>
@@ -827,8 +786,7 @@ public class FlFaceLightBeanBase
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -840,8 +798,7 @@ public class FlFaceLightBeanBase
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -852,8 +809,7 @@ public class FlFaceLightBeanBase
 
 
     /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face_light.md5</li>
@@ -868,8 +824,7 @@ public class FlFaceLightBeanBase
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -882,9 +837,7 @@ public class FlFaceLightBeanBase
 
 
 
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlFaceLightBean)) {
@@ -916,9 +869,7 @@ public class FlFaceLightBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -945,9 +896,7 @@ public class FlFaceLightBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
@@ -974,34 +923,33 @@ public class FlFaceLightBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlFaceLightBean obj = (FlFaceLightBean) object;
+    @Override
+    public int compareTo(FlFaceLightBean object){
         return new CompareToBuilder()
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getExtInfo(), obj.getExtInfo())
-            .append(getAngleRoll(), obj.getAngleRoll())
-            .append(getAnglePitch(), obj.getAnglePitch())
-            .append(getAngleYaw(), obj.getAngleYaw())
-            .append(getNoseY(), obj.getNoseY())
-            .append(getNoseX(), obj.getNoseX())
-            .append(getMouthY(), obj.getMouthY())
-            .append(getMouthX(), obj.getMouthX())
-            .append(getEyeRighty(), obj.getEyeRighty())
-            .append(getEyeRightx(), obj.getEyeRightx())
-            .append(getEyeLefty(), obj.getEyeLefty())
-            .append(getEyeLeftx(), obj.getEyeLeftx())
-            .append(getFaceHeight(), obj.getFaceHeight())
-            .append(getFaceWidth(), obj.getFaceWidth())
-            .append(getFaceTop(), obj.getFaceTop())
-            .append(getFaceLeft(), obj.getFaceLeft())
-            .append(getImgMd5(), obj.getImgMd5())
-            .append(getPersonId(), obj.getPersonId())
-            .append(getMd5(), obj.getMd5())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getExtInfo(), object.getExtInfo())
+            .append(getAngleRoll(), object.getAngleRoll())
+            .append(getAnglePitch(), object.getAnglePitch())
+            .append(getAngleYaw(), object.getAngleYaw())
+            .append(getNoseY(), object.getNoseY())
+            .append(getNoseX(), object.getNoseX())
+            .append(getMouthY(), object.getMouthY())
+            .append(getMouthX(), object.getMouthX())
+            .append(getEyeRighty(), object.getEyeRighty())
+            .append(getEyeRightx(), object.getEyeRightx())
+            .append(getEyeLefty(), object.getEyeLefty())
+            .append(getEyeLeftx(), object.getEyeLeftx())
+            .append(getFaceHeight(), object.getFaceHeight())
+            .append(getFaceWidth(), object.getFaceWidth())
+            .append(getFaceTop(), object.getFaceTop())
+            .append(getFaceLeft(), object.getFaceLeft())
+            .append(getImgMd5(), object.getImgMd5())
+            .append(getPersonId(), object.getPersonId())
+            .append(getMd5(), object.getMd5())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -1035,7 +983,7 @@ public class FlFaceLightBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong

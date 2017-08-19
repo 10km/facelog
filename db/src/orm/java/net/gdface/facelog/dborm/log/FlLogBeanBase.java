@@ -26,24 +26,45 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlLogBeanBase
-    implements Serializable,BaseBean<FlLogBeanBase>
+    implements Serializable,BaseBean<FlLogBeanBase>,Comparable<FlLogBean>
 {
-	private static final long serialVersionUID = 2087592021401895679L;
+	private static final long serialVersionUID = 8295775966707678279L;
 	
     protected java.util.Date createTime;
 
+    /**
+     * comments:验证时间(可能由前端设备提供时间)
+     */
     protected java.util.Date verifyTime;
 
+    /**
+     * comments:验证相似度
+     */
     protected Double similarty;
 
+    /**
+     * comments:外键,数据库中最相似的对比人脸id
+     */
     protected String compareFace;
 
+    /**
+     * comments:外键,验证人脸信息id
+     */
     protected String verifyFace;
 
+    /**
+     * comments:外键,图像来源设备id
+     */
     protected Integer deviceId;
 
+    /**
+     * comments:外键,用户id
+     */
     protected Integer personId;
 
+    /**
+     * comments:日志id
+     */
     protected Integer id;
 
     private boolean _isNew = true;
@@ -89,8 +110,7 @@ public class FlLogBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.create_time</li>
@@ -104,8 +124,7 @@ public class FlLogBeanBase
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -117,8 +136,7 @@ public class FlLogBeanBase
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -129,8 +147,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for verifyTime.
-     * <br>
+     * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.verify_time</li>
@@ -145,8 +162,7 @@ public class FlLogBeanBase
         return verifyTime;
     }
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -158,8 +174,7 @@ public class FlLogBeanBase
     }
 
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to verifyTime
@@ -170,8 +185,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for similarty.
-     * <br>
+     * Getter method for {@link #similarty}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.similarty</li>
@@ -186,8 +200,7 @@ public class FlLogBeanBase
         return similarty;
     }
     /**
-     * Setter method for similarty.
-     * <br>
+     * Setter method for {@link #similarty}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -199,8 +212,7 @@ public class FlLogBeanBase
     }
 
     /**
-     * Setter method for similarty.
-     * <br>
+     * Setter method for {@link #similarty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to similarty
@@ -211,8 +223,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for compareFace.
-     * <br>
+     * Getter method for {@link #compareFace}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.compare_face</li>
@@ -228,8 +239,7 @@ public class FlLogBeanBase
         return compareFace;
     }
     /**
-     * Setter method for compareFace.
-     * <br>
+     * Setter method for {@link #compareFace}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -243,8 +253,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for verifyFace.
-     * <br>
+     * Getter method for {@link #verifyFace}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.verify_face</li>
@@ -260,8 +269,7 @@ public class FlLogBeanBase
         return verifyFace;
     }
     /**
-     * Setter method for verifyFace.
-     * <br>
+     * Setter method for {@link #verifyFace}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -275,8 +283,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for deviceId.
-     * <br>
+     * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.device_id</li>
@@ -292,8 +299,7 @@ public class FlLogBeanBase
         return deviceId;
     }
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -305,8 +311,7 @@ public class FlLogBeanBase
     }
 
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to deviceId
@@ -317,8 +322,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.person_id</li>
@@ -334,8 +338,7 @@ public class FlLogBeanBase
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -347,8 +350,7 @@ public class FlLogBeanBase
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -359,8 +361,7 @@ public class FlLogBeanBase
 
 
     /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -376,8 +377,7 @@ public class FlLogBeanBase
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -389,8 +389,7 @@ public class FlLogBeanBase
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -406,7 +405,7 @@ public class FlLogBeanBase
     public FlDeviceBean getFlDeviceBean() {
         return this.referencedFlDevice;
     }
-    /** Setter method for FlDeviceBean. */
+    /** Setter method for {@link #referencedFlDevice}. */
     public void setFlDeviceBean(FlDeviceBean reference) {
         this.referencedFlDevice = reference;
     }    
@@ -416,7 +415,7 @@ public class FlLogBeanBase
     public FlFaceBean getFlFaceBean() {
         return this.referencedFlFace;
     }
-    /** Setter method for FlFaceBean. */
+    /** Setter method for {@link #referencedFlFace}. */
     public void setFlFaceBean(FlFaceBean reference) {
         this.referencedFlFace = reference;
     }    
@@ -426,13 +425,11 @@ public class FlLogBeanBase
     public FlPersonBean getFlPersonBean() {
         return this.referencedFlPerson;
     }
-    /** Setter method for FlPersonBean. */
+    /** Setter method for {@link #referencedFlPerson}. */
     public void setFlPersonBean(FlPersonBean reference) {
         this.referencedFlPerson = reference;
     }    
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlLogBean)) {
@@ -452,9 +449,7 @@ public class FlLogBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -469,9 +464,7 @@ public class FlLogBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
@@ -486,22 +479,21 @@ public class FlLogBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlLogBean obj = (FlLogBean) object;
+    @Override
+    public int compareTo(FlLogBean object){
         return new CompareToBuilder()
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getVerifyTime(), obj.getVerifyTime())
-            .append(getSimilarty(), obj.getSimilarty())
-            .append(getCompareFace(), obj.getCompareFace())
-            .append(getVerifyFace(), obj.getVerifyFace())
-            .append(getDeviceId(), obj.getDeviceId())
-            .append(getPersonId(), obj.getPersonId())
-            .append(getId(), obj.getId())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getVerifyTime(), object.getVerifyTime())
+            .append(getSimilarty(), object.getSimilarty())
+            .append(getCompareFace(), object.getCompareFace())
+            .append(getVerifyFace(), object.getVerifyFace())
+            .append(getDeviceId(), object.getDeviceId())
+            .append(getPersonId(), object.getPersonId())
+            .append(getId(), object.getId())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -523,7 +515,7 @@ public class FlLogBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong

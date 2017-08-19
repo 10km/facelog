@@ -23,20 +23,38 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlLogLightBeanBase
-    implements Serializable,BaseBean<FlLogLightBeanBase>
+    implements Serializable,BaseBean<FlLogLightBeanBase>,Comparable<FlLogLightBean>
 {
-	private static final long serialVersionUID = -3442136450056590048L;
+	private static final long serialVersionUID = -5488426185831054046L;
 	
+    /**
+     * comments:验证时间(可能由前端设备提供时间)
+     */
     protected java.util.Date verifyTime;
 
+    /**
+     * comments:证件号码
+     */
     protected String papersNum;
 
+    /**
+     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
+     */
     protected Integer papersType;
 
+    /**
+     * comments:姓名
+     */
     protected String name;
 
+    /**
+     * comments:用户识别码
+     */
     protected Integer personId;
 
+    /**
+     * comments:日志id
+     */
     protected Integer id;
 
     private boolean _isNew = true;
@@ -82,8 +100,7 @@ public class FlLogLightBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for verifyTime.
-     * <br>
+     * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.verify_time</li>
@@ -98,8 +115,7 @@ public class FlLogLightBeanBase
         return verifyTime;
     }
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -111,8 +127,7 @@ public class FlLogLightBeanBase
     }
 
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to verifyTime
@@ -123,8 +138,7 @@ public class FlLogLightBeanBase
 
 
     /**
-     * Getter method for papersNum.
-     * <br>
+     * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.papers_num</li>
@@ -139,8 +153,7 @@ public class FlLogLightBeanBase
         return papersNum;
     }
     /**
-     * Setter method for papersNum.
-     * <br>
+     * Setter method for {@link #papersNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -154,8 +167,7 @@ public class FlLogLightBeanBase
 
 
     /**
-     * Getter method for papersType.
-     * <br>
+     * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.papers_type</li>
@@ -170,8 +182,7 @@ public class FlLogLightBeanBase
         return papersType;
     }
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -183,8 +194,7 @@ public class FlLogLightBeanBase
     }
 
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to papersType
@@ -195,8 +205,7 @@ public class FlLogLightBeanBase
 
 
     /**
-     * Getter method for name.
-     * <br>
+     * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.name</li>
@@ -211,8 +220,7 @@ public class FlLogLightBeanBase
         return name;
     }
     /**
-     * Setter method for name.
-     * <br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -226,8 +234,7 @@ public class FlLogLightBeanBase
 
 
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.person_id</li>
@@ -242,8 +249,7 @@ public class FlLogLightBeanBase
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -255,8 +261,7 @@ public class FlLogLightBeanBase
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -267,8 +272,7 @@ public class FlLogLightBeanBase
 
 
     /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.id</li>
@@ -283,8 +287,7 @@ public class FlLogLightBeanBase
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -296,8 +299,7 @@ public class FlLogLightBeanBase
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -307,9 +309,7 @@ public class FlLogLightBeanBase
     }
 
 
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlLogLightBean)) {
@@ -327,9 +327,7 @@ public class FlLogLightBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -342,9 +340,7 @@ public class FlLogLightBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tverify_time=").append(getVerifyTime()).append("\n")
@@ -357,20 +353,19 @@ public class FlLogLightBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlLogLightBean obj = (FlLogLightBean) object;
+    @Override
+    public int compareTo(FlLogLightBean object){
         return new CompareToBuilder()
-            .append(getVerifyTime(), obj.getVerifyTime())
-            .append(getPapersNum(), obj.getPapersNum())
-            .append(getPapersType(), obj.getPapersType())
-            .append(getName(), obj.getName())
-            .append(getPersonId(), obj.getPersonId())
-            .append(getId(), obj.getId())
+            .append(getVerifyTime(), object.getVerifyTime())
+            .append(getPapersNum(), object.getPapersNum())
+            .append(getPapersType(), object.getPapersType())
+            .append(getName(), object.getName())
+            .append(getPersonId(), object.getPersonId())
+            .append(getId(), object.getId())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -390,7 +385,7 @@ public class FlLogLightBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong

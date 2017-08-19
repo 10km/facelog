@@ -25,24 +25,48 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlImageBeanBase
-    implements Serializable,BaseBean<FlImageBeanBase>
+    implements Serializable,BaseBean<FlImageBeanBase>,Comparable<FlImageBean>
 {
-	private static final long serialVersionUID = -6976525791776006790L;
+	private static final long serialVersionUID = -7341934473238360027L;
 	
+    /**
+     * comments:外键,图像来源设备
+     */
     protected Integer deviceId;
 
+    /**
+     * comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5)
+     */
     protected String thumbMd5;
 
+    /**
+     * comments:图像中的人脸数目
+     */
     protected Integer faceNum;
 
+    /**
+     * comments:通道数
+     */
     protected Integer depth;
 
+    /**
+     * comments:图像高度
+     */
     protected Integer height;
 
+    /**
+     * comments:图像宽度
+     */
     protected Integer width;
 
+    /**
+     * comments:图像格式
+     */
     protected String format;
 
+    /**
+     * comments:主键,图像md5检验码,同时也是外键fl_store(md5)
+     */
     protected String md5;
 
     private boolean _isNew = true;
@@ -88,8 +112,7 @@ public class FlImageBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for deviceId.
-     * <br>
+     * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.device_id</li>
@@ -105,8 +128,7 @@ public class FlImageBeanBase
         return deviceId;
     }
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -118,8 +140,7 @@ public class FlImageBeanBase
     }
 
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to deviceId
@@ -130,8 +151,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for thumbMd5.
-     * <br>
+     * Getter method for {@link #thumbMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.thumb_md5</li>
@@ -147,8 +167,7 @@ public class FlImageBeanBase
         return thumbMd5;
     }
     /**
-     * Setter method for thumbMd5.
-     * <br>
+     * Setter method for {@link #thumbMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -162,8 +181,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for faceNum.
-     * <br>
+     * Getter method for {@link #faceNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.face_num</li>
@@ -178,8 +196,7 @@ public class FlImageBeanBase
         return faceNum;
     }
     /**
-     * Setter method for faceNum.
-     * <br>
+     * Setter method for {@link #faceNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -191,8 +208,7 @@ public class FlImageBeanBase
     }
 
     /**
-     * Setter method for faceNum.
-     * <br>
+     * Setter method for {@link #faceNum}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceNum
@@ -203,8 +219,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for depth.
-     * <br>
+     * Getter method for {@link #depth}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.depth</li>
@@ -219,8 +234,7 @@ public class FlImageBeanBase
         return depth;
     }
     /**
-     * Setter method for depth.
-     * <br>
+     * Setter method for {@link #depth}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -232,8 +246,7 @@ public class FlImageBeanBase
     }
 
     /**
-     * Setter method for depth.
-     * <br>
+     * Setter method for {@link #depth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to depth
@@ -244,8 +257,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for height.
-     * <br>
+     * Getter method for {@link #height}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.height</li>
@@ -260,8 +272,7 @@ public class FlImageBeanBase
         return height;
     }
     /**
-     * Setter method for height.
-     * <br>
+     * Setter method for {@link #height}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -273,8 +284,7 @@ public class FlImageBeanBase
     }
 
     /**
-     * Setter method for height.
-     * <br>
+     * Setter method for {@link #height}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to height
@@ -285,8 +295,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for width.
-     * <br>
+     * Getter method for {@link #width}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.width</li>
@@ -301,8 +310,7 @@ public class FlImageBeanBase
         return width;
     }
     /**
-     * Setter method for width.
-     * <br>
+     * Setter method for {@link #width}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -314,8 +322,7 @@ public class FlImageBeanBase
     }
 
     /**
-     * Setter method for width.
-     * <br>
+     * Setter method for {@link #width}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to width
@@ -326,8 +333,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for format.
-     * <br>
+     * Getter method for {@link #format}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.format</li>
@@ -342,8 +348,7 @@ public class FlImageBeanBase
         return format;
     }
     /**
-     * Setter method for format.
-     * <br>
+     * Setter method for {@link #format}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -357,8 +362,7 @@ public class FlImageBeanBase
 
 
     /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -377,8 +381,7 @@ public class FlImageBeanBase
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -397,7 +400,7 @@ public class FlImageBeanBase
     public FlDeviceBean getFlDeviceBean() {
         return this.referencedFlDevice;
     }
-    /** Setter method for FlDeviceBean. */
+    /** Setter method for {@link #referencedFlDevice}. */
     public void setFlDeviceBean(FlDeviceBean reference) {
         this.referencedFlDevice = reference;
     }    
@@ -407,13 +410,11 @@ public class FlImageBeanBase
     public FlStoreBean getFlStoreBean() {
         return this.referencedFlStore;
     }
-    /** Setter method for FlStoreBean. */
+    /** Setter method for {@link #referencedFlStore}. */
     public void setFlStoreBean(FlStoreBean reference) {
         this.referencedFlStore = reference;
     }    
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlImageBean)) {
@@ -433,9 +434,7 @@ public class FlImageBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -450,9 +449,7 @@ public class FlImageBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tdevice_id=").append(getDeviceId()).append("\n")
@@ -467,22 +464,21 @@ public class FlImageBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlImageBean obj = (FlImageBean) object;
+    @Override
+    public int compareTo(FlImageBean object){
         return new CompareToBuilder()
-            .append(getDeviceId(), obj.getDeviceId())
-            .append(getThumbMd5(), obj.getThumbMd5())
-            .append(getFaceNum(), obj.getFaceNum())
-            .append(getDepth(), obj.getDepth())
-            .append(getHeight(), obj.getHeight())
-            .append(getWidth(), obj.getWidth())
-            .append(getFormat(), obj.getFormat())
-            .append(getMd5(), obj.getMd5())
+            .append(getDeviceId(), object.getDeviceId())
+            .append(getThumbMd5(), object.getThumbMd5())
+            .append(getFaceNum(), object.getFaceNum())
+            .append(getDepth(), object.getDepth())
+            .append(getHeight(), object.getHeight())
+            .append(getWidth(), object.getWidth())
+            .append(getFormat(), object.getFormat())
+            .append(getMd5(), object.getMd5())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -504,7 +500,7 @@ public class FlImageBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong

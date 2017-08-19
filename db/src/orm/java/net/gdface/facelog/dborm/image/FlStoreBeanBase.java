@@ -23,14 +23,23 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlStoreBeanBase
-    implements Serializable,BaseBean<FlStoreBeanBase>
+    implements Serializable,BaseBean<FlStoreBeanBase>,Comparable<FlStoreBean>
 {
-	private static final long serialVersionUID = 2812947725062831816L;
+	private static final long serialVersionUID = 2040691791588256416L;
 	
+    /**
+     * comments:二进制数据
+     */
     protected byte[] data;
 
+    /**
+     * comments:编码类型,GBK,UTF8...
+     */
     protected String encoding;
 
+    /**
+     * comments:主键,md5检验码
+     */
     protected String md5;
 
     private boolean _isNew = true;
@@ -76,8 +85,7 @@ public class FlStoreBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for data.
-     * <br>
+     * Getter method for {@link #data}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.data</li>
@@ -92,8 +100,7 @@ public class FlStoreBeanBase
         return data;
     }
     /**
-     * Setter method for data.
-     * <br>
+     * Setter method for {@link #data}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -106,8 +113,7 @@ public class FlStoreBeanBase
 
 
     /**
-     * Getter method for encoding.
-     * <br>
+     * Getter method for {@link #encoding}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.encoding</li>
@@ -122,8 +128,7 @@ public class FlStoreBeanBase
         return encoding;
     }
     /**
-     * Setter method for encoding.
-     * <br>
+     * Setter method for {@link #encoding}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -137,14 +142,13 @@ public class FlStoreBeanBase
 
 
     /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.md5</li>
-     * <li> imported key: fl_image.thumb_md5</li>
      * <li> imported key: fl_image.md5</li>
+     * <li> imported key: fl_image.thumb_md5</li>
      * <li>comments: 主键,md5检验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -156,8 +160,7 @@ public class FlStoreBeanBase
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -170,9 +173,7 @@ public class FlStoreBeanBase
 
 
 
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlStoreBean)) {
@@ -187,9 +188,7 @@ public class FlStoreBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -199,9 +198,7 @@ public class FlStoreBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tdata=").append(getData()).append("\n")
@@ -211,17 +208,16 @@ public class FlStoreBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlStoreBean obj = (FlStoreBean) object;
+    @Override
+    public int compareTo(FlStoreBean object){
         return new CompareToBuilder()
-            .append(getData(), obj.getData())
-            .append(getEncoding(), obj.getEncoding())
-            .append(getMd5(), obj.getMd5())
+            .append(getData(), object.getData())
+            .append(getEncoding(), object.getEncoding())
+            .append(getMd5(), object.getMd5())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -238,7 +234,7 @@ public class FlStoreBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong

@@ -24,32 +24,62 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlPersonBeanBase
-    implements Serializable,BaseBean<FlPersonBeanBase>
+    implements Serializable,BaseBean<FlPersonBeanBase>,Comparable<FlPersonBean>
 {
-	private static final long serialVersionUID = 5215134106814122962L;
+	private static final long serialVersionUID = -7023426021589646053L;
 	
     protected java.util.Date updateTime;
 
     protected java.util.Date createTime;
 
+    /**
+     * comments:验证有效期限(超过期限不能通过验证),为NULL永久有效
+     */
     protected java.util.Date expiryDate;
 
+    /**
+     * comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新
+     */
     protected String faceMd5;
 
+    /**
+     * comments:用户默认照片(证件照,标准照)的md5校验码,外键
+     */
     protected String photoId;
 
+    /**
+     * comments:证件号码
+     */
     protected String papersNum;
 
+    /**
+     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
+     */
     protected Integer papersType;
 
+    /**
+     * comments:出生日期
+     */
     protected java.util.Date birthdate;
 
+    /**
+     * comments:性别,0:女,1:男
+     */
     protected Integer sex;
 
+    /**
+     * comments:姓名
+     */
     protected String name;
 
+    /**
+     * comments:用户所属组id
+     */
     protected Integer groupId;
 
+    /**
+     * comments:用户识别码
+     */
     protected Integer id;
 
     private boolean _isNew = true;
@@ -95,8 +125,7 @@ public class FlPersonBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for updateTime.
-     * <br>
+     * Getter method for {@link #updateTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.update_time</li>
@@ -110,8 +139,7 @@ public class FlPersonBeanBase
         return updateTime;
     }
     /**
-     * Setter method for updateTime.
-     * <br>
+     * Setter method for {@link #updateTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -123,8 +151,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for updateTime.
-     * <br>
+     * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to updateTime
@@ -135,8 +162,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.create_time</li>
@@ -150,8 +176,7 @@ public class FlPersonBeanBase
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -163,8 +188,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -175,8 +199,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for expiryDate.
-     * <br>
+     * Getter method for {@link #expiryDate}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.expiry_date</li>
@@ -191,8 +214,7 @@ public class FlPersonBeanBase
         return expiryDate;
     }
     /**
-     * Setter method for expiryDate.
-     * <br>
+     * Setter method for {@link #expiryDate}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -204,8 +226,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for expiryDate.
-     * <br>
+     * Setter method for {@link #expiryDate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to expiryDate
@@ -216,8 +237,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for faceMd5.
-     * <br>
+     * Getter method for {@link #faceMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.face_md5</li>
@@ -232,8 +252,7 @@ public class FlPersonBeanBase
         return faceMd5;
     }
     /**
-     * Setter method for faceMd5.
-     * <br>
+     * Setter method for {@link #faceMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -247,8 +266,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for photoId.
-     * <br>
+     * Getter method for {@link #photoId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.photo_id</li>
@@ -264,8 +282,7 @@ public class FlPersonBeanBase
         return photoId;
     }
     /**
-     * Setter method for photoId.
-     * <br>
+     * Setter method for {@link #photoId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -279,8 +296,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for papersNum.
-     * <br>
+     * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.papers_num</li>
@@ -295,8 +311,7 @@ public class FlPersonBeanBase
         return papersNum;
     }
     /**
-     * Setter method for papersNum.
-     * <br>
+     * Setter method for {@link #papersNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -310,8 +325,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for papersType.
-     * <br>
+     * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.papers_type</li>
@@ -326,8 +340,7 @@ public class FlPersonBeanBase
         return papersType;
     }
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -339,8 +352,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to papersType
@@ -351,8 +363,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for birthdate.
-     * <br>
+     * Getter method for {@link #birthdate}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.birthdate</li>
@@ -367,8 +378,7 @@ public class FlPersonBeanBase
         return birthdate;
     }
     /**
-     * Setter method for birthdate.
-     * <br>
+     * Setter method for {@link #birthdate}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -380,8 +390,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for birthdate.
-     * <br>
+     * Setter method for {@link #birthdate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to birthdate
@@ -392,8 +401,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for sex.
-     * <br>
+     * Getter method for {@link #sex}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.sex</li>
@@ -408,8 +416,7 @@ public class FlPersonBeanBase
         return sex;
     }
     /**
-     * Setter method for sex.
-     * <br>
+     * Setter method for {@link #sex}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -421,8 +428,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for sex.
-     * <br>
+     * Setter method for {@link #sex}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to sex
@@ -433,8 +439,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for name.
-     * <br>
+     * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.name</li>
@@ -449,8 +454,7 @@ public class FlPersonBeanBase
         return name;
     }
     /**
-     * Setter method for name.
-     * <br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -464,8 +468,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for groupId.
-     * <br>
+     * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.group_id</li>
@@ -480,8 +483,7 @@ public class FlPersonBeanBase
         return groupId;
     }
     /**
-     * Setter method for groupId.
-     * <br>
+     * Setter method for {@link #groupId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -493,8 +495,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for groupId.
-     * <br>
+     * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to groupId
@@ -505,8 +506,7 @@ public class FlPersonBeanBase
 
 
     /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -524,8 +524,7 @@ public class FlPersonBeanBase
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -537,8 +536,7 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -554,13 +552,11 @@ public class FlPersonBeanBase
     public FlImageBean getFlImageBean() {
         return this.referencedFlImage;
     }
-    /** Setter method for FlImageBean. */
+    /** Setter method for {@link #referencedFlImage}. */
     public void setFlImageBean(FlImageBean reference) {
         this.referencedFlImage = reference;
     }    
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlPersonBean)) {
@@ -584,9 +580,7 @@ public class FlPersonBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -605,9 +599,7 @@ public class FlPersonBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tupdate_time=").append(getUpdateTime()).append("\n")
@@ -626,26 +618,25 @@ public class FlPersonBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlPersonBean obj = (FlPersonBean) object;
+    @Override
+    public int compareTo(FlPersonBean object){
         return new CompareToBuilder()
-            .append(getUpdateTime(), obj.getUpdateTime())
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getExpiryDate(), obj.getExpiryDate())
-            .append(getFaceMd5(), obj.getFaceMd5())
-            .append(getPhotoId(), obj.getPhotoId())
-            .append(getPapersNum(), obj.getPapersNum())
-            .append(getPapersType(), obj.getPapersType())
-            .append(getBirthdate(), obj.getBirthdate())
-            .append(getSex(), obj.getSex())
-            .append(getName(), obj.getName())
-            .append(getGroupId(), obj.getGroupId())
-            .append(getId(), obj.getId())
+            .append(getUpdateTime(), object.getUpdateTime())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getExpiryDate(), object.getExpiryDate())
+            .append(getFaceMd5(), object.getFaceMd5())
+            .append(getPhotoId(), object.getPhotoId())
+            .append(getPapersNum(), object.getPapersNum())
+            .append(getPapersType(), object.getPapersType())
+            .append(getBirthdate(), object.getBirthdate())
+            .append(getSex(), object.getSex())
+            .append(getName(), object.getName())
+            .append(getGroupId(), object.getGroupId())
+            .append(getId(), object.getId())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -671,7 +662,7 @@ public class FlPersonBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong

@@ -23,18 +23,30 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlFeatureBeanBase
-    implements Serializable,BaseBean<FlFeatureBeanBase>
+    implements Serializable,BaseBean<FlFeatureBeanBase>,Comparable<FlFeatureBean>
 {
-	private static final long serialVersionUID = 5940489810475059099L;
+	private static final long serialVersionUID = 5168233877000483700L;
 	
     protected java.util.Date createTime;
 
+    /**
+     * comments:二进制特征数据
+     */
     protected byte[] feature;
 
+    /**
+     * comments:外键,所属图像id
+     */
     protected String imgMd5;
 
+    /**
+     * comments:外键,所属用户id
+     */
     protected Integer personId;
 
+    /**
+     * comments:主键,特征数据md5校验码
+     */
     protected String md5;
 
     private boolean _isNew = true;
@@ -80,8 +92,7 @@ public class FlFeatureBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.create_time</li>
@@ -95,8 +106,7 @@ public class FlFeatureBeanBase
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -108,8 +118,7 @@ public class FlFeatureBeanBase
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -120,8 +129,7 @@ public class FlFeatureBeanBase
 
 
     /**
-     * Getter method for feature.
-     * <br>
+     * Getter method for {@link #feature}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.feature</li>
@@ -136,8 +144,7 @@ public class FlFeatureBeanBase
         return feature;
     }
     /**
-     * Setter method for feature.
-     * <br>
+     * Setter method for {@link #feature}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -150,8 +157,7 @@ public class FlFeatureBeanBase
 
 
     /**
-     * Getter method for imgMd5.
-     * <br>
+     * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.img_md5</li>
@@ -166,8 +172,7 @@ public class FlFeatureBeanBase
         return imgMd5;
     }
     /**
-     * Setter method for imgMd5.
-     * <br>
+     * Setter method for {@link #imgMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -181,8 +186,7 @@ public class FlFeatureBeanBase
 
 
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.person_id</li>
@@ -197,8 +201,7 @@ public class FlFeatureBeanBase
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -210,8 +213,7 @@ public class FlFeatureBeanBase
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -222,8 +224,7 @@ public class FlFeatureBeanBase
 
 
     /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.md5</li>
@@ -238,8 +239,7 @@ public class FlFeatureBeanBase
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -252,9 +252,7 @@ public class FlFeatureBeanBase
 
 
 
-    /**
-     * @see java.lang.Object#equals(Object)
-     */
+    @Override
     public boolean equals(Object object)
     {
         if (!(object instanceof FlFeatureBean)) {
@@ -271,9 +269,7 @@ public class FlFeatureBeanBase
             .isEquals();
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
@@ -285,9 +281,7 @@ public class FlFeatureBeanBase
             .toHashCode();
     }
 
-    /**
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
@@ -299,19 +293,18 @@ public class FlFeatureBeanBase
             .toString();
     }
 
-
-    public int compareTo(Object object){
-        FlFeatureBean obj = (FlFeatureBean) object;
+    @Override
+    public int compareTo(FlFeatureBean object){
         return new CompareToBuilder()
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getFeature(), obj.getFeature())
-            .append(getImgMd5(), obj.getImgMd5())
-            .append(getPersonId(), obj.getPersonId())
-            .append(getMd5(), obj.getMd5())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getFeature(), object.getFeature())
+            .append(getImgMd5(), object.getImgMd5())
+            .append(getPersonId(), object.getPersonId())
+            .append(getMd5(), object.getMd5())
             .toComparison();
     }
     /**
-    * Copies proterty of the passed bean into the current bean.<br>
+    * Copies property of the passed bean into the current bean.<br>
     * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
     * @param bean the bean to copy into the current bean
     * @author guyadong
@@ -330,7 +323,7 @@ public class FlFeatureBeanBase
         }
     }
     /**
-    * Copies proterty of the passed bean into the current bean if property not null.
+    * Copies property of the passed bean into the current bean if property not null.
     *
     * @param bean the bean to copy into the current bean
     * @author guyadong
