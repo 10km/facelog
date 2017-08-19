@@ -29,7 +29,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlLogLightBeanBase
     implements Serializable,BaseBean<FlLogLightBeanBase>
 {
-	private static final long serialVersionUID = 7720438579046958623L;
+	private static final long serialVersionUID = -462453489187594183L;
 	
     protected java.util.Date verifyTime;
 
