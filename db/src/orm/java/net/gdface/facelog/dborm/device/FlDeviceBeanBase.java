@@ -29,7 +29,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlDeviceBeanBase
     implements Serializable,BaseBean<FlDeviceBeanBase>
 {
-	private static final long serialVersionUID = 5792630681636860384L;
+	private static final long serialVersionUID = -7373963352301050910L;
 	
     protected java.util.Date updateTime;
 
@@ -39,7 +39,7 @@ public class FlDeviceBeanBase
 
     protected Integer groupId;
 
-    protected Integer online;
+    protected Boolean online;
 
     protected String name;
 
@@ -246,13 +246,13 @@ public class FlDeviceBeanBase
      * <ul>
      * <li>full name: fl_device.online</li>
      * <li>comments: 设备是否在线标记</li>
-     * <li>column size: 3</li>
-     * <li>jdbc type returned by the driver: Types.TINYINT</li>
+     * <li>column size: 1</li>
+     * <li>jdbc type returned by the driver: Types.BIT</li>
      * </ul>
      *
      * @return the value of online
      */
-    public Integer getOnline(){
+    public Boolean getOnline(){
         return online;
     }
     /**
@@ -264,7 +264,7 @@ public class FlDeviceBeanBase
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(Integer newVal){    
+    public void setOnline(Boolean newVal){    
         online = newVal;
     }
 
@@ -275,8 +275,8 @@ public class FlDeviceBeanBase
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(int newVal){
-        setOnline(new Integer(newVal));
+    public void setOnline(boolean newVal){
+        setOnline(new Boolean(newVal));
     }
 
 
@@ -631,7 +631,7 @@ public class FlDeviceBeanBase
         } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
             setGroupId((Integer)object);
         } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            setOnline((Integer)object);
+            setOnline((Boolean)object);
         } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
             setName((String)object);
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {

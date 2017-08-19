@@ -25,7 +25,7 @@ public class FlStoreBean
     extends FlStoreBeanBase
     implements FullBean<FlStoreBeanBase>
 {
-	private static final long serialVersionUID = -4650123470513762129L;
+	private static final long serialVersionUID = 4335830255467190746L;
 	
     private boolean dataIsModified = false;
     private boolean dataIsInitialized = false;
@@ -171,8 +171,8 @@ public class FlStoreBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.md5</li>
-     * <li> imported key: fl_image.thumb_md5</li>
      * <li> imported key: fl_image.md5</li>
+     * <li> imported key: fl_image.thumb_md5</li>
      * <li>comments: 主键,md5检验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>

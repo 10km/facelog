@@ -31,7 +31,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlFaceBeanBase
     implements Serializable,BaseBean<FlFaceBeanBase>
 {
-	private static final long serialVersionUID = 5792630681636860384L;
+	private static final long serialVersionUID = 8263747083350020100L;
 	
     protected java.util.Date createTime;
 
@@ -898,8 +898,8 @@ public class FlFaceBeanBase
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.md5</li>
-     * <li> imported key: fl_log.verify_face</li>
      * <li> imported key: fl_log.compare_face</li>
+     * <li> imported key: fl_log.verify_face</li>
      * <li>comments: 主键,特征数据md5校验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>

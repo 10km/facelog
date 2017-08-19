@@ -459,7 +459,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Retrieves the FlStoreBean object from the fl_image.thumb_md5 field.
+     * Retrieves the FlStoreBean object from the fl_image.md5 field.
      *
      * @param bean the FlImageBean
      * @return the associated FlStoreBean bean
@@ -469,8 +469,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     public FlStoreBean getFlStoreBean(FlImageBean bean) throws DAOException
     {
         FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getThumbMd5()); 
         other.setMd5(bean.getMd5()); 
+        other.setMd5(bean.getThumbMd5()); 
         bean.setFlStoreBean(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
         return bean.getFlStoreBean();
     }
@@ -486,7 +486,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //4.2 ADD IMPORTED VALUE
     public FlStoreBean addFlStoreBean(FlStoreBean beanToSet, FlImageBean bean) throws Exception
     {
-        beanToSet.setMd5(bean.getThumbMd5());
+        beanToSet.setMd5(bean.getMd5());
         return FlStoreManager.getInstance().save(beanToSet);
     }
 
@@ -501,7 +501,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //5.2 SET IMPORTED
     public FlStoreBean setFlStoreBean(FlImageBean bean, FlStoreBean beanToSet) throws Exception
     {
-        bean.setThumbMd5(beanToSet.getMd5());
+        bean.setMd5(beanToSet.getMd5());
         return FlStoreManager.getInstance().save(beanToSet);
     }
 

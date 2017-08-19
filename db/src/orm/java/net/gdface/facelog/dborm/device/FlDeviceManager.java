@@ -1598,7 +1598,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             }
             if (bean.isOnlineModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getOnline() + "]");
-                if (bean.getOnline() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getOnline()); }
+                if (bean.getOnline() == null) { ps.setNull(++_dirtyCount, Types.BIT); } else { Manager.setBoolean(ps, ++_dirtyCount, bean.getOnline()); }
             }
             if (bean.isNameModified()) {
                 switch (searchType) {
@@ -1735,7 +1735,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             bean.setCreateTime(rs.getTimestamp(2));
             bean.setVersion(rs.getString(3));
             bean.setGroupId(Manager.getInteger(rs, 4));
-            bean.setOnline(Manager.getInteger(rs, 5));
+            bean.setOnline(Manager.getBoolean(rs, 5));
             bean.setName(rs.getString(6));
             bean.setId(Manager.getInteger(rs, 7));
         }
@@ -1787,7 +1787,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
                         break;
                     case ID_ONLINE:
                         ++pos;
-                        bean.setOnline(Manager.getInteger(rs, pos));
+                        bean.setOnline(Manager.getBoolean(rs, pos));
                         break;
                     case ID_NAME:
                         ++pos;
@@ -1829,7 +1829,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             bean.setCreateTime(rs.getTimestamp("create_time"));
             bean.setVersion(rs.getString("version"));
             bean.setGroupId(Manager.getInteger(rs, "group_id"));
-            bean.setOnline(Manager.getInteger(rs, "online"));
+            bean.setOnline(Manager.getBoolean(rs, "online"));
             bean.setName(rs.getString("name"));
             bean.setId(Manager.getInteger(rs, "id"));
         }

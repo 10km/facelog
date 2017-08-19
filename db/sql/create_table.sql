@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS fl_store (
 CREATE TABLE IF NOT EXISTS fl_device (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备id',
   `name`        varchar(32) DEFAULT NULL COMMENT '设备名称',
-  `online`      tinyint(1) DEFAULT NULL COMMENT '设备是否在线标记',
+  `online`      bit(1) DEFAULT NULL COMMENT '设备是否在线标记',
   `group_id`    int(11) DEFAULT NULL COMMENT '设备所属组id',
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,

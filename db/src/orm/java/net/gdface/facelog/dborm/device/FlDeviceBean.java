@@ -25,7 +25,7 @@ public class FlDeviceBean
     extends FlDeviceBeanBase
     implements FullBean<FlDeviceBeanBase>
 {
-	private static final long serialVersionUID = -4655080924458781809L;
+	private static final long serialVersionUID = 4350702608712315194L;
 	
     private boolean updateTimeIsModified = false;
     private boolean updateTimeIsInitialized = false;
@@ -338,13 +338,13 @@ public class FlDeviceBean
      * <ul>
      * <li>full name: fl_device.online</li>
      * <li>comments: 设备是否在线标记</li>
-     * <li>column size: 3</li>
-     * <li>jdbc type returned by the driver: Types.TINYINT</li>
+     * <li>column size: 1</li>
+     * <li>jdbc type returned by the driver: Types.BIT</li>
      * </ul>
      *
      * @return the value of online
      */
-    public Integer getOnline(){
+    public Boolean getOnline(){
         return online;
     }
     /**
@@ -356,7 +356,7 @@ public class FlDeviceBean
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(Integer newVal)
+    public void setOnline(Boolean newVal)
     {
         if ((newVal != null && online != null && (newVal.compareTo(online) == 0)) ||
             (newVal == null && online == null && onlineIsInitialized)) {
@@ -374,9 +374,9 @@ public class FlDeviceBean
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(int newVal)
+    public void setOnline(boolean newVal)
     {
-        setOnline(new Integer(newVal));
+        setOnline(new Boolean(newVal));
     }
 
     /**

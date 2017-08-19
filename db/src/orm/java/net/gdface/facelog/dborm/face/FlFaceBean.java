@@ -25,7 +25,7 @@ public class FlFaceBean
     extends FlFaceBeanBase
     implements FullBean<FlFaceBeanBase>
 {
-	private static final long serialVersionUID = -4655080924458781809L;
+	private static final long serialVersionUID = 4342440188333927258L;
 	
     private boolean createTimeIsModified = false;
     private boolean createTimeIsInitialized = false;
@@ -1454,8 +1454,8 @@ public class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.md5</li>
-     * <li> imported key: fl_log.verify_face</li>
      * <li> imported key: fl_log.compare_face</li>
+     * <li> imported key: fl_log.verify_face</li>
      * <li>comments: 主键,特征数据md5校验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
