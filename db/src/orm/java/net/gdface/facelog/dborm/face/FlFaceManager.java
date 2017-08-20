@@ -431,7 +431,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlLogBean object from the fl_face.compare_face field.
+     * Retrieves the FlLogBean object from the fl_face.verify_face field.
      *
      * @param bean the FlFaceBean
      * @return the associated FlLogBean bean
@@ -441,12 +441,12 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     public FlLogBean[] getFlLogBeans(FlFaceBean bean) throws DAOException
     {
         FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setCompareFace(bean.getMd5());
+        other.setVerifyFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the FlLogBean object from the fl_face.compare_face field.
+     * Retrieves the FlLogBean object from the fl_face.verify_face field.
      *
      * @param bean the FlFaceBean
      * @return the associated FlLogBean bean
@@ -456,7 +456,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     public List<FlLogBean> getFlLogBeansAsList(FlFaceBean bean) throws DAOException
     {
         FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setCompareFace(bean.getMd5());
+        other.setVerifyFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
 
@@ -470,7 +470,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     //4.1 SET IMPORTED
     public FlFaceBean setFlLogBean(FlFaceBean bean,FlLogBean beanToSet)
     {
-        bean.setMd5(beanToSet.getCompareFace());
+        bean.setMd5(beanToSet.getVerifyFace());
         return bean;
     }
 
