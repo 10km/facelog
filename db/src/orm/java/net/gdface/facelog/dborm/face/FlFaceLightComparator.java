@@ -103,9 +103,6 @@ public class FlFaceLightComparator implements Comparator<FlFaceLightBean>
         this.bReverse = bReverse;
     }
 
-    /**
-     * Implementation of the compare method.
-     */
     @Override
     public int compare(FlFaceLightBean b1, FlFaceLightBean b2)
     {

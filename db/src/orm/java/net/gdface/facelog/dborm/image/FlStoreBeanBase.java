@@ -25,7 +25,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlStoreBeanBase
     implements Serializable,BaseBean<FlStoreBeanBase>,Comparable<FlStoreBean>
 {
-	private static final long serialVersionUID = -4951123832670214323L;
+	private static final long serialVersionUID = -6942057372255517145L;
 	
     /**
      * comments:二进制数据

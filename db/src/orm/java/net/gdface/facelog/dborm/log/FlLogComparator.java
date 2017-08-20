@@ -80,9 +80,6 @@ public class FlLogComparator implements Comparator<FlLogBean>
         this.bReverse = bReverse;
     }
 
-    /**
-     * Implementation of the compare method.
-     */
     @Override
     public int compare(FlLogBean b1, FlLogBean b2)
     {

@@ -69,9 +69,6 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
         this.bReverse = bReverse;
     }
 
-    /**
-     * Implementation of the compare method.
-     */
     @Override
     public int compare(FlStoreBean b1, FlStoreBean b2)
     {

@@ -88,9 +88,6 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
         this.bReverse = bReverse;
     }
 
-    /**
-     * Implementation of the compare method.
-     */
     @Override
     public int compare(FlPersonBean b1, FlPersonBean b2)
     {

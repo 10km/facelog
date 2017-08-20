@@ -76,9 +76,6 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
         this.bReverse = bReverse;
     }
 
-    /**
-     * Implementation of the compare method.
-     */
     @Override
     public int compare(FlLogLightBean b1, FlLogLightBean b2)
     {
