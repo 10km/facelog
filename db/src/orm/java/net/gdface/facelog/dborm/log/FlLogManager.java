@@ -361,7 +361,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Retrieves the FlFaceBean object from the fl_log.verify_face field.
+     * Retrieves the FlFaceBean object from the fl_log.compare_face field.
      *
      * @param bean the FlLogBean
      * @return the associated FlFaceBean bean
@@ -371,8 +371,8 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     public FlFaceBean getFlFaceBean(FlLogBean bean) throws DAOException
     {
         FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setMd5(bean.getVerifyFace()); 
         other.setMd5(bean.getCompareFace()); 
+        other.setMd5(bean.getVerifyFace()); 
         bean.setFlFaceBean(FlFaceManager.getInstance().loadUniqueUsingTemplate(other)); 
         return bean.getFlFaceBean();
     }
@@ -388,7 +388,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     //4.2 ADD IMPORTED VALUE
     public FlFaceBean addFlFaceBean(FlFaceBean beanToSet, FlLogBean bean) throws Exception
     {
-        beanToSet.setMd5(bean.getVerifyFace());
+        beanToSet.setMd5(bean.getCompareFace());
         return FlFaceManager.getInstance().save(beanToSet);
     }
 
@@ -403,7 +403,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     //5.2 SET IMPORTED
     public FlFaceBean setFlFaceBean(FlLogBean bean, FlFaceBean beanToSet) throws Exception
     {
-        bean.setVerifyFace(beanToSet.getMd5());
+        bean.setCompareFace(beanToSet.getMd5());
         return FlFaceManager.getInstance().save(beanToSet);
     }
 
