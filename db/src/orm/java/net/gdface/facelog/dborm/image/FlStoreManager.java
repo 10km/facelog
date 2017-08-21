@@ -266,14 +266,43 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlImageBean object from the fl_store.thumb_md5 field.
+     * Retrieves the {@link FlImageBean} object from the fl_image.md5 field.
      *
      * @param bean the FlStoreBean
      * @return the associated FlImageBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlImageBean[] getFlImageBeans(FlStoreBean bean) throws DAOException
+    public FlImageBean[] getFlImageBeansByMd5(FlStoreBean bean) throws DAOException
+    {
+        FlImageBean other = FlImageManager.getInstance().createBean();
+        other.setMd5(bean.getMd5());
+        return FlImageManager.getInstance().loadUsingTemplate(other);
+    }
+
+    /**
+     * Retrieves the {@link FlImageBean} object from the fl_image.md5 field.
+     *
+     * @param bean the FlStoreBean
+     * @return the associated FlImageBean bean
+     * @throws DAOException
+     */
+    //3.1 GET IMPORTED
+    public List<FlImageBean> getFlImageBeansByMd5AsList(FlStoreBean bean) throws DAOException
+    {
+        FlImageBean other = FlImageManager.getInstance().createBean();
+        other.setMd5(bean.getMd5());
+        return FlImageManager.getInstance().loadUsingTemplateAsList(other);
+    }
+    /**
+     * Retrieves the {@link FlImageBean} object from the fl_image.thumb_md5 field.
+     *
+     * @param bean the FlStoreBean
+     * @return the associated FlImageBean bean
+     * @throws DAOException
+     */
+    //3.1 GET IMPORTED
+    public FlImageBean[] getFlImageBeansByThumbMd5(FlStoreBean bean) throws DAOException
     {
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setThumbMd5(bean.getMd5());
@@ -281,34 +310,19 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Retrieves the FlImageBean object from the fl_store.thumb_md5 field.
+     * Retrieves the {@link FlImageBean} object from the fl_image.thumb_md5 field.
      *
      * @param bean the FlStoreBean
      * @return the associated FlImageBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public List<FlImageBean> getFlImageBeansAsList(FlStoreBean bean) throws DAOException
+    public List<FlImageBean> getFlImageBeansByThumbMd5AsList(FlStoreBean bean) throws DAOException
     {
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setThumbMd5(bean.getMd5());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
-
-    /**
-     * Associates the FlStoreBean object to the FlImageBean object.
-     *
-     * @param bean the FlStoreBean object to use
-     * @param beanToSet the FlImageBean object to associate to the FlStoreBean
-     * @return the associated FlImageBean bean
-     */
-    //4.1 SET IMPORTED
-    public FlStoreBean setFlImageBean(FlStoreBean bean,FlImageBean beanToSet)
-    {
-        bean.setMd5(beanToSet.getThumbMd5());
-        return bean;
-    }
-
 
 
 

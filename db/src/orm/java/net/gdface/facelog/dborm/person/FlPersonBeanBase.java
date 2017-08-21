@@ -160,7 +160,6 @@ public class FlPersonBeanBase
         setUpdateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -196,7 +195,6 @@ public class FlPersonBeanBase
     public void setCreateTime(long newVal){
         setCreateTime(new java.util.Date(newVal));
     }
-
 
     /**
      * Getter method for {@link #expiryDate}.<br>
@@ -235,7 +233,6 @@ public class FlPersonBeanBase
         setExpiryDate(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #faceMd5}.<br>
      * Meta Data Information (in progress):
@@ -262,7 +259,6 @@ public class FlPersonBeanBase
     public void setFaceMd5(String newVal){    
         faceMd5 = newVal;
     }
-
 
 
     /**
@@ -294,7 +290,6 @@ public class FlPersonBeanBase
     }
 
 
-
     /**
      * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
@@ -321,7 +316,6 @@ public class FlPersonBeanBase
     public void setPapersNum(String newVal){    
         papersNum = newVal;
     }
-
 
 
     /**
@@ -361,7 +355,6 @@ public class FlPersonBeanBase
         setPapersType(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #birthdate}.<br>
      * Meta Data Information (in progress):
@@ -398,7 +391,6 @@ public class FlPersonBeanBase
     public void setBirthdate(long newVal){
         setBirthdate(new java.util.Date(newVal));
     }
-
 
     /**
      * Getter method for {@link #sex}.<br>
@@ -437,7 +429,6 @@ public class FlPersonBeanBase
         setSex(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
@@ -464,7 +455,6 @@ public class FlPersonBeanBase
     public void setName(String newVal){    
         name = newVal;
     }
-
 
 
     /**
@@ -503,7 +493,6 @@ public class FlPersonBeanBase
     public void setGroupId(int newVal){
         setGroupId(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #id}.<br>
@@ -546,16 +535,23 @@ public class FlPersonBeanBase
     }
 
 
-    /** The FlImage referenced by this bean. */
-    private FlImageBean referencedFlImage;
-    /** Getter method for FlImageBean. */
-    public FlImageBean getFlImageBean() {
-        return this.referencedFlImage;
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlImageBean} by {@link #photoId}. <br>
+     * FOREIGN KEY (photo_id) REFERENCES fl_image(md5)
+     */
+    private FlImageBean referencedByPhotoId;
+    /** Getter method for {@link #referencedByPhotoId}. */
+    public FlImageBean getReferencedByPhotoId() {
+        return this.referencedByPhotoId;
     }
-    /** Setter method for {@link #referencedFlImage}. */
-    public void setFlImageBean(FlImageBean reference) {
-        this.referencedFlImage = reference;
+    /** Setter method for {@link #referencedByPhotoId}. */
+    public void setReferencedByPhotoId(FlImageBean reference) {
+        this.referencedByPhotoId = reference;
     }    
+
     @Override
     public boolean equals(Object object)
     {

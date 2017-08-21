@@ -316,139 +316,126 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlDeviceBean object from the fl_log.device_id field.
+     * Retrieves the {@link FlDeviceBean} object from the fl_log.device_id field.
      *
      * @param bean the FlLogBean
      * @return the associated FlDeviceBean bean
      * @throws DAOException
      */
-    //3.2 GET IMPORTED VALUES
-    public FlDeviceBean getFlDeviceBean(FlLogBean bean) throws DAOException
+    //3.2 GET REFERENCED VALUE
+    public FlDeviceBean getReferencedByDeviceId(FlLogBean bean) throws DAOException
     {
         FlDeviceBean other = FlDeviceManager.getInstance().createBean();
         other.setId(bean.getDeviceId()); 
-        bean.setFlDeviceBean(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlDeviceBean();
+        bean.setReferencedByDeviceId(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByDeviceId();
     }
 
     /**
-     * Associates the FlLogBean object to the FlDeviceBean object.
+     * Associates the {@link FlLogBean} object to the {@link FlDeviceBean} object.
      *
      * @param bean the FlLogBean object to use
      * @param beanToSet the FlDeviceBean object to associate to the FlLogBean
      * @return the associated FlDeviceBean bean
      * @throws Exception
      */
-    //4.2 ADD IMPORTED VALUE
-    public FlDeviceBean addFlDeviceBean(FlDeviceBean beanToSet, FlLogBean bean) throws Exception
-    {
-        beanToSet.setId(bean.getDeviceId());
-        return FlDeviceManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Associates the FlLogBean object to the FlDeviceBean object.
-     *
-     * @param bean the FlLogBean object to use
-     * @param beanToSet the FlDeviceBean object to associate to the FlLogBean
-     * @return the associated FlDeviceBean bean
-     * @throws Exception
-     */
-    //5.2 SET IMPORTED
-    public FlDeviceBean setFlDeviceBean(FlLogBean bean, FlDeviceBean beanToSet) throws Exception
+    //5.2 SET REFERENCED 
+    public FlDeviceBean setReferencedByDeviceId(FlLogBean bean, FlDeviceBean beanToSet) throws DAOException
     {
         bean.setDeviceId(beanToSet.getId());
         return FlDeviceManager.getInstance().save(beanToSet);
     }
 
     /**
-     * Retrieves the FlFaceBean object from the fl_log.verify_face field.
+     * Retrieves the {@link FlFaceBean} object from the fl_log.verify_face field.
      *
      * @param bean the FlLogBean
      * @return the associated FlFaceBean bean
      * @throws DAOException
      */
-    //3.2 GET IMPORTED VALUES
-    public FlFaceBean getFlFaceBean(FlLogBean bean) throws DAOException
+    //3.2 GET REFERENCED VALUE
+    public FlFaceBean getReferencedByVerifyFace(FlLogBean bean) throws DAOException
     {
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setMd5(bean.getVerifyFace()); 
         other.setMd5(bean.getCompareFace()); 
-        bean.setFlFaceBean(FlFaceManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlFaceBean();
+        bean.setReferencedByVerifyFace(FlFaceManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByVerifyFace();
     }
 
     /**
-     * Associates the FlLogBean object to the FlFaceBean object.
+     * Associates the {@link FlLogBean} object to the {@link FlFaceBean} object.
      *
      * @param bean the FlLogBean object to use
      * @param beanToSet the FlFaceBean object to associate to the FlLogBean
      * @return the associated FlFaceBean bean
      * @throws Exception
      */
-    //4.2 ADD IMPORTED VALUE
-    public FlFaceBean addFlFaceBean(FlFaceBean beanToSet, FlLogBean bean) throws Exception
-    {
-        beanToSet.setMd5(bean.getVerifyFace());
-        return FlFaceManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Associates the FlLogBean object to the FlFaceBean object.
-     *
-     * @param bean the FlLogBean object to use
-     * @param beanToSet the FlFaceBean object to associate to the FlLogBean
-     * @return the associated FlFaceBean bean
-     * @throws Exception
-     */
-    //5.2 SET IMPORTED
-    public FlFaceBean setFlFaceBean(FlLogBean bean, FlFaceBean beanToSet) throws Exception
+    //5.2 SET REFERENCED 
+    public FlFaceBean setReferencedByVerifyFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
     {
         bean.setVerifyFace(beanToSet.getMd5());
         return FlFaceManager.getInstance().save(beanToSet);
     }
 
     /**
-     * Retrieves the FlPersonBean object from the fl_log.person_id field.
+     * Retrieves the {@link FlFaceBean} object from the fl_log.compare_face field.
+     *
+     * @param bean the FlLogBean
+     * @return the associated FlFaceBean bean
+     * @throws DAOException
+     */
+    //3.2 GET REFERENCED VALUE
+    public FlFaceBean getReferencedByCompareFace(FlLogBean bean) throws DAOException
+    {
+        FlFaceBean other = FlFaceManager.getInstance().createBean();
+        other.setMd5(bean.getVerifyFace()); 
+        other.setMd5(bean.getCompareFace()); 
+        bean.setReferencedByCompareFace(FlFaceManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByCompareFace();
+    }
+
+    /**
+     * Associates the {@link FlLogBean} object to the {@link FlFaceBean} object.
+     *
+     * @param bean the FlLogBean object to use
+     * @param beanToSet the FlFaceBean object to associate to the FlLogBean
+     * @return the associated FlFaceBean bean
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
+    {
+        bean.setCompareFace(beanToSet.getMd5());
+        return FlFaceManager.getInstance().save(beanToSet);
+    }
+
+    /**
+     * Retrieves the {@link FlPersonBean} object from the fl_log.person_id field.
      *
      * @param bean the FlLogBean
      * @return the associated FlPersonBean bean
      * @throws DAOException
      */
-    //3.2 GET IMPORTED VALUES
-    public FlPersonBean getFlPersonBean(FlLogBean bean) throws DAOException
+    //3.2 GET REFERENCED VALUE
+    public FlPersonBean getReferencedByPersonId(FlLogBean bean) throws DAOException
     {
         FlPersonBean other = FlPersonManager.getInstance().createBean();
         other.setId(bean.getPersonId()); 
-        bean.setFlPersonBean(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlPersonBean();
+        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByPersonId();
     }
 
     /**
-     * Associates the FlLogBean object to the FlPersonBean object.
+     * Associates the {@link FlLogBean} object to the {@link FlPersonBean} object.
      *
      * @param bean the FlLogBean object to use
      * @param beanToSet the FlPersonBean object to associate to the FlLogBean
      * @return the associated FlPersonBean bean
      * @throws Exception
      */
-    //4.2 ADD IMPORTED VALUE
-    public FlPersonBean addFlPersonBean(FlPersonBean beanToSet, FlLogBean bean) throws Exception
-    {
-        beanToSet.setId(bean.getPersonId());
-        return FlPersonManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Associates the FlLogBean object to the FlPersonBean object.
-     *
-     * @param bean the FlLogBean object to use
-     * @param beanToSet the FlPersonBean object to associate to the FlLogBean
-     * @return the associated FlPersonBean bean
-     * @throws Exception
-     */
-    //5.2 SET IMPORTED
-    public FlPersonBean setFlPersonBean(FlLogBean bean, FlPersonBean beanToSet) throws Exception
+    //5.2 SET REFERENCED 
+    public FlPersonBean setReferencedByPersonId(FlLogBean bean, FlPersonBean beanToSet) throws DAOException
     {
         bean.setPersonId(beanToSet.getId());
         return FlPersonManager.getInstance().save(beanToSet);

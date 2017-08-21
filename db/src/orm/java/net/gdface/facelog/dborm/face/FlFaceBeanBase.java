@@ -164,7 +164,6 @@ public class FlFaceBeanBase
         setCreateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #feature}.<br>
      * Meta Data Information (in progress):
@@ -192,7 +191,6 @@ public class FlFaceBeanBase
     }
 
 
-
     /**
      * Getter method for {@link #extInfo}.<br>
      * Meta Data Information (in progress):
@@ -218,7 +216,6 @@ public class FlFaceBeanBase
     public void setExtInfo(byte[] newVal){    
         extInfo = newVal;
     }
-
 
 
     /**
@@ -257,7 +254,6 @@ public class FlFaceBeanBase
         setAngleRoll(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #anglePitch}.<br>
      * Meta Data Information (in progress):
@@ -293,7 +289,6 @@ public class FlFaceBeanBase
     public void setAnglePitch(int newVal){
         setAnglePitch(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #angleYaw}.<br>
@@ -331,7 +326,6 @@ public class FlFaceBeanBase
         setAngleYaw(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #noseY}.<br>
      * Meta Data Information (in progress):
@@ -367,7 +361,6 @@ public class FlFaceBeanBase
     public void setNoseY(int newVal){
         setNoseY(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #noseX}.<br>
@@ -405,7 +398,6 @@ public class FlFaceBeanBase
         setNoseX(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #mouthY}.<br>
      * Meta Data Information (in progress):
@@ -441,7 +433,6 @@ public class FlFaceBeanBase
     public void setMouthY(int newVal){
         setMouthY(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #mouthX}.<br>
@@ -479,7 +470,6 @@ public class FlFaceBeanBase
         setMouthX(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #eyeRighty}.<br>
      * Meta Data Information (in progress):
@@ -515,7 +505,6 @@ public class FlFaceBeanBase
     public void setEyeRighty(int newVal){
         setEyeRighty(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #eyeRightx}.<br>
@@ -553,7 +542,6 @@ public class FlFaceBeanBase
         setEyeRightx(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #eyeLefty}.<br>
      * Meta Data Information (in progress):
@@ -589,7 +577,6 @@ public class FlFaceBeanBase
     public void setEyeLefty(int newVal){
         setEyeLefty(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #eyeLeftx}.<br>
@@ -627,7 +614,6 @@ public class FlFaceBeanBase
         setEyeLeftx(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #faceHeight}.<br>
      * Meta Data Information (in progress):
@@ -663,7 +649,6 @@ public class FlFaceBeanBase
     public void setFaceHeight(int newVal){
         setFaceHeight(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #faceWidth}.<br>
@@ -701,7 +686,6 @@ public class FlFaceBeanBase
         setFaceWidth(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #faceTop}.<br>
      * Meta Data Information (in progress):
@@ -737,7 +721,6 @@ public class FlFaceBeanBase
     public void setFaceTop(int newVal){
         setFaceTop(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #faceLeft}.<br>
@@ -775,7 +758,6 @@ public class FlFaceBeanBase
         setFaceLeft(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
@@ -803,7 +785,6 @@ public class FlFaceBeanBase
     public void setImgMd5(String newVal){    
         imgMd5 = newVal;
     }
-
 
 
     /**
@@ -844,7 +825,6 @@ public class FlFaceBeanBase
         setPersonId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
@@ -877,26 +857,36 @@ public class FlFaceBeanBase
 
 
 
-    /** The FlImage referenced by this bean. */
-    private FlImageBean referencedFlImage;
-    /** Getter method for FlImageBean. */
-    public FlImageBean getFlImageBean() {
-        return this.referencedFlImage;
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlImageBean} by {@link #imgMd5}. <br>
+     * FOREIGN KEY (img_md5) REFERENCES fl_image(md5)
+     */
+    private FlImageBean referencedByImgMd5;
+    /** Getter method for {@link #referencedByImgMd5}. */
+    public FlImageBean getReferencedByImgMd5() {
+        return this.referencedByImgMd5;
     }
-    /** Setter method for {@link #referencedFlImage}. */
-    public void setFlImageBean(FlImageBean reference) {
-        this.referencedFlImage = reference;
+    /** Setter method for {@link #referencedByImgMd5}. */
+    public void setReferencedByImgMd5(FlImageBean reference) {
+        this.referencedByImgMd5 = reference;
     }    
-    /** The FlPerson referenced by this bean. */
-    private FlPersonBean referencedFlPerson;
-    /** Getter method for FlPersonBean. */
-    public FlPersonBean getFlPersonBean() {
-        return this.referencedFlPerson;
+    /** 
+     * The referenced {@link FlPersonBean} by {@link #personId}. <br>
+     * FOREIGN KEY (person_id) REFERENCES fl_person(id)
+     */
+    private FlPersonBean referencedByPersonId;
+    /** Getter method for {@link #referencedByPersonId}. */
+    public FlPersonBean getReferencedByPersonId() {
+        return this.referencedByPersonId;
     }
-    /** Setter method for {@link #referencedFlPerson}. */
-    public void setFlPersonBean(FlPersonBean reference) {
-        this.referencedFlPerson = reference;
+    /** Setter method for {@link #referencedByPersonId}. */
+    public void setReferencedByPersonId(FlPersonBean reference) {
+        this.referencedByPersonId = reference;
     }    
+
     @Override
     public boolean equals(Object object)
     {

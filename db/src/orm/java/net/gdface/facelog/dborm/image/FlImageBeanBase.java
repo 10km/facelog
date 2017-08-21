@@ -149,7 +149,6 @@ public class FlImageBeanBase
         setDeviceId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #thumbMd5}.<br>
      * Meta Data Information (in progress):
@@ -177,7 +176,6 @@ public class FlImageBeanBase
     public void setThumbMd5(String newVal){    
         thumbMd5 = newVal;
     }
-
 
 
     /**
@@ -217,7 +215,6 @@ public class FlImageBeanBase
         setFaceNum(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #depth}.<br>
      * Meta Data Information (in progress):
@@ -254,7 +251,6 @@ public class FlImageBeanBase
     public void setDepth(int newVal){
         setDepth(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #height}.<br>
@@ -293,7 +289,6 @@ public class FlImageBeanBase
         setHeight(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #width}.<br>
      * Meta Data Information (in progress):
@@ -331,7 +326,6 @@ public class FlImageBeanBase
         setWidth(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #format}.<br>
      * Meta Data Information (in progress):
@@ -358,7 +352,6 @@ public class FlImageBeanBase
     public void setFormat(String newVal){    
         format = newVal;
     }
-
 
 
     /**
@@ -394,26 +387,49 @@ public class FlImageBeanBase
 
 
 
-    /** The FlDevice referenced by this bean. */
-    private FlDeviceBean referencedFlDevice;
-    /** Getter method for FlDeviceBean. */
-    public FlDeviceBean getFlDeviceBean() {
-        return this.referencedFlDevice;
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlDeviceBean} by {@link #deviceId}. <br>
+     * FOREIGN KEY (device_id) REFERENCES fl_device(id)
+     */
+    private FlDeviceBean referencedByDeviceId;
+    /** Getter method for {@link #referencedByDeviceId}. */
+    public FlDeviceBean getReferencedByDeviceId() {
+        return this.referencedByDeviceId;
     }
-    /** Setter method for {@link #referencedFlDevice}. */
-    public void setFlDeviceBean(FlDeviceBean reference) {
-        this.referencedFlDevice = reference;
+    /** Setter method for {@link #referencedByDeviceId}. */
+    public void setReferencedByDeviceId(FlDeviceBean reference) {
+        this.referencedByDeviceId = reference;
     }    
-    /** The FlStore referenced by this bean. */
-    private FlStoreBean referencedFlStore;
-    /** Getter method for FlStoreBean. */
-    public FlStoreBean getFlStoreBean() {
-        return this.referencedFlStore;
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #md5}. <br>
+     * FOREIGN KEY (md5) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByMd5;
+    /** Getter method for {@link #referencedByMd5}. */
+    public FlStoreBean getReferencedByMd5() {
+        return this.referencedByMd5;
     }
-    /** Setter method for {@link #referencedFlStore}. */
-    public void setFlStoreBean(FlStoreBean reference) {
-        this.referencedFlStore = reference;
+    /** Setter method for {@link #referencedByMd5}. */
+    public void setReferencedByMd5(FlStoreBean reference) {
+        this.referencedByMd5 = reference;
     }    
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #thumbMd5}. <br>
+     * FOREIGN KEY (thumb_md5) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByThumbMd5;
+    /** Getter method for {@link #referencedByThumbMd5}. */
+    public FlStoreBean getReferencedByThumbMd5() {
+        return this.referencedByThumbMd5;
+    }
+    /** Setter method for {@link #referencedByThumbMd5}. */
+    public void setReferencedByThumbMd5(FlStoreBean reference) {
+        this.referencedByThumbMd5 = reference;
+    }    
+
     @Override
     public boolean equals(Object object)
     {

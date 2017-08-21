@@ -134,7 +134,6 @@ public class FlDeviceBeanBase
         setUpdateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -171,7 +170,6 @@ public class FlDeviceBeanBase
         setCreateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #version}.<br>
      * Meta Data Information (in progress):
@@ -198,7 +196,6 @@ public class FlDeviceBeanBase
     public void setVersion(String newVal){    
         version = newVal;
     }
-
 
 
     /**
@@ -238,7 +235,6 @@ public class FlDeviceBeanBase
         setGroupId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #online}.<br>
      * Meta Data Information (in progress):
@@ -276,7 +272,6 @@ public class FlDeviceBeanBase
         setOnline(new Boolean(newVal));
     }
 
-
     /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
@@ -303,7 +298,6 @@ public class FlDeviceBeanBase
     public void setName(String newVal){    
         name = newVal;
     }
-
 
 
     /**
@@ -345,6 +339,7 @@ public class FlDeviceBeanBase
     public void setId(int newVal){
         setId(new Integer(newVal));
     }
+
 
 
     @Override

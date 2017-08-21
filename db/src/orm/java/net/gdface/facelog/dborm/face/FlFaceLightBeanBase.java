@@ -157,7 +157,6 @@ public class FlFaceLightBeanBase
         setCreateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #extInfo}.<br>
      * Meta Data Information (in progress):
@@ -183,7 +182,6 @@ public class FlFaceLightBeanBase
     public void setExtInfo(byte[] newVal){    
         extInfo = newVal;
     }
-
 
 
     /**
@@ -222,7 +220,6 @@ public class FlFaceLightBeanBase
         setAngleRoll(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #anglePitch}.<br>
      * Meta Data Information (in progress):
@@ -258,7 +255,6 @@ public class FlFaceLightBeanBase
     public void setAnglePitch(int newVal){
         setAnglePitch(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #angleYaw}.<br>
@@ -296,7 +292,6 @@ public class FlFaceLightBeanBase
         setAngleYaw(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #noseY}.<br>
      * Meta Data Information (in progress):
@@ -332,7 +327,6 @@ public class FlFaceLightBeanBase
     public void setNoseY(int newVal){
         setNoseY(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #noseX}.<br>
@@ -370,7 +364,6 @@ public class FlFaceLightBeanBase
         setNoseX(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #mouthY}.<br>
      * Meta Data Information (in progress):
@@ -406,7 +399,6 @@ public class FlFaceLightBeanBase
     public void setMouthY(int newVal){
         setMouthY(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #mouthX}.<br>
@@ -444,7 +436,6 @@ public class FlFaceLightBeanBase
         setMouthX(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #eyeRighty}.<br>
      * Meta Data Information (in progress):
@@ -480,7 +471,6 @@ public class FlFaceLightBeanBase
     public void setEyeRighty(int newVal){
         setEyeRighty(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #eyeRightx}.<br>
@@ -518,7 +508,6 @@ public class FlFaceLightBeanBase
         setEyeRightx(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #eyeLefty}.<br>
      * Meta Data Information (in progress):
@@ -554,7 +543,6 @@ public class FlFaceLightBeanBase
     public void setEyeLefty(int newVal){
         setEyeLefty(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #eyeLeftx}.<br>
@@ -592,7 +580,6 @@ public class FlFaceLightBeanBase
         setEyeLeftx(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #faceHeight}.<br>
      * Meta Data Information (in progress):
@@ -628,7 +615,6 @@ public class FlFaceLightBeanBase
     public void setFaceHeight(int newVal){
         setFaceHeight(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #faceWidth}.<br>
@@ -666,7 +652,6 @@ public class FlFaceLightBeanBase
         setFaceWidth(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #faceTop}.<br>
      * Meta Data Information (in progress):
@@ -702,7 +687,6 @@ public class FlFaceLightBeanBase
     public void setFaceTop(int newVal){
         setFaceTop(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #faceLeft}.<br>
@@ -740,7 +724,6 @@ public class FlFaceLightBeanBase
         setFaceLeft(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
@@ -767,7 +750,6 @@ public class FlFaceLightBeanBase
     public void setImgMd5(String newVal){    
         imgMd5 = newVal;
     }
-
 
 
     /**
@@ -807,7 +789,6 @@ public class FlFaceLightBeanBase
         setPersonId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #md5}.<br>
      * Meta Data Information (in progress):
@@ -834,6 +815,7 @@ public class FlFaceLightBeanBase
     public void setMd5(String newVal){    
         md5 = newVal;
     }
+
 
 
 

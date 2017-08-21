@@ -145,7 +145,6 @@ public class FlLogBeanBase
         setCreateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
@@ -182,7 +181,6 @@ public class FlLogBeanBase
     public void setVerifyTime(long newVal){
         setVerifyTime(new java.util.Date(newVal));
     }
-
 
     /**
      * Getter method for {@link #similarty}.<br>
@@ -221,7 +219,6 @@ public class FlLogBeanBase
         setSimilarty(new Double(newVal));
     }
 
-
     /**
      * Getter method for {@link #compareFace}.<br>
      * Meta Data Information (in progress):
@@ -251,7 +248,6 @@ public class FlLogBeanBase
     }
 
 
-
     /**
      * Getter method for {@link #verifyFace}.<br>
      * Meta Data Information (in progress):
@@ -279,7 +275,6 @@ public class FlLogBeanBase
     public void setVerifyFace(String newVal){    
         verifyFace = newVal;
     }
-
 
 
     /**
@@ -320,7 +315,6 @@ public class FlLogBeanBase
         setDeviceId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
@@ -358,7 +352,6 @@ public class FlLogBeanBase
     public void setPersonId(int newVal){
         setPersonId(new Integer(newVal));
     }
-
 
     /**
      * Getter method for {@link #id}.<br>
@@ -399,36 +392,62 @@ public class FlLogBeanBase
     }
 
 
-    /** The FlDevice referenced by this bean. */
-    private FlDeviceBean referencedFlDevice;
-    /** Getter method for FlDeviceBean. */
-    public FlDeviceBean getFlDeviceBean() {
-        return this.referencedFlDevice;
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlDeviceBean} by {@link #deviceId}. <br>
+     * FOREIGN KEY (device_id) REFERENCES fl_device(id)
+     */
+    private FlDeviceBean referencedByDeviceId;
+    /** Getter method for {@link #referencedByDeviceId}. */
+    public FlDeviceBean getReferencedByDeviceId() {
+        return this.referencedByDeviceId;
     }
-    /** Setter method for {@link #referencedFlDevice}. */
-    public void setFlDeviceBean(FlDeviceBean reference) {
-        this.referencedFlDevice = reference;
+    /** Setter method for {@link #referencedByDeviceId}. */
+    public void setReferencedByDeviceId(FlDeviceBean reference) {
+        this.referencedByDeviceId = reference;
     }    
-    /** The FlFace referenced by this bean. */
-    private FlFaceBean referencedFlFace;
-    /** Getter method for FlFaceBean. */
-    public FlFaceBean getFlFaceBean() {
-        return this.referencedFlFace;
+    /** 
+     * The referenced {@link FlFaceBean} by {@link #verifyFace}. <br>
+     * FOREIGN KEY (verify_face) REFERENCES fl_face(md5)
+     */
+    private FlFaceBean referencedByVerifyFace;
+    /** Getter method for {@link #referencedByVerifyFace}. */
+    public FlFaceBean getReferencedByVerifyFace() {
+        return this.referencedByVerifyFace;
     }
-    /** Setter method for {@link #referencedFlFace}. */
-    public void setFlFaceBean(FlFaceBean reference) {
-        this.referencedFlFace = reference;
+    /** Setter method for {@link #referencedByVerifyFace}. */
+    public void setReferencedByVerifyFace(FlFaceBean reference) {
+        this.referencedByVerifyFace = reference;
     }    
-    /** The FlPerson referenced by this bean. */
-    private FlPersonBean referencedFlPerson;
-    /** Getter method for FlPersonBean. */
-    public FlPersonBean getFlPersonBean() {
-        return this.referencedFlPerson;
+    /** 
+     * The referenced {@link FlFaceBean} by {@link #compareFace}. <br>
+     * FOREIGN KEY (compare_face) REFERENCES fl_face(md5)
+     */
+    private FlFaceBean referencedByCompareFace;
+    /** Getter method for {@link #referencedByCompareFace}. */
+    public FlFaceBean getReferencedByCompareFace() {
+        return this.referencedByCompareFace;
     }
-    /** Setter method for {@link #referencedFlPerson}. */
-    public void setFlPersonBean(FlPersonBean reference) {
-        this.referencedFlPerson = reference;
+    /** Setter method for {@link #referencedByCompareFace}. */
+    public void setReferencedByCompareFace(FlFaceBean reference) {
+        this.referencedByCompareFace = reference;
     }    
+    /** 
+     * The referenced {@link FlPersonBean} by {@link #personId}. <br>
+     * FOREIGN KEY (person_id) REFERENCES fl_person(id)
+     */
+    private FlPersonBean referencedByPersonId;
+    /** Getter method for {@link #referencedByPersonId}. */
+    public FlPersonBean getReferencedByPersonId() {
+        return this.referencedByPersonId;
+    }
+    /** Setter method for {@link #referencedByPersonId}. */
+    public void setReferencedByPersonId(FlPersonBean reference) {
+        this.referencedByPersonId = reference;
+    }    
+
     @Override
     public boolean equals(Object object)
     {

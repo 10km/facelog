@@ -136,7 +136,6 @@ public class FlLogLightBeanBase
         setVerifyTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
@@ -163,7 +162,6 @@ public class FlLogLightBeanBase
     public void setPapersNum(String newVal){    
         papersNum = newVal;
     }
-
 
 
     /**
@@ -203,7 +201,6 @@ public class FlLogLightBeanBase
         setPapersType(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
@@ -230,7 +227,6 @@ public class FlLogLightBeanBase
     public void setName(String newVal){    
         name = newVal;
     }
-
 
 
     /**
@@ -270,7 +266,6 @@ public class FlLogLightBeanBase
         setPersonId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #id}.<br>
      * Meta Data Information (in progress):
@@ -307,6 +302,7 @@ public class FlLogLightBeanBase
     public void setId(int newVal){
         setId(new Integer(newVal));
     }
+
 
 
     @Override

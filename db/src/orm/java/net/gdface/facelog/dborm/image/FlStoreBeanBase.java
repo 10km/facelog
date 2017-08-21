@@ -111,7 +111,6 @@ public class FlStoreBeanBase
     }
 
 
-
     /**
      * Getter method for {@link #encoding}.<br>
      * Meta Data Information (in progress):
@@ -138,7 +137,6 @@ public class FlStoreBeanBase
     public void setEncoding(String newVal){    
         encoding = newVal;
     }
-
 
 
     /**
@@ -170,6 +168,7 @@ public class FlStoreBeanBase
     public void setMd5(String newVal){    
         md5 = newVal;
     }
+
 
 
 

@@ -127,7 +127,6 @@ public class FlFeatureBeanBase
         setCreateTime(new java.util.Date(newVal));
     }
 
-
     /**
      * Getter method for {@link #feature}.<br>
      * Meta Data Information (in progress):
@@ -153,7 +152,6 @@ public class FlFeatureBeanBase
     public void setFeature(byte[] newVal){    
         feature = newVal;
     }
-
 
 
     /**
@@ -182,7 +180,6 @@ public class FlFeatureBeanBase
     public void setImgMd5(String newVal){    
         imgMd5 = newVal;
     }
-
 
 
     /**
@@ -222,7 +219,6 @@ public class FlFeatureBeanBase
         setPersonId(new Integer(newVal));
     }
 
-
     /**
      * Getter method for {@link #md5}.<br>
      * Meta Data Information (in progress):
@@ -249,6 +245,7 @@ public class FlFeatureBeanBase
     public void setMd5(String newVal){    
         md5 = newVal;
     }
+
 
 
 

@@ -304,14 +304,14 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlImageBean object from the fl_device.device_id field.
+     * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.
      *
      * @param bean the FlDeviceBean
      * @return the associated FlImageBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlImageBean[] getFlImageBeans(FlDeviceBean bean) throws DAOException
+    public FlImageBean[] getFlImageBeansByDeviceId(FlDeviceBean bean) throws DAOException
     {
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
@@ -319,43 +319,28 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Retrieves the FlImageBean object from the fl_device.device_id field.
+     * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.
      *
      * @param bean the FlDeviceBean
      * @return the associated FlImageBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public List<FlImageBean> getFlImageBeansAsList(FlDeviceBean bean) throws DAOException
+    public List<FlImageBean> getFlImageBeansByDeviceIdAsList(FlDeviceBean bean) throws DAOException
     {
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
-
     /**
-     * Associates the FlDeviceBean object to the FlImageBean object.
-     *
-     * @param bean the FlDeviceBean object to use
-     * @param beanToSet the FlImageBean object to associate to the FlDeviceBean
-     * @return the associated FlImageBean bean
-     */
-    //4.1 SET IMPORTED
-    public FlDeviceBean setFlImageBean(FlDeviceBean bean,FlImageBean beanToSet)
-    {
-        bean.setId(beanToSet.getDeviceId());
-        return bean;
-    }
-
-    /**
-     * Retrieves the FlLogBean object from the fl_device.device_id field.
+     * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.
      *
      * @param bean the FlDeviceBean
      * @return the associated FlLogBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeans(FlDeviceBean bean) throws DAOException
+    public FlLogBean[] getFlLogBeansByDeviceId(FlDeviceBean bean) throws DAOException
     {
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
@@ -363,34 +348,19 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Retrieves the FlLogBean object from the fl_device.device_id field.
+     * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.
      *
      * @param bean the FlDeviceBean
      * @return the associated FlLogBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansAsList(FlDeviceBean bean) throws DAOException
+    public List<FlLogBean> getFlLogBeansByDeviceIdAsList(FlDeviceBean bean) throws DAOException
     {
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
-
-    /**
-     * Associates the FlDeviceBean object to the FlLogBean object.
-     *
-     * @param bean the FlDeviceBean object to use
-     * @param beanToSet the FlLogBean object to associate to the FlDeviceBean
-     * @return the associated FlLogBean bean
-     */
-    //4.1 SET IMPORTED
-    public FlDeviceBean setFlLogBean(FlDeviceBean bean,FlLogBean beanToSet)
-    {
-        bean.setId(beanToSet.getDeviceId());
-        return bean;
-    }
-
 
 
 

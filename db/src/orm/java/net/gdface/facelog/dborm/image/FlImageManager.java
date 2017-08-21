@@ -317,14 +317,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlFaceBean object from the fl_image.img_md5 field.
+     * Retrieves the {@link FlFaceBean} object from the fl_face.img_md5 field.
      *
      * @param bean the FlImageBean
      * @return the associated FlFaceBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlFaceBean[] getFlFaceBeans(FlImageBean bean) throws DAOException
+    public FlFaceBean[] getFlFaceBeansByImgMd5(FlImageBean bean) throws DAOException
     {
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setImgMd5(bean.getMd5());
@@ -332,43 +332,28 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Retrieves the FlFaceBean object from the fl_image.img_md5 field.
+     * Retrieves the {@link FlFaceBean} object from the fl_face.img_md5 field.
      *
      * @param bean the FlImageBean
      * @return the associated FlFaceBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public List<FlFaceBean> getFlFaceBeansAsList(FlImageBean bean) throws DAOException
+    public List<FlFaceBean> getFlFaceBeansByImgMd5AsList(FlImageBean bean) throws DAOException
     {
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setImgMd5(bean.getMd5());
         return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
     }
-
     /**
-     * Associates the FlImageBean object to the FlFaceBean object.
-     *
-     * @param bean the FlImageBean object to use
-     * @param beanToSet the FlFaceBean object to associate to the FlImageBean
-     * @return the associated FlFaceBean bean
-     */
-    //4.1 SET IMPORTED
-    public FlImageBean setFlFaceBean(FlImageBean bean,FlFaceBean beanToSet)
-    {
-        bean.setMd5(beanToSet.getImgMd5());
-        return bean;
-    }
-
-    /**
-     * Retrieves the FlPersonBean object from the fl_image.photo_id field.
+     * Retrieves the {@link FlPersonBean} object from the fl_person.photo_id field.
      *
      * @param bean the FlImageBean
      * @return the associated FlPersonBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlPersonBean[] getFlPersonBeans(FlImageBean bean) throws DAOException
+    public FlPersonBean[] getFlPersonBeansByPhotoId(FlImageBean bean) throws DAOException
     {
         FlPersonBean other = FlPersonManager.getInstance().createBean();
         other.setPhotoId(bean.getMd5());
@@ -376,127 +361,114 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Retrieves the FlPersonBean object from the fl_image.photo_id field.
+     * Retrieves the {@link FlPersonBean} object from the fl_person.photo_id field.
      *
      * @param bean the FlImageBean
      * @return the associated FlPersonBean bean
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public List<FlPersonBean> getFlPersonBeansAsList(FlImageBean bean) throws DAOException
+    public List<FlPersonBean> getFlPersonBeansByPhotoIdAsList(FlImageBean bean) throws DAOException
     {
         FlPersonBean other = FlPersonManager.getInstance().createBean();
         other.setPhotoId(bean.getMd5());
         return FlPersonManager.getInstance().loadUsingTemplateAsList(other);
     }
 
-    /**
-     * Associates the FlImageBean object to the FlPersonBean object.
-     *
-     * @param bean the FlImageBean object to use
-     * @param beanToSet the FlPersonBean object to associate to the FlImageBean
-     * @return the associated FlPersonBean bean
-     */
-    //4.1 SET IMPORTED
-    public FlImageBean setFlPersonBean(FlImageBean bean,FlPersonBean beanToSet)
-    {
-        bean.setMd5(beanToSet.getPhotoId());
-        return bean;
-    }
-
-
 
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the FlDeviceBean object from the fl_image.device_id field.
+     * Retrieves the {@link FlDeviceBean} object from the fl_image.device_id field.
      *
      * @param bean the FlImageBean
      * @return the associated FlDeviceBean bean
      * @throws DAOException
      */
-    //3.2 GET IMPORTED VALUES
-    public FlDeviceBean getFlDeviceBean(FlImageBean bean) throws DAOException
+    //3.2 GET REFERENCED VALUE
+    public FlDeviceBean getReferencedByDeviceId(FlImageBean bean) throws DAOException
     {
         FlDeviceBean other = FlDeviceManager.getInstance().createBean();
         other.setId(bean.getDeviceId()); 
-        bean.setFlDeviceBean(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlDeviceBean();
+        bean.setReferencedByDeviceId(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByDeviceId();
     }
 
     /**
-     * Associates the FlImageBean object to the FlDeviceBean object.
+     * Associates the {@link FlImageBean} object to the {@link FlDeviceBean} object.
      *
      * @param bean the FlImageBean object to use
      * @param beanToSet the FlDeviceBean object to associate to the FlImageBean
      * @return the associated FlDeviceBean bean
      * @throws Exception
      */
-    //4.2 ADD IMPORTED VALUE
-    public FlDeviceBean addFlDeviceBean(FlDeviceBean beanToSet, FlImageBean bean) throws Exception
-    {
-        beanToSet.setId(bean.getDeviceId());
-        return FlDeviceManager.getInstance().save(beanToSet);
-    }
-
-    /**
-     * Associates the FlImageBean object to the FlDeviceBean object.
-     *
-     * @param bean the FlImageBean object to use
-     * @param beanToSet the FlDeviceBean object to associate to the FlImageBean
-     * @return the associated FlDeviceBean bean
-     * @throws Exception
-     */
-    //5.2 SET IMPORTED
-    public FlDeviceBean setFlDeviceBean(FlImageBean bean, FlDeviceBean beanToSet) throws Exception
+    //5.2 SET REFERENCED 
+    public FlDeviceBean setReferencedByDeviceId(FlImageBean bean, FlDeviceBean beanToSet) throws DAOException
     {
         bean.setDeviceId(beanToSet.getId());
         return FlDeviceManager.getInstance().save(beanToSet);
     }
 
     /**
-     * Retrieves the FlStoreBean object from the fl_image.thumb_md5 field.
+     * Retrieves the {@link FlStoreBean} object from the fl_image.md5 field.
      *
      * @param bean the FlImageBean
      * @return the associated FlStoreBean bean
      * @throws DAOException
      */
-    //3.2 GET IMPORTED VALUES
-    public FlStoreBean getFlStoreBean(FlImageBean bean) throws DAOException
+    //3.2 GET REFERENCED VALUE
+    public FlStoreBean getReferencedByMd5(FlImageBean bean) throws DAOException
     {
         FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getThumbMd5()); 
         other.setMd5(bean.getMd5()); 
-        bean.setFlStoreBean(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getFlStoreBean();
+        other.setMd5(bean.getThumbMd5()); 
+        bean.setReferencedByMd5(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByMd5();
     }
 
     /**
-     * Associates the FlImageBean object to the FlStoreBean object.
+     * Associates the {@link FlImageBean} object to the {@link FlStoreBean} object.
      *
      * @param bean the FlImageBean object to use
      * @param beanToSet the FlStoreBean object to associate to the FlImageBean
      * @return the associated FlStoreBean bean
      * @throws Exception
      */
-    //4.2 ADD IMPORTED VALUE
-    public FlStoreBean addFlStoreBean(FlStoreBean beanToSet, FlImageBean bean) throws Exception
+    //5.2 SET REFERENCED 
+    public FlStoreBean setReferencedByMd5(FlImageBean bean, FlStoreBean beanToSet) throws DAOException
     {
-        beanToSet.setMd5(bean.getThumbMd5());
+        bean.setMd5(beanToSet.getMd5());
         return FlStoreManager.getInstance().save(beanToSet);
     }
 
     /**
-     * Associates the FlImageBean object to the FlStoreBean object.
+     * Retrieves the {@link FlStoreBean} object from the fl_image.thumb_md5 field.
+     *
+     * @param bean the FlImageBean
+     * @return the associated FlStoreBean bean
+     * @throws DAOException
+     */
+    //3.2 GET REFERENCED VALUE
+    public FlStoreBean getReferencedByThumbMd5(FlImageBean bean) throws DAOException
+    {
+        FlStoreBean other = FlStoreManager.getInstance().createBean();
+        other.setMd5(bean.getMd5()); 
+        other.setMd5(bean.getThumbMd5()); 
+        bean.setReferencedByThumbMd5(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByThumbMd5();
+    }
+
+    /**
+     * Associates the {@link FlImageBean} object to the {@link FlStoreBean} object.
      *
      * @param bean the FlImageBean object to use
      * @param beanToSet the FlStoreBean object to associate to the FlImageBean
      * @return the associated FlStoreBean bean
      * @throws Exception
      */
-    //5.2 SET IMPORTED
-    public FlStoreBean setFlStoreBean(FlImageBean bean, FlStoreBean beanToSet) throws Exception
+    //5.2 SET REFERENCED 
+    public FlStoreBean setReferencedByThumbMd5(FlImageBean bean, FlStoreBean beanToSet) throws DAOException
     {
         bean.setThumbMd5(beanToSet.getMd5());
         return FlStoreManager.getInstance().save(beanToSet);
