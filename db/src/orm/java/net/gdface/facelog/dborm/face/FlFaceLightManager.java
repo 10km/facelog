@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
 import net.gdface.facelog.dborm.Manager;
@@ -1105,7 +1106,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @return the saved FlFaceLightBean array.
      * @throws DAOException
      */
-    //15
+    //15-2
     public List<FlFaceLightBean> save(List<FlFaceLightBean> beans) throws DAOException
     {
         for (FlFaceLightBean bean : beans) 
@@ -1114,7 +1115,38 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
         }
         return beans;
     }
-
+    /**
+     * Saves an array of FlFaceLightBean beans as transaction into the database.
+     *
+     * @param beans the FlFaceLightBean bean table to be saved
+     * @return the saved FlFaceLightBean array.
+     * @throws DAOException
+     * @see #save(FlFaceLightBean[])
+     */
+    //15-3
+    public FlFaceLightBean[] saveAsTransaction(final FlFaceLightBean[] beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<FlFaceLightBean[]>(){
+            @Override
+            public FlFaceLightBean[] call() throws Exception {
+                return save(beans);
+            }});
+    }
+    /**
+     * Saves a list of FlFaceLightBean beans as transaction into the database.
+     *
+     * @param beans the FlFaceLightBean bean table to be saved
+     * @return the saved FlFaceLightBean array.
+     * @throws DAOException
+     * @see #save(List)
+     */
+    //15-4
+    public List<FlFaceLightBean> saveAsTransaction(final List<FlFaceLightBean> beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<List<FlFaceLightBean>>(){
+            @Override
+            public List<FlFaceLightBean> call() throws Exception {
+                return save(beans);
+            }});
+    }
     /**
      * Insert an array of FlFaceLightBean beans into the database.
      *
@@ -1135,11 +1167,40 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @return the saved FlFaceLightBean array.
      * @throws DAOException
      */
-    //16
+    //16-2
     public List<FlFaceLightBean> insert(List<FlFaceLightBean> beans) throws DAOException
     {
         return this.save(beans);
     }
+    
+    /**
+     * Insert an array of FlFaceLightBean beans as transaction into the database.
+     *
+     * @param beans the FlFaceLightBean bean table to be inserted
+     * @return the saved FlFaceLightBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlFaceLightBean[])
+     */
+    //16-3
+    public FlFaceLightBean[] insertAsTransaction(FlFaceLightBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
+    /**
+     * Insert a list of FlFaceLightBean beans as transaction into the database.
+     *
+     * @param beans the FlFaceLightBean bean table to be inserted
+     * @return the saved FlFaceLightBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //16-4
+    public List<FlFaceLightBean> insertAsTransaction(List<FlFaceLightBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
 
     /**
      * Updates an array of FlFaceLightBean beans into the database.
@@ -1161,13 +1222,40 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @return the saved FlFaceLightBean array.
      * @throws DAOException
      */
-    //17
+    //17-2
     public List<FlFaceLightBean> update(List<FlFaceLightBean> beans) throws DAOException
     {
         return this.save(beans);
     }
     
+    /**
+     * Updates an array of FlFaceLightBean beans as transaction into the database.
+     *
+     * @param beans the FlFaceLightBean bean table to be inserted
+     * @return the saved FlFaceLightBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlFaceLightBean[])
+     */
+    //17-3
+    public FlFaceLightBean[] updateAsTransaction(FlFaceLightBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
 
+    /**
+     * Updates a list of FlFaceLightBean beans as transaction into the database.
+     *
+     * @param beans the FlFaceLightBean bean table to be inserted
+     * @return the saved FlFaceLightBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //17-4
+    public List<FlFaceLightBean> updateAsTransaction(List<FlFaceLightBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
@@ -2515,7 +2603,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @return the count dealt by action
      * @throws DAOException
      */
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2591,4 +2679,15 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
             return bean.clean();
         }
     }
+    
+    @Override
+    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+        return Manager.getInstance().runAsTransaction(fun);
+    }
+    
+    @Override
+    public void runAsTransaction(final Runnable fun) throws DAOException{
+        Manager.getInstance().runAsTransaction(fun);
+    }
+
 }

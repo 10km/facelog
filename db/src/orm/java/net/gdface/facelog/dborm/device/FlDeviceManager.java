@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
 import net.gdface.facelog.dborm.Manager;
@@ -984,7 +985,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the saved FlDeviceBean array.
      * @throws DAOException
      */
-    //15
+    //15-2
     public List<FlDeviceBean> save(List<FlDeviceBean> beans) throws DAOException
     {
         for (FlDeviceBean bean : beans) 
@@ -993,7 +994,38 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         }
         return beans;
     }
-
+    /**
+     * Saves an array of FlDeviceBean beans as transaction into the database.
+     *
+     * @param beans the FlDeviceBean bean table to be saved
+     * @return the saved FlDeviceBean array.
+     * @throws DAOException
+     * @see #save(FlDeviceBean[])
+     */
+    //15-3
+    public FlDeviceBean[] saveAsTransaction(final FlDeviceBean[] beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<FlDeviceBean[]>(){
+            @Override
+            public FlDeviceBean[] call() throws Exception {
+                return save(beans);
+            }});
+    }
+    /**
+     * Saves a list of FlDeviceBean beans as transaction into the database.
+     *
+     * @param beans the FlDeviceBean bean table to be saved
+     * @return the saved FlDeviceBean array.
+     * @throws DAOException
+     * @see #save(List)
+     */
+    //15-4
+    public List<FlDeviceBean> saveAsTransaction(final List<FlDeviceBean> beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<List<FlDeviceBean>>(){
+            @Override
+            public List<FlDeviceBean> call() throws Exception {
+                return save(beans);
+            }});
+    }
     /**
      * Insert an array of FlDeviceBean beans into the database.
      *
@@ -1014,11 +1046,40 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the saved FlDeviceBean array.
      * @throws DAOException
      */
-    //16
+    //16-2
     public List<FlDeviceBean> insert(List<FlDeviceBean> beans) throws DAOException
     {
         return this.save(beans);
     }
+    
+    /**
+     * Insert an array of FlDeviceBean beans as transaction into the database.
+     *
+     * @param beans the FlDeviceBean bean table to be inserted
+     * @return the saved FlDeviceBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlDeviceBean[])
+     */
+    //16-3
+    public FlDeviceBean[] insertAsTransaction(FlDeviceBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
+    /**
+     * Insert a list of FlDeviceBean beans as transaction into the database.
+     *
+     * @param beans the FlDeviceBean bean table to be inserted
+     * @return the saved FlDeviceBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //16-4
+    public List<FlDeviceBean> insertAsTransaction(List<FlDeviceBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
 
     /**
      * Updates an array of FlDeviceBean beans into the database.
@@ -1040,13 +1101,40 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the saved FlDeviceBean array.
      * @throws DAOException
      */
-    //17
+    //17-2
     public List<FlDeviceBean> update(List<FlDeviceBean> beans) throws DAOException
     {
         return this.save(beans);
     }
     
+    /**
+     * Updates an array of FlDeviceBean beans as transaction into the database.
+     *
+     * @param beans the FlDeviceBean bean table to be inserted
+     * @return the saved FlDeviceBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlDeviceBean[])
+     */
+    //17-3
+    public FlDeviceBean[] updateAsTransaction(FlDeviceBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
 
+    /**
+     * Updates a list of FlDeviceBean beans as transaction into the database.
+     *
+     * @param beans the FlDeviceBean bean table to be inserted
+     * @return the saved FlDeviceBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //17-4
+    public List<FlDeviceBean> updateAsTransaction(List<FlDeviceBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
@@ -2163,7 +2251,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the count dealt by action
      * @throws DAOException
      */
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2239,4 +2327,15 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             return bean.clean();
         }
     }
+    
+    @Override
+    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+        return Manager.getInstance().runAsTransaction(fun);
+    }
+    
+    @Override
+    public void runAsTransaction(final Runnable fun) throws DAOException{
+        Manager.getInstance().runAsTransaction(fun);
+    }
+
 }

@@ -10,6 +10,7 @@ package net.gdface.facelog.dborm;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 
@@ -58,6 +59,10 @@ public interface TableManager<B1 extends BaseBean<?>,B2 extends FullBean<B1>> {
     public abstract B2[] insert(B2[] beans) throws DAOException;
 
     public abstract List<B2> insert(List<B2> beans) throws DAOException;
+
+    public abstract B2[] insertAsTransaction(B2[] beans) throws DAOException;
+
+    public abstract List<B2> insertAsTransaction(List<B2> beans) throws DAOException;
 
     public abstract B2[] loadAll() throws DAOException;
 
@@ -115,6 +120,10 @@ public interface TableManager<B1 extends BaseBean<?>,B2 extends FullBean<B1>> {
 
     public abstract B2[] save(B2[] beans) throws DAOException;
 
+    public abstract List<B2> saveAsTransaction(List<B2> beans) throws DAOException;
+
+    public abstract B2[] saveAsTransaction(B2[] beans) throws DAOException;
+
     public abstract List<B2> save(List<B2> beans) throws DAOException;
 
     public abstract B2 update(B2 bean) throws DAOException;
@@ -123,7 +132,28 @@ public interface TableManager<B1 extends BaseBean<?>,B2 extends FullBean<B1>> {
 
     public abstract List<B2> update(List<B2> beans) throws DAOException;
     
+    public abstract B2[] updateAsTransaction(B2[] beans) throws DAOException;
+
+    public abstract List<B2> updateAsTransaction(List<B2> beans) throws DAOException;
+
     public abstract B2[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException;
     
     public abstract List<B2> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException;
+    /**
+     * Run {@code Callable<T>} as a transaction.<br>
+     * all exceptions but {@code SQLException} threw by {@code Callable<T>} is warpped into {@code RuntimeException}<br>
+     * throw {@code NullPointerException} if {@code fun} be {@code null}<br>
+     * @param <T>  type of return result
+     * @param fun
+     * @return
+     * @throws DAOException
+     */
+    public <T>T runAsTransaction(Callable<T> fun) throws DAOException;
+    /**
+     * Run {@code Runnable} as a transaction.no return
+     * @param fun
+     * @throws DAOException
+     * @see #runAsTransaction(Runnable)
+     */
+    public void runAsTransaction(final Runnable fun) throws DAOException;
 }

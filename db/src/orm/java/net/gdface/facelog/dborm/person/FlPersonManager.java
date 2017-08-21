@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
 import net.gdface.facelog.dborm.Manager;
@@ -1166,7 +1167,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @return the saved FlPersonBean array.
      * @throws DAOException
      */
-    //15
+    //15-2
     public List<FlPersonBean> save(List<FlPersonBean> beans) throws DAOException
     {
         for (FlPersonBean bean : beans) 
@@ -1175,7 +1176,38 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         }
         return beans;
     }
-
+    /**
+     * Saves an array of FlPersonBean beans as transaction into the database.
+     *
+     * @param beans the FlPersonBean bean table to be saved
+     * @return the saved FlPersonBean array.
+     * @throws DAOException
+     * @see #save(FlPersonBean[])
+     */
+    //15-3
+    public FlPersonBean[] saveAsTransaction(final FlPersonBean[] beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<FlPersonBean[]>(){
+            @Override
+            public FlPersonBean[] call() throws Exception {
+                return save(beans);
+            }});
+    }
+    /**
+     * Saves a list of FlPersonBean beans as transaction into the database.
+     *
+     * @param beans the FlPersonBean bean table to be saved
+     * @return the saved FlPersonBean array.
+     * @throws DAOException
+     * @see #save(List)
+     */
+    //15-4
+    public List<FlPersonBean> saveAsTransaction(final List<FlPersonBean> beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<List<FlPersonBean>>(){
+            @Override
+            public List<FlPersonBean> call() throws Exception {
+                return save(beans);
+            }});
+    }
     /**
      * Insert an array of FlPersonBean beans into the database.
      *
@@ -1196,11 +1228,40 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @return the saved FlPersonBean array.
      * @throws DAOException
      */
-    //16
+    //16-2
     public List<FlPersonBean> insert(List<FlPersonBean> beans) throws DAOException
     {
         return this.save(beans);
     }
+    
+    /**
+     * Insert an array of FlPersonBean beans as transaction into the database.
+     *
+     * @param beans the FlPersonBean bean table to be inserted
+     * @return the saved FlPersonBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlPersonBean[])
+     */
+    //16-3
+    public FlPersonBean[] insertAsTransaction(FlPersonBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
+    /**
+     * Insert a list of FlPersonBean beans as transaction into the database.
+     *
+     * @param beans the FlPersonBean bean table to be inserted
+     * @return the saved FlPersonBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //16-4
+    public List<FlPersonBean> insertAsTransaction(List<FlPersonBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
 
     /**
      * Updates an array of FlPersonBean beans into the database.
@@ -1222,13 +1283,40 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @return the saved FlPersonBean array.
      * @throws DAOException
      */
-    //17
+    //17-2
     public List<FlPersonBean> update(List<FlPersonBean> beans) throws DAOException
     {
         return this.save(beans);
     }
     
+    /**
+     * Updates an array of FlPersonBean beans as transaction into the database.
+     *
+     * @param beans the FlPersonBean bean table to be inserted
+     * @return the saved FlPersonBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlPersonBean[])
+     */
+    //17-3
+    public FlPersonBean[] updateAsTransaction(FlPersonBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
 
+    /**
+     * Updates a list of FlPersonBean beans as transaction into the database.
+     *
+     * @param beans the FlPersonBean bean table to be inserted
+     * @return the saved FlPersonBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //17-4
+    public List<FlPersonBean> updateAsTransaction(List<FlPersonBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
@@ -2637,7 +2725,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @return the count dealt by action
      * @throws DAOException
      */
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2713,4 +2801,15 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             return bean.clean();
         }
     }
+    
+    @Override
+    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+        return Manager.getInstance().runAsTransaction(fun);
+    }
+    
+    @Override
+    public void runAsTransaction(final Runnable fun) throws DAOException{
+        Manager.getInstance().runAsTransaction(fun);
+    }
+
 }

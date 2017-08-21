@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
 import net.gdface.facelog.dborm.Manager;
@@ -1063,7 +1064,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @return the saved FlLogBean array.
      * @throws DAOException
      */
-    //15
+    //15-2
     public List<FlLogBean> save(List<FlLogBean> beans) throws DAOException
     {
         for (FlLogBean bean : beans) 
@@ -1072,7 +1073,38 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         }
         return beans;
     }
-
+    /**
+     * Saves an array of FlLogBean beans as transaction into the database.
+     *
+     * @param beans the FlLogBean bean table to be saved
+     * @return the saved FlLogBean array.
+     * @throws DAOException
+     * @see #save(FlLogBean[])
+     */
+    //15-3
+    public FlLogBean[] saveAsTransaction(final FlLogBean[] beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<FlLogBean[]>(){
+            @Override
+            public FlLogBean[] call() throws Exception {
+                return save(beans);
+            }});
+    }
+    /**
+     * Saves a list of FlLogBean beans as transaction into the database.
+     *
+     * @param beans the FlLogBean bean table to be saved
+     * @return the saved FlLogBean array.
+     * @throws DAOException
+     * @see #save(List)
+     */
+    //15-4
+    public List<FlLogBean> saveAsTransaction(final List<FlLogBean> beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<List<FlLogBean>>(){
+            @Override
+            public List<FlLogBean> call() throws Exception {
+                return save(beans);
+            }});
+    }
     /**
      * Insert an array of FlLogBean beans into the database.
      *
@@ -1093,11 +1125,40 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @return the saved FlLogBean array.
      * @throws DAOException
      */
-    //16
+    //16-2
     public List<FlLogBean> insert(List<FlLogBean> beans) throws DAOException
     {
         return this.save(beans);
     }
+    
+    /**
+     * Insert an array of FlLogBean beans as transaction into the database.
+     *
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlLogBean[])
+     */
+    //16-3
+    public FlLogBean[] insertAsTransaction(FlLogBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
+    /**
+     * Insert a list of FlLogBean beans as transaction into the database.
+     *
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //16-4
+    public List<FlLogBean> insertAsTransaction(List<FlLogBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
 
     /**
      * Updates an array of FlLogBean beans into the database.
@@ -1119,13 +1180,40 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @return the saved FlLogBean array.
      * @throws DAOException
      */
-    //17
+    //17-2
     public List<FlLogBean> update(List<FlLogBean> beans) throws DAOException
     {
         return this.save(beans);
     }
     
+    /**
+     * Updates an array of FlLogBean beans as transaction into the database.
+     *
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlLogBean[])
+     */
+    //17-3
+    public FlLogBean[] updateAsTransaction(FlLogBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
 
+    /**
+     * Updates a list of FlLogBean beans as transaction into the database.
+     *
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //17-4
+    public List<FlLogBean> updateAsTransaction(List<FlLogBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
@@ -2426,7 +2514,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @return the count dealt by action
      * @throws DAOException
      */
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2502,4 +2590,15 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
             return bean.clean();
         }
     }
+    
+    @Override
+    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+        return Manager.getInstance().runAsTransaction(fun);
+    }
+    
+    @Override
+    public void runAsTransaction(final Runnable fun) throws DAOException{
+        Manager.getInstance().runAsTransaction(fun);
+    }
+
 }

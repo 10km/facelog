@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
 import net.gdface.facelog.dborm.Manager;
@@ -715,7 +716,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
-    //15
+    //15-2
     public List<FlFeatureBean> save(List<FlFeatureBean> beans) throws DAOException
     {
         for (FlFeatureBean bean : beans) 
@@ -724,7 +725,38 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         }
         return beans;
     }
-
+    /**
+     * Saves an array of FlFeatureBean beans as transaction into the database.
+     *
+     * @param beans the FlFeatureBean bean table to be saved
+     * @return the saved FlFeatureBean array.
+     * @throws DAOException
+     * @see #save(FlFeatureBean[])
+     */
+    //15-3
+    public FlFeatureBean[] saveAsTransaction(final FlFeatureBean[] beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<FlFeatureBean[]>(){
+            @Override
+            public FlFeatureBean[] call() throws Exception {
+                return save(beans);
+            }});
+    }
+    /**
+     * Saves a list of FlFeatureBean beans as transaction into the database.
+     *
+     * @param beans the FlFeatureBean bean table to be saved
+     * @return the saved FlFeatureBean array.
+     * @throws DAOException
+     * @see #save(List)
+     */
+    //15-4
+    public List<FlFeatureBean> saveAsTransaction(final List<FlFeatureBean> beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<List<FlFeatureBean>>(){
+            @Override
+            public List<FlFeatureBean> call() throws Exception {
+                return save(beans);
+            }});
+    }
     /**
      * Insert an array of FlFeatureBean beans into the database.
      *
@@ -745,11 +777,40 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
-    //16
+    //16-2
     public List<FlFeatureBean> insert(List<FlFeatureBean> beans) throws DAOException
     {
         return this.save(beans);
     }
+    
+    /**
+     * Insert an array of FlFeatureBean beans as transaction into the database.
+     *
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlFeatureBean[])
+     */
+    //16-3
+    public FlFeatureBean[] insertAsTransaction(FlFeatureBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
+    /**
+     * Insert a list of FlFeatureBean beans as transaction into the database.
+     *
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //16-4
+    public List<FlFeatureBean> insertAsTransaction(List<FlFeatureBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+
 
     /**
      * Updates an array of FlFeatureBean beans into the database.
@@ -771,13 +832,40 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
-    //17
+    //17-2
     public List<FlFeatureBean> update(List<FlFeatureBean> beans) throws DAOException
     {
         return this.save(beans);
     }
     
+    /**
+     * Updates an array of FlFeatureBean beans as transaction into the database.
+     *
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(FlFeatureBean[])
+     */
+    //17-3
+    public FlFeatureBean[] updateAsTransaction(FlFeatureBean[] beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
 
+    /**
+     * Updates a list of FlFeatureBean beans as transaction into the database.
+     *
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
+     * @throws DAOException
+     * @see #saveAsTransaction(List)
+     */
+    //17-4
+    public List<FlFeatureBean> updateAsTransaction(List<FlFeatureBean> beans) throws DAOException
+    {
+        return this.saveAsTransaction(beans);
+    }
+    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
@@ -1855,7 +1943,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @return the count dealt by action
      * @throws DAOException
      */
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -1931,4 +2019,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             return bean.clean();
         }
     }
+    
+    @Override
+    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
+        return Manager.getInstance().runAsTransaction(fun);
+    }
+    
+    @Override
+    public void runAsTransaction(final Runnable fun) throws DAOException{
+        Manager.getInstance().runAsTransaction(fun);
+    }
+
 }
