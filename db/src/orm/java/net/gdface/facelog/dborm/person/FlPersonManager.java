@@ -7,6 +7,7 @@
 
 package net.gdface.facelog.dborm.person;
 import java.lang.ref.SoftReference;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -409,7 +410,29 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
 
-
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public <T> T[] getImportedBeans(FlPersonBean bean,String key,String importedKey) throws DAOException{    	
+    	try {
+			Class<TableManager> managerClass =  (Class<TableManager>) Class.forName("net.gdface.facelog.dborm.log.FlLogManager");
+			Object instance = managerClass.getMethod("getInstance").invoke(null);
+			T other=(T) managerClass.getMethod("createBean").invoke(instance);
+			Object keyObj = bean.getObject(key);
+			other.getClass().getMethod("setObject", String.class,keyObj.getClass()).invoke(other,importedKey, keyObj);
+			return (T[]) managerClass.getMethod("loadUsingTemplateAsList", other.getClass()).invoke(instance, other);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}    	
+    }
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
