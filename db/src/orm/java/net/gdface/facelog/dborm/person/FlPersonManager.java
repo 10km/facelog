@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -411,13 +412,12 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public <T> T[] getImportedBeans(FlPersonBean bean,String key,String importedKey) throws DAOException{    	
+	public <T extends BaseBean> T[] getImportedBeans(FlPersonBean bean,String key,String importedKey) throws DAOException{    	
     	try {
 			Class<TableManager> managerClass =  (Class<TableManager>) Class.forName("net.gdface.facelog.dborm.log.FlLogManager");
 			Object instance = managerClass.getMethod("getInstance").invoke(null);
 			T other=(T) managerClass.getMethod("createBean").invoke(instance);
-			Object keyObj = bean.getObject(key);
-			other.getClass().getMethod("setObject", String.class,keyObj.getClass()).invoke(other,importedKey, keyObj);
+			other.setObject(importedKey, bean.getObject(key));
 			return (T[]) managerClass.getMethod("loadUsingTemplateAsList", other.getClass()).invoke(instance, other);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
