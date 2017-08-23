@@ -7,7 +7,6 @@
 
 package net.gdface.facelog.dborm.person;
 import java.lang.ref.SoftReference;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
-import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -353,99 +351,83 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the {@link FlFaceBean} object from the fl_face.person_id field.
-     *
-     * @param bean the FlPersonBean
-     * @return the associated FlFaceBean bean
+     * Retrieves the {@link FlFaceBean} object from the fl_face.person_id field.<BR>
+     * FK_NAME : fl_face_ibfk_2 
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public FlFaceBean[] getFlFaceBeansByPersonId(FlPersonBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setPersonId(bean.getId());
         return FlFaceManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the {@link FlFaceBean} object from the fl_face.person_id field.
-     *
-     * @param bean the FlPersonBean
-     * @return the associated FlFaceBean bean
+     * Retrieves the {@link FlFaceBean} object from fl_face.person_id field.<BR>
+     * FK_NAME:fl_face_ibfk_2
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public List<FlFaceBean> getFlFaceBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setPersonId(bean.getId());
         return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
     }
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.
-     *
-     * @param bean the FlPersonBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
+     * FK_NAME : fl_log_ibfk_1 
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public FlLogBean[] getFlLogBeansByPersonId(FlPersonBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setPersonId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.
-     *
-     * @param bean the FlPersonBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
+     * FK_NAME:fl_log_ibfk_1
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setPersonId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public <T extends BaseBean> T[] getImportedBeans(FlPersonBean bean,String key,String importedKey) throws DAOException{    	
-    	try {
-			Class<TableManager> managerClass =  (Class<TableManager>) Class.forName("net.gdface.facelog.dborm.log.FlLogManager");
-			Object instance = managerClass.getMethod("getInstance").invoke(null);
-			T other=(T) managerClass.getMethod("createBean").invoke(instance);
-			other.setObject(importedKey, bean.getObject(key));
-			return (T[]) managerClass.getMethod("loadUsingTemplateAsList", other.getClass()).invoke(instance, other);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}    	
-    }
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+
     /**
-     * Retrieves the {@link FlImageBean} object from the fl_person.photo_id field.
-     *
-     * @param bean the FlPersonBean
-     * @return the associated FlImageBean bean
+     * Retrieves the {@link FlImageBean} object referenced by {@link FlPersonBean#getPhotoId}() field.<br>
+     * FK_NAME : fl_person_ibfk_1
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
     public FlImageBean getReferencedByPhotoId(FlPersonBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setMd5(bean.getPhotoId()); 
         bean.setReferencedByPhotoId(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
@@ -453,21 +435,20 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
 
     /**
-     * Associates the {@link FlPersonBean} object to the {@link FlImageBean} object.
+     * Associates the {@link FlPersonBean} object to the {@link FlImageBean} object by {@link FlPersonBean#getPhotoId}() field.
      *
-     * @param bean the FlPersonBean object to use
-     * @param beanToSet the FlImageBean object to associate to the FlPersonBean
-     * @return the associated FlImageBean bean
+     * @param bean the {@link FlPersonBean} object to use
+     * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlPersonBean}
+     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlImageBean setReferencedByPhotoId(FlPersonBean bean, FlImageBean beanToSet) throws DAOException
     {
+        if(null == bean || null == beanToSet) return null;
         bean.setPhotoId(beanToSet.getMd5());
         return FlImageManager.getInstance().save(beanToSet);
     }
-
-
 
     //////////////////////////////////////
     // LOAD ALL

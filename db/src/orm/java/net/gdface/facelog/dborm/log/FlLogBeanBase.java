@@ -396,7 +396,7 @@ public class FlLogBeanBase
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link FlDeviceBean} by {@link #deviceId}. <br>
+     * The referenced {@link FlDeviceBean} by {@link #deviceId} . <br>
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
     private FlDeviceBean referencedByDeviceId;
@@ -407,9 +407,9 @@ public class FlLogBeanBase
     /** Setter method for {@link #referencedByDeviceId}. */
     public void setReferencedByDeviceId(FlDeviceBean reference) {
         this.referencedByDeviceId = reference;
-    }    
+    }
     /** 
-     * The referenced {@link FlFaceBean} by {@link #verifyFace}. <br>
+     * The referenced {@link FlFaceBean} by {@link #verifyFace} . <br>
      * FOREIGN KEY (verify_face) REFERENCES fl_face(md5)
      */
     private FlFaceBean referencedByVerifyFace;
@@ -420,9 +420,9 @@ public class FlLogBeanBase
     /** Setter method for {@link #referencedByVerifyFace}. */
     public void setReferencedByVerifyFace(FlFaceBean reference) {
         this.referencedByVerifyFace = reference;
-    }    
+    }
     /** 
-     * The referenced {@link FlFaceBean} by {@link #compareFace}. <br>
+     * The referenced {@link FlFaceBean} by {@link #compareFace} . <br>
      * FOREIGN KEY (compare_face) REFERENCES fl_face(md5)
      */
     private FlFaceBean referencedByCompareFace;
@@ -433,9 +433,9 @@ public class FlLogBeanBase
     /** Setter method for {@link #referencedByCompareFace}. */
     public void setReferencedByCompareFace(FlFaceBean reference) {
         this.referencedByCompareFace = reference;
-    }    
+    }
     /** 
-     * The referenced {@link FlPersonBean} by {@link #personId}. <br>
+     * The referenced {@link FlPersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
     private FlPersonBean referencedByPersonId;
@@ -446,7 +446,7 @@ public class FlLogBeanBase
     /** Setter method for {@link #referencedByPersonId}. */
     public void setReferencedByPersonId(FlPersonBean reference) {
         this.referencedByPersonId = reference;
-    }    
+    }
 
     @Override
     public boolean equals(Object object)

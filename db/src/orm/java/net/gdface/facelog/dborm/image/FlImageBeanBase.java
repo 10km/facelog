@@ -391,7 +391,7 @@ public class FlImageBeanBase
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link FlDeviceBean} by {@link #deviceId}. <br>
+     * The referenced {@link FlDeviceBean} by {@link #deviceId} . <br>
      * FOREIGN KEY (device_id) REFERENCES fl_device(id)
      */
     private FlDeviceBean referencedByDeviceId;
@@ -402,9 +402,9 @@ public class FlImageBeanBase
     /** Setter method for {@link #referencedByDeviceId}. */
     public void setReferencedByDeviceId(FlDeviceBean reference) {
         this.referencedByDeviceId = reference;
-    }    
+    }
     /** 
-     * The referenced {@link FlStoreBean} by {@link #md5}. <br>
+     * The referenced {@link FlStoreBean} by {@link #md5} . <br>
      * FOREIGN KEY (md5) REFERENCES fl_store(md5)
      */
     private FlStoreBean referencedByMd5;
@@ -415,9 +415,9 @@ public class FlImageBeanBase
     /** Setter method for {@link #referencedByMd5}. */
     public void setReferencedByMd5(FlStoreBean reference) {
         this.referencedByMd5 = reference;
-    }    
+    }
     /** 
-     * The referenced {@link FlStoreBean} by {@link #thumbMd5}. <br>
+     * The referenced {@link FlStoreBean} by {@link #thumbMd5} . <br>
      * FOREIGN KEY (thumb_md5) REFERENCES fl_store(md5)
      */
     private FlStoreBean referencedByThumbMd5;
@@ -428,7 +428,7 @@ public class FlImageBeanBase
     /** Setter method for {@link #referencedByThumbMd5}. */
     public void setReferencedByThumbMd5(FlStoreBean reference) {
         this.referencedByThumbMd5 = reference;
-    }    
+    }
 
     @Override
     public boolean equals(Object object)

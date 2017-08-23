@@ -304,64 +304,67 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.
-     *
-     * @param bean the FlDeviceBean
-     * @return the associated FlImageBean bean
+     * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.<BR>
+     * FK_NAME : fl_image_ibfk_3 
+     * @param bean the {@link FlDeviceBean}
+     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public FlImageBean[] getFlImageBeansByDeviceId(FlDeviceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
         return FlImageManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.
-     *
-     * @param bean the FlDeviceBean
-     * @return the associated FlImageBean bean
+     * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
+     * FK_NAME:fl_image_ibfk_3
+     * @param bean the {@link FlDeviceBean}
+     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public List<FlImageBean> getFlImageBeansByDeviceIdAsList(FlDeviceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.
-     *
-     * @param bean the FlDeviceBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.<BR>
+     * FK_NAME : fl_log_ibfk_2 
+     * @param bean the {@link FlDeviceBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public FlLogBean[] getFlLogBeansByDeviceId(FlDeviceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.
-     *
-     * @param bean the FlDeviceBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from fl_log.device_id field.<BR>
+     * FK_NAME:fl_log_ibfk_2
+     * @param bean the {@link FlDeviceBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByDeviceIdAsList(FlDeviceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setDeviceId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
-
 
 
     //////////////////////////////////////

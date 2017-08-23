@@ -861,7 +861,7 @@ public class FlFaceBeanBase
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link FlImageBean} by {@link #imgMd5}. <br>
+     * The referenced {@link FlImageBean} by {@link #imgMd5} . <br>
      * FOREIGN KEY (img_md5) REFERENCES fl_image(md5)
      */
     private FlImageBean referencedByImgMd5;
@@ -872,9 +872,9 @@ public class FlFaceBeanBase
     /** Setter method for {@link #referencedByImgMd5}. */
     public void setReferencedByImgMd5(FlImageBean reference) {
         this.referencedByImgMd5 = reference;
-    }    
+    }
     /** 
-     * The referenced {@link FlPersonBean} by {@link #personId}. <br>
+     * The referenced {@link FlPersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
     private FlPersonBean referencedByPersonId;
@@ -885,7 +885,7 @@ public class FlFaceBeanBase
     /** Setter method for {@link #referencedByPersonId}. */
     public void setReferencedByPersonId(FlPersonBean reference) {
         this.referencedByPersonId = reference;
-    }    
+    }
 
     @Override
     public boolean equals(Object object)

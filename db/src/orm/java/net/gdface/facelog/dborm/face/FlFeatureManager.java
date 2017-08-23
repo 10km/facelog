@@ -176,7 +176,6 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
 
 
 
-
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

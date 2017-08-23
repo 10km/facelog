@@ -432,78 +432,83 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.verify_face field.
-     *
-     * @param bean the FlFaceBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from the fl_log.verify_face field.<BR>
+     * FK_NAME : fl_log_ibfk_3 
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public FlLogBean[] getFlLogBeansByVerifyFace(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setVerifyFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.verify_face field.
-     *
-     * @param bean the FlFaceBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from fl_log.verify_face field.<BR>
+     * FK_NAME:fl_log_ibfk_3
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByVerifyFaceAsList(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setVerifyFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.
-     *
-     * @param bean the FlFaceBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public FlLogBean[] getFlLogBeansByCompareFace(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setCompareFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplate(other);
     }
 
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.
-     *
-     * @param bean the FlFaceBean
-     * @return the associated FlLogBean bean
+     * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByCompareFaceAsList(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setCompareFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
 
-
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+
     /**
-     * Retrieves the {@link FlImageBean} object from the fl_face.img_md5 field.
-     *
-     * @param bean the FlFaceBean
-     * @return the associated FlImageBean bean
+     * Retrieves the {@link FlImageBean} object referenced by {@link FlFaceBean#getImgMd5}() field.<br>
+     * FK_NAME : fl_face_ibfk_1
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
     public FlImageBean getReferencedByImgMd5(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setMd5(bean.getImgMd5()); 
         bean.setReferencedByImgMd5(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
@@ -511,30 +516,32 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Associates the {@link FlFaceBean} object to the {@link FlImageBean} object.
+     * Associates the {@link FlFaceBean} object to the {@link FlImageBean} object by {@link FlFaceBean#getImgMd5}() field.
      *
-     * @param bean the FlFaceBean object to use
-     * @param beanToSet the FlImageBean object to associate to the FlFaceBean
-     * @return the associated FlImageBean bean
+     * @param bean the {@link FlFaceBean} object to use
+     * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlFaceBean}
+     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlImageBean setReferencedByImgMd5(FlFaceBean bean, FlImageBean beanToSet) throws DAOException
     {
+        if(null == bean || null == beanToSet) return null;
         bean.setImgMd5(beanToSet.getMd5());
         return FlImageManager.getInstance().save(beanToSet);
     }
 
     /**
-     * Retrieves the {@link FlPersonBean} object from the fl_face.person_id field.
-     *
-     * @param bean the FlFaceBean
-     * @return the associated FlPersonBean bean
+     * Retrieves the {@link FlPersonBean} object referenced by {@link FlFaceBean#getPersonId}() field.<br>
+     * FK_NAME : fl_face_ibfk_2
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
     public FlPersonBean getReferencedByPersonId(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         FlPersonBean other = FlPersonManager.getInstance().createBean();
         other.setId(bean.getPersonId()); 
         bean.setReferencedByPersonId(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
@@ -542,21 +549,20 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Associates the {@link FlFaceBean} object to the {@link FlPersonBean} object.
+     * Associates the {@link FlFaceBean} object to the {@link FlPersonBean} object by {@link FlFaceBean#getPersonId}() field.
      *
-     * @param bean the FlFaceBean object to use
-     * @param beanToSet the FlPersonBean object to associate to the FlFaceBean
-     * @return the associated FlPersonBean bean
+     * @param bean the {@link FlFaceBean} object to use
+     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFaceBean}
+     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlPersonBean setReferencedByPersonId(FlFaceBean bean, FlPersonBean beanToSet) throws DAOException
     {
+        if(null == bean || null == beanToSet) return null;
         bean.setPersonId(beanToSet.getId());
         return FlPersonManager.getInstance().save(beanToSet);
     }
-
-
 
     //////////////////////////////////////
     // LOAD ALL

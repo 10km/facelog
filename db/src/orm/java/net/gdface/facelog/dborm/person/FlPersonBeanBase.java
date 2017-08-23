@@ -539,7 +539,7 @@ public class FlPersonBeanBase
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link FlImageBean} by {@link #photoId}. <br>
+     * The referenced {@link FlImageBean} by {@link #photoId} . <br>
      * FOREIGN KEY (photo_id) REFERENCES fl_image(md5)
      */
     private FlImageBean referencedByPhotoId;
@@ -550,7 +550,7 @@ public class FlPersonBeanBase
     /** Setter method for {@link #referencedByPhotoId}. */
     public void setReferencedByPhotoId(FlImageBean reference) {
         this.referencedByPhotoId = reference;
-    }    
+    }
 
     @Override
     public boolean equals(Object object)
