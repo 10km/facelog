@@ -328,7 +328,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @see {@link FlImageManager#setReferencedByMd5(FlImageBean, FlStoreBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByMd5AsList(FlStoreBean bean , T importedBeans) throws DAOException
+    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByMd5(FlStoreBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
@@ -400,7 +400,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @see {@link FlImageManager#setReferencedByThumbMd5(FlImageBean, FlStoreBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByThumbMd5AsList(FlStoreBean bean , T importedBeans) throws DAOException
+    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByThumbMd5(FlStoreBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
@@ -476,6 +476,14 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         return bean;
     }   
  
+    public <T> T getReferencedBean(FlStoreBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    public <T> T setReferencedBean(FlStoreBean bean,T beanToSet,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+     
+
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

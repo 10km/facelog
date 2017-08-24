@@ -366,7 +366,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByDeviceIdAsList(FlDeviceBean bean , T importedBeans) throws DAOException
+    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
@@ -438,7 +438,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByDeviceIdAsList(FlDeviceBean bean , T importedBeans) throws DAOException
+    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -514,6 +514,14 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         return bean;
     }   
  
+    public <T> T getReferencedBean(FlDeviceBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    public <T> T setReferencedBean(FlDeviceBean bean,T beanToSet,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+     
+
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

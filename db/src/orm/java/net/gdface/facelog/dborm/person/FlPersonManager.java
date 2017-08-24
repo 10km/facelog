@@ -413,7 +413,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @see {@link FlFaceManager#setReferencedByPersonId(FlFaceBean, FlPersonBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlFaceBean>> T setFlFaceBeansByPersonIdAsList(FlPersonBean bean , T importedBeans) throws DAOException
+    public <T extends java.util.Collection<FlFaceBean>> T setFlFaceBeansByPersonId(FlPersonBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -485,7 +485,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @see {@link FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByPersonIdAsList(FlPersonBean bean , T importedBeans) throws DAOException
+    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByPersonId(FlPersonBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -570,9 +570,99 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         }
         return bean;
     }   
-     //////////////////////////////////////
+     private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+        private static final long serialVersionUID = 1L;
+    {        
+    put("refFlImagebyPhotoId",new Object[]{"getReferencedByPhotoId","setReferencedByPhotoId",FlImageBean.class});
+    }} ;
+    /**
+     * Retrieves the bean object referenced by fkName.<br>
+     *
+     * <ul>
+     *     <li> refFlImagebyPhotoId -> FlImageBean</li>
+     * </ul>
+     * @param bean the {@link FlPersonBean} object to use
+     * @param fkName valid value: refFlImagebyPhotoId
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getReferencedBean(FlPersonBean bean,String fkName)throws DAOException{
+        Object[] objs = REF_METHODS.get(fkName);
+        if(null==objs)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        try {
+            return (T) this.getClass().getMethod((String)objs[0],bean.getClass()).invoke(this,bean);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Associates the {@link FlPersonBean} object to the bean object by fkName field.<br>
+     * 
+     * <ul>
+     *     <li> refFlImagebyPhotoId -> FlImageBean</li>
+     * </ul>
+     * @param bean the {@link FlPersonBean} object to use
+     * @param beanToSet the <T> object to associate to the {@link FlPersonBean}
+     * @param fkName valid value: refFlImagebyPhotoId
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,String fkName)throws DAOException{
+        Object[] objs = REF_METHODS.get(fkName);
+        if(null==objs)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==beanToSet)
+            throw new NullPointerException();
+        Class<?> resultClass = (Class<?>)objs[2];
+        if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
+            throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
+        }
+        try {            
+            return (T) this.getClass().getMethod((String)objs[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+     
+    //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+
 
     /**
      * Retrieves the {@link FlImageBean} object referenced by {@link FlPersonBean#getPhotoId}() field.<br>

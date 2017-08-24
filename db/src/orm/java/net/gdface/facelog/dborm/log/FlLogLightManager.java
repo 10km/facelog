@@ -186,6 +186,14 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
 
 
 
+    public <T> T getReferencedBean(FlLogLightBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    public <T> T setReferencedBean(FlLogLightBean bean,T beanToSet,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+     
+
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

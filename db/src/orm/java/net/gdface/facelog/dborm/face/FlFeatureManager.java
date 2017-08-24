@@ -177,6 +177,14 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
 
 
 
+    public <T> T getReferencedBean(FlFeatureBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    public <T> T setReferencedBean(FlFeatureBean bean,T beanToSet,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+     
+
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

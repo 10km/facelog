@@ -348,9 +348,108 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         bean = this.save( bean );
         return bean;
     }   
-     //////////////////////////////////////
+     private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+        private static final long serialVersionUID = 1L;
+    {        
+    put("refFlDevicebyDeviceId",new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
+    put("refFlFacebyVerifyFace",new Object[]{"getReferencedByVerifyFace","setReferencedByVerifyFace",FlFaceBean.class});
+    put("refFlFacebyCompareFace",new Object[]{"getReferencedByCompareFace","setReferencedByCompareFace",FlFaceBean.class});
+    put("refFlPersonbyPersonId",new Object[]{"getReferencedByPersonId","setReferencedByPersonId",FlPersonBean.class});
+    }} ;
+    /**
+     * Retrieves the bean object referenced by fkName.<br>
+     *
+     * <ul>
+     *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
+     *     <li> refFlFacebyVerifyFace -> FlFaceBean</li>
+     *     <li> refFlFacebyCompareFace -> FlFaceBean</li>
+     *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
+     * </ul>
+     * @param bean the {@link FlLogBean} object to use
+     * @param fkName valid value: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getReferencedBean(FlLogBean bean,String fkName)throws DAOException{
+        Object[] objs = REF_METHODS.get(fkName);
+        if(null==objs)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        try {
+            return (T) this.getClass().getMethod((String)objs[0],bean.getClass()).invoke(this,bean);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Associates the {@link FlLogBean} object to the bean object by fkName field.<br>
+     * 
+     * <ul>
+     *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
+     *     <li> refFlFacebyVerifyFace -> FlFaceBean</li>
+     *     <li> refFlFacebyCompareFace -> FlFaceBean</li>
+     *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
+     * </ul>
+     * @param bean the {@link FlLogBean} object to use
+     * @param beanToSet the <T> object to associate to the {@link FlLogBean}
+     * @param fkName valid value: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T setReferencedBean(FlLogBean bean,T beanToSet,String fkName)throws DAOException{
+        Object[] objs = REF_METHODS.get(fkName);
+        if(null==objs)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==beanToSet)
+            throw new NullPointerException();
+        Class<?> resultClass = (Class<?>)objs[2];
+        if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
+            throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
+        }
+        try {            
+            return (T) this.getClass().getMethod((String)objs[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+     
+    //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+
 
     /**
      * Retrieves the {@link FlDeviceBean} object referenced by {@link FlLogBean#getDeviceId}() field.<br>
