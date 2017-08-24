@@ -669,7 +669,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
-     *
+     * @param <T>
      * <ul>
      *     <li> refFlImagebyImgMd5 -> FlImageBean</li>
      *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
@@ -709,6 +709,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     /**
      * Associates the {@link FlFaceBean} object to the bean object by fkName field.<br>
      * 
+     * @param <T>
      * <ul>
      *     <li> refFlImagebyImgMd5 -> FlImageBean</li>
      *     <li> refFlPersonbyPersonId -> FlPersonBean</li>

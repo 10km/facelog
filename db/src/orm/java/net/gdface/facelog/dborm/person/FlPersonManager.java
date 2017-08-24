@@ -577,7 +577,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
-     *
+     * @param <T>
      * <ul>
      *     <li> refFlImagebyPhotoId -> FlImageBean</li>
      * </ul>
@@ -616,6 +616,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     /**
      * Associates the {@link FlPersonBean} object to the bean object by fkName field.<br>
      * 
+     * @param <T>
      * <ul>
      *     <li> refFlImagebyPhotoId -> FlImageBean</li>
      * </ul>

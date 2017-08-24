@@ -358,7 +358,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
-     *
+     * @param <T>
      * <ul>
      *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
      *     <li> refFlFacebyVerifyFace -> FlFaceBean</li>
@@ -400,6 +400,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     /**
      * Associates the {@link FlLogBean} object to the bean object by fkName field.<br>
      * 
+     * @param <T>
      * <ul>
      *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
      *     <li> refFlFacebyVerifyFace -> FlFaceBean</li>

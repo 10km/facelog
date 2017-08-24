@@ -565,7 +565,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
-     *
+     * @param <T>
      * <ul>
      *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
      *     <li> refFlStorebyMd5 -> FlStoreBean</li>
@@ -606,6 +606,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     /**
      * Associates the {@link FlImageBean} object to the bean object by fkName field.<br>
      * 
+     * @param <T>
      * <ul>
      *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
      *     <li> refFlStorebyMd5 -> FlStoreBean</li>
