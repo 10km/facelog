@@ -324,7 +324,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Loads a FlFaceBean from the fl_face using its key fields.
      *
      * @param md5 String - PK# 1
-     * @return a unique FlFaceBean
+     * @return a unique FlFaceBean or {@code null} if not found
      * @throws DAOException
      */
     //1
@@ -342,8 +342,8 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
             List<FlFaceBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (pReturn.size() == 0) {
-                throw new ObjectRetrievalException();
+            if (0 == pReturn.size()) {
+                return null;
             } else {
                 return pReturn.get(0);
             }
@@ -360,13 +360,14 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #loadByPrimaryKey(String md5)},loads a FlFaceBean from the fl_face.
+     * Get Primary Key fileds as parameters from the parameter {@code bean},
+     * loads a {@link FlFaceBean} from the fl_face.<br>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlFaceBean with key fields
-     * @return a unique FlFaceBean
+     * @param bean the {@link FlFaceBean} with key fields
+     * @return a unique {@link FlFaceBean} or {@code null} if not found
      * @throws DAOException
+     * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.1
     public FlFaceBean loadByPrimaryKey(FlFaceBeanBase bean) throws DAOException
@@ -375,7 +376,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Deletes rows according to its keys.
+     * Delete row according to its keys.
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
@@ -414,13 +415,13 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         }
     }
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #deleteByPrimaryKey(String md5)}.<br>
+     * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the FlFaceBean with key fields
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
     public int deleteByPrimaryKey(FlFaceBeanBase bean) throws DAOException
@@ -578,7 +579,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
 
 
     /**
-     * Saves the FlFaceBean bean and primary key imported bean into the database.
+     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
@@ -618,9 +619,24 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
             }
         }
         return bean;
-    }   
+    } 
     /**
-     * Saves the FlFaceBean bean and primary key imported bean into the database.
+     * Transaction version for sync save
+     * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , FlLogBean[] , FlLogBean[] )}
+     */
+    //3.6 SYNC SAVE AS TRANSACTION
+    public FlFaceBean saveAsTransaction(final FlFaceBean bean
+        ,final FlImageBean refFlImagebyImgMd5 ,final FlPersonBean refFlPersonbyPersonId 
+        ,final FlLogBean[] impFlLogbyVerifyFace ,final FlLogBean[] impFlLogbyCompareFace ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlFaceBean>(){
+            @Override
+            public FlFaceBean call() throws Exception {
+                return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
+            }});
+    }
+    /**
+     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
@@ -630,7 +646,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
-    //3.6 SYNC SAVE 
+    //3.7 SYNC SAVE 
     public FlFaceBean save(FlFaceBean bean
         , FlImageBean refFlImagebyImgMd5 , FlPersonBean refFlPersonbyPersonId 
         , java.util.Collection<FlLogBean> impFlLogbyVerifyFace , java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
@@ -661,7 +677,22 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         }
         return bean;
     }   
-     private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , java.util.Collection , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FlFaceBean saveAsTransaction(final FlFaceBean bean
+        ,final FlImageBean refFlImagebyImgMd5 ,final FlPersonBean refFlPersonbyPersonId 
+        ,final  java.util.Collection<FlLogBean> impFlLogbyVerifyFace ,final  java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlFaceBean>(){
+            @Override
+            public FlFaceBean call() throws Exception {
+                return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
+            }});
+    }
+      private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
         private static final long serialVersionUID = 1L;
     {        
     put("refFlImagebyImgMd5",new Object[]{"getReferencedByImgMd5","setReferencedByImgMd5",FlImageBean.class});
@@ -675,17 +706,18 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
-     * @param fkName valid value: refFlImagebyImgMd5,refFlPersonbyPersonId
+     * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T getReferencedBean(FlFaceBean bean,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
-            return (T) this.getClass().getMethod((String)objs[0],bean.getClass()).invoke(this,bean);
+            return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -716,23 +748,24 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
-     * @param fkName valid value: refFlImagebyImgMd5,refFlPersonbyPersonId
+     * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T setReferencedBean(FlFaceBean bean,T beanToSet,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==beanToSet)
             throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)objs[2];
+        Class<?> resultClass = (Class<?>)params[2];
         if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
-            return (T) this.getClass().getMethod((String)objs[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
+            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {

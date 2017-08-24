@@ -158,7 +158,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * Loads a FlStoreBean from the fl_store using its key fields.
      *
      * @param md5 String - PK# 1
-     * @return a unique FlStoreBean
+     * @return a unique FlStoreBean or {@code null} if not found
      * @throws DAOException
      */
     //1
@@ -176,8 +176,8 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
             List<FlStoreBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (pReturn.size() == 0) {
-                throw new ObjectRetrievalException();
+            if (0 == pReturn.size()) {
+                return null;
             } else {
                 return pReturn.get(0);
             }
@@ -194,13 +194,14 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #loadByPrimaryKey(String md5)},loads a FlStoreBean from the fl_store.
+     * Get Primary Key fileds as parameters from the parameter {@code bean},
+     * loads a {@link FlStoreBean} from the fl_store.<br>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlStoreBean with key fields
-     * @return a unique FlStoreBean
+     * @param bean the {@link FlStoreBean} with key fields
+     * @return a unique {@link FlStoreBean} or {@code null} if not found
      * @throws DAOException
+     * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.1
     public FlStoreBean loadByPrimaryKey(FlStoreBeanBase bean) throws DAOException
@@ -209,7 +210,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Deletes rows according to its keys.
+     * Delete row according to its keys.
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
@@ -248,13 +249,13 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         }
     }
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #deleteByPrimaryKey(String md5)}.<br>
+     * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the FlStoreBean with key fields
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
     public int deleteByPrimaryKey(FlStoreBeanBase bean) throws DAOException
@@ -412,7 +413,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
 
 
     /**
-     * Saves the FlStoreBean bean and primary key imported bean into the database.
+     * Save the FlStoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
          * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
@@ -442,9 +443,24 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             }
         }
         return bean;
-    }   
+    } 
     /**
-     * Saves the FlStoreBean bean and primary key imported bean into the database.
+     * Transaction version for sync save
+     * @see {@link #save(FlStoreBean , FlImageBean[] , FlImageBean[] )}
+     */
+    //3.6 SYNC SAVE AS TRANSACTION
+    public FlStoreBean saveAsTransaction(final FlStoreBean bean
+        
+        ,final FlImageBean[] impFlImagebyMd5 ,final FlImageBean[] impFlImagebyThumbMd5 ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlStoreBean>(){
+            @Override
+            public FlStoreBean call() throws Exception {
+                return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
+            }});
+    }
+    /**
+     * Save the FlStoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
          * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
@@ -452,7 +468,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @return the inserted or updated {@link FlStoreBean} bean
      * @throws DAOException
      */
-    //3.6 SYNC SAVE 
+    //3.7 SYNC SAVE 
     public FlStoreBean save(FlStoreBean bean
         
         , java.util.Collection<FlImageBean> impFlImagebyMd5 , java.util.Collection<FlImageBean> impFlImagebyThumbMd5 ) throws DAOException
@@ -475,7 +491,22 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         }
         return bean;
     }   
- 
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlStoreBean , java.util.Collection , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FlStoreBean saveAsTransaction(final FlStoreBean bean
+        
+        ,final  java.util.Collection<FlImageBean> impFlImagebyMd5 ,final  java.util.Collection<FlImageBean> impFlImagebyThumbMd5 ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlStoreBean>(){
+            @Override
+            public FlStoreBean call() throws Exception {
+                return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
+            }});
+    }
+  
     public <T> T getReferencedBean(FlStoreBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }

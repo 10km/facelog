@@ -243,7 +243,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * Loads a FlPersonBean from the fl_person using its key fields.
      *
      * @param id Integer - PK# 1
-     * @return a unique FlPersonBean
+     * @return a unique FlPersonBean or {@code null} if not found
      * @throws DAOException
      */
     //1
@@ -261,8 +261,8 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlPersonBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (pReturn.size() == 0) {
-                throw new ObjectRetrievalException();
+            if (0 == pReturn.size()) {
+                return null;
             } else {
                 return pReturn.get(0);
             }
@@ -279,13 +279,14 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #loadByPrimaryKey(Integer id)},loads a FlPersonBean from the fl_person.
+     * Get Primary Key fileds as parameters from the parameter {@code bean},
+     * loads a {@link FlPersonBean} from the fl_person.<br>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlPersonBean with key fields
-     * @return a unique FlPersonBean
+     * @param bean the {@link FlPersonBean} with key fields
+     * @return a unique {@link FlPersonBean} or {@code null} if not found
      * @throws DAOException
+     * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.1
     public FlPersonBean loadByPrimaryKey(FlPersonBeanBase bean) throws DAOException
@@ -294,7 +295,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
 
     /**
-     * Deletes rows according to its keys.
+     * Delete row according to its keys.
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -333,13 +334,13 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         }
     }
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #deleteByPrimaryKey(Integer id)}.<br>
+     * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the FlPersonBean with key fields
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
     public int deleteByPrimaryKey(FlPersonBeanBase bean) throws DAOException
@@ -497,7 +498,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
 
 
     /**
-     * Saves the FlPersonBean bean and primary key imported bean into the database.
+     * Save the FlPersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param refFlImagebyPhotoId the {@link FlImageBean} bean referenced by {@link FlPersonBean} 
@@ -532,9 +533,24 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             }
         }
         return bean;
-    }   
+    } 
     /**
-     * Saves the FlPersonBean bean and primary key imported bean into the database.
+     * Transaction version for sync save
+     * @see {@link #save(FlPersonBean , FlImageBean , FlFaceBean[] , FlLogBean[] )}
+     */
+    //3.6 SYNC SAVE AS TRANSACTION
+    public FlPersonBean saveAsTransaction(final FlPersonBean bean
+        ,final FlImageBean refFlImagebyPhotoId 
+        ,final FlFaceBean[] impFlFacebyPersonId ,final FlLogBean[] impFlLogbyPersonId ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlPersonBean>(){
+            @Override
+            public FlPersonBean call() throws Exception {
+                return save(bean , refFlImagebyPhotoId , impFlFacebyPersonId , impFlLogbyPersonId );
+            }});
+    }
+    /**
+     * Save the FlPersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param refFlImagebyPhotoId the {@link FlImageBean} bean referenced by {@link FlPersonBean} 
@@ -543,7 +559,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
-    //3.6 SYNC SAVE 
+    //3.7 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
         , FlImageBean refFlImagebyPhotoId 
         , java.util.Collection<FlFaceBean> impFlFacebyPersonId , java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
@@ -570,7 +586,22 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         }
         return bean;
     }   
-     private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlPersonBean , FlImageBean , java.util.Collection , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FlPersonBean saveAsTransaction(final FlPersonBean bean
+        ,final FlImageBean refFlImagebyPhotoId 
+        ,final  java.util.Collection<FlFaceBean> impFlFacebyPersonId ,final  java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlPersonBean>(){
+            @Override
+            public FlPersonBean call() throws Exception {
+                return save(bean , refFlImagebyPhotoId , impFlFacebyPersonId , impFlLogbyPersonId );
+            }});
+    }
+      private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
         private static final long serialVersionUID = 1L;
     {        
     put("refFlImagebyPhotoId",new Object[]{"getReferencedByPhotoId","setReferencedByPhotoId",FlImageBean.class});
@@ -582,17 +613,18 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      *     <li> refFlImagebyPhotoId -> FlImageBean</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param fkName valid value: refFlImagebyPhotoId
+     * @param fkName valid values: refFlImagebyPhotoId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T getReferencedBean(FlPersonBean bean,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
-            return (T) this.getClass().getMethod((String)objs[0],bean.getClass()).invoke(this,bean);
+            return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -622,23 +654,24 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlPersonBean}
-     * @param fkName valid value: refFlImagebyPhotoId
+     * @param fkName valid values: refFlImagebyPhotoId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==beanToSet)
             throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)objs[2];
+        Class<?> resultClass = (Class<?>)params[2];
         if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
-            return (T) this.getClass().getMethod((String)objs[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
+            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {

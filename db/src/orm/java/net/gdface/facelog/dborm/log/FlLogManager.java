@@ -207,7 +207,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * Loads a FlLogBean from the fl_log using its key fields.
      *
      * @param id Integer - PK# 1
-     * @return a unique FlLogBean
+     * @return a unique FlLogBean or {@code null} if not found
      * @throws DAOException
      */
     //1
@@ -225,8 +225,8 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlLogBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (pReturn.size() == 0) {
-                throw new ObjectRetrievalException();
+            if (0 == pReturn.size()) {
+                return null;
             } else {
                 return pReturn.get(0);
             }
@@ -243,13 +243,14 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #loadByPrimaryKey(Integer id)},loads a FlLogBean from the fl_log.
+     * Get Primary Key fileds as parameters from the parameter {@code bean},
+     * loads a {@link FlLogBean} from the fl_log.<br>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlLogBean with key fields
-     * @return a unique FlLogBean
+     * @param bean the {@link FlLogBean} with key fields
+     * @return a unique {@link FlLogBean} or {@code null} if not found
      * @throws DAOException
+     * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.1
     public FlLogBean loadByPrimaryKey(FlLogBeanBase bean) throws DAOException
@@ -258,7 +259,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Deletes rows according to its keys.
+     * Delete row according to its keys.
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -297,13 +298,13 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         }
     }
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #deleteByPrimaryKey(Integer id)}.<br>
+     * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the FlLogBean with key fields
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
     public int deleteByPrimaryKey(FlLogBeanBase bean) throws DAOException
@@ -313,7 +314,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
 
 
     /**
-     * Saves the FlLogBean bean and primary key imported bean into the database.
+     * Save the FlLogBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlLogBean} 
@@ -347,8 +348,23 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         }
         bean = this.save( bean );
         return bean;
-    }   
-     private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+    } 
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
+     */
+    //3.6 SYNC SAVE AS TRANSACTION
+    public FlLogBean saveAsTransaction(final FlLogBean bean
+        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlFaceBean refFlFacebyVerifyFace ,final FlFaceBean refFlFacebyCompareFace ,final FlPersonBean refFlPersonbyPersonId 
+        ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlLogBean>(){
+            @Override
+            public FlLogBean call() throws Exception {
+                return save(bean , refFlDevicebyDeviceId , refFlFacebyVerifyFace , refFlFacebyCompareFace , refFlPersonbyPersonId );
+            }});
+    }
+      private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
         private static final long serialVersionUID = 1L;
     {        
     put("refFlDevicebyDeviceId",new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
@@ -366,17 +382,18 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
-     * @param fkName valid value: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
+     * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T getReferencedBean(FlLogBean bean,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
-            return (T) this.getClass().getMethod((String)objs[0],bean.getClass()).invoke(this,bean);
+            return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -409,23 +426,24 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlLogBean}
-     * @param fkName valid value: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
+     * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T setReferencedBean(FlLogBean bean,T beanToSet,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==beanToSet)
             throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)objs[2];
+        Class<?> resultClass = (Class<?>)params[2];
         if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
-            return (T) this.getClass().getMethod((String)objs[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
+            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {

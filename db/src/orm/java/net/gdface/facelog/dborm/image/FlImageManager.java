@@ -209,7 +209,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Loads a FlImageBean from the fl_image using its key fields.
      *
      * @param md5 String - PK# 1
-     * @return a unique FlImageBean
+     * @return a unique FlImageBean or {@code null} if not found
      * @throws DAOException
      */
     //1
@@ -227,8 +227,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
             List<FlImageBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (pReturn.size() == 0) {
-                throw new ObjectRetrievalException();
+            if (0 == pReturn.size()) {
+                return null;
             } else {
                 return pReturn.get(0);
             }
@@ -245,13 +245,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #loadByPrimaryKey(String md5)},loads a FlImageBean from the fl_image.
+     * Get Primary Key fileds as parameters from the parameter {@code bean},
+     * loads a {@link FlImageBean} from the fl_image.<br>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlImageBean with key fields
-     * @return a unique FlImageBean
+     * @param bean the {@link FlImageBean} with key fields
+     * @return a unique {@link FlImageBean} or {@code null} if not found
      * @throws DAOException
+     * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.1
     public FlImageBean loadByPrimaryKey(FlImageBeanBase bean) throws DAOException
@@ -260,7 +261,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Deletes rows according to its keys.
+     * Delete row according to its keys.
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
@@ -299,13 +300,13 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         }
     }
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #deleteByPrimaryKey(String md5)}.<br>
+     * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the FlImageBean with key fields
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
     public int deleteByPrimaryKey(FlImageBeanBase bean) throws DAOException
@@ -463,7 +464,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
 
 
     /**
-     * Saves the FlImageBean bean and primary key imported bean into the database.
+     * Save the FlImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
@@ -508,9 +509,24 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             }
         }
         return bean;
-    }   
+    } 
     /**
-     * Saves the FlImageBean bean and primary key imported bean into the database.
+     * Transaction version for sync save
+     * @see {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , FlFaceBean[] , FlPersonBean[] )}
+     */
+    //3.6 SYNC SAVE AS TRANSACTION
+    public FlImageBean saveAsTransaction(final FlImageBean bean
+        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlStoreBean refFlStorebyMd5 ,final FlStoreBean refFlStorebyThumbMd5 
+        ,final FlFaceBean[] impFlFacebyImgMd5 ,final FlPersonBean[] impFlPersonbyPhotoId ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlImageBean>(){
+            @Override
+            public FlImageBean call() throws Exception {
+                return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImgMd5 , impFlPersonbyPhotoId );
+            }});
+    }
+    /**
+     * Save the FlImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
@@ -521,7 +537,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DAOException
      */
-    //3.6 SYNC SAVE 
+    //3.7 SYNC SAVE 
     public FlImageBean save(FlImageBean bean
         , FlDeviceBean refFlDevicebyDeviceId , FlStoreBean refFlStorebyMd5 , FlStoreBean refFlStorebyThumbMd5 
         , java.util.Collection<FlFaceBean> impFlFacebyImgMd5 , java.util.Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
@@ -556,7 +572,22 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         }
         return bean;
     }   
-     private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , java.util.Collection , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FlImageBean saveAsTransaction(final FlImageBean bean
+        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlStoreBean refFlStorebyMd5 ,final FlStoreBean refFlStorebyThumbMd5 
+        ,final  java.util.Collection<FlFaceBean> impFlFacebyImgMd5 ,final  java.util.Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlImageBean>(){
+            @Override
+            public FlImageBean call() throws Exception {
+                return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImgMd5 , impFlPersonbyPhotoId );
+            }});
+    }
+      private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
         private static final long serialVersionUID = 1L;
     {        
     put("refFlDevicebyDeviceId",new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
@@ -572,17 +603,18 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      *     <li> refFlStorebyThumbMd5 -> FlStoreBean</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
-     * @param fkName valid value: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
+     * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T getReferencedBean(FlImageBean bean,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
-            return (T) this.getClass().getMethod((String)objs[0],bean.getClass()).invoke(this,bean);
+            return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -614,23 +646,24 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlImageBean}
-     * @param fkName valid value: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
+     * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T setReferencedBean(FlImageBean bean,T beanToSet,String fkName)throws DAOException{
-        Object[] objs = REF_METHODS.get(fkName);
-        if(null==objs)
+        Object[] params = REF_METHODS.get(fkName);
+        if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==beanToSet)
             throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)objs[2];
+        Class<?> resultClass = (Class<?>)params[2];
         if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
-            return (T) this.getClass().getMethod((String)objs[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
+            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {

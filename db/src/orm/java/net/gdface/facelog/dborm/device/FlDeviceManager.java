@@ -196,7 +196,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Loads a FlDeviceBean from the fl_device using its key fields.
      *
      * @param id Integer - PK# 1
-     * @return a unique FlDeviceBean
+     * @return a unique FlDeviceBean or {@code null} if not found
      * @throws DAOException
      */
     //1
@@ -214,8 +214,8 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlDeviceBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (pReturn.size() == 0) {
-                throw new ObjectRetrievalException();
+            if (0 == pReturn.size()) {
+                return null;
             } else {
                 return pReturn.get(0);
             }
@@ -232,13 +232,14 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #loadByPrimaryKey(Integer id)},loads a FlDeviceBean from the fl_device.
+     * Get Primary Key fileds as parameters from the parameter {@code bean},
+     * loads a {@link FlDeviceBean} from the fl_device.<br>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlDeviceBean with key fields
-     * @return a unique FlDeviceBean
+     * @param bean the {@link FlDeviceBean} with key fields
+     * @return a unique {@link FlDeviceBean} or {@code null} if not found
      * @throws DAOException
+     * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.1
     public FlDeviceBean loadByPrimaryKey(FlDeviceBeanBase bean) throws DAOException
@@ -247,7 +248,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Deletes rows according to its keys.
+     * Delete row according to its keys.
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -286,13 +287,13 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         }
     }
     /**
-     * Get Primary Key fileds as parameters from the parameter{@code bean},
-     * then call {@link #deleteByPrimaryKey(Integer id)}.<br>
+     * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the FlDeviceBean with key fields
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
     public int deleteByPrimaryKey(FlDeviceBeanBase bean) throws DAOException
@@ -450,7 +451,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
 
 
     /**
-     * Saves the FlDeviceBean bean and primary key imported bean into the database.
+     * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlDeviceBean} bean to be saved
          * @param impFlImagebyDeviceId the {@link FlImageBean} bean refer to {@link FlDeviceBean} 
@@ -480,9 +481,24 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             }
         }
         return bean;
-    }   
+    } 
     /**
-     * Saves the FlDeviceBean bean and primary key imported bean into the database.
+     * Transaction version for sync save
+     * @see {@link #save(FlDeviceBean , FlImageBean[] , FlLogBean[] )}
+     */
+    //3.6 SYNC SAVE AS TRANSACTION
+    public FlDeviceBean saveAsTransaction(final FlDeviceBean bean
+        
+        ,final FlImageBean[] impFlImagebyDeviceId ,final FlLogBean[] impFlLogbyDeviceId ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlDeviceBean>(){
+            @Override
+            public FlDeviceBean call() throws Exception {
+                return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
+            }});
+    }
+    /**
+     * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlDeviceBean} bean to be saved
          * @param impFlImagebyDeviceId the {@link FlImageBean} bean refer to {@link FlDeviceBean} 
@@ -490,7 +506,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the inserted or updated {@link FlDeviceBean} bean
      * @throws DAOException
      */
-    //3.6 SYNC SAVE 
+    //3.7 SYNC SAVE 
     public FlDeviceBean save(FlDeviceBean bean
         
         , java.util.Collection<FlImageBean> impFlImagebyDeviceId , java.util.Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
@@ -513,7 +529,22 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         }
         return bean;
     }   
- 
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlDeviceBean , java.util.Collection , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FlDeviceBean saveAsTransaction(final FlDeviceBean bean
+        
+        ,final  java.util.Collection<FlImageBean> impFlImagebyDeviceId ,final  java.util.Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlDeviceBean>(){
+            @Override
+            public FlDeviceBean call() throws Exception {
+                return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
+            }});
+    }
+  
     public <T> T getReferencedBean(FlDeviceBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }

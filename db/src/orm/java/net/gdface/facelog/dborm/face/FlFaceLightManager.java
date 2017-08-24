@@ -311,7 +311,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
 
 
 
-
+ 
     public <T> T getReferencedBean(FlFaceLightBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
