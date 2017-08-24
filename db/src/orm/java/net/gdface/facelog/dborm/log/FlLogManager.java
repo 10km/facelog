@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -1215,7 +1216,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //15-2
-    public List<FlLogBean> save(List<FlLogBean> beans) throws DAOException
+    public <T extends Collection<FlLogBean>>T save(T beans) throws DAOException
     {
         for (FlLogBean bean : beans) 
         {
@@ -1248,10 +1249,10 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @see #save(List)
      */
     //15-4
-    public List<FlLogBean> saveAsTransaction(final List<FlLogBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlLogBean>>(){
+    public <T extends Collection<FlLogBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlLogBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -1276,7 +1277,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //16-2
-    public List<FlLogBean> insert(List<FlLogBean> beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1304,7 +1305,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlLogBean> insertAsTransaction(List<FlLogBean> beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -1331,7 +1332,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //17-2
-    public List<FlLogBean> update(List<FlLogBean> beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1359,7 +1360,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlLogBean> updateAsTransaction(List<FlLogBean> beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

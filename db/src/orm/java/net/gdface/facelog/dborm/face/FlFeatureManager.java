@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -725,7 +726,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //15-2
-    public List<FlFeatureBean> save(List<FlFeatureBean> beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>>T save(T beans) throws DAOException
     {
         for (FlFeatureBean bean : beans) 
         {
@@ -758,10 +759,10 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @see #save(List)
      */
     //15-4
-    public List<FlFeatureBean> saveAsTransaction(final List<FlFeatureBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlFeatureBean>>(){
+    public <T extends Collection<FlFeatureBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlFeatureBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -786,7 +787,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //16-2
-    public List<FlFeatureBean> insert(List<FlFeatureBean> beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -814,7 +815,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlFeatureBean> insertAsTransaction(List<FlFeatureBean> beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -841,7 +842,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //17-2
-    public List<FlFeatureBean> update(List<FlFeatureBean> beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -869,7 +870,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlFeatureBean> updateAsTransaction(List<FlFeatureBean> beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -1115,7 +1116,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @throws DAOException
      */
     //15-2
-    public List<FlFaceLightBean> save(List<FlFaceLightBean> beans) throws DAOException
+    public <T extends Collection<FlFaceLightBean>>T save(T beans) throws DAOException
     {
         for (FlFaceLightBean bean : beans) 
         {
@@ -1148,10 +1149,10 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @see #save(List)
      */
     //15-4
-    public List<FlFaceLightBean> saveAsTransaction(final List<FlFaceLightBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlFaceLightBean>>(){
+    public <T extends Collection<FlFaceLightBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlFaceLightBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -1176,7 +1177,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @throws DAOException
      */
     //16-2
-    public List<FlFaceLightBean> insert(List<FlFaceLightBean> beans) throws DAOException
+    public <T extends Collection<FlFaceLightBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1204,7 +1205,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlFaceLightBean> insertAsTransaction(List<FlFaceLightBean> beans) throws DAOException
+    public <T extends Collection<FlFaceLightBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -1231,7 +1232,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @throws DAOException
      */
     //17-2
-    public List<FlFaceLightBean> update(List<FlFaceLightBean> beans) throws DAOException
+    public <T extends Collection<FlFaceLightBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1259,7 +1260,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlFaceLightBean> updateAsTransaction(List<FlFaceLightBean> beans) throws DAOException
+    public <T extends Collection<FlFaceLightBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

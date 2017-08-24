@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -380,7 +381,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see {@link FlFaceManager#setReferencedByImgMd5(FlFaceBean, FlImageBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlFaceBean>> T setFlFaceBeansByImgMd5(FlImageBean bean , T importedBeans) throws DAOException
+    public <T extends Collection<FlFaceBean>> T setFlFaceBeansByImgMd5(FlImageBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -452,7 +453,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see {@link FlPersonManager#setReferencedByPhotoId(FlPersonBean, FlImageBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlPersonBean>> T setFlPersonBeansByPhotoId(FlImageBean bean , T importedBeans) throws DAOException
+    public <T extends Collection<FlPersonBean>> T setFlPersonBeansByPhotoId(FlImageBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -540,7 +541,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //3.7 SYNC SAVE 
     public FlImageBean save(FlImageBean bean
         , FlDeviceBean refFlDevicebyDeviceId , FlStoreBean refFlStorebyMd5 , FlStoreBean refFlStorebyThumbMd5 
-        , java.util.Collection<FlFaceBean> impFlFacebyImgMd5 , java.util.Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
+        , Collection<FlFaceBean> impFlFacebyImgMd5 , Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
     {
         if(null == bean) return null;
         if( null != refFlDevicebyDeviceId) {
@@ -574,12 +575,12 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , Collection , Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlImageBean saveAsTransaction(final FlImageBean bean
         ,final FlDeviceBean refFlDevicebyDeviceId ,final FlStoreBean refFlStorebyMd5 ,final FlStoreBean refFlStorebyThumbMd5 
-        ,final  java.util.Collection<FlFaceBean> impFlFacebyImgMd5 ,final  java.util.Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
+        ,final  Collection<FlFaceBean> impFlFacebyImgMd5 ,final  Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
@@ -1384,7 +1385,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //15-2
-    public List<FlImageBean> save(List<FlImageBean> beans) throws DAOException
+    public <T extends Collection<FlImageBean>>T save(T beans) throws DAOException
     {
         for (FlImageBean bean : beans) 
         {
@@ -1417,10 +1418,10 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see #save(List)
      */
     //15-4
-    public List<FlImageBean> saveAsTransaction(final List<FlImageBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlImageBean>>(){
+    public <T extends Collection<FlImageBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlImageBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -1445,7 +1446,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //16-2
-    public List<FlImageBean> insert(List<FlImageBean> beans) throws DAOException
+    public <T extends Collection<FlImageBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1473,7 +1474,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlImageBean> insertAsTransaction(List<FlImageBean> beans) throws DAOException
+    public <T extends Collection<FlImageBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -1500,7 +1501,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //17-2
-    public List<FlImageBean> update(List<FlImageBean> beans) throws DAOException
+    public <T extends Collection<FlImageBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1528,7 +1529,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlImageBean> updateAsTransaction(List<FlImageBean> beans) throws DAOException
+    public <T extends Collection<FlImageBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

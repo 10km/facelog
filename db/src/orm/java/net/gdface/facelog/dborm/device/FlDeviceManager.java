@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -367,7 +368,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
+    public <T extends Collection<FlImageBean>> T setFlImageBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
@@ -439,7 +440,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
+    public <T extends Collection<FlLogBean>> T setFlLogBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -509,7 +510,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     //3.7 SYNC SAVE 
     public FlDeviceBean save(FlDeviceBean bean
         
-        , java.util.Collection<FlImageBean> impFlImagebyDeviceId , java.util.Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
+        , Collection<FlImageBean> impFlImagebyDeviceId , Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
     {
         if(null == bean) return null;
         bean = this.save( bean );
@@ -531,12 +532,12 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlDeviceBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FlDeviceBean , Collection , Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlDeviceBean saveAsTransaction(final FlDeviceBean bean
         
-        ,final  java.util.Collection<FlImageBean> impFlImagebyDeviceId ,final  java.util.Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
+        ,final  Collection<FlImageBean> impFlImagebyDeviceId ,final  Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlDeviceBean>(){
             @Override
@@ -1145,7 +1146,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //15-2
-    public List<FlDeviceBean> save(List<FlDeviceBean> beans) throws DAOException
+    public <T extends Collection<FlDeviceBean>>T save(T beans) throws DAOException
     {
         for (FlDeviceBean bean : beans) 
         {
@@ -1178,10 +1179,10 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see #save(List)
      */
     //15-4
-    public List<FlDeviceBean> saveAsTransaction(final List<FlDeviceBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlDeviceBean>>(){
+    public <T extends Collection<FlDeviceBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlDeviceBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -1206,7 +1207,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //16-2
-    public List<FlDeviceBean> insert(List<FlDeviceBean> beans) throws DAOException
+    public <T extends Collection<FlDeviceBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1234,7 +1235,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlDeviceBean> insertAsTransaction(List<FlDeviceBean> beans) throws DAOException
+    public <T extends Collection<FlDeviceBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -1261,7 +1262,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //17-2
-    public List<FlDeviceBean> update(List<FlDeviceBean> beans) throws DAOException
+    public <T extends Collection<FlDeviceBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1289,7 +1290,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlDeviceBean> updateAsTransaction(List<FlDeviceBean> beans) throws DAOException
+    public <T extends Collection<FlDeviceBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

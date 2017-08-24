@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -495,7 +496,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see {@link FlLogManager#setReferencedByVerifyFace(FlLogBean, FlFaceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByVerifyFace(FlFaceBean bean , T importedBeans) throws DAOException
+    public <T extends Collection<FlLogBean>> T setFlLogBeansByVerifyFace(FlFaceBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -567,7 +568,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByCompareFace(FlFaceBean bean , T importedBeans) throws DAOException
+    public <T extends Collection<FlLogBean>> T setFlLogBeansByCompareFace(FlFaceBean bean , T importedBeans) throws DAOException
     {
         if(null != bean && null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -649,7 +650,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     //3.7 SYNC SAVE 
     public FlFaceBean save(FlFaceBean bean
         , FlImageBean refFlImagebyImgMd5 , FlPersonBean refFlPersonbyPersonId 
-        , java.util.Collection<FlLogBean> impFlLogbyVerifyFace , java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
+        , Collection<FlLogBean> impFlLogbyVerifyFace , Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
     {
         if(null == bean) return null;
         if( null != refFlImagebyImgMd5) {
@@ -679,12 +680,12 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , Collection , Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
         ,final FlImageBean refFlImagebyImgMd5 ,final FlPersonBean refFlPersonbyPersonId 
-        ,final  java.util.Collection<FlLogBean> impFlLogbyVerifyFace ,final  java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
+        ,final  Collection<FlLogBean> impFlLogbyVerifyFace ,final  Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFaceBean>(){
             @Override
@@ -1673,7 +1674,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @throws DAOException
      */
     //15-2
-    public List<FlFaceBean> save(List<FlFaceBean> beans) throws DAOException
+    public <T extends Collection<FlFaceBean>>T save(T beans) throws DAOException
     {
         for (FlFaceBean bean : beans) 
         {
@@ -1706,10 +1707,10 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see #save(List)
      */
     //15-4
-    public List<FlFaceBean> saveAsTransaction(final List<FlFaceBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlFaceBean>>(){
+    public <T extends Collection<FlFaceBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlFaceBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -1734,7 +1735,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @throws DAOException
      */
     //16-2
-    public List<FlFaceBean> insert(List<FlFaceBean> beans) throws DAOException
+    public <T extends Collection<FlFaceBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1762,7 +1763,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlFaceBean> insertAsTransaction(List<FlFaceBean> beans) throws DAOException
+    public <T extends Collection<FlFaceBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -1789,7 +1790,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @throws DAOException
      */
     //17-2
-    public List<FlFaceBean> update(List<FlFaceBean> beans) throws DAOException
+    public <T extends Collection<FlFaceBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -1817,7 +1818,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlFaceBean> updateAsTransaction(List<FlFaceBean> beans) throws DAOException
+    public <T extends Collection<FlFaceBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

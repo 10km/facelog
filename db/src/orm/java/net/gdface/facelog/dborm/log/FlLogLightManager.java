@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -751,7 +752,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
      * @throws DAOException
      */
     //15-2
-    public List<FlLogLightBean> save(List<FlLogLightBean> beans) throws DAOException
+    public <T extends Collection<FlLogLightBean>>T save(T beans) throws DAOException
     {
         for (FlLogLightBean bean : beans) 
         {
@@ -784,10 +785,10 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
      * @see #save(List)
      */
     //15-4
-    public List<FlLogLightBean> saveAsTransaction(final List<FlLogLightBean> beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<List<FlLogLightBean>>(){
+    public <T extends Collection<FlLogLightBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public List<FlLogLightBean> call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
@@ -812,7 +813,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
      * @throws DAOException
      */
     //16-2
-    public List<FlLogLightBean> insert(List<FlLogLightBean> beans) throws DAOException
+    public <T extends Collection<FlLogLightBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -840,7 +841,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public List<FlLogLightBean> insertAsTransaction(List<FlLogLightBean> beans) throws DAOException
+    public <T extends Collection<FlLogLightBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
@@ -867,7 +868,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
      * @throws DAOException
      */
     //17-2
-    public List<FlLogLightBean> update(List<FlLogLightBean> beans) throws DAOException
+    public <T extends Collection<FlLogLightBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
@@ -895,7 +896,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public List<FlLogLightBean> updateAsTransaction(List<FlLogLightBean> beans) throws DAOException
+    public <T extends Collection<FlLogLightBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
