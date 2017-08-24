@@ -262,6 +262,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
 
+
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
@@ -288,7 +289,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
+    //3.2 GET IMPORTED
     public List<FlImageBean> getFlImageBeansByMd5AsList(FlStoreBean bean) throws DAOException
     {
         if(null == bean)return null;
@@ -296,6 +297,47 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         other.setMd5(bean.getMd5());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
+
+    /**
+     * set  the {@link FlImageBean} object array associate to FlStoreBean by the fl_image.md5 field.<BR>
+     * FK_NAME : fl_image_ibfk_1 
+     * @param bean the referenced {@link FlStoreBean}
+     * @param importedBeans imported beans from fl_image
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlImageManager#setReferencedByMd5(FlImageBean, FlStoreBean)
+     */
+    //3.3 SET IMPORTED
+    public FlImageBean[] setFlImageBeansByMd5(FlStoreBean bean , FlImageBean[] importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlImageBean importBean : importedBeans ){
+                FlImageManager.getInstance().setReferencedByMd5(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
+     * set  the {@link FlImageBean} object collection associate to FlStoreBean by the fl_image.md5 field.<BR>
+     * FK_NAME:fl_image_ibfk_1
+     * @param bean the referenced {@link FlStoreBean} 
+     * @param importedBeans imported beans from fl_image 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlImageManager#setReferencedByMd5(FlImageBean, FlStoreBean)
+     */
+    //3.4 SET IMPORTED
+    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByMd5AsList(FlStoreBean bean , T importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlImageBean importBean : importedBeans ){
+                FlImageManager.getInstance().setReferencedByMd5(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
     /**
      * Retrieves the {@link FlImageBean} object from the fl_image.thumb_md5 field.<BR>
      * FK_NAME : fl_image_ibfk_2 
@@ -319,7 +361,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
+    //3.2 GET IMPORTED
     public List<FlImageBean> getFlImageBeansByThumbMd5AsList(FlStoreBean bean) throws DAOException
     {
         if(null == bean)return null;
@@ -328,7 +370,112 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
 
+    /**
+     * set  the {@link FlImageBean} object array associate to FlStoreBean by the fl_image.thumb_md5 field.<BR>
+     * FK_NAME : fl_image_ibfk_2 
+     * @param bean the referenced {@link FlStoreBean}
+     * @param importedBeans imported beans from fl_image
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlImageManager#setReferencedByThumbMd5(FlImageBean, FlStoreBean)
+     */
+    //3.3 SET IMPORTED
+    public FlImageBean[] setFlImageBeansByThumbMd5(FlStoreBean bean , FlImageBean[] importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlImageBean importBean : importedBeans ){
+                FlImageManager.getInstance().setReferencedByThumbMd5(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
 
+    /**
+     * set  the {@link FlImageBean} object collection associate to FlStoreBean by the fl_image.thumb_md5 field.<BR>
+     * FK_NAME:fl_image_ibfk_2
+     * @param bean the referenced {@link FlStoreBean} 
+     * @param importedBeans imported beans from fl_image 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlImageManager#setReferencedByThumbMd5(FlImageBean, FlStoreBean)
+     */
+    //3.4 SET IMPORTED
+    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByThumbMd5AsList(FlStoreBean bean , T importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlImageBean importBean : importedBeans ){
+                FlImageManager.getInstance().setReferencedByThumbMd5(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+
+    /**
+     * Saves the FlStoreBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlStoreBean} bean to be saved
+         * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
+     * @param impFlImagebyThumbMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
+     * @return the inserted or updated {@link FlStoreBean} bean
+     * @throws DAOException
+     */
+    //3.5 SYNC SAVE 
+    public FlStoreBean save(FlStoreBean bean
+        
+        , FlImageBean[] impFlImagebyMd5 , FlImageBean[] impFlImagebyThumbMd5 ) throws DAOException
+    {
+        if(null == bean) return null;
+        bean = this.save( bean );
+        if( null != impFlImagebyMd5) {
+            for ( FlImageBean imp : impFlImagebyMd5 ){
+                imp.setMd5(bean.getMd5()); 
+                imp.setReferencedByMd5(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlImagebyThumbMd5) {
+            for ( FlImageBean imp : impFlImagebyThumbMd5 ){
+                imp.setThumbMd5(bean.getMd5()); 
+                imp.setReferencedByThumbMd5(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        return bean;
+    }   
+    /**
+     * Saves the FlStoreBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlStoreBean} bean to be saved
+         * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
+     * @param impFlImagebyThumbMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
+     * @return the inserted or updated {@link FlStoreBean} bean
+     * @throws DAOException
+     */
+    //3.6 SYNC SAVE 
+    public FlStoreBean save(FlStoreBean bean
+        
+        , java.util.Collection<FlImageBean> impFlImagebyMd5 , java.util.Collection<FlImageBean> impFlImagebyThumbMd5 ) throws DAOException
+    {
+        if(null == bean) return null;
+        bean = this.save( bean );
+        if( null != impFlImagebyMd5) {
+            for ( FlImageBean imp : impFlImagebyMd5 ){
+                imp.setMd5(bean.getMd5()); 
+                imp.setReferencedByMd5(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlImagebyThumbMd5) {
+            for ( FlImageBean imp : impFlImagebyThumbMd5 ){
+                imp.setThumbMd5(bean.getMd5()); 
+                imp.setReferencedByThumbMd5(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        return bean;
+    }   
+ 
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

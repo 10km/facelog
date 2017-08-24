@@ -311,7 +311,44 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
 
-    //////////////////////////////////////
+
+    /**
+     * Saves the FlLogBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlLogBean} bean to be saved
+     * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlLogBean} 
+     * @param refFlFacebyVerifyFace the {@link FlFaceBean} bean referenced by {@link FlLogBean} 
+     * @param refFlFacebyCompareFace the {@link FlFaceBean} bean referenced by {@link FlLogBean} 
+     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlLogBean} 
+         * @return the inserted or updated {@link FlLogBean} bean
+     * @throws DAOException
+     */
+    //3.5 SYNC SAVE 
+    public FlLogBean save(FlLogBean bean
+        , FlDeviceBean refFlDevicebyDeviceId , FlFaceBean refFlFacebyVerifyFace , FlFaceBean refFlFacebyCompareFace , FlPersonBean refFlPersonbyPersonId 
+        ) throws DAOException
+    {
+        if(null == bean) return null;
+        if( null != refFlDevicebyDeviceId) {
+            refFlDevicebyDeviceId = FlDeviceManager.getInstance().save( refFlDevicebyDeviceId );
+            bean.setReferencedByDeviceId(refFlDevicebyDeviceId);
+        }
+        if( null != refFlFacebyVerifyFace) {
+            refFlFacebyVerifyFace = FlFaceManager.getInstance().save( refFlFacebyVerifyFace );
+            bean.setReferencedByVerifyFace(refFlFacebyVerifyFace);
+        }
+        if( null != refFlFacebyCompareFace) {
+            refFlFacebyCompareFace = FlFaceManager.getInstance().save( refFlFacebyCompareFace );
+            bean.setReferencedByCompareFace(refFlFacebyCompareFace);
+        }
+        if( null != refFlPersonbyPersonId) {
+            refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
+            bean.setReferencedByPersonId(refFlPersonbyPersonId);
+        }
+        bean = this.save( bean );
+        return bean;
+    }   
+     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
 
@@ -345,6 +382,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         if(null == bean || null == beanToSet) return null;
         bean.setDeviceId(beanToSet.getId());
+        bean.setReferencedByDeviceId(beanToSet);
         return FlDeviceManager.getInstance().save(beanToSet);
     }
 
@@ -378,6 +416,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         if(null == bean || null == beanToSet) return null;
         bean.setVerifyFace(beanToSet.getMd5());
+        bean.setReferencedByVerifyFace(beanToSet);
         return FlFaceManager.getInstance().save(beanToSet);
     }
 
@@ -411,6 +450,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         if(null == bean || null == beanToSet) return null;
         bean.setCompareFace(beanToSet.getMd5());
+        bean.setReferencedByCompareFace(beanToSet);
         return FlFaceManager.getInstance().save(beanToSet);
     }
 
@@ -444,6 +484,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         if(null == bean || null == beanToSet) return null;
         bean.setPersonId(beanToSet.getId());
+        bean.setReferencedByPersonId(beanToSet);
         return FlPersonManager.getInstance().save(beanToSet);
     }
 

@@ -311,6 +311,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
 
 
 
+
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

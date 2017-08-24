@@ -185,6 +185,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
 
 
 
+
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

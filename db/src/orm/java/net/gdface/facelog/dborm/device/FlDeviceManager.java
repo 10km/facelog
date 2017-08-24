@@ -300,6 +300,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
 
+
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
@@ -326,7 +327,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
+    //3.2 GET IMPORTED
     public List<FlImageBean> getFlImageBeansByDeviceIdAsList(FlDeviceBean bean) throws DAOException
     {
         if(null == bean)return null;
@@ -334,6 +335,47 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         other.setDeviceId(bean.getId());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
+
+    /**
+     * set  the {@link FlImageBean} object array associate to FlDeviceBean by the fl_image.device_id field.<BR>
+     * FK_NAME : fl_image_ibfk_3 
+     * @param bean the referenced {@link FlDeviceBean}
+     * @param importedBeans imported beans from fl_image
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
+     */
+    //3.3 SET IMPORTED
+    public FlImageBean[] setFlImageBeansByDeviceId(FlDeviceBean bean , FlImageBean[] importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlImageBean importBean : importedBeans ){
+                FlImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
+     * set  the {@link FlImageBean} object collection associate to FlDeviceBean by the fl_image.device_id field.<BR>
+     * FK_NAME:fl_image_ibfk_3
+     * @param bean the referenced {@link FlDeviceBean} 
+     * @param importedBeans imported beans from fl_image 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
+     */
+    //3.4 SET IMPORTED
+    public <T extends java.util.Collection<FlImageBean>> T setFlImageBeansByDeviceIdAsList(FlDeviceBean bean , T importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlImageBean importBean : importedBeans ){
+                FlImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
@@ -357,7 +399,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
+    //3.2 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByDeviceIdAsList(FlDeviceBean bean) throws DAOException
     {
         if(null == bean)return null;
@@ -366,7 +408,112 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
 
+    /**
+     * set  the {@link FlLogBean} object array associate to FlDeviceBean by the fl_log.device_id field.<BR>
+     * FK_NAME : fl_log_ibfk_2 
+     * @param bean the referenced {@link FlDeviceBean}
+     * @param importedBeans imported beans from fl_log
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
+     */
+    //3.3 SET IMPORTED
+    public FlLogBean[] setFlLogBeansByDeviceId(FlDeviceBean bean , FlLogBean[] importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByDeviceId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
 
+    /**
+     * set  the {@link FlLogBean} object collection associate to FlDeviceBean by the fl_log.device_id field.<BR>
+     * FK_NAME:fl_log_ibfk_2
+     * @param bean the referenced {@link FlDeviceBean} 
+     * @param importedBeans imported beans from fl_log 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
+     */
+    //3.4 SET IMPORTED
+    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByDeviceIdAsList(FlDeviceBean bean , T importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByDeviceId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+
+    /**
+     * Saves the FlDeviceBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlDeviceBean} bean to be saved
+         * @param impFlImagebyDeviceId the {@link FlImageBean} bean refer to {@link FlDeviceBean} 
+     * @param impFlLogbyDeviceId the {@link FlLogBean} bean refer to {@link FlDeviceBean} 
+     * @return the inserted or updated {@link FlDeviceBean} bean
+     * @throws DAOException
+     */
+    //3.5 SYNC SAVE 
+    public FlDeviceBean save(FlDeviceBean bean
+        
+        , FlImageBean[] impFlImagebyDeviceId , FlLogBean[] impFlLogbyDeviceId ) throws DAOException
+    {
+        if(null == bean) return null;
+        bean = this.save( bean );
+        if( null != impFlImagebyDeviceId) {
+            for ( FlImageBean imp : impFlImagebyDeviceId ){
+                imp.setDeviceId(bean.getId()); 
+                imp.setReferencedByDeviceId(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlLogbyDeviceId) {
+            for ( FlLogBean imp : impFlLogbyDeviceId ){
+                imp.setDeviceId(bean.getId()); 
+                imp.setReferencedByDeviceId(bean);
+                FlLogManager.getInstance().save( imp );
+            }
+        }
+        return bean;
+    }   
+    /**
+     * Saves the FlDeviceBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlDeviceBean} bean to be saved
+         * @param impFlImagebyDeviceId the {@link FlImageBean} bean refer to {@link FlDeviceBean} 
+     * @param impFlLogbyDeviceId the {@link FlLogBean} bean refer to {@link FlDeviceBean} 
+     * @return the inserted or updated {@link FlDeviceBean} bean
+     * @throws DAOException
+     */
+    //3.6 SYNC SAVE 
+    public FlDeviceBean save(FlDeviceBean bean
+        
+        , java.util.Collection<FlImageBean> impFlImagebyDeviceId , java.util.Collection<FlLogBean> impFlLogbyDeviceId ) throws DAOException
+    {
+        if(null == bean) return null;
+        bean = this.save( bean );
+        if( null != impFlImagebyDeviceId) {
+            for ( FlImageBean imp : impFlImagebyDeviceId ){
+                imp.setDeviceId(bean.getId()); 
+                imp.setReferencedByDeviceId(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlLogbyDeviceId) {
+            for ( FlLogBean imp : impFlLogbyDeviceId ){
+                imp.setDeviceId(bean.getId()); 
+                imp.setReferencedByDeviceId(bean);
+                FlLogManager.getInstance().save( imp );
+            }
+        }
+        return bean;
+    }   
+ 
     //////////////////////////////////////
     // LOAD ALL
     //////////////////////////////////////

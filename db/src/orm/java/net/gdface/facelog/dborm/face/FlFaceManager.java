@@ -428,6 +428,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
 
+
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
@@ -454,7 +455,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
+    //3.2 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByVerifyFaceAsList(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
@@ -462,6 +463,47 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         other.setVerifyFace(bean.getMd5());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
+
+    /**
+     * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.verify_face field.<BR>
+     * FK_NAME : fl_log_ibfk_3 
+     * @param bean the referenced {@link FlFaceBean}
+     * @param importedBeans imported beans from fl_log
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByVerifyFace(FlLogBean, FlFaceBean)
+     */
+    //3.3 SET IMPORTED
+    public FlLogBean[] setFlLogBeansByVerifyFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
+     * set  the {@link FlLogBean} object collection associate to FlFaceBean by the fl_log.verify_face field.<BR>
+     * FK_NAME:fl_log_ibfk_3
+     * @param bean the referenced {@link FlFaceBean} 
+     * @param importedBeans imported beans from fl_log 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByVerifyFace(FlLogBean, FlFaceBean)
+     */
+    //3.4 SET IMPORTED
+    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByVerifyFaceAsList(FlFaceBean bean , T importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
@@ -485,7 +527,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.1 GET IMPORTED
+    //3.2 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByCompareFaceAsList(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
@@ -494,7 +536,132 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
 
-    //////////////////////////////////////
+    /**
+     * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param bean the referenced {@link FlFaceBean}
+     * @param importedBeans imported beans from fl_log
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
+     */
+    //3.3 SET IMPORTED
+    public FlLogBean[] setFlLogBeansByCompareFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
+     * set  the {@link FlLogBean} object collection associate to FlFaceBean by the fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the referenced {@link FlFaceBean} 
+     * @param importedBeans imported beans from fl_log 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
+     */
+    //3.4 SET IMPORTED
+    public <T extends java.util.Collection<FlLogBean>> T setFlLogBeansByCompareFaceAsList(FlFaceBean bean , T importedBeans) throws DAOException
+    {
+        if(null != bean && null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+
+    /**
+     * Saves the FlFaceBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
+     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFaceBean} 
+     * @param impFlLogbyVerifyFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
+     * @param impFlLogbyCompareFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
+     * @return the inserted or updated {@link FlFaceBean} bean
+     * @throws DAOException
+     */
+    //3.5 SYNC SAVE 
+    public FlFaceBean save(FlFaceBean bean
+        , FlImageBean refFlImagebyImgMd5 , FlPersonBean refFlPersonbyPersonId 
+        , FlLogBean[] impFlLogbyVerifyFace , FlLogBean[] impFlLogbyCompareFace ) throws DAOException
+    {
+        if(null == bean) return null;
+        if( null != refFlImagebyImgMd5) {
+            refFlImagebyImgMd5 = FlImageManager.getInstance().save( refFlImagebyImgMd5 );
+            bean.setReferencedByImgMd5(refFlImagebyImgMd5);
+        }
+        if( null != refFlPersonbyPersonId) {
+            refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
+            bean.setReferencedByPersonId(refFlPersonbyPersonId);
+        }
+        bean = this.save( bean );
+        if( null != impFlLogbyVerifyFace) {
+            for ( FlLogBean imp : impFlLogbyVerifyFace ){
+                imp.setVerifyFace(bean.getMd5()); 
+                imp.setReferencedByVerifyFace(bean);
+                FlLogManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlLogbyCompareFace) {
+            for ( FlLogBean imp : impFlLogbyCompareFace ){
+                imp.setCompareFace(bean.getMd5()); 
+                imp.setReferencedByCompareFace(bean);
+                FlLogManager.getInstance().save( imp );
+            }
+        }
+        return bean;
+    }   
+    /**
+     * Saves the FlFaceBean bean and primary key imported bean into the database.
+     *
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
+     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFaceBean} 
+     * @param impFlLogbyVerifyFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
+     * @param impFlLogbyCompareFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
+     * @return the inserted or updated {@link FlFaceBean} bean
+     * @throws DAOException
+     */
+    //3.6 SYNC SAVE 
+    public FlFaceBean save(FlFaceBean bean
+        , FlImageBean refFlImagebyImgMd5 , FlPersonBean refFlPersonbyPersonId 
+        , java.util.Collection<FlLogBean> impFlLogbyVerifyFace , java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
+    {
+        if(null == bean) return null;
+        if( null != refFlImagebyImgMd5) {
+            refFlImagebyImgMd5 = FlImageManager.getInstance().save( refFlImagebyImgMd5 );
+            bean.setReferencedByImgMd5(refFlImagebyImgMd5);
+        }
+        if( null != refFlPersonbyPersonId) {
+            refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
+            bean.setReferencedByPersonId(refFlPersonbyPersonId);
+        }
+        bean = this.save( bean );
+        if( null != impFlLogbyVerifyFace) {
+            for ( FlLogBean imp : impFlLogbyVerifyFace ){
+                imp.setVerifyFace(bean.getMd5()); 
+                imp.setReferencedByVerifyFace(bean);
+                FlLogManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlLogbyCompareFace) {
+            for ( FlLogBean imp : impFlLogbyCompareFace ){
+                imp.setCompareFace(bean.getMd5()); 
+                imp.setReferencedByCompareFace(bean);
+                FlLogManager.getInstance().save( imp );
+            }
+        }
+        return bean;
+    }   
+     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
 
@@ -528,6 +695,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     {
         if(null == bean || null == beanToSet) return null;
         bean.setImgMd5(beanToSet.getMd5());
+        bean.setReferencedByImgMd5(beanToSet);
         return FlImageManager.getInstance().save(beanToSet);
     }
 
@@ -561,6 +729,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     {
         if(null == bean || null == beanToSet) return null;
         bean.setPersonId(beanToSet.getId());
+        bean.setReferencedByPersonId(beanToSet);
         return FlPersonManager.getInstance().save(beanToSet);
     }
 
