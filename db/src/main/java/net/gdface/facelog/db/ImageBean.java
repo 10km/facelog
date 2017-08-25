@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author guyadong
 */
 public class ImageBean
-    implements Serializable,Comparable<ImageBean>
+    implements Serializable,BaseBean,Comparable<ImageBean>
 {
 	private static final long serialVersionUID = 333221336623905925L;
 

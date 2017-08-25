@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author guyadong
 */
 public class PersonBean
-    implements Serializable,Comparable<PersonBean>
+    implements Serializable,BaseBean,Comparable<PersonBean>
 {
 	private static final long serialVersionUID = -4389648827870275876L;
 

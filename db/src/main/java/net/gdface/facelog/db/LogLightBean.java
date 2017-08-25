@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author guyadong
 */
 public class LogLightBean
-    implements Serializable,Comparable<LogLightBean>
+    implements Serializable,BaseBean,Comparable<LogLightBean>
 {
 	private static final long serialVersionUID = -424252416358387796L;
 

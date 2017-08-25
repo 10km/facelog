@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author guyadong
 */
 public class StoreBean
-    implements Serializable,Comparable<StoreBean>
+    implements Serializable,BaseBean,Comparable<StoreBean>
 {
 	private static final long serialVersionUID = -3656272639623326787L;
 

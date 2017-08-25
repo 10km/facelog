@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author guyadong
 */
 public class FaceBean
-    implements Serializable,Comparable<FaceBean>
+    implements Serializable,BaseBean,Comparable<FaceBean>
 {
 	private static final long serialVersionUID = -8767040876006428508L;
 

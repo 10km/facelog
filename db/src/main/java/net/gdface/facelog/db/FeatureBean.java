@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author guyadong
 */
 public class FeatureBean
-    implements Serializable,Comparable<FeatureBean>
+    implements Serializable,BaseBean,Comparable<FeatureBean>
 {
 	private static final long serialVersionUID = 1482337690356583744L;
 
