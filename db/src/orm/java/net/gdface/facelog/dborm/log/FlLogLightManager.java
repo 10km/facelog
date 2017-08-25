@@ -189,10 +189,31 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
     }
  
 
+    @Override
+    public <T> T[] getImportedBeans(FlLogLightBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> List<T> getImportedBeansAsList(FlLogLightBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> T[] setImportedBeans(FlLogLightBean bean,T[] importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }    
+    @Override
+    public <T extends Collection<? extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlLogLightBean bean,T importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
  
+
+
+ 
+    @Override
     public <T> T getReferencedBean(FlLogLightBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
+    @Override
     public <T> T setReferencedBean(FlLogLightBean bean,T beanToSet,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
@@ -446,7 +467,6 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
     {
         return this.deleteByWhere("");
     }
-
 
     /**
      * Deletes rows from the fl_log_light table using a 'where' clause.

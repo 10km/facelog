@@ -180,10 +180,31 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
  
 
+    @Override
+    public <T> T[] getImportedBeans(FlFeatureBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> List<T> getImportedBeansAsList(FlFeatureBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> T[] setImportedBeans(FlFeatureBean bean,T[] importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }    
+    @Override
+    public <T extends Collection<? extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlFeatureBean bean,T importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
  
+
+
+ 
+    @Override
     public <T> T getReferencedBean(FlFeatureBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
+    @Override
     public <T> T setReferencedBean(FlFeatureBean bean,T beanToSet,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
@@ -437,7 +458,6 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     {
         return this.deleteByWhere("");
     }
-
 
     /**
      * Deletes rows from the fl_feature table using a 'where' clause.

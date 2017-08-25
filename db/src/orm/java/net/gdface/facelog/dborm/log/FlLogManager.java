@@ -287,7 +287,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
     
     /**
-     * Delete row according to its keys.
+     * Delete row according to its primary keys.
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -341,6 +341,25 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
  
 
+    @Override
+    public <T> T[] getImportedBeans(FlLogBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> List<T> getImportedBeansAsList(FlLogBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> T[] setImportedBeans(FlLogBean bean,T[] importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }    
+    @Override
+    public <T extends Collection<? extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlLogBean bean,T importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+ 
+
+
     /**
      * Save the FlLogBean bean and referenced beans and imported beans into the database.
      *
@@ -392,7 +411,10 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
                 return save(bean , refFlDevicebyDeviceId , refFlFacebyVerifyFace , refFlFacebyCompareFace , refFlPersonbyPersonId );
             }});
     }
-      private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+      //////////////////////////////////////
+    // FOREIGN KEY GENERIC METHOD
+    //////////////////////////////////////
+    private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
         private static final long serialVersionUID = 1L;
     {        
     put("refFlDevicebyDeviceId",new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
@@ -412,7 +434,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @param bean the {@link FlLogBean} object to use
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Exception
+     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -456,7 +478,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @param beanToSet the <T> object to associate to the {@link FlLogBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Exception
+     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -882,7 +904,6 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         return this.deleteByWhere("");
     }
-
 
     /**
      * Deletes rows from the fl_log table using a 'where' clause.

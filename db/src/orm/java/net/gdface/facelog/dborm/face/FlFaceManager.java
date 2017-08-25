@@ -404,7 +404,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
     
     /**
-     * Delete row according to its keys.
+     * Delete row according to its primary keys.
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
@@ -455,6 +455,187 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     public int deleteByPrimaryKey(FlFaceBeanBase bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
+    }
+ 
+    //////////////////////////////////////
+    // IMPORT KEY GENERIC METHOD
+    //////////////////////////////////////
+    private static final  java.util.HashMap<String, Object[]> IMPORT_METHODS=new java.util.HashMap<String,Object[]>(){
+        private static final long serialVersionUID = 1L;
+    {        
+    put("impFlLogbyVerifyFace",new Object[]{"getFlLogBeansByVerifyFace","setFlLogBeansByVerifyFace",FlLogBean[].class});
+    put("impFlLogbyCompareFace",new Object[]{"getFlLogBeansByCompareFace","setFlLogBeansByCompareFace",FlLogBean[].class});
+    }} ;
+    /**
+     * Retrieves imported T objects by fkName.<br>
+     * @param <T>
+     * <ul>
+     *     <li> impFlLogbyVerifyFace -> FlLogBean</li>
+     *     <li> impFlLogbyCompareFace -> FlLogBean</li>
+     * </ul>
+     * @param bean the {@link FlFaceBean} object to use
+     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] getImportedBeans(FlFaceBean bean,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        try {
+            return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Retrieves imported T objects by fkName.<br>
+     * @param <T>
+     * <ul>
+     *     <li> impFlLogbyVerifyFace -> FlLogBean</li>
+     *     <li> impFlLogbyCompareFace -> FlLogBean</li>
+     * </ul>
+     * @param bean the {@link FlFaceBean} object to use
+     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> getImportedBeansAsList(FlFaceBean bean,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        try {
+            return (List<T>) this.getClass().getMethod((String)params[0]+"AsList",bean.getClass()).invoke(this,bean);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Set the T objects as imported beans of bean object by fkName.<br>
+     * @param <T>
+     * 
+     * <ul>
+     *     <li> impFlLogbyVerifyFace -> FlLogBean</li>
+     *     <li> impFlLogbyCompareFace -> FlLogBean</li>
+     * </ul>
+     * @param bean the {@link FlFaceBean} object to use
+     * @param importedBeans the FlLogBean array to associate to the {@link FlFaceBean}
+     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==importedBeans)
+            throw new NullPointerException();
+        Class<?> resultClass = (Class<?>)params[2];
+        if(!resultClass.isAssignableFrom(importedBeans.getClass()) ){
+            throw new IllegalArgumentException("the argument 'importedBeans' be invalid type,expect type:" + resultClass.getName());
+        }
+        try {            
+            return (T[]) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,importedBeans);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Set the importedBeans associates to the bean by fkName<br>
+     * @param <T>
+     * <ul>
+     *     <li> impFlLogbyVerifyFace -> FlLogBean Collection</li>
+     *     <li> impFlLogbyCompareFace -> FlLogBean Collection</li>
+     * </ul>
+     * @param bean the {@link FlFaceBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
+     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Collection<?extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlFaceBean bean,T importedBeans,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==importedBeans)
+            throw new NullPointerException();
+        try {            
+            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
     }
  
 
@@ -606,6 +787,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
 
+
     /**
      * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
@@ -720,7 +902,10 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
                 return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
             }});
     }
-      private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+      //////////////////////////////////////
+    // FOREIGN KEY GENERIC METHOD
+    //////////////////////////////////////
+    private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
         private static final long serialVersionUID = 1L;
     {        
     put("refFlImagebyImgMd5",new Object[]{"getReferencedByImgMd5","setReferencedByImgMd5",FlImageBean.class});
@@ -736,7 +921,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Exception
+     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -778,7 +963,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws Exception
+     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -1136,7 +1321,6 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     {
         return this.deleteByWhere("");
     }
-
 
     /**
      * Deletes rows from the fl_face table using a 'where' clause.

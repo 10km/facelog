@@ -315,10 +315,31 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
     }
  
 
+    @Override
+    public <T> T[] getImportedBeans(FlFaceLightBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> List<T> getImportedBeansAsList(FlFaceLightBean bean,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public <T> T[] setImportedBeans(FlFaceLightBean bean,T[] importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }    
+    @Override
+    public <T extends Collection<? extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlFaceLightBean bean,T importedBeans,String fkName)throws DAOException{
+        throw new UnsupportedOperationException();
+    }
  
+
+
+ 
+    @Override
     public <T> T getReferencedBean(FlFaceLightBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
+    @Override
     public <T> T setReferencedBean(FlFaceLightBean bean,T beanToSet,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
@@ -572,7 +593,6 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
     {
         return this.deleteByWhere("");
     }
-
 
     /**
      * Deletes rows from the fl_face_light table using a 'where' clause.

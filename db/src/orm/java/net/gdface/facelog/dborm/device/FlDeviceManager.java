@@ -276,7 +276,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
     
     /**
-     * Delete row according to its keys.
+     * Delete row according to its primary keys.
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -327,6 +327,187 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     public int deleteByPrimaryKey(FlDeviceBeanBase bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getId());
+    }
+ 
+    //////////////////////////////////////
+    // IMPORT KEY GENERIC METHOD
+    //////////////////////////////////////
+    private static final  java.util.HashMap<String, Object[]> IMPORT_METHODS=new java.util.HashMap<String,Object[]>(){
+        private static final long serialVersionUID = 1L;
+    {        
+    put("impFlImagebyDeviceId",new Object[]{"getFlImageBeansByDeviceId","setFlImageBeansByDeviceId",FlImageBean[].class});
+    put("impFlLogbyDeviceId",new Object[]{"getFlLogBeansByDeviceId","setFlLogBeansByDeviceId",FlLogBean[].class});
+    }} ;
+    /**
+     * Retrieves imported T objects by fkName.<br>
+     * @param <T>
+     * <ul>
+     *     <li> impFlImagebyDeviceId -> FlImageBean</li>
+     *     <li> impFlLogbyDeviceId -> FlLogBean</li>
+     * </ul>
+     * @param bean the {@link FlDeviceBean} object to use
+     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] getImportedBeans(FlDeviceBean bean,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        try {
+            return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Retrieves imported T objects by fkName.<br>
+     * @param <T>
+     * <ul>
+     *     <li> impFlImagebyDeviceId -> FlImageBean</li>
+     *     <li> impFlLogbyDeviceId -> FlLogBean</li>
+     * </ul>
+     * @param bean the {@link FlDeviceBean} object to use
+     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> getImportedBeansAsList(FlDeviceBean bean,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        try {
+            return (List<T>) this.getClass().getMethod((String)params[0]+"AsList",bean.getClass()).invoke(this,bean);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Set the T objects as imported beans of bean object by fkName.<br>
+     * @param <T>
+     * 
+     * <ul>
+     *     <li> impFlImagebyDeviceId -> FlImageBean</li>
+     *     <li> impFlLogbyDeviceId -> FlLogBean</li>
+     * </ul>
+     * @param bean the {@link FlDeviceBean} object to use
+     * @param importedBeans the FlLogBean array to associate to the {@link FlDeviceBean}
+     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==importedBeans)
+            throw new NullPointerException();
+        Class<?> resultClass = (Class<?>)params[2];
+        if(!resultClass.isAssignableFrom(importedBeans.getClass()) ){
+            throw new IllegalArgumentException("the argument 'importedBeans' be invalid type,expect type:" + resultClass.getName());
+        }
+        try {            
+            return (T[]) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,importedBeans);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
+    }
+    /**
+     * Set the importedBeans associates to the bean by fkName<br>
+     * @param <T>
+     * <ul>
+     *     <li> impFlImagebyDeviceId -> FlImageBean Collection</li>
+     *     <li> impFlLogbyDeviceId -> FlLogBean Collection</li>
+     * </ul>
+     * @param bean the {@link FlDeviceBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link FlDeviceBean}
+     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Collection<?extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlDeviceBean bean,T importedBeans,String fkName)throws DAOException{
+        Object[] params = IMPORT_METHODS.get(fkName);
+        if(null==params)
+            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==importedBeans)
+            throw new NullPointerException();
+        try {            
+            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {    
+            throw new RuntimeException(e);
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            try{
+                throw e.getCause();
+            }catch(DAOException e1){
+                throw e1;
+            }catch(RuntimeException e1){
+                throw e1;
+            }catch (Throwable e1) {
+                throw new RuntimeException(e1);
+            } 
+        }
     }
  
 
@@ -478,6 +659,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
 
+
     /**
      * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
      *
@@ -573,9 +755,11 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             }});
     }
   
+    @Override
     public <T> T getReferencedBean(FlDeviceBean bean,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
+    @Override
     public <T> T setReferencedBean(FlDeviceBean bean,T beanToSet,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
@@ -829,7 +1013,6 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     {
         return this.deleteByWhere("");
     }
-
 
     /**
      * Deletes rows from the fl_device table using a 'where' clause.
