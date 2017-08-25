@@ -30,19 +30,19 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceComparator(FlDeviceManager.ID_UPDATE_TIME, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceComparator(FlDeviceManager.ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlDeviceManager.ID_UPDATE_TIME
-     *   <li>FlDeviceManager.ID_CREATE_TIME
-     *   <li>FlDeviceManager.ID_VERSION
-     *   <li>FlDeviceManager.ID_GROUP_ID
-     *   <li>FlDeviceManager.ID_ONLINE
-     *   <li>FlDeviceManager.ID_NAME
      *   <li>FlDeviceManager.ID_ID
+     *   <li>FlDeviceManager.ID_NAME
+     *   <li>FlDeviceManager.ID_ONLINE
+     *   <li>FlDeviceManager.ID_GROUP_ID
+     *   <li>FlDeviceManager.ID_VERSION
+     *   <li>FlDeviceManager.ID_CREATE_TIME
+     *   <li>FlDeviceManager.ID_UPDATE_TIME
      * </ul>
      */
     public FlDeviceComparator(int iType)
@@ -55,19 +55,19 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceComparator(FlDeviceManager.ID_UPDATE_TIME, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceComparator(FlDeviceManager.ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlDeviceManager.ID_UPDATE_TIME
-     *   <li>FlDeviceManager.ID_CREATE_TIME
-     *   <li>FlDeviceManager.ID_VERSION
-     *   <li>FlDeviceManager.ID_GROUP_ID
-     *   <li>FlDeviceManager.ID_ONLINE
-     *   <li>FlDeviceManager.ID_NAME
      *   <li>FlDeviceManager.ID_ID
+     *   <li>FlDeviceManager.ID_NAME
+     *   <li>FlDeviceManager.ID_ONLINE
+     *   <li>FlDeviceManager.ID_GROUP_ID
+     *   <li>FlDeviceManager.ID_VERSION
+     *   <li>FlDeviceManager.ID_CREATE_TIME
+     *   <li>FlDeviceManager.ID_UPDATE_TIME
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -84,59 +84,15 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlDeviceManager.ID_UPDATE_TIME:
-                if (b1.getUpdateTime() == null && b2.getUpdateTime() != null) {
+            case FlDeviceManager.ID_ID:
+                if (b1.getId() == null && b2.getId() != null) {
                     iReturn = -1;
-                } else if (b1.getUpdateTime() == null && b2.getUpdateTime() == null) {
+                } else if (b1.getId() == null && b2.getId() == null) {
                     iReturn = 0;
-                } else if (b1.getUpdateTime() != null && b2.getUpdateTime() == null) {
+                } else if (b1.getId() != null && b2.getId() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getUpdateTime().compareTo(b2.getUpdateTime());
-                }
-                break;
-            case FlDeviceManager.ID_CREATE_TIME:
-                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
-                    iReturn = -1;
-                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
-                    iReturn = 0;
-                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
-                }
-                break;
-            case FlDeviceManager.ID_VERSION:
-                if (b1.getVersion() == null && b2.getVersion() != null) {
-                    iReturn = -1;
-                } else if (b1.getVersion() == null && b2.getVersion() == null) {
-                    iReturn = 0;
-                } else if (b1.getVersion() != null && b2.getVersion() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getVersion().compareTo(b2.getVersion());
-                }
-                break;
-            case FlDeviceManager.ID_GROUP_ID:
-                if (b1.getGroupId() == null && b2.getGroupId() != null) {
-                    iReturn = -1;
-                } else if (b1.getGroupId() == null && b2.getGroupId() == null) {
-                    iReturn = 0;
-                } else if (b1.getGroupId() != null && b2.getGroupId() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getGroupId().compareTo(b2.getGroupId());
-                }
-                break;
-            case FlDeviceManager.ID_ONLINE:
-                if (b1.getOnline() == null && b2.getOnline() != null) {
-                    iReturn = -1;
-                } else if (b1.getOnline() == null && b2.getOnline() == null) {
-                    iReturn = 0;
-                } else if (b1.getOnline() != null && b2.getOnline() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getOnline().compareTo(b2.getOnline());
+                    iReturn = b1.getId().compareTo(b2.getId());
                 }
                 break;
             case FlDeviceManager.ID_NAME:
@@ -150,15 +106,59 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getName().compareTo(b2.getName());
                 }
                 break;
-            case FlDeviceManager.ID_ID:
-                if (b1.getId() == null && b2.getId() != null) {
+            case FlDeviceManager.ID_ONLINE:
+                if (b1.getOnline() == null && b2.getOnline() != null) {
                     iReturn = -1;
-                } else if (b1.getId() == null && b2.getId() == null) {
+                } else if (b1.getOnline() == null && b2.getOnline() == null) {
                     iReturn = 0;
-                } else if (b1.getId() != null && b2.getId() == null) {
+                } else if (b1.getOnline() != null && b2.getOnline() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getId().compareTo(b2.getId());
+                    iReturn = b1.getOnline().compareTo(b2.getOnline());
+                }
+                break;
+            case FlDeviceManager.ID_GROUP_ID:
+                if (b1.getGroupId() == null && b2.getGroupId() != null) {
+                    iReturn = -1;
+                } else if (b1.getGroupId() == null && b2.getGroupId() == null) {
+                    iReturn = 0;
+                } else if (b1.getGroupId() != null && b2.getGroupId() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getGroupId().compareTo(b2.getGroupId());
+                }
+                break;
+            case FlDeviceManager.ID_VERSION:
+                if (b1.getVersion() == null && b2.getVersion() != null) {
+                    iReturn = -1;
+                } else if (b1.getVersion() == null && b2.getVersion() == null) {
+                    iReturn = 0;
+                } else if (b1.getVersion() != null && b2.getVersion() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getVersion().compareTo(b2.getVersion());
+                }
+                break;
+            case FlDeviceManager.ID_CREATE_TIME:
+                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
+                    iReturn = -1;
+                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
+                    iReturn = 0;
+                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
+                }
+                break;
+            case FlDeviceManager.ID_UPDATE_TIME:
+                if (b1.getUpdateTime() == null && b2.getUpdateTime() != null) {
+                    iReturn = -1;
+                } else if (b1.getUpdateTime() == null && b2.getUpdateTime() == null) {
+                    iReturn = 0;
+                } else if (b1.getUpdateTime() != null && b2.getUpdateTime() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getUpdateTime().compareTo(b2.getUpdateTime());
                 }
                 break;
             default:

@@ -48,64 +48,64 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
-     * Identify the update_time field.
+     * Identify the id field.
      */
-    public static final int ID_UPDATE_TIME = 0;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 1;
-
-    /**
-     * Identify the expiry_date field.
-     */
-    public static final int ID_EXPIRY_DATE = 2;
-
-    /**
-     * Identify the face_md5 field.
-     */
-    public static final int ID_FACE_MD5 = 3;
-
-    /**
-     * Identify the photo_id field.
-     */
-    public static final int ID_PHOTO_ID = 4;
-
-    /**
-     * Identify the papers_num field.
-     */
-    public static final int ID_PAPERS_NUM = 5;
-
-    /**
-     * Identify the papers_type field.
-     */
-    public static final int ID_PAPERS_TYPE = 6;
-
-    /**
-     * Identify the birthdate field.
-     */
-    public static final int ID_BIRTHDATE = 7;
-
-    /**
-     * Identify the sex field.
-     */
-    public static final int ID_SEX = 8;
-
-    /**
-     * Identify the name field.
-     */
-    public static final int ID_NAME = 9;
+    public static final int ID_ID = 0;
 
     /**
      * Identify the group_id field.
      */
-    public static final int ID_GROUP_ID = 10;
+    public static final int ID_GROUP_ID = 1;
 
     /**
-     * Identify the id field.
+     * Identify the name field.
      */
-    public static final int ID_ID = 11;
+    public static final int ID_NAME = 2;
+
+    /**
+     * Identify the sex field.
+     */
+    public static final int ID_SEX = 3;
+
+    /**
+     * Identify the birthdate field.
+     */
+    public static final int ID_BIRTHDATE = 4;
+
+    /**
+     * Identify the papers_type field.
+     */
+    public static final int ID_PAPERS_TYPE = 5;
+
+    /**
+     * Identify the papers_num field.
+     */
+    public static final int ID_PAPERS_NUM = 6;
+
+    /**
+     * Identify the photo_id field.
+     */
+    public static final int ID_PHOTO_ID = 7;
+
+    /**
+     * Identify the face_md5 field.
+     */
+    public static final int ID_FACE_MD5 = 8;
+
+    /**
+     * Identify the expiry_date field.
+     */
+    public static final int ID_EXPIRY_DATE = 9;
+
+    /**
+     * Identify the create_time field.
+     */
+    public static final int ID_CREATE_TIME = 10;
+
+    /**
+     * Identify the update_time field.
+     */
+    public static final int ID_UPDATE_TIME = 11;
 
     /**
      * Tablename.
@@ -116,18 +116,18 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      */
     public static final String[] FULL_FIELD_NAMES =
     {
-        "fl_person.update_time"
-        ,"fl_person.create_time"
-        ,"fl_person.expiry_date"
-        ,"fl_person.face_md5"
-        ,"fl_person.photo_id"
-        ,"fl_person.papers_num"
-        ,"fl_person.papers_type"
-        ,"fl_person.birthdate"
-        ,"fl_person.sex"
-        ,"fl_person.name"
+        "fl_person.id"
         ,"fl_person.group_id"
-        ,"fl_person.id"
+        ,"fl_person.name"
+        ,"fl_person.sex"
+        ,"fl_person.birthdate"
+        ,"fl_person.papers_type"
+        ,"fl_person.papers_num"
+        ,"fl_person.photo_id"
+        ,"fl_person.face_md5"
+        ,"fl_person.expiry_date"
+        ,"fl_person.create_time"
+        ,"fl_person.update_time"
     };
 
     /**
@@ -135,18 +135,18 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      */
     public static final String[] FIELD_NAMES =
     {
-        "update_time"
-        ,"create_time"
-        ,"expiry_date"
-        ,"face_md5"
-        ,"photo_id"
-        ,"papers_num"
-        ,"papers_type"
-        ,"birthdate"
-        ,"sex"
-        ,"name"
+        "id"
         ,"group_id"
-        ,"id"
+        ,"name"
+        ,"sex"
+        ,"birthdate"
+        ,"papers_type"
+        ,"papers_num"
+        ,"photo_id"
+        ,"face_md5"
+        ,"expiry_date"
+        ,"create_time"
+        ,"update_time"
     };
    /**
      * Contains all the primarykey fields of the fl_person table.
@@ -158,34 +158,34 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     /**
      * Field that contains the comma separated fields of the fl_person table.
      */
-    public static final String ALL_FULL_FIELDS = "fl_person.update_time"
-                            + ",fl_person.create_time"
-                            + ",fl_person.expiry_date"
-                            + ",fl_person.face_md5"
-                            + ",fl_person.photo_id"
-                            + ",fl_person.papers_num"
-                            + ",fl_person.papers_type"
-                            + ",fl_person.birthdate"
-                            + ",fl_person.sex"
-                            + ",fl_person.name"
+    public static final String ALL_FULL_FIELDS = "fl_person.id"
                             + ",fl_person.group_id"
-                            + ",fl_person.id";
+                            + ",fl_person.name"
+                            + ",fl_person.sex"
+                            + ",fl_person.birthdate"
+                            + ",fl_person.papers_type"
+                            + ",fl_person.papers_num"
+                            + ",fl_person.photo_id"
+                            + ",fl_person.face_md5"
+                            + ",fl_person.expiry_date"
+                            + ",fl_person.create_time"
+                            + ",fl_person.update_time";
 
     /**
      * Field that contains the comma separated fields of the fl_person table.
      */
-    public static final String ALL_FIELDS = "update_time"
-                            + ",create_time"
-                            + ",expiry_date"
-                            + ",face_md5"
-                            + ",photo_id"
-                            + ",papers_num"
-                            + ",papers_type"
-                            + ",birthdate"
-                            + ",sex"
-                            + ",name"
+    public static final String ALL_FIELDS = "id"
                             + ",group_id"
-                            + ",id";
+                            + ",name"
+                            + ",sex"
+                            + ",birthdate"
+                            + ",papers_type"
+                            + ",papers_num"
+                            + ",photo_id"
+                            + ",face_md5"
+                            + ",expiry_date"
+                            + ",create_time"
+                            + ",update_time";
 
     public static interface Action{
           void call(FlPersonBean bean);
@@ -1278,83 +1278,11 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_person (");
 
-            if (bean.isUpdateTimeModified()) {
+            if (bean.isIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("update_time");
-                _dirtyCount++;
-            }
-
-            if (bean.isCreateTimeModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("create_time");
-                _dirtyCount++;
-            }
-
-            if (bean.isExpiryDateModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("expiry_date");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_md5");
-                _dirtyCount++;
-            }
-
-            if (bean.isPhotoIdModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("photo_id");
-                _dirtyCount++;
-            }
-
-            if (bean.isPapersNumModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("papers_num");
-                _dirtyCount++;
-            }
-
-            if (bean.isPapersTypeModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("papers_type");
-                _dirtyCount++;
-            }
-
-            if (bean.isBirthdateModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("birthdate");
-                _dirtyCount++;
-            }
-
-            if (bean.isSexModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("sex");
-                _dirtyCount++;
-            }
-
-            if (bean.isNameModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("name");
+                sql.append("id");
                 _dirtyCount++;
             }
 
@@ -1366,11 +1294,83 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                 _dirtyCount++;
             }
 
-            if (bean.isIdModified()) {
+            if (bean.isNameModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("id");
+                sql.append("name");
+                _dirtyCount++;
+            }
+
+            if (bean.isSexModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("sex");
+                _dirtyCount++;
+            }
+
+            if (bean.isBirthdateModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("birthdate");
+                _dirtyCount++;
+            }
+
+            if (bean.isPapersTypeModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("papers_type");
+                _dirtyCount++;
+            }
+
+            if (bean.isPapersNumModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("papers_num");
+                _dirtyCount++;
+            }
+
+            if (bean.isPhotoIdModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("photo_id");
+                _dirtyCount++;
+            }
+
+            if (bean.isFaceMd5Modified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("face_md5");
+                _dirtyCount++;
+            }
+
+            if (bean.isExpiryDateModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("expiry_date");
+                _dirtyCount++;
+            }
+
+            if (bean.isCreateTimeModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("create_time");
+                _dirtyCount++;
+            }
+
+            if (bean.isUpdateTimeModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("update_time");
                 _dirtyCount++;
             }
 
@@ -1456,94 +1456,13 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             sql = new StringBuilder("UPDATE fl_person SET ");
             boolean useComma=false;
 
-            if (bean.isUpdateTimeModified()) {
+            if (bean.isIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("update_time=?");
-            }
-
-            if (bean.isCreateTimeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("create_time=?");
-            }
-
-            if (bean.isExpiryDateModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("expiry_date=?");
-            }
-
-            if (bean.isFaceMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_md5=?");
-            }
-
-            if (bean.isPhotoIdModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("photo_id=?");
-            }
-
-            if (bean.isPapersNumModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("papers_num=?");
-            }
-
-            if (bean.isPapersTypeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("papers_type=?");
-            }
-
-            if (bean.isBirthdateModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("birthdate=?");
-            }
-
-            if (bean.isSexModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("sex=?");
-            }
-
-            if (bean.isNameModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("name=?");
+                sql.append("id=?");
             }
 
             if (bean.isGroupIdModified()) {
@@ -1555,13 +1474,94 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                 sql.append("group_id=?");
             }
 
-            if (bean.isIdModified()) {
+            if (bean.isNameModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("id=?");
+                sql.append("name=?");
+            }
+
+            if (bean.isSexModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("sex=?");
+            }
+
+            if (bean.isBirthdateModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("birthdate=?");
+            }
+
+            if (bean.isPapersTypeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("papers_type=?");
+            }
+
+            if (bean.isPapersNumModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("papers_num=?");
+            }
+
+            if (bean.isPhotoIdModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("photo_id=?");
+            }
+
+            if (bean.isFaceMd5Modified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("face_md5=?");
+            }
+
+            if (bean.isExpiryDateModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("expiry_date=?");
+            }
+
+            if (bean.isCreateTimeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("create_time=?");
+            }
+
+            if (bean.isUpdateTimeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("update_time=?");
             }
             sql.append(" WHERE ");
             sql.append("id=?");
@@ -2367,84 +2367,12 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         }
         try
         {
-            if (bean.isUpdateTimeModified()) {
+            if (bean.isIdModified()) {
                 _dirtyCount ++;
-                if (bean.getUpdateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
+                if (bean.getId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time = ?");
-                }
-            }
-            if (bean.isCreateTimeModified()) {
-                _dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
-                }
-            }
-            if (bean.isExpiryDateModified()) {
-                _dirtyCount ++;
-                if (bean.getExpiryDate() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date = ?");
-                }
-            }
-            if (bean.isFaceMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getFaceMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isPhotoIdModified()) {
-                _dirtyCount ++;
-                if (bean.getPhotoId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isPapersNumModified()) {
-                _dirtyCount ++;
-                if (bean.getPapersNum() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isPapersTypeModified()) {
-                _dirtyCount ++;
-                if (bean.getPapersType() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type = ?");
-                }
-            }
-            if (bean.isBirthdateModified()) {
-                _dirtyCount ++;
-                if (bean.getBirthdate() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate = ?");
-                }
-            }
-            if (bean.isSexModified()) {
-                _dirtyCount ++;
-                if (bean.getSex() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex = ?");
-                }
-            }
-            if (bean.isNameModified()) {
-                _dirtyCount ++;
-                if (bean.getName() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
                 }
             }
             if (bean.isGroupIdModified()) {
@@ -2455,12 +2383,84 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id = ?");
                 }
             }
-            if (bean.isIdModified()) {
+            if (bean.isNameModified()) {
                 _dirtyCount ++;
-                if (bean.getId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
+                if (bean.getName() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isSexModified()) {
+                _dirtyCount ++;
+                if (bean.getSex() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex = ?");
+                }
+            }
+            if (bean.isBirthdateModified()) {
+                _dirtyCount ++;
+                if (bean.getBirthdate() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate = ?");
+                }
+            }
+            if (bean.isPapersTypeModified()) {
+                _dirtyCount ++;
+                if (bean.getPapersType() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type = ?");
+                }
+            }
+            if (bean.isPapersNumModified()) {
+                _dirtyCount ++;
+                if (bean.getPapersNum() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isPhotoIdModified()) {
+                _dirtyCount ++;
+                if (bean.getPhotoId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isFaceMd5Modified()) {
+                _dirtyCount ++;
+                if (bean.getFaceMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isExpiryDateModified()) {
+                _dirtyCount ++;
+                if (bean.getExpiryDate() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date = ?");
+                }
+            }
+            if (bean.isCreateTimeModified()) {
+                _dirtyCount ++;
+                if (bean.getCreateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
+                }
+            }
+            if (bean.isUpdateTimeModified()) {
+                _dirtyCount ++;
+                if (bean.getUpdateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time = ?");
                 }
             }
         }
@@ -2487,35 +2487,65 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         int _dirtyCount = 0;
         try
         {
-            if (bean.isUpdateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
-                if (bean.getUpdateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
+            if (bean.isIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
+                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
-            if (bean.isCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+            if (bean.isGroupIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
+                if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
             }
-            if (bean.isExpiryDateModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExpiryDate() + "]");
-                if (bean.getExpiryDate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
-            }
-            if (bean.isFaceMd5Modified()) {
+            if (bean.isNameModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "]");
-                        if (bean.getFaceMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
+                        if (bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "%]");
-                        if ( bean.getFaceMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFaceMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "%]");
+                        if ( bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "]");
-                        if ( bean.getFaceMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFaceMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
+                        if ( bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "%]");
-                        if (bean.getFaceMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "%]");
+                        if (bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.isSexModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
+                if (bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getSex()); }
+            }
+            if (bean.isBirthdateModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getBirthdate() + "]");
+                if (bean.getBirthdate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
+            }
+            if (bean.isPapersTypeModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
+                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
+            }
+            if (bean.isPapersNumModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "]");
+                        if (bean.getPapersNum() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "%]");
+                        if ( bean.getPapersNum()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "]");
+                        if ( bean.getPapersNum() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "%]");
+                        if (bean.getPapersNum()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2543,69 +2573,39 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPapersNumModified()) {
+            if (bean.isFaceMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "]");
-                        if (bean.getPapersNum() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "]");
+                        if (bean.getFaceMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "%]");
-                        if ( bean.getPapersNum()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "%]");
+                        if ( bean.getFaceMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFaceMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if ( bean.getPapersNum() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "]");
+                        if ( bean.getFaceMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFaceMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "%]");
-                        if (bean.getPapersNum()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "%]");
+                        if (bean.getFaceMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPapersTypeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
-                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
+            if (bean.isExpiryDateModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExpiryDate() + "]");
+                if (bean.getExpiryDate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
             }
-            if (bean.isBirthdateModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getBirthdate() + "]");
-                if (bean.getBirthdate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
+            if (bean.isCreateTimeModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
-            if (bean.isSexModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
-                if (bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getSex()); }
-            }
-            if (bean.isNameModified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
-                        if (bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
-                if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
-            }
-            if (bean.isIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+            if (bean.isUpdateTimeModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
+                if (bean.getUpdateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }
         }
         catch(SQLException e)
@@ -2712,18 +2712,18 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             bean = this.createBean();
         try
         {
-            bean.setUpdateTime(rs.getTimestamp(1));
-            bean.setCreateTime(rs.getTimestamp(2));
-            bean.setExpiryDate(rs.getDate(3));
-            bean.setFaceMd5(rs.getString(4));
-            bean.setPhotoId(rs.getString(5));
-            bean.setPapersNum(rs.getString(6));
-            bean.setPapersType(Manager.getInteger(rs, 7));
-            bean.setBirthdate(rs.getDate(8));
-            bean.setSex(Manager.getInteger(rs, 9));
-            bean.setName(rs.getString(10));
-            bean.setGroupId(Manager.getInteger(rs, 11));
-            bean.setId(Manager.getInteger(rs, 12));
+            bean.setId(Manager.getInteger(rs, 1));
+            bean.setGroupId(Manager.getInteger(rs, 2));
+            bean.setName(rs.getString(3));
+            bean.setSex(Manager.getInteger(rs, 4));
+            bean.setBirthdate(rs.getDate(5));
+            bean.setPapersType(Manager.getInteger(rs, 6));
+            bean.setPapersNum(rs.getString(7));
+            bean.setPhotoId(rs.getString(8));
+            bean.setFaceMd5(rs.getString(9));
+            bean.setExpiryDate(rs.getDate(10));
+            bean.setCreateTime(rs.getTimestamp(11));
+            bean.setUpdateTime(rs.getTimestamp(12));
         }
         catch(SQLException e)
         {
@@ -2755,53 +2755,53 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             {
                 switch(fieldList[i])
                 {
-                    case ID_UPDATE_TIME:
+                    case ID_ID:
                         ++pos;
-                        bean.setUpdateTime(rs.getTimestamp(pos));
-                        break;
-                    case ID_CREATE_TIME:
-                        ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
-                        break;
-                    case ID_EXPIRY_DATE:
-                        ++pos;
-                        bean.setExpiryDate(rs.getDate(pos));
-                        break;
-                    case ID_FACE_MD5:
-                        ++pos;
-                        bean.setFaceMd5(rs.getString(pos));
-                        break;
-                    case ID_PHOTO_ID:
-                        ++pos;
-                        bean.setPhotoId(rs.getString(pos));
-                        break;
-                    case ID_PAPERS_NUM:
-                        ++pos;
-                        bean.setPapersNum(rs.getString(pos));
-                        break;
-                    case ID_PAPERS_TYPE:
-                        ++pos;
-                        bean.setPapersType(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_BIRTHDATE:
-                        ++pos;
-                        bean.setBirthdate(rs.getDate(pos));
-                        break;
-                    case ID_SEX:
-                        ++pos;
-                        bean.setSex(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_NAME:
-                        ++pos;
-                        bean.setName(rs.getString(pos));
+                        bean.setId(Manager.getInteger(rs, pos));
                         break;
                     case ID_GROUP_ID:
                         ++pos;
                         bean.setGroupId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_ID:
+                    case ID_NAME:
                         ++pos;
-                        bean.setId(Manager.getInteger(rs, pos));
+                        bean.setName(rs.getString(pos));
+                        break;
+                    case ID_SEX:
+                        ++pos;
+                        bean.setSex(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_BIRTHDATE:
+                        ++pos;
+                        bean.setBirthdate(rs.getDate(pos));
+                        break;
+                    case ID_PAPERS_TYPE:
+                        ++pos;
+                        bean.setPapersType(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_PAPERS_NUM:
+                        ++pos;
+                        bean.setPapersNum(rs.getString(pos));
+                        break;
+                    case ID_PHOTO_ID:
+                        ++pos;
+                        bean.setPhotoId(rs.getString(pos));
+                        break;
+                    case ID_FACE_MD5:
+                        ++pos;
+                        bean.setFaceMd5(rs.getString(pos));
+                        break;
+                    case ID_EXPIRY_DATE:
+                        ++pos;
+                        bean.setExpiryDate(rs.getDate(pos));
+                        break;
+                    case ID_CREATE_TIME:
+                        ++pos;
+                        bean.setCreateTime(rs.getTimestamp(pos));
+                        break;
+                    case ID_UPDATE_TIME:
+                        ++pos;
+                        bean.setUpdateTime(rs.getTimestamp(pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -2831,18 +2831,18 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         FlPersonBean bean = this.createBean();
         try
         {
-            bean.setUpdateTime(rs.getTimestamp("update_time"));
-            bean.setCreateTime(rs.getTimestamp("create_time"));
-            bean.setExpiryDate(rs.getDate("expiry_date"));
-            bean.setFaceMd5(rs.getString("face_md5"));
-            bean.setPhotoId(rs.getString("photo_id"));
-            bean.setPapersNum(rs.getString("papers_num"));
-            bean.setPapersType(Manager.getInteger(rs, "papers_type"));
-            bean.setBirthdate(rs.getDate("birthdate"));
-            bean.setSex(Manager.getInteger(rs, "sex"));
-            bean.setName(rs.getString("name"));
-            bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setId(Manager.getInteger(rs, "id"));
+            bean.setGroupId(Manager.getInteger(rs, "group_id"));
+            bean.setName(rs.getString("name"));
+            bean.setSex(Manager.getInteger(rs, "sex"));
+            bean.setBirthdate(rs.getDate("birthdate"));
+            bean.setPapersType(Manager.getInteger(rs, "papers_type"));
+            bean.setPapersNum(rs.getString("papers_num"));
+            bean.setPhotoId(rs.getString("photo_id"));
+            bean.setFaceMd5(rs.getString("face_md5"));
+            bean.setExpiryDate(rs.getDate("expiry_date"));
+            bean.setCreateTime(rs.getTimestamp("create_time"));
+            bean.setUpdateTime(rs.getTimestamp("update_time"));
         }
         catch(SQLException e)
         {

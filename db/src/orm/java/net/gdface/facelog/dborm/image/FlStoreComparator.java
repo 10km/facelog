@@ -30,14 +30,14 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlStoreComparator(FlStoreManager.ID_DATA, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlStoreComparator(FlStoreManager.ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlStoreManager.ID_ENCODING
      *   <li>FlStoreManager.ID_MD5
+     *   <li>FlStoreManager.ID_ENCODING
      * </ul>
      */
     public FlStoreComparator(int iType)
@@ -50,15 +50,15 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlStoreComparator(FlStoreManager.ID_DATA, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlStoreComparator(FlStoreManager.ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlStoreManager.ID_DATA
-     *   <li>FlStoreManager.ID_ENCODING
      *   <li>FlStoreManager.ID_MD5
+     *   <li>FlStoreManager.ID_ENCODING
+     *   <li>FlStoreManager.ID_DATA
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -75,17 +75,6 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlStoreManager.ID_ENCODING:
-                if (b1.getEncoding() == null && b2.getEncoding() != null) {
-                    iReturn = -1;
-                } else if (b1.getEncoding() == null && b2.getEncoding() == null) {
-                    iReturn = 0;
-                } else if (b1.getEncoding() != null && b2.getEncoding() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getEncoding().compareTo(b2.getEncoding());
-                }
-                break;
             case FlStoreManager.ID_MD5:
                 if (b1.getMd5() == null && b2.getMd5() != null) {
                     iReturn = -1;
@@ -95,6 +84,17 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
                     iReturn = 1;
                 } else {
                     iReturn = b1.getMd5().compareTo(b2.getMd5());
+                }
+                break;
+            case FlStoreManager.ID_ENCODING:
+                if (b1.getEncoding() == null && b2.getEncoding() != null) {
+                    iReturn = -1;
+                } else if (b1.getEncoding() == null && b2.getEncoding() == null) {
+                    iReturn = 0;
+                } else if (b1.getEncoding() != null && b2.getEncoding() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getEncoding().compareTo(b2.getEncoding());
                 }
                 break;
             default:

@@ -30,32 +30,10 @@ public class FlLogBeanBase
 {
 	private static final long serialVersionUID = -4612112589792507945L;
 	
-    protected java.util.Date createTime;
-
     /**
-     * comments:验证时间(可能由前端设备提供时间)
+     * comments:日志id
      */
-    protected java.util.Date verifyTime;
-
-    /**
-     * comments:验证相似度
-     */
-    protected Double similarty;
-
-    /**
-     * comments:外键,数据库中最相似的对比人脸id
-     */
-    protected String compareFace;
-
-    /**
-     * comments:外键,验证人脸信息id
-     */
-    protected String verifyFace;
-
-    /**
-     * comments:外键,图像来源设备id
-     */
-    protected Integer deviceId;
+    protected Integer id;
 
     /**
      * comments:外键,用户id
@@ -63,9 +41,31 @@ public class FlLogBeanBase
     protected Integer personId;
 
     /**
-     * comments:日志id
+     * comments:外键,图像来源设备id
      */
-    protected Integer id;
+    protected Integer deviceId;
+
+    /**
+     * comments:外键,验证人脸信息id
+     */
+    protected String verifyFace;
+
+    /**
+     * comments:外键,数据库中最相似的对比人脸id
+     */
+    protected String compareFace;
+
+    /**
+     * comments:验证相似度
+     */
+    protected Double similarty;
+
+    /**
+     * comments:验证时间(可能由前端设备提供时间)
+     */
+    protected java.util.Date verifyTime;
+
+    protected java.util.Date createTime;
 
     private boolean _isNew = true;
     /**
@@ -110,209 +110,41 @@ public class FlLogBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for {@link #createTime}.<br>
+     * Getter method for {@link #id}.<br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.create_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal){    
-        createTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal){
-        setCreateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #verifyTime}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.verify_time</li>
-     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of verifyTime
-     */
-    public java.util.Date getVerifyTime(){
-        return verifyTime;
-    }
-    /**
-     * Setter method for {@link #verifyTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to verifyTime
-     */
-    public void setVerifyTime(java.util.Date newVal){    
-        verifyTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #verifyTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to verifyTime
-     */
-    public void setVerifyTime(long newVal){
-        setVerifyTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #similarty}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.similarty</li>
-     * <li>comments: 验证相似度</li>
-     * <li>column size: 22</li>
-     * <li>jdbc type returned by the driver: Types.DOUBLE</li>
-     * </ul>
-     *
-     * @return the value of similarty
-     */
-    public Double getSimilarty(){
-        return similarty;
-    }
-    /**
-     * Setter method for {@link #similarty}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to similarty
-     */
-    public void setSimilarty(Double newVal){    
-        similarty = newVal;
-    }
-
-    /**
-     * Setter method for {@link #similarty}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to similarty
-     */
-    public void setSimilarty(double newVal){
-        setSimilarty(new Double(newVal));
-    }
-
-    /**
-     * Getter method for {@link #compareFace}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.compare_face</li>
-     * <li> foreign key: fl_face.md5</li>
-     * <li>comments: 外键,数据库中最相似的对比人脸id</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of compareFace
-     */
-    public String getCompareFace(){
-        return compareFace;
-    }
-    /**
-     * Setter method for {@link #compareFace}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to compareFace
-     */
-    public void setCompareFace(String newVal){    
-        compareFace = newVal;
-    }
-
-
-    /**
-     * Getter method for {@link #verifyFace}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.verify_face</li>
-     * <li> foreign key: fl_face.md5</li>
-     * <li>comments: 外键,验证人脸信息id</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of verifyFace
-     */
-    public String getVerifyFace(){
-        return verifyFace;
-    }
-    /**
-     * Setter method for {@link #verifyFace}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to verifyFace
-     */
-    public void setVerifyFace(String newVal){    
-        verifyFace = newVal;
-    }
-
-
-    /**
-     * Getter method for {@link #deviceId}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.device_id</li>
-     * <li> foreign key: fl_device.id</li>
-     * <li>comments: 外键,图像来源设备id</li>
+     * <li>full name: fl_log.id</li>
+     * <li>comments: 日志id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of deviceId
+     * @return the value of id
      */
-    public Integer getDeviceId(){
-        return deviceId;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for {@link #deviceId}.<br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value to be assigned to id
      */
-    public void setDeviceId(Integer newVal){    
-        deviceId = newVal;
+    public void setId(Integer newVal){    
+        id = newVal;
     }
 
     /**
-     * Setter method for {@link #deviceId}.<br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value to be assigned to id
      */
-    public void setDeviceId(int newVal){
-        setDeviceId(new Integer(newVal));
+    public void setId(int newVal){
+        setId(new Integer(newVal));
     }
 
     /**
@@ -354,41 +186,209 @@ public class FlLogBeanBase
     }
 
     /**
-     * Getter method for {@link #id}.<br>
-     * PRIMARY KEY.<br>
+     * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.id</li>
-     * <li>comments: 日志id</li>
+     * <li>full name: fl_log.device_id</li>
+     * <li> foreign key: fl_device.id</li>
+     * <li>comments: 外键,图像来源设备id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of id
+     * @return the value of deviceId
      */
-    public Integer getId(){
-        return id;
+    public Integer getDeviceId(){
+        return deviceId;
     }
     /**
-     * Setter method for {@link #id}.<br>
+     * Setter method for {@link #deviceId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to deviceId
      */
-    public void setId(Integer newVal){    
-        id = newVal;
+    public void setDeviceId(Integer newVal){    
+        deviceId = newVal;
     }
 
     /**
-     * Setter method for {@link #id}.<br>
+     * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to deviceId
      */
-    public void setId(int newVal){
-        setId(new Integer(newVal));
+    public void setDeviceId(int newVal){
+        setDeviceId(new Integer(newVal));
+    }
+
+    /**
+     * Getter method for {@link #verifyFace}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.verify_face</li>
+     * <li> foreign key: fl_face.md5</li>
+     * <li>comments: 外键,验证人脸信息id</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of verifyFace
+     */
+    public String getVerifyFace(){
+        return verifyFace;
+    }
+    /**
+     * Setter method for {@link #verifyFace}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to verifyFace
+     */
+    public void setVerifyFace(String newVal){    
+        verifyFace = newVal;
+    }
+
+
+    /**
+     * Getter method for {@link #compareFace}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.compare_face</li>
+     * <li> foreign key: fl_face.md5</li>
+     * <li>comments: 外键,数据库中最相似的对比人脸id</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of compareFace
+     */
+    public String getCompareFace(){
+        return compareFace;
+    }
+    /**
+     * Setter method for {@link #compareFace}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to compareFace
+     */
+    public void setCompareFace(String newVal){    
+        compareFace = newVal;
+    }
+
+
+    /**
+     * Getter method for {@link #similarty}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.similarty</li>
+     * <li>comments: 验证相似度</li>
+     * <li>column size: 22</li>
+     * <li>jdbc type returned by the driver: Types.DOUBLE</li>
+     * </ul>
+     *
+     * @return the value of similarty
+     */
+    public Double getSimilarty(){
+        return similarty;
+    }
+    /**
+     * Setter method for {@link #similarty}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to similarty
+     */
+    public void setSimilarty(Double newVal){    
+        similarty = newVal;
+    }
+
+    /**
+     * Setter method for {@link #similarty}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to similarty
+     */
+    public void setSimilarty(double newVal){
+        setSimilarty(new Double(newVal));
+    }
+
+    /**
+     * Getter method for {@link #verifyTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.verify_time</li>
+     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of verifyTime
+     */
+    public java.util.Date getVerifyTime(){
+        return verifyTime;
+    }
+    /**
+     * Setter method for {@link #verifyTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to verifyTime
+     */
+    public void setVerifyTime(java.util.Date newVal){    
+        verifyTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #verifyTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to verifyTime
+     */
+    public void setVerifyTime(long newVal){
+        setVerifyTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Getter method for {@link #createTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.create_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal){    
+        createTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal){
+        setCreateTime(new java.util.Date(newVal));
     }
 
 
@@ -457,14 +457,14 @@ public class FlLogBeanBase
 
         FlLogBean obj = (FlLogBean) object;
         return new EqualsBuilder()
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getVerifyTime(), obj.getVerifyTime())
-            .append(getSimilarty(), obj.getSimilarty())
-            .append(getCompareFace(), obj.getCompareFace())
-            .append(getVerifyFace(), obj.getVerifyFace())
-            .append(getDeviceId(), obj.getDeviceId())
-            .append(getPersonId(), obj.getPersonId())
             .append(getId(), obj.getId())
+            .append(getPersonId(), obj.getPersonId())
+            .append(getDeviceId(), obj.getDeviceId())
+            .append(getVerifyFace(), obj.getVerifyFace())
+            .append(getCompareFace(), obj.getCompareFace())
+            .append(getSimilarty(), obj.getSimilarty())
+            .append(getVerifyTime(), obj.getVerifyTime())
+            .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
 
@@ -472,28 +472,28 @@ public class FlLogBeanBase
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getCreateTime())
-            .append(getVerifyTime())
-            .append(getSimilarty())
-            .append(getCompareFace())
-            .append(getVerifyFace())
-            .append(getDeviceId())
-            .append(getPersonId())
             .append(getId())
+            .append(getPersonId())
+            .append(getDeviceId())
+            .append(getVerifyFace())
+            .append(getCompareFace())
+            .append(getSimilarty())
+            .append(getVerifyTime())
+            .append(getCreateTime())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("\tverify_time=").append(getVerifyTime()).append("\n")
-            .append("\tsimilarty=").append(getSimilarty()).append("\n")
-            .append("\tcompare_face=").append(getCompareFace()).append("\n")
-            .append("\tverify_face=").append(getVerifyFace()).append("\n")
-            .append("\tdevice_id=").append(getDeviceId()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\tid=").append(getId()).append("\n")
+            .append("\tperson_id=").append(getPersonId()).append("\n")
+            .append("\tdevice_id=").append(getDeviceId()).append("\n")
+            .append("\tverify_face=").append(getVerifyFace()).append("\n")
+            .append("\tcompare_face=").append(getCompareFace()).append("\n")
+            .append("\tsimilarty=").append(getSimilarty()).append("\n")
+            .append("\tverify_time=").append(getVerifyTime()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -501,14 +501,14 @@ public class FlLogBeanBase
     @Override
     public int compareTo(FlLogBean object){
         return new CompareToBuilder()
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getVerifyTime(), object.getVerifyTime())
-            .append(getSimilarty(), object.getSimilarty())
-            .append(getCompareFace(), object.getCompareFace())
-            .append(getVerifyFace(), object.getVerifyFace())
-            .append(getDeviceId(), object.getDeviceId())
-            .append(getPersonId(), object.getPersonId())
             .append(getId(), object.getId())
+            .append(getPersonId(), object.getPersonId())
+            .append(getDeviceId(), object.getDeviceId())
+            .append(getVerifyFace(), object.getVerifyFace())
+            .append(getCompareFace(), object.getCompareFace())
+            .append(getSimilarty(), object.getSimilarty())
+            .append(getVerifyTime(), object.getVerifyTime())
+            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     /**
@@ -523,14 +523,14 @@ public class FlLogBeanBase
             copyIfNotNull(bean);
         }else{        
             isNew(bean.isNew());
-            setCreateTime(bean.getCreateTime());
-            setVerifyTime(bean.getVerifyTime());
-            setSimilarty(bean.getSimilarty());
-            setCompareFace(bean.getCompareFace());
-            setVerifyFace(bean.getVerifyFace());
-            setDeviceId(bean.getDeviceId());
-            setPersonId(bean.getPersonId());
             setId(bean.getId());
+            setPersonId(bean.getPersonId());
+            setDeviceId(bean.getDeviceId());
+            setVerifyFace(bean.getVerifyFace());
+            setCompareFace(bean.getCompareFace());
+            setSimilarty(bean.getSimilarty());
+            setVerifyTime(bean.getVerifyTime());
+            setCreateTime(bean.getCreateTime());
         }
     }
     /**
@@ -542,22 +542,22 @@ public class FlLogBeanBase
     public void copyIfNotNull(FlLogBeanBase bean)
     {
         isNew(bean.isNew());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getVerifyTime()!=null)
-            setVerifyTime(bean.getVerifyTime());
-        if(bean.getSimilarty()!=null)
-            setSimilarty(bean.getSimilarty());
-        if(bean.getCompareFace()!=null)
-            setCompareFace(bean.getCompareFace());
-        if(bean.getVerifyFace()!=null)
-            setVerifyFace(bean.getVerifyFace());
-        if(bean.getDeviceId()!=null)
-            setDeviceId(bean.getDeviceId());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
         if(bean.getId()!=null)
             setId(bean.getId());
+        if(bean.getPersonId()!=null)
+            setPersonId(bean.getPersonId());
+        if(bean.getDeviceId()!=null)
+            setDeviceId(bean.getDeviceId());
+        if(bean.getVerifyFace()!=null)
+            setVerifyFace(bean.getVerifyFace());
+        if(bean.getCompareFace()!=null)
+            setCompareFace(bean.getCompareFace());
+        if(bean.getSimilarty()!=null)
+            setSimilarty(bean.getSimilarty());
+        if(bean.getVerifyTime()!=null)
+            setVerifyTime(bean.getVerifyTime());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
     }
 
     /**
@@ -568,14 +568,14 @@ public class FlLogBeanBase
     public FlLogBeanBase clean()
     {
         isNew(true);
-        setCreateTime(null);
-        setVerifyTime(null);
-        setSimilarty(null);
-        setCompareFace(null);
-        setVerifyFace(null);
-        setDeviceId(null);
-        setPersonId(null);
         setId(null);
+        setPersonId(null);
+        setDeviceId(null);
+        setVerifyFace(null);
+        setCompareFace(null);
+        setSimilarty(null);
+        setVerifyTime(null);
+        setCreateTime(null);
         return this;
     }
     
@@ -638,14 +638,14 @@ public class FlLogBeanBase
     public Map<String,String> readDictionnary()
     {
         Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
-        dictionnary.put("verify_time", getVerifyTime() == null ? "" : getVerifyTime().toString());
-        dictionnary.put("similarty", getSimilarty() == null ? "" : getSimilarty().toString());
-        dictionnary.put("compare_face", getCompareFace() == null ? "" : getCompareFace().toString());
-        dictionnary.put("verify_face", getVerifyFace() == null ? "" : getVerifyFace().toString());
-        dictionnary.put("device_id", getDeviceId() == null ? "" : getDeviceId().toString());
-        dictionnary.put("person_id", getPersonId() == null ? "" : getPersonId().toString());
         dictionnary.put("id", getId() == null ? "" : getId().toString());
+        dictionnary.put("person_id", getPersonId() == null ? "" : getPersonId().toString());
+        dictionnary.put("device_id", getDeviceId() == null ? "" : getDeviceId().toString());
+        dictionnary.put("verify_face", getVerifyFace() == null ? "" : getVerifyFace().toString());
+        dictionnary.put("compare_face", getCompareFace() == null ? "" : getCompareFace().toString());
+        dictionnary.put("similarty", getSimilarty() == null ? "" : getSimilarty().toString());
+        dictionnary.put("verify_time", getVerifyTime() == null ? "" : getVerifyTime().toString());
+        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
         return dictionnary;
     }
 
@@ -666,22 +666,22 @@ public class FlLogBeanBase
     {
         if (null == column || "".equals(column)) {
             return "";
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? "" : getCreateTime().toString();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return getVerifyTime() == null ? "" : getVerifyTime().toString();
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            return getSimilarty() == null ? "" : getSimilarty().toString();
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            return getCompareFace() == null ? "" : getCompareFace().toString();
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            return getVerifyFace() == null ? "" : getVerifyFace().toString();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return getDeviceId() == null ? "" : getDeviceId().toString();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return getPersonId() == null ? "" : getPersonId().toString();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? "" : getId().toString();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return getPersonId() == null ? "" : getPersonId().toString();
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            return getDeviceId() == null ? "" : getDeviceId().toString();
+        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
+            return getVerifyFace() == null ? "" : getVerifyFace().toString();
+        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
+            return getCompareFace() == null ? "" : getCompareFace().toString();
+        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
+            return getSimilarty() == null ? "" : getSimilarty().toString();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return getVerifyTime() == null ? "" : getVerifyTime().toString();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? "" : getCreateTime().toString();
         }
         return "";
     }
@@ -694,22 +694,22 @@ public class FlLogBeanBase
     {
         if (null == column || "".equals(column)) {
             return null;
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? null : (T)getCreateTime();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return getVerifyTime() == null ? null : (T)getVerifyTime();
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            return getSimilarty() == null ? null : (T)getSimilarty();
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            return getCompareFace() == null ? null : (T)getCompareFace();
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            return getVerifyFace() == null ? null : (T)getVerifyFace();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return getDeviceId() == null ? null : (T)getDeviceId();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return getPersonId() == null ? null : (T)getPersonId();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? null : (T)getId();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return getPersonId() == null ? null : (T)getPersonId();
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            return getDeviceId() == null ? null : (T)getDeviceId();
+        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
+            return getVerifyFace() == null ? null : (T)getVerifyFace();
+        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
+            return getCompareFace() == null ? null : (T)getCompareFace();
+        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
+            return getSimilarty() == null ? null : (T)getSimilarty();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return getVerifyTime() == null ? null : (T)getVerifyTime();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? null : (T)getCreateTime();
         }
         return null;
     }
@@ -721,22 +721,22 @@ public class FlLogBeanBase
     {
         if (null == column || "".equals(column)) {
             return ;
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            setCreateTime((java.util.Date)object);
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            setVerifyTime((java.util.Date)object);
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            setSimilarty((Double)object);
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            setCompareFace((String)object);
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            setVerifyFace((String)object);
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            setDeviceId((Integer)object);
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            setPersonId((Integer)object);
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             setId((Integer)object);
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            setPersonId((Integer)object);
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            setDeviceId((Integer)object);
+        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
+            setVerifyFace((String)object);
+        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
+            setCompareFace((String)object);
+        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
+            setSimilarty((Double)object);
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            setVerifyTime((java.util.Date)object);
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            setCreateTime((java.util.Date)object);
         }
     }
 }

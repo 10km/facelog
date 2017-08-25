@@ -23,29 +23,29 @@ public class FlLogBean
 {
 	private static final long serialVersionUID = -1281153514489833773L;
 	
-    private boolean createTimeIsModified = false;
-    private boolean createTimeIsInitialized = false;
-
-    private boolean verifyTimeIsModified = false;
-    private boolean verifyTimeIsInitialized = false;
-
-    private boolean similartyIsModified = false;
-    private boolean similartyIsInitialized = false;
-
-    private boolean compareFaceIsModified = false;
-    private boolean compareFaceIsInitialized = false;
-
-    private boolean verifyFaceIsModified = false;
-    private boolean verifyFaceIsInitialized = false;
-
-    private boolean deviceIdIsModified = false;
-    private boolean deviceIdIsInitialized = false;
+    private boolean idIsModified = false;
+    private boolean idIsInitialized = false;
 
     private boolean personIdIsModified = false;
     private boolean personIdIsInitialized = false;
 
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    private boolean deviceIdIsModified = false;
+    private boolean deviceIdIsInitialized = false;
+
+    private boolean verifyFaceIsModified = false;
+    private boolean verifyFaceIsInitialized = false;
+
+    private boolean compareFaceIsModified = false;
+    private boolean compareFaceIsInitialized = false;
+
+    private boolean similartyIsModified = false;
+    private boolean similartyIsInitialized = false;
+
+    private boolean verifyTimeIsModified = false;
+    private boolean verifyTimeIsInitialized = false;
+
+    private boolean createTimeIsModified = false;
+    private boolean createTimeIsInitialized = false;
 
 
 
@@ -65,401 +65,74 @@ public class FlLogBean
         copy(bean);
     }
     /**
-     * Getter method for createTime.
+     * Getter method for id.
      * <br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.create_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /**
-     * Setter method for createTime.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal)
-    {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && createTimeIsInitialized)) {
-            return;
-        }
-        super.setCreateTime(newVal);
-        createTimeIsModified = true;
-        createTimeIsInitialized = true;
-    }
-
-    /**
-     * Setter method for createTime.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Determines if the createTime has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isCreateTimeModified()
-    {
-        return createTimeIsModified;
-    }
-
-    /**
-     * Determines if the createTime has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isCreateTimeInitialized()
-    {
-        return createTimeIsInitialized;
-    }
-
-    /**
-     * Getter method for verifyTime.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.verify_time</li>
-     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of verifyTime
-     */
-    public java.util.Date getVerifyTime(){
-        return verifyTime;
-    }
-    /**
-     * Setter method for verifyTime.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to verifyTime
-     */
-    public void setVerifyTime(java.util.Date newVal)
-    {
-        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && verifyTimeIsInitialized)) {
-            return;
-        }
-        super.setVerifyTime(newVal);
-        verifyTimeIsModified = true;
-        verifyTimeIsInitialized = true;
-    }
-
-    /**
-     * Setter method for verifyTime.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to verifyTime
-     */
-    public void setVerifyTime(long newVal)
-    {
-        setVerifyTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Determines if the verifyTime has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isVerifyTimeModified()
-    {
-        return verifyTimeIsModified;
-    }
-
-    /**
-     * Determines if the verifyTime has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isVerifyTimeInitialized()
-    {
-        return verifyTimeIsInitialized;
-    }
-
-    /**
-     * Getter method for similarty.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.similarty</li>
-     * <li>comments: 验证相似度</li>
-     * <li>column size: 22</li>
-     * <li>jdbc type returned by the driver: Types.DOUBLE</li>
-     * </ul>
-     *
-     * @return the value of similarty
-     */
-    public Double getSimilarty(){
-        return similarty;
-    }
-    /**
-     * Setter method for similarty.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to similarty
-     */
-    public void setSimilarty(Double newVal)
-    {
-        if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
-            (newVal == null && similarty == null && similartyIsInitialized)) {
-            return;
-        }
-        super.setSimilarty(newVal);
-        similartyIsModified = true;
-        similartyIsInitialized = true;
-    }
-
-    /**
-     * Setter method for similarty.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to similarty
-     */
-    public void setSimilarty(double newVal)
-    {
-        setSimilarty(new Double(newVal));
-    }
-
-    /**
-     * Determines if the similarty has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isSimilartyModified()
-    {
-        return similartyIsModified;
-    }
-
-    /**
-     * Determines if the similarty has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isSimilartyInitialized()
-    {
-        return similartyIsInitialized;
-    }
-
-    /**
-     * Getter method for compareFace.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.compare_face</li>
-     * <li> foreign key: fl_face.md5</li>
-     * <li>comments: 外键,数据库中最相似的对比人脸id</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of compareFace
-     */
-    public String getCompareFace(){
-        return compareFace;
-    }
-    /**
-     * Setter method for compareFace.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to compareFace
-     */
-    public void setCompareFace(String newVal)
-    {
-        if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
-            (newVal == null && compareFace == null && compareFaceIsInitialized)) {
-            return;
-        }
-        super.setCompareFace(newVal);
-        compareFaceIsModified = true;
-        compareFaceIsInitialized = true;
-    }
-
-    /**
-     * Determines if the compareFace has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isCompareFaceModified()
-    {
-        return compareFaceIsModified;
-    }
-
-    /**
-     * Determines if the compareFace has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isCompareFaceInitialized()
-    {
-        return compareFaceIsInitialized;
-    }
-
-    /**
-     * Getter method for verifyFace.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.verify_face</li>
-     * <li> foreign key: fl_face.md5</li>
-     * <li>comments: 外键,验证人脸信息id</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of verifyFace
-     */
-    public String getVerifyFace(){
-        return verifyFace;
-    }
-    /**
-     * Setter method for verifyFace.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to verifyFace
-     */
-    public void setVerifyFace(String newVal)
-    {
-        if ((newVal != null && verifyFace != null && (newVal.compareTo(verifyFace) == 0)) ||
-            (newVal == null && verifyFace == null && verifyFaceIsInitialized)) {
-            return;
-        }
-        super.setVerifyFace(newVal);
-        verifyFaceIsModified = true;
-        verifyFaceIsInitialized = true;
-    }
-
-    /**
-     * Determines if the verifyFace has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isVerifyFaceModified()
-    {
-        return verifyFaceIsModified;
-    }
-
-    /**
-     * Determines if the verifyFace has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isVerifyFaceInitialized()
-    {
-        return verifyFaceIsInitialized;
-    }
-
-    /**
-     * Getter method for deviceId.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log.device_id</li>
-     * <li> foreign key: fl_device.id</li>
-     * <li>comments: 外键,图像来源设备id</li>
+     * <li>full name: fl_log.id</li>
+     * <li>comments: 日志id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of deviceId
+     * @return the value of id
      */
-    public Integer getDeviceId(){
-        return deviceId;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for deviceId.
+     * Setter method for id.
      * <br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value to be assigned to id
      */
-    public void setDeviceId(Integer newVal)
+    public void setId(Integer newVal)
     {
-        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && deviceIdIsInitialized)) {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && idIsInitialized)) {
             return;
         }
-        super.setDeviceId(newVal);
-        deviceIdIsModified = true;
-        deviceIdIsInitialized = true;
+        super.setId(newVal);
+        idIsModified = true;
+        idIsInitialized = true;
     }
 
     /**
-     * Setter method for deviceId.
+     * Setter method for id.
      * <br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value to be assigned to id
      */
-    public void setDeviceId(int newVal)
+    public void setId(int newVal)
     {
-        setDeviceId(new Integer(newVal));
+        setId(new Integer(newVal));
     }
 
     /**
-     * Determines if the deviceId has been modified.
+     * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isDeviceIdModified()
+    public boolean isIdModified()
     {
-        return deviceIdIsModified;
+        return idIsModified;
     }
 
     /**
-     * Determines if the deviceId has been initialized.
+     * Determines if the id has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isDeviceIdInitialized()
+    public boolean isIdInitialized()
     {
-        return deviceIdIsInitialized;
+        return idIsInitialized;
     }
 
     /**
@@ -534,74 +207,401 @@ public class FlLogBean
     }
 
     /**
-     * Getter method for id.
+     * Getter method for deviceId.
      * <br>
-     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.id</li>
-     * <li>comments: 日志id</li>
+     * <li>full name: fl_log.device_id</li>
+     * <li> foreign key: fl_device.id</li>
+     * <li>comments: 外键,图像来源设备id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of id
+     * @return the value of deviceId
      */
-    public Integer getId(){
-        return id;
+    public Integer getDeviceId(){
+        return deviceId;
     }
     /**
-     * Setter method for id.
+     * Setter method for deviceId.
      * <br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to deviceId
      */
-    public void setId(Integer newVal)
+    public void setDeviceId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
+            (newVal == null && deviceId == null && deviceIdIsInitialized)) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        super.setDeviceId(newVal);
+        deviceIdIsModified = true;
+        deviceIdIsInitialized = true;
     }
 
     /**
-     * Setter method for id.
+     * Setter method for deviceId.
      * <br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to deviceId
      */
-    public void setId(int newVal)
+    public void setDeviceId(int newVal)
     {
-        setId(new Integer(newVal));
+        setDeviceId(new Integer(newVal));
     }
 
     /**
-     * Determines if the id has been modified.
+     * Determines if the deviceId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean isDeviceIdModified()
     {
-        return idIsModified;
+        return deviceIdIsModified;
     }
 
     /**
-     * Determines if the id has been initialized.
+     * Determines if the deviceId has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean isDeviceIdInitialized()
     {
-        return idIsInitialized;
+        return deviceIdIsInitialized;
+    }
+
+    /**
+     * Getter method for verifyFace.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.verify_face</li>
+     * <li> foreign key: fl_face.md5</li>
+     * <li>comments: 外键,验证人脸信息id</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of verifyFace
+     */
+    public String getVerifyFace(){
+        return verifyFace;
+    }
+    /**
+     * Setter method for verifyFace.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to verifyFace
+     */
+    public void setVerifyFace(String newVal)
+    {
+        if ((newVal != null && verifyFace != null && (newVal.compareTo(verifyFace) == 0)) ||
+            (newVal == null && verifyFace == null && verifyFaceIsInitialized)) {
+            return;
+        }
+        super.setVerifyFace(newVal);
+        verifyFaceIsModified = true;
+        verifyFaceIsInitialized = true;
+    }
+
+    /**
+     * Determines if the verifyFace has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isVerifyFaceModified()
+    {
+        return verifyFaceIsModified;
+    }
+
+    /**
+     * Determines if the verifyFace has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isVerifyFaceInitialized()
+    {
+        return verifyFaceIsInitialized;
+    }
+
+    /**
+     * Getter method for compareFace.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.compare_face</li>
+     * <li> foreign key: fl_face.md5</li>
+     * <li>comments: 外键,数据库中最相似的对比人脸id</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of compareFace
+     */
+    public String getCompareFace(){
+        return compareFace;
+    }
+    /**
+     * Setter method for compareFace.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to compareFace
+     */
+    public void setCompareFace(String newVal)
+    {
+        if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
+            (newVal == null && compareFace == null && compareFaceIsInitialized)) {
+            return;
+        }
+        super.setCompareFace(newVal);
+        compareFaceIsModified = true;
+        compareFaceIsInitialized = true;
+    }
+
+    /**
+     * Determines if the compareFace has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isCompareFaceModified()
+    {
+        return compareFaceIsModified;
+    }
+
+    /**
+     * Determines if the compareFace has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isCompareFaceInitialized()
+    {
+        return compareFaceIsInitialized;
+    }
+
+    /**
+     * Getter method for similarty.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.similarty</li>
+     * <li>comments: 验证相似度</li>
+     * <li>column size: 22</li>
+     * <li>jdbc type returned by the driver: Types.DOUBLE</li>
+     * </ul>
+     *
+     * @return the value of similarty
+     */
+    public Double getSimilarty(){
+        return similarty;
+    }
+    /**
+     * Setter method for similarty.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to similarty
+     */
+    public void setSimilarty(Double newVal)
+    {
+        if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
+            (newVal == null && similarty == null && similartyIsInitialized)) {
+            return;
+        }
+        super.setSimilarty(newVal);
+        similartyIsModified = true;
+        similartyIsInitialized = true;
+    }
+
+    /**
+     * Setter method for similarty.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to similarty
+     */
+    public void setSimilarty(double newVal)
+    {
+        setSimilarty(new Double(newVal));
+    }
+
+    /**
+     * Determines if the similarty has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isSimilartyModified()
+    {
+        return similartyIsModified;
+    }
+
+    /**
+     * Determines if the similarty has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isSimilartyInitialized()
+    {
+        return similartyIsInitialized;
+    }
+
+    /**
+     * Getter method for verifyTime.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.verify_time</li>
+     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of verifyTime
+     */
+    public java.util.Date getVerifyTime(){
+        return verifyTime;
+    }
+    /**
+     * Setter method for verifyTime.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to verifyTime
+     */
+    public void setVerifyTime(java.util.Date newVal)
+    {
+        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
+            (newVal == null && verifyTime == null && verifyTimeIsInitialized)) {
+            return;
+        }
+        super.setVerifyTime(newVal);
+        verifyTimeIsModified = true;
+        verifyTimeIsInitialized = true;
+    }
+
+    /**
+     * Setter method for verifyTime.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to verifyTime
+     */
+    public void setVerifyTime(long newVal)
+    {
+        setVerifyTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Determines if the verifyTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isVerifyTimeModified()
+    {
+        return verifyTimeIsModified;
+    }
+
+    /**
+     * Determines if the verifyTime has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isVerifyTimeInitialized()
+    {
+        return verifyTimeIsInitialized;
+    }
+
+    /**
+     * Getter method for createTime.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log.create_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for createTime.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && createTimeIsInitialized)) {
+            return;
+        }
+        super.setCreateTime(newVal);
+        createTimeIsModified = true;
+        createTimeIsInitialized = true;
+    }
+
+    /**
+     * Setter method for createTime.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal)
+    {
+        setCreateTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isCreateTimeModified()
+    {
+        return createTimeIsModified;
+    }
+
+    /**
+     * Determines if the createTime has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isCreateTimeInitialized()
+    {
+        return createTimeIsInitialized;
     }
 
 
@@ -615,7 +615,7 @@ public class FlLogBean
      */
     public boolean isModified()
     {
-        return createTimeIsModified 		|| verifyTimeIsModified  		|| similartyIsModified  		|| compareFaceIsModified  		|| verifyFaceIsModified  		|| deviceIdIsModified  		|| personIdIsModified  		|| idIsModified  ;
+        return idIsModified 		|| personIdIsModified  		|| deviceIdIsModified  		|| verifyFaceIsModified  		|| compareFaceIsModified  		|| similartyIsModified  		|| verifyTimeIsModified  		|| createTimeIsModified  ;
     }
     
     /**
@@ -627,22 +627,22 @@ public class FlLogBean
     public boolean isModified(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeModified();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeModified();
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            return isSimilartyModified();
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            return isCompareFaceModified();
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            return isVerifyFaceModified();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return isDeviceIdModified();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdModified();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return isIdModified();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return isPersonIdModified();
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            return isDeviceIdModified();
+        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
+            return isVerifyFaceModified();
+        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
+            return isCompareFaceModified();
+        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
+            return isSimilartyModified();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return isVerifyTimeModified();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return isCreateTimeModified();
         }
         return false;		
     }
@@ -658,22 +658,22 @@ public class FlLogBean
     public boolean isInitialized(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeInitialized();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeInitialized();
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            return isSimilartyInitialized();
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            return isCompareFaceInitialized();
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            return isVerifyFaceInitialized();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return isDeviceIdInitialized();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdInitialized();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return isIdInitialized();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return isPersonIdInitialized();
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            return isDeviceIdInitialized();
+        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
+            return isVerifyFaceInitialized();
+        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
+            return isCompareFaceInitialized();
+        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
+            return isSimilartyInitialized();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return isVerifyTimeInitialized();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return isCreateTimeInitialized();
         }
         return false;		
     }
@@ -683,14 +683,14 @@ public class FlLogBean
      */
     public void resetIsModified()
     {
-        createTimeIsModified = false;
-        verifyTimeIsModified = false;
-        similartyIsModified = false;
-        compareFaceIsModified = false;
-        verifyFaceIsModified = false;
-        deviceIdIsModified = false;
-        personIdIsModified = false;
         idIsModified = false;
+        personIdIsModified = false;
+        deviceIdIsModified = false;
+        verifyFaceIsModified = false;
+        compareFaceIsModified = false;
+        similartyIsModified = false;
+        verifyTimeIsModified = false;
+        createTimeIsModified = false;
     }
 
     /**

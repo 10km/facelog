@@ -23,14 +23,14 @@ public class FlStoreBean
 {
 	private static final long serialVersionUID = 5829422701165052747L;
 	
-    private boolean dataIsModified = false;
-    private boolean dataIsInitialized = false;
+    private boolean md5IsModified = false;
+    private boolean md5IsInitialized = false;
 
     private boolean encodingIsModified = false;
     private boolean encodingIsInitialized = false;
 
-    private boolean md5IsModified = false;
-    private boolean md5IsInitialized = false;
+    private boolean dataIsModified = false;
+    private boolean dataIsInitialized = false;
 
 
 
@@ -50,56 +50,64 @@ public class FlStoreBean
         copy(bean);
     }
     /**
-     * Getter method for data.
+     * Getter method for md5.
      * <br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_store.data</li>
-     * <li>comments: 二进制数据</li>
-     * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
+     * <li>full name: fl_store.md5</li>
+     * <li> imported key: fl_image.md5</li>
+     * <li> imported key: fl_image.thumb_md5</li>
+     * <li>comments: 主键,md5检验码</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of data
+     * @return the value of md5
      */
-    public byte[] getData(){
-        return data;
+    public String getMd5(){
+        return md5;
     }
     /**
-     * Setter method for data.
+     * Setter method for md5.
      * <br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to data
+     * @param newVal the new value to be assigned to md5
      */
-    public void setData(byte[] newVal)
+    public void setMd5(String newVal)
     {
-        super.setData(newVal);
-        dataIsModified = true;
-        dataIsInitialized = true;
+        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
+            (newVal == null && md5 == null && md5IsInitialized)) {
+            return;
+        }
+        super.setMd5(newVal);
+        md5IsModified = true;
+        md5IsInitialized = true;
     }
 
     /**
-     * Determines if the data has been modified.
+     * Determines if the md5 has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isDataModified()
+    public boolean isMd5Modified()
     {
-        return dataIsModified;
+        return md5IsModified;
     }
 
     /**
-     * Determines if the data has been initialized.
+     * Determines if the md5 has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isDataInitialized()
+    public boolean isMd5Initialized()
     {
-        return dataIsInitialized;
+        return md5IsInitialized;
     }
 
     /**
@@ -161,64 +169,56 @@ public class FlStoreBean
     }
 
     /**
-     * Getter method for md5.
+     * Getter method for data.
      * <br>
-     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_store.md5</li>
-     * <li> imported key: fl_image.thumb_md5</li>
-     * <li> imported key: fl_image.md5</li>
-     * <li>comments: 主键,md5检验码</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>full name: fl_store.data</li>
+     * <li>comments: 二进制数据</li>
+     * <li>column size: 65535</li>
+     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
      *
-     * @return the value of md5
+     * @return the value of data
      */
-    public String getMd5(){
-        return md5;
+    public byte[] getData(){
+        return data;
     }
     /**
-     * Setter method for md5.
+     * Setter method for data.
      * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
+     * Attention, there will be no comparison with current value which
+     * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value to be assigned to md5
+     * @param newVal the new value to be assigned to data
      */
-    public void setMd5(String newVal)
+    public void setData(byte[] newVal)
     {
-        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && md5IsInitialized)) {
-            return;
-        }
-        super.setMd5(newVal);
-        md5IsModified = true;
-        md5IsInitialized = true;
+        super.setData(newVal);
+        dataIsModified = true;
+        dataIsInitialized = true;
     }
 
     /**
-     * Determines if the md5 has been modified.
+     * Determines if the data has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMd5Modified()
+    public boolean isDataModified()
     {
-        return md5IsModified;
+        return dataIsModified;
     }
 
     /**
-     * Determines if the md5 has been initialized.
+     * Determines if the data has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMd5Initialized()
+    public boolean isDataInitialized()
     {
-        return md5IsInitialized;
+        return dataIsInitialized;
     }
 
 
@@ -232,7 +232,7 @@ public class FlStoreBean
      */
     public boolean isModified()
     {
-        return dataIsModified 		|| encodingIsModified  		|| md5IsModified  ;
+        return md5IsModified 		|| encodingIsModified  		|| dataIsModified  ;
     }
     
     /**
@@ -244,12 +244,12 @@ public class FlStoreBean
     public boolean isModified(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("data".equalsIgnoreCase(column) || "data".equalsIgnoreCase(column)) {
-            return isDataModified();
-        } else if ("encoding".equalsIgnoreCase(column) || "encoding".equalsIgnoreCase(column)) {
-            return isEncodingModified();
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             return isMd5Modified();
+        } else if ("encoding".equalsIgnoreCase(column) || "encoding".equalsIgnoreCase(column)) {
+            return isEncodingModified();
+        } else if ("data".equalsIgnoreCase(column) || "data".equalsIgnoreCase(column)) {
+            return isDataModified();
         }
         return false;		
     }
@@ -265,12 +265,12 @@ public class FlStoreBean
     public boolean isInitialized(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("data".equalsIgnoreCase(column) || "data".equalsIgnoreCase(column)) {
-            return isDataInitialized();
-        } else if ("encoding".equalsIgnoreCase(column) || "encoding".equalsIgnoreCase(column)) {
-            return isEncodingInitialized();
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             return isMd5Initialized();
+        } else if ("encoding".equalsIgnoreCase(column) || "encoding".equalsIgnoreCase(column)) {
+            return isEncodingInitialized();
+        } else if ("data".equalsIgnoreCase(column) || "data".equalsIgnoreCase(column)) {
+            return isDataInitialized();
         }
         return false;		
     }
@@ -280,9 +280,9 @@ public class FlStoreBean
      */
     public void resetIsModified()
     {
-        dataIsModified = false;
-        encodingIsModified = false;
         md5IsModified = false;
+        encodingIsModified = false;
+        dataIsModified = false;
     }
 
     /**

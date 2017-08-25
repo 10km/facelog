@@ -23,26 +23,26 @@ public class FlDeviceBean
 {
 	private static final long serialVersionUID = -5067890216116245608L;
 	
-    private boolean updateTimeIsModified = false;
-    private boolean updateTimeIsInitialized = false;
-
-    private boolean createTimeIsModified = false;
-    private boolean createTimeIsInitialized = false;
-
-    private boolean versionIsModified = false;
-    private boolean versionIsInitialized = false;
-
-    private boolean groupIdIsModified = false;
-    private boolean groupIdIsInitialized = false;
-
-    private boolean onlineIsModified = false;
-    private boolean onlineIsInitialized = false;
+    private boolean idIsModified = false;
+    private boolean idIsInitialized = false;
 
     private boolean nameIsModified = false;
     private boolean nameIsInitialized = false;
 
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    private boolean onlineIsModified = false;
+    private boolean onlineIsInitialized = false;
+
+    private boolean groupIdIsModified = false;
+    private boolean groupIdIsInitialized = false;
+
+    private boolean versionIsModified = false;
+    private boolean versionIsInitialized = false;
+
+    private boolean createTimeIsModified = false;
+    private boolean createTimeIsInitialized = false;
+
+    private boolean updateTimeIsModified = false;
+    private boolean updateTimeIsInitialized = false;
 
 
 
@@ -62,269 +62,134 @@ public class FlDeviceBean
         copy(bean);
     }
     /**
-     * Getter method for updateTime.
+     * Getter method for id.
      * <br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device.update_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of updateTime
-     */
-    public java.util.Date getUpdateTime(){
-        return updateTime;
-    }
-    /**
-     * Setter method for updateTime.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(java.util.Date newVal)
-    {
-        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && updateTimeIsInitialized)) {
-            return;
-        }
-        super.setUpdateTime(newVal);
-        updateTimeIsModified = true;
-        updateTimeIsInitialized = true;
-    }
-
-    /**
-     * Setter method for updateTime.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(long newVal)
-    {
-        setUpdateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Determines if the updateTime has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isUpdateTimeModified()
-    {
-        return updateTimeIsModified;
-    }
-
-    /**
-     * Determines if the updateTime has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isUpdateTimeInitialized()
-    {
-        return updateTimeIsInitialized;
-    }
-
-    /**
-     * Getter method for createTime.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.create_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /**
-     * Setter method for createTime.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal)
-    {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && createTimeIsInitialized)) {
-            return;
-        }
-        super.setCreateTime(newVal);
-        createTimeIsModified = true;
-        createTimeIsInitialized = true;
-    }
-
-    /**
-     * Setter method for createTime.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal)
-    {
-        setCreateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Determines if the createTime has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isCreateTimeModified()
-    {
-        return createTimeIsModified;
-    }
-
-    /**
-     * Determines if the createTime has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isCreateTimeInitialized()
-    {
-        return createTimeIsInitialized;
-    }
-
-    /**
-     * Getter method for version.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.version</li>
-     * <li>comments: 设备版本号</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of version
-     */
-    public String getVersion(){
-        return version;
-    }
-    /**
-     * Setter method for version.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to version
-     */
-    public void setVersion(String newVal)
-    {
-        if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
-            (newVal == null && version == null && versionIsInitialized)) {
-            return;
-        }
-        super.setVersion(newVal);
-        versionIsModified = true;
-        versionIsInitialized = true;
-    }
-
-    /**
-     * Determines if the version has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isVersionModified()
-    {
-        return versionIsModified;
-    }
-
-    /**
-     * Determines if the version has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isVersionInitialized()
-    {
-        return versionIsInitialized;
-    }
-
-    /**
-     * Getter method for groupId.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.group_id</li>
-     * <li>comments: 设备所属组id</li>
+     * <li>full name: fl_device.id</li>
+     * <li> imported key: fl_log.device_id</li>
+     * <li> imported key: fl_image.device_id</li>
+     * <li>comments: 设备id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of groupId
+     * @return the value of id
      */
-    public Integer getGroupId(){
-        return groupId;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for groupId.
+     * Setter method for id.
      * <br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value to be assigned to id
      */
-    public void setGroupId(Integer newVal)
+    public void setId(Integer newVal)
     {
-        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && groupIdIsInitialized)) {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && idIsInitialized)) {
             return;
         }
-        super.setGroupId(newVal);
-        groupIdIsModified = true;
-        groupIdIsInitialized = true;
+        super.setId(newVal);
+        idIsModified = true;
+        idIsInitialized = true;
     }
 
     /**
-     * Setter method for groupId.
+     * Setter method for id.
      * <br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value to be assigned to id
      */
-    public void setGroupId(int newVal)
+    public void setId(int newVal)
     {
-        setGroupId(new Integer(newVal));
+        setId(new Integer(newVal));
     }
 
     /**
-     * Determines if the groupId has been modified.
+     * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isGroupIdModified()
+    public boolean isIdModified()
     {
-        return groupIdIsModified;
+        return idIsModified;
     }
 
     /**
-     * Determines if the groupId has been initialized.
+     * Determines if the id has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isGroupIdInitialized()
+    public boolean isIdInitialized()
     {
-        return groupIdIsInitialized;
+        return idIsInitialized;
+    }
+
+    /**
+     * Getter method for name.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.name</li>
+     * <li>comments: 设备名称</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of name
+     */
+    public String getName(){
+        return name;
+    }
+    /**
+     * Setter method for name.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to name
+     */
+    public void setName(String newVal)
+    {
+        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
+            (newVal == null && name == null && nameIsInitialized)) {
+            return;
+        }
+        super.setName(newVal);
+        nameIsModified = true;
+        nameIsInitialized = true;
+    }
+
+    /**
+     * Determines if the name has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isNameModified()
+    {
+        return nameIsModified;
+    }
+
+    /**
+     * Determines if the name has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isNameInitialized()
+    {
+        return nameIsInitialized;
     }
 
     /**
@@ -398,134 +263,269 @@ public class FlDeviceBean
     }
 
     /**
-     * Getter method for name.
+     * Getter method for groupId.
      * <br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device.name</li>
-     * <li>comments: 设备名称</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of name
-     */
-    public String getName(){
-        return name;
-    }
-    /**
-     * Setter method for name.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to name
-     */
-    public void setName(String newVal)
-    {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && nameIsInitialized)) {
-            return;
-        }
-        super.setName(newVal);
-        nameIsModified = true;
-        nameIsInitialized = true;
-    }
-
-    /**
-     * Determines if the name has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isNameModified()
-    {
-        return nameIsModified;
-    }
-
-    /**
-     * Determines if the name has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isNameInitialized()
-    {
-        return nameIsInitialized;
-    }
-
-    /**
-     * Getter method for id.
-     * <br>
-     * PRIMARY KEY.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.id</li>
-     * <li> imported key: fl_image.device_id</li>
-     * <li> imported key: fl_log.device_id</li>
-     * <li>comments: 设备id</li>
+     * <li>full name: fl_device.group_id</li>
+     * <li>comments: 设备所属组id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of id
+     * @return the value of groupId
      */
-    public Integer getId(){
-        return id;
+    public Integer getGroupId(){
+        return groupId;
     }
     /**
-     * Setter method for id.
+     * Setter method for groupId.
      * <br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to groupId
      */
-    public void setId(Integer newVal)
+    public void setGroupId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
+            (newVal == null && groupId == null && groupIdIsInitialized)) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        super.setGroupId(newVal);
+        groupIdIsModified = true;
+        groupIdIsInitialized = true;
     }
 
     /**
-     * Setter method for id.
+     * Setter method for groupId.
      * <br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to groupId
      */
-    public void setId(int newVal)
+    public void setGroupId(int newVal)
     {
-        setId(new Integer(newVal));
+        setGroupId(new Integer(newVal));
     }
 
     /**
-     * Determines if the id has been modified.
+     * Determines if the groupId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean isGroupIdModified()
     {
-        return idIsModified;
+        return groupIdIsModified;
     }
 
     /**
-     * Determines if the id has been initialized.
+     * Determines if the groupId has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean isGroupIdInitialized()
     {
-        return idIsInitialized;
+        return groupIdIsInitialized;
+    }
+
+    /**
+     * Getter method for version.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.version</li>
+     * <li>comments: 设备版本号</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of version
+     */
+    public String getVersion(){
+        return version;
+    }
+    /**
+     * Setter method for version.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to version
+     */
+    public void setVersion(String newVal)
+    {
+        if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
+            (newVal == null && version == null && versionIsInitialized)) {
+            return;
+        }
+        super.setVersion(newVal);
+        versionIsModified = true;
+        versionIsInitialized = true;
+    }
+
+    /**
+     * Determines if the version has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isVersionModified()
+    {
+        return versionIsModified;
+    }
+
+    /**
+     * Determines if the version has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isVersionInitialized()
+    {
+        return versionIsInitialized;
+    }
+
+    /**
+     * Getter method for createTime.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.create_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for createTime.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && createTimeIsInitialized)) {
+            return;
+        }
+        super.setCreateTime(newVal);
+        createTimeIsModified = true;
+        createTimeIsInitialized = true;
+    }
+
+    /**
+     * Setter method for createTime.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal)
+    {
+        setCreateTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isCreateTimeModified()
+    {
+        return createTimeIsModified;
+    }
+
+    /**
+     * Determines if the createTime has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isCreateTimeInitialized()
+    {
+        return createTimeIsInitialized;
+    }
+
+    /**
+     * Getter method for updateTime.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.update_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of updateTime
+     */
+    public java.util.Date getUpdateTime(){
+        return updateTime;
+    }
+    /**
+     * Setter method for updateTime.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
+            (newVal == null && updateTime == null && updateTimeIsInitialized)) {
+            return;
+        }
+        super.setUpdateTime(newVal);
+        updateTimeIsModified = true;
+        updateTimeIsInitialized = true;
+    }
+
+    /**
+     * Setter method for updateTime.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(long newVal)
+    {
+        setUpdateTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Determines if the updateTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isUpdateTimeModified()
+    {
+        return updateTimeIsModified;
+    }
+
+    /**
+     * Determines if the updateTime has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isUpdateTimeInitialized()
+    {
+        return updateTimeIsInitialized;
     }
 
 
@@ -539,7 +539,7 @@ public class FlDeviceBean
      */
     public boolean isModified()
     {
-        return updateTimeIsModified 		|| createTimeIsModified  		|| versionIsModified  		|| groupIdIsModified  		|| onlineIsModified  		|| nameIsModified  		|| idIsModified  ;
+        return idIsModified 		|| nameIsModified  		|| onlineIsModified  		|| groupIdIsModified  		|| versionIsModified  		|| createTimeIsModified  		|| updateTimeIsModified  ;
     }
     
     /**
@@ -551,20 +551,20 @@ public class FlDeviceBean
     public boolean isModified(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return isUpdateTimeModified();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeModified();
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            return isVersionModified();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return isGroupIdModified();
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            return isOnlineModified();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameModified();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return isIdModified();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return isNameModified();
+        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
+            return isOnlineModified();
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            return isGroupIdModified();
+        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
+            return isVersionModified();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return isCreateTimeModified();
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            return isUpdateTimeModified();
         }
         return false;		
     }
@@ -580,20 +580,20 @@ public class FlDeviceBean
     public boolean isInitialized(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return isUpdateTimeInitialized();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeInitialized();
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            return isVersionInitialized();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return isGroupIdInitialized();
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            return isOnlineInitialized();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameInitialized();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return isIdInitialized();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return isNameInitialized();
+        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
+            return isOnlineInitialized();
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            return isGroupIdInitialized();
+        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
+            return isVersionInitialized();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return isCreateTimeInitialized();
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            return isUpdateTimeInitialized();
         }
         return false;		
     }
@@ -603,13 +603,13 @@ public class FlDeviceBean
      */
     public void resetIsModified()
     {
-        updateTimeIsModified = false;
-        createTimeIsModified = false;
-        versionIsModified = false;
-        groupIdIsModified = false;
-        onlineIsModified = false;
-        nameIsModified = false;
         idIsModified = false;
+        nameIsModified = false;
+        onlineIsModified = false;
+        groupIdIsModified = false;
+        versionIsModified = false;
+        createTimeIsModified = false;
+        updateTimeIsModified = false;
     }
 
     /**

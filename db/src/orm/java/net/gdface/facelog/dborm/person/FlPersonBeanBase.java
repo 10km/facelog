@@ -28,49 +28,10 @@ public class FlPersonBeanBase
 {
 	private static final long serialVersionUID = 7495075959879601994L;
 	
-    protected java.util.Date updateTime;
-
-    protected java.util.Date createTime;
-
     /**
-     * comments:验证有效期限(超过期限不能通过验证),为NULL永久有效
+     * comments:用户识别码
      */
-    protected java.util.Date expiryDate;
-
-    /**
-     * comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新
-     */
-    protected String faceMd5;
-
-    /**
-     * comments:用户默认照片(证件照,标准照)的md5校验码,外键
-     */
-    protected String photoId;
-
-    /**
-     * comments:证件号码
-     */
-    protected String papersNum;
-
-    /**
-     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-     */
-    protected Integer papersType;
-
-    /**
-     * comments:出生日期
-     */
-    protected java.util.Date birthdate;
-
-    /**
-     * comments:性别,0:女,1:男
-     */
-    protected Integer sex;
-
-    /**
-     * comments:姓名
-     */
-    protected String name;
+    protected Integer id;
 
     /**
      * comments:用户所属组id
@@ -78,9 +39,48 @@ public class FlPersonBeanBase
     protected Integer groupId;
 
     /**
-     * comments:用户识别码
+     * comments:姓名
      */
-    protected Integer id;
+    protected String name;
+
+    /**
+     * comments:性别,0:女,1:男
+     */
+    protected Integer sex;
+
+    /**
+     * comments:出生日期
+     */
+    protected java.util.Date birthdate;
+
+    /**
+     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
+     */
+    protected Integer papersType;
+
+    /**
+     * comments:证件号码
+     */
+    protected String papersNum;
+
+    /**
+     * comments:用户默认照片(证件照,标准照)的md5校验码,外键
+     */
+    protected String photoId;
+
+    /**
+     * comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新
+     */
+    protected String faceMd5;
+
+    /**
+     * comments:验证有效期限(超过期限不能通过验证),为NULL永久有效
+     */
+    protected java.util.Date expiryDate;
+
+    protected java.util.Date createTime;
+
+    protected java.util.Date updateTime;
 
     private boolean _isNew = true;
     /**
@@ -125,234 +125,145 @@ public class FlPersonBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for {@link #updateTime}.<br>
+     * Getter method for {@link #id}.<br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.update_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of updateTime
-     */
-    public java.util.Date getUpdateTime(){
-        return updateTime;
-    }
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(java.util.Date newVal){    
-        updateTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(long newVal){
-        setUpdateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #createTime}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_person.create_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal){    
-        createTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal){
-        setCreateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #expiryDate}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_person.expiry_date</li>
-     * <li>comments: 验证有效期限(超过期限不能通过验证),为NULL永久有效</li>
+     * <li>full name: fl_person.id</li>
+     * <li> imported key: fl_face.person_id</li>
+     * <li> imported key: fl_log.person_id</li>
+     * <li>comments: 用户识别码</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.DATE</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of expiryDate
+     * @return the value of id
      */
-    public java.util.Date getExpiryDate(){
-        return expiryDate;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for {@link #expiryDate}.<br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to expiryDate
+     * @param newVal the new value to be assigned to id
      */
-    public void setExpiryDate(java.util.Date newVal){    
-        expiryDate = newVal;
+    public void setId(Integer newVal){    
+        id = newVal;
     }
 
     /**
-     * Setter method for {@link #expiryDate}.<br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to expiryDate
+     * @param newVal the new value to be assigned to id
      */
-    public void setExpiryDate(long newVal){
-        setExpiryDate(new java.util.Date(newVal));
+    public void setId(int newVal){
+        setId(new Integer(newVal));
     }
 
     /**
-     * Getter method for {@link #faceMd5}.<br>
+     * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.face_md5</li>
-     * <li>comments: 从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>full name: fl_person.group_id</li>
+     * <li>comments: 用户所属组id</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of faceMd5
+     * @return the value of groupId
      */
-    public String getFaceMd5(){
-        return faceMd5;
+    public Integer getGroupId(){
+        return groupId;
     }
     /**
-     * Setter method for {@link #faceMd5}.<br>
+     * Setter method for {@link #groupId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceMd5
+     * @param newVal the new value to be assigned to groupId
      */
-    public void setFaceMd5(String newVal){    
-        faceMd5 = newVal;
+    public void setGroupId(Integer newVal){    
+        groupId = newVal;
     }
 
+    /**
+     * Setter method for {@link #groupId}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to groupId
+     */
+    public void setGroupId(int newVal){
+        setGroupId(new Integer(newVal));
+    }
 
     /**
-     * Getter method for {@link #photoId}.<br>
+     * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.photo_id</li>
-     * <li> foreign key: fl_image.md5</li>
-     * <li>comments: 用户默认照片(证件照,标准照)的md5校验码,外键</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
-     * </ul>
-     *
-     * @return the value of photoId
-     */
-    public String getPhotoId(){
-        return photoId;
-    }
-    /**
-     * Setter method for {@link #photoId}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to photoId
-     */
-    public void setPhotoId(String newVal){    
-        photoId = newVal;
-    }
-
-
-    /**
-     * Getter method for {@link #papersNum}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_person.papers_num</li>
-     * <li>comments: 证件号码</li>
+     * <li>full name: fl_person.name</li>
+     * <li>comments: 姓名</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of papersNum
+     * @return the value of name
      */
-    public String getPapersNum(){
-        return papersNum;
+    public String getName(){
+        return name;
     }
     /**
-     * Setter method for {@link #papersNum}.<br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersNum
+     * @param newVal the new value to be assigned to name
      */
-    public void setPapersNum(String newVal){    
-        papersNum = newVal;
+    public void setName(String newVal){    
+        name = newVal;
     }
 
 
     /**
-     * Getter method for {@link #papersType}.<br>
+     * Getter method for {@link #sex}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.papers_type</li>
-     * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
+     * <li>full name: fl_person.sex</li>
+     * <li>comments: 性别,0:女,1:男</li>
      * <li>column size: 3</li>
      * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
-     * @return the value of papersType
+     * @return the value of sex
      */
-    public Integer getPapersType(){
-        return papersType;
+    public Integer getSex(){
+        return sex;
     }
     /**
-     * Setter method for {@link #papersType}.<br>
+     * Setter method for {@link #sex}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersType
+     * @param newVal the new value to be assigned to sex
      */
-    public void setPapersType(Integer newVal){    
-        papersType = newVal;
+    public void setSex(Integer newVal){    
+        sex = newVal;
     }
 
     /**
-     * Setter method for {@link #papersType}.<br>
+     * Setter method for {@link #sex}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to papersType
+     * @param newVal the new value to be assigned to sex
      */
-    public void setPapersType(int newVal){
-        setPapersType(new Integer(newVal));
+    public void setSex(int newVal){
+        setSex(new Integer(newVal));
     }
 
     /**
@@ -393,145 +304,234 @@ public class FlPersonBeanBase
     }
 
     /**
-     * Getter method for {@link #sex}.<br>
+     * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.sex</li>
-     * <li>comments: 性别,0:女,1:男</li>
+     * <li>full name: fl_person.papers_type</li>
+     * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
      * <li>column size: 3</li>
      * <li>jdbc type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
-     * @return the value of sex
+     * @return the value of papersType
      */
-    public Integer getSex(){
-        return sex;
+    public Integer getPapersType(){
+        return papersType;
     }
     /**
-     * Setter method for {@link #sex}.<br>
+     * Setter method for {@link #papersType}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to sex
+     * @param newVal the new value to be assigned to papersType
      */
-    public void setSex(Integer newVal){    
-        sex = newVal;
+    public void setPapersType(Integer newVal){    
+        papersType = newVal;
     }
 
     /**
-     * Setter method for {@link #sex}.<br>
+     * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to sex
+     * @param newVal the new value to be assigned to papersType
      */
-    public void setSex(int newVal){
-        setSex(new Integer(newVal));
+    public void setPapersType(int newVal){
+        setPapersType(new Integer(newVal));
     }
 
     /**
-     * Getter method for {@link #name}.<br>
+     * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.name</li>
-     * <li>comments: 姓名</li>
+     * <li>full name: fl_person.papers_num</li>
+     * <li>comments: 证件号码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of name
+     * @return the value of papersNum
      */
-    public String getName(){
-        return name;
+    public String getPapersNum(){
+        return papersNum;
     }
     /**
-     * Setter method for {@link #name}.<br>
+     * Setter method for {@link #papersNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to name
+     * @param newVal the new value to be assigned to papersNum
      */
-    public void setName(String newVal){    
-        name = newVal;
+    public void setPapersNum(String newVal){    
+        papersNum = newVal;
     }
 
 
     /**
-     * Getter method for {@link #groupId}.<br>
+     * Getter method for {@link #photoId}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.group_id</li>
-     * <li>comments: 用户所属组id</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>full name: fl_person.photo_id</li>
+     * <li> foreign key: fl_image.md5</li>
+     * <li>comments: 用户默认照片(证件照,标准照)的md5校验码,外键</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of groupId
+     * @return the value of photoId
      */
-    public Integer getGroupId(){
-        return groupId;
+    public String getPhotoId(){
+        return photoId;
     }
     /**
-     * Setter method for {@link #groupId}.<br>
+     * Setter method for {@link #photoId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value to be assigned to photoId
      */
-    public void setGroupId(Integer newVal){    
-        groupId = newVal;
+    public void setPhotoId(String newVal){    
+        photoId = newVal;
     }
 
-    /**
-     * Setter method for {@link #groupId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to groupId
-     */
-    public void setGroupId(int newVal){
-        setGroupId(new Integer(newVal));
-    }
 
     /**
-     * Getter method for {@link #id}.<br>
-     * PRIMARY KEY.<br>
+     * Getter method for {@link #faceMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.id</li>
-     * <li> imported key: fl_face.person_id</li>
-     * <li> imported key: fl_log.person_id</li>
-     * <li>comments: 用户识别码</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>full name: fl_person.face_md5</li>
+     * <li>comments: 从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of id
+     * @return the value of faceMd5
      */
-    public Integer getId(){
-        return id;
+    public String getFaceMd5(){
+        return faceMd5;
     }
     /**
-     * Setter method for {@link #id}.<br>
+     * Setter method for {@link #faceMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to faceMd5
      */
-    public void setId(Integer newVal){    
-        id = newVal;
+    public void setFaceMd5(String newVal){    
+        faceMd5 = newVal;
+    }
+
+
+    /**
+     * Getter method for {@link #expiryDate}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.expiry_date</li>
+     * <li>comments: 验证有效期限(超过期限不能通过验证),为NULL永久有效</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.DATE</li>
+     * </ul>
+     *
+     * @return the value of expiryDate
+     */
+    public java.util.Date getExpiryDate(){
+        return expiryDate;
+    }
+    /**
+     * Setter method for {@link #expiryDate}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to expiryDate
+     */
+    public void setExpiryDate(java.util.Date newVal){    
+        expiryDate = newVal;
     }
 
     /**
-     * Setter method for {@link #id}.<br>
+     * Setter method for {@link #expiryDate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to expiryDate
      */
-    public void setId(int newVal){
-        setId(new Integer(newVal));
+    public void setExpiryDate(long newVal){
+        setExpiryDate(new java.util.Date(newVal));
+    }
+
+    /**
+     * Getter method for {@link #createTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.create_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal){    
+        createTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal){
+        setCreateTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Getter method for {@link #updateTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.update_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of updateTime
+     */
+    public java.util.Date getUpdateTime(){
+        return updateTime;
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(java.util.Date newVal){    
+        updateTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(long newVal){
+        setUpdateTime(new java.util.Date(newVal));
     }
 
 
@@ -561,18 +561,18 @@ public class FlPersonBeanBase
 
         FlPersonBean obj = (FlPersonBean) object;
         return new EqualsBuilder()
-            .append(getUpdateTime(), obj.getUpdateTime())
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getExpiryDate(), obj.getExpiryDate())
-            .append(getFaceMd5(), obj.getFaceMd5())
-            .append(getPhotoId(), obj.getPhotoId())
-            .append(getPapersNum(), obj.getPapersNum())
-            .append(getPapersType(), obj.getPapersType())
-            .append(getBirthdate(), obj.getBirthdate())
-            .append(getSex(), obj.getSex())
-            .append(getName(), obj.getName())
-            .append(getGroupId(), obj.getGroupId())
             .append(getId(), obj.getId())
+            .append(getGroupId(), obj.getGroupId())
+            .append(getName(), obj.getName())
+            .append(getSex(), obj.getSex())
+            .append(getBirthdate(), obj.getBirthdate())
+            .append(getPapersType(), obj.getPapersType())
+            .append(getPapersNum(), obj.getPapersNum())
+            .append(getPhotoId(), obj.getPhotoId())
+            .append(getFaceMd5(), obj.getFaceMd5())
+            .append(getExpiryDate(), obj.getExpiryDate())
+            .append(getCreateTime(), obj.getCreateTime())
+            .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
     }
 
@@ -580,36 +580,36 @@ public class FlPersonBeanBase
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getUpdateTime())
-            .append(getCreateTime())
-            .append(getExpiryDate())
-            .append(getFaceMd5())
-            .append(getPhotoId())
-            .append(getPapersNum())
-            .append(getPapersType())
-            .append(getBirthdate())
-            .append(getSex())
-            .append(getName())
-            .append(getGroupId())
             .append(getId())
+            .append(getGroupId())
+            .append(getName())
+            .append(getSex())
+            .append(getBirthdate())
+            .append(getPapersType())
+            .append(getPapersNum())
+            .append(getPhotoId())
+            .append(getFaceMd5())
+            .append(getExpiryDate())
+            .append(getCreateTime())
+            .append(getUpdateTime())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("\texpiry_date=").append(getExpiryDate()).append("\n")
-            .append("\tface_md5=").append(getFaceMd5()).append("\n")
-            .append("\tphoto_id=").append(getPhotoId()).append("\n")
-            .append("\tpapers_num=").append(getPapersNum()).append("\n")
-            .append("\tpapers_type=").append(getPapersType()).append("\n")
-            .append("\tbirthdate=").append(getBirthdate()).append("\n")
-            .append("\tsex=").append(getSex()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
-            .append("\tgroup_id=").append(getGroupId()).append("\n")
             .append("\tid=").append(getId()).append("\n")
+            .append("\tgroup_id=").append(getGroupId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
+            .append("\tsex=").append(getSex()).append("\n")
+            .append("\tbirthdate=").append(getBirthdate()).append("\n")
+            .append("\tpapers_type=").append(getPapersType()).append("\n")
+            .append("\tpapers_num=").append(getPapersNum()).append("\n")
+            .append("\tphoto_id=").append(getPhotoId()).append("\n")
+            .append("\tface_md5=").append(getFaceMd5()).append("\n")
+            .append("\texpiry_date=").append(getExpiryDate()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -617,18 +617,18 @@ public class FlPersonBeanBase
     @Override
     public int compareTo(FlPersonBean object){
         return new CompareToBuilder()
-            .append(getUpdateTime(), object.getUpdateTime())
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getExpiryDate(), object.getExpiryDate())
-            .append(getFaceMd5(), object.getFaceMd5())
-            .append(getPhotoId(), object.getPhotoId())
-            .append(getPapersNum(), object.getPapersNum())
-            .append(getPapersType(), object.getPapersType())
-            .append(getBirthdate(), object.getBirthdate())
-            .append(getSex(), object.getSex())
-            .append(getName(), object.getName())
-            .append(getGroupId(), object.getGroupId())
             .append(getId(), object.getId())
+            .append(getGroupId(), object.getGroupId())
+            .append(getName(), object.getName())
+            .append(getSex(), object.getSex())
+            .append(getBirthdate(), object.getBirthdate())
+            .append(getPapersType(), object.getPapersType())
+            .append(getPapersNum(), object.getPapersNum())
+            .append(getPhotoId(), object.getPhotoId())
+            .append(getFaceMd5(), object.getFaceMd5())
+            .append(getExpiryDate(), object.getExpiryDate())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     /**
@@ -643,18 +643,18 @@ public class FlPersonBeanBase
             copyIfNotNull(bean);
         }else{        
             isNew(bean.isNew());
-            setUpdateTime(bean.getUpdateTime());
-            setCreateTime(bean.getCreateTime());
-            setExpiryDate(bean.getExpiryDate());
-            setFaceMd5(bean.getFaceMd5());
-            setPhotoId(bean.getPhotoId());
-            setPapersNum(bean.getPapersNum());
-            setPapersType(bean.getPapersType());
-            setBirthdate(bean.getBirthdate());
-            setSex(bean.getSex());
-            setName(bean.getName());
-            setGroupId(bean.getGroupId());
             setId(bean.getId());
+            setGroupId(bean.getGroupId());
+            setName(bean.getName());
+            setSex(bean.getSex());
+            setBirthdate(bean.getBirthdate());
+            setPapersType(bean.getPapersType());
+            setPapersNum(bean.getPapersNum());
+            setPhotoId(bean.getPhotoId());
+            setFaceMd5(bean.getFaceMd5());
+            setExpiryDate(bean.getExpiryDate());
+            setCreateTime(bean.getCreateTime());
+            setUpdateTime(bean.getUpdateTime());
         }
     }
     /**
@@ -666,30 +666,30 @@ public class FlPersonBeanBase
     public void copyIfNotNull(FlPersonBeanBase bean)
     {
         isNew(bean.isNew());
-        if(bean.getUpdateTime()!=null)
-            setUpdateTime(bean.getUpdateTime());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getExpiryDate()!=null)
-            setExpiryDate(bean.getExpiryDate());
-        if(bean.getFaceMd5()!=null)
-            setFaceMd5(bean.getFaceMd5());
-        if(bean.getPhotoId()!=null)
-            setPhotoId(bean.getPhotoId());
-        if(bean.getPapersNum()!=null)
-            setPapersNum(bean.getPapersNum());
-        if(bean.getPapersType()!=null)
-            setPapersType(bean.getPapersType());
-        if(bean.getBirthdate()!=null)
-            setBirthdate(bean.getBirthdate());
-        if(bean.getSex()!=null)
-            setSex(bean.getSex());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getGroupId()!=null)
-            setGroupId(bean.getGroupId());
         if(bean.getId()!=null)
             setId(bean.getId());
+        if(bean.getGroupId()!=null)
+            setGroupId(bean.getGroupId());
+        if(bean.getName()!=null)
+            setName(bean.getName());
+        if(bean.getSex()!=null)
+            setSex(bean.getSex());
+        if(bean.getBirthdate()!=null)
+            setBirthdate(bean.getBirthdate());
+        if(bean.getPapersType()!=null)
+            setPapersType(bean.getPapersType());
+        if(bean.getPapersNum()!=null)
+            setPapersNum(bean.getPapersNum());
+        if(bean.getPhotoId()!=null)
+            setPhotoId(bean.getPhotoId());
+        if(bean.getFaceMd5()!=null)
+            setFaceMd5(bean.getFaceMd5());
+        if(bean.getExpiryDate()!=null)
+            setExpiryDate(bean.getExpiryDate());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
+        if(bean.getUpdateTime()!=null)
+            setUpdateTime(bean.getUpdateTime());
     }
 
     /**
@@ -700,18 +700,18 @@ public class FlPersonBeanBase
     public FlPersonBeanBase clean()
     {
         isNew(true);
-        setUpdateTime(null);
-        setCreateTime(null);
-        setExpiryDate(null);
-        setFaceMd5(null);
-        setPhotoId(null);
-        setPapersNum(null);
-        setPapersType(null);
-        setBirthdate(null);
-        setSex(null);
-        setName(null);
-        setGroupId(null);
         setId(null);
+        setGroupId(null);
+        setName(null);
+        setSex(null);
+        setBirthdate(null);
+        setPapersType(null);
+        setPapersNum(null);
+        setPhotoId(null);
+        setFaceMd5(null);
+        setExpiryDate(null);
+        setCreateTime(null);
+        setUpdateTime(null);
         return this;
     }
     
@@ -774,18 +774,18 @@ public class FlPersonBeanBase
     public Map<String,String> readDictionnary()
     {
         Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("update_time", getUpdateTime() == null ? "" : getUpdateTime().toString());
-        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
-        dictionnary.put("expiry_date", getExpiryDate() == null ? "" : getExpiryDate().toString());
-        dictionnary.put("face_md5", getFaceMd5() == null ? "" : getFaceMd5().toString());
-        dictionnary.put("photo_id", getPhotoId() == null ? "" : getPhotoId().toString());
-        dictionnary.put("papers_num", getPapersNum() == null ? "" : getPapersNum().toString());
-        dictionnary.put("papers_type", getPapersType() == null ? "" : getPapersType().toString());
-        dictionnary.put("birthdate", getBirthdate() == null ? "" : getBirthdate().toString());
-        dictionnary.put("sex", getSex() == null ? "" : getSex().toString());
-        dictionnary.put("name", getName() == null ? "" : getName().toString());
-        dictionnary.put("group_id", getGroupId() == null ? "" : getGroupId().toString());
         dictionnary.put("id", getId() == null ? "" : getId().toString());
+        dictionnary.put("group_id", getGroupId() == null ? "" : getGroupId().toString());
+        dictionnary.put("name", getName() == null ? "" : getName().toString());
+        dictionnary.put("sex", getSex() == null ? "" : getSex().toString());
+        dictionnary.put("birthdate", getBirthdate() == null ? "" : getBirthdate().toString());
+        dictionnary.put("papers_type", getPapersType() == null ? "" : getPapersType().toString());
+        dictionnary.put("papers_num", getPapersNum() == null ? "" : getPapersNum().toString());
+        dictionnary.put("photo_id", getPhotoId() == null ? "" : getPhotoId().toString());
+        dictionnary.put("face_md5", getFaceMd5() == null ? "" : getFaceMd5().toString());
+        dictionnary.put("expiry_date", getExpiryDate() == null ? "" : getExpiryDate().toString());
+        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
+        dictionnary.put("update_time", getUpdateTime() == null ? "" : getUpdateTime().toString());
         return dictionnary;
     }
 
@@ -806,30 +806,30 @@ public class FlPersonBeanBase
     {
         if (null == column || "".equals(column)) {
             return "";
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return getUpdateTime() == null ? "" : getUpdateTime().toString();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? "" : getCreateTime().toString();
-        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
-            return getExpiryDate() == null ? "" : getExpiryDate().toString();
-        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
-            return getFaceMd5() == null ? "" : getFaceMd5().toString();
-        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
-            return getPhotoId() == null ? "" : getPhotoId().toString();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return getPapersNum() == null ? "" : getPapersNum().toString();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return getPapersType() == null ? "" : getPapersType().toString();
-        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
-            return getBirthdate() == null ? "" : getBirthdate().toString();
-        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
-            return getSex() == null ? "" : getSex().toString();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return getName() == null ? "" : getName().toString();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return getGroupId() == null ? "" : getGroupId().toString();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? "" : getId().toString();
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            return getGroupId() == null ? "" : getGroupId().toString();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return getName() == null ? "" : getName().toString();
+        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
+            return getSex() == null ? "" : getSex().toString();
+        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
+            return getBirthdate() == null ? "" : getBirthdate().toString();
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            return getPapersType() == null ? "" : getPapersType().toString();
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            return getPapersNum() == null ? "" : getPapersNum().toString();
+        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
+            return getPhotoId() == null ? "" : getPhotoId().toString();
+        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
+            return getFaceMd5() == null ? "" : getFaceMd5().toString();
+        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
+            return getExpiryDate() == null ? "" : getExpiryDate().toString();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? "" : getCreateTime().toString();
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            return getUpdateTime() == null ? "" : getUpdateTime().toString();
         }
         return "";
     }
@@ -842,30 +842,30 @@ public class FlPersonBeanBase
     {
         if (null == column || "".equals(column)) {
             return null;
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return getUpdateTime() == null ? null : (T)getUpdateTime();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? null : (T)getCreateTime();
-        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
-            return getExpiryDate() == null ? null : (T)getExpiryDate();
-        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
-            return getFaceMd5() == null ? null : (T)getFaceMd5();
-        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
-            return getPhotoId() == null ? null : (T)getPhotoId();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return getPapersNum() == null ? null : (T)getPapersNum();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return getPapersType() == null ? null : (T)getPapersType();
-        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
-            return getBirthdate() == null ? null : (T)getBirthdate();
-        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
-            return getSex() == null ? null : (T)getSex();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return getName() == null ? null : (T)getName();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return getGroupId() == null ? null : (T)getGroupId();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? null : (T)getId();
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            return getGroupId() == null ? null : (T)getGroupId();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return getName() == null ? null : (T)getName();
+        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
+            return getSex() == null ? null : (T)getSex();
+        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
+            return getBirthdate() == null ? null : (T)getBirthdate();
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            return getPapersType() == null ? null : (T)getPapersType();
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            return getPapersNum() == null ? null : (T)getPapersNum();
+        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
+            return getPhotoId() == null ? null : (T)getPhotoId();
+        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
+            return getFaceMd5() == null ? null : (T)getFaceMd5();
+        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
+            return getExpiryDate() == null ? null : (T)getExpiryDate();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? null : (T)getCreateTime();
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            return getUpdateTime() == null ? null : (T)getUpdateTime();
         }
         return null;
     }
@@ -877,30 +877,30 @@ public class FlPersonBeanBase
     {
         if (null == column || "".equals(column)) {
             return ;
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            setUpdateTime((java.util.Date)object);
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            setCreateTime((java.util.Date)object);
-        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
-            setExpiryDate((java.util.Date)object);
-        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
-            setFaceMd5((String)object);
-        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
-            setPhotoId((String)object);
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            setPapersNum((String)object);
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            setPapersType((Integer)object);
-        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
-            setBirthdate((java.util.Date)object);
-        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
-            setSex((Integer)object);
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            setName((String)object);
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            setGroupId((Integer)object);
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             setId((Integer)object);
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            setGroupId((Integer)object);
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            setName((String)object);
+        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
+            setSex((Integer)object);
+        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
+            setBirthdate((java.util.Date)object);
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            setPapersType((Integer)object);
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            setPapersNum((String)object);
+        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
+            setPhotoId((String)object);
+        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
+            setFaceMd5((String)object);
+        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
+            setExpiryDate((java.util.Date)object);
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            setCreateTime((java.util.Date)object);
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            setUpdateTime((java.util.Date)object);
         }
     }
 }

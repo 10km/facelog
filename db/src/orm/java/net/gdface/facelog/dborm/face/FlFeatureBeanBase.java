@@ -27,17 +27,10 @@ public class FlFeatureBeanBase
 {
 	private static final long serialVersionUID = 6689140813999920663L;
 	
-    protected java.util.Date createTime;
-
     /**
-     * comments:二进制特征数据
+     * comments:主键,特征数据md5校验码
      */
-    protected byte[] feature;
-
-    /**
-     * comments:外键,所属图像id
-     */
-    protected String imgMd5;
+    protected String md5;
 
     /**
      * comments:外键,所属用户id
@@ -45,9 +38,16 @@ public class FlFeatureBeanBase
     protected Integer personId;
 
     /**
-     * comments:主键,特征数据md5校验码
+     * comments:外键,所属图像id
      */
-    protected String md5;
+    protected String imgMd5;
+
+    /**
+     * comments:二进制特征数据
+     */
+    protected byte[] feature;
+
+    protected java.util.Date createTime;
 
     private boolean _isNew = true;
     /**
@@ -92,93 +92,30 @@ public class FlFeatureBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for {@link #createTime}.<br>
+     * Getter method for {@link #md5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_feature.create_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal){    
-        createTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal){
-        setCreateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #feature}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_feature.feature</li>
-     * <li>comments: 二进制特征数据</li>
-     * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
-     * </ul>
-     *
-     * @return the value of feature
-     */
-    public byte[] getFeature(){
-        return feature;
-    }
-    /**
-     * Setter method for {@link #feature}.<br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
-     *
-     * @param newVal the new value to be assigned to feature
-     */
-    public void setFeature(byte[] newVal){    
-        feature = newVal;
-    }
-
-
-    /**
-     * Getter method for {@link #imgMd5}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_feature.img_md5</li>
-     * <li>comments: 外键,所属图像id</li>
+     * <li>full name: fl_feature.md5</li>
+     * <li>comments: 主键,特征数据md5校验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of imgMd5
+     * @return the value of md5
      */
-    public String getImgMd5(){
-        return imgMd5;
+    public String getMd5(){
+        return md5;
     }
     /**
-     * Setter method for {@link #imgMd5}.<br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to imgMd5
+     * @param newVal the new value to be assigned to md5
      */
-    public void setImgMd5(String newVal){    
-        imgMd5 = newVal;
+    public void setMd5(String newVal){    
+        md5 = newVal;
     }
 
 
@@ -220,32 +157,95 @@ public class FlFeatureBeanBase
     }
 
     /**
-     * Getter method for {@link #md5}.<br>
+     * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_feature.md5</li>
-     * <li>comments: 主键,特征数据md5校验码</li>
+     * <li>full name: fl_feature.img_md5</li>
+     * <li>comments: 外键,所属图像id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of md5
+     * @return the value of imgMd5
      */
-    public String getMd5(){
-        return md5;
+    public String getImgMd5(){
+        return imgMd5;
     }
     /**
-     * Setter method for {@link #md5}.<br>
+     * Setter method for {@link #imgMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to md5
+     * @param newVal the new value to be assigned to imgMd5
      */
-    public void setMd5(String newVal){    
-        md5 = newVal;
+    public void setImgMd5(String newVal){    
+        imgMd5 = newVal;
     }
 
+
+    /**
+     * Getter method for {@link #feature}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_feature.feature</li>
+     * <li>comments: 二进制特征数据</li>
+     * <li>column size: 65535</li>
+     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
+     * </ul>
+     *
+     * @return the value of feature
+     */
+    public byte[] getFeature(){
+        return feature;
+    }
+    /**
+     * Setter method for {@link #feature}.<br>
+     * Attention, there will be no comparison with current value which
+     * means calling this method will mark the field as 'modified' in all cases.
+     *
+     * @param newVal the new value to be assigned to feature
+     */
+    public void setFeature(byte[] newVal){    
+        feature = newVal;
+    }
+
+
+    /**
+     * Getter method for {@link #createTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_feature.create_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal){    
+        createTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal){
+        setCreateTime(new java.util.Date(newVal));
+    }
 
 
 
@@ -258,11 +258,11 @@ public class FlFeatureBeanBase
 
         FlFeatureBean obj = (FlFeatureBean) object;
         return new EqualsBuilder()
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getFeature(), obj.getFeature())
-            .append(getImgMd5(), obj.getImgMd5())
-            .append(getPersonId(), obj.getPersonId())
             .append(getMd5(), obj.getMd5())
+            .append(getPersonId(), obj.getPersonId())
+            .append(getImgMd5(), obj.getImgMd5())
+            .append(getFeature(), obj.getFeature())
+            .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
 
@@ -270,22 +270,22 @@ public class FlFeatureBeanBase
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getCreateTime())
-            .append(getFeature())
-            .append(getImgMd5())
-            .append(getPersonId())
             .append(getMd5())
+            .append(getPersonId())
+            .append(getImgMd5())
+            .append(getFeature())
+            .append(getCreateTime())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("\tfeature=").append(getFeature()).append("\n")
-            .append("\timg_md5=").append(getImgMd5()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\tmd5=").append(getMd5()).append("\n")
+            .append("\tperson_id=").append(getPersonId()).append("\n")
+            .append("\timg_md5=").append(getImgMd5()).append("\n")
+            .append("\tfeature=").append(getFeature()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -293,11 +293,11 @@ public class FlFeatureBeanBase
     @Override
     public int compareTo(FlFeatureBean object){
         return new CompareToBuilder()
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getFeature(), object.getFeature())
-            .append(getImgMd5(), object.getImgMd5())
-            .append(getPersonId(), object.getPersonId())
             .append(getMd5(), object.getMd5())
+            .append(getPersonId(), object.getPersonId())
+            .append(getImgMd5(), object.getImgMd5())
+            .append(getFeature(), object.getFeature())
+            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     /**
@@ -312,11 +312,11 @@ public class FlFeatureBeanBase
             copyIfNotNull(bean);
         }else{        
             isNew(bean.isNew());
-            setCreateTime(bean.getCreateTime());
-            setFeature(bean.getFeature());
-            setImgMd5(bean.getImgMd5());
-            setPersonId(bean.getPersonId());
             setMd5(bean.getMd5());
+            setPersonId(bean.getPersonId());
+            setImgMd5(bean.getImgMd5());
+            setFeature(bean.getFeature());
+            setCreateTime(bean.getCreateTime());
         }
     }
     /**
@@ -328,16 +328,16 @@ public class FlFeatureBeanBase
     public void copyIfNotNull(FlFeatureBeanBase bean)
     {
         isNew(bean.isNew());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getFeature()!=null)
-            setFeature(bean.getFeature());
-        if(bean.getImgMd5()!=null)
-            setImgMd5(bean.getImgMd5());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
         if(bean.getMd5()!=null)
             setMd5(bean.getMd5());
+        if(bean.getPersonId()!=null)
+            setPersonId(bean.getPersonId());
+        if(bean.getImgMd5()!=null)
+            setImgMd5(bean.getImgMd5());
+        if(bean.getFeature()!=null)
+            setFeature(bean.getFeature());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
     }
 
     /**
@@ -348,11 +348,11 @@ public class FlFeatureBeanBase
     public FlFeatureBeanBase clean()
     {
         isNew(true);
-        setCreateTime(null);
-        setFeature(null);
-        setImgMd5(null);
-        setPersonId(null);
         setMd5(null);
+        setPersonId(null);
+        setImgMd5(null);
+        setFeature(null);
+        setCreateTime(null);
         return this;
     }
     
@@ -415,11 +415,11 @@ public class FlFeatureBeanBase
     public Map<String,String> readDictionnary()
     {
         Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
-        dictionnary.put("feature", getFeature() == null ? "" : getFeature().toString());
-        dictionnary.put("img_md5", getImgMd5() == null ? "" : getImgMd5().toString());
-        dictionnary.put("person_id", getPersonId() == null ? "" : getPersonId().toString());
         dictionnary.put("md5", getMd5() == null ? "" : getMd5().toString());
+        dictionnary.put("person_id", getPersonId() == null ? "" : getPersonId().toString());
+        dictionnary.put("img_md5", getImgMd5() == null ? "" : getImgMd5().toString());
+        dictionnary.put("feature", getFeature() == null ? "" : getFeature().toString());
+        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
         return dictionnary;
     }
 
@@ -439,16 +439,16 @@ public class FlFeatureBeanBase
     {
         if (null == column || "".equals(column)) {
             return "";
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? "" : getCreateTime().toString();
-        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
-            return getFeature() == null ? "" : getFeature().toString();
-        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
-            return getImgMd5() == null ? "" : getImgMd5().toString();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return getPersonId() == null ? "" : getPersonId().toString();
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             return getMd5() == null ? "" : getMd5().toString();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return getPersonId() == null ? "" : getPersonId().toString();
+        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
+            return getImgMd5() == null ? "" : getImgMd5().toString();
+        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
+            return getFeature() == null ? "" : getFeature().toString();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? "" : getCreateTime().toString();
         }
         return "";
     }
@@ -461,16 +461,16 @@ public class FlFeatureBeanBase
     {
         if (null == column || "".equals(column)) {
             return null;
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? null : (T)getCreateTime();
-        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
-            return getFeature() == null ? null : (T)getFeature();
-        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
-            return getImgMd5() == null ? null : (T)getImgMd5();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return getPersonId() == null ? null : (T)getPersonId();
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             return getMd5() == null ? null : (T)getMd5();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return getPersonId() == null ? null : (T)getPersonId();
+        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
+            return getImgMd5() == null ? null : (T)getImgMd5();
+        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
+            return getFeature() == null ? null : (T)getFeature();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? null : (T)getCreateTime();
         }
         return null;
     }
@@ -482,16 +482,16 @@ public class FlFeatureBeanBase
     {
         if (null == column || "".equals(column)) {
             return ;
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            setCreateTime((java.util.Date)object);
-        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
-            setFeature((byte[])object);
-        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
-            setImgMd5((String)object);
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            setPersonId((Integer)object);
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             setMd5((String)object);
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            setPersonId((Integer)object);
+        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
+            setImgMd5((String)object);
+        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
+            setFeature((byte[])object);
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            setCreateTime((java.util.Date)object);
         }
     }
 }

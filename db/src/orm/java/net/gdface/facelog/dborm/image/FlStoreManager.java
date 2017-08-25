@@ -44,9 +44,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
-     * Identify the data field.
+     * Identify the md5 field.
      */
-    public static final int ID_DATA = 0;
+    public static final int ID_MD5 = 0;
 
     /**
      * Identify the encoding field.
@@ -54,9 +54,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     public static final int ID_ENCODING = 1;
 
     /**
-     * Identify the md5 field.
+     * Identify the data field.
      */
-    public static final int ID_MD5 = 2;
+    public static final int ID_DATA = 2;
 
     /**
      * Tablename.
@@ -67,9 +67,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      */
     public static final String[] FULL_FIELD_NAMES =
     {
-        "fl_store.data"
+        "fl_store.md5"
         ,"fl_store.encoding"
-        ,"fl_store.md5"
+        ,"fl_store.data"
     };
 
     /**
@@ -77,9 +77,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      */
     public static final String[] FIELD_NAMES =
     {
-        "data"
+        "md5"
         ,"encoding"
-        ,"md5"
+        ,"data"
     };
    /**
      * Contains all the primarykey fields of the fl_store table.
@@ -91,16 +91,16 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     /**
      * Field that contains the comma separated fields of the fl_store table.
      */
-    public static final String ALL_FULL_FIELDS = "fl_store.data"
+    public static final String ALL_FULL_FIELDS = "fl_store.md5"
                             + ",fl_store.encoding"
-                            + ",fl_store.md5";
+                            + ",fl_store.data";
 
     /**
      * Field that contains the comma separated fields of the fl_store table.
      */
-    public static final String ALL_FIELDS = "data"
+    public static final String ALL_FIELDS = "md5"
                             + ",encoding"
-                            + ",md5";
+                            + ",data";
 
     public static interface Action{
           void call(FlStoreBean bean);
@@ -1060,11 +1060,11 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_store (");
 
-            if (bean.isDataModified()) {
+            if (bean.isMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("data");
+                sql.append("md5");
                 _dirtyCount++;
             }
 
@@ -1076,11 +1076,11 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
                 _dirtyCount++;
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isDataModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("md5");
+                sql.append("data");
                 _dirtyCount++;
             }
 
@@ -1149,13 +1149,13 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             sql = new StringBuilder("UPDATE fl_store SET ");
             boolean useComma=false;
 
-            if (bean.isDataModified()) {
+            if (bean.isMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("data=?");
+                sql.append("md5=?");
             }
 
             if (bean.isEncodingModified()) {
@@ -1167,13 +1167,13 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
                 sql.append("encoding=?");
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isDataModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("md5=?");
+                sql.append("data=?");
             }
             sql.append(" WHERE ");
             sql.append("md5=?");
@@ -1813,12 +1813,12 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         }
         try
         {
-            if (bean.isDataModified()) {
+            if (bean.isMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getData() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("data IS NULL");
+                if (bean.getMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("data = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.isEncodingModified()) {
@@ -1829,12 +1829,12 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("encoding ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isMd5Modified()) {
+            if (bean.isDataModified()) {
                 _dirtyCount ++;
-                if (bean.getMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
+                if (bean.getData() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("data IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("data = ?");
                 }
             }
         }
@@ -1861,9 +1861,27 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isDataModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getData() + "]");
-                if (bean.getData() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getData()); }
+            if (bean.isMd5Modified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
             }
             if (bean.isEncodingModified()) {
                 switch (searchType) {
@@ -1887,27 +1905,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
+            if (bean.isDataModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getData() + "]");
+                if (bean.getData() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getData()); }
             }
         }
         catch(SQLException e)
@@ -2014,9 +2014,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             bean = this.createBean();
         try
         {
-            bean.setData(rs.getBytes(1));
+            bean.setMd5(rs.getString(1));
             bean.setEncoding(rs.getString(2));
-            bean.setMd5(rs.getString(3));
+            bean.setData(rs.getBytes(3));
         }
         catch(SQLException e)
         {
@@ -2048,17 +2048,17 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_DATA:
+                    case ID_MD5:
                         ++pos;
-                        bean.setData(rs.getBytes(pos));
+                        bean.setMd5(rs.getString(pos));
                         break;
                     case ID_ENCODING:
                         ++pos;
                         bean.setEncoding(rs.getString(pos));
                         break;
-                    case ID_MD5:
+                    case ID_DATA:
                         ++pos;
-                        bean.setMd5(rs.getString(pos));
+                        bean.setData(rs.getBytes(pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -2088,9 +2088,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
         FlStoreBean bean = this.createBean();
         try
         {
-            bean.setData(rs.getBytes("data"));
-            bean.setEncoding(rs.getString("encoding"));
             bean.setMd5(rs.getString("md5"));
+            bean.setEncoding(rs.getString("encoding"));
+            bean.setData(rs.getBytes("data"));
         }
         catch(SQLException e)
         {

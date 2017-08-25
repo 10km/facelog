@@ -30,20 +30,20 @@ public class FlImageComparator implements Comparator<FlImageBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlImageComparator(FlImageManager.ID_DEVICE_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlImageComparator(FlImageManager.ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlImageManager.ID_DEVICE_ID
-     *   <li>FlImageManager.ID_THUMB_MD5
-     *   <li>FlImageManager.ID_FACE_NUM
-     *   <li>FlImageManager.ID_DEPTH
-     *   <li>FlImageManager.ID_HEIGHT
-     *   <li>FlImageManager.ID_WIDTH
-     *   <li>FlImageManager.ID_FORMAT
      *   <li>FlImageManager.ID_MD5
+     *   <li>FlImageManager.ID_FORMAT
+     *   <li>FlImageManager.ID_WIDTH
+     *   <li>FlImageManager.ID_HEIGHT
+     *   <li>FlImageManager.ID_DEPTH
+     *   <li>FlImageManager.ID_FACE_NUM
+     *   <li>FlImageManager.ID_THUMB_MD5
+     *   <li>FlImageManager.ID_DEVICE_ID
      * </ul>
      */
     public FlImageComparator(int iType)
@@ -56,20 +56,20 @@ public class FlImageComparator implements Comparator<FlImageBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlImageComparator(FlImageManager.ID_DEVICE_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlImageComparator(FlImageManager.ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlImageManager.ID_DEVICE_ID
-     *   <li>FlImageManager.ID_THUMB_MD5
-     *   <li>FlImageManager.ID_FACE_NUM
-     *   <li>FlImageManager.ID_DEPTH
-     *   <li>FlImageManager.ID_HEIGHT
-     *   <li>FlImageManager.ID_WIDTH
-     *   <li>FlImageManager.ID_FORMAT
      *   <li>FlImageManager.ID_MD5
+     *   <li>FlImageManager.ID_FORMAT
+     *   <li>FlImageManager.ID_WIDTH
+     *   <li>FlImageManager.ID_HEIGHT
+     *   <li>FlImageManager.ID_DEPTH
+     *   <li>FlImageManager.ID_FACE_NUM
+     *   <li>FlImageManager.ID_THUMB_MD5
+     *   <li>FlImageManager.ID_DEVICE_ID
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -86,70 +86,15 @@ public class FlImageComparator implements Comparator<FlImageBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlImageManager.ID_DEVICE_ID:
-                if (b1.getDeviceId() == null && b2.getDeviceId() != null) {
+            case FlImageManager.ID_MD5:
+                if (b1.getMd5() == null && b2.getMd5() != null) {
                     iReturn = -1;
-                } else if (b1.getDeviceId() == null && b2.getDeviceId() == null) {
+                } else if (b1.getMd5() == null && b2.getMd5() == null) {
                     iReturn = 0;
-                } else if (b1.getDeviceId() != null && b2.getDeviceId() == null) {
+                } else if (b1.getMd5() != null && b2.getMd5() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getDeviceId().compareTo(b2.getDeviceId());
-                }
-                break;
-            case FlImageManager.ID_THUMB_MD5:
-                if (b1.getThumbMd5() == null && b2.getThumbMd5() != null) {
-                    iReturn = -1;
-                } else if (b1.getThumbMd5() == null && b2.getThumbMd5() == null) {
-                    iReturn = 0;
-                } else if (b1.getThumbMd5() != null && b2.getThumbMd5() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getThumbMd5().compareTo(b2.getThumbMd5());
-                }
-                break;
-            case FlImageManager.ID_FACE_NUM:
-                if (b1.getFaceNum() == null && b2.getFaceNum() != null) {
-                    iReturn = -1;
-                } else if (b1.getFaceNum() == null && b2.getFaceNum() == null) {
-                    iReturn = 0;
-                } else if (b1.getFaceNum() != null && b2.getFaceNum() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getFaceNum().compareTo(b2.getFaceNum());
-                }
-                break;
-            case FlImageManager.ID_DEPTH:
-                if (b1.getDepth() == null && b2.getDepth() != null) {
-                    iReturn = -1;
-                } else if (b1.getDepth() == null && b2.getDepth() == null) {
-                    iReturn = 0;
-                } else if (b1.getDepth() != null && b2.getDepth() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getDepth().compareTo(b2.getDepth());
-                }
-                break;
-            case FlImageManager.ID_HEIGHT:
-                if (b1.getHeight() == null && b2.getHeight() != null) {
-                    iReturn = -1;
-                } else if (b1.getHeight() == null && b2.getHeight() == null) {
-                    iReturn = 0;
-                } else if (b1.getHeight() != null && b2.getHeight() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getHeight().compareTo(b2.getHeight());
-                }
-                break;
-            case FlImageManager.ID_WIDTH:
-                if (b1.getWidth() == null && b2.getWidth() != null) {
-                    iReturn = -1;
-                } else if (b1.getWidth() == null && b2.getWidth() == null) {
-                    iReturn = 0;
-                } else if (b1.getWidth() != null && b2.getWidth() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getWidth().compareTo(b2.getWidth());
+                    iReturn = b1.getMd5().compareTo(b2.getMd5());
                 }
                 break;
             case FlImageManager.ID_FORMAT:
@@ -163,15 +108,70 @@ public class FlImageComparator implements Comparator<FlImageBean>
                     iReturn = b1.getFormat().compareTo(b2.getFormat());
                 }
                 break;
-            case FlImageManager.ID_MD5:
-                if (b1.getMd5() == null && b2.getMd5() != null) {
+            case FlImageManager.ID_WIDTH:
+                if (b1.getWidth() == null && b2.getWidth() != null) {
                     iReturn = -1;
-                } else if (b1.getMd5() == null && b2.getMd5() == null) {
+                } else if (b1.getWidth() == null && b2.getWidth() == null) {
                     iReturn = 0;
-                } else if (b1.getMd5() != null && b2.getMd5() == null) {
+                } else if (b1.getWidth() != null && b2.getWidth() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getMd5().compareTo(b2.getMd5());
+                    iReturn = b1.getWidth().compareTo(b2.getWidth());
+                }
+                break;
+            case FlImageManager.ID_HEIGHT:
+                if (b1.getHeight() == null && b2.getHeight() != null) {
+                    iReturn = -1;
+                } else if (b1.getHeight() == null && b2.getHeight() == null) {
+                    iReturn = 0;
+                } else if (b1.getHeight() != null && b2.getHeight() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getHeight().compareTo(b2.getHeight());
+                }
+                break;
+            case FlImageManager.ID_DEPTH:
+                if (b1.getDepth() == null && b2.getDepth() != null) {
+                    iReturn = -1;
+                } else if (b1.getDepth() == null && b2.getDepth() == null) {
+                    iReturn = 0;
+                } else if (b1.getDepth() != null && b2.getDepth() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getDepth().compareTo(b2.getDepth());
+                }
+                break;
+            case FlImageManager.ID_FACE_NUM:
+                if (b1.getFaceNum() == null && b2.getFaceNum() != null) {
+                    iReturn = -1;
+                } else if (b1.getFaceNum() == null && b2.getFaceNum() == null) {
+                    iReturn = 0;
+                } else if (b1.getFaceNum() != null && b2.getFaceNum() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getFaceNum().compareTo(b2.getFaceNum());
+                }
+                break;
+            case FlImageManager.ID_THUMB_MD5:
+                if (b1.getThumbMd5() == null && b2.getThumbMd5() != null) {
+                    iReturn = -1;
+                } else if (b1.getThumbMd5() == null && b2.getThumbMd5() == null) {
+                    iReturn = 0;
+                } else if (b1.getThumbMd5() != null && b2.getThumbMd5() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getThumbMd5().compareTo(b2.getThumbMd5());
+                }
+                break;
+            case FlImageManager.ID_DEVICE_ID:
+                if (b1.getDeviceId() == null && b2.getDeviceId() != null) {
+                    iReturn = -1;
+                } else if (b1.getDeviceId() == null && b2.getDeviceId() == null) {
+                    iReturn = 0;
+                } else if (b1.getDeviceId() != null && b2.getDeviceId() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getDeviceId().compareTo(b2.getDeviceId());
                 }
                 break;
             default:

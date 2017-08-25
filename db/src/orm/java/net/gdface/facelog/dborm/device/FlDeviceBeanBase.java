@@ -27,24 +27,10 @@ public class FlDeviceBeanBase
 {
 	private static final long serialVersionUID = 8578787076920531423L;
 	
-    protected java.util.Date updateTime;
-
-    protected java.util.Date createTime;
-
     /**
-     * comments:设备版本号
+     * comments:设备id
      */
-    protected String version;
-
-    /**
-     * comments:设备所属组id
-     */
-    protected Integer groupId;
-
-    /**
-     * comments:设备是否在线标记
-     */
-    protected Boolean online;
+    protected Integer id;
 
     /**
      * comments:设备名称
@@ -52,9 +38,23 @@ public class FlDeviceBeanBase
     protected String name;
 
     /**
-     * comments:设备id
+     * comments:设备是否在线标记
      */
-    protected Integer id;
+    protected Boolean online;
+
+    /**
+     * comments:设备所属组id
+     */
+    protected Integer groupId;
+
+    /**
+     * comments:设备版本号
+     */
+    protected String version;
+
+    protected java.util.Date createTime;
+
+    protected java.util.Date updateTime;
 
     private boolean _isNew = true;
     /**
@@ -99,141 +99,72 @@ public class FlDeviceBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for {@link #updateTime}.<br>
+     * Getter method for {@link #id}.<br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device.update_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of updateTime
-     */
-    public java.util.Date getUpdateTime(){
-        return updateTime;
-    }
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(java.util.Date newVal){    
-        updateTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #updateTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to updateTime
-     */
-    public void setUpdateTime(long newVal){
-        setUpdateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #createTime}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.create_time</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
-     * </ul>
-     *
-     * @return the value of createTime
-     */
-    public java.util.Date getCreateTime(){
-        return createTime;
-    }
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(java.util.Date newVal){    
-        createTime = newVal;
-    }
-
-    /**
-     * Setter method for {@link #createTime}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to createTime
-     */
-    public void setCreateTime(long newVal){
-        setCreateTime(new java.util.Date(newVal));
-    }
-
-    /**
-     * Getter method for {@link #version}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.version</li>
-     * <li>comments: 设备版本号</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of version
-     */
-    public String getVersion(){
-        return version;
-    }
-    /**
-     * Setter method for {@link #version}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to version
-     */
-    public void setVersion(String newVal){    
-        version = newVal;
-    }
-
-
-    /**
-     * Getter method for {@link #groupId}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.group_id</li>
-     * <li>comments: 设备所属组id</li>
+     * <li>full name: fl_device.id</li>
+     * <li> imported key: fl_log.device_id</li>
+     * <li> imported key: fl_image.device_id</li>
+     * <li>comments: 设备id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of groupId
+     * @return the value of id
      */
-    public Integer getGroupId(){
-        return groupId;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for {@link #groupId}.<br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value to be assigned to id
      */
-    public void setGroupId(Integer newVal){    
-        groupId = newVal;
+    public void setId(Integer newVal){    
+        id = newVal;
     }
 
     /**
-     * Setter method for {@link #groupId}.<br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value to be assigned to id
      */
-    public void setGroupId(int newVal){
-        setGroupId(new Integer(newVal));
+    public void setId(int newVal){
+        setId(new Integer(newVal));
     }
+
+    /**
+     * Getter method for {@link #name}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.name</li>
+     * <li>comments: 设备名称</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of name
+     */
+    public String getName(){
+        return name;
+    }
+    /**
+     * Setter method for {@link #name}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to name
+     */
+    public void setName(String newVal){    
+        name = newVal;
+    }
+
 
     /**
      * Getter method for {@link #online}.<br>
@@ -273,71 +204,140 @@ public class FlDeviceBeanBase
     }
 
     /**
-     * Getter method for {@link #name}.<br>
+     * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device.name</li>
-     * <li>comments: 设备名称</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of name
-     */
-    public String getName(){
-        return name;
-    }
-    /**
-     * Setter method for {@link #name}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to name
-     */
-    public void setName(String newVal){    
-        name = newVal;
-    }
-
-
-    /**
-     * Getter method for {@link #id}.<br>
-     * PRIMARY KEY.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.id</li>
-     * <li> imported key: fl_image.device_id</li>
-     * <li> imported key: fl_log.device_id</li>
-     * <li>comments: 设备id</li>
+     * <li>full name: fl_device.group_id</li>
+     * <li>comments: 设备所属组id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of id
+     * @return the value of groupId
      */
-    public Integer getId(){
-        return id;
+    public Integer getGroupId(){
+        return groupId;
     }
     /**
-     * Setter method for {@link #id}.<br>
+     * Setter method for {@link #groupId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to groupId
      */
-    public void setId(Integer newVal){    
-        id = newVal;
+    public void setGroupId(Integer newVal){    
+        groupId = newVal;
     }
 
     /**
-     * Setter method for {@link #id}.<br>
+     * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to groupId
      */
-    public void setId(int newVal){
-        setId(new Integer(newVal));
+    public void setGroupId(int newVal){
+        setGroupId(new Integer(newVal));
+    }
+
+    /**
+     * Getter method for {@link #version}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.version</li>
+     * <li>comments: 设备版本号</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of version
+     */
+    public String getVersion(){
+        return version;
+    }
+    /**
+     * Setter method for {@link #version}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to version
+     */
+    public void setVersion(String newVal){    
+        version = newVal;
+    }
+
+
+    /**
+     * Getter method for {@link #createTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.create_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of createTime
+     */
+    public java.util.Date getCreateTime(){
+        return createTime;
+    }
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(java.util.Date newVal){    
+        createTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #createTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to createTime
+     */
+    public void setCreateTime(long newVal){
+        setCreateTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Getter method for {@link #updateTime}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.update_time</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of updateTime
+     */
+    public java.util.Date getUpdateTime(){
+        return updateTime;
+    }
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(java.util.Date newVal){    
+        updateTime = newVal;
+    }
+
+    /**
+     * Setter method for {@link #updateTime}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to updateTime
+     */
+    public void setUpdateTime(long newVal){
+        setUpdateTime(new java.util.Date(newVal));
     }
 
 
@@ -351,13 +351,13 @@ public class FlDeviceBeanBase
 
         FlDeviceBean obj = (FlDeviceBean) object;
         return new EqualsBuilder()
-            .append(getUpdateTime(), obj.getUpdateTime())
-            .append(getCreateTime(), obj.getCreateTime())
-            .append(getVersion(), obj.getVersion())
-            .append(getGroupId(), obj.getGroupId())
-            .append(getOnline(), obj.getOnline())
-            .append(getName(), obj.getName())
             .append(getId(), obj.getId())
+            .append(getName(), obj.getName())
+            .append(getOnline(), obj.getOnline())
+            .append(getGroupId(), obj.getGroupId())
+            .append(getVersion(), obj.getVersion())
+            .append(getCreateTime(), obj.getCreateTime())
+            .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
     }
 
@@ -365,26 +365,26 @@ public class FlDeviceBeanBase
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getUpdateTime())
-            .append(getCreateTime())
-            .append(getVersion())
-            .append(getGroupId())
-            .append(getOnline())
-            .append(getName())
             .append(getId())
+            .append(getName())
+            .append(getOnline())
+            .append(getGroupId())
+            .append(getVersion())
+            .append(getCreateTime())
+            .append(getUpdateTime())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("\tversion=").append(getVersion()).append("\n")
-            .append("\tgroup_id=").append(getGroupId()).append("\n")
-            .append("\tonline=").append(getOnline()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
             .append("\tid=").append(getId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
+            .append("\tonline=").append(getOnline()).append("\n")
+            .append("\tgroup_id=").append(getGroupId()).append("\n")
+            .append("\tversion=").append(getVersion()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -392,13 +392,13 @@ public class FlDeviceBeanBase
     @Override
     public int compareTo(FlDeviceBean object){
         return new CompareToBuilder()
-            .append(getUpdateTime(), object.getUpdateTime())
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getVersion(), object.getVersion())
-            .append(getGroupId(), object.getGroupId())
-            .append(getOnline(), object.getOnline())
-            .append(getName(), object.getName())
             .append(getId(), object.getId())
+            .append(getName(), object.getName())
+            .append(getOnline(), object.getOnline())
+            .append(getGroupId(), object.getGroupId())
+            .append(getVersion(), object.getVersion())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     /**
@@ -413,13 +413,13 @@ public class FlDeviceBeanBase
             copyIfNotNull(bean);
         }else{        
             isNew(bean.isNew());
-            setUpdateTime(bean.getUpdateTime());
-            setCreateTime(bean.getCreateTime());
-            setVersion(bean.getVersion());
-            setGroupId(bean.getGroupId());
-            setOnline(bean.getOnline());
-            setName(bean.getName());
             setId(bean.getId());
+            setName(bean.getName());
+            setOnline(bean.getOnline());
+            setGroupId(bean.getGroupId());
+            setVersion(bean.getVersion());
+            setCreateTime(bean.getCreateTime());
+            setUpdateTime(bean.getUpdateTime());
         }
     }
     /**
@@ -431,20 +431,20 @@ public class FlDeviceBeanBase
     public void copyIfNotNull(FlDeviceBeanBase bean)
     {
         isNew(bean.isNew());
-        if(bean.getUpdateTime()!=null)
-            setUpdateTime(bean.getUpdateTime());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getVersion()!=null)
-            setVersion(bean.getVersion());
-        if(bean.getGroupId()!=null)
-            setGroupId(bean.getGroupId());
-        if(bean.getOnline()!=null)
-            setOnline(bean.getOnline());
-        if(bean.getName()!=null)
-            setName(bean.getName());
         if(bean.getId()!=null)
             setId(bean.getId());
+        if(bean.getName()!=null)
+            setName(bean.getName());
+        if(bean.getOnline()!=null)
+            setOnline(bean.getOnline());
+        if(bean.getGroupId()!=null)
+            setGroupId(bean.getGroupId());
+        if(bean.getVersion()!=null)
+            setVersion(bean.getVersion());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
+        if(bean.getUpdateTime()!=null)
+            setUpdateTime(bean.getUpdateTime());
     }
 
     /**
@@ -455,13 +455,13 @@ public class FlDeviceBeanBase
     public FlDeviceBeanBase clean()
     {
         isNew(true);
-        setUpdateTime(null);
-        setCreateTime(null);
-        setVersion(null);
-        setGroupId(null);
-        setOnline(null);
-        setName(null);
         setId(null);
+        setName(null);
+        setOnline(null);
+        setGroupId(null);
+        setVersion(null);
+        setCreateTime(null);
+        setUpdateTime(null);
         return this;
     }
     
@@ -524,13 +524,13 @@ public class FlDeviceBeanBase
     public Map<String,String> readDictionnary()
     {
         Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("update_time", getUpdateTime() == null ? "" : getUpdateTime().toString());
-        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
-        dictionnary.put("version", getVersion() == null ? "" : getVersion().toString());
-        dictionnary.put("group_id", getGroupId() == null ? "" : getGroupId().toString());
-        dictionnary.put("online", getOnline() == null ? "" : getOnline().toString());
-        dictionnary.put("name", getName() == null ? "" : getName().toString());
         dictionnary.put("id", getId() == null ? "" : getId().toString());
+        dictionnary.put("name", getName() == null ? "" : getName().toString());
+        dictionnary.put("online", getOnline() == null ? "" : getOnline().toString());
+        dictionnary.put("group_id", getGroupId() == null ? "" : getGroupId().toString());
+        dictionnary.put("version", getVersion() == null ? "" : getVersion().toString());
+        dictionnary.put("create_time", getCreateTime() == null ? "" : getCreateTime().toString());
+        dictionnary.put("update_time", getUpdateTime() == null ? "" : getUpdateTime().toString());
         return dictionnary;
     }
 
@@ -551,20 +551,20 @@ public class FlDeviceBeanBase
     {
         if (null == column || "".equals(column)) {
             return "";
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return getUpdateTime() == null ? "" : getUpdateTime().toString();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? "" : getCreateTime().toString();
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            return getVersion() == null ? "" : getVersion().toString();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return getGroupId() == null ? "" : getGroupId().toString();
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            return getOnline() == null ? "" : getOnline().toString();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return getName() == null ? "" : getName().toString();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? "" : getId().toString();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return getName() == null ? "" : getName().toString();
+        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
+            return getOnline() == null ? "" : getOnline().toString();
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            return getGroupId() == null ? "" : getGroupId().toString();
+        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
+            return getVersion() == null ? "" : getVersion().toString();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? "" : getCreateTime().toString();
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            return getUpdateTime() == null ? "" : getUpdateTime().toString();
         }
         return "";
     }
@@ -577,20 +577,20 @@ public class FlDeviceBeanBase
     {
         if (null == column || "".equals(column)) {
             return null;
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return getUpdateTime() == null ? null : (T)getUpdateTime();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return getCreateTime() == null ? null : (T)getCreateTime();
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            return getVersion() == null ? null : (T)getVersion();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return getGroupId() == null ? null : (T)getGroupId();
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            return getOnline() == null ? null : (T)getOnline();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return getName() == null ? null : (T)getName();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? null : (T)getId();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return getName() == null ? null : (T)getName();
+        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
+            return getOnline() == null ? null : (T)getOnline();
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            return getGroupId() == null ? null : (T)getGroupId();
+        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
+            return getVersion() == null ? null : (T)getVersion();
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            return getCreateTime() == null ? null : (T)getCreateTime();
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            return getUpdateTime() == null ? null : (T)getUpdateTime();
         }
         return null;
     }
@@ -602,20 +602,20 @@ public class FlDeviceBeanBase
     {
         if (null == column || "".equals(column)) {
             return ;
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            setUpdateTime((java.util.Date)object);
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            setCreateTime((java.util.Date)object);
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            setVersion((String)object);
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            setGroupId((Integer)object);
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            setOnline((Boolean)object);
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            setName((String)object);
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             setId((Integer)object);
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            setName((String)object);
+        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
+            setOnline((Boolean)object);
+        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
+            setGroupId((Integer)object);
+        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
+            setVersion((String)object);
+        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
+            setCreateTime((java.util.Date)object);
+        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
+            setUpdateTime((java.util.Date)object);
         }
     }
 }

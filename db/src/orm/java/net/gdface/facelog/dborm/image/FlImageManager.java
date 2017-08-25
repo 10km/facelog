@@ -50,44 +50,44 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
-     * Identify the device_id field.
+     * Identify the md5 field.
      */
-    public static final int ID_DEVICE_ID = 0;
-
-    /**
-     * Identify the thumb_md5 field.
-     */
-    public static final int ID_THUMB_MD5 = 1;
-
-    /**
-     * Identify the face_num field.
-     */
-    public static final int ID_FACE_NUM = 2;
-
-    /**
-     * Identify the depth field.
-     */
-    public static final int ID_DEPTH = 3;
-
-    /**
-     * Identify the height field.
-     */
-    public static final int ID_HEIGHT = 4;
-
-    /**
-     * Identify the width field.
-     */
-    public static final int ID_WIDTH = 5;
+    public static final int ID_MD5 = 0;
 
     /**
      * Identify the format field.
      */
-    public static final int ID_FORMAT = 6;
+    public static final int ID_FORMAT = 1;
 
     /**
-     * Identify the md5 field.
+     * Identify the width field.
      */
-    public static final int ID_MD5 = 7;
+    public static final int ID_WIDTH = 2;
+
+    /**
+     * Identify the height field.
+     */
+    public static final int ID_HEIGHT = 3;
+
+    /**
+     * Identify the depth field.
+     */
+    public static final int ID_DEPTH = 4;
+
+    /**
+     * Identify the face_num field.
+     */
+    public static final int ID_FACE_NUM = 5;
+
+    /**
+     * Identify the thumb_md5 field.
+     */
+    public static final int ID_THUMB_MD5 = 6;
+
+    /**
+     * Identify the device_id field.
+     */
+    public static final int ID_DEVICE_ID = 7;
 
     /**
      * Tablename.
@@ -98,14 +98,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      */
     public static final String[] FULL_FIELD_NAMES =
     {
-        "fl_image.device_id"
-        ,"fl_image.thumb_md5"
-        ,"fl_image.face_num"
-        ,"fl_image.depth"
-        ,"fl_image.height"
-        ,"fl_image.width"
+        "fl_image.md5"
         ,"fl_image.format"
-        ,"fl_image.md5"
+        ,"fl_image.width"
+        ,"fl_image.height"
+        ,"fl_image.depth"
+        ,"fl_image.face_num"
+        ,"fl_image.thumb_md5"
+        ,"fl_image.device_id"
     };
 
     /**
@@ -113,14 +113,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      */
     public static final String[] FIELD_NAMES =
     {
-        "device_id"
-        ,"thumb_md5"
-        ,"face_num"
-        ,"depth"
-        ,"height"
-        ,"width"
+        "md5"
         ,"format"
-        ,"md5"
+        ,"width"
+        ,"height"
+        ,"depth"
+        ,"face_num"
+        ,"thumb_md5"
+        ,"device_id"
     };
    /**
      * Contains all the primarykey fields of the fl_image table.
@@ -132,26 +132,26 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     /**
      * Field that contains the comma separated fields of the fl_image table.
      */
-    public static final String ALL_FULL_FIELDS = "fl_image.device_id"
-                            + ",fl_image.thumb_md5"
-                            + ",fl_image.face_num"
-                            + ",fl_image.depth"
-                            + ",fl_image.height"
-                            + ",fl_image.width"
+    public static final String ALL_FULL_FIELDS = "fl_image.md5"
                             + ",fl_image.format"
-                            + ",fl_image.md5";
+                            + ",fl_image.width"
+                            + ",fl_image.height"
+                            + ",fl_image.depth"
+                            + ",fl_image.face_num"
+                            + ",fl_image.thumb_md5"
+                            + ",fl_image.device_id";
 
     /**
      * Field that contains the comma separated fields of the fl_image table.
      */
-    public static final String ALL_FIELDS = "device_id"
-                            + ",thumb_md5"
-                            + ",face_num"
-                            + ",depth"
-                            + ",height"
-                            + ",width"
+    public static final String ALL_FIELDS = "md5"
                             + ",format"
-                            + ",md5";
+                            + ",width"
+                            + ",height"
+                            + ",depth"
+                            + ",face_num"
+                            + ",thumb_md5"
+                            + ",device_id";
 
     public static interface Action{
           void call(FlImageBean bean);
@@ -1338,51 +1338,11 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_image (");
 
-            if (bean.isDeviceIdModified()) {
+            if (bean.isMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("device_id");
-                _dirtyCount++;
-            }
-
-            if (bean.isThumbMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("thumb_md5");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceNumModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_num");
-                _dirtyCount++;
-            }
-
-            if (bean.isDepthModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("depth");
-                _dirtyCount++;
-            }
-
-            if (bean.isHeightModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("height");
-                _dirtyCount++;
-            }
-
-            if (bean.isWidthModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("width");
+                sql.append("md5");
                 _dirtyCount++;
             }
 
@@ -1394,11 +1354,51 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isWidthModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("md5");
+                sql.append("width");
+                _dirtyCount++;
+            }
+
+            if (bean.isHeightModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("height");
+                _dirtyCount++;
+            }
+
+            if (bean.isDepthModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("depth");
+                _dirtyCount++;
+            }
+
+            if (bean.isFaceNumModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("face_num");
+                _dirtyCount++;
+            }
+
+            if (bean.isThumbMd5Modified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("thumb_md5");
+                _dirtyCount++;
+            }
+
+            if (bean.isDeviceIdModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("device_id");
                 _dirtyCount++;
             }
 
@@ -1467,58 +1467,13 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             sql = new StringBuilder("UPDATE fl_image SET ");
             boolean useComma=false;
 
-            if (bean.isDeviceIdModified()) {
+            if (bean.isMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("device_id=?");
-            }
-
-            if (bean.isThumbMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("thumb_md5=?");
-            }
-
-            if (bean.isFaceNumModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_num=?");
-            }
-
-            if (bean.isDepthModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("depth=?");
-            }
-
-            if (bean.isHeightModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("height=?");
-            }
-
-            if (bean.isWidthModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("width=?");
+                sql.append("md5=?");
             }
 
             if (bean.isFormatModified()) {
@@ -1530,13 +1485,58 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                 sql.append("format=?");
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isWidthModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("md5=?");
+                sql.append("width=?");
+            }
+
+            if (bean.isHeightModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("height=?");
+            }
+
+            if (bean.isDepthModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("depth=?");
+            }
+
+            if (bean.isFaceNumModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("face_num=?");
+            }
+
+            if (bean.isThumbMd5Modified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("thumb_md5=?");
+            }
+
+            if (bean.isDeviceIdModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("device_id=?");
             }
             sql.append(" WHERE ");
             sql.append("md5=?");
@@ -2262,52 +2262,12 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         }
         try
         {
-            if (bean.isDeviceIdModified()) {
+            if (bean.isMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getDeviceId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id IS NULL");
+                if (bean.getMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id = ?");
-                }
-            }
-            if (bean.isThumbMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getThumbMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isFaceNumModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceNum() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num = ?");
-                }
-            }
-            if (bean.isDepthModified()) {
-                _dirtyCount ++;
-                if (bean.getDepth() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth = ?");
-                }
-            }
-            if (bean.isHeightModified()) {
-                _dirtyCount ++;
-                if (bean.getHeight() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height = ?");
-                }
-            }
-            if (bean.isWidthModified()) {
-                _dirtyCount ++;
-                if (bean.getWidth() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.isFormatModified()) {
@@ -2318,12 +2278,52 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("format ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isMd5Modified()) {
+            if (bean.isWidthModified()) {
                 _dirtyCount ++;
-                if (bean.getMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
+                if (bean.getWidth() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width = ?");
+                }
+            }
+            if (bean.isHeightModified()) {
+                _dirtyCount ++;
+                if (bean.getHeight() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height = ?");
+                }
+            }
+            if (bean.isDepthModified()) {
+                _dirtyCount ++;
+                if (bean.getDepth() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth = ?");
+                }
+            }
+            if (bean.isFaceNumModified()) {
+                _dirtyCount ++;
+                if (bean.getFaceNum() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num = ?");
+                }
+            }
+            if (bean.isThumbMd5Modified()) {
+                _dirtyCount ++;
+                if (bean.getThumbMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isDeviceIdModified()) {
+                _dirtyCount ++;
+                if (bean.getDeviceId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id = ?");
                 }
             }
         }
@@ -2350,47 +2350,27 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isDeviceIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
-                if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
-            }
-            if (bean.isThumbMd5Modified()) {
+            if (bean.isMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "]");
-                        if (bean.getThumbMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "%]");
-                        if ( bean.getThumbMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "]");
-                        if ( bean.getThumbMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "%]");
-                        if (bean.getThumbMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
-            }
-            if (bean.isFaceNumModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceNum() + "]");
-                if (bean.getFaceNum() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceNum()); }
-            }
-            if (bean.isDepthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDepth() + "]");
-                if (bean.getDepth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDepth()); }
-            }
-            if (bean.isHeightModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getHeight() + "]");
-                if (bean.getHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getHeight()); }
-            }
-            if (bean.isWidthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getWidth() + "]");
-                if (bean.getWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getWidth()); }
             }
             if (bean.isFormatModified()) {
                 switch (searchType) {
@@ -2414,27 +2394,47 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isMd5Modified()) {
+            if (bean.isWidthModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getWidth() + "]");
+                if (bean.getWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getWidth()); }
+            }
+            if (bean.isHeightModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getHeight() + "]");
+                if (bean.getHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getHeight()); }
+            }
+            if (bean.isDepthModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDepth() + "]");
+                if (bean.getDepth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDepth()); }
+            }
+            if (bean.isFaceNumModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceNum() + "]");
+                if (bean.getFaceNum() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceNum()); }
+            }
+            if (bean.isThumbMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "]");
+                        if (bean.getThumbMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "%]");
+                        if ( bean.getThumbMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "]");
+                        if ( bean.getThumbMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "%]");
+                        if (bean.getThumbMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
+            }
+            if (bean.isDeviceIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
+                if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
             }
         }
         catch(SQLException e)
@@ -2541,14 +2541,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             bean = this.createBean();
         try
         {
-            bean.setDeviceId(Manager.getInteger(rs, 1));
-            bean.setThumbMd5(rs.getString(2));
-            bean.setFaceNum(Manager.getInteger(rs, 3));
-            bean.setDepth(Manager.getInteger(rs, 4));
-            bean.setHeight(Manager.getInteger(rs, 5));
-            bean.setWidth(Manager.getInteger(rs, 6));
-            bean.setFormat(rs.getString(7));
-            bean.setMd5(rs.getString(8));
+            bean.setMd5(rs.getString(1));
+            bean.setFormat(rs.getString(2));
+            bean.setWidth(Manager.getInteger(rs, 3));
+            bean.setHeight(Manager.getInteger(rs, 4));
+            bean.setDepth(Manager.getInteger(rs, 5));
+            bean.setFaceNum(Manager.getInteger(rs, 6));
+            bean.setThumbMd5(rs.getString(7));
+            bean.setDeviceId(Manager.getInteger(rs, 8));
         }
         catch(SQLException e)
         {
@@ -2580,37 +2580,37 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_DEVICE_ID:
+                    case ID_MD5:
                         ++pos;
-                        bean.setDeviceId(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_THUMB_MD5:
-                        ++pos;
-                        bean.setThumbMd5(rs.getString(pos));
-                        break;
-                    case ID_FACE_NUM:
-                        ++pos;
-                        bean.setFaceNum(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_DEPTH:
-                        ++pos;
-                        bean.setDepth(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_HEIGHT:
-                        ++pos;
-                        bean.setHeight(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_WIDTH:
-                        ++pos;
-                        bean.setWidth(Manager.getInteger(rs, pos));
+                        bean.setMd5(rs.getString(pos));
                         break;
                     case ID_FORMAT:
                         ++pos;
                         bean.setFormat(rs.getString(pos));
                         break;
-                    case ID_MD5:
+                    case ID_WIDTH:
                         ++pos;
-                        bean.setMd5(rs.getString(pos));
+                        bean.setWidth(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_HEIGHT:
+                        ++pos;
+                        bean.setHeight(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_DEPTH:
+                        ++pos;
+                        bean.setDepth(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_FACE_NUM:
+                        ++pos;
+                        bean.setFaceNum(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_THUMB_MD5:
+                        ++pos;
+                        bean.setThumbMd5(rs.getString(pos));
+                        break;
+                    case ID_DEVICE_ID:
+                        ++pos;
+                        bean.setDeviceId(Manager.getInteger(rs, pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -2640,14 +2640,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         FlImageBean bean = this.createBean();
         try
         {
-            bean.setDeviceId(Manager.getInteger(rs, "device_id"));
-            bean.setThumbMd5(rs.getString("thumb_md5"));
-            bean.setFaceNum(Manager.getInteger(rs, "face_num"));
-            bean.setDepth(Manager.getInteger(rs, "depth"));
-            bean.setHeight(Manager.getInteger(rs, "height"));
-            bean.setWidth(Manager.getInteger(rs, "width"));
-            bean.setFormat(rs.getString("format"));
             bean.setMd5(rs.getString("md5"));
+            bean.setFormat(rs.getString("format"));
+            bean.setWidth(Manager.getInteger(rs, "width"));
+            bean.setHeight(Manager.getInteger(rs, "height"));
+            bean.setDepth(Manager.getInteger(rs, "depth"));
+            bean.setFaceNum(Manager.getInteger(rs, "face_num"));
+            bean.setThumbMd5(rs.getString("thumb_md5"));
+            bean.setDeviceId(Manager.getInteger(rs, "device_id"));
         }
         catch(SQLException e)
         {

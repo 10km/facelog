@@ -30,34 +30,9 @@ public class FlImageBeanBase
 	private static final long serialVersionUID = -6828373541550111918L;
 	
     /**
-     * comments:外键,图像来源设备
+     * comments:主键,图像md5检验码,同时也是外键fl_store(md5)
      */
-    protected Integer deviceId;
-
-    /**
-     * comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5)
-     */
-    protected String thumbMd5;
-
-    /**
-     * comments:图像中的人脸数目
-     */
-    protected Integer faceNum;
-
-    /**
-     * comments:通道数
-     */
-    protected Integer depth;
-
-    /**
-     * comments:图像高度
-     */
-    protected Integer height;
-
-    /**
-     * comments:图像宽度
-     */
-    protected Integer width;
+    protected String md5;
 
     /**
      * comments:图像格式
@@ -65,9 +40,34 @@ public class FlImageBeanBase
     protected String format;
 
     /**
-     * comments:主键,图像md5检验码,同时也是外键fl_store(md5)
+     * comments:图像宽度
      */
-    protected String md5;
+    protected Integer width;
+
+    /**
+     * comments:图像高度
+     */
+    protected Integer height;
+
+    /**
+     * comments:通道数
+     */
+    protected Integer depth;
+
+    /**
+     * comments:图像中的人脸数目
+     */
+    protected Integer faceNum;
+
+    /**
+     * comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5)
+     */
+    protected String thumbMd5;
+
+    /**
+     * comments:外键,图像来源设备
+     */
+    protected Integer deviceId;
 
     private boolean _isNew = true;
     /**
@@ -112,144 +112,100 @@ public class FlImageBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for {@link #deviceId}.<br>
+     * Getter method for {@link #md5}.<br>
+     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_image.device_id</li>
-     * <li> foreign key: fl_device.id</li>
-     * <li>comments: 外键,图像来源设备</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
-     * </ul>
-     *
-     * @return the value of deviceId
-     */
-    public Integer getDeviceId(){
-        return deviceId;
-    }
-    /**
-     * Setter method for {@link #deviceId}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to deviceId
-     */
-    public void setDeviceId(Integer newVal){    
-        deviceId = newVal;
-    }
-
-    /**
-     * Setter method for {@link #deviceId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to deviceId
-     */
-    public void setDeviceId(int newVal){
-        setDeviceId(new Integer(newVal));
-    }
-
-    /**
-     * Getter method for {@link #thumbMd5}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_image.thumb_md5</li>
+     * <li>full name: fl_image.md5</li>
      * <li> foreign key: fl_store.md5</li>
-     * <li>comments: 外键,缩略图md5,图像数据存储在fl_imae_store(md5)</li>
+     * <li> imported key: fl_face.img_md5</li>
+     * <li> imported key: fl_person.photo_id</li>
+     * <li>comments: 主键,图像md5检验码,同时也是外键fl_store(md5)</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of thumbMd5
+     * @return the value of md5
      */
-    public String getThumbMd5(){
-        return thumbMd5;
+    public String getMd5(){
+        return md5;
     }
     /**
-     * Setter method for {@link #thumbMd5}.<br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to thumbMd5
+     * @param newVal the new value to be assigned to md5
      */
-    public void setThumbMd5(String newVal){    
-        thumbMd5 = newVal;
+    public void setMd5(String newVal){    
+        md5 = newVal;
     }
 
 
     /**
-     * Getter method for {@link #faceNum}.<br>
+     * Getter method for {@link #format}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_image.face_num</li>
-     * <li>comments: 图像中的人脸数目</li>
+     * <li>full name: fl_image.format</li>
+     * <li>comments: 图像格式</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of format
+     */
+    public String getFormat(){
+        return format;
+    }
+    /**
+     * Setter method for {@link #format}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to format
+     */
+    public void setFormat(String newVal){    
+        format = newVal;
+    }
+
+
+    /**
+     * Getter method for {@link #width}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_image.width</li>
+     * <li>comments: 图像宽度</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of faceNum
+     * @return the value of width
      */
-    public Integer getFaceNum(){
-        return faceNum;
+    public Integer getWidth(){
+        return width;
     }
     /**
-     * Setter method for {@link #faceNum}.<br>
+     * Setter method for {@link #width}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceNum
+     * @param newVal the new value to be assigned to width
      */
-    public void setFaceNum(Integer newVal){    
-        faceNum = newVal;
+    public void setWidth(Integer newVal){    
+        width = newVal;
     }
 
     /**
-     * Setter method for {@link #faceNum}.<br>
+     * Setter method for {@link #width}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to faceNum
+     * @param newVal the new value to be assigned to width
      */
-    public void setFaceNum(int newVal){
-        setFaceNum(new Integer(newVal));
-    }
-
-    /**
-     * Getter method for {@link #depth}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_image.depth</li>
-     * <li>comments: 通道数</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
-     * </ul>
-     *
-     * @return the value of depth
-     */
-    public Integer getDepth(){
-        return depth;
-    }
-    /**
-     * Setter method for {@link #depth}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to depth
-     */
-    public void setDepth(Integer newVal){    
-        depth = newVal;
-    }
-
-    /**
-     * Setter method for {@link #depth}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to depth
-     */
-    public void setDepth(int newVal){
-        setDepth(new Integer(newVal));
+    public void setWidth(int newVal){
+        setWidth(new Integer(newVal));
     }
 
     /**
@@ -290,101 +246,145 @@ public class FlImageBeanBase
     }
 
     /**
-     * Getter method for {@link #width}.<br>
+     * Getter method for {@link #depth}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_image.width</li>
-     * <li>comments: 图像宽度</li>
+     * <li>full name: fl_image.depth</li>
+     * <li>comments: 通道数</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of width
+     * @return the value of depth
      */
-    public Integer getWidth(){
-        return width;
+    public Integer getDepth(){
+        return depth;
     }
     /**
-     * Setter method for {@link #width}.<br>
+     * Setter method for {@link #depth}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to width
+     * @param newVal the new value to be assigned to depth
      */
-    public void setWidth(Integer newVal){    
-        width = newVal;
+    public void setDepth(Integer newVal){    
+        depth = newVal;
     }
 
     /**
-     * Setter method for {@link #width}.<br>
+     * Setter method for {@link #depth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to width
+     * @param newVal the new value to be assigned to depth
      */
-    public void setWidth(int newVal){
-        setWidth(new Integer(newVal));
+    public void setDepth(int newVal){
+        setDepth(new Integer(newVal));
     }
 
     /**
-     * Getter method for {@link #format}.<br>
+     * Getter method for {@link #faceNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_image.format</li>
-     * <li>comments: 图像格式</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>full name: fl_image.face_num</li>
+     * <li>comments: 图像中的人脸数目</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of format
+     * @return the value of faceNum
      */
-    public String getFormat(){
-        return format;
+    public Integer getFaceNum(){
+        return faceNum;
     }
     /**
-     * Setter method for {@link #format}.<br>
+     * Setter method for {@link #faceNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to format
+     * @param newVal the new value to be assigned to faceNum
      */
-    public void setFormat(String newVal){    
-        format = newVal;
+    public void setFaceNum(Integer newVal){    
+        faceNum = newVal;
     }
 
+    /**
+     * Setter method for {@link #faceNum}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to faceNum
+     */
+    public void setFaceNum(int newVal){
+        setFaceNum(new Integer(newVal));
+    }
 
     /**
-     * Getter method for {@link #md5}.<br>
-     * PRIMARY KEY.<br>
+     * Getter method for {@link #thumbMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_image.md5</li>
+     * <li>full name: fl_image.thumb_md5</li>
      * <li> foreign key: fl_store.md5</li>
-     * <li> imported key: fl_person.photo_id</li>
-     * <li> imported key: fl_face.img_md5</li>
-     * <li>comments: 主键,图像md5检验码,同时也是外键fl_store(md5)</li>
+     * <li>comments: 外键,缩略图md5,图像数据存储在fl_imae_store(md5)</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of md5
+     * @return the value of thumbMd5
      */
-    public String getMd5(){
-        return md5;
+    public String getThumbMd5(){
+        return thumbMd5;
     }
     /**
-     * Setter method for {@link #md5}.<br>
+     * Setter method for {@link #thumbMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to md5
+     * @param newVal the new value to be assigned to thumbMd5
      */
-    public void setMd5(String newVal){    
-        md5 = newVal;
+    public void setThumbMd5(String newVal){    
+        thumbMd5 = newVal;
     }
 
+
+    /**
+     * Getter method for {@link #deviceId}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_image.device_id</li>
+     * <li> foreign key: fl_device.id</li>
+     * <li>comments: 外键,图像来源设备</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of deviceId
+     */
+    public Integer getDeviceId(){
+        return deviceId;
+    }
+    /**
+     * Setter method for {@link #deviceId}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to deviceId
+     */
+    public void setDeviceId(Integer newVal){    
+        deviceId = newVal;
+    }
+
+    /**
+     * Setter method for {@link #deviceId}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to deviceId
+     */
+    public void setDeviceId(int newVal){
+        setDeviceId(new Integer(newVal));
+    }
 
 
     //////////////////////////////////////
@@ -439,14 +439,14 @@ public class FlImageBeanBase
 
         FlImageBean obj = (FlImageBean) object;
         return new EqualsBuilder()
-            .append(getDeviceId(), obj.getDeviceId())
-            .append(getThumbMd5(), obj.getThumbMd5())
-            .append(getFaceNum(), obj.getFaceNum())
-            .append(getDepth(), obj.getDepth())
-            .append(getHeight(), obj.getHeight())
-            .append(getWidth(), obj.getWidth())
-            .append(getFormat(), obj.getFormat())
             .append(getMd5(), obj.getMd5())
+            .append(getFormat(), obj.getFormat())
+            .append(getWidth(), obj.getWidth())
+            .append(getHeight(), obj.getHeight())
+            .append(getDepth(), obj.getDepth())
+            .append(getFaceNum(), obj.getFaceNum())
+            .append(getThumbMd5(), obj.getThumbMd5())
+            .append(getDeviceId(), obj.getDeviceId())
             .isEquals();
     }
 
@@ -454,28 +454,28 @@ public class FlImageBeanBase
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getDeviceId())
-            .append(getThumbMd5())
-            .append(getFaceNum())
-            .append(getDepth())
-            .append(getHeight())
-            .append(getWidth())
-            .append(getFormat())
             .append(getMd5())
+            .append(getFormat())
+            .append(getWidth())
+            .append(getHeight())
+            .append(getDepth())
+            .append(getFaceNum())
+            .append(getThumbMd5())
+            .append(getDeviceId())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tdevice_id=").append(getDeviceId()).append("\n")
-            .append("\tthumb_md5=").append(getThumbMd5()).append("\n")
-            .append("\tface_num=").append(getFaceNum()).append("\n")
-            .append("\tdepth=").append(getDepth()).append("\n")
-            .append("\theight=").append(getHeight()).append("\n")
-            .append("\twidth=").append(getWidth()).append("\n")
-            .append("\tformat=").append(getFormat()).append("\n")
             .append("\tmd5=").append(getMd5()).append("\n")
+            .append("\tformat=").append(getFormat()).append("\n")
+            .append("\twidth=").append(getWidth()).append("\n")
+            .append("\theight=").append(getHeight()).append("\n")
+            .append("\tdepth=").append(getDepth()).append("\n")
+            .append("\tface_num=").append(getFaceNum()).append("\n")
+            .append("\tthumb_md5=").append(getThumbMd5()).append("\n")
+            .append("\tdevice_id=").append(getDeviceId()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -483,14 +483,14 @@ public class FlImageBeanBase
     @Override
     public int compareTo(FlImageBean object){
         return new CompareToBuilder()
-            .append(getDeviceId(), object.getDeviceId())
-            .append(getThumbMd5(), object.getThumbMd5())
-            .append(getFaceNum(), object.getFaceNum())
-            .append(getDepth(), object.getDepth())
-            .append(getHeight(), object.getHeight())
-            .append(getWidth(), object.getWidth())
-            .append(getFormat(), object.getFormat())
             .append(getMd5(), object.getMd5())
+            .append(getFormat(), object.getFormat())
+            .append(getWidth(), object.getWidth())
+            .append(getHeight(), object.getHeight())
+            .append(getDepth(), object.getDepth())
+            .append(getFaceNum(), object.getFaceNum())
+            .append(getThumbMd5(), object.getThumbMd5())
+            .append(getDeviceId(), object.getDeviceId())
             .toComparison();
     }
     /**
@@ -505,14 +505,14 @@ public class FlImageBeanBase
             copyIfNotNull(bean);
         }else{        
             isNew(bean.isNew());
-            setDeviceId(bean.getDeviceId());
-            setThumbMd5(bean.getThumbMd5());
-            setFaceNum(bean.getFaceNum());
-            setDepth(bean.getDepth());
-            setHeight(bean.getHeight());
-            setWidth(bean.getWidth());
-            setFormat(bean.getFormat());
             setMd5(bean.getMd5());
+            setFormat(bean.getFormat());
+            setWidth(bean.getWidth());
+            setHeight(bean.getHeight());
+            setDepth(bean.getDepth());
+            setFaceNum(bean.getFaceNum());
+            setThumbMd5(bean.getThumbMd5());
+            setDeviceId(bean.getDeviceId());
         }
     }
     /**
@@ -524,22 +524,22 @@ public class FlImageBeanBase
     public void copyIfNotNull(FlImageBeanBase bean)
     {
         isNew(bean.isNew());
-        if(bean.getDeviceId()!=null)
-            setDeviceId(bean.getDeviceId());
-        if(bean.getThumbMd5()!=null)
-            setThumbMd5(bean.getThumbMd5());
-        if(bean.getFaceNum()!=null)
-            setFaceNum(bean.getFaceNum());
-        if(bean.getDepth()!=null)
-            setDepth(bean.getDepth());
-        if(bean.getHeight()!=null)
-            setHeight(bean.getHeight());
-        if(bean.getWidth()!=null)
-            setWidth(bean.getWidth());
-        if(bean.getFormat()!=null)
-            setFormat(bean.getFormat());
         if(bean.getMd5()!=null)
             setMd5(bean.getMd5());
+        if(bean.getFormat()!=null)
+            setFormat(bean.getFormat());
+        if(bean.getWidth()!=null)
+            setWidth(bean.getWidth());
+        if(bean.getHeight()!=null)
+            setHeight(bean.getHeight());
+        if(bean.getDepth()!=null)
+            setDepth(bean.getDepth());
+        if(bean.getFaceNum()!=null)
+            setFaceNum(bean.getFaceNum());
+        if(bean.getThumbMd5()!=null)
+            setThumbMd5(bean.getThumbMd5());
+        if(bean.getDeviceId()!=null)
+            setDeviceId(bean.getDeviceId());
     }
 
     /**
@@ -550,14 +550,14 @@ public class FlImageBeanBase
     public FlImageBeanBase clean()
     {
         isNew(true);
-        setDeviceId(null);
-        setThumbMd5(null);
-        setFaceNum(null);
-        setDepth(null);
-        setHeight(null);
-        setWidth(null);
-        setFormat(null);
         setMd5(null);
+        setFormat(null);
+        setWidth(null);
+        setHeight(null);
+        setDepth(null);
+        setFaceNum(null);
+        setThumbMd5(null);
+        setDeviceId(null);
         return this;
     }
     
@@ -620,14 +620,14 @@ public class FlImageBeanBase
     public Map<String,String> readDictionnary()
     {
         Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("device_id", getDeviceId() == null ? "" : getDeviceId().toString());
-        dictionnary.put("thumb_md5", getThumbMd5() == null ? "" : getThumbMd5().toString());
-        dictionnary.put("face_num", getFaceNum() == null ? "" : getFaceNum().toString());
-        dictionnary.put("depth", getDepth() == null ? "" : getDepth().toString());
-        dictionnary.put("height", getHeight() == null ? "" : getHeight().toString());
-        dictionnary.put("width", getWidth() == null ? "" : getWidth().toString());
-        dictionnary.put("format", getFormat() == null ? "" : getFormat().toString());
         dictionnary.put("md5", getMd5() == null ? "" : getMd5().toString());
+        dictionnary.put("format", getFormat() == null ? "" : getFormat().toString());
+        dictionnary.put("width", getWidth() == null ? "" : getWidth().toString());
+        dictionnary.put("height", getHeight() == null ? "" : getHeight().toString());
+        dictionnary.put("depth", getDepth() == null ? "" : getDepth().toString());
+        dictionnary.put("face_num", getFaceNum() == null ? "" : getFaceNum().toString());
+        dictionnary.put("thumb_md5", getThumbMd5() == null ? "" : getThumbMd5().toString());
+        dictionnary.put("device_id", getDeviceId() == null ? "" : getDeviceId().toString());
         return dictionnary;
     }
 
@@ -648,22 +648,22 @@ public class FlImageBeanBase
     {
         if (null == column || "".equals(column)) {
             return "";
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return getDeviceId() == null ? "" : getDeviceId().toString();
-        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
-            return getThumbMd5() == null ? "" : getThumbMd5().toString();
-        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
-            return getFaceNum() == null ? "" : getFaceNum().toString();
-        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
-            return getDepth() == null ? "" : getDepth().toString();
-        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
-            return getHeight() == null ? "" : getHeight().toString();
-        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
-            return getWidth() == null ? "" : getWidth().toString();
-        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
-            return getFormat() == null ? "" : getFormat().toString();
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             return getMd5() == null ? "" : getMd5().toString();
+        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
+            return getFormat() == null ? "" : getFormat().toString();
+        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
+            return getWidth() == null ? "" : getWidth().toString();
+        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
+            return getHeight() == null ? "" : getHeight().toString();
+        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
+            return getDepth() == null ? "" : getDepth().toString();
+        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
+            return getFaceNum() == null ? "" : getFaceNum().toString();
+        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
+            return getThumbMd5() == null ? "" : getThumbMd5().toString();
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            return getDeviceId() == null ? "" : getDeviceId().toString();
         }
         return "";
     }
@@ -676,22 +676,22 @@ public class FlImageBeanBase
     {
         if (null == column || "".equals(column)) {
             return null;
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return getDeviceId() == null ? null : (T)getDeviceId();
-        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
-            return getThumbMd5() == null ? null : (T)getThumbMd5();
-        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
-            return getFaceNum() == null ? null : (T)getFaceNum();
-        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
-            return getDepth() == null ? null : (T)getDepth();
-        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
-            return getHeight() == null ? null : (T)getHeight();
-        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
-            return getWidth() == null ? null : (T)getWidth();
-        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
-            return getFormat() == null ? null : (T)getFormat();
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             return getMd5() == null ? null : (T)getMd5();
+        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
+            return getFormat() == null ? null : (T)getFormat();
+        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
+            return getWidth() == null ? null : (T)getWidth();
+        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
+            return getHeight() == null ? null : (T)getHeight();
+        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
+            return getDepth() == null ? null : (T)getDepth();
+        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
+            return getFaceNum() == null ? null : (T)getFaceNum();
+        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
+            return getThumbMd5() == null ? null : (T)getThumbMd5();
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            return getDeviceId() == null ? null : (T)getDeviceId();
         }
         return null;
     }
@@ -703,22 +703,22 @@ public class FlImageBeanBase
     {
         if (null == column || "".equals(column)) {
             return ;
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            setDeviceId((Integer)object);
-        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
-            setThumbMd5((String)object);
-        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
-            setFaceNum((Integer)object);
-        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
-            setDepth((Integer)object);
-        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
-            setHeight((Integer)object);
-        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
-            setWidth((Integer)object);
-        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
-            setFormat((String)object);
         } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
             setMd5((String)object);
+        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
+            setFormat((String)object);
+        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
+            setWidth((Integer)object);
+        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
+            setHeight((Integer)object);
+        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
+            setDepth((Integer)object);
+        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
+            setFaceNum((Integer)object);
+        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
+            setThumbMd5((String)object);
+        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
+            setDeviceId((Integer)object);
         }
     }
 }

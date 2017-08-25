@@ -30,16 +30,16 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFeatureComparator(FlFeatureManager.ID_CREATE_TIME, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFeatureComparator(FlFeatureManager.ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlFeatureManager.ID_CREATE_TIME
-     *   <li>FlFeatureManager.ID_IMG_MD5
-     *   <li>FlFeatureManager.ID_PERSON_ID
      *   <li>FlFeatureManager.ID_MD5
+     *   <li>FlFeatureManager.ID_PERSON_ID
+     *   <li>FlFeatureManager.ID_IMG_MD5
+     *   <li>FlFeatureManager.ID_CREATE_TIME
      * </ul>
      */
     public FlFeatureComparator(int iType)
@@ -52,17 +52,17 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFeatureComparator(FlFeatureManager.ID_CREATE_TIME, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFeatureComparator(FlFeatureManager.ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlFeatureManager.ID_CREATE_TIME
-     *   <li>FlFeatureManager.ID_FEATURE
-     *   <li>FlFeatureManager.ID_IMG_MD5
-     *   <li>FlFeatureManager.ID_PERSON_ID
      *   <li>FlFeatureManager.ID_MD5
+     *   <li>FlFeatureManager.ID_PERSON_ID
+     *   <li>FlFeatureManager.ID_IMG_MD5
+     *   <li>FlFeatureManager.ID_FEATURE
+     *   <li>FlFeatureManager.ID_CREATE_TIME
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -79,26 +79,15 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlFeatureManager.ID_CREATE_TIME:
-                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
+            case FlFeatureManager.ID_MD5:
+                if (b1.getMd5() == null && b2.getMd5() != null) {
                     iReturn = -1;
-                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
+                } else if (b1.getMd5() == null && b2.getMd5() == null) {
                     iReturn = 0;
-                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
+                } else if (b1.getMd5() != null && b2.getMd5() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
-                }
-                break;
-            case FlFeatureManager.ID_IMG_MD5:
-                if (b1.getImgMd5() == null && b2.getImgMd5() != null) {
-                    iReturn = -1;
-                } else if (b1.getImgMd5() == null && b2.getImgMd5() == null) {
-                    iReturn = 0;
-                } else if (b1.getImgMd5() != null && b2.getImgMd5() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getImgMd5().compareTo(b2.getImgMd5());
+                    iReturn = b1.getMd5().compareTo(b2.getMd5());
                 }
                 break;
             case FlFeatureManager.ID_PERSON_ID:
@@ -112,15 +101,26 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
                     iReturn = b1.getPersonId().compareTo(b2.getPersonId());
                 }
                 break;
-            case FlFeatureManager.ID_MD5:
-                if (b1.getMd5() == null && b2.getMd5() != null) {
+            case FlFeatureManager.ID_IMG_MD5:
+                if (b1.getImgMd5() == null && b2.getImgMd5() != null) {
                     iReturn = -1;
-                } else if (b1.getMd5() == null && b2.getMd5() == null) {
+                } else if (b1.getImgMd5() == null && b2.getImgMd5() == null) {
                     iReturn = 0;
-                } else if (b1.getMd5() != null && b2.getMd5() == null) {
+                } else if (b1.getImgMd5() != null && b2.getImgMd5() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getMd5().compareTo(b2.getMd5());
+                    iReturn = b1.getImgMd5().compareTo(b2.getImgMd5());
+                }
+                break;
+            case FlFeatureManager.ID_CREATE_TIME:
+                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
+                    iReturn = -1;
+                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
+                    iReturn = 0;
+                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
                 }
                 break;
             default:

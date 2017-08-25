@@ -28,24 +28,9 @@ public class FlLogLightBeanBase
 	private static final long serialVersionUID = -7498507724950774278L;
 	
     /**
-     * comments:验证时间(可能由前端设备提供时间)
+     * comments:日志id
      */
-    protected java.util.Date verifyTime;
-
-    /**
-     * comments:证件号码
-     */
-    protected String papersNum;
-
-    /**
-     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-     */
-    protected Integer papersType;
-
-    /**
-     * comments:姓名
-     */
-    protected String name;
+    protected Integer id;
 
     /**
      * comments:用户识别码
@@ -53,9 +38,24 @@ public class FlLogLightBeanBase
     protected Integer personId;
 
     /**
-     * comments:日志id
+     * comments:姓名
      */
-    protected Integer id;
+    protected String name;
+
+    /**
+     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
+     */
+    protected Integer papersType;
+
+    /**
+     * comments:证件号码
+     */
+    protected String papersNum;
+
+    /**
+     * comments:验证时间(可能由前端设备提供时间)
+     */
+    protected java.util.Date verifyTime;
 
     private boolean _isNew = true;
     /**
@@ -100,67 +100,104 @@ public class FlLogLightBeanBase
         this.copy(bean);
     }
     /**
-     * Getter method for {@link #verifyTime}.<br>
+     * Getter method for {@link #id}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log_light.verify_time</li>
-     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>full name: fl_log_light.id</li>
+     * <li>comments: 日志id</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of verifyTime
+     * @return the value of id
      */
-    public java.util.Date getVerifyTime(){
-        return verifyTime;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for {@link #verifyTime}.<br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value to be assigned to id
      */
-    public void setVerifyTime(java.util.Date newVal){    
-        verifyTime = newVal;
+    public void setId(Integer newVal){    
+        id = newVal;
     }
 
     /**
-     * Setter method for {@link #verifyTime}.<br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value to be assigned to id
      */
-    public void setVerifyTime(long newVal){
-        setVerifyTime(new java.util.Date(newVal));
+    public void setId(int newVal){
+        setId(new Integer(newVal));
     }
 
     /**
-     * Getter method for {@link #papersNum}.<br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log_light.papers_num</li>
-     * <li>comments: 证件号码</li>
+     * <li>full name: fl_log_light.person_id</li>
+     * <li>comments: 用户识别码</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of personId
+     */
+    public Integer getPersonId(){
+        return personId;
+    }
+    /**
+     * Setter method for {@link #personId}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to personId
+     */
+    public void setPersonId(Integer newVal){    
+        personId = newVal;
+    }
+
+    /**
+     * Setter method for {@link #personId}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to personId
+     */
+    public void setPersonId(int newVal){
+        setPersonId(new Integer(newVal));
+    }
+
+    /**
+     * Getter method for {@link #name}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log_light.name</li>
+     * <li>comments: 姓名</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of papersNum
+     * @return the value of name
      */
-    public String getPapersNum(){
-        return papersNum;
+    public String getName(){
+        return name;
     }
     /**
-     * Setter method for {@link #papersNum}.<br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersNum
+     * @param newVal the new value to be assigned to name
      */
-    public void setPapersNum(String newVal){    
-        papersNum = newVal;
+    public void setName(String newVal){    
+        name = newVal;
     }
 
 
@@ -202,105 +239,68 @@ public class FlLogLightBeanBase
     }
 
     /**
-     * Getter method for {@link #name}.<br>
+     * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log_light.name</li>
-     * <li>comments: 姓名</li>
+     * <li>full name: fl_log_light.papers_num</li>
+     * <li>comments: 证件号码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of name
+     * @return the value of papersNum
      */
-    public String getName(){
-        return name;
+    public String getPapersNum(){
+        return papersNum;
     }
     /**
-     * Setter method for {@link #name}.<br>
+     * Setter method for {@link #papersNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to name
+     * @param newVal the new value to be assigned to papersNum
      */
-    public void setName(String newVal){    
-        name = newVal;
+    public void setPapersNum(String newVal){    
+        papersNum = newVal;
     }
 
 
     /**
-     * Getter method for {@link #personId}.<br>
+     * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log_light.person_id</li>
-     * <li>comments: 用户识别码</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>full name: fl_log_light.verify_time</li>
+     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
-     * @return the value of personId
+     * @return the value of verifyTime
      */
-    public Integer getPersonId(){
-        return personId;
+    public java.util.Date getVerifyTime(){
+        return verifyTime;
     }
     /**
-     * Setter method for {@link #personId}.<br>
+     * Setter method for {@link #verifyTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value to be assigned to verifyTime
      */
-    public void setPersonId(Integer newVal){    
-        personId = newVal;
+    public void setVerifyTime(java.util.Date newVal){    
+        verifyTime = newVal;
     }
 
     /**
-     * Setter method for {@link #personId}.<br>
+     * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value to be assigned to verifyTime
      */
-    public void setPersonId(int newVal){
-        setPersonId(new Integer(newVal));
-    }
-
-    /**
-     * Getter method for {@link #id}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log_light.id</li>
-     * <li>comments: 日志id</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
-     * </ul>
-     *
-     * @return the value of id
-     */
-    public Integer getId(){
-        return id;
-    }
-    /**
-     * Setter method for {@link #id}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(Integer newVal){    
-        id = newVal;
-    }
-
-    /**
-     * Setter method for {@link #id}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal){
-        setId(new Integer(newVal));
+    public void setVerifyTime(long newVal){
+        setVerifyTime(new java.util.Date(newVal));
     }
 
 
@@ -314,12 +314,12 @@ public class FlLogLightBeanBase
 
         FlLogLightBean obj = (FlLogLightBean) object;
         return new EqualsBuilder()
-            .append(getVerifyTime(), obj.getVerifyTime())
-            .append(getPapersNum(), obj.getPapersNum())
-            .append(getPapersType(), obj.getPapersType())
-            .append(getName(), obj.getName())
-            .append(getPersonId(), obj.getPersonId())
             .append(getId(), obj.getId())
+            .append(getPersonId(), obj.getPersonId())
+            .append(getName(), obj.getName())
+            .append(getPapersType(), obj.getPapersType())
+            .append(getPapersNum(), obj.getPapersNum())
+            .append(getVerifyTime(), obj.getVerifyTime())
             .isEquals();
     }
 
@@ -327,24 +327,24 @@ public class FlLogLightBeanBase
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getVerifyTime())
-            .append(getPapersNum())
-            .append(getPapersType())
-            .append(getName())
-            .append(getPersonId())
             .append(getId())
+            .append(getPersonId())
+            .append(getName())
+            .append(getPapersType())
+            .append(getPapersNum())
+            .append(getVerifyTime())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tverify_time=").append(getVerifyTime()).append("\n")
-            .append("\tpapers_num=").append(getPapersNum()).append("\n")
-            .append("\tpapers_type=").append(getPapersType()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\tid=").append(getId()).append("\n")
+            .append("\tperson_id=").append(getPersonId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
+            .append("\tpapers_type=").append(getPapersType()).append("\n")
+            .append("\tpapers_num=").append(getPapersNum()).append("\n")
+            .append("\tverify_time=").append(getVerifyTime()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -352,12 +352,12 @@ public class FlLogLightBeanBase
     @Override
     public int compareTo(FlLogLightBean object){
         return new CompareToBuilder()
-            .append(getVerifyTime(), object.getVerifyTime())
-            .append(getPapersNum(), object.getPapersNum())
-            .append(getPapersType(), object.getPapersType())
-            .append(getName(), object.getName())
-            .append(getPersonId(), object.getPersonId())
             .append(getId(), object.getId())
+            .append(getPersonId(), object.getPersonId())
+            .append(getName(), object.getName())
+            .append(getPapersType(), object.getPapersType())
+            .append(getPapersNum(), object.getPapersNum())
+            .append(getVerifyTime(), object.getVerifyTime())
             .toComparison();
     }
     /**
@@ -372,12 +372,12 @@ public class FlLogLightBeanBase
             copyIfNotNull(bean);
         }else{        
             isNew(bean.isNew());
-            setVerifyTime(bean.getVerifyTime());
-            setPapersNum(bean.getPapersNum());
-            setPapersType(bean.getPapersType());
-            setName(bean.getName());
-            setPersonId(bean.getPersonId());
             setId(bean.getId());
+            setPersonId(bean.getPersonId());
+            setName(bean.getName());
+            setPapersType(bean.getPapersType());
+            setPapersNum(bean.getPapersNum());
+            setVerifyTime(bean.getVerifyTime());
         }
     }
     /**
@@ -389,18 +389,18 @@ public class FlLogLightBeanBase
     public void copyIfNotNull(FlLogLightBeanBase bean)
     {
         isNew(bean.isNew());
-        if(bean.getVerifyTime()!=null)
-            setVerifyTime(bean.getVerifyTime());
-        if(bean.getPapersNum()!=null)
-            setPapersNum(bean.getPapersNum());
-        if(bean.getPapersType()!=null)
-            setPapersType(bean.getPapersType());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
         if(bean.getId()!=null)
             setId(bean.getId());
+        if(bean.getPersonId()!=null)
+            setPersonId(bean.getPersonId());
+        if(bean.getName()!=null)
+            setName(bean.getName());
+        if(bean.getPapersType()!=null)
+            setPapersType(bean.getPapersType());
+        if(bean.getPapersNum()!=null)
+            setPapersNum(bean.getPapersNum());
+        if(bean.getVerifyTime()!=null)
+            setVerifyTime(bean.getVerifyTime());
     }
 
     /**
@@ -411,12 +411,12 @@ public class FlLogLightBeanBase
     public FlLogLightBeanBase clean()
     {
         isNew(true);
-        setVerifyTime(null);
-        setPapersNum(null);
-        setPapersType(null);
-        setName(null);
-        setPersonId(null);
         setId(null);
+        setPersonId(null);
+        setName(null);
+        setPapersType(null);
+        setPapersNum(null);
+        setVerifyTime(null);
         return this;
     }
     
@@ -479,12 +479,12 @@ public class FlLogLightBeanBase
     public Map<String,String> readDictionnary()
     {
         Map<String,String> dictionnary = new HashMap<String,String>();
-        dictionnary.put("verify_time", getVerifyTime() == null ? "" : getVerifyTime().toString());
-        dictionnary.put("papers_num", getPapersNum() == null ? "" : getPapersNum().toString());
-        dictionnary.put("papers_type", getPapersType() == null ? "" : getPapersType().toString());
-        dictionnary.put("name", getName() == null ? "" : getName().toString());
-        dictionnary.put("person_id", getPersonId() == null ? "" : getPersonId().toString());
         dictionnary.put("id", getId() == null ? "" : getId().toString());
+        dictionnary.put("person_id", getPersonId() == null ? "" : getPersonId().toString());
+        dictionnary.put("name", getName() == null ? "" : getName().toString());
+        dictionnary.put("papers_type", getPapersType() == null ? "" : getPapersType().toString());
+        dictionnary.put("papers_num", getPapersNum() == null ? "" : getPapersNum().toString());
+        dictionnary.put("verify_time", getVerifyTime() == null ? "" : getVerifyTime().toString());
         return dictionnary;
     }
 
@@ -504,18 +504,18 @@ public class FlLogLightBeanBase
     {
         if (null == column || "".equals(column)) {
             return "";
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return getVerifyTime() == null ? "" : getVerifyTime().toString();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return getPapersNum() == null ? "" : getPapersNum().toString();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return getPapersType() == null ? "" : getPapersType().toString();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return getName() == null ? "" : getName().toString();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return getPersonId() == null ? "" : getPersonId().toString();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? "" : getId().toString();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return getPersonId() == null ? "" : getPersonId().toString();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return getName() == null ? "" : getName().toString();
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            return getPapersType() == null ? "" : getPapersType().toString();
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            return getPapersNum() == null ? "" : getPapersNum().toString();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return getVerifyTime() == null ? "" : getVerifyTime().toString();
         }
         return "";
     }
@@ -528,18 +528,18 @@ public class FlLogLightBeanBase
     {
         if (null == column || "".equals(column)) {
             return null;
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return getVerifyTime() == null ? null : (T)getVerifyTime();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return getPapersNum() == null ? null : (T)getPapersNum();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return getPapersType() == null ? null : (T)getPapersType();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return getName() == null ? null : (T)getName();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return getPersonId() == null ? null : (T)getPersonId();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return getId() == null ? null : (T)getId();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return getPersonId() == null ? null : (T)getPersonId();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return getName() == null ? null : (T)getName();
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            return getPapersType() == null ? null : (T)getPapersType();
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            return getPapersNum() == null ? null : (T)getPapersNum();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return getVerifyTime() == null ? null : (T)getVerifyTime();
         }
         return null;
     }
@@ -551,18 +551,18 @@ public class FlLogLightBeanBase
     {
         if (null == column || "".equals(column)) {
             return ;
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            setVerifyTime((java.util.Date)object);
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            setPapersNum((String)object);
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            setPapersType((Integer)object);
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            setName((String)object);
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            setPersonId((Integer)object);
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             setId((Integer)object);
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            setPersonId((Integer)object);
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            setName((String)object);
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            setPapersType((Integer)object);
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            setPapersNum((String)object);
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            setVerifyTime((java.util.Date)object);
         }
     }
 }

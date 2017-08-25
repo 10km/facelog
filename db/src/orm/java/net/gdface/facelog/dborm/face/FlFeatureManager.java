@@ -42,14 +42,14 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
-     * Identify the create_time field.
+     * Identify the md5 field.
      */
-    public static final int ID_CREATE_TIME = 0;
+    public static final int ID_MD5 = 0;
 
     /**
-     * Identify the feature field.
+     * Identify the person_id field.
      */
-    public static final int ID_FEATURE = 1;
+    public static final int ID_PERSON_ID = 1;
 
     /**
      * Identify the img_md5 field.
@@ -57,14 +57,14 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     public static final int ID_IMG_MD5 = 2;
 
     /**
-     * Identify the person_id field.
+     * Identify the feature field.
      */
-    public static final int ID_PERSON_ID = 3;
+    public static final int ID_FEATURE = 3;
 
     /**
-     * Identify the md5 field.
+     * Identify the create_time field.
      */
-    public static final int ID_MD5 = 4;
+    public static final int ID_CREATE_TIME = 4;
 
     /**
      * Tablename.
@@ -75,11 +75,11 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      */
     public static final String[] FULL_FIELD_NAMES =
     {
-        "fl_feature.create_time"
-        ,"fl_feature.feature"
-        ,"fl_feature.img_md5"
+        "fl_feature.md5"
         ,"fl_feature.person_id"
-        ,"fl_feature.md5"
+        ,"fl_feature.img_md5"
+        ,"fl_feature.feature"
+        ,"fl_feature.create_time"
     };
 
     /**
@@ -87,11 +87,11 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      */
     public static final String[] FIELD_NAMES =
     {
-        "create_time"
-        ,"feature"
-        ,"img_md5"
+        "md5"
         ,"person_id"
-        ,"md5"
+        ,"img_md5"
+        ,"feature"
+        ,"create_time"
     };
    /**
      * Contains all the primarykey fields of the fl_feature table.
@@ -102,20 +102,20 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     /**
      * Field that contains the comma separated fields of the fl_feature table.
      */
-    public static final String ALL_FULL_FIELDS = "fl_feature.create_time"
-                            + ",fl_feature.feature"
-                            + ",fl_feature.img_md5"
+    public static final String ALL_FULL_FIELDS = "fl_feature.md5"
                             + ",fl_feature.person_id"
-                            + ",fl_feature.md5";
+                            + ",fl_feature.img_md5"
+                            + ",fl_feature.feature"
+                            + ",fl_feature.create_time";
 
     /**
      * Field that contains the comma separated fields of the fl_feature table.
      */
-    public static final String ALL_FIELDS = "create_time"
-                            + ",feature"
-                            + ",img_md5"
+    public static final String ALL_FIELDS = "md5"
                             + ",person_id"
-                            + ",md5";
+                            + ",img_md5"
+                            + ",feature"
+                            + ",create_time";
 
     public static interface Action{
           void call(FlFeatureBean bean);
@@ -543,27 +543,11 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_feature (");
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.isMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("create_time");
-                _dirtyCount++;
-            }
-
-            if (bean.isFeatureModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("feature");
-                _dirtyCount++;
-            }
-
-            if (bean.isImgMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("img_md5");
+                sql.append("md5");
                 _dirtyCount++;
             }
 
@@ -575,11 +559,27 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
                 _dirtyCount++;
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isImgMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("md5");
+                sql.append("img_md5");
+                _dirtyCount++;
+            }
+
+            if (bean.isFeatureModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("feature");
+                _dirtyCount++;
+            }
+
+            if (bean.isCreateTimeModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("create_time");
                 _dirtyCount++;
             }
 
@@ -649,31 +649,13 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             sql = new StringBuilder("UPDATE fl_feature SET ");
             boolean useComma=false;
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.isMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("create_time=?");
-            }
-
-            if (bean.isFeatureModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("feature=?");
-            }
-
-            if (bean.isImgMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("img_md5=?");
+                sql.append("md5=?");
             }
 
             if (bean.isPersonIdModified()) {
@@ -685,13 +667,31 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
                 sql.append("person_id=?");
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isImgMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("md5=?");
+                sql.append("img_md5=?");
+            }
+
+            if (bean.isFeatureModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("feature=?");
+            }
+
+            if (bean.isCreateTimeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("create_time=?");
             }
             sql.append("");
             // System.out.println("update : " + sql.toString());
@@ -1326,28 +1326,12 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         }
         try
         {
-            if (bean.isCreateTimeModified()) {
+            if (bean.isMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                if (bean.getMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
-                }
-            }
-            if (bean.isFeatureModified()) {
-                _dirtyCount ++;
-                if (bean.getFeature() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature = ?");
-                }
-            }
-            if (bean.isImgMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getImgMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.isPersonIdModified()) {
@@ -1358,12 +1342,28 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
                 }
             }
-            if (bean.isMd5Modified()) {
+            if (bean.isImgMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
+                if (bean.getImgMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isFeatureModified()) {
+                _dirtyCount ++;
+                if (bean.getFeature() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature = ?");
+                }
+            }
+            if (bean.isCreateTimeModified()) {
+                _dirtyCount ++;
+                if (bean.getCreateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
                 }
             }
         }
@@ -1390,13 +1390,31 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         int _dirtyCount = 0;
         try
         {
-            if (bean.isCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+            if (bean.isMd5Modified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
             }
-            if (bean.isFeatureModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
-                if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getFeature()); }
+            if (bean.isPersonIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
+                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
             }
             if (bean.isImgMd5Modified()) {
                 switch (searchType) {
@@ -1420,31 +1438,13 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPersonIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
+            if (bean.isFeatureModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
+                if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getFeature()); }
             }
-            if (bean.isMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
+            if (bean.isCreateTimeModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)
@@ -1551,11 +1551,11 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             bean = this.createBean();
         try
         {
-            bean.setCreateTime(rs.getTimestamp(1));
-            bean.setFeature(rs.getBytes(2));
+            bean.setMd5(rs.getString(1));
+            bean.setPersonId(Manager.getInteger(rs, 2));
             bean.setImgMd5(rs.getString(3));
-            bean.setPersonId(Manager.getInteger(rs, 4));
-            bean.setMd5(rs.getString(5));
+            bean.setFeature(rs.getBytes(4));
+            bean.setCreateTime(rs.getTimestamp(5));
         }
         catch(SQLException e)
         {
@@ -1587,25 +1587,25 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             {
                 switch(fieldList[i])
                 {
-                    case ID_CREATE_TIME:
+                    case ID_MD5:
                         ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
-                        break;
-                    case ID_FEATURE:
-                        ++pos;
-                        bean.setFeature(rs.getBytes(pos));
-                        break;
-                    case ID_IMG_MD5:
-                        ++pos;
-                        bean.setImgMd5(rs.getString(pos));
+                        bean.setMd5(rs.getString(pos));
                         break;
                     case ID_PERSON_ID:
                         ++pos;
                         bean.setPersonId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_MD5:
+                    case ID_IMG_MD5:
                         ++pos;
-                        bean.setMd5(rs.getString(pos));
+                        bean.setImgMd5(rs.getString(pos));
+                        break;
+                    case ID_FEATURE:
+                        ++pos;
+                        bean.setFeature(rs.getBytes(pos));
+                        break;
+                    case ID_CREATE_TIME:
+                        ++pos;
+                        bean.setCreateTime(rs.getTimestamp(pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -1635,11 +1635,11 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         FlFeatureBean bean = this.createBean();
         try
         {
-            bean.setCreateTime(rs.getTimestamp("create_time"));
-            bean.setFeature(rs.getBytes("feature"));
-            bean.setImgMd5(rs.getString("img_md5"));
-            bean.setPersonId(Manager.getInteger(rs, "person_id"));
             bean.setMd5(rs.getString("md5"));
+            bean.setPersonId(Manager.getInteger(rs, "person_id"));
+            bean.setImgMd5(rs.getString("img_md5"));
+            bean.setFeature(rs.getBytes("feature"));
+            bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)
         {

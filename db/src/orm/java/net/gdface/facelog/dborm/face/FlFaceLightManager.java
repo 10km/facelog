@@ -42,104 +42,104 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
     public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
-     * Identify the create_time field.
+     * Identify the md5 field.
      */
-    public static final int ID_CREATE_TIME = 0;
-
-    /**
-     * Identify the ext_info field.
-     */
-    public static final int ID_EXT_INFO = 1;
-
-    /**
-     * Identify the angle_roll field.
-     */
-    public static final int ID_ANGLE_ROLL = 2;
-
-    /**
-     * Identify the angle_pitch field.
-     */
-    public static final int ID_ANGLE_PITCH = 3;
-
-    /**
-     * Identify the angle_yaw field.
-     */
-    public static final int ID_ANGLE_YAW = 4;
-
-    /**
-     * Identify the nose_y field.
-     */
-    public static final int ID_NOSE_Y = 5;
-
-    /**
-     * Identify the nose_x field.
-     */
-    public static final int ID_NOSE_X = 6;
-
-    /**
-     * Identify the mouth_y field.
-     */
-    public static final int ID_MOUTH_Y = 7;
-
-    /**
-     * Identify the mouth_x field.
-     */
-    public static final int ID_MOUTH_X = 8;
-
-    /**
-     * Identify the eye_righty field.
-     */
-    public static final int ID_EYE_RIGHTY = 9;
-
-    /**
-     * Identify the eye_rightx field.
-     */
-    public static final int ID_EYE_RIGHTX = 10;
-
-    /**
-     * Identify the eye_lefty field.
-     */
-    public static final int ID_EYE_LEFTY = 11;
-
-    /**
-     * Identify the eye_leftx field.
-     */
-    public static final int ID_EYE_LEFTX = 12;
-
-    /**
-     * Identify the face_height field.
-     */
-    public static final int ID_FACE_HEIGHT = 13;
-
-    /**
-     * Identify the face_width field.
-     */
-    public static final int ID_FACE_WIDTH = 14;
-
-    /**
-     * Identify the face_top field.
-     */
-    public static final int ID_FACE_TOP = 15;
-
-    /**
-     * Identify the face_left field.
-     */
-    public static final int ID_FACE_LEFT = 16;
-
-    /**
-     * Identify the img_md5 field.
-     */
-    public static final int ID_IMG_MD5 = 17;
+    public static final int ID_MD5 = 0;
 
     /**
      * Identify the person_id field.
      */
-    public static final int ID_PERSON_ID = 18;
+    public static final int ID_PERSON_ID = 1;
 
     /**
-     * Identify the md5 field.
+     * Identify the img_md5 field.
      */
-    public static final int ID_MD5 = 19;
+    public static final int ID_IMG_MD5 = 2;
+
+    /**
+     * Identify the face_left field.
+     */
+    public static final int ID_FACE_LEFT = 3;
+
+    /**
+     * Identify the face_top field.
+     */
+    public static final int ID_FACE_TOP = 4;
+
+    /**
+     * Identify the face_width field.
+     */
+    public static final int ID_FACE_WIDTH = 5;
+
+    /**
+     * Identify the face_height field.
+     */
+    public static final int ID_FACE_HEIGHT = 6;
+
+    /**
+     * Identify the eye_leftx field.
+     */
+    public static final int ID_EYE_LEFTX = 7;
+
+    /**
+     * Identify the eye_lefty field.
+     */
+    public static final int ID_EYE_LEFTY = 8;
+
+    /**
+     * Identify the eye_rightx field.
+     */
+    public static final int ID_EYE_RIGHTX = 9;
+
+    /**
+     * Identify the eye_righty field.
+     */
+    public static final int ID_EYE_RIGHTY = 10;
+
+    /**
+     * Identify the mouth_x field.
+     */
+    public static final int ID_MOUTH_X = 11;
+
+    /**
+     * Identify the mouth_y field.
+     */
+    public static final int ID_MOUTH_Y = 12;
+
+    /**
+     * Identify the nose_x field.
+     */
+    public static final int ID_NOSE_X = 13;
+
+    /**
+     * Identify the nose_y field.
+     */
+    public static final int ID_NOSE_Y = 14;
+
+    /**
+     * Identify the angle_yaw field.
+     */
+    public static final int ID_ANGLE_YAW = 15;
+
+    /**
+     * Identify the angle_pitch field.
+     */
+    public static final int ID_ANGLE_PITCH = 16;
+
+    /**
+     * Identify the angle_roll field.
+     */
+    public static final int ID_ANGLE_ROLL = 17;
+
+    /**
+     * Identify the ext_info field.
+     */
+    public static final int ID_EXT_INFO = 18;
+
+    /**
+     * Identify the create_time field.
+     */
+    public static final int ID_CREATE_TIME = 19;
 
     /**
      * Tablename.
@@ -150,26 +150,26 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      */
     public static final String[] FULL_FIELD_NAMES =
     {
-        "fl_face_light.create_time"
-        ,"fl_face_light.ext_info"
-        ,"fl_face_light.angle_roll"
-        ,"fl_face_light.angle_pitch"
-        ,"fl_face_light.angle_yaw"
-        ,"fl_face_light.nose_y"
-        ,"fl_face_light.nose_x"
-        ,"fl_face_light.mouth_y"
-        ,"fl_face_light.mouth_x"
-        ,"fl_face_light.eye_righty"
-        ,"fl_face_light.eye_rightx"
-        ,"fl_face_light.eye_lefty"
-        ,"fl_face_light.eye_leftx"
-        ,"fl_face_light.face_height"
-        ,"fl_face_light.face_width"
-        ,"fl_face_light.face_top"
-        ,"fl_face_light.face_left"
-        ,"fl_face_light.img_md5"
+        "fl_face_light.md5"
         ,"fl_face_light.person_id"
-        ,"fl_face_light.md5"
+        ,"fl_face_light.img_md5"
+        ,"fl_face_light.face_left"
+        ,"fl_face_light.face_top"
+        ,"fl_face_light.face_width"
+        ,"fl_face_light.face_height"
+        ,"fl_face_light.eye_leftx"
+        ,"fl_face_light.eye_lefty"
+        ,"fl_face_light.eye_rightx"
+        ,"fl_face_light.eye_righty"
+        ,"fl_face_light.mouth_x"
+        ,"fl_face_light.mouth_y"
+        ,"fl_face_light.nose_x"
+        ,"fl_face_light.nose_y"
+        ,"fl_face_light.angle_yaw"
+        ,"fl_face_light.angle_pitch"
+        ,"fl_face_light.angle_roll"
+        ,"fl_face_light.ext_info"
+        ,"fl_face_light.create_time"
     };
 
     /**
@@ -177,26 +177,26 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
      */
     public static final String[] FIELD_NAMES =
     {
-        "create_time"
-        ,"ext_info"
-        ,"angle_roll"
-        ,"angle_pitch"
-        ,"angle_yaw"
-        ,"nose_y"
-        ,"nose_x"
-        ,"mouth_y"
-        ,"mouth_x"
-        ,"eye_righty"
-        ,"eye_rightx"
-        ,"eye_lefty"
-        ,"eye_leftx"
-        ,"face_height"
-        ,"face_width"
-        ,"face_top"
-        ,"face_left"
-        ,"img_md5"
+        "md5"
         ,"person_id"
-        ,"md5"
+        ,"img_md5"
+        ,"face_left"
+        ,"face_top"
+        ,"face_width"
+        ,"face_height"
+        ,"eye_leftx"
+        ,"eye_lefty"
+        ,"eye_rightx"
+        ,"eye_righty"
+        ,"mouth_x"
+        ,"mouth_y"
+        ,"nose_x"
+        ,"nose_y"
+        ,"angle_yaw"
+        ,"angle_pitch"
+        ,"angle_roll"
+        ,"ext_info"
+        ,"create_time"
     };
    /**
      * Contains all the primarykey fields of the fl_face_light table.
@@ -207,50 +207,50 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
     /**
      * Field that contains the comma separated fields of the fl_face_light table.
      */
-    public static final String ALL_FULL_FIELDS = "fl_face_light.create_time"
-                            + ",fl_face_light.ext_info"
-                            + ",fl_face_light.angle_roll"
-                            + ",fl_face_light.angle_pitch"
-                            + ",fl_face_light.angle_yaw"
-                            + ",fl_face_light.nose_y"
-                            + ",fl_face_light.nose_x"
-                            + ",fl_face_light.mouth_y"
-                            + ",fl_face_light.mouth_x"
-                            + ",fl_face_light.eye_righty"
-                            + ",fl_face_light.eye_rightx"
-                            + ",fl_face_light.eye_lefty"
-                            + ",fl_face_light.eye_leftx"
-                            + ",fl_face_light.face_height"
-                            + ",fl_face_light.face_width"
-                            + ",fl_face_light.face_top"
-                            + ",fl_face_light.face_left"
-                            + ",fl_face_light.img_md5"
+    public static final String ALL_FULL_FIELDS = "fl_face_light.md5"
                             + ",fl_face_light.person_id"
-                            + ",fl_face_light.md5";
+                            + ",fl_face_light.img_md5"
+                            + ",fl_face_light.face_left"
+                            + ",fl_face_light.face_top"
+                            + ",fl_face_light.face_width"
+                            + ",fl_face_light.face_height"
+                            + ",fl_face_light.eye_leftx"
+                            + ",fl_face_light.eye_lefty"
+                            + ",fl_face_light.eye_rightx"
+                            + ",fl_face_light.eye_righty"
+                            + ",fl_face_light.mouth_x"
+                            + ",fl_face_light.mouth_y"
+                            + ",fl_face_light.nose_x"
+                            + ",fl_face_light.nose_y"
+                            + ",fl_face_light.angle_yaw"
+                            + ",fl_face_light.angle_pitch"
+                            + ",fl_face_light.angle_roll"
+                            + ",fl_face_light.ext_info"
+                            + ",fl_face_light.create_time";
 
     /**
      * Field that contains the comma separated fields of the fl_face_light table.
      */
-    public static final String ALL_FIELDS = "create_time"
-                            + ",ext_info"
-                            + ",angle_roll"
-                            + ",angle_pitch"
-                            + ",angle_yaw"
-                            + ",nose_y"
-                            + ",nose_x"
-                            + ",mouth_y"
-                            + ",mouth_x"
-                            + ",eye_righty"
-                            + ",eye_rightx"
-                            + ",eye_lefty"
-                            + ",eye_leftx"
-                            + ",face_height"
-                            + ",face_width"
-                            + ",face_top"
-                            + ",face_left"
-                            + ",img_md5"
+    public static final String ALL_FIELDS = "md5"
                             + ",person_id"
-                            + ",md5";
+                            + ",img_md5"
+                            + ",face_left"
+                            + ",face_top"
+                            + ",face_width"
+                            + ",face_height"
+                            + ",eye_leftx"
+                            + ",eye_lefty"
+                            + ",eye_rightx"
+                            + ",eye_righty"
+                            + ",mouth_x"
+                            + ",mouth_y"
+                            + ",nose_x"
+                            + ",nose_y"
+                            + ",angle_yaw"
+                            + ",angle_pitch"
+                            + ",angle_roll"
+                            + ",ext_info"
+                            + ",create_time";
 
     public static interface Action{
           void call(FlFaceLightBean bean);
@@ -678,147 +678,11 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_face_light (");
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.isMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("create_time");
-                _dirtyCount++;
-            }
-
-            if (bean.isExtInfoModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("ext_info");
-                _dirtyCount++;
-            }
-
-            if (bean.isAngleRollModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("angle_roll");
-                _dirtyCount++;
-            }
-
-            if (bean.isAnglePitchModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("angle_pitch");
-                _dirtyCount++;
-            }
-
-            if (bean.isAngleYawModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("angle_yaw");
-                _dirtyCount++;
-            }
-
-            if (bean.isNoseYModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("nose_y");
-                _dirtyCount++;
-            }
-
-            if (bean.isNoseXModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("nose_x");
-                _dirtyCount++;
-            }
-
-            if (bean.isMouthYModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("mouth_y");
-                _dirtyCount++;
-            }
-
-            if (bean.isMouthXModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("mouth_x");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeRightyModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_righty");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeRightxModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_rightx");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeLeftyModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_lefty");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeLeftxModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_leftx");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceHeightModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_height");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceWidthModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_width");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceTopModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_top");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceLeftModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_left");
-                _dirtyCount++;
-            }
-
-            if (bean.isImgMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("img_md5");
+                sql.append("md5");
                 _dirtyCount++;
             }
 
@@ -830,11 +694,147 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
                 _dirtyCount++;
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isImgMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("md5");
+                sql.append("img_md5");
+                _dirtyCount++;
+            }
+
+            if (bean.isFaceLeftModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("face_left");
+                _dirtyCount++;
+            }
+
+            if (bean.isFaceTopModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("face_top");
+                _dirtyCount++;
+            }
+
+            if (bean.isFaceWidthModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("face_width");
+                _dirtyCount++;
+            }
+
+            if (bean.isFaceHeightModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("face_height");
+                _dirtyCount++;
+            }
+
+            if (bean.isEyeLeftxModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("eye_leftx");
+                _dirtyCount++;
+            }
+
+            if (bean.isEyeLeftyModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("eye_lefty");
+                _dirtyCount++;
+            }
+
+            if (bean.isEyeRightxModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("eye_rightx");
+                _dirtyCount++;
+            }
+
+            if (bean.isEyeRightyModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("eye_righty");
+                _dirtyCount++;
+            }
+
+            if (bean.isMouthXModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("mouth_x");
+                _dirtyCount++;
+            }
+
+            if (bean.isMouthYModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("mouth_y");
+                _dirtyCount++;
+            }
+
+            if (bean.isNoseXModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("nose_x");
+                _dirtyCount++;
+            }
+
+            if (bean.isNoseYModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("nose_y");
+                _dirtyCount++;
+            }
+
+            if (bean.isAngleYawModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("angle_yaw");
+                _dirtyCount++;
+            }
+
+            if (bean.isAnglePitchModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("angle_pitch");
+                _dirtyCount++;
+            }
+
+            if (bean.isAngleRollModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("angle_roll");
+                _dirtyCount++;
+            }
+
+            if (bean.isExtInfoModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("ext_info");
+                _dirtyCount++;
+            }
+
+            if (bean.isCreateTimeModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("create_time");
                 _dirtyCount++;
             }
 
@@ -904,166 +904,13 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
             sql = new StringBuilder("UPDATE fl_face_light SET ");
             boolean useComma=false;
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.isMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("create_time=?");
-            }
-
-            if (bean.isExtInfoModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("ext_info=?");
-            }
-
-            if (bean.isAngleRollModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("angle_roll=?");
-            }
-
-            if (bean.isAnglePitchModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("angle_pitch=?");
-            }
-
-            if (bean.isAngleYawModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("angle_yaw=?");
-            }
-
-            if (bean.isNoseYModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("nose_y=?");
-            }
-
-            if (bean.isNoseXModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("nose_x=?");
-            }
-
-            if (bean.isMouthYModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("mouth_y=?");
-            }
-
-            if (bean.isMouthXModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("mouth_x=?");
-            }
-
-            if (bean.isEyeRightyModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_righty=?");
-            }
-
-            if (bean.isEyeRightxModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_rightx=?");
-            }
-
-            if (bean.isEyeLeftyModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_lefty=?");
-            }
-
-            if (bean.isEyeLeftxModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_leftx=?");
-            }
-
-            if (bean.isFaceHeightModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_height=?");
-            }
-
-            if (bean.isFaceWidthModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_width=?");
-            }
-
-            if (bean.isFaceTopModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_top=?");
-            }
-
-            if (bean.isFaceLeftModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_left=?");
-            }
-
-            if (bean.isImgMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("img_md5=?");
+                sql.append("md5=?");
             }
 
             if (bean.isPersonIdModified()) {
@@ -1075,13 +922,166 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
                 sql.append("person_id=?");
             }
 
-            if (bean.isMd5Modified()) {
+            if (bean.isImgMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("md5=?");
+                sql.append("img_md5=?");
+            }
+
+            if (bean.isFaceLeftModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("face_left=?");
+            }
+
+            if (bean.isFaceTopModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("face_top=?");
+            }
+
+            if (bean.isFaceWidthModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("face_width=?");
+            }
+
+            if (bean.isFaceHeightModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("face_height=?");
+            }
+
+            if (bean.isEyeLeftxModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("eye_leftx=?");
+            }
+
+            if (bean.isEyeLeftyModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("eye_lefty=?");
+            }
+
+            if (bean.isEyeRightxModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("eye_rightx=?");
+            }
+
+            if (bean.isEyeRightyModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("eye_righty=?");
+            }
+
+            if (bean.isMouthXModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("mouth_x=?");
+            }
+
+            if (bean.isMouthYModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("mouth_y=?");
+            }
+
+            if (bean.isNoseXModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("nose_x=?");
+            }
+
+            if (bean.isNoseYModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("nose_y=?");
+            }
+
+            if (bean.isAngleYawModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("angle_yaw=?");
+            }
+
+            if (bean.isAnglePitchModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("angle_pitch=?");
+            }
+
+            if (bean.isAngleRollModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("angle_roll=?");
+            }
+
+            if (bean.isExtInfoModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("ext_info=?");
+            }
+
+            if (bean.isCreateTimeModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("create_time=?");
             }
             sql.append("");
             // System.out.println("update : " + sql.toString());
@@ -1716,148 +1716,12 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
         }
         try
         {
-            if (bean.isCreateTimeModified()) {
+            if (bean.isMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                if (bean.getMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
-                }
-            }
-            if (bean.isExtInfoModified()) {
-                _dirtyCount ++;
-                if (bean.getExtInfo() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info = ?");
-                }
-            }
-            if (bean.isAngleRollModified()) {
-                _dirtyCount ++;
-                if (bean.getAngleRoll() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll = ?");
-                }
-            }
-            if (bean.isAnglePitchModified()) {
-                _dirtyCount ++;
-                if (bean.getAnglePitch() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch = ?");
-                }
-            }
-            if (bean.isAngleYawModified()) {
-                _dirtyCount ++;
-                if (bean.getAngleYaw() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw = ?");
-                }
-            }
-            if (bean.isNoseYModified()) {
-                _dirtyCount ++;
-                if (bean.getNoseY() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y = ?");
-                }
-            }
-            if (bean.isNoseXModified()) {
-                _dirtyCount ++;
-                if (bean.getNoseX() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x = ?");
-                }
-            }
-            if (bean.isMouthYModified()) {
-                _dirtyCount ++;
-                if (bean.getMouthY() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y = ?");
-                }
-            }
-            if (bean.isMouthXModified()) {
-                _dirtyCount ++;
-                if (bean.getMouthX() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x = ?");
-                }
-            }
-            if (bean.isEyeRightyModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeRighty() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty = ?");
-                }
-            }
-            if (bean.isEyeRightxModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeRightx() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx = ?");
-                }
-            }
-            if (bean.isEyeLeftyModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeLefty() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty = ?");
-                }
-            }
-            if (bean.isEyeLeftxModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeLeftx() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx = ?");
-                }
-            }
-            if (bean.isFaceHeightModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceHeight() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height = ?");
-                }
-            }
-            if (bean.isFaceWidthModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceWidth() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width = ?");
-                }
-            }
-            if (bean.isFaceTopModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceTop() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top = ?");
-                }
-            }
-            if (bean.isFaceLeftModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceLeft() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left = ?");
-                }
-            }
-            if (bean.isImgMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getImgMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.isPersonIdModified()) {
@@ -1868,12 +1732,148 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
                 }
             }
-            if (bean.isMd5Modified()) {
+            if (bean.isImgMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
+                if (bean.getImgMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.isFaceLeftModified()) {
+                _dirtyCount ++;
+                if (bean.getFaceLeft() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left = ?");
+                }
+            }
+            if (bean.isFaceTopModified()) {
+                _dirtyCount ++;
+                if (bean.getFaceTop() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top = ?");
+                }
+            }
+            if (bean.isFaceWidthModified()) {
+                _dirtyCount ++;
+                if (bean.getFaceWidth() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width = ?");
+                }
+            }
+            if (bean.isFaceHeightModified()) {
+                _dirtyCount ++;
+                if (bean.getFaceHeight() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height = ?");
+                }
+            }
+            if (bean.isEyeLeftxModified()) {
+                _dirtyCount ++;
+                if (bean.getEyeLeftx() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx = ?");
+                }
+            }
+            if (bean.isEyeLeftyModified()) {
+                _dirtyCount ++;
+                if (bean.getEyeLefty() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty = ?");
+                }
+            }
+            if (bean.isEyeRightxModified()) {
+                _dirtyCount ++;
+                if (bean.getEyeRightx() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx = ?");
+                }
+            }
+            if (bean.isEyeRightyModified()) {
+                _dirtyCount ++;
+                if (bean.getEyeRighty() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty = ?");
+                }
+            }
+            if (bean.isMouthXModified()) {
+                _dirtyCount ++;
+                if (bean.getMouthX() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x = ?");
+                }
+            }
+            if (bean.isMouthYModified()) {
+                _dirtyCount ++;
+                if (bean.getMouthY() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y = ?");
+                }
+            }
+            if (bean.isNoseXModified()) {
+                _dirtyCount ++;
+                if (bean.getNoseX() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x = ?");
+                }
+            }
+            if (bean.isNoseYModified()) {
+                _dirtyCount ++;
+                if (bean.getNoseY() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y = ?");
+                }
+            }
+            if (bean.isAngleYawModified()) {
+                _dirtyCount ++;
+                if (bean.getAngleYaw() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw = ?");
+                }
+            }
+            if (bean.isAnglePitchModified()) {
+                _dirtyCount ++;
+                if (bean.getAnglePitch() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch = ?");
+                }
+            }
+            if (bean.isAngleRollModified()) {
+                _dirtyCount ++;
+                if (bean.getAngleRoll() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll = ?");
+                }
+            }
+            if (bean.isExtInfoModified()) {
+                _dirtyCount ++;
+                if (bean.getExtInfo() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info = ?");
+                }
+            }
+            if (bean.isCreateTimeModified()) {
+                _dirtyCount ++;
+                if (bean.getCreateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
                 }
             }
         }
@@ -1900,73 +1900,31 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
         int _dirtyCount = 0;
         try
         {
-            if (bean.isCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+            if (bean.isMd5Modified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
+                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
+                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
+                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
+                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
             }
-            if (bean.isExtInfoModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
-                if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getExtInfo()); }
-            }
-            if (bean.isAngleRollModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleRoll() + "]");
-                if (bean.getAngleRoll() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
-            }
-            if (bean.isAnglePitchModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAnglePitch() + "]");
-                if (bean.getAnglePitch() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
-            }
-            if (bean.isAngleYawModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleYaw() + "]");
-                if (bean.getAngleYaw() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
-            }
-            if (bean.isNoseYModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseY() + "]");
-                if (bean.getNoseY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
-            }
-            if (bean.isNoseXModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseX() + "]");
-                if (bean.getNoseX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
-            }
-            if (bean.isMouthYModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthY() + "]");
-                if (bean.getMouthY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
-            }
-            if (bean.isMouthXModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthX() + "]");
-                if (bean.getMouthX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
-            }
-            if (bean.isEyeRightyModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRighty() + "]");
-                if (bean.getEyeRighty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
-            }
-            if (bean.isEyeRightxModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRightx() + "]");
-                if (bean.getEyeRightx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
-            }
-            if (bean.isEyeLeftyModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLefty() + "]");
-                if (bean.getEyeLefty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
-            }
-            if (bean.isEyeLeftxModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLeftx() + "]");
-                if (bean.getEyeLeftx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
-            }
-            if (bean.isFaceHeightModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceHeight() + "]");
-                if (bean.getFaceHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
-            }
-            if (bean.isFaceWidthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceWidth() + "]");
-                if (bean.getFaceWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
-            }
-            if (bean.isFaceTopModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceTop() + "]");
-                if (bean.getFaceTop() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
-            }
-            if (bean.isFaceLeftModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceLeft() + "]");
-                if (bean.getFaceLeft() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
+            if (bean.isPersonIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
+                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
             }
             if (bean.isImgMd5Modified()) {
                 switch (searchType) {
@@ -1990,31 +1948,73 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPersonIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
+            if (bean.isFaceLeftModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceLeft() + "]");
+                if (bean.getFaceLeft() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
             }
-            if (bean.isMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
+            if (bean.isFaceTopModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceTop() + "]");
+                if (bean.getFaceTop() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
+            }
+            if (bean.isFaceWidthModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceWidth() + "]");
+                if (bean.getFaceWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
+            }
+            if (bean.isFaceHeightModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceHeight() + "]");
+                if (bean.getFaceHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
+            }
+            if (bean.isEyeLeftxModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLeftx() + "]");
+                if (bean.getEyeLeftx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
+            }
+            if (bean.isEyeLeftyModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLefty() + "]");
+                if (bean.getEyeLefty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
+            }
+            if (bean.isEyeRightxModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRightx() + "]");
+                if (bean.getEyeRightx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
+            }
+            if (bean.isEyeRightyModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRighty() + "]");
+                if (bean.getEyeRighty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
+            }
+            if (bean.isMouthXModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthX() + "]");
+                if (bean.getMouthX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
+            }
+            if (bean.isMouthYModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthY() + "]");
+                if (bean.getMouthY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
+            }
+            if (bean.isNoseXModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseX() + "]");
+                if (bean.getNoseX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
+            }
+            if (bean.isNoseYModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseY() + "]");
+                if (bean.getNoseY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
+            }
+            if (bean.isAngleYawModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleYaw() + "]");
+                if (bean.getAngleYaw() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
+            }
+            if (bean.isAnglePitchModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAnglePitch() + "]");
+                if (bean.getAnglePitch() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
+            }
+            if (bean.isAngleRollModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleRoll() + "]");
+                if (bean.getAngleRoll() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
+            }
+            if (bean.isExtInfoModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
+                if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getExtInfo()); }
+            }
+            if (bean.isCreateTimeModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
+                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)
@@ -2121,26 +2121,26 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
             bean = this.createBean();
         try
         {
-            bean.setCreateTime(rs.getTimestamp(1));
-            bean.setExtInfo(rs.getBytes(2));
-            bean.setAngleRoll(Manager.getInteger(rs, 3));
-            bean.setAnglePitch(Manager.getInteger(rs, 4));
-            bean.setAngleYaw(Manager.getInteger(rs, 5));
-            bean.setNoseY(Manager.getInteger(rs, 6));
-            bean.setNoseX(Manager.getInteger(rs, 7));
-            bean.setMouthY(Manager.getInteger(rs, 8));
-            bean.setMouthX(Manager.getInteger(rs, 9));
-            bean.setEyeRighty(Manager.getInteger(rs, 10));
-            bean.setEyeRightx(Manager.getInteger(rs, 11));
-            bean.setEyeLefty(Manager.getInteger(rs, 12));
-            bean.setEyeLeftx(Manager.getInteger(rs, 13));
-            bean.setFaceHeight(Manager.getInteger(rs, 14));
-            bean.setFaceWidth(Manager.getInteger(rs, 15));
-            bean.setFaceTop(Manager.getInteger(rs, 16));
-            bean.setFaceLeft(Manager.getInteger(rs, 17));
-            bean.setImgMd5(rs.getString(18));
-            bean.setPersonId(Manager.getInteger(rs, 19));
-            bean.setMd5(rs.getString(20));
+            bean.setMd5(rs.getString(1));
+            bean.setPersonId(Manager.getInteger(rs, 2));
+            bean.setImgMd5(rs.getString(3));
+            bean.setFaceLeft(Manager.getInteger(rs, 4));
+            bean.setFaceTop(Manager.getInteger(rs, 5));
+            bean.setFaceWidth(Manager.getInteger(rs, 6));
+            bean.setFaceHeight(Manager.getInteger(rs, 7));
+            bean.setEyeLeftx(Manager.getInteger(rs, 8));
+            bean.setEyeLefty(Manager.getInteger(rs, 9));
+            bean.setEyeRightx(Manager.getInteger(rs, 10));
+            bean.setEyeRighty(Manager.getInteger(rs, 11));
+            bean.setMouthX(Manager.getInteger(rs, 12));
+            bean.setMouthY(Manager.getInteger(rs, 13));
+            bean.setNoseX(Manager.getInteger(rs, 14));
+            bean.setNoseY(Manager.getInteger(rs, 15));
+            bean.setAngleYaw(Manager.getInteger(rs, 16));
+            bean.setAnglePitch(Manager.getInteger(rs, 17));
+            bean.setAngleRoll(Manager.getInteger(rs, 18));
+            bean.setExtInfo(rs.getBytes(19));
+            bean.setCreateTime(rs.getTimestamp(20));
         }
         catch(SQLException e)
         {
@@ -2172,85 +2172,85 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
             {
                 switch(fieldList[i])
                 {
-                    case ID_CREATE_TIME:
+                    case ID_MD5:
                         ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
-                        break;
-                    case ID_EXT_INFO:
-                        ++pos;
-                        bean.setExtInfo(rs.getBytes(pos));
-                        break;
-                    case ID_ANGLE_ROLL:
-                        ++pos;
-                        bean.setAngleRoll(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_ANGLE_PITCH:
-                        ++pos;
-                        bean.setAnglePitch(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_ANGLE_YAW:
-                        ++pos;
-                        bean.setAngleYaw(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_NOSE_Y:
-                        ++pos;
-                        bean.setNoseY(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_NOSE_X:
-                        ++pos;
-                        bean.setNoseX(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_MOUTH_Y:
-                        ++pos;
-                        bean.setMouthY(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_MOUTH_X:
-                        ++pos;
-                        bean.setMouthX(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_RIGHTY:
-                        ++pos;
-                        bean.setEyeRighty(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_RIGHTX:
-                        ++pos;
-                        bean.setEyeRightx(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_LEFTY:
-                        ++pos;
-                        bean.setEyeLefty(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_LEFTX:
-                        ++pos;
-                        bean.setEyeLeftx(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_HEIGHT:
-                        ++pos;
-                        bean.setFaceHeight(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_WIDTH:
-                        ++pos;
-                        bean.setFaceWidth(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_TOP:
-                        ++pos;
-                        bean.setFaceTop(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_LEFT:
-                        ++pos;
-                        bean.setFaceLeft(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_IMG_MD5:
-                        ++pos;
-                        bean.setImgMd5(rs.getString(pos));
+                        bean.setMd5(rs.getString(pos));
                         break;
                     case ID_PERSON_ID:
                         ++pos;
                         bean.setPersonId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_MD5:
+                    case ID_IMG_MD5:
                         ++pos;
-                        bean.setMd5(rs.getString(pos));
+                        bean.setImgMd5(rs.getString(pos));
+                        break;
+                    case ID_FACE_LEFT:
+                        ++pos;
+                        bean.setFaceLeft(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_FACE_TOP:
+                        ++pos;
+                        bean.setFaceTop(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_FACE_WIDTH:
+                        ++pos;
+                        bean.setFaceWidth(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_FACE_HEIGHT:
+                        ++pos;
+                        bean.setFaceHeight(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_EYE_LEFTX:
+                        ++pos;
+                        bean.setEyeLeftx(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_EYE_LEFTY:
+                        ++pos;
+                        bean.setEyeLefty(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_EYE_RIGHTX:
+                        ++pos;
+                        bean.setEyeRightx(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_EYE_RIGHTY:
+                        ++pos;
+                        bean.setEyeRighty(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_MOUTH_X:
+                        ++pos;
+                        bean.setMouthX(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_MOUTH_Y:
+                        ++pos;
+                        bean.setMouthY(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_NOSE_X:
+                        ++pos;
+                        bean.setNoseX(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_NOSE_Y:
+                        ++pos;
+                        bean.setNoseY(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_ANGLE_YAW:
+                        ++pos;
+                        bean.setAngleYaw(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_ANGLE_PITCH:
+                        ++pos;
+                        bean.setAnglePitch(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_ANGLE_ROLL:
+                        ++pos;
+                        bean.setAngleRoll(Manager.getInteger(rs, pos));
+                        break;
+                    case ID_EXT_INFO:
+                        ++pos;
+                        bean.setExtInfo(rs.getBytes(pos));
+                        break;
+                    case ID_CREATE_TIME:
+                        ++pos;
+                        bean.setCreateTime(rs.getTimestamp(pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -2280,26 +2280,26 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
         FlFaceLightBean bean = this.createBean();
         try
         {
-            bean.setCreateTime(rs.getTimestamp("create_time"));
-            bean.setExtInfo(rs.getBytes("ext_info"));
-            bean.setAngleRoll(Manager.getInteger(rs, "angle_roll"));
-            bean.setAnglePitch(Manager.getInteger(rs, "angle_pitch"));
-            bean.setAngleYaw(Manager.getInteger(rs, "angle_yaw"));
-            bean.setNoseY(Manager.getInteger(rs, "nose_y"));
-            bean.setNoseX(Manager.getInteger(rs, "nose_x"));
-            bean.setMouthY(Manager.getInteger(rs, "mouth_y"));
-            bean.setMouthX(Manager.getInteger(rs, "mouth_x"));
-            bean.setEyeRighty(Manager.getInteger(rs, "eye_righty"));
-            bean.setEyeRightx(Manager.getInteger(rs, "eye_rightx"));
-            bean.setEyeLefty(Manager.getInteger(rs, "eye_lefty"));
-            bean.setEyeLeftx(Manager.getInteger(rs, "eye_leftx"));
-            bean.setFaceHeight(Manager.getInteger(rs, "face_height"));
-            bean.setFaceWidth(Manager.getInteger(rs, "face_width"));
-            bean.setFaceTop(Manager.getInteger(rs, "face_top"));
-            bean.setFaceLeft(Manager.getInteger(rs, "face_left"));
-            bean.setImgMd5(rs.getString("img_md5"));
-            bean.setPersonId(Manager.getInteger(rs, "person_id"));
             bean.setMd5(rs.getString("md5"));
+            bean.setPersonId(Manager.getInteger(rs, "person_id"));
+            bean.setImgMd5(rs.getString("img_md5"));
+            bean.setFaceLeft(Manager.getInteger(rs, "face_left"));
+            bean.setFaceTop(Manager.getInteger(rs, "face_top"));
+            bean.setFaceWidth(Manager.getInteger(rs, "face_width"));
+            bean.setFaceHeight(Manager.getInteger(rs, "face_height"));
+            bean.setEyeLeftx(Manager.getInteger(rs, "eye_leftx"));
+            bean.setEyeLefty(Manager.getInteger(rs, "eye_lefty"));
+            bean.setEyeRightx(Manager.getInteger(rs, "eye_rightx"));
+            bean.setEyeRighty(Manager.getInteger(rs, "eye_righty"));
+            bean.setMouthX(Manager.getInteger(rs, "mouth_x"));
+            bean.setMouthY(Manager.getInteger(rs, "mouth_y"));
+            bean.setNoseX(Manager.getInteger(rs, "nose_x"));
+            bean.setNoseY(Manager.getInteger(rs, "nose_y"));
+            bean.setAngleYaw(Manager.getInteger(rs, "angle_yaw"));
+            bean.setAnglePitch(Manager.getInteger(rs, "angle_pitch"));
+            bean.setAngleRoll(Manager.getInteger(rs, "angle_roll"));
+            bean.setExtInfo(rs.getBytes("ext_info"));
+            bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)
         {

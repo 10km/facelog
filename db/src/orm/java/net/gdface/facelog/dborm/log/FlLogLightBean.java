@@ -23,23 +23,23 @@ public class FlLogLightBean
 {
 	private static final long serialVersionUID = -5060000021203341417L;
 	
-    private boolean verifyTimeIsModified = false;
-    private boolean verifyTimeIsInitialized = false;
-
-    private boolean papersNumIsModified = false;
-    private boolean papersNumIsInitialized = false;
-
-    private boolean papersTypeIsModified = false;
-    private boolean papersTypeIsInitialized = false;
-
-    private boolean nameIsModified = false;
-    private boolean nameIsInitialized = false;
+    private boolean idIsModified = false;
+    private boolean idIsInitialized = false;
 
     private boolean personIdIsModified = false;
     private boolean personIdIsInitialized = false;
 
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    private boolean nameIsModified = false;
+    private boolean nameIsInitialized = false;
+
+    private boolean papersTypeIsModified = false;
+    private boolean papersTypeIsInitialized = false;
+
+    private boolean papersNumIsModified = false;
+    private boolean papersNumIsInitialized = false;
+
+    private boolean verifyTimeIsModified = false;
+    private boolean verifyTimeIsInitialized = false;
 
 
 
@@ -59,259 +59,73 @@ public class FlLogLightBean
         copy(bean);
     }
     /**
-     * Getter method for verifyTime.
+     * Getter method for id.
      * <br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log_light.verify_time</li>
-     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
-     * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>full name: fl_log_light.id</li>
+     * <li>comments: 日志id</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of verifyTime
+     * @return the value of id
      */
-    public java.util.Date getVerifyTime(){
-        return verifyTime;
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for verifyTime.
+     * Setter method for id.
      * <br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value to be assigned to id
      */
-    public void setVerifyTime(java.util.Date newVal)
+    public void setId(Integer newVal)
     {
-        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && verifyTimeIsInitialized)) {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && idIsInitialized)) {
             return;
         }
-        super.setVerifyTime(newVal);
-        verifyTimeIsModified = true;
-        verifyTimeIsInitialized = true;
+        super.setId(newVal);
+        idIsModified = true;
+        idIsInitialized = true;
     }
 
     /**
-     * Setter method for verifyTime.
+     * Setter method for id.
      * <br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value to be assigned to id
      */
-    public void setVerifyTime(long newVal)
+    public void setId(int newVal)
     {
-        setVerifyTime(new java.util.Date(newVal));
+        setId(new Integer(newVal));
     }
 
     /**
-     * Determines if the verifyTime has been modified.
+     * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isVerifyTimeModified()
+    public boolean isIdModified()
     {
-        return verifyTimeIsModified;
+        return idIsModified;
     }
 
     /**
-     * Determines if the verifyTime has been initialized.
+     * Determines if the id has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isVerifyTimeInitialized()
+    public boolean isIdInitialized()
     {
-        return verifyTimeIsInitialized;
-    }
-
-    /**
-     * Getter method for papersNum.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log_light.papers_num</li>
-     * <li>comments: 证件号码</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of papersNum
-     */
-    public String getPapersNum(){
-        return papersNum;
-    }
-    /**
-     * Setter method for papersNum.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to papersNum
-     */
-    public void setPapersNum(String newVal)
-    {
-        if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && papersNumIsInitialized)) {
-            return;
-        }
-        super.setPapersNum(newVal);
-        papersNumIsModified = true;
-        papersNumIsInitialized = true;
-    }
-
-    /**
-     * Determines if the papersNum has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isPapersNumModified()
-    {
-        return papersNumIsModified;
-    }
-
-    /**
-     * Determines if the papersNum has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isPapersNumInitialized()
-    {
-        return papersNumIsInitialized;
-    }
-
-    /**
-     * Getter method for papersType.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log_light.papers_type</li>
-     * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
-     * <li>column size: 3</li>
-     * <li>jdbc type returned by the driver: Types.TINYINT</li>
-     * </ul>
-     *
-     * @return the value of papersType
-     */
-    public Integer getPapersType(){
-        return papersType;
-    }
-    /**
-     * Setter method for papersType.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to papersType
-     */
-    public void setPapersType(Integer newVal)
-    {
-        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && papersTypeIsInitialized)) {
-            return;
-        }
-        super.setPapersType(newVal);
-        papersTypeIsModified = true;
-        papersTypeIsInitialized = true;
-    }
-
-    /**
-     * Setter method for papersType.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to papersType
-     */
-    public void setPapersType(int newVal)
-    {
-        setPapersType(new Integer(newVal));
-    }
-
-    /**
-     * Determines if the papersType has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isPapersTypeModified()
-    {
-        return papersTypeIsModified;
-    }
-
-    /**
-     * Determines if the papersType has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isPapersTypeInitialized()
-    {
-        return papersTypeIsInitialized;
-    }
-
-    /**
-     * Getter method for name.
-     * <br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_log_light.name</li>
-     * <li>comments: 姓名</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of name
-     */
-    public String getName(){
-        return name;
-    }
-    /**
-     * Setter method for name.
-     * <br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to name
-     */
-    public void setName(String newVal)
-    {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && nameIsInitialized)) {
-            return;
-        }
-        super.setName(newVal);
-        nameIsModified = true;
-        nameIsInitialized = true;
-    }
-
-    /**
-     * Determines if the name has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean isNameModified()
-    {
-        return nameIsModified;
-    }
-
-    /**
-     * Determines if the name has been initialized.
-     * <br>
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean isNameInitialized()
-    {
-        return nameIsInitialized;
+        return idIsInitialized;
     }
 
     /**
@@ -385,73 +199,259 @@ public class FlLogLightBean
     }
 
     /**
-     * Getter method for id.
+     * Getter method for name.
      * <br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log_light.id</li>
-     * <li>comments: 日志id</li>
-     * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>full name: fl_log_light.name</li>
+     * <li>comments: 姓名</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of id
+     * @return the value of name
      */
-    public Integer getId(){
-        return id;
+    public String getName(){
+        return name;
     }
     /**
-     * Setter method for id.
+     * Setter method for name.
      * <br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value to be assigned to name
      */
-    public void setId(Integer newVal)
+    public void setName(String newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
+            (newVal == null && name == null && nameIsInitialized)) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        super.setName(newVal);
+        nameIsModified = true;
+        nameIsInitialized = true;
     }
 
     /**
-     * Setter method for id.
-     * <br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to id
-     */
-    public void setId(int newVal)
-    {
-        setId(new Integer(newVal));
-    }
-
-    /**
-     * Determines if the id has been modified.
+     * Determines if the name has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean isNameModified()
     {
-        return idIsModified;
+        return nameIsModified;
     }
 
     /**
-     * Determines if the id has been initialized.
+     * Determines if the name has been initialized.
      * <br>
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean isNameInitialized()
     {
-        return idIsInitialized;
+        return nameIsInitialized;
+    }
+
+    /**
+     * Getter method for papersType.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log_light.papers_type</li>
+     * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
+     * <li>column size: 3</li>
+     * <li>jdbc type returned by the driver: Types.TINYINT</li>
+     * </ul>
+     *
+     * @return the value of papersType
+     */
+    public Integer getPapersType(){
+        return papersType;
+    }
+    /**
+     * Setter method for papersType.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to papersType
+     */
+    public void setPapersType(Integer newVal)
+    {
+        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
+            (newVal == null && papersType == null && papersTypeIsInitialized)) {
+            return;
+        }
+        super.setPapersType(newVal);
+        papersTypeIsModified = true;
+        papersTypeIsInitialized = true;
+    }
+
+    /**
+     * Setter method for papersType.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to papersType
+     */
+    public void setPapersType(int newVal)
+    {
+        setPapersType(new Integer(newVal));
+    }
+
+    /**
+     * Determines if the papersType has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isPapersTypeModified()
+    {
+        return papersTypeIsModified;
+    }
+
+    /**
+     * Determines if the papersType has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isPapersTypeInitialized()
+    {
+        return papersTypeIsInitialized;
+    }
+
+    /**
+     * Getter method for papersNum.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log_light.papers_num</li>
+     * <li>comments: 证件号码</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of papersNum
+     */
+    public String getPapersNum(){
+        return papersNum;
+    }
+    /**
+     * Setter method for papersNum.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to papersNum
+     */
+    public void setPapersNum(String newVal)
+    {
+        if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
+            (newVal == null && papersNum == null && papersNumIsInitialized)) {
+            return;
+        }
+        super.setPapersNum(newVal);
+        papersNumIsModified = true;
+        papersNumIsInitialized = true;
+    }
+
+    /**
+     * Determines if the papersNum has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isPapersNumModified()
+    {
+        return papersNumIsModified;
+    }
+
+    /**
+     * Determines if the papersNum has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isPapersNumInitialized()
+    {
+        return papersNumIsInitialized;
+    }
+
+    /**
+     * Getter method for verifyTime.
+     * <br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_log_light.verify_time</li>
+     * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>column size: 19</li>
+     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * </ul>
+     *
+     * @return the value of verifyTime
+     */
+    public java.util.Date getVerifyTime(){
+        return verifyTime;
+    }
+    /**
+     * Setter method for verifyTime.
+     * <br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value to be assigned to verifyTime
+     */
+    public void setVerifyTime(java.util.Date newVal)
+    {
+        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
+            (newVal == null && verifyTime == null && verifyTimeIsInitialized)) {
+            return;
+        }
+        super.setVerifyTime(newVal);
+        verifyTimeIsModified = true;
+        verifyTimeIsInitialized = true;
+    }
+
+    /**
+     * Setter method for verifyTime.
+     * <br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to verifyTime
+     */
+    public void setVerifyTime(long newVal)
+    {
+        setVerifyTime(new java.util.Date(newVal));
+    }
+
+    /**
+     * Determines if the verifyTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean isVerifyTimeModified()
+    {
+        return verifyTimeIsModified;
+    }
+
+    /**
+     * Determines if the verifyTime has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean isVerifyTimeInitialized()
+    {
+        return verifyTimeIsInitialized;
     }
 
 
@@ -465,7 +465,7 @@ public class FlLogLightBean
      */
     public boolean isModified()
     {
-        return verifyTimeIsModified 		|| papersNumIsModified  		|| papersTypeIsModified  		|| nameIsModified  		|| personIdIsModified  		|| idIsModified  ;
+        return idIsModified 		|| personIdIsModified  		|| nameIsModified  		|| papersTypeIsModified  		|| papersNumIsModified  		|| verifyTimeIsModified  ;
     }
     
     /**
@@ -477,18 +477,18 @@ public class FlLogLightBean
     public boolean isModified(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeModified();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return isPapersNumModified();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return isPapersTypeModified();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameModified();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdModified();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return isIdModified();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return isPersonIdModified();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return isNameModified();
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            return isPapersTypeModified();
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            return isPapersNumModified();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return isVerifyTimeModified();
         }
         return false;		
     }
@@ -504,18 +504,18 @@ public class FlLogLightBean
     public boolean isInitialized(String column){
         if (null == column || "".equals(column)) {
             return false;
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeInitialized();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return isPapersNumInitialized();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return isPapersTypeInitialized();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameInitialized();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdInitialized();
         } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
             return isIdInitialized();
+        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
+            return isPersonIdInitialized();
+        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
+            return isNameInitialized();
+        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
+            return isPapersTypeInitialized();
+        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
+            return isPapersNumInitialized();
+        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
+            return isVerifyTimeInitialized();
         }
         return false;		
     }
@@ -525,12 +525,12 @@ public class FlLogLightBean
      */
     public void resetIsModified()
     {
-        verifyTimeIsModified = false;
-        papersNumIsModified = false;
-        papersTypeIsModified = false;
-        nameIsModified = false;
-        personIdIsModified = false;
         idIsModified = false;
+        personIdIsModified = false;
+        nameIsModified = false;
+        papersTypeIsModified = false;
+        papersNumIsModified = false;
+        verifyTimeIsModified = false;
     }
 
     /**
