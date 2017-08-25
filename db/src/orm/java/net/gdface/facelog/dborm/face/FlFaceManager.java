@@ -322,7 +322,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     //////////////////////////////////////
 
     /**
-     * Loads a FlFaceBean from the fl_face using its key fields.
+     * Loads a {@link FlFaceBean} from the fl_face using primary key fields.
      *
      * @param md5 String - PK# 1
      * @return a unique FlFaceBean or {@code null} if not found
@@ -361,21 +361,48 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter {@code bean},
-     * loads a {@link FlFaceBean} from the fl_face.<br>
+     * Loads a {@link FlFaceBean} from the fl_face using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the {@link FlFaceBean} with key fields
+     * @param bean the {@link FlFaceBean} with primary key fields
      * @return a unique {@link FlFaceBean} or {@code null} if not found
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(String md5)}
      */
-    //1.1
+    //1.2
     public FlFaceBean loadByPrimaryKey(FlFaceBeanBase bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getMd5());
     }
+    /**
+     * Returns true if this fl_face contains row with primary key fields.
+     * @author guyadong
+     * @param md5 String - PK# 1
+     * @throws DAOException
+     * @see #loadByPrimaryKey(String md5)
+     */
+    //1.3
+    public boolean existsPrimaryKey(String md5) throws DAOException
+    {
+        return null!=loadByPrimaryKey(md5 );
+    }
 
+    /**
+     * Returns true if this fl_face contains row specified by primary key fields of {@link FlFaceBean}.<br>
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the {@link FlFaceBean} with primary key fields
+     * @return 
+     * @throws DAOException
+     * @see {@link #loadByPrimaryKey(FlFaceBeanBase bean)}
+     */
+    //1.4
+    @Override
+    public boolean existsPrimaryKey(FlFaceBeanBase bean) throws DAOException
+    {
+        return null!=loadByPrimaryKey(bean);
+    }
+    
     /**
      * Delete row according to its keys.
      *
@@ -419,7 +446,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlFaceBean with key fields
+     * @param bean the FlFaceBean with primary key fields
      * @return the number of deleted rows
      * @throws DAOException
      * @see {@link #deleteByPrimaryKey(String md5)}
@@ -429,7 +456,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     {
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
-
+ 
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD

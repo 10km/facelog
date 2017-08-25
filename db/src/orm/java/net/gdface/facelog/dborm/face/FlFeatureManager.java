@@ -170,12 +170,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     {
         throw new UnsupportedOperationException();
     }
+    public boolean existsPrimaryKey(FlFeatureBeanBase bean) throws DAOException
+    {
+        throw new UnsupportedOperationException();
+    }
     public int deleteByPrimaryKey(FlFeatureBeanBase bean) throws DAOException
     {
         throw new UnsupportedOperationException();
     }
-
-
+ 
 
  
     public <T> T getReferencedBean(FlFeatureBean bean,String fkName)throws DAOException{

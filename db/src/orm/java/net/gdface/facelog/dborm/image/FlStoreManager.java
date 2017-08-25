@@ -156,7 +156,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     //////////////////////////////////////
 
     /**
-     * Loads a FlStoreBean from the fl_store using its key fields.
+     * Loads a {@link FlStoreBean} from the fl_store using primary key fields.
      *
      * @param md5 String - PK# 1
      * @return a unique FlStoreBean or {@code null} if not found
@@ -195,21 +195,48 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter {@code bean},
-     * loads a {@link FlStoreBean} from the fl_store.<br>
+     * Loads a {@link FlStoreBean} from the fl_store using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the {@link FlStoreBean} with key fields
+     * @param bean the {@link FlStoreBean} with primary key fields
      * @return a unique {@link FlStoreBean} or {@code null} if not found
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(String md5)}
      */
-    //1.1
+    //1.2
     public FlStoreBean loadByPrimaryKey(FlStoreBeanBase bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getMd5());
     }
+    /**
+     * Returns true if this fl_store contains row with primary key fields.
+     * @author guyadong
+     * @param md5 String - PK# 1
+     * @throws DAOException
+     * @see #loadByPrimaryKey(String md5)
+     */
+    //1.3
+    public boolean existsPrimaryKey(String md5) throws DAOException
+    {
+        return null!=loadByPrimaryKey(md5 );
+    }
 
+    /**
+     * Returns true if this fl_store contains row specified by primary key fields of {@link FlStoreBean}.<br>
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the {@link FlStoreBean} with primary key fields
+     * @return 
+     * @throws DAOException
+     * @see {@link #loadByPrimaryKey(FlStoreBeanBase bean)}
+     */
+    //1.4
+    @Override
+    public boolean existsPrimaryKey(FlStoreBeanBase bean) throws DAOException
+    {
+        return null!=loadByPrimaryKey(bean);
+    }
+    
     /**
      * Delete row according to its keys.
      *
@@ -253,7 +280,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlStoreBean with key fields
+     * @param bean the FlStoreBean with primary key fields
      * @return the number of deleted rows
      * @throws DAOException
      * @see {@link #deleteByPrimaryKey(String md5)}
@@ -263,7 +290,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     {
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
-
+ 
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD

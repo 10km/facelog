@@ -179,12 +179,15 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
     {
         throw new UnsupportedOperationException();
     }
+    public boolean existsPrimaryKey(FlLogLightBeanBase bean) throws DAOException
+    {
+        throw new UnsupportedOperationException();
+    }
     public int deleteByPrimaryKey(FlLogLightBeanBase bean) throws DAOException
     {
         throw new UnsupportedOperationException();
     }
-
-
+ 
 
  
     public <T> T getReferencedBean(FlLogLightBean bean,String fkName)throws DAOException{

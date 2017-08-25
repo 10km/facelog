@@ -305,12 +305,15 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
     {
         throw new UnsupportedOperationException();
     }
+    public boolean existsPrimaryKey(FlFaceLightBeanBase bean) throws DAOException
+    {
+        throw new UnsupportedOperationException();
+    }
     public int deleteByPrimaryKey(FlFaceLightBeanBase bean) throws DAOException
     {
         throw new UnsupportedOperationException();
     }
-
-
+ 
 
  
     public <T> T getReferencedBean(FlFaceLightBean bean,String fkName)throws DAOException{

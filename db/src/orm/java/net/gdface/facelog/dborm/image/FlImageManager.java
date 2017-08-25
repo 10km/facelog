@@ -207,7 +207,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //////////////////////////////////////
 
     /**
-     * Loads a FlImageBean from the fl_image using its key fields.
+     * Loads a {@link FlImageBean} from the fl_image using primary key fields.
      *
      * @param md5 String - PK# 1
      * @return a unique FlImageBean or {@code null} if not found
@@ -246,21 +246,48 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter {@code bean},
-     * loads a {@link FlImageBean} from the fl_image.<br>
+     * Loads a {@link FlImageBean} from the fl_image using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the {@link FlImageBean} with key fields
+     * @param bean the {@link FlImageBean} with primary key fields
      * @return a unique {@link FlImageBean} or {@code null} if not found
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(String md5)}
      */
-    //1.1
+    //1.2
     public FlImageBean loadByPrimaryKey(FlImageBeanBase bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getMd5());
     }
+    /**
+     * Returns true if this fl_image contains row with primary key fields.
+     * @author guyadong
+     * @param md5 String - PK# 1
+     * @throws DAOException
+     * @see #loadByPrimaryKey(String md5)
+     */
+    //1.3
+    public boolean existsPrimaryKey(String md5) throws DAOException
+    {
+        return null!=loadByPrimaryKey(md5 );
+    }
 
+    /**
+     * Returns true if this fl_image contains row specified by primary key fields of {@link FlImageBean}.<br>
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the {@link FlImageBean} with primary key fields
+     * @return 
+     * @throws DAOException
+     * @see {@link #loadByPrimaryKey(FlImageBeanBase bean)}
+     */
+    //1.4
+    @Override
+    public boolean existsPrimaryKey(FlImageBeanBase bean) throws DAOException
+    {
+        return null!=loadByPrimaryKey(bean);
+    }
+    
     /**
      * Delete row according to its keys.
      *
@@ -304,7 +331,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlImageBean with key fields
+     * @param bean the FlImageBean with primary key fields
      * @return the number of deleted rows
      * @throws DAOException
      * @see {@link #deleteByPrimaryKey(String md5)}
@@ -314,7 +341,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     {
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
-
+ 
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD

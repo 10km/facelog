@@ -205,7 +205,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     //////////////////////////////////////
 
     /**
-     * Loads a FlLogBean from the fl_log using its key fields.
+     * Loads a {@link FlLogBean} from the fl_log using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique FlLogBean or {@code null} if not found
@@ -244,21 +244,48 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter {@code bean},
-     * loads a {@link FlLogBean} from the fl_log.<br>
+     * Loads a {@link FlLogBean} from the fl_log using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the {@link FlLogBean} with key fields
+     * @param bean the {@link FlLogBean} with primary key fields
      * @return a unique {@link FlLogBean} or {@code null} if not found
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
-    //1.1
+    //1.2
     public FlLogBean loadByPrimaryKey(FlLogBeanBase bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getId());
     }
+    /**
+     * Returns true if this fl_log contains row with primary key fields.
+     * @author guyadong
+     * @param id Integer - PK# 1
+     * @throws DAOException
+     * @see #loadByPrimaryKey(Integer id)
+     */
+    //1.3
+    public boolean existsPrimaryKey(Integer id) throws DAOException
+    {
+        return null!=loadByPrimaryKey(id );
+    }
 
+    /**
+     * Returns true if this fl_log contains row specified by primary key fields of {@link FlLogBean}.<br>
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the {@link FlLogBean} with primary key fields
+     * @return 
+     * @throws DAOException
+     * @see {@link #loadByPrimaryKey(FlLogBeanBase bean)}
+     */
+    //1.4
+    @Override
+    public boolean existsPrimaryKey(FlLogBeanBase bean) throws DAOException
+    {
+        return null!=loadByPrimaryKey(bean);
+    }
+    
     /**
      * Delete row according to its keys.
      *
@@ -302,7 +329,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlLogBean with key fields
+     * @param bean the FlLogBean with primary key fields
      * @return the number of deleted rows
      * @throws DAOException
      * @see {@link #deleteByPrimaryKey(Integer id)}
@@ -312,7 +339,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     {
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
-
+ 
 
     /**
      * Save the FlLogBean bean and referenced beans and imported beans into the database.

@@ -194,7 +194,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     //////////////////////////////////////
 
     /**
-     * Loads a FlDeviceBean from the fl_device using its key fields.
+     * Loads a {@link FlDeviceBean} from the fl_device using primary key fields.
      *
      * @param id Integer - PK# 1
      * @return a unique FlDeviceBean or {@code null} if not found
@@ -233,21 +233,48 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Get Primary Key fileds as parameters from the parameter {@code bean},
-     * loads a {@link FlDeviceBean} from the fl_device.<br>
+     * Loads a {@link FlDeviceBean} from the fl_device using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the {@link FlDeviceBean} with key fields
+     * @param bean the {@link FlDeviceBean} with primary key fields
      * @return a unique {@link FlDeviceBean} or {@code null} if not found
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
-    //1.1
+    //1.2
     public FlDeviceBean loadByPrimaryKey(FlDeviceBeanBase bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getId());
     }
+    /**
+     * Returns true if this fl_device contains row with primary key fields.
+     * @author guyadong
+     * @param id Integer - PK# 1
+     * @throws DAOException
+     * @see #loadByPrimaryKey(Integer id)
+     */
+    //1.3
+    public boolean existsPrimaryKey(Integer id) throws DAOException
+    {
+        return null!=loadByPrimaryKey(id );
+    }
 
+    /**
+     * Returns true if this fl_device contains row specified by primary key fields of {@link FlDeviceBean}.<br>
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param bean the {@link FlDeviceBean} with primary key fields
+     * @return 
+     * @throws DAOException
+     * @see {@link #loadByPrimaryKey(FlDeviceBeanBase bean)}
+     */
+    //1.4
+    @Override
+    public boolean existsPrimaryKey(FlDeviceBeanBase bean) throws DAOException
+    {
+        return null!=loadByPrimaryKey(bean);
+    }
+    
     /**
      * Delete row according to its keys.
      *
@@ -291,7 +318,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
-     * @param bean the FlDeviceBean with key fields
+     * @param bean the FlDeviceBean with primary key fields
      * @return the number of deleted rows
      * @throws DAOException
      * @see {@link #deleteByPrimaryKey(Integer id)}
@@ -301,7 +328,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     {
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
-
+ 
 
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
