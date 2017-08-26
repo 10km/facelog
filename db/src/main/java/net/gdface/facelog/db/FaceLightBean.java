@@ -10,17 +10,17 @@ import java.io.Serializable;
 
 
 /**
- * FaceBean is a mapping of fl_face Table.
+ * FaceLightBean is a mapping of fl_face_light Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外) </li>
+ *    <li>comments: VIEW </li>
  * </ul>
  * @author guyadong
 */
-public class FaceBean
-    implements Serializable,BaseBean,Comparable<FaceBean>
+public class FaceLightBean
+    implements Serializable,BaseBean,Comparable<FaceLightBean>
 {
-	private static final long serialVersionUID = 7139198696161776249L;
+	private static final long serialVersionUID = 3775783205561936829L;
 	
     /**
      * comments:主键,特征数据md5校验码
@@ -72,11 +72,6 @@ public class FaceBean
      */
     private byte[] extInfo;
 
-    /**
-     * comments:二进制特征数据
-     */
-    private byte[] feature;
-
     private java.util.Date createTime;
 
     private boolean _isNew = true;
@@ -110,25 +105,22 @@ public class FaceBean
     }
 
     /**
-     * Prefered methods to create a FaceBean is via the createFaceBean method in FlFaceManager or
-     * via the factory class FlFaceFactory create method
+     * Prefered methods to create a FaceLightBean is via the createFaceLightBean method in FlFaceLightManager or
+     * via the factory class FlFaceLightFactory create method
      */
-    public FaceBean(){
+    public FaceLightBean(){
     }
     /**
-     * create a FaceBean from a instance
+     * create a FaceLightBean from a instance
      */
-    public FaceBean(FaceBean bean){
+    public FaceLightBean(FaceLightBean bean){
         this.copy(bean);
     }
     /**
      * Getter method for {@link #md5}.<br>
-     * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.md5</li>
-     * <li> imported key: fl_log.verify_face</li>
-     * <li> imported key: fl_log.compare_face</li>
+     * <li>full name: fl_face_light.md5</li>
      * <li>comments: 主键,特征数据md5校验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -156,8 +148,7 @@ public class FaceBean
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.person_id</li>
-     * <li> foreign key: fl_person.id</li>
+     * <li>full name: fl_face_light.person_id</li>
      * <li>comments: 外键,所属用户id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
@@ -194,8 +185,7 @@ public class FaceBean
      * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.img_md5</li>
-     * <li> foreign key: fl_image.md5</li>
+     * <li>full name: fl_face_light.img_md5</li>
      * <li>comments: 外键,所属图像id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -223,7 +213,7 @@ public class FaceBean
      * Getter method for {@link #faceLeft}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.face_left</li>
+     * <li>full name: fl_face_light.face_left</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -259,7 +249,7 @@ public class FaceBean
      * Getter method for {@link #faceTop}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.face_top</li>
+     * <li>full name: fl_face_light.face_top</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -295,7 +285,7 @@ public class FaceBean
      * Getter method for {@link #faceWidth}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.face_width</li>
+     * <li>full name: fl_face_light.face_width</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -331,7 +321,7 @@ public class FaceBean
      * Getter method for {@link #faceHeight}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.face_height</li>
+     * <li>full name: fl_face_light.face_height</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -367,7 +357,7 @@ public class FaceBean
      * Getter method for {@link #eyeLeftx}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.eye_leftx</li>
+     * <li>full name: fl_face_light.eye_leftx</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -403,7 +393,7 @@ public class FaceBean
      * Getter method for {@link #eyeLefty}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.eye_lefty</li>
+     * <li>full name: fl_face_light.eye_lefty</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -439,7 +429,7 @@ public class FaceBean
      * Getter method for {@link #eyeRightx}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.eye_rightx</li>
+     * <li>full name: fl_face_light.eye_rightx</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -475,7 +465,7 @@ public class FaceBean
      * Getter method for {@link #eyeRighty}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.eye_righty</li>
+     * <li>full name: fl_face_light.eye_righty</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -511,7 +501,7 @@ public class FaceBean
      * Getter method for {@link #mouthX}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.mouth_x</li>
+     * <li>full name: fl_face_light.mouth_x</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -547,7 +537,7 @@ public class FaceBean
      * Getter method for {@link #mouthY}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.mouth_y</li>
+     * <li>full name: fl_face_light.mouth_y</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -583,7 +573,7 @@ public class FaceBean
      * Getter method for {@link #noseX}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.nose_x</li>
+     * <li>full name: fl_face_light.nose_x</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -619,7 +609,7 @@ public class FaceBean
      * Getter method for {@link #noseY}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.nose_y</li>
+     * <li>full name: fl_face_light.nose_y</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -655,7 +645,7 @@ public class FaceBean
      * Getter method for {@link #angleYaw}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.angle_yaw</li>
+     * <li>full name: fl_face_light.angle_yaw</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -691,7 +681,7 @@ public class FaceBean
      * Getter method for {@link #anglePitch}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.angle_pitch</li>
+     * <li>full name: fl_face_light.angle_pitch</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -727,7 +717,7 @@ public class FaceBean
      * Getter method for {@link #angleRoll}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.angle_roll</li>
+     * <li>full name: fl_face_light.angle_roll</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -763,7 +753,7 @@ public class FaceBean
      * Getter method for {@link #extInfo}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.ext_info</li>
+     * <li>full name: fl_face_light.ext_info</li>
      * <li>comments: 扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析</li>
      * <li>column size: 65535</li>
      * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
@@ -787,37 +777,10 @@ public class FaceBean
 
 
     /**
-     * Getter method for {@link #feature}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_face.feature</li>
-     * <li>comments: 二进制特征数据</li>
-     * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
-     * </ul>
-     *
-     * @return the value of feature
-     */
-    public byte[] getFeature(){
-        return feature;
-    }
-    /**
-     * Setter method for {@link #feature}.<br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
-     *
-     * @param newVal the new value to be assigned to feature
-     */
-    public void setFeature(byte[] newVal){    
-        feature = newVal;
-    }
-
-
-    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.create_time</li>
+     * <li>full name: fl_face_light.create_time</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -850,44 +813,15 @@ public class FaceBean
     }
 
 
-    //////////////////////////////////////
-    // referenced bean for FOREIGN KEYS
-    //////////////////////////////////////
-    /** 
-     * The referenced {@link ImageBean} by {@link #imgMd5} . <br>
-     * FOREIGN KEY (img_md5) REFERENCES fl_image(md5)
-     */
-    private ImageBean referencedByImgMd5;
-    /** Getter method for {@link #referencedByImgMd5}. */
-    public ImageBean getReferencedByImgMd5() {
-        return this.referencedByImgMd5;
-    }
-    /** Setter method for {@link #referencedByImgMd5}. */
-    public void setReferencedByImgMd5(ImageBean reference) {
-        this.referencedByImgMd5 = reference;
-    }
-    /** 
-     * The referenced {@link PersonBean} by {@link #personId} . <br>
-     * FOREIGN KEY (person_id) REFERENCES fl_person(id)
-     */
-    private PersonBean referencedByPersonId;
-    /** Getter method for {@link #referencedByPersonId}. */
-    public PersonBean getReferencedByPersonId() {
-        return this.referencedByPersonId;
-    }
-    /** Setter method for {@link #referencedByPersonId}. */
-    public void setReferencedByPersonId(PersonBean reference) {
-        this.referencedByPersonId = reference;
-    }
 
     @Override
     public boolean equals(Object object)
     {
-        if (!(object instanceof FaceBean)) {
+        if (!(object instanceof FaceLightBean)) {
             return false;
         }
 
-        FaceBean obj = (FaceBean) object;
+        FaceLightBean obj = (FaceLightBean) object;
         return new EqualsBuilder()
             .append(getMd5(), obj.getMd5())
             .append(getPersonId(), obj.getPersonId())
@@ -908,7 +842,6 @@ public class FaceBean
             .append(getAnglePitch(), obj.getAnglePitch())
             .append(getAngleRoll(), obj.getAngleRoll())
             .append(getExtInfo(), obj.getExtInfo())
-            .append(getFeature(), obj.getFeature())
             .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
@@ -936,7 +869,6 @@ public class FaceBean
             .append(getAnglePitch())
             .append(getAngleRoll())
             .append(getExtInfo())
-            .append(getFeature())
             .append(getCreateTime())
             .toHashCode();
     }
@@ -963,14 +895,13 @@ public class FaceBean
             .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
             .append("\tangle_roll=").append(getAngleRoll()).append("\n")
             .append("\text_info=").append(getExtInfo()).append("\n")
-            .append("\tfeature=").append(getFeature()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
     }
 
     @Override
-    public int compareTo(FaceBean object){
+    public int compareTo(FaceLightBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
             .append(getPersonId(), object.getPersonId())
@@ -991,7 +922,6 @@ public class FaceBean
             .append(getAnglePitch(), object.getAnglePitch())
             .append(getAngleRoll(), object.getAngleRoll())
             .append(getExtInfo(), object.getExtInfo())
-            .append(getFeature(), object.getFeature())
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
@@ -1001,7 +931,7 @@ public class FaceBean
     * @param bean the bean to copy into the current bean
     * @author guyadong
     */
-    public void copy(FaceBean bean)
+    public void copy(FaceLightBean bean)
     {
         if(bean.isNew()){
             copyIfNotNull(bean);
@@ -1026,7 +956,6 @@ public class FaceBean
             setAnglePitch(bean.getAnglePitch());
             setAngleRoll(bean.getAngleRoll());
             setExtInfo(bean.getExtInfo());
-            setFeature(bean.getFeature());
             setCreateTime(bean.getCreateTime());
         }
     }
@@ -1036,7 +965,7 @@ public class FaceBean
     * @param bean the bean to copy into the current bean
     * @author guyadong
     */
-    public void copyIfNotNull(FaceBean bean)
+    public void copyIfNotNull(FaceLightBean bean)
     {
         isNew(bean.isNew());
         if(bean.getMd5()!=null)
@@ -1077,8 +1006,6 @@ public class FaceBean
             setAngleRoll(bean.getAngleRoll());
         if(bean.getExtInfo()!=null)
             setExtInfo(bean.getExtInfo());
-        if(bean.getFeature()!=null)
-            setFeature(bean.getFeature());
         if(bean.getCreateTime()!=null)
             setCreateTime(bean.getCreateTime());
     }
@@ -1088,7 +1015,7 @@ public class FaceBean
     *
     * @author guyadong
     */
-    public FaceBean clean()
+    public FaceLightBean clean()
     {
         isNew(true);
         setMd5(null);
@@ -1110,7 +1037,6 @@ public class FaceBean
         setAnglePitch(null);
         setAngleRoll(null);
         setExtInfo(null);
-        setFeature(null);
         setCreateTime(null);
         return this;
     }
