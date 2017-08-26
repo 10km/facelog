@@ -347,7 +347,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * </ul>
      * @param bean the {@link FlDeviceBean} object to use
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -387,7 +387,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * </ul>
      * @param bean the {@link FlDeviceBean} object to use
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -518,7 +518,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_3 
      * @param bean the {@link FlDeviceBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -534,7 +534,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_3
      * @param bean the {@link FlDeviceBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED
@@ -590,7 +590,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
      * @param bean the {@link FlDeviceBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -606,7 +606,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Retrieves the {@link FlLogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
      * @param bean the {@link FlDeviceBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED

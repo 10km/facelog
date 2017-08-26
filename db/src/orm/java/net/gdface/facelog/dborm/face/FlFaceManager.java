@@ -475,7 +475,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -515,7 +515,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -646,7 +646,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Retrieves the {@link FlLogBean} object from the fl_log.verify_face field.<BR>
      * FK_NAME : fl_log_ibfk_3 
      * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -662,7 +662,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Retrieves the {@link FlLogBean} object from fl_log.verify_face field.<BR>
      * FK_NAME:fl_log_ibfk_3
      * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED
@@ -718,7 +718,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
      * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -734,7 +734,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
      * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED

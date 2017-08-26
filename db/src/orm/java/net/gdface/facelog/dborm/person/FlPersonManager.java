@@ -394,7 +394,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -434,7 +434,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -565,7 +565,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * Retrieves the {@link FlFaceBean} object from the fl_face.person_id field.<BR>
      * FK_NAME : fl_face_ibfk_2 
      * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -581,7 +581,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * Retrieves the {@link FlFaceBean} object from fl_face.person_id field.<BR>
      * FK_NAME:fl_face_ibfk_2
      * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED
@@ -637,7 +637,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
      * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -653,7 +653,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
      * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlLogBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED

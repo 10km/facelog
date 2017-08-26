@@ -309,7 +309,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
      * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -349,7 +349,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
      * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -480,7 +480,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * Retrieves the {@link FlImageBean} object from the fl_image.md5 field.<BR>
      * FK_NAME : fl_image_ibfk_1 
      * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -496,7 +496,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * Retrieves the {@link FlImageBean} object from fl_image.md5 field.<BR>
      * FK_NAME:fl_image_ibfk_1
      * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED
@@ -552,7 +552,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * Retrieves the {@link FlImageBean} object from the fl_image.thumb_md5 field.<BR>
      * FK_NAME : fl_image_ibfk_2 
      * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -568,7 +568,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * Retrieves the {@link FlImageBean} object from fl_image.thumb_md5 field.<BR>
      * FK_NAME:fl_image_ibfk_2
      * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED

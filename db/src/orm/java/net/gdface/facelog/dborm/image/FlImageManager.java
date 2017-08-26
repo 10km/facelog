@@ -360,7 +360,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -400,7 +400,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
-     * @return importedBeans always
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -531,7 +531,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Retrieves the {@link FlFaceBean} object from the fl_face.img_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
      * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -547,7 +547,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Retrieves the {@link FlFaceBean} object from fl_face.img_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
      * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED
@@ -603,7 +603,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Retrieves the {@link FlPersonBean} object from the fl_person.photo_id field.<BR>
      * FK_NAME : fl_person_ibfk_1 
      * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1 GET IMPORTED
@@ -619,7 +619,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Retrieves the {@link FlPersonBean} object from fl_person.photo_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
      * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET IMPORTED
