@@ -28,12 +28,21 @@ public interface IDbConverter {
     public abstract IBeanConverter<FeatureBean, FlFeatureBeanBase> getFeatureBeanConverter();
     public abstract IBeanConverter<LogLightBean, FlLogLightBeanBase> getLogLightBeanConverter();
 
-	/**
-	 * @param <G> general type
-	 * @param <N> native type
-	 * @param clazz
-	 * @return
-	 */
-	<G extends BaseBean, N> IBeanConverter<G,N> getBeanConverter(Class<G> clazz);
+    /**
+     * @param <G> general type
+     * @param <N> native type
+     * @param gClass
+     * @param nClass
+     * @return
+     */
+    public abstract<G extends BaseBean, N> IBeanConverter<G,N> getBeanConverter(Class<G> gClass,Class<N> nClass);
+    /**
+     * @param <G> general type
+     * @param <N> native type
+     * @param gClass
+     * @param nClass
+     * @param converter
+     */
+    public abstract <G extends BaseBean, N> void setBeanConverter(Class<G> gClass, Class<N> nClass, IBeanConverter<G,N>converter);
 
 }

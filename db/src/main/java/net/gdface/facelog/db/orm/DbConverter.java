@@ -7,8 +7,7 @@
 
 package net.gdface.facelog.db.orm;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Vector;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.BaseBean;
@@ -32,168 +31,214 @@ import net.gdface.facelog.dborm.face.FlFaceLightBeanBase;
 import net.gdface.facelog.dborm.face.FlFeatureBeanBase;
 import net.gdface.facelog.dborm.log.FlLogLightBeanBase;
 public class DbConverter implements IDbConverter {
-	public final IBeanConverter<DeviceBean,FlDeviceBeanBase> _convertDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,FlDeviceBeanBase>(){
+    public final IBeanConverter<DeviceBean,FlDeviceBeanBase> _convertDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,FlDeviceBeanBase>(){
 
-		@Override
-		public DeviceBean fromNative(FlDeviceBeanBase bean) {
-			return null;
-		}
+        @Override
+        public DeviceBean fromNative(FlDeviceBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlDeviceBeanBase toNative(DeviceBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<FaceBean,FlFaceBeanBase> _convertFaceBean=new IBeanConverter.AbstractHandle<FaceBean,FlFaceBeanBase>(){
+        @Override
+        public FlDeviceBeanBase toNative(DeviceBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<FaceBean,FlFaceBeanBase> _convertFaceBean=new IBeanConverter.AbstractHandle<FaceBean,FlFaceBeanBase>(){
 
-		@Override
-		public FaceBean fromNative(FlFaceBeanBase bean) {
-			return null;
-		}
+        @Override
+        public FaceBean fromNative(FlFaceBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlFaceBeanBase toNative(FaceBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<ImageBean,FlImageBeanBase> _convertImageBean=new IBeanConverter.AbstractHandle<ImageBean,FlImageBeanBase>(){
+        @Override
+        public FlFaceBeanBase toNative(FaceBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<ImageBean,FlImageBeanBase> _convertImageBean=new IBeanConverter.AbstractHandle<ImageBean,FlImageBeanBase>(){
 
-		@Override
-		public ImageBean fromNative(FlImageBeanBase bean) {
-			return null;
-		}
+        @Override
+        public ImageBean fromNative(FlImageBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlImageBeanBase toNative(ImageBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<LogBean,FlLogBeanBase> _convertLogBean=new IBeanConverter.AbstractHandle<LogBean,FlLogBeanBase>(){
+        @Override
+        public FlImageBeanBase toNative(ImageBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<LogBean,FlLogBeanBase> _convertLogBean=new IBeanConverter.AbstractHandle<LogBean,FlLogBeanBase>(){
 
-		@Override
-		public LogBean fromNative(FlLogBeanBase bean) {
-			return null;
-		}
+        @Override
+        public LogBean fromNative(FlLogBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlLogBeanBase toNative(LogBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<PersonBean,FlPersonBeanBase> _convertPersonBean=new IBeanConverter.AbstractHandle<PersonBean,FlPersonBeanBase>(){
+        @Override
+        public FlLogBeanBase toNative(LogBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<PersonBean,FlPersonBeanBase> _convertPersonBean=new IBeanConverter.AbstractHandle<PersonBean,FlPersonBeanBase>(){
 
-		@Override
-		public PersonBean fromNative(FlPersonBeanBase bean) {
-			return null;
-		}
+        @Override
+        public PersonBean fromNative(FlPersonBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlPersonBeanBase toNative(PersonBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<StoreBean,FlStoreBeanBase> _convertStoreBean=new IBeanConverter.AbstractHandle<StoreBean,FlStoreBeanBase>(){
+        @Override
+        public FlPersonBeanBase toNative(PersonBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<StoreBean,FlStoreBeanBase> _convertStoreBean=new IBeanConverter.AbstractHandle<StoreBean,FlStoreBeanBase>(){
 
-		@Override
-		public StoreBean fromNative(FlStoreBeanBase bean) {
-			return null;
-		}
+        @Override
+        public StoreBean fromNative(FlStoreBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlStoreBeanBase toNative(StoreBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<FaceLightBean,FlFaceLightBeanBase> _convertFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,FlFaceLightBeanBase>(){
+        @Override
+        public FlStoreBeanBase toNative(StoreBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<FaceLightBean,FlFaceLightBeanBase> _convertFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,FlFaceLightBeanBase>(){
 
-		@Override
-		public FaceLightBean fromNative(FlFaceLightBeanBase bean) {
-			return null;
-		}
+        @Override
+        public FaceLightBean fromNative(FlFaceLightBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlFaceLightBeanBase toNative(FaceLightBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<FeatureBean,FlFeatureBeanBase> _convertFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,FlFeatureBeanBase>(){
+        @Override
+        public FlFaceLightBeanBase toNative(FaceLightBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<FeatureBean,FlFeatureBeanBase> _convertFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,FlFeatureBeanBase>(){
 
-		@Override
-		public FeatureBean fromNative(FlFeatureBeanBase bean) {
-			return null;
-		}
+        @Override
+        public FeatureBean fromNative(FlFeatureBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlFeatureBeanBase toNative(FeatureBean bean) {
-			return null;
-		}};
-	public final IBeanConverter<LogLightBean,FlLogLightBeanBase> _convertLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,FlLogLightBeanBase>(){
+        @Override
+        public FlFeatureBeanBase toNative(FeatureBean bean) {
+            return null;
+        }};
+    public final IBeanConverter<LogLightBean,FlLogLightBeanBase> _convertLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,FlLogLightBeanBase>(){
 
-		@Override
-		public LogLightBean fromNative(FlLogLightBeanBase bean) {
-			return null;
-		}
+        @Override
+        public LogLightBean fromNative(FlLogLightBeanBase bean) {
+            return null;
+        }
 
-		@Override
-		public FlLogLightBeanBase toNative(LogLightBean bean) {
-			return null;
-		}};
+        @Override
+        public FlLogLightBeanBase toNative(LogLightBean bean) {
+            return null;
+        }};
 
-		private final Map<Class<? extends BaseBean>,IBeanConverter<? extends BaseBean,?>> converters= new HashMap<Class<? extends BaseBean>,IBeanConverter<?extends BaseBean,?>>(){
-			private static final long serialVersionUID = 1L;
-			{
-				put(DeviceBean.class,_convertDeviceBean);
-				put(FaceBean.class,_convertFaceBean);
-				put(ImageBean.class,_convertImageBean);
-				put(LogBean.class,_convertLogBean);
-				put(PersonBean.class,_convertPersonBean);
-				put(StoreBean.class,_convertStoreBean);
-				put(FaceLightBean.class,_convertFaceLightBean);
-				put(FeatureBean.class,_convertFeatureBean);
-				put(LogLightBean.class,_convertLogLightBean);
-			}};
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public <G extends BaseBean,N>IBeanConverter<G,N>getBeanConverter(Class<G> clazz){
-		return (IBeanConverter<G, N>) converters.get(clazz);
-	}
+    private final Vector<Object[]> converters= new Vector<Object[]>(){
+        private static final long serialVersionUID = -2915982403974349774L;
+        {
+            add(new Object[]{DeviceBean.class,FlDeviceBeanBase.class,_convertDeviceBean});
+            add(new Object[]{FaceBean.class,FlFaceBeanBase.class,_convertFaceBean});
+            add(new Object[]{ImageBean.class,FlImageBeanBase.class,_convertImageBean});
+            add(new Object[]{LogBean.class,FlLogBeanBase.class,_convertLogBean});
+            add(new Object[]{PersonBean.class,FlPersonBeanBase.class,_convertPersonBean});
+            add(new Object[]{StoreBean.class,FlStoreBeanBase.class,_convertStoreBean});
+            add(new Object[]{FaceLightBean.class,FlFaceLightBeanBase.class,_convertFaceLightBean});
+            add(new Object[]{FeatureBean.class,FlFeatureBeanBase.class,_convertFeatureBean});
+            add(new Object[]{LogLightBean.class,FlLogLightBeanBase.class,_convertLogLightBean});
+        }};
+    
+    private<G extends BaseBean,N> int getIndex(Class<G> gClass,Class<N> nClass){
+            Vector<Integer>find= new Vector<Integer>();
+            if(null!=gClass && null != nClass){
+                for(int i=0;i<converters.size();++i){
+                    Object[] converter = converters.get(i);
+                    if(((Class<?>)converter[0]).isAssignableFrom(gClass) 
+                            && ((Class<?>)converter[1]).isAssignableFrom(nClass)){
+                        return i;
+                    }
+                }
+            }else if(null != gClass){
+                for(int i=0;i<converters.size();++i){
+                    Object[] converter = converters.get(i);
+                    if(((Class<?>)converter[0]).isAssignableFrom(gClass) 
+                            ){
+                        find.add(i);
+                    }
+                }
+            }else if(null != nClass){
+                for(int i=0;i<converters.size();++i){
+                    Object[] converter = converters.get(i);
+                    if(((Class<?>)converter[1]).isAssignableFrom(nClass)){
+                        find.add(i);
+                    }
+                }
+            }
+            return  1==find.size() ? find.get(0) : -1;
+        }  
+    @Override
+    @SuppressWarnings("unchecked")
+    public <G extends BaseBean,N>IBeanConverter<G,N>getBeanConverter(Class<G> gClass,Class<N> nClass){
+        int index = getIndex(gClass, nClass);
+        if(index<0)
+            throw new IllegalArgumentException(
+                    String.format("not found converter for (%s,%s)"
+                            ,null==gClass?"null":gClass.getSimpleName()
+                            ,null==nClass?"null":nClass.getSimpleName()));
+        return (IBeanConverter<G, N>) converters.get(index)[2];
+    }
+    @Override
+    public synchronized <G extends BaseBean,N>void setBeanConverter(Class<G> gClass,Class<N> nClass,IBeanConverter<G,N>converter){
+        if(null == gClass || null == nClass || null == converter)
+            throw new NullPointerException();
+        Object[] c = new Object[]{gClass,nClass,converter};
+        int index = getIndex(gClass, nClass);
+        if(index<0){
+            converters.add(c);
+        }else{
+            converters.set(index, c);
+        }
+    }
 
-	@Override
-	public IBeanConverter<DeviceBean, FlDeviceBeanBase> getDeviceBeanConverter() {
-		return _convertDeviceBean;
-	}
+    @Override
+    public IBeanConverter<DeviceBean, FlDeviceBeanBase> getDeviceBeanConverter() {
+        return _convertDeviceBean;
+    }
 
-	@Override
-	public IBeanConverter<FaceBean, FlFaceBeanBase> getFaceBeanConverter() {
-		return _convertFaceBean;
-	}
+    @Override
+    public IBeanConverter<FaceBean, FlFaceBeanBase> getFaceBeanConverter() {
+        return _convertFaceBean;
+    }
 
-	@Override
-	public IBeanConverter<ImageBean, FlImageBeanBase> getImageBeanConverter() {
-		return _convertImageBean;
-	}
+    @Override
+    public IBeanConverter<ImageBean, FlImageBeanBase> getImageBeanConverter() {
+        return _convertImageBean;
+    }
 
-	@Override
-	public IBeanConverter<LogBean, FlLogBeanBase> getLogBeanConverter() {
-		return _convertLogBean;
-	}
+    @Override
+    public IBeanConverter<LogBean, FlLogBeanBase> getLogBeanConverter() {
+        return _convertLogBean;
+    }
 
-	@Override
-	public IBeanConverter<PersonBean, FlPersonBeanBase> getPersonBeanConverter() {
-		return _convertPersonBean;
-	}
+    @Override
+    public IBeanConverter<PersonBean, FlPersonBeanBase> getPersonBeanConverter() {
+        return _convertPersonBean;
+    }
 
-	@Override
-	public IBeanConverter<StoreBean, FlStoreBeanBase> getStoreBeanConverter() {
-		return _convertStoreBean;
-	}
+    @Override
+    public IBeanConverter<StoreBean, FlStoreBeanBase> getStoreBeanConverter() {
+        return _convertStoreBean;
+    }
 
-	@Override
-	public IBeanConverter<FaceLightBean, FlFaceLightBeanBase> getFaceLightBeanConverter() {
-		return _convertFaceLightBean;
-	}
+    @Override
+    public IBeanConverter<FaceLightBean, FlFaceLightBeanBase> getFaceLightBeanConverter() {
+        return _convertFaceLightBean;
+    }
 
-	@Override
-	public IBeanConverter<FeatureBean, FlFeatureBeanBase> getFeatureBeanConverter() {
-		return _convertFeatureBean;
-	}
+    @Override
+    public IBeanConverter<FeatureBean, FlFeatureBeanBase> getFeatureBeanConverter() {
+        return _convertFeatureBean;
+    }
 
-	@Override
-	public IBeanConverter<LogLightBean, FlLogLightBeanBase> getLogLightBeanConverter() {
-		return _convertLogLightBean;
-	}
+    @Override
+    public IBeanConverter<LogLightBean, FlLogLightBeanBase> getLogLightBeanConverter() {
+        return _convertLogLightBean;
+    }
 }
