@@ -30,8 +30,9 @@ import net.gdface.facelog.dborm.image.FlStoreBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceLightBeanBase;
 import net.gdface.facelog.dborm.face.FlFeatureBeanBase;
 import net.gdface.facelog.dborm.log.FlLogLightBeanBase;
+
 public class DbConverter implements IDbConverter {
-    public final IBeanConverter<DeviceBean,FlDeviceBeanBase> _converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,FlDeviceBeanBase>(){
+    public static final IBeanConverter<DeviceBean,FlDeviceBeanBase> _converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,FlDeviceBeanBase>(){
 
         @Override
         public DeviceBean fromNative(FlDeviceBeanBase bean) {
@@ -77,7 +78,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<FaceBean,FlFaceBeanBase> _converterFaceBean=new IBeanConverter.AbstractHandle<FaceBean,FlFaceBeanBase>(){
+    public static final IBeanConverter<FaceBean,FlFaceBeanBase> _converterFaceBean=new IBeanConverter.AbstractHandle<FaceBean,FlFaceBeanBase>(){
 
         @Override
         public FaceBean fromNative(FlFaceBeanBase bean) {
@@ -178,7 +179,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<ImageBean,FlImageBeanBase> _converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,FlImageBeanBase>(){
+    public static final IBeanConverter<ImageBean,FlImageBeanBase> _converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,FlImageBeanBase>(){
 
         @Override
         public ImageBean fromNative(FlImageBeanBase bean) {
@@ -226,7 +227,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<LogBean,FlLogBeanBase> _converterLogBean=new IBeanConverter.AbstractHandle<LogBean,FlLogBeanBase>(){
+    public static final IBeanConverter<LogBean,FlLogBeanBase> _converterLogBean=new IBeanConverter.AbstractHandle<LogBean,FlLogBeanBase>(){
 
         @Override
         public LogBean fromNative(FlLogBeanBase bean) {
@@ -275,7 +276,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<PersonBean,FlPersonBeanBase> _converterPersonBean=new IBeanConverter.AbstractHandle<PersonBean,FlPersonBeanBase>(){
+    public static final IBeanConverter<PersonBean,FlPersonBeanBase> _converterPersonBean=new IBeanConverter.AbstractHandle<PersonBean,FlPersonBeanBase>(){
 
         @Override
         public PersonBean fromNative(FlPersonBeanBase bean) {
@@ -341,7 +342,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<StoreBean,FlStoreBeanBase> _converterStoreBean=new IBeanConverter.AbstractHandle<StoreBean,FlStoreBeanBase>(){
+    public static final IBeanConverter<StoreBean,FlStoreBeanBase> _converterStoreBean=new IBeanConverter.AbstractHandle<StoreBean,FlStoreBeanBase>(){
 
         @Override
         public StoreBean fromNative(FlStoreBeanBase bean) {
@@ -369,7 +370,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<FaceLightBean,FlFaceLightBeanBase> _converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,FlFaceLightBeanBase>(){
+    public static final IBeanConverter<FaceLightBean,FlFaceLightBeanBase> _converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,FlFaceLightBeanBase>(){
 
         @Override
         public FaceLightBean fromNative(FlFaceLightBeanBase bean) {
@@ -466,7 +467,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<FeatureBean,FlFeatureBeanBase> _converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,FlFeatureBeanBase>(){
+    public static final IBeanConverter<FeatureBean,FlFeatureBeanBase> _converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,FlFeatureBeanBase>(){
 
         @Override
         public FeatureBean fromNative(FlFeatureBeanBase bean) {
@@ -503,7 +504,7 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
-    public final IBeanConverter<LogLightBean,FlLogLightBeanBase> _converterLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,FlLogLightBeanBase>(){
+    public static final IBeanConverter<LogLightBean,FlLogLightBeanBase> _converterLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,FlLogLightBeanBase>(){
 
         @Override
         public LogLightBean fromNative(FlLogLightBeanBase bean) {
@@ -544,7 +545,7 @@ public class DbConverter implements IDbConverter {
         }};
         
 
-    private final Vector<Object[]> converters= new Vector<Object[]>(){
+    private static final Vector<Object[]> converters= new Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
         {
             add(new Object[]{DeviceBean.class,FlDeviceBeanBase.class,_converterDeviceBean});
@@ -558,7 +559,7 @@ public class DbConverter implements IDbConverter {
             add(new Object[]{LogLightBean.class,FlLogLightBeanBase.class,_converterLogLightBean});
         }};
     
-    private<G extends BaseBean,N> int getIndex(Class<G> gClass,Class<N> nClass){
+    private static final <G extends BaseBean,N> int getIndex(Class<G> gClass,Class<N> nClass){
             Vector<Integer>find= new Vector<Integer>();
             if(null!=gClass && null != nClass){
                 for(int i=0;i<converters.size();++i){
@@ -585,7 +586,8 @@ public class DbConverter implements IDbConverter {
                 }
             }
             return  1==find.size() ? find.get(0) : -1;
-        }  
+    }  
+        
     @Override
     @SuppressWarnings("unchecked")
     public <G extends BaseBean,N>IBeanConverter<G,N>getBeanConverter(Class<G> gClass,Class<N> nClass){
@@ -597,6 +599,7 @@ public class DbConverter implements IDbConverter {
                             ,null==nClass?"null":nClass.getSimpleName()));
         return (IBeanConverter<G, N>) converters.get(index)[2];
     }
+    
     @Override
     public synchronized <G extends BaseBean,N>void setBeanConverter(Class<G> gClass,Class<N> nClass,IBeanConverter<G,N>converter){
         if(null == gClass || null == nClass || null == converter)
