@@ -43,6 +43,7 @@
 	                    <configuration>
 	                        <sources>
 	                            <source>src/orm/java</source>
+	                            <source>src/general/java</source>
 	                        </sources>
 	                    </configuration>
 	                </execution> 
