@@ -60,27 +60,20 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
                 nativeBean.setId(bean.getId());
-
             if(bean.getName() != null)
                 nativeBean.setName(bean.getName());
-
             if(bean.getOnline() != null)
                 nativeBean.setOnline(bean.getOnline());
-
             if(bean.getGroupId() != null)
                 nativeBean.setGroupId(bean.getGroupId());
-
             if(bean.getVersion() != null)
                 nativeBean.setVersion(bean.getVersion());
-
-// ignore field create_time
+// IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-
-// ignore field update_time
+// IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getUpdateTime() != null)
 //                 nativeBean.setUpdateTime(bean.getUpdateTime());
-
             return nativeBean;
         }};
         
@@ -141,68 +134,47 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
                 nativeBean.setMd5(bean.getMd5());
-
             if(bean.getPersonId() != null)
                 nativeBean.setPersonId(bean.getPersonId());
-
             if(bean.getImgMd5() != null)
                 nativeBean.setImgMd5(bean.getImgMd5());
-
             if(bean.getFaceLeft() != null)
                 nativeBean.setFaceLeft(bean.getFaceLeft());
-
             if(bean.getFaceTop() != null)
                 nativeBean.setFaceTop(bean.getFaceTop());
-
             if(bean.getFaceWidth() != null)
                 nativeBean.setFaceWidth(bean.getFaceWidth());
-
             if(bean.getFaceHeight() != null)
                 nativeBean.setFaceHeight(bean.getFaceHeight());
-
             if(bean.getEyeLeftx() != null)
                 nativeBean.setEyeLeftx(bean.getEyeLeftx());
-
             if(bean.getEyeLefty() != null)
                 nativeBean.setEyeLefty(bean.getEyeLefty());
-
             if(bean.getEyeRightx() != null)
                 nativeBean.setEyeRightx(bean.getEyeRightx());
-
             if(bean.getEyeRighty() != null)
                 nativeBean.setEyeRighty(bean.getEyeRighty());
-
             if(bean.getMouthX() != null)
                 nativeBean.setMouthX(bean.getMouthX());
-
             if(bean.getMouthY() != null)
                 nativeBean.setMouthY(bean.getMouthY());
-
             if(bean.getNoseX() != null)
                 nativeBean.setNoseX(bean.getNoseX());
-
             if(bean.getNoseY() != null)
                 nativeBean.setNoseY(bean.getNoseY());
-
             if(bean.getAngleYaw() != null)
                 nativeBean.setAngleYaw(bean.getAngleYaw());
-
             if(bean.getAnglePitch() != null)
                 nativeBean.setAnglePitch(bean.getAnglePitch());
-
             if(bean.getAngleRoll() != null)
                 nativeBean.setAngleRoll(bean.getAngleRoll());
-
             if(bean.getExtInfo() != null)
                 nativeBean.setExtInfo(bean.getExtInfo());
-
             if(bean.getFeature() != null)
                 nativeBean.setFeature(bean.getFeature());
-
-// ignore field create_time
+// IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-
             return nativeBean;
         }};
         
@@ -237,28 +209,20 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
                 nativeBean.setMd5(bean.getMd5());
-
             if(bean.getFormat() != null)
                 nativeBean.setFormat(bean.getFormat());
-
             if(bean.getWidth() != null)
                 nativeBean.setWidth(bean.getWidth());
-
             if(bean.getHeight() != null)
                 nativeBean.setHeight(bean.getHeight());
-
             if(bean.getDepth() != null)
                 nativeBean.setDepth(bean.getDepth());
-
             if(bean.getFaceNum() != null)
                 nativeBean.setFaceNum(bean.getFaceNum());
-
             if(bean.getThumbMd5() != null)
                 nativeBean.setThumbMd5(bean.getThumbMd5());
-
             if(bean.getDeviceId() != null)
                 nativeBean.setDeviceId(bean.getDeviceId());
-
             return nativeBean;
         }};
         
@@ -293,29 +257,21 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
                 nativeBean.setId(bean.getId());
-
             if(bean.getPersonId() != null)
                 nativeBean.setPersonId(bean.getPersonId());
-
             if(bean.getDeviceId() != null)
                 nativeBean.setDeviceId(bean.getDeviceId());
-
             if(bean.getVerifyFace() != null)
                 nativeBean.setVerifyFace(bean.getVerifyFace());
-
             if(bean.getCompareFace() != null)
                 nativeBean.setCompareFace(bean.getCompareFace());
-
             if(bean.getSimilarty() != null)
                 nativeBean.setSimilarty(bean.getSimilarty());
-
             if(bean.getVerifyTime() != null)
                 nativeBean.setVerifyTime(bean.getVerifyTime());
-
-// ignore field create_time
+// IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-
             return nativeBean;
         }};
         
@@ -358,42 +314,30 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
                 nativeBean.setId(bean.getId());
-
             if(bean.getGroupId() != null)
                 nativeBean.setGroupId(bean.getGroupId());
-
             if(bean.getName() != null)
                 nativeBean.setName(bean.getName());
-
             if(bean.getSex() != null)
                 nativeBean.setSex(bean.getSex());
-
             if(bean.getBirthdate() != null)
                 nativeBean.setBirthdate(bean.getBirthdate());
-
             if(bean.getPapersType() != null)
                 nativeBean.setPapersType(bean.getPapersType());
-
             if(bean.getPapersNum() != null)
                 nativeBean.setPapersNum(bean.getPapersNum());
-
             if(bean.getPhotoId() != null)
                 nativeBean.setPhotoId(bean.getPhotoId());
-
             if(bean.getFaceMd5() != null)
                 nativeBean.setFaceMd5(bean.getFaceMd5());
-
             if(bean.getExpiryDate() != null)
                 nativeBean.setExpiryDate(bean.getExpiryDate());
-
-// ignore field create_time
+// IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-
-// ignore field update_time
+// IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getUpdateTime() != null)
 //                 nativeBean.setUpdateTime(bean.getUpdateTime());
-
             return nativeBean;
         }};
         
@@ -418,13 +362,10 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
                 nativeBean.setMd5(bean.getMd5());
-
             if(bean.getEncoding() != null)
                 nativeBean.setEncoding(bean.getEncoding());
-
             if(bean.getData() != null)
                 nativeBean.setData(bean.getData());
-
             return nativeBean;
         }};
         
@@ -483,65 +424,45 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
                 nativeBean.setMd5(bean.getMd5());
-
             if(bean.getPersonId() != null)
                 nativeBean.setPersonId(bean.getPersonId());
-
             if(bean.getImgMd5() != null)
                 nativeBean.setImgMd5(bean.getImgMd5());
-
             if(bean.getFaceLeft() != null)
                 nativeBean.setFaceLeft(bean.getFaceLeft());
-
             if(bean.getFaceTop() != null)
                 nativeBean.setFaceTop(bean.getFaceTop());
-
             if(bean.getFaceWidth() != null)
                 nativeBean.setFaceWidth(bean.getFaceWidth());
-
             if(bean.getFaceHeight() != null)
                 nativeBean.setFaceHeight(bean.getFaceHeight());
-
             if(bean.getEyeLeftx() != null)
                 nativeBean.setEyeLeftx(bean.getEyeLeftx());
-
             if(bean.getEyeLefty() != null)
                 nativeBean.setEyeLefty(bean.getEyeLefty());
-
             if(bean.getEyeRightx() != null)
                 nativeBean.setEyeRightx(bean.getEyeRightx());
-
             if(bean.getEyeRighty() != null)
                 nativeBean.setEyeRighty(bean.getEyeRighty());
-
             if(bean.getMouthX() != null)
                 nativeBean.setMouthX(bean.getMouthX());
-
             if(bean.getMouthY() != null)
                 nativeBean.setMouthY(bean.getMouthY());
-
             if(bean.getNoseX() != null)
                 nativeBean.setNoseX(bean.getNoseX());
-
             if(bean.getNoseY() != null)
                 nativeBean.setNoseY(bean.getNoseY());
-
             if(bean.getAngleYaw() != null)
                 nativeBean.setAngleYaw(bean.getAngleYaw());
-
             if(bean.getAnglePitch() != null)
                 nativeBean.setAnglePitch(bean.getAnglePitch());
-
             if(bean.getAngleRoll() != null)
                 nativeBean.setAngleRoll(bean.getAngleRoll());
-
             if(bean.getExtInfo() != null)
                 nativeBean.setExtInfo(bean.getExtInfo());
-
-// ignore field create_time
+// IGNORE field fl_face_light.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-
             return nativeBean;
         }};
         
@@ -570,20 +491,15 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
                 nativeBean.setMd5(bean.getMd5());
-
             if(bean.getPersonId() != null)
                 nativeBean.setPersonId(bean.getPersonId());
-
             if(bean.getImgMd5() != null)
                 nativeBean.setImgMd5(bean.getImgMd5());
-
             if(bean.getFeature() != null)
                 nativeBean.setFeature(bean.getFeature());
-
-// ignore field create_time
+// IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-
             return nativeBean;
         }};
         
@@ -614,22 +530,16 @@ public class DbConverter implements IDbConverter {
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
                 nativeBean.setId(bean.getId());
-
             if(bean.getPersonId() != null)
                 nativeBean.setPersonId(bean.getPersonId());
-
             if(bean.getName() != null)
                 nativeBean.setName(bean.getName());
-
             if(bean.getPapersType() != null)
                 nativeBean.setPapersType(bean.getPapersType());
-
             if(bean.getPapersNum() != null)
                 nativeBean.setPapersNum(bean.getPapersNum());
-
             if(bean.getVerifyTime() != null)
                 nativeBean.setVerifyTime(bean.getVerifyTime());
-
             return nativeBean;
         }};
         
