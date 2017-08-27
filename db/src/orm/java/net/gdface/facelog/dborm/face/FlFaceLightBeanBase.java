@@ -899,7 +899,7 @@ public class FlFaceLightBeanBase
             .append("\tangle_yaw=").append(getAngleYaw()).append("\n")
             .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
             .append("\tangle_roll=").append(getAngleRoll()).append("\n")
-            .append("\text_info=").append(getExtInfo()).append("\n")
+            .append("\text_info=").append(getExtInfo().length).append(" bytes\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();

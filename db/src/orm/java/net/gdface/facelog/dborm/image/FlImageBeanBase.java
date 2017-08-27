@@ -484,13 +484,6 @@ public class FlImageBeanBase
     public int compareTo(FlImageBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
-            .append(getFormat(), object.getFormat())
-            .append(getWidth(), object.getWidth())
-            .append(getHeight(), object.getHeight())
-            .append(getDepth(), object.getDepth())
-            .append(getFaceNum(), object.getFaceNum())
-            .append(getThumbMd5(), object.getThumbMd5())
-            .append(getDeviceId(), object.getDeviceId())
             .toComparison();
     }
     /**

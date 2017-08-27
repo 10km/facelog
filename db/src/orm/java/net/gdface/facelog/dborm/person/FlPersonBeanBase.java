@@ -618,17 +618,6 @@ public class FlPersonBeanBase
     public int compareTo(FlPersonBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
-            .append(getGroupId(), object.getGroupId())
-            .append(getName(), object.getName())
-            .append(getSex(), object.getSex())
-            .append(getBirthdate(), object.getBirthdate())
-            .append(getPapersType(), object.getPapersType())
-            .append(getPapersNum(), object.getPapersNum())
-            .append(getPhotoId(), object.getPhotoId())
-            .append(getFaceMd5(), object.getFaceMd5())
-            .append(getExpiryDate(), object.getExpiryDate())
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     /**

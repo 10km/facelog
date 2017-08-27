@@ -279,7 +279,7 @@ public class FeatureBean
             .append("\tmd5=").append(getMd5()).append("\n")
             .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\timg_md5=").append(getImgMd5()).append("\n")
-            .append("\tfeature=").append(getFeature()).append("\n")
+            .append("\tfeature=").append(getFeature().length).append(" bytes\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();

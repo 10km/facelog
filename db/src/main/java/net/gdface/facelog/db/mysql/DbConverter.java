@@ -635,7 +635,7 @@ public class DbConverter implements IDbConverter {
         
 
     private final Vector<Object[]> converters= new Vector<Object[]>(){
-        private static final long serialVersionUID = -2915982403974349774L;
+        private static final long serialVersionUID = 1L;
         {
             add(new Object[]{DeviceBean.class,FlDeviceBeanBase.class,_converterDeviceBean});
             add(new Object[]{FaceBean.class,FlFaceBeanBase.class,_converterFaceBean});

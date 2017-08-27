@@ -962,8 +962,8 @@ public class FaceBean
             .append("\tangle_yaw=").append(getAngleYaw()).append("\n")
             .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
             .append("\tangle_roll=").append(getAngleRoll()).append("\n")
-            .append("\text_info=").append(getExtInfo()).append("\n")
-            .append("\tfeature=").append(getFeature()).append("\n")
+            .append("\text_info=").append(getExtInfo().length).append(" bytes\n")
+            .append("\tfeature=").append(getFeature().length).append(" bytes\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
@@ -973,26 +973,6 @@ public class FaceBean
     public int compareTo(FaceBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
-            .append(getPersonId(), object.getPersonId())
-            .append(getImgMd5(), object.getImgMd5())
-            .append(getFaceLeft(), object.getFaceLeft())
-            .append(getFaceTop(), object.getFaceTop())
-            .append(getFaceWidth(), object.getFaceWidth())
-            .append(getFaceHeight(), object.getFaceHeight())
-            .append(getEyeLeftx(), object.getEyeLeftx())
-            .append(getEyeLefty(), object.getEyeLefty())
-            .append(getEyeRightx(), object.getEyeRightx())
-            .append(getEyeRighty(), object.getEyeRighty())
-            .append(getMouthX(), object.getMouthX())
-            .append(getMouthY(), object.getMouthY())
-            .append(getNoseX(), object.getNoseX())
-            .append(getNoseY(), object.getNoseY())
-            .append(getAngleYaw(), object.getAngleYaw())
-            .append(getAnglePitch(), object.getAnglePitch())
-            .append(getAngleRoll(), object.getAngleRoll())
-            .append(getExtInfo(), object.getExtInfo())
-            .append(getFeature(), object.getFeature())
-            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     /**

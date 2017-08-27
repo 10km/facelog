@@ -202,7 +202,7 @@ public class FlStoreBeanBase
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tmd5=").append(getMd5()).append("\n")
             .append("\tencoding=").append(getEncoding()).append("\n")
-            .append("\tdata=").append(getData()).append("\n")
+            .append("\tdata=").append(getData().length).append(" bytes\n")
             .append("]\n")
             .toString();
     }
@@ -211,8 +211,6 @@ public class FlStoreBeanBase
     public int compareTo(FlStoreBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
-            .append(getEncoding(), object.getEncoding())
-            .append(getData(), object.getData())
             .toComparison();
     }
     /**

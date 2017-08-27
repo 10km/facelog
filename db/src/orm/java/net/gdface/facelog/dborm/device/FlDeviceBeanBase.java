@@ -393,12 +393,6 @@ public class FlDeviceBeanBase
     public int compareTo(FlDeviceBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
-            .append(getName(), object.getName())
-            .append(getOnline(), object.getOnline())
-            .append(getGroupId(), object.getGroupId())
-            .append(getVersion(), object.getVersion())
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     /**

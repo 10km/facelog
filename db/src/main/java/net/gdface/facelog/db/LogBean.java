@@ -494,13 +494,6 @@ public class LogBean
     public int compareTo(LogBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
-            .append(getPersonId(), object.getPersonId())
-            .append(getDeviceId(), object.getDeviceId())
-            .append(getVerifyFace(), object.getVerifyFace())
-            .append(getCompareFace(), object.getCompareFace())
-            .append(getSimilarty(), object.getSimilarty())
-            .append(getVerifyTime(), object.getVerifyTime())
-            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     /**

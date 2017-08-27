@@ -388,12 +388,6 @@ public class DeviceBean
     public int compareTo(DeviceBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
-            .append(getName(), object.getName())
-            .append(getOnline(), object.getOnline())
-            .append(getGroupId(), object.getGroupId())
-            .append(getVersion(), object.getVersion())
-            .append(getCreateTime(), object.getCreateTime())
-            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     /**
