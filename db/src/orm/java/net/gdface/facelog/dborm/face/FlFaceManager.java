@@ -807,10 +807,12 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         if(null == bean) return null;
         if( null != refFlImagebyImgMd5) {
             refFlImagebyImgMd5 = FlImageManager.getInstance().save( refFlImagebyImgMd5 );
+            bean.setImgMd5(refFlImagebyImgMd5.getMd5()); 
             bean.setReferencedByImgMd5(refFlImagebyImgMd5);
         }
         if( null != refFlPersonbyPersonId) {
             refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
+            bean.setPersonId(refFlPersonbyPersonId.getId()); 
             bean.setReferencedByPersonId(refFlPersonbyPersonId);
         }
         bean = this.save( bean );

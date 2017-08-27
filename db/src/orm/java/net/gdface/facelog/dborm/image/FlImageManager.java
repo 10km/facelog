@@ -693,14 +693,17 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         if(null == bean) return null;
         if( null != refFlDevicebyDeviceId) {
             refFlDevicebyDeviceId = FlDeviceManager.getInstance().save( refFlDevicebyDeviceId );
+            bean.setDeviceId(refFlDevicebyDeviceId.getId()); 
             bean.setReferencedByDeviceId(refFlDevicebyDeviceId);
         }
         if( null != refFlStorebyMd5) {
             refFlStorebyMd5 = FlStoreManager.getInstance().save( refFlStorebyMd5 );
+            bean.setMd5(refFlStorebyMd5.getMd5()); 
             bean.setReferencedByMd5(refFlStorebyMd5);
         }
         if( null != refFlStorebyThumbMd5) {
             refFlStorebyThumbMd5 = FlStoreManager.getInstance().save( refFlStorebyThumbMd5 );
+            bean.setThumbMd5(refFlStorebyThumbMd5.getMd5()); 
             bean.setReferencedByThumbMd5(refFlStorebyThumbMd5);
         }
         bean = this.save( bean );

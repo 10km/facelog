@@ -725,6 +725,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         if(null == bean) return null;
         if( null != refFlImagebyPhotoId) {
             refFlImagebyPhotoId = FlImageManager.getInstance().save( refFlImagebyPhotoId );
+            bean.setPhotoId(refFlImagebyPhotoId.getMd5()); 
             bean.setReferencedByPhotoId(refFlImagebyPhotoId);
         }
         bean = this.save( bean );

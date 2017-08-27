@@ -379,18 +379,22 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         if(null == bean) return null;
         if( null != refFlDevicebyDeviceId) {
             refFlDevicebyDeviceId = FlDeviceManager.getInstance().save( refFlDevicebyDeviceId );
+            bean.setDeviceId(refFlDevicebyDeviceId.getId()); 
             bean.setReferencedByDeviceId(refFlDevicebyDeviceId);
         }
         if( null != refFlFacebyVerifyFace) {
             refFlFacebyVerifyFace = FlFaceManager.getInstance().save( refFlFacebyVerifyFace );
+            bean.setVerifyFace(refFlFacebyVerifyFace.getMd5()); 
             bean.setReferencedByVerifyFace(refFlFacebyVerifyFace);
         }
         if( null != refFlFacebyCompareFace) {
             refFlFacebyCompareFace = FlFaceManager.getInstance().save( refFlFacebyCompareFace );
+            bean.setCompareFace(refFlFacebyCompareFace.getMd5()); 
             bean.setReferencedByCompareFace(refFlFacebyCompareFace);
         }
         if( null != refFlPersonbyPersonId) {
             refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
+            bean.setPersonId(refFlPersonbyPersonId.getId()); 
             bean.setReferencedByPersonId(refFlPersonbyPersonId);
         }
         bean = this.save( bean );
