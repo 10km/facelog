@@ -235,7 +235,7 @@ public class StoreManager
      * @author guyadong
      * @param bean the {@link StoreBean} with primary key fields
      * @return 
-     * @see {@link #loadByPrimaryKey(StoreBeanBase bean)}
+     * @see {@link #loadByPrimaryKey(StoreBean bean)}
      */
     //1.4
     //@Override
@@ -1405,29 +1405,29 @@ public class StoreManager
 			}
 
 			@Override
-			public void afterInsert(FlDeviceBean bean) throws DAOException {
+			public void afterInsert(FlStoreBean bean) throws DAOException {
 				listener.afterInsert(StoreManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+			public void beforeUpdate(FlStoreBean bean) throws DAOException {
 				listener.beforeUpdate(StoreManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+			public void afterUpdate(FlStoreBean bean) throws DAOException {
 				listener.afterUpdate(StoreManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+			public void beforeDelete(FlStoreBean bean) throws DAOException {
 				listener.beforeDelete(StoreManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void afterDelete(FlDeviceBean bean) throws DAOException {
+			public void afterDelete(FlStoreBean bean) throws DAOException {
 				listener.afterDelete(StoreManager.this.beanConverter.fromNative(bean));
 			}};
 	}

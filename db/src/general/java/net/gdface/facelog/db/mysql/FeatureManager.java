@@ -188,15 +188,15 @@ public class FeatureManager
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getFeatureBeanConverter();
     }
-    public FeatureBean loadByPrimaryKey(FeatureBeanBase bean)
+    public FeatureBean loadByPrimaryKey(FeatureBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    public boolean existsPrimaryKey(FeatureBeanBase bean)
+    public boolean existsPrimaryKey(FeatureBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    public int deleteByPrimaryKey(FeatureBeanBase bean)
+    public int deleteByPrimaryKey(FeatureBean bean)
     {
         throw new UnsupportedOperationException();
     }
@@ -1000,29 +1000,29 @@ public class FeatureManager
 			}
 
 			@Override
-			public void afterInsert(FlDeviceBean bean) throws DAOException {
+			public void afterInsert(FlFeatureBean bean) throws DAOException {
 				listener.afterInsert(FeatureManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+			public void beforeUpdate(FlFeatureBean bean) throws DAOException {
 				listener.beforeUpdate(FeatureManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+			public void afterUpdate(FlFeatureBean bean) throws DAOException {
 				listener.afterUpdate(FeatureManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+			public void beforeDelete(FlFeatureBean bean) throws DAOException {
 				listener.beforeDelete(FeatureManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void afterDelete(FlDeviceBean bean) throws DAOException {
+			public void afterDelete(FlFeatureBean bean) throws DAOException {
 				listener.afterDelete(FeatureManager.this.beanConverter.fromNative(bean));
 			}};
 	}

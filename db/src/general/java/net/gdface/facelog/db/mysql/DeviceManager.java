@@ -275,7 +275,7 @@ public class DeviceManager
      * @author guyadong
      * @param bean the {@link DeviceBean} with primary key fields
      * @return 
-     * @see {@link #loadByPrimaryKey(DeviceBeanBase bean)}
+     * @see {@link #loadByPrimaryKey(DeviceBean bean)}
      */
     //1.4
     //@Override

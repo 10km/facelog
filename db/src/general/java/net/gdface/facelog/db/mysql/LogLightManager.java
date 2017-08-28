@@ -197,15 +197,15 @@ public class LogLightManager
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getLogLightBeanConverter();
     }
-    public LogLightBean loadByPrimaryKey(LogLightBeanBase bean)
+    public LogLightBean loadByPrimaryKey(LogLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    public boolean existsPrimaryKey(LogLightBeanBase bean)
+    public boolean existsPrimaryKey(LogLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    public int deleteByPrimaryKey(LogLightBeanBase bean)
+    public int deleteByPrimaryKey(LogLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
@@ -1009,29 +1009,29 @@ public class LogLightManager
 			}
 
 			@Override
-			public void afterInsert(FlDeviceBean bean) throws DAOException {
+			public void afterInsert(FlLogLightBean bean) throws DAOException {
 				listener.afterInsert(LogLightManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+			public void beforeUpdate(FlLogLightBean bean) throws DAOException {
 				listener.beforeUpdate(LogLightManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+			public void afterUpdate(FlLogLightBean bean) throws DAOException {
 				listener.afterUpdate(LogLightManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+			public void beforeDelete(FlLogLightBean bean) throws DAOException {
 				listener.beforeDelete(LogLightManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void afterDelete(FlDeviceBean bean) throws DAOException {
+			public void afterDelete(FlLogLightBean bean) throws DAOException {
 				listener.afterDelete(LogLightManager.this.beanConverter.fromNative(bean));
 			}};
 	}

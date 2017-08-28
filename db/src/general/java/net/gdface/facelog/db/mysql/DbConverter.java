@@ -10,7 +10,6 @@ package net.gdface.facelog.db.mysql;
 import java.util.Vector;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
@@ -559,7 +558,7 @@ public class DbConverter implements IDbConverter {
             add(new Object[]{LogLightBean.class,FlLogLightBeanBase.class,_converterLogLightBean});
         }};
     
-    private static final <G extends BaseBean,N> int getIndex(Class<G> gClass,Class<N> nClass){
+    private static final <G,N> int getIndex(Class<G> gClass,Class<N> nClass){
             Vector<Integer>find= new Vector<Integer>();
             if(null!=gClass && null != nClass){
                 for(int i=0;i<converters.size();++i){
@@ -590,7 +589,7 @@ public class DbConverter implements IDbConverter {
         
     @Override
     @SuppressWarnings("unchecked")
-    public <G extends BaseBean,N>IBeanConverter<G,N>getBeanConverter(Class<G> gClass,Class<N> nClass){
+    public <G,N>IBeanConverter<G,N>getBeanConverter(Class<G> gClass,Class<N> nClass){
         int index = getIndex(gClass, nClass);
         if(index<0)
             throw new IllegalArgumentException(
@@ -601,7 +600,7 @@ public class DbConverter implements IDbConverter {
     }
     
     @Override
-    public synchronized <G extends BaseBean,N>void setBeanConverter(Class<G> gClass,Class<N> nClass,IBeanConverter<G,N>converter){
+    public synchronized <G,N>void setBeanConverter(Class<G> gClass,Class<N> nClass,IBeanConverter<G,N>converter){
         if(null == gClass || null == nClass || null == converter)
             throw new NullPointerException();
         Object[] c = new Object[]{gClass,nClass,converter};

@@ -292,7 +292,7 @@ public class ImageManager
      * @author guyadong
      * @param bean the {@link ImageBean} with primary key fields
      * @return 
-     * @see {@link #loadByPrimaryKey(ImageBeanBase bean)}
+     * @see {@link #loadByPrimaryKey(ImageBean bean)}
      */
     //1.4
     //@Override
@@ -692,12 +692,12 @@ public class ImageManager
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+    private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlDevicebyDeviceId",new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
-    put("refFlStorebyMd5",new Object[]{"getReferencedByMd5","setReferencedByMd5",FlStoreBean.class});
-    put("refFlStorebyThumbMd5",new Object[]{"getReferencedByThumbMd5","setReferencedByThumbMd5",FlStoreBean.class});
+    put("refFlDevicebyDeviceId",new Class<?>[]{DeviceBean.class,FlDeviceBean.class});
+    put("refFlStorebyMd5",new Class<?>[]{StoreBean.class,FlStoreBean.class});
+    put("refFlStorebyThumbMd5",new Class<?>[]{StoreBean.class,FlStoreBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
@@ -715,29 +715,12 @@ public class ImageManager
     @SuppressWarnings("unchecked")
     //@Override
     public <T> T getReferencedBean(ImageBean bean,String fkName){
-        Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
-            return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
+            return this.nativeManager.getReferencedBean((FlImageBean) this.beanConverter.toNative(bean), fkName);
+        }
+        catch(DAOException e)
+        {
             throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
         }
     }
     /**
@@ -758,35 +741,20 @@ public class ImageManager
     @SuppressWarnings("unchecked")
     //@Override
     public <T> T setReferencedBean(ImageBean bean,T beanToSet,String fkName)throws DAOException{
-        Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==beanToSet)
-            throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)params[2];
-        if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
-            throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
+        try {
+            if(null == beanToSet) return null;
+            Class<?>[] types=REF_METHODS.get(fkName);
+            if(null == types)
+                throw new IllegalArgumentException(String.format("invalid fkName :%s",fkName));
+            @SuppressWarnings("rawtypes")
+			IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
+            if( null == converter )
+                throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
+            return (T) converter.fromNative(this.nativeManager.setReferencedBean((FlImageBean) this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
         }
-        try {            
-            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
-        } catch (SecurityException e) {
+        catch(DAOException e)
+        {
             throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
         }
     }
      
@@ -1767,29 +1735,29 @@ public class ImageManager
 			}
 
 			@Override
-			public void afterInsert(FlDeviceBean bean) throws DAOException {
+			public void afterInsert(FlImageBean bean) throws DAOException {
 				listener.afterInsert(ImageManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+			public void beforeUpdate(FlImageBean bean) throws DAOException {
 				listener.beforeUpdate(ImageManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+			public void afterUpdate(FlImageBean bean) throws DAOException {
 				listener.afterUpdate(ImageManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+			public void beforeDelete(FlImageBean bean) throws DAOException {
 				listener.beforeDelete(ImageManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void afterDelete(FlDeviceBean bean) throws DAOException {
+			public void afterDelete(FlImageBean bean) throws DAOException {
 				listener.afterDelete(ImageManager.this.beanConverter.fromNative(bean));
 			}};
 	}

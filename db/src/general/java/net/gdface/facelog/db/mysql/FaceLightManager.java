@@ -323,15 +323,15 @@ public class FaceLightManager
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getFaceLightBeanConverter();
     }
-    public FaceLightBean loadByPrimaryKey(FaceLightBeanBase bean)
+    public FaceLightBean loadByPrimaryKey(FaceLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    public boolean existsPrimaryKey(FaceLightBeanBase bean)
+    public boolean existsPrimaryKey(FaceLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    public int deleteByPrimaryKey(FaceLightBeanBase bean)
+    public int deleteByPrimaryKey(FaceLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
@@ -1135,29 +1135,29 @@ public class FaceLightManager
 			}
 
 			@Override
-			public void afterInsert(FlDeviceBean bean) throws DAOException {
+			public void afterInsert(FlFaceLightBean bean) throws DAOException {
 				listener.afterInsert(FaceLightManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+			public void beforeUpdate(FlFaceLightBean bean) throws DAOException {
 				listener.beforeUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
 				
 			}
 
 			@Override
-			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+			public void afterUpdate(FlFaceLightBean bean) throws DAOException {
 				listener.afterUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+			public void beforeDelete(FlFaceLightBean bean) throws DAOException {
 				listener.beforeDelete(FaceLightManager.this.beanConverter.fromNative(bean));
 			}
 
 			@Override
-			public void afterDelete(FlDeviceBean bean) throws DAOException {
+			public void afterDelete(FlFaceLightBean bean) throws DAOException {
 				listener.afterDelete(FaceLightManager.this.beanConverter.fromNative(bean));
 			}};
 	}
