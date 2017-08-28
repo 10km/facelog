@@ -20,6 +20,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
+import net.gdface.facelog.db.PersonListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.person.FlPersonManager;
@@ -1458,7 +1459,7 @@ public class PersonManager
     /**
      * Retrieves an unique PersonBean using the face_md5 index.
      *
-     * @param faceMd5 the face_md5 column's value filter.
+     * @param faceMd5 the face_md5 column's value filter. must not be null
      * @return an array of PersonBean
      */
     public PersonBean loadByface_md5(String faceMd5)
@@ -1493,7 +1494,7 @@ public class PersonManager
     /**
      * Retrieves an unique PersonBean using the papers_num index.
      *
-     * @param papersNum the papers_num column's value filter.
+     * @param papersNum the papers_num column's value filter. must not be null
      * @return an array of PersonBean
      */
     public PersonBean loadBypapers_num(String papersNum)
@@ -1528,7 +1529,7 @@ public class PersonManager
     /**
      * Retrieves an unique PersonBean using the photo_id index.
      *
-     * @param photoId the photo_id column's value filter.
+     * @param photoId the photo_id column's value filter. must not be null
      * @return an array of PersonBean
      */
     public PersonBean loadByphoto_id(String photoId)

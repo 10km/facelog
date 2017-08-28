@@ -5,10 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-package net.gdface.facelog.db.mysql;
+package net.gdface.facelog.db;
 
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.FeatureBean;
 
 /**
  * Listener that is notified of fl_feature table changes.

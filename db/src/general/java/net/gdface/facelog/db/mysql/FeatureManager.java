@@ -17,6 +17,7 @@ import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
+import net.gdface.facelog.db.FeatureListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFeatureManager;
