@@ -1580,7 +1580,7 @@ public class FaceManager
     // USING INDICES
     //_____________________________________________________________________
 
-    /**
+     /**
      * Retrieves an array of FaceBean using the img_md5 index.
      *
      * @param imgMd5 the img_md5 column's value filter.
@@ -1588,9 +1588,13 @@ public class FaceManager
      */
     public FaceBean[] loadByimg_md5(String imgMd5)
     {
-        FaceBean bean= new FaceBean ();
-        bean.setImgMd5(imgMd5);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByimg_md5(imgMd5));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -1601,11 +1605,15 @@ public class FaceManager
      */
     public List<FaceBean> loadByimg_md5AsList(String imgMd5)
     {
-        FaceBean bean = new FaceBean ();
-        bean.setImgMd5(imgMd5);
-        return loadUsingTemplateAsList(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByimg_md5AsList(imgMd5));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
+ 
     /**
      * Deletes rows using the img_md5 index.
      *
@@ -1614,12 +1622,16 @@ public class FaceManager
      */
     public int deleteByimg_md5(String imgMd5)
     {
-        FaceBean bean = new FaceBean ();
-        bean.setImgMd5(imgMd5);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteByimg_md5(imgMd5);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
-    /**
+     /**
      * Retrieves an array of FaceBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
@@ -1627,9 +1639,13 @@ public class FaceManager
      */
     public FaceBean[] loadByperson_id(Integer personId)
     {
-        FaceBean bean= new FaceBean ();
-        bean.setPersonId(personId);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByperson_id(personId));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -1640,11 +1656,15 @@ public class FaceManager
      */
     public List<FaceBean> loadByperson_idAsList(Integer personId)
     {
-        FaceBean bean = new FaceBean ();
-        bean.setPersonId(personId);
-        return loadUsingTemplateAsList(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByperson_idAsList(personId));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
+ 
     /**
      * Deletes rows using the person_id index.
      *
@@ -1653,9 +1673,13 @@ public class FaceManager
      */
     public int deleteByperson_id(Integer personId)
     {
-        FaceBean bean = new FaceBean ();
-        bean.setPersonId(personId);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteByperson_id(personId);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
 

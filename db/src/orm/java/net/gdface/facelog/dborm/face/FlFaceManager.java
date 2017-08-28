@@ -2276,7 +2276,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     // USING INDICES
     //_____________________________________________________________________
 
-    /**
+     /**
      * Retrieves an array of FlFaceBean using the img_md5 index.
      *
      * @param imgMd5 the img_md5 column's value filter.
@@ -2301,8 +2301,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         bean.setImgMd5(imgMd5);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the img_md5 index.
      *
      * @param imgMd5 the img_md5 column's value filter.
@@ -2316,7 +2315,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
+     /**
      * Retrieves an array of FlFaceBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
@@ -2341,8 +2340,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         bean.setPersonId(personId);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the person_id index.
      *
      * @param personId the person_id column's value filter.

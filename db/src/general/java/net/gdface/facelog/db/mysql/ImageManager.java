@@ -1508,7 +1508,7 @@ public class ImageManager
     // USING INDICES
     //_____________________________________________________________________
 
-    /**
+     /**
      * Retrieves an array of ImageBean using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
@@ -1516,9 +1516,13 @@ public class ImageManager
      */
     public ImageBean[] loadBydevice_id(Integer deviceId)
     {
-        ImageBean bean= new ImageBean ();
-        bean.setDeviceId(deviceId);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadBydevice_id(deviceId));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -1529,11 +1533,15 @@ public class ImageManager
      */
     public List<ImageBean> loadBydevice_idAsList(Integer deviceId)
     {
-        ImageBean bean = new ImageBean ();
-        bean.setDeviceId(deviceId);
-        return loadUsingTemplateAsList(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadBydevice_idAsList(deviceId));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
+ 
     /**
      * Deletes rows using the device_id index.
      *
@@ -1542,12 +1550,16 @@ public class ImageManager
      */
     public int deleteBydevice_id(Integer deviceId)
     {
-        ImageBean bean = new ImageBean ();
-        bean.setDeviceId(deviceId);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteBydevice_id(deviceId);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
-    /**
+     /**
      * Retrieves an array of ImageBean using the thumb_md5 index.
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
@@ -1555,9 +1567,13 @@ public class ImageManager
      */
     public ImageBean[] loadBythumb_md5(String thumbMd5)
     {
-        ImageBean bean= new ImageBean ();
-        bean.setThumbMd5(thumbMd5);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadBythumb_md5(thumbMd5));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -1568,11 +1584,15 @@ public class ImageManager
      */
     public List<ImageBean> loadBythumb_md5AsList(String thumbMd5)
     {
-        ImageBean bean = new ImageBean ();
-        bean.setThumbMd5(thumbMd5);
-        return loadUsingTemplateAsList(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadBythumb_md5AsList(thumbMd5));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
+ 
     /**
      * Deletes rows using the thumb_md5 index.
      *
@@ -1581,9 +1601,13 @@ public class ImageManager
      */
     public int deleteBythumb_md5(String thumbMd5)
     {
-        ImageBean bean = new ImageBean ();
-        bean.setThumbMd5(thumbMd5);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteBythumb_md5(thumbMd5);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
 

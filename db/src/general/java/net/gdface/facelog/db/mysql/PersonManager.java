@@ -1456,31 +1456,23 @@ public class PersonManager
     //_____________________________________________________________________
 
     /**
-     * Retrieves an array of PersonBean using the face_md5 index.
+     * Retrieves an unique PersonBean using the face_md5 index.
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return an array of PersonBean
      */
-    public PersonBean[] loadByface_md5(String faceMd5)
+    public PersonBean loadByface_md5(String faceMd5)
     {
-        PersonBean bean= new PersonBean ();
-        bean.setFaceMd5(faceMd5);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByface_md5(faceMd5));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
-    /**
-     * Retrieves a list of PersonBean using the face_md5 index.
-     *
-     * @param faceMd5 the face_md5 column's value filter.
-     * @return a list of PersonBean
-     */
-    public List<PersonBean> loadByface_md5AsList(String faceMd5)
-    {
-        PersonBean bean = new PersonBean ();
-        bean.setFaceMd5(faceMd5);
-        return loadUsingTemplateAsList(bean);
-    }
-    
+
+ 
     /**
      * Deletes rows using the face_md5 index.
      *
@@ -1489,37 +1481,33 @@ public class PersonManager
      */
     public int deleteByface_md5(String faceMd5)
     {
-        PersonBean bean = new PersonBean ();
-        bean.setFaceMd5(faceMd5);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteByface_md5(faceMd5);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
-     * Retrieves an array of PersonBean using the papers_num index.
+     * Retrieves an unique PersonBean using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter.
      * @return an array of PersonBean
      */
-    public PersonBean[] loadBypapers_num(String papersNum)
+    public PersonBean loadBypapers_num(String papersNum)
     {
-        PersonBean bean= new PersonBean ();
-        bean.setPapersNum(papersNum);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadBypapers_num(papersNum));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
-    /**
-     * Retrieves a list of PersonBean using the papers_num index.
-     *
-     * @param papersNum the papers_num column's value filter.
-     * @return a list of PersonBean
-     */
-    public List<PersonBean> loadBypapers_numAsList(String papersNum)
-    {
-        PersonBean bean = new PersonBean ();
-        bean.setPapersNum(papersNum);
-        return loadUsingTemplateAsList(bean);
-    }
-    
+
+ 
     /**
      * Deletes rows using the papers_num index.
      *
@@ -1528,37 +1516,33 @@ public class PersonManager
      */
     public int deleteBypapers_num(String papersNum)
     {
-        PersonBean bean = new PersonBean ();
-        bean.setPapersNum(papersNum);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteBypapers_num(papersNum);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
-     * Retrieves an array of PersonBean using the photo_id index.
+     * Retrieves an unique PersonBean using the photo_id index.
      *
      * @param photoId the photo_id column's value filter.
      * @return an array of PersonBean
      */
-    public PersonBean[] loadByphoto_id(String photoId)
+    public PersonBean loadByphoto_id(String photoId)
     {
-        PersonBean bean= new PersonBean ();
-        bean.setPhotoId(photoId);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByphoto_id(photoId));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
-    /**
-     * Retrieves a list of PersonBean using the photo_id index.
-     *
-     * @param photoId the photo_id column's value filter.
-     * @return a list of PersonBean
-     */
-    public List<PersonBean> loadByphoto_idAsList(String photoId)
-    {
-        PersonBean bean = new PersonBean ();
-        bean.setPhotoId(photoId);
-        return loadUsingTemplateAsList(bean);
-    }
-    
+
+ 
     /**
      * Deletes rows using the photo_id index.
      *
@@ -1567,12 +1551,16 @@ public class PersonManager
      */
     public int deleteByphoto_id(String photoId)
     {
-        PersonBean bean = new PersonBean ();
-        bean.setPhotoId(photoId);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteByphoto_id(photoId);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
-    /**
+     /**
      * Retrieves an array of PersonBean using the expiry_date index.
      *
      * @param expiryDate the expiry_date column's value filter.
@@ -1580,9 +1568,13 @@ public class PersonManager
      */
     public PersonBean[] loadByexpiry_date(java.util.Date expiryDate)
     {
-        PersonBean bean= new PersonBean ();
-        bean.setExpiryDate(expiryDate);
-        return loadUsingTemplate(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByexpiry_date(expiryDate));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -1593,11 +1585,15 @@ public class PersonManager
      */
     public List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate)
     {
-        PersonBean bean = new PersonBean ();
-        bean.setExpiryDate(expiryDate);
-        return loadUsingTemplateAsList(bean);
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByexpiry_dateAsList(expiryDate));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
-    
+ 
     /**
      * Deletes rows using the expiry_date index.
      *
@@ -1606,9 +1602,13 @@ public class PersonManager
      */
     public int deleteByexpiry_date(java.util.Date expiryDate)
     {
-        PersonBean bean = new PersonBean ();
-        bean.setExpiryDate(expiryDate);
-        return deleteUsingTemplate(bean);
+        try{
+            return this.nativeManager.deleteByexpiry_date(expiryDate);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
 

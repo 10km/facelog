@@ -1657,7 +1657,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     // USING INDICES
     //_____________________________________________________________________
 
-    /**
+     /**
      * Retrieves an array of FlLogBean using the compare_face index.
      *
      * @param compareFace the compare_face column's value filter.
@@ -1682,8 +1682,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         bean.setCompareFace(compareFace);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the compare_face index.
      *
      * @param compareFace the compare_face column's value filter.
@@ -1697,7 +1696,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
+     /**
      * Retrieves an array of FlLogBean using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
@@ -1722,8 +1721,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         bean.setDeviceId(deviceId);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
@@ -1737,7 +1735,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
+     /**
      * Retrieves an array of FlLogBean using the person_id index.
      *
      * @param personId the person_id column's value filter.
@@ -1762,8 +1760,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         bean.setPersonId(personId);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the person_id index.
      *
      * @param personId the person_id column's value filter.
@@ -1777,7 +1774,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
+     /**
      * Retrieves an array of FlLogBean using the verify_face index.
      *
      * @param verifyFace the verify_face column's value filter.
@@ -1802,8 +1799,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         bean.setVerifyFace(verifyFace);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the verify_face index.
      *
      * @param verifyFace the verify_face column's value filter.

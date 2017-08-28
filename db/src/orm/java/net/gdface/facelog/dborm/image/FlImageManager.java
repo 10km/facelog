@@ -1988,7 +1988,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     // USING INDICES
     //_____________________________________________________________________
 
-    /**
+     /**
      * Retrieves an array of FlImageBean using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
@@ -2013,8 +2013,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         bean.setDeviceId(deviceId);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
@@ -2028,7 +2027,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
+     /**
      * Retrieves an array of FlImageBean using the thumb_md5 index.
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
@@ -2053,8 +2052,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         bean.setThumbMd5(thumbMd5);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the thumb_md5 index.
      *
      * @param thumbMd5 the thumb_md5 column's value filter.

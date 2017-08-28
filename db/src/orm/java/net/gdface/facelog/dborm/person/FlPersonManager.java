@@ -2012,32 +2012,21 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     //_____________________________________________________________________
 
     /**
-     * Retrieves an array of FlPersonBean using the face_md5 index.
-     *
-     * @param faceMd5 the face_md5 column's value filter.
-     * @return an array of FlPersonBean
-     * @throws DAOException
-     */
-    public FlPersonBean[] loadByface_md5(String faceMd5) throws DAOException
-    {
-        return (FlPersonBean[])this.loadByface_md5AsList(faceMd5).toArray(new FlPersonBean[0]);
-    }
-    
-    /**
-     * Retrieves a list of FlPersonBean using the face_md5 index.
+     * Retrieves an unique FlPersonBean using the face_md5 index.
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public List<FlPersonBean> loadByface_md5AsList(String faceMd5) throws DAOException
+    public FlPersonBean loadByface_md5(String faceMd5) throws DAOException
     {
         FlPersonBean bean = this.createBean();
+        if( null == faceMd5)
+            throw new IllegalArgumentException("the key 'faceMd5'  must not be null");
         bean.setFaceMd5(faceMd5);
-        return loadUsingTemplateAsList(bean);
+        return loadUniqueUsingTemplate(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the face_md5 index.
      *
      * @param faceMd5 the face_md5 column's value filter.
@@ -2052,32 +2041,21 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
     
     /**
-     * Retrieves an array of FlPersonBean using the papers_num index.
-     *
-     * @param papersNum the papers_num column's value filter.
-     * @return an array of FlPersonBean
-     * @throws DAOException
-     */
-    public FlPersonBean[] loadBypapers_num(String papersNum) throws DAOException
-    {
-        return (FlPersonBean[])this.loadBypapers_numAsList(papersNum).toArray(new FlPersonBean[0]);
-    }
-    
-    /**
-     * Retrieves a list of FlPersonBean using the papers_num index.
+     * Retrieves an unique FlPersonBean using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter.
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public List<FlPersonBean> loadBypapers_numAsList(String papersNum) throws DAOException
+    public FlPersonBean loadBypapers_num(String papersNum) throws DAOException
     {
         FlPersonBean bean = this.createBean();
+        if( null == papersNum)
+            throw new IllegalArgumentException("the key 'papersNum'  must not be null");
         bean.setPapersNum(papersNum);
-        return loadUsingTemplateAsList(bean);
+        return loadUniqueUsingTemplate(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter.
@@ -2092,32 +2070,21 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
     
     /**
-     * Retrieves an array of FlPersonBean using the photo_id index.
-     *
-     * @param photoId the photo_id column's value filter.
-     * @return an array of FlPersonBean
-     * @throws DAOException
-     */
-    public FlPersonBean[] loadByphoto_id(String photoId) throws DAOException
-    {
-        return (FlPersonBean[])this.loadByphoto_idAsList(photoId).toArray(new FlPersonBean[0]);
-    }
-    
-    /**
-     * Retrieves a list of FlPersonBean using the photo_id index.
+     * Retrieves an unique FlPersonBean using the photo_id index.
      *
      * @param photoId the photo_id column's value filter.
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public List<FlPersonBean> loadByphoto_idAsList(String photoId) throws DAOException
+    public FlPersonBean loadByphoto_id(String photoId) throws DAOException
     {
         FlPersonBean bean = this.createBean();
+        if( null == photoId)
+            throw new IllegalArgumentException("the key 'photoId'  must not be null");
         bean.setPhotoId(photoId);
-        return loadUsingTemplateAsList(bean);
+        return loadUniqueUsingTemplate(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the photo_id index.
      *
      * @param photoId the photo_id column's value filter.
@@ -2131,7 +2098,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         return deleteUsingTemplate(bean);
     }
     
-    /**
+     /**
      * Retrieves an array of FlPersonBean using the expiry_date index.
      *
      * @param expiryDate the expiry_date column's value filter.
@@ -2156,8 +2123,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
         bean.setExpiryDate(expiryDate);
         return loadUsingTemplateAsList(bean);
     }
-    
-    /**
+     /**
      * Deletes rows using the expiry_date index.
      *
      * @param expiryDate the expiry_date column's value filter.
