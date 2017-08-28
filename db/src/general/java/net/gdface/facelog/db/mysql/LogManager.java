@@ -9,19 +9,10 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
@@ -30,23 +21,14 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.device.FlDeviceBeanBase;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonBeanBase;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.log.FlLogManager;
-import net.gdface.facelog.dborm.log.FlLogBeanBase;
 import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogListener;
 
@@ -197,7 +179,7 @@ public class LogManager
     }
     private FlLogManager nativeManager = FlLogManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<LogBean,FlLogBeanBase> beanConverter;
+    private IBeanConverter<LogBean,FlLogBean> beanConverter;
     private static LogManager singleton = new LogManager();
 
     /**
@@ -418,9 +400,7 @@ public class LogManager
      * @param bean the {@link LogBean} object to use
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T getReferencedBean(LogBean bean,String fkName){
         try {
@@ -445,11 +425,10 @@ public class LogManager
      * @param beanToSet the <T> object to associate to the {@link LogBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     //@Override
-    public <T> T setReferencedBean(LogBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(LogBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -477,16 +456,18 @@ public class LogManager
      * FK_NAME : fl_log_ibfk_2
      * @param bean the {@link LogBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public DeviceBean getReferencedByDeviceId(LogBean bean) throws DAOException
+    public DeviceBean getReferencedByDeviceId(LogBean bean)
     {
-        if(null == bean)return null;
-        FlDeviceBean other = FlDeviceManager.getInstance().createBean();
-        other.setId(bean.getDeviceId()); 
-        bean.setReferencedByDeviceId(this.dbConverter.getDeviceBeanConverter().fromNative(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByDeviceId();
+        try{
+            return this.dbConverter.getDeviceBeanConverter().fromNative(this.nativeManager.getReferencedByDeviceId(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -511,16 +492,18 @@ public class LogManager
      * FK_NAME : fl_log_ibfk_3
      * @param bean the {@link LogBean}
      * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public FaceBean getReferencedByVerifyFace(LogBean bean) throws DAOException
+    public FaceBean getReferencedByVerifyFace(LogBean bean)
     {
-        if(null == bean)return null;
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setMd5(bean.getVerifyFace()); 
-        bean.setReferencedByVerifyFace(this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByVerifyFace();
+        try{
+            return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.getReferencedByVerifyFace(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -545,16 +528,18 @@ public class LogManager
      * FK_NAME : fl_log_ibfk_4
      * @param bean the {@link LogBean}
      * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public FaceBean getReferencedByCompareFace(LogBean bean) throws DAOException
+    public FaceBean getReferencedByCompareFace(LogBean bean)
     {
-        if(null == bean)return null;
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setMd5(bean.getCompareFace()); 
-        bean.setReferencedByCompareFace(this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByCompareFace();
+        try{
+            return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.getReferencedByCompareFace(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -579,16 +564,18 @@ public class LogManager
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link LogBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public PersonBean getReferencedByPersonId(LogBean bean) throws DAOException
+    public PersonBean getReferencedByPersonId(LogBean bean)
     {
-        if(null == bean)return null;
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setId(bean.getPersonId()); 
-        bean.setReferencedByPersonId(this.dbConverter.getPersonBeanConverter().fromNative(FlPersonManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByPersonId();
+        try{
+            return this.dbConverter.getPersonBeanConverter().fromNative(this.nativeManager.getReferencedByPersonId(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -966,7 +953,6 @@ public class LogManager
      *
      * @param beans the LogBean bean table to be saved
      * @return the saved LogBean array.
-     * @throws DAOException
      * @see #save(LogBean[])
      */
     //15-3
@@ -1060,7 +1046,6 @@ public class LogManager
      *
      * @param beans the LogBean bean table to be inserted
      * @return the saved LogBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<LogBean>> T update(T beans)
@@ -1159,7 +1144,6 @@ public class LogManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the LogBean matching the template
-     * @throws DAOException
      */
     //20
     public LogBean[] loadUsingTemplate(LogBean bean, int startRow, int numRows)
@@ -1282,16 +1266,9 @@ public class LogManager
      */
     public LogBean[] loadBycompare_face(String compareFace)
     {
-        try{        
-            LogBean bean= new LogBean ();
-            bean.setCompareFace(compareFace);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        LogBean bean= new LogBean ();
+        bean.setCompareFace(compareFace);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1299,9 +1276,8 @@ public class LogManager
      *
      * @param compareFace the compare_face column's value filter.
      * @return a list of LogBean
-     * @throws DAOException
      */
-    public List<LogBean> loadBycompare_faceAsList(String compareFace) throws DAOException
+    public List<LogBean> loadBycompare_faceAsList(String compareFace)
     {
         LogBean bean = new LogBean ();
         bean.setCompareFace(compareFace);
@@ -1313,9 +1289,8 @@ public class LogManager
      *
      * @param compareFace the compare_face column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteBycompare_face(String compareFace) throws DAOException
+    public int deleteBycompare_face(String compareFace)
     {
         LogBean bean = new LogBean ();
         bean.setCompareFace(compareFace);
@@ -1330,16 +1305,9 @@ public class LogManager
      */
     public LogBean[] loadBydevice_id(Integer deviceId)
     {
-        try{        
-            LogBean bean= new LogBean ();
-            bean.setDeviceId(deviceId);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        LogBean bean= new LogBean ();
+        bean.setDeviceId(deviceId);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1347,9 +1315,8 @@ public class LogManager
      *
      * @param deviceId the device_id column's value filter.
      * @return a list of LogBean
-     * @throws DAOException
      */
-    public List<LogBean> loadBydevice_idAsList(Integer deviceId) throws DAOException
+    public List<LogBean> loadBydevice_idAsList(Integer deviceId)
     {
         LogBean bean = new LogBean ();
         bean.setDeviceId(deviceId);
@@ -1361,9 +1328,8 @@ public class LogManager
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteBydevice_id(Integer deviceId) throws DAOException
+    public int deleteBydevice_id(Integer deviceId)
     {
         LogBean bean = new LogBean ();
         bean.setDeviceId(deviceId);
@@ -1378,16 +1344,9 @@ public class LogManager
      */
     public LogBean[] loadByperson_id(Integer personId)
     {
-        try{        
-            LogBean bean= new LogBean ();
-            bean.setPersonId(personId);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        LogBean bean= new LogBean ();
+        bean.setPersonId(personId);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1395,9 +1354,8 @@ public class LogManager
      *
      * @param personId the person_id column's value filter.
      * @return a list of LogBean
-     * @throws DAOException
      */
-    public List<LogBean> loadByperson_idAsList(Integer personId) throws DAOException
+    public List<LogBean> loadByperson_idAsList(Integer personId)
     {
         LogBean bean = new LogBean ();
         bean.setPersonId(personId);
@@ -1409,9 +1367,8 @@ public class LogManager
      *
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByperson_id(Integer personId) throws DAOException
+    public int deleteByperson_id(Integer personId)
     {
         LogBean bean = new LogBean ();
         bean.setPersonId(personId);
@@ -1426,16 +1383,9 @@ public class LogManager
      */
     public LogBean[] loadByverify_face(String verifyFace)
     {
-        try{        
-            LogBean bean= new LogBean ();
-            bean.setVerifyFace(verifyFace);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        LogBean bean= new LogBean ();
+        bean.setVerifyFace(verifyFace);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1443,9 +1393,8 @@ public class LogManager
      *
      * @param verifyFace the verify_face column's value filter.
      * @return a list of LogBean
-     * @throws DAOException
      */
-    public List<LogBean> loadByverify_faceAsList(String verifyFace) throws DAOException
+    public List<LogBean> loadByverify_faceAsList(String verifyFace)
     {
         LogBean bean = new LogBean ();
         bean.setVerifyFace(verifyFace);
@@ -1457,9 +1406,8 @@ public class LogManager
      *
      * @param verifyFace the verify_face column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByverify_face(String verifyFace) throws DAOException
+    public int deleteByverify_face(String verifyFace)
     {
         LogBean bean = new LogBean ();
         bean.setVerifyFace(verifyFace);
@@ -1639,7 +1587,7 @@ public class LogManager
      */
     public List<LogBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

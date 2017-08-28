@@ -9,32 +9,17 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.log.FlLogLightManager;
-import net.gdface.facelog.dborm.log.FlLogLightBeanBase;
 import net.gdface.facelog.dborm.log.FlLogLightBean;
 import net.gdface.facelog.dborm.log.FlLogLightListener;
 
@@ -166,7 +151,7 @@ public class LogLightManager
     }
     private FlLogLightManager nativeManager = FlLogLightManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<LogLightBean,FlLogLightBeanBase> beanConverter;
+    private IBeanConverter<LogLightBean,FlLogLightBean> beanConverter;
     private static LogLightManager singleton = new LogLightManager();
 
     /**
@@ -599,7 +584,6 @@ public class LogLightManager
      *
      * @param beans the LogLightBean bean table to be saved
      * @return the saved LogLightBean array.
-     * @throws DAOException
      * @see #save(LogLightBean[])
      */
     //15-3
@@ -693,7 +677,6 @@ public class LogLightManager
      *
      * @param beans the LogLightBean bean table to be inserted
      * @return the saved LogLightBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<LogLightBean>> T update(T beans)
@@ -792,7 +775,6 @@ public class LogLightManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the LogLightBean matching the template
-     * @throws DAOException
      */
     //20
     public LogLightBean[] loadUsingTemplate(LogLightBean bean, int startRow, int numRows)
@@ -1074,7 +1056,7 @@ public class LogLightManager
      */
     public List<LogLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

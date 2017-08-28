@@ -9,32 +9,17 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.FaceLightBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFaceLightManager;
-import net.gdface.facelog.dborm.face.FlFaceLightBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceLightBean;
 import net.gdface.facelog.dborm.face.FlFaceLightListener;
 
@@ -292,7 +277,7 @@ public class FaceLightManager
     }
     private FlFaceLightManager nativeManager = FlFaceLightManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<FaceLightBean,FlFaceLightBeanBase> beanConverter;
+    private IBeanConverter<FaceLightBean,FlFaceLightBean> beanConverter;
     private static FaceLightManager singleton = new FaceLightManager();
 
     /**
@@ -725,7 +710,6 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be saved
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      * @see #save(FaceLightBean[])
      */
     //15-3
@@ -819,7 +803,6 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<FaceLightBean>> T update(T beans)
@@ -918,7 +901,6 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the FaceLightBean matching the template
-     * @throws DAOException
      */
     //20
     public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows)
@@ -1200,7 +1182,7 @@ public class FaceLightManager
      */
     public List<FaceLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

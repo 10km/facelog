@@ -9,19 +9,10 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
@@ -31,26 +22,16 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonBeanBase;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.device.FlDeviceBeanBase;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreBeanBase;
 import net.gdface.facelog.dborm.image.FlStoreManager;
 import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.image.FlImageBeanBase;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageListener;
 
@@ -201,7 +182,7 @@ public class ImageManager
     }
     private FlImageManager nativeManager = FlImageManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<ImageBean,FlImageBeanBase> beanConverter;
+    private IBeanConverter<ImageBean,FlImageBean> beanConverter;
     private static ImageManager singleton = new ImageManager();
 
     /**
@@ -354,7 +335,6 @@ public class ImageManager
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] getImportedBeans(ImageBean bean,String fkName){
         try {
@@ -376,7 +356,6 @@ public class ImageManager
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> List<T> getImportedBeansAsList(ImageBean bean,String fkName){
         try {
@@ -400,7 +379,6 @@ public class ImageManager
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
      * @return importedBeans always
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] setImportedBeans(ImageBean bean,T[] importedBeans,String fkName){
         try {
@@ -427,7 +405,7 @@ public class ImageManager
     //@Override
     public <T extends Collection<ImageBean>> T setImportedBeans(ImageBean bean,T importedBeans,String fkName){
         try {        	
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((ImageBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((FlImageBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -462,7 +440,6 @@ public class ImageManager
      * FK_NAME:fl_face_ibfk_1
      * @param bean the {@link ImageBean}
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FaceBean> getFlFaceBeansByImgMd5AsList(ImageBean bean)
@@ -546,7 +523,6 @@ public class ImageManager
      * FK_NAME:fl_person_ibfk_1
      * @param bean the {@link ImageBean}
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<PersonBean> getFlPersonBeansByPhotoIdAsList(ImageBean bean)
@@ -710,9 +686,7 @@ public class ImageManager
      * @param bean the {@link ImageBean} object to use
      * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T getReferencedBean(ImageBean bean,String fkName){
         try {
@@ -736,11 +710,10 @@ public class ImageManager
      * @param beanToSet the <T> object to associate to the {@link ImageBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     //@Override
-    public <T> T setReferencedBean(ImageBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(ImageBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -768,16 +741,18 @@ public class ImageManager
      * FK_NAME : fl_image_ibfk_3
      * @param bean the {@link ImageBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public DeviceBean getReferencedByDeviceId(ImageBean bean) throws DAOException
+    public DeviceBean getReferencedByDeviceId(ImageBean bean)
     {
-        if(null == bean)return null;
-        FlDeviceBean other = FlDeviceManager.getInstance().createBean();
-        other.setId(bean.getDeviceId()); 
-        bean.setReferencedByDeviceId(this.dbConverter.getDeviceBeanConverter().fromNative(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByDeviceId();
+        try{
+            return this.dbConverter.getDeviceBeanConverter().fromNative(this.nativeManager.getReferencedByDeviceId(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -802,16 +777,18 @@ public class ImageManager
      * FK_NAME : fl_image_ibfk_1
      * @param bean the {@link ImageBean}
      * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public StoreBean getReferencedByMd5(ImageBean bean) throws DAOException
+    public StoreBean getReferencedByMd5(ImageBean bean)
     {
-        if(null == bean)return null;
-        FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getMd5()); 
-        bean.setReferencedByMd5(this.dbConverter.getStoreBeanConverter().fromNative(FlStoreManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByMd5();
+        try{
+            return this.dbConverter.getStoreBeanConverter().fromNative(this.nativeManager.getReferencedByMd5(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -836,16 +813,18 @@ public class ImageManager
      * FK_NAME : fl_image_ibfk_2
      * @param bean the {@link ImageBean}
      * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public StoreBean getReferencedByThumbMd5(ImageBean bean) throws DAOException
+    public StoreBean getReferencedByThumbMd5(ImageBean bean)
     {
-        if(null == bean)return null;
-        FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getThumbMd5()); 
-        bean.setReferencedByThumbMd5(this.dbConverter.getStoreBeanConverter().fromNative(FlStoreManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByThumbMd5();
+        try{
+            return this.dbConverter.getStoreBeanConverter().fromNative(this.nativeManager.getReferencedByThumbMd5(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -1223,7 +1202,6 @@ public class ImageManager
      *
      * @param beans the ImageBean bean table to be saved
      * @return the saved ImageBean array.
-     * @throws DAOException
      * @see #save(ImageBean[])
      */
     //15-3
@@ -1317,7 +1295,6 @@ public class ImageManager
      *
      * @param beans the ImageBean bean table to be inserted
      * @return the saved ImageBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<ImageBean>> T update(T beans)
@@ -1416,7 +1393,6 @@ public class ImageManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the ImageBean matching the template
-     * @throws DAOException
      */
     //20
     public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows)
@@ -1539,16 +1515,9 @@ public class ImageManager
      */
     public ImageBean[] loadBydevice_id(Integer deviceId)
     {
-        try{        
-            ImageBean bean= new ImageBean ();
-            bean.setDeviceId(deviceId);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        ImageBean bean= new ImageBean ();
+        bean.setDeviceId(deviceId);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1556,9 +1525,8 @@ public class ImageManager
      *
      * @param deviceId the device_id column's value filter.
      * @return a list of ImageBean
-     * @throws DAOException
      */
-    public List<ImageBean> loadBydevice_idAsList(Integer deviceId) throws DAOException
+    public List<ImageBean> loadBydevice_idAsList(Integer deviceId)
     {
         ImageBean bean = new ImageBean ();
         bean.setDeviceId(deviceId);
@@ -1570,9 +1538,8 @@ public class ImageManager
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteBydevice_id(Integer deviceId) throws DAOException
+    public int deleteBydevice_id(Integer deviceId)
     {
         ImageBean bean = new ImageBean ();
         bean.setDeviceId(deviceId);
@@ -1587,16 +1554,9 @@ public class ImageManager
      */
     public ImageBean[] loadBythumb_md5(String thumbMd5)
     {
-        try{        
-            ImageBean bean= new ImageBean ();
-            bean.setThumbMd5(thumbMd5);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        ImageBean bean= new ImageBean ();
+        bean.setThumbMd5(thumbMd5);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1604,9 +1564,8 @@ public class ImageManager
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return a list of ImageBean
-     * @throws DAOException
      */
-    public List<ImageBean> loadBythumb_md5AsList(String thumbMd5) throws DAOException
+    public List<ImageBean> loadBythumb_md5AsList(String thumbMd5)
     {
         ImageBean bean = new ImageBean ();
         bean.setThumbMd5(thumbMd5);
@@ -1618,9 +1577,8 @@ public class ImageManager
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteBythumb_md5(String thumbMd5) throws DAOException
+    public int deleteBythumb_md5(String thumbMd5)
     {
         ImageBean bean = new ImageBean ();
         bean.setThumbMd5(thumbMd5);
@@ -1800,7 +1758,7 @@ public class ImageManager
      */
     public List<ImageBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

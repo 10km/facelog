@@ -9,32 +9,17 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFeatureManager;
-import net.gdface.facelog.dborm.face.FlFeatureBeanBase;
 import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.face.FlFeatureListener;
 
@@ -157,7 +142,7 @@ public class FeatureManager
     }
     private FlFeatureManager nativeManager = FlFeatureManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<FeatureBean,FlFeatureBeanBase> beanConverter;
+    private IBeanConverter<FeatureBean,FlFeatureBean> beanConverter;
     private static FeatureManager singleton = new FeatureManager();
 
     /**
@@ -590,7 +575,6 @@ public class FeatureManager
      *
      * @param beans the FeatureBean bean table to be saved
      * @return the saved FeatureBean array.
-     * @throws DAOException
      * @see #save(FeatureBean[])
      */
     //15-3
@@ -684,7 +668,6 @@ public class FeatureManager
      *
      * @param beans the FeatureBean bean table to be inserted
      * @return the saved FeatureBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<FeatureBean>> T update(T beans)
@@ -783,7 +766,6 @@ public class FeatureManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the FeatureBean matching the template
-     * @throws DAOException
      */
     //20
     public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows)
@@ -1065,7 +1047,7 @@ public class FeatureManager
      */
     public List<FeatureBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

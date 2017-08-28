@@ -9,19 +9,10 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
@@ -29,20 +20,12 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageBeanBase;
 import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogBeanBase;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.device.FlDeviceBeanBase;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceListener;
 
@@ -184,7 +167,7 @@ public class DeviceManager
     }
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<DeviceBean,FlDeviceBeanBase> beanConverter;
+    private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter;
     private static DeviceManager singleton = new DeviceManager();
 
     /**
@@ -337,7 +320,6 @@ public class DeviceManager
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] getImportedBeans(DeviceBean bean,String fkName){
         try {
@@ -359,7 +341,6 @@ public class DeviceManager
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
         try {
@@ -383,7 +364,6 @@ public class DeviceManager
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return importedBeans always
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,String fkName){
         try {
@@ -410,7 +390,7 @@ public class DeviceManager
     //@Override
     public <T extends Collection<DeviceBean>> T setImportedBeans(DeviceBean bean,T importedBeans,String fkName){
         try {        	
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((DeviceBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((FlDeviceBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -445,7 +425,6 @@ public class DeviceManager
      * FK_NAME:fl_image_ibfk_3
      * @param bean the {@link DeviceBean}
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
@@ -529,7 +508,6 @@ public class DeviceManager
      * FK_NAME:fl_log_ibfk_2
      * @param bean the {@link DeviceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
@@ -1035,7 +1013,6 @@ public class DeviceManager
      *
      * @param beans the DeviceBean bean table to be saved
      * @return the saved DeviceBean array.
-     * @throws DAOException
      * @see #save(DeviceBean[])
      */
     //15-3
@@ -1129,7 +1106,6 @@ public class DeviceManager
      *
      * @param beans the DeviceBean bean table to be inserted
      * @return the saved DeviceBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<DeviceBean>> T update(T beans)
@@ -1228,7 +1204,6 @@ public class DeviceManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the DeviceBean matching the template
-     * @throws DAOException
      */
     //20
     public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows)
@@ -1510,7 +1485,7 @@ public class DeviceManager
      */
     public List<DeviceBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

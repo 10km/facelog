@@ -9,19 +9,10 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
@@ -30,23 +21,14 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogBeanBase;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageBeanBase;
 import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonBeanBase;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.face.FlFaceManager;
-import net.gdface.facelog.dborm.face.FlFaceBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceListener;
 
@@ -314,7 +296,7 @@ public class FaceManager
     }
     private FlFaceManager nativeManager = FlFaceManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<FaceBean,FlFaceBeanBase> beanConverter;
+    private IBeanConverter<FaceBean,FlFaceBean> beanConverter;
     private static FaceManager singleton = new FaceManager();
 
     /**
@@ -467,7 +449,6 @@ public class FaceManager
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] getImportedBeans(FaceBean bean,String fkName){
         try {
@@ -489,7 +470,6 @@ public class FaceManager
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> List<T> getImportedBeansAsList(FaceBean bean,String fkName){
         try {
@@ -513,7 +493,6 @@ public class FaceManager
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return importedBeans always
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] setImportedBeans(FaceBean bean,T[] importedBeans,String fkName){
         try {
@@ -540,7 +519,7 @@ public class FaceManager
     //@Override
     public <T extends Collection<FaceBean>> T setImportedBeans(FaceBean bean,T importedBeans,String fkName){
         try {        	
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((FaceBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((FlFaceBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -575,7 +554,6 @@ public class FaceManager
      * FK_NAME:fl_log_ibfk_3
      * @param bean the {@link FaceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<LogBean> getFlLogBeansByVerifyFaceAsList(FaceBean bean)
@@ -659,7 +637,6 @@ public class FaceManager
      * FK_NAME:fl_log_ibfk_4
      * @param bean the {@link FaceBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<LogBean> getFlLogBeansByCompareFaceAsList(FaceBean bean)
@@ -819,9 +796,7 @@ public class FaceManager
      * @param bean the {@link FaceBean} object to use
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T getReferencedBean(FaceBean bean,String fkName){
         try {
@@ -844,11 +819,10 @@ public class FaceManager
      * @param beanToSet the <T> object to associate to the {@link FaceBean}
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     //@Override
-    public <T> T setReferencedBean(FaceBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(FaceBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -876,16 +850,18 @@ public class FaceManager
      * FK_NAME : fl_face_ibfk_1
      * @param bean the {@link FaceBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public ImageBean getReferencedByImgMd5(FaceBean bean) throws DAOException
+    public ImageBean getReferencedByImgMd5(FaceBean bean)
     {
-        if(null == bean)return null;
-        FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setMd5(bean.getImgMd5()); 
-        bean.setReferencedByImgMd5(this.dbConverter.getImageBeanConverter().fromNative(FlImageManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByImgMd5();
+        try{
+            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.getReferencedByImgMd5(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -910,16 +886,18 @@ public class FaceManager
      * FK_NAME : fl_face_ibfk_2
      * @param bean the {@link FaceBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public PersonBean getReferencedByPersonId(FaceBean bean) throws DAOException
+    public PersonBean getReferencedByPersonId(FaceBean bean)
     {
-        if(null == bean)return null;
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setId(bean.getPersonId()); 
-        bean.setReferencedByPersonId(this.dbConverter.getPersonBeanConverter().fromNative(FlPersonManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByPersonId();
+        try{
+            return this.dbConverter.getPersonBeanConverter().fromNative(this.nativeManager.getReferencedByPersonId(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -1297,7 +1275,6 @@ public class FaceManager
      *
      * @param beans the FaceBean bean table to be saved
      * @return the saved FaceBean array.
-     * @throws DAOException
      * @see #save(FaceBean[])
      */
     //15-3
@@ -1391,7 +1368,6 @@ public class FaceManager
      *
      * @param beans the FaceBean bean table to be inserted
      * @return the saved FaceBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<FaceBean>> T update(T beans)
@@ -1490,7 +1466,6 @@ public class FaceManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the FaceBean matching the template
-     * @throws DAOException
      */
     //20
     public FaceBean[] loadUsingTemplate(FaceBean bean, int startRow, int numRows)
@@ -1613,16 +1588,9 @@ public class FaceManager
      */
     public FaceBean[] loadByimg_md5(String imgMd5)
     {
-        try{        
-            FaceBean bean= new FaceBean ();
-            bean.setImgMd5(imgMd5);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        FaceBean bean= new FaceBean ();
+        bean.setImgMd5(imgMd5);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1630,9 +1598,8 @@ public class FaceManager
      *
      * @param imgMd5 the img_md5 column's value filter.
      * @return a list of FaceBean
-     * @throws DAOException
      */
-    public List<FaceBean> loadByimg_md5AsList(String imgMd5) throws DAOException
+    public List<FaceBean> loadByimg_md5AsList(String imgMd5)
     {
         FaceBean bean = new FaceBean ();
         bean.setImgMd5(imgMd5);
@@ -1644,9 +1611,8 @@ public class FaceManager
      *
      * @param imgMd5 the img_md5 column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByimg_md5(String imgMd5) throws DAOException
+    public int deleteByimg_md5(String imgMd5)
     {
         FaceBean bean = new FaceBean ();
         bean.setImgMd5(imgMd5);
@@ -1661,16 +1627,9 @@ public class FaceManager
      */
     public FaceBean[] loadByperson_id(Integer personId)
     {
-        try{        
-            FaceBean bean= new FaceBean ();
-            bean.setPersonId(personId);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        FaceBean bean= new FaceBean ();
+        bean.setPersonId(personId);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1678,9 +1637,8 @@ public class FaceManager
      *
      * @param personId the person_id column's value filter.
      * @return a list of FaceBean
-     * @throws DAOException
      */
-    public List<FaceBean> loadByperson_idAsList(Integer personId) throws DAOException
+    public List<FaceBean> loadByperson_idAsList(Integer personId)
     {
         FaceBean bean = new FaceBean ();
         bean.setPersonId(personId);
@@ -1692,9 +1650,8 @@ public class FaceManager
      *
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByperson_id(Integer personId) throws DAOException
+    public int deleteByperson_id(Integer personId)
     {
         FaceBean bean = new FaceBean ();
         bean.setPersonId(personId);
@@ -1874,7 +1831,7 @@ public class FaceManager
      */
     public List<FaceBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {

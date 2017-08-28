@@ -9,19 +9,10 @@
 
 package net.gdface.facelog.db.mysql;
 
-import java.lang.ref.SoftReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
 
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
@@ -30,23 +21,14 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
 
-import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableManager;
-
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.exception.DataAccessException;
-import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogBeanBase;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageBeanBase;
 import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.person.FlPersonManager;
-import net.gdface.facelog.dborm.person.FlPersonBeanBase;
 import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonListener;
 
@@ -233,7 +215,7 @@ public class PersonManager
     }
     private FlPersonManager nativeManager = FlPersonManager.getInstance();
     private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<PersonBean,FlPersonBeanBase> beanConverter;
+    private IBeanConverter<PersonBean,FlPersonBean> beanConverter;
     private static PersonManager singleton = new PersonManager();
 
     /**
@@ -386,7 +368,6 @@ public class PersonManager
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] getImportedBeans(PersonBean bean,String fkName){
         try {
@@ -408,7 +389,6 @@ public class PersonManager
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> List<T> getImportedBeansAsList(PersonBean bean,String fkName){
         try {
@@ -432,7 +412,6 @@ public class PersonManager
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
      * @return importedBeans always
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T[] setImportedBeans(PersonBean bean,T[] importedBeans,String fkName){
         try {
@@ -459,7 +438,7 @@ public class PersonManager
     //@Override
     public <T extends Collection<PersonBean>> T setImportedBeans(PersonBean bean,T importedBeans,String fkName){
         try {        	
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((PersonBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((FlPersonBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -494,7 +473,6 @@ public class PersonManager
      * FK_NAME:fl_face_ibfk_2
      * @param bean the {@link PersonBean}
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean)
@@ -578,7 +556,6 @@ public class PersonManager
      * FK_NAME:fl_log_ibfk_1
      * @param bean the {@link PersonBean}
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
@@ -734,9 +711,7 @@ public class PersonManager
      * @param bean the {@link PersonBean} object to use
      * @param fkName valid values: refFlImagebyPhotoId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
-    @SuppressWarnings("unchecked")
     //@Override
     public <T> T getReferencedBean(PersonBean bean,String fkName){
         try {
@@ -758,11 +733,10 @@ public class PersonManager
      * @param beanToSet the <T> object to associate to the {@link PersonBean}
      * @param fkName valid values: refFlImagebyPhotoId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
-     * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     //@Override
-    public <T> T setReferencedBean(PersonBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(PersonBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -790,16 +764,18 @@ public class PersonManager
      * FK_NAME : fl_person_ibfk_1
      * @param bean the {@link PersonBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public ImageBean getReferencedByPhotoId(PersonBean bean) throws DAOException
+    public ImageBean getReferencedByPhotoId(PersonBean bean)
     {
-        if(null == bean)return null;
-        FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setMd5(bean.getPhotoId()); 
-        bean.setReferencedByPhotoId(this.dbConverter.getImageBeanConverter().fromNative(FlImageManager.getInstance().loadUniqueUsingTemplate(other))); 
-        return bean.getReferencedByPhotoId();
+        try{
+            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.getReferencedByPhotoId(this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        
     }
 
     /**
@@ -1177,7 +1153,6 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be saved
      * @return the saved PersonBean array.
-     * @throws DAOException
      * @see #save(PersonBean[])
      */
     //15-3
@@ -1271,7 +1246,6 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      */
     //17-2
     public <T extends Collection<PersonBean>> T update(T beans)
@@ -1370,7 +1344,6 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the PersonBean matching the template
-     * @throws DAOException
      */
     //20
     public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows)
@@ -1493,16 +1466,9 @@ public class PersonManager
      */
     public PersonBean[] loadByface_md5(String faceMd5)
     {
-        try{        
-            PersonBean bean= new PersonBean ();
-            bean.setFaceMd5(faceMd5);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        PersonBean bean= new PersonBean ();
+        bean.setFaceMd5(faceMd5);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1510,9 +1476,8 @@ public class PersonManager
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return a list of PersonBean
-     * @throws DAOException
      */
-    public List<PersonBean> loadByface_md5AsList(String faceMd5) throws DAOException
+    public List<PersonBean> loadByface_md5AsList(String faceMd5)
     {
         PersonBean bean = new PersonBean ();
         bean.setFaceMd5(faceMd5);
@@ -1524,9 +1489,8 @@ public class PersonManager
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByface_md5(String faceMd5) throws DAOException
+    public int deleteByface_md5(String faceMd5)
     {
         PersonBean bean = new PersonBean ();
         bean.setFaceMd5(faceMd5);
@@ -1541,16 +1505,9 @@ public class PersonManager
      */
     public PersonBean[] loadBypapers_num(String papersNum)
     {
-        try{        
-            PersonBean bean= new PersonBean ();
-            bean.setPapersNum(papersNum);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        PersonBean bean= new PersonBean ();
+        bean.setPapersNum(papersNum);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1558,9 +1515,8 @@ public class PersonManager
      *
      * @param papersNum the papers_num column's value filter.
      * @return a list of PersonBean
-     * @throws DAOException
      */
-    public List<PersonBean> loadBypapers_numAsList(String papersNum) throws DAOException
+    public List<PersonBean> loadBypapers_numAsList(String papersNum)
     {
         PersonBean bean = new PersonBean ();
         bean.setPapersNum(papersNum);
@@ -1572,9 +1528,8 @@ public class PersonManager
      *
      * @param papersNum the papers_num column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteBypapers_num(String papersNum) throws DAOException
+    public int deleteBypapers_num(String papersNum)
     {
         PersonBean bean = new PersonBean ();
         bean.setPapersNum(papersNum);
@@ -1589,16 +1544,9 @@ public class PersonManager
      */
     public PersonBean[] loadByphoto_id(String photoId)
     {
-        try{        
-            PersonBean bean= new PersonBean ();
-            bean.setPhotoId(photoId);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        PersonBean bean= new PersonBean ();
+        bean.setPhotoId(photoId);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1606,9 +1554,8 @@ public class PersonManager
      *
      * @param photoId the photo_id column's value filter.
      * @return a list of PersonBean
-     * @throws DAOException
      */
-    public List<PersonBean> loadByphoto_idAsList(String photoId) throws DAOException
+    public List<PersonBean> loadByphoto_idAsList(String photoId)
     {
         PersonBean bean = new PersonBean ();
         bean.setPhotoId(photoId);
@@ -1620,9 +1567,8 @@ public class PersonManager
      *
      * @param photoId the photo_id column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByphoto_id(String photoId) throws DAOException
+    public int deleteByphoto_id(String photoId)
     {
         PersonBean bean = new PersonBean ();
         bean.setPhotoId(photoId);
@@ -1637,16 +1583,9 @@ public class PersonManager
      */
     public PersonBean[] loadByexpiry_date(java.util.Date expiryDate)
     {
-        try{        
-            PersonBean bean= new PersonBean ();
-            bean.setExpiryDate(expiryDate);
-            return loadUsingTemplate(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
+        PersonBean bean= new PersonBean ();
+        bean.setExpiryDate(expiryDate);
+        return loadUsingTemplate(bean);
     }
     
     /**
@@ -1654,9 +1593,8 @@ public class PersonManager
      *
      * @param expiryDate the expiry_date column's value filter.
      * @return a list of PersonBean
-     * @throws DAOException
      */
-    public List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate) throws DAOException
+    public List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate)
     {
         PersonBean bean = new PersonBean ();
         bean.setExpiryDate(expiryDate);
@@ -1668,9 +1606,8 @@ public class PersonManager
      *
      * @param expiryDate the expiry_date column's value filter.
      * @return the number of deleted objects
-     * @throws DAOException
      */
-    public int deleteByexpiry_date(java.util.Date expiryDate) throws DAOException
+    public int deleteByexpiry_date(java.util.Date expiryDate)
     {
         PersonBean bean = new PersonBean ();
         bean.setExpiryDate(expiryDate);
@@ -1850,7 +1787,7 @@ public class PersonManager
      */
     public List<PersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {
