@@ -6,6 +6,7 @@
 // ______________________________________________________
 
 
+
 package net.gdface.facelog.db.mysql;
 
 import java.lang.ref.SoftReference;
@@ -24,9 +25,9 @@ import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.FaceLightBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
+import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
 
 import net.gdface.facelog.dborm.exception.DAOException;
@@ -35,6 +36,7 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFaceLightManager;
 import net.gdface.facelog.dborm.face.FlFaceLightBeanBase;
 import net.gdface.facelog.dborm.face.FlFaceLightBean;
+import net.gdface.facelog.dborm.face.FlFaceLightListener;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face_light table.
@@ -264,10 +266,8 @@ public class FaceLightManager
                             + ",create_time";
 
     public static interface Action{
-          void call(FaceLightBean
- bean);
-          FaceLightBean
- getBean();
+          void call(FaceLightBean bean);
+          FaceLightBean getBean();
      }
 
     /**
@@ -358,11 +358,11 @@ public class FaceLightManager
 
  
     //@Override
-    public <T> T getReferencedBean(FaceLightBean bean,String fkName)throws DAOException{
+    public <T> T getReferencedBean(FaceLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
     //@Override
-    public <T> T setReferencedBean(FaceLightBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(FaceLightBean bean,T beanToSet,String fkName){
         throw new UnsupportedOperationException();
     }
      
@@ -391,21 +391,19 @@ public class FaceLightManager
      * Loads each row from fl_face_light and dealt with action.
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //5-1
-    public int loadAll(Action action) throws DAOException
+    public int loadAll(Action action)
     {
-        return this.nativeManager.loadUsingTemplate(null,action);
+        return this.loadUsingTemplate(null,action);
     }
     /**
      * Loads all the rows from fl_face_light.
      *
-     * @return a list of FlFaceLightManager bean
-     * @throws DAOException
+     * @return a list of FaceLightBean bean
      */
     //5-2
-    public List<FaceLightBean> loadAllAsList() throws DAOException
+    public List<FaceLightBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
     }
@@ -417,10 +415,9 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return an array of FlFaceLightManager bean
-     * @throws DAOException
      */
     //6
-    public FaceLightBean[] loadAll(int startRow, int numRows) throws DAOException
+    public FaceLightBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
     }
@@ -430,10 +427,9 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //6-1
-    public int loadAll(int startRow, int numRows,Action action) throws DAOException
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -443,10 +439,9 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of FlFaceLightManager bean
-     * @throws DAOException
      */
     //6-2
-    public List<FaceLightBean> loadAllAsList(int startRow, int numRows) throws DAOException
+    public List<FaceLightBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
     }
@@ -459,10 +454,9 @@ public class FaceLightManager
      *
      * @param where the sql 'where' clause
      * @return the resulting FaceLightBean table
-     * @throws DAOException
      */
     //7
-    public FaceLightBean[] loadByWhere(String where) throws DAOException
+    public FaceLightBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
@@ -471,10 +465,9 @@ public class FaceLightManager
      *
      * @param where the sql 'where' clause
      * @return the resulting FaceLightBean table
-     * @throws DAOException
      */
     //7
-    public List<FaceLightBean> loadByWhereAsList(String where) throws DAOException
+    public List<FaceLightBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
     }
@@ -483,10 +476,9 @@ public class FaceLightManager
      * @param where the sql 'where' clause
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //7-1
-    public int loadByWhere(String where,Action action) throws DAOException
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -497,10 +489,9 @@ public class FaceLightManager
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @return the resulting FaceLightBean table
-     * @throws DAOException
      */
     //8
-    public FaceLightBean[] loadByWhere(String where, int[] fieldList) throws DAOException
+    public FaceLightBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
     }
@@ -513,10 +504,9 @@ public class FaceLightManager
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @return the resulting FaceLightBean table
-     * @throws DAOException
      */
     //8
-    public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList) throws DAOException
+    public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
     }
@@ -528,10 +518,9 @@ public class FaceLightManager
      * @param fieldList array of field's ID
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action) throws DAOException
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -545,10 +534,9 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FaceLightBean table
-     * @throws DAOException
      */
     //9
-    public FaceLightBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FaceLightBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (FaceLightBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FaceLightBean[0]);
     }
@@ -563,10 +551,9 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -580,14 +567,17 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting FaceLightBean table
-     * @throws DAOException
      */
     //9-2
-    public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
-        ListAction action = new ListAction();
-        loadByWhereForAction(where,fieldList,startRow,numRows,action);              
-        return action.getList();
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Retrieves each row of FaceLightBean given a sql where clause and a list of fields, and startRow and numRows,
@@ -600,23 +590,25 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
-        String sql=createSqlString(fieldList, where);
-        // System.out.println("loadByWhere: " + sql);
-        return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
+        try{
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * Deletes all rows from fl_face_light table.
      * @return the number of deleted rows.
-     * @throws DAOException
      */
     //10
-    public int deleteAll() throws DAOException
+    public int deleteAll()
     {
         return this.deleteByWhere("");
     }
@@ -628,30 +620,16 @@ public class FaceLightManager
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws DAOException
      */
     //11
-    public int deleteByWhere(String where) throws DAOException
+    public int deleteByWhere(String where)
     {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try
-        {
-            c = this.getConnection();
-            StringBuilder sql = new StringBuilder("DELETE FROM fl_face_light " + where);
-            // System.out.println("deleteByWhere: " + sql);
-            ps = c.prepareStatement(sql.toString());
-            return ps.executeUpdate();
+        try{
+            return this.nativeManager.deleteByWhere(where);
         }
-        catch(SQLException e)
+        catch(DAOException e)
         {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(ps);
-            this.freeConnection(c);
+            throw new RuntimeException(e);
         }
     }
 
@@ -664,10 +642,9 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean bean to be saved
      * @return the inserted or updated bean
-     * @throws DAOException
      */
     //12
-    public FaceLightBean save(FaceLightBean bean) throws DAOException
+    public FaceLightBean save(FaceLightBean bean)
     {
         if (bean.isNew()) {
             return this.insert(bean);
@@ -681,222 +658,16 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean bean to be saved
      * @return the inserted bean
-     * @throws DAOException
      */
     //13
-    public FaceLightBean insert(FaceLightBean bean) throws DAOException
+    public FaceLightBean insert(FaceLightBean bean)
     {
-        // mini checks
-        if (!bean.isModified()) {
-            return bean; // should not we log something ?
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.insert((FlFaceLightBean)this.beanConverter.toNative(bean)));
         }
-        if (!bean.isNew()){
-            return this.update(bean);
-        }
-
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = null;
-
-        try
+        catch(DAOException e)
         {
-            c = this.getConnection();
-            this.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
-            sql = new StringBuilder("INSERT into fl_face_light (");
-
-            if (bean.isMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("md5");
-                _dirtyCount++;
-            }
-
-            if (bean.isPersonIdModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("person_id");
-                _dirtyCount++;
-            }
-
-            if (bean.isImgMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("img_md5");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceLeftModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_left");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceTopModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_top");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceWidthModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_width");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceHeightModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_height");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeLeftxModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_leftx");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeLeftyModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_lefty");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeRightxModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_rightx");
-                _dirtyCount++;
-            }
-
-            if (bean.isEyeRightyModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("eye_righty");
-                _dirtyCount++;
-            }
-
-            if (bean.isMouthXModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("mouth_x");
-                _dirtyCount++;
-            }
-
-            if (bean.isMouthYModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("mouth_y");
-                _dirtyCount++;
-            }
-
-            if (bean.isNoseXModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("nose_x");
-                _dirtyCount++;
-            }
-
-            if (bean.isNoseYModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("nose_y");
-                _dirtyCount++;
-            }
-
-            if (bean.isAngleYawModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("angle_yaw");
-                _dirtyCount++;
-            }
-
-            if (bean.isAnglePitchModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("angle_pitch");
-                _dirtyCount++;
-            }
-
-            if (bean.isAngleRollModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("angle_roll");
-                _dirtyCount++;
-            }
-
-            if (bean.isExtInfoModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("ext_info");
-                _dirtyCount++;
-            }
-
-            if (bean.isCreateTimeModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("create_time");
-                _dirtyCount++;
-            }
-
-            sql.append(") values (");
-            if(_dirtyCount > 0) {
-                sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
-                    sql.append(",?");
-                }
-            }
-            sql.append(")");
-
-
-            // System.out.println("insert : " + sql.toString());
-
-            ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
-
-            ps.executeUpdate();
-
-            bean.isNew(false);
-            bean.resetIsModified();
-            this.afterInsert(bean); // listener callback
-            return bean;
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            sql = null;
-            this.getManager().close(ps);
-            this.freeConnection(c);
+            throw new RuntimeException(e);
         }
     }
 
@@ -905,239 +676,16 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean bean to be updated
      * @return the updated bean
-     * @throws DAOException
      */
     //14
-    public FaceLightBean update(FaceLightBean bean) throws DAOException
+    public FaceLightBean update(FaceLightBean bean)
     {
-        // mini checks
-        if (!bean.isModified()) {
-            return bean; // should not we log something ?
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.update((FlFaceLightBean)this.beanConverter.toNative(bean)));
         }
-        if (bean.isNew()){
-            return this.insert(bean);
-        }
-
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = null;
-
-        try
+        catch(DAOException e)
         {
-            c = this.getConnection();
-
-
-            this.beforeUpdate(bean); // listener callback
-            sql = new StringBuilder("UPDATE fl_face_light SET ");
-            boolean useComma=false;
-
-            if (bean.isMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("md5=?");
-            }
-
-            if (bean.isPersonIdModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("person_id=?");
-            }
-
-            if (bean.isImgMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("img_md5=?");
-            }
-
-            if (bean.isFaceLeftModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_left=?");
-            }
-
-            if (bean.isFaceTopModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_top=?");
-            }
-
-            if (bean.isFaceWidthModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_width=?");
-            }
-
-            if (bean.isFaceHeightModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_height=?");
-            }
-
-            if (bean.isEyeLeftxModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_leftx=?");
-            }
-
-            if (bean.isEyeLeftyModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_lefty=?");
-            }
-
-            if (bean.isEyeRightxModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_rightx=?");
-            }
-
-            if (bean.isEyeRightyModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("eye_righty=?");
-            }
-
-            if (bean.isMouthXModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("mouth_x=?");
-            }
-
-            if (bean.isMouthYModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("mouth_y=?");
-            }
-
-            if (bean.isNoseXModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("nose_x=?");
-            }
-
-            if (bean.isNoseYModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("nose_y=?");
-            }
-
-            if (bean.isAngleYawModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("angle_yaw=?");
-            }
-
-            if (bean.isAnglePitchModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("angle_pitch=?");
-            }
-
-            if (bean.isAngleRollModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("angle_roll=?");
-            }
-
-            if (bean.isExtInfoModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("ext_info=?");
-            }
-
-            if (bean.isCreateTimeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("create_time=?");
-            }
-            sql.append("");
-            // System.out.println("update : " + sql.toString());
-            ps = c.prepareStatement(sql.toString(),
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
-
-            if (_dirtyCount == 0) {
-                // System.out.println("The bean to look is not initialized... do not update.");
-                return bean;
-            }
-
-            ps.executeUpdate();
-            bean.resetIsModified();
-            this.afterUpdate(bean); // listener callback
-
-            return bean;
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            sql = null;
-            this.getManager().close(ps);
-            this.freeConnection(c);
+            throw new RuntimeException(e);
         }
     }
 
@@ -1146,10 +694,9 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be saved
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      */
     //15
-    public FaceLightBean[] save(FaceLightBean[] beans) throws DAOException
+    public FaceLightBean[] save(FaceLightBean[] beans)
     {
         for (FaceLightBean bean : beans) 
         {
@@ -1163,10 +710,9 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be saved
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      */
     //15-2
-    public <T extends Collection<FaceLightBean>>T save(T beans) throws DAOException
+    public <T extends Collection<FaceLightBean>>T save(T beans)
     {
         for (FaceLightBean bean : beans) 
         {
@@ -1183,8 +729,8 @@ public class FaceLightManager
      * @see #save(FaceLightBean[])
      */
     //15-3
-    public FaceLightBean[] saveAsTransaction(final FaceLightBean[] beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<FaceLightBean[]>(){
+    public FaceLightBean[] saveAsTransaction(final FaceLightBean[] beans) {
+        return this.runAsTransaction(new Callable<FaceLightBean[]>(){
             @Override
             public FaceLightBean[] call() throws Exception {
                 return save(beans);
@@ -1195,12 +741,11 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be saved
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<FaceLightBean>> T saveAsTransaction(final T beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<T>(){
+    public <T extends Collection<FaceLightBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
             public T call() throws Exception {
                 return save(beans);
@@ -1211,10 +756,9 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      */
     //16
-    public FaceLightBean[] insert(FaceLightBean[] beans) throws DAOException
+    public FaceLightBean[] insert(FaceLightBean[] beans)
     {
         return this.save(beans);
     }
@@ -1224,10 +768,9 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      */
     //16-2
-    public <T extends Collection<FaceLightBean>> T insert(T beans) throws DAOException
+    public <T extends Collection<FaceLightBean>> T insert(T beans)
     {
         return this.save(beans);
     }
@@ -1237,11 +780,10 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(FaceLightBean[])
      */
     //16-3
-    public FaceLightBean[] insertAsTransaction(FaceLightBean[] beans) throws DAOException
+    public FaceLightBean[] insertAsTransaction(FaceLightBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1251,11 +793,10 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<FaceLightBean>> T insertAsTransaction(T beans) throws DAOException
+    public <T extends Collection<FaceLightBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1266,10 +807,9 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      */
     //17
-    public FaceLightBean[] update(FaceLightBean[] beans) throws DAOException
+    public FaceLightBean[] update(FaceLightBean[] beans)
     {
         return this.save(beans);
     }
@@ -1282,7 +822,7 @@ public class FaceLightManager
      * @throws DAOException
      */
     //17-2
-    public <T extends Collection<FaceLightBean>> T update(T beans) throws DAOException
+    public <T extends Collection<FaceLightBean>> T update(T beans)
     {
         return this.save(beans);
     }
@@ -1292,11 +832,10 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(FaceLightBean[])
      */
     //17-3
-    public FaceLightBean[] updateAsTransaction(FaceLightBean[] beans) throws DAOException
+    public FaceLightBean[] updateAsTransaction(FaceLightBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1306,11 +845,10 @@ public class FaceLightManager
      *
      * @param beans the FaceLightBean bean table to be inserted
      * @return the saved FaceLightBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<FaceLightBean>> T updateAsTransaction(T beans) throws DAOException
+    public <T extends Collection<FaceLightBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1324,19 +862,17 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean bean to look for
      * @return the bean matching the template
-     * @throws DAOException
      */
     //18
-    public FaceLightBean loadUniqueUsingTemplate(FaceLightBeanBase bean) throws DAOException
+    public FaceLightBean loadUniqueUsingTemplate(FaceLightBean bean)
     {
-         FaceLightBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
-             return null;
-         }
-         if (beans.length > 1) {
-             throw new ObjectRetrievalException("More than one element !!");
-         }
-         return beans[0];
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlFaceLightBean)this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
      }
 
     /**
@@ -1344,10 +880,9 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean template to look for
      * @return all the FaceLightBean matching the template
-     * @throws DAOException
      */
     //19
-    public FaceLightBean[] loadUsingTemplate(FaceLightBeanBase bean) throws DAOException
+    public FaceLightBean[] loadUsingTemplate(FaceLightBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1357,10 +892,9 @@ public class FaceLightManager
      * @param bean the FaceLightBean template to look for
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FaceLightBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FaceLightBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1370,10 +904,9 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean template to look for
      * @return all the FaceLightBean matching the template
-     * @throws DAOException
      */
     //19-2
-    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBeanBase bean) throws DAOException
+    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1388,7 +921,7 @@ public class FaceLightManager
      * @throws DAOException
      */
     //20
-    public FaceLightBean[] loadUsingTemplate(FaceLightBeanBase bean, int startRow, int numRows) throws DAOException
+    public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1400,10 +933,9 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FaceLightBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FaceLightBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1414,10 +946,9 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the FaceLightBean matching the template
-     * @throws DAOException
      */
     //20-2
-    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1430,10 +961,9 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return all the FaceLightBean matching the template
-     * @throws DAOException
      */
     //20-3
-    public FaceLightBean[] loadUsingTemplate(FaceLightBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
     	return (FaceLightBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceLightBean[0]);
     }
@@ -1446,15 +976,17 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return all the FaceLightBean matching the template
-     * @throws DAOException
      */
     //20-4
-    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean beanBase, int startRow, int numRows, int searchType)
     {
-        ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
-        return (List<FaceLightBean>) action.getList();
-        
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlFaceLightBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }        
     }
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -1465,32 +997,16 @@ public class FaceLightManager
      * @param searchType exact ?  like ? starting like ?
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FaceLightBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FaceLightBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
-        FaceLightBean bean=FaceLightBeanBase.toFullBean(beanBase);
-        // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
-        StringBuilder sqlWhere = new StringBuilder("");
-        String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
-        PreparedStatement ps = null;
-        Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
-            connection = this.getConnection();
-            ps = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
-            return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
-            throw e;
-        }catch (SQLException e) {
-            throw new DataAccessException(e);
-        } finally {
-            this.getManager().close(ps);
-            this.freeConnection(connection);
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
     /**
@@ -1498,51 +1014,16 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean object(s) to be deleted
      * @return the number of deleted objects
-     * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FaceLightBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FaceLightBean beanBase)
     {
-        FaceLightBean bean=FaceLightBeanBase.toFullBean(beanBase);
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = new StringBuilder("DELETE FROM fl_face_light ");
-        StringBuilder sqlWhere = new StringBuilder("");
-
-        try
-        {
-            this.beforeDelete(bean); // listener callback
-            if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
-            {
-                sql.append(" WHERE ").append(sqlWhere);
-            }
-            else
-            {
-                // System.out.println("The bean to look is not initialized... deleting all");
-            }
-            // System.out.println("deleteUsingTemplate: " + sql.toString());
-
-            c = this.getConnection();
-            ps = c.prepareStatement(sql.toString(),
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
-
-            int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
-            return _rows;
+        try{
+            return this.nativeManager.deleteUsingTemplate((FlFaceLightBean)this.beanConverter.toNative(beanBase));
         }
-        catch(SQLException e)
+        catch(DAOException e)
         {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(ps);
-            this.freeConnection(c);
-            sql = null;
-            sqlWhere = null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -1557,10 +1038,9 @@ public class FaceLightManager
      * Retrieves the number of rows of the table fl_face_light.
      *
      * @return the number of rows returned
-     * @throws DAOException
      */
     //24
-    public int countAll() throws DAOException
+    public int countAll() 
     {
         return this.countWhere("");
     }
@@ -1571,74 +1051,17 @@ public class FaceLightManager
      *
      * @param where the restriction clause
      * @return the number of rows returned
-     * @throws DAOException
      */
     //25
-    public int countWhere(String where) throws DAOException
+    public int countWhere(String where)
     {
-        String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_face_light " + where;
-        // System.out.println("countWhere: " + sql);
-        Connection c = null;
-        Statement st = null;
-        ResultSet rs =  null;
-        try
-        {
-            int iReturn = -1;
-            c = this.getConnection();
-            st = c.createStatement();
-            rs =  st.executeQuery(sql);
-            if (rs.next())
-            {
-                iReturn = rs.getInt("MCOUNT");
-            }
-            if (iReturn != -1) {
-                return iReturn;
-            }
+        try{
+            return this.nativeManager.countWhere(where);
         }
-        catch(SQLException e)
+        catch(DAOException e)
         {
-            throw new DataAccessException(e);
+            throw new RuntimeException(e);
         }
-        finally
-        {
-            this.getManager().close(st, rs);
-            this.freeConnection(c);
-            sql = null;
-        }
-        throw new DataAccessException("Error in countWhere where=[" + where + "]");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_face_light with a prepared statement.
-     *
-     * @param ps the PreparedStatement to be used
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //26
-    private int countByPreparedStatement(PreparedStatement ps) throws DAOException
-    {
-        ResultSet rs =  null;
-        try
-        {
-            int iReturn = -1;
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                iReturn = rs.getInt("MCOUNT");
-            }
-            if (iReturn != -1) {
-                return iReturn;
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(rs);
-        }
-       throw new DataAccessException("Error in countByPreparedStatement");
     }
 
     /**
@@ -1646,10 +1069,9 @@ public class FaceLightManager
      *
      * @param bean the FaceLightBean bean to look for ant count
      * @return the number of rows returned
-     * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FaceLightBeanBase bean) throws DAOException
+    public int countUsingTemplate(FaceLightBean bean)
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -1661,10 +1083,9 @@ public class FaceLightManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the number of rows returned
-     * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FaceLightBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FaceLightBean bean, int startRow, int numRows)
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1677,923 +1098,76 @@ public class FaceLightManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FaceLightBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FaceLightBean beanBase, int startRow, int numRows, int searchType)
     {
-        FaceLightBean bean=FaceLightBeanBase.toFullBean(beanBase);
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_face_light");
-        StringBuilder sqlWhere = new StringBuilder("");
-
-        try
-        {
-            if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
-            {
-                sql.append(" WHERE ").append(sqlWhere);
-            }
-            else
-            {
-                // System.out.println("The bean to look is not initialized... counting all...");
-            }
-            // System.out.println("countUsingTemplate: " + sql.toString());
-
-            c = this.getConnection();
-            ps = c.prepareStatement(sql.toString(),
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
-
-            return this.countByPreparedStatement(ps);
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(ps);
-            this.freeConnection(c);
-            sql = null;
-            sqlWhere = null;
-        }
-    }
-
-    //
-
-
-    /**
-     * fills the given StringBuilder with the sql where clausis constructed using the bean and the search type
-     * @param sqlWhere the StringBuilder that will be filled
-     * @param bean the bean to use for creating the where clausis
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
-     */
-    protected int fillWhere(StringBuilder sqlWhere, FaceLightBean bean, int searchType)
-    {
-        if (bean == null) {
-            return 0;
-        }
-        int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
-        try
-        {
-            if (bean.isMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isPersonIdModified()) {
-                _dirtyCount ++;
-                if (bean.getPersonId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
-                }
-            }
-            if (bean.isImgMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getImgMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isFaceLeftModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceLeft() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left = ?");
-                }
-            }
-            if (bean.isFaceTopModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceTop() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top = ?");
-                }
-            }
-            if (bean.isFaceWidthModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceWidth() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width = ?");
-                }
-            }
-            if (bean.isFaceHeightModified()) {
-                _dirtyCount ++;
-                if (bean.getFaceHeight() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height = ?");
-                }
-            }
-            if (bean.isEyeLeftxModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeLeftx() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx = ?");
-                }
-            }
-            if (bean.isEyeLeftyModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeLefty() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty = ?");
-                }
-            }
-            if (bean.isEyeRightxModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeRightx() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx = ?");
-                }
-            }
-            if (bean.isEyeRightyModified()) {
-                _dirtyCount ++;
-                if (bean.getEyeRighty() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty = ?");
-                }
-            }
-            if (bean.isMouthXModified()) {
-                _dirtyCount ++;
-                if (bean.getMouthX() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x = ?");
-                }
-            }
-            if (bean.isMouthYModified()) {
-                _dirtyCount ++;
-                if (bean.getMouthY() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y = ?");
-                }
-            }
-            if (bean.isNoseXModified()) {
-                _dirtyCount ++;
-                if (bean.getNoseX() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x = ?");
-                }
-            }
-            if (bean.isNoseYModified()) {
-                _dirtyCount ++;
-                if (bean.getNoseY() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y = ?");
-                }
-            }
-            if (bean.isAngleYawModified()) {
-                _dirtyCount ++;
-                if (bean.getAngleYaw() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw = ?");
-                }
-            }
-            if (bean.isAnglePitchModified()) {
-                _dirtyCount ++;
-                if (bean.getAnglePitch() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch = ?");
-                }
-            }
-            if (bean.isAngleRollModified()) {
-                _dirtyCount ++;
-                if (bean.getAngleRoll() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll = ?");
-                }
-            }
-            if (bean.isExtInfoModified()) {
-                _dirtyCount ++;
-                if (bean.getExtInfo() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info = ?");
-                }
-            }
-            if (bean.isCreateTimeModified()) {
-                _dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
-                }
-            }
-        }
-        finally
-        {
-            sqlEqualsOperation = null;
-        }
-        return _dirtyCount;
-    }
-
-    /**
-     * fill the given prepared statement with the bean values and a search type
-     * @param ps the PreparedStatement that will be filled
-     * @param bean the bean to use for creating the where clausis
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
-     * @throws DAOException
-     */
-    protected int fillPreparedStatement(PreparedStatement ps, FaceLightBean bean, int searchType) throws DAOException
-    {
-        if (bean == null) {
-            return 0;
-        }
-        int _dirtyCount = 0;
-        try
-        {
-            if (bean.isMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isPersonIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
-            }
-            if (bean.isImgMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "]");
-                        if (bean.getImgMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImgMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "%]");
-                        if ( bean.getImgMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImgMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "]");
-                        if ( bean.getImgMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImgMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "%]");
-                        if (bean.getImgMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImgMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isFaceLeftModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceLeft() + "]");
-                if (bean.getFaceLeft() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
-            }
-            if (bean.isFaceTopModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceTop() + "]");
-                if (bean.getFaceTop() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
-            }
-            if (bean.isFaceWidthModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceWidth() + "]");
-                if (bean.getFaceWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
-            }
-            if (bean.isFaceHeightModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceHeight() + "]");
-                if (bean.getFaceHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
-            }
-            if (bean.isEyeLeftxModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLeftx() + "]");
-                if (bean.getEyeLeftx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
-            }
-            if (bean.isEyeLeftyModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLefty() + "]");
-                if (bean.getEyeLefty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
-            }
-            if (bean.isEyeRightxModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRightx() + "]");
-                if (bean.getEyeRightx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
-            }
-            if (bean.isEyeRightyModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRighty() + "]");
-                if (bean.getEyeRighty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
-            }
-            if (bean.isMouthXModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthX() + "]");
-                if (bean.getMouthX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
-            }
-            if (bean.isMouthYModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthY() + "]");
-                if (bean.getMouthY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
-            }
-            if (bean.isNoseXModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseX() + "]");
-                if (bean.getNoseX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
-            }
-            if (bean.isNoseYModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseY() + "]");
-                if (bean.getNoseY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
-            }
-            if (bean.isAngleYawModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleYaw() + "]");
-                if (bean.getAngleYaw() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
-            }
-            if (bean.isAnglePitchModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAnglePitch() + "]");
-                if (bean.getAnglePitch() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
-            }
-            if (bean.isAngleRollModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleRoll() + "]");
-                if (bean.getAngleRoll() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
-            }
-            if (bean.isExtInfoModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
-                if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getExtInfo()); }
-            }
-            if (bean.isCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        return _dirtyCount;
-    }
-
-
-    //_____________________________________________________________________
-    //
-    // DECODE RESULT SET
-    //_____________________________________________________________________
-
-    /**
-     * decode a resultset in an array of FaceLightBean objects
-     *
-     * @param rs the resultset to decode
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FaceLightBean table
-     * @throws DAOException
-     */
-    //28
-    public FaceLightBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-    	return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FaceLightBean[0]);
-    }
-
-    /**
-     * decode a resultset in a list of FaceLightBean objects
-     *
-     * @param rs the resultset to decode
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FaceLightBean table
-     * @throws DAOException
-     */
-    //28-1
-    public List<FaceLightBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        actionOnResultSet(rs, fieldList, numRows, numRows, action);
-        return action.getList();
-    }
-    /** decode a resultset and call action
-     * @param rs the resultset to decode
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action interface obj for do something
-     * @return the count dealt by action  
-     * @throws DAOException
-     * @throws IllegalArgumentException
-     */
-    //28-2
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action action) throws DAOException{
         try{
-            int count = 0;
-            if(0!=numRows){
-                if( startRow<1 )
-                    throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
-                if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
-                            action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
-                            action.call(decodeRow(rs, action.getBean()));
-                }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
-                            action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
-                            action.call(decodeRow(rs, fieldList,action.getBean()));
-                }
-            }
-            return count;
-        }catch(DAOException e){
-            throw e;
-        }catch(SQLException e){
-            throw new DataAccessException(e);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
         }
-    }
-
-    /**
-     * Transforms a ResultSet iterating on the fl_face_light on a FaceLightBean bean.
-     *
-     * @param rs the ResultSet to be transformed
-     * @return bean resulting FaceLightBean bean
-     * @throws DAOException
-     */
-    //29
-    public FaceLightBean decodeRow(ResultSet rs,FaceLightBean bean) throws DAOException
-    {
-        if(null==bean)
-            bean = this.createBean();
-        try
+        catch(DAOException e)
         {
-            bean.setMd5(rs.getString(1));
-            bean.setPersonId(Manager.getInteger(rs, 2));
-            bean.setImgMd5(rs.getString(3));
-            bean.setFaceLeft(Manager.getInteger(rs, 4));
-            bean.setFaceTop(Manager.getInteger(rs, 5));
-            bean.setFaceWidth(Manager.getInteger(rs, 6));
-            bean.setFaceHeight(Manager.getInteger(rs, 7));
-            bean.setEyeLeftx(Manager.getInteger(rs, 8));
-            bean.setEyeLefty(Manager.getInteger(rs, 9));
-            bean.setEyeRightx(Manager.getInteger(rs, 10));
-            bean.setEyeRighty(Manager.getInteger(rs, 11));
-            bean.setMouthX(Manager.getInteger(rs, 12));
-            bean.setMouthY(Manager.getInteger(rs, 13));
-            bean.setNoseX(Manager.getInteger(rs, 14));
-            bean.setNoseY(Manager.getInteger(rs, 15));
-            bean.setAngleYaw(Manager.getInteger(rs, 16));
-            bean.setAnglePitch(Manager.getInteger(rs, 17));
-            bean.setAngleRoll(Manager.getInteger(rs, 18));
-            bean.setExtInfo(rs.getBytes(19));
-            bean.setCreateTime(rs.getTimestamp(20));
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        bean.isNew(false);
-        bean.resetIsModified();
-
-        return bean;
-    }
-
-    /**
-     * Transforms a ResultSet iterating on the fl_face_light table on a FaceLightBean bean according to a list of fields.
-     *
-     * @param rs the ResultSet to be transformed
-     * @param fieldList table of the field's associated constants
-     * @return bean resulting FaceLightBean bean
-     * @throws DAOException
-     */
-    //30
-    public FaceLightBean decodeRow(ResultSet rs, int[] fieldList,FaceLightBean bean) throws DAOException
-    {
-        if(null==bean)
-            bean = this.createBean();
-        int pos = 0;
-        try
-        {
-            for(int i = 0; i < fieldList.length; i++)
-            {
-                switch(fieldList[i])
-                {
-                    case ID_MD5:
-                        ++pos;
-                        bean.setMd5(rs.getString(pos));
-                        break;
-                    case ID_PERSON_ID:
-                        ++pos;
-                        bean.setPersonId(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_IMG_MD5:
-                        ++pos;
-                        bean.setImgMd5(rs.getString(pos));
-                        break;
-                    case ID_FACE_LEFT:
-                        ++pos;
-                        bean.setFaceLeft(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_TOP:
-                        ++pos;
-                        bean.setFaceTop(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_WIDTH:
-                        ++pos;
-                        bean.setFaceWidth(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_FACE_HEIGHT:
-                        ++pos;
-                        bean.setFaceHeight(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_LEFTX:
-                        ++pos;
-                        bean.setEyeLeftx(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_LEFTY:
-                        ++pos;
-                        bean.setEyeLefty(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_RIGHTX:
-                        ++pos;
-                        bean.setEyeRightx(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EYE_RIGHTY:
-                        ++pos;
-                        bean.setEyeRighty(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_MOUTH_X:
-                        ++pos;
-                        bean.setMouthX(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_MOUTH_Y:
-                        ++pos;
-                        bean.setMouthY(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_NOSE_X:
-                        ++pos;
-                        bean.setNoseX(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_NOSE_Y:
-                        ++pos;
-                        bean.setNoseY(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_ANGLE_YAW:
-                        ++pos;
-                        bean.setAngleYaw(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_ANGLE_PITCH:
-                        ++pos;
-                        bean.setAnglePitch(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_ANGLE_ROLL:
-                        ++pos;
-                        bean.setAngleRoll(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_EXT_INFO:
-                        ++pos;
-                        bean.setExtInfo(rs.getBytes(pos));
-                        break;
-                    case ID_CREATE_TIME:
-                        ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
-                        break;
-                    default:
-                        throw new DAOException("Unknown field id " + fieldList[i]);
-                }
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        bean.isNew(false);
-        bean.resetIsModified();
-
-        return bean;
-    }
-
-    /**
-     * Transforms a ResultSet iterating on the fl_face_light on a FaceLightBean bean using the names of the columns
-     *
-     * @param rs the ResultSet to be transformed
-     * @return bean resulting FaceLightBean bean
-     * @throws DAOException
-     */
-    //31
-    public FaceLightBean metaDataDecodeRow(ResultSet rs) throws DAOException
-    {
-        FaceLightBean bean = this.createBean();
-        try
-        {
-            bean.setMd5(rs.getString("md5"));
-            bean.setPersonId(Manager.getInteger(rs, "person_id"));
-            bean.setImgMd5(rs.getString("img_md5"));
-            bean.setFaceLeft(Manager.getInteger(rs, "face_left"));
-            bean.setFaceTop(Manager.getInteger(rs, "face_top"));
-            bean.setFaceWidth(Manager.getInteger(rs, "face_width"));
-            bean.setFaceHeight(Manager.getInteger(rs, "face_height"));
-            bean.setEyeLeftx(Manager.getInteger(rs, "eye_leftx"));
-            bean.setEyeLefty(Manager.getInteger(rs, "eye_lefty"));
-            bean.setEyeRightx(Manager.getInteger(rs, "eye_rightx"));
-            bean.setEyeRighty(Manager.getInteger(rs, "eye_righty"));
-            bean.setMouthX(Manager.getInteger(rs, "mouth_x"));
-            bean.setMouthY(Manager.getInteger(rs, "mouth_y"));
-            bean.setNoseX(Manager.getInteger(rs, "nose_x"));
-            bean.setNoseY(Manager.getInteger(rs, "nose_y"));
-            bean.setAngleYaw(Manager.getInteger(rs, "angle_yaw"));
-            bean.setAnglePitch(Manager.getInteger(rs, "angle_pitch"));
-            bean.setAngleRoll(Manager.getInteger(rs, "angle_roll"));
-            bean.setExtInfo(rs.getBytes("ext_info"));
-            bean.setCreateTime(rs.getTimestamp("create_time"));
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-
-        bean.isNew(false);
-        bean.resetIsModified();
-
-        return bean;
-    }
-
-    //////////////////////////////////////
-    // PREPARED STATEMENT LOADER
-    //////////////////////////////////////
-
-    /**
-     * Loads all the elements using a prepared statement.
-     *
-     * @param ps the PreparedStatement to be used
-     * @return an array of FaceLightBean
-     * @throws DAOException
-     */
-    //32
-    public FaceLightBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
-    {
-        return this.loadByPreparedStatement(ps, null);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement.
-     *
-     * @param ps the PreparedStatement to be used
-     * @return an array of FaceLightBean
-     * @throws DAOException
-     */
-    //32
-    public List<FaceLightBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
-    {
-        return this.loadByPreparedStatementAsList(ps, null);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param fieldList table of the field's associated constants
-     * @return an array of FaceLightBean
-     * @throws DAOException
-     */
-    //33
-    public FaceLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
-    {
-        return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FaceLightBean[0]);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param fieldList table of the field's associated constants
-     * @return an array of FaceLightBean
-     * @throws DAOException
-     */
-    //33
-    public List<FaceLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
-    { 
-        return loadByPreparedStatementAsList(ps,fieldList,1,-1);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
-     * and specifying the start row and the number of rows.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
-     * @return an array of FaceLightBean
-     * @throws DAOException
-     */
-    //34
-    public FaceLightBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FaceLightBean[0]);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
-     * and specifying the start row and the number of rows.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
-     * @return an array of FaceLightBean
-     * @throws DAOException
-     */
-    //34-1
-    public List<FaceLightBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
-        return action.getList();
-    }
-    /**
-     * Loads each element using a prepared statement specifying a list of fields to be retrieved,
-     * and specifying the start row and the number of rows 
-     * and dealt by action.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */     
-    //34-2
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        ResultSet rs =  null;
-        try {
-            ps.setFetchSize(100);
-            rs = ps.executeQuery();
-            return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
-            throw e;
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        } finally {
-            this.getManager().close(rs);
+            throw new RuntimeException(e);
         }
     }
+
+
     //_____________________________________________________________________
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlFaceLightListener listener = null;
 
     /**
-     * Registers a unique FlFaceLightListener listener.
+     * Registers a unique FaceLightListener listener.
      */
     //35
     public void registerListener(TableListener listener)
     {
-        this.listener = (FlFaceLightListener)listener;
+        this.nativeManager.registerListener(this.toNative((FaceLightListener)listener));
     }
 
-    /**
-     * Before the save of the FaceLightBean bean.
-     *
-     * @param bean the FaceLightBean bean to be saved
-     */
-    //36
-    private void beforeInsert(FaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeInsert(bean);
-        }
-    }
+    private FlFaceLightListener toNative(final FaceLightListener listener) {
+		return null == listener ?null:new FlFaceLightListener (){
 
-    /**
-     * After the save of the FaceLightBean bean.
-     *
-     * @param bean the FaceLightBean bean to be saved
-     */
-    //37
-    private void afterInsert(FaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterInsert(bean);
-        }
-    }
+			@Override
+			public void beforeInsert(FlFaceLightBean bean) throws DAOException {
+				listener.beforeInsert(FaceLightManager.this.beanConverter.fromNative(bean));				
+			}
 
-    /**
-     * Before the update of the FaceLightBean bean.
-     *
-     * @param bean the FaceLightBean bean to be updated
-     */
-    //38
-    private void beforeUpdate(FaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeUpdate(bean);
-        }
-    }
+			@Override
+			public void afterInsert(FlDeviceBean bean) throws DAOException {
+				listener.afterInsert(FaceLightManager.this.beanConverter.fromNative(bean));
+				
+			}
 
-    /**
-     * After the update of the FaceLightBean bean.
-     *
-     * @param bean the FaceLightBean bean to be updated
-     */
-    //39
-    private void afterUpdate(FaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterUpdate(bean);
-        }
-    }
+			@Override
+			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+				listener.beforeUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
+				
+			}
 
-    /**
-     * Before the delete of the FaceLightBean bean.
-     *
-     * @param bean the FaceLightBean bean to be deleted
-     */
-    private void beforeDelete(FaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeDelete(bean);
-        }
-    }
+			@Override
+			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+				listener.afterUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
+			}
 
-    /**
-     * After the delete of the FaceLightBean bean.
-     *
-     * @param bean the FaceLightBean bean to be deleted
-     */
-    private void afterDelete(FaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterDelete(bean);
-        }
-    }
+			@Override
+			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+				listener.beforeDelete(FaceLightManager.this.beanConverter.fromNative(bean));
+			}
+
+			@Override
+			public void afterDelete(FlDeviceBean bean) throws DAOException {
+				listener.afterDelete(FaceLightManager.this.beanConverter.fromNative(bean));
+			}};
+	}
 
     //_____________________________________________________________________
     //
     // UTILS
     //_____________________________________________________________________
 
-    /**
-     * Retrieves the manager object used to get connections.
-     *
-     * @return the manager used
-     */
-    //40
-    private Manager getManager()
-    {
-        return Manager.getInstance();
-    }
 
-    /**
-     * Frees the connection.
-     *
-     * @param c the connection to release
-     */
-    //41
-    private void freeConnection(Connection c)
-    {
-        this.getManager().releaseConnection(c); // back to pool
-    }
-
-    /**
-     * Gets the connection.
-     */
-    //42
-    private Connection getConnection() throws DAOException
-    {
-        try
-        {
-            return this.getManager().getConnection();
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-    }
     /**
      * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
      * return false if @{code column} is null or empty 
@@ -2606,26 +1180,6 @@ public class FaceLightManager
         for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
         return false;
     }
-    /**
-     * Fill the given prepared statement with the values in argList
-     * @param ps the PreparedStatement that will be filled
-     * @param argList the arguments to use fill given prepared statement
-     * @throws DAOException
-     */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DAOException{
-        try {
-            if (!(argList == null || ps == null)) {
-                for (int i = 0; i < argList.length; i++) {
-                    if (argList[i].getClass().equals(byte[].class)) {
-                        ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
-                        ps.setObject(i + 1, argList[i]);
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-    }
     
     /**
      * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
@@ -2633,9 +1187,8 @@ public class FaceLightManager
      * @param argList the arguments to use fill given prepared statement,may be null
      * @param fieldList table of the field's associated constants
      * @return an array of FaceLightBean
-     * @throws DAOException 
      */
-    public FaceLightBean[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException {
+    public FaceLightBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new FaceLightBean[0]);
     }
     /**
@@ -2644,109 +1197,50 @@ public class FaceLightManager
      * @param argList the arguments to use fill given prepared statement,may be null
      * @param fieldList table of the field's associated constants
      * @return an list of FaceLightBean
-     * @throws DAOException
      */
-    public List<FaceLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException{
-        ListAction action = new ListAction();
-        loadBySqlForAction(sql,argList,fieldList,1,-1,action);
-        return action.getList();
-    }
-    /**
-     * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
-        PreparedStatement ps = null;
-        Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
-        try {
-            connection = this.getConnection();
-            ps = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            fillPrepareStatement(ps, argList);
-            return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
-            throw e;
-        }catch (SQLException e) {
-            throw new DataAccessException(e);
-        } finally {
-            this.getManager().close(ps);
-            this.freeConnection(connection);
+    public List<FaceLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+        try{
+            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
-    private String createSqlString(int[] fieldList,String where){
-        StringBuffer sql = new StringBuffer(128);
-        if(fieldList == null) {
-            sql.append("SELECT ").append(ALL_FIELDS);
-        } else{
-            sql.append("SELECT ");
-            for(int i = 0; i < fieldList.length; ++i){
-                if(i != 0) {
-                    sql.append(",");
-                }
-                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
-            }            
+
+    
+    //@Override
+    public <T>T runAsTransaction(Callable<T> fun) {
+        try{
+            return this.nativeManager.runAsTransaction(fun);
         }
-        sql.append(" FROM fl_face_light ");
-        if(null!=where)
-            sql.append(where);
-        return sql.toString();
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
-    class ListAction implements Action {
-        final List<FaceLightBean> list;
-        protected ListAction(List<FaceLightBean> list) {
-            if(null==list)
-                throw new IllegalArgumentException("list must not be null");
-            this.list = list;
+    //@Override
+    public void runAsTransaction(final Runnable fun){
+        try{
+            this.nativeManager.runAsTransaction(fun);
         }
-
-        protected ListAction() {
-            list=new ArrayList<FaceLightBean>();
-        }
-
-        public List<FaceLightBean> getList() {
-            return list;
-        }
-
-        @Override
-        public void call(FaceLightBean bean) {
-            list.add(bean);
-        }
-
-        @Override
-        public FaceLightBean getBean() {
-            return null;
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
-    public static abstract class NoListAction implements Action {
-        SoftReference<FaceLightBean> sf=new SoftReference<FaceLightBean>(new FaceLightBean());
-        @Override
-        public final FaceLightBean getBean() {
-            FaceLightBean bean = sf.get();
-            if(null==bean){
-                sf=new SoftReference<FaceLightBean>(bean=new FaceLightBean());
+    private FlFaceLightManager.Action toNative(final Action action){
+        return new FlFaceLightManager.Action(){
+
+            @Override
+            public void call(FlFaceLightBean bean) {
+                action.call(FaceLightManager.this.beanConverter.fromNative(bean));
             }
-            return bean.clean();
-        }
-    }
-    
-    @Override
-    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
-        return Manager.getInstance().runAsTransaction(fun);
-    }
-    
-    @Override
-    public void runAsTransaction(final Runnable fun) throws DAOException{
-        Manager.getInstance().runAsTransaction(fun);
-    }
 
+            @Override
+            public FlFaceLightBean getBean() {
+                return (FlFaceLightBean) FaceLightManager.this.beanConverter.toNative(action.getBean());
+            }};
+    }
 }

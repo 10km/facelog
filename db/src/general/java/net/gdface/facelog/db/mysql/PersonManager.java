@@ -6,6 +6,7 @@
 // ______________________________________________________
 
 
+
 package net.gdface.facelog.db.mysql;
 
 import java.lang.ref.SoftReference;
@@ -27,9 +28,9 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.Manager;
-import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
 
 import net.gdface.facelog.dborm.exception.DAOException;
@@ -47,6 +48,7 @@ import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.person.FlPersonBeanBase;
 import net.gdface.facelog.dborm.person.FlPersonBean;
+import net.gdface.facelog.dborm.person.FlPersonListener;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person table.
@@ -205,10 +207,8 @@ public class PersonManager
                             + ",update_time";
 
     public static interface Action{
-          void call(PersonBean
- bean);
-          PersonBean
- getBean();
+          void call(PersonBean bean);
+          PersonBean getBean();
      }
 
     /**
@@ -277,8 +277,7 @@ public class PersonManager
     //1
     public PersonBean loadByPrimaryKey(Integer id)
     {
-        try
-        {
+        try{
             return this.beanConverter.fromNative(nativeManager.loadByPrimaryKey(id));
         }
         catch(DAOException e)
@@ -299,7 +298,7 @@ public class PersonManager
     public PersonBean loadByPrimaryKey(PersonBean bean)
     {
         try{
-            return bean==null?null:loadByPrimaryKey( bean.getId());
+            return this.beanConverter.fromNative(this.nativeManager.loadByPrimaryKey(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -310,19 +309,13 @@ public class PersonManager
      * Returns true if this fl_person contains row with primary key fields.
      * @author guyadong
      * @param id Integer - PK# 1
-     * @throws DAOException
      * @see #loadByPrimaryKey(Integer id)
      */
     //1.3
     public boolean existsPrimaryKey(Integer id)
     {
-        try{
-            return null!=loadByPrimaryKey(id );
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return null!=loadByPrimaryKey(id );
+
     }
 
     /**
@@ -337,13 +330,8 @@ public class PersonManager
     //@Override
     public boolean existsPrimaryKey(PersonBean bean)
     {
-        try{
-            return null!=loadByPrimaryKey(bean);
-        }
-        catch(DAOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        return null!=loadByPrimaryKey(bean);
+
     }
     
     /**
@@ -376,7 +364,7 @@ public class PersonManager
     public int deleteByPrimaryKey(PersonBean bean)
     {
         try{
-            return bean==null?0:deleteByPrimaryKey( bean.getId());
+            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toNative(bean));
         }
         catch(DAOException e)
         {
@@ -532,9 +520,9 @@ public class PersonManager
     public FaceBean[] setFlFaceBeansByPersonId(PersonBean bean , FaceBean[] importedBeans)
     {
         try {        	
-            return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.setFlFaceBeansByPersonId(
+            return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.setFlFaceBeansByPersonId(
                 (FlPersonBean) this.beanConverter.toNative(bean),
-                this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
+                (FlFaceBean[])this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -616,9 +604,9 @@ public class PersonManager
     public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
         try {        	
-            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.setFlLogBeansByPersonId(
+            return this.dbConverter.getLogBeanConverter().fromNative(this.nativeManager.setFlLogBeansByPersonId(
                 (FlPersonBean) this.beanConverter.toNative(bean),
-                this.dbConverter.getLogBeanConverter().toNative(importedBeans)
+                (FlLogBean[])this.dbConverter.getLogBeanConverter().toNative(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -661,36 +649,20 @@ public class PersonManager
      * @param impFlFacebyPersonId the {@link FaceBean} bean refer to {@link PersonBean} 
      * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
-     * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refFlImagebyPhotoId 
-        , FaceBean[] impFlFacebyPersonId , LogBean[] impFlLogbyPersonId ) throws DAOException
+        , FaceBean[] impFlFacebyPersonId , LogBean[] impFlLogbyPersonId )
     {
-        if(null == bean) return null;
-        if( null != refFlImagebyPhotoId) {
-            IBeanConverter<ImageBean, FlImageBeanBase> bc = this.dbConverter.getImageBeanConverter();
-            refFlImagebyPhotoId = bc.fromNative(FlImageManager.getInstance().save( (FlImageBean)bc.toNative(refFlImagebyPhotoId) ));
-            bean.setPhotoId(refFlImagebyPhotoId.getMd5()); 
-            bean.setReferencedByPhotoId(refFlImagebyPhotoId);
+        try{
+            return this.beanConverter.fromNative(nativeManager.save((FlPersonBean)this.beanConverter.toNative(bean)
+            , (FlImageBean)this.dbConverter.getImageBeanConverter().toNative(refFlImagebyPhotoId)             , (FlFaceBean[])this.dbConverter.getFaceBeanConverter().toNative(impFlFacebyPersonId)  , (FlLogBean[])this.dbConverter.getLogBeanConverter().toNative(impFlLogbyPersonId)  ));
         }
-        bean = this.save( bean );
-        if( null != impFlFacebyPersonId) {
-            for ( FaceBean imp : impFlFacebyPersonId ){
-                imp.setPersonId(bean.getId()); 
-                imp.setReferencedByPersonId( bean );
-                FlFaceManager.getInstance().save( (FlFaceBean)this.dbConverter.getFaceBeanConverter().toNative(imp) );
-            }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
-        if( null != impFlLogbyPersonId) {
-            for ( LogBean imp : impFlLogbyPersonId ){
-                imp.setPersonId(bean.getId()); 
-                imp.setReferencedByPersonId( bean );
-                FlLogManager.getInstance().save( (FlLogBean)this.dbConverter.getLogBeanConverter().toNative(imp) );
-            }
-        }
-        return bean;
     } 
     /**
      * Transaction version for sync save
@@ -699,7 +671,7 @@ public class PersonManager
     //3.6 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refFlImagebyPhotoId 
-        ,final FaceBean[] impFlFacebyPersonId ,final LogBean[] impFlLogbyPersonId ) throws DAOException
+        ,final FaceBean[] impFlFacebyPersonId ,final LogBean[] impFlLogbyPersonId )
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
@@ -715,34 +687,20 @@ public class PersonManager
      * @param impFlFacebyPersonId the {@link FaceBean} bean refer to {@link PersonBean} 
      * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
-     * @throws DAOException
      */
     //3.7 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refFlImagebyPhotoId 
-        , Collection<FaceBean> impFlFacebyPersonId , Collection<LogBean> impFlLogbyPersonId ) throws DAOException
+        , Collection<FaceBean> impFlFacebyPersonId , Collection<LogBean> impFlLogbyPersonId )
     {
-        if(null == bean) return null;
-        if( null != refFlImagebyPhotoId) {
-            refFlImagebyPhotoId = FlImageManager.getInstance().save( refFlImagebyPhotoId );
-            bean.setReferencedByPhotoId(refFlImagebyPhotoId);
+        try{
+            return this.beanConverter.fromNative(nativeManager.save((FlPersonBean)this.beanConverter.toNative(bean)
+            , (FlImageBean)this.dbConverter.getImageBeanConverter().toNative(refFlImagebyPhotoId)             , (Collection<FlFaceBean>)this.dbConverter.getFaceBeanConverter().toNative(impFlFacebyPersonId)  , (Collection<FlLogBean>)this.dbConverter.getLogBeanConverter().toNative(impFlLogbyPersonId)  ));
         }
-        bean = this.save( bean );
-        if( null != impFlFacebyPersonId) {
-            for ( FaceBean imp : impFlFacebyPersonId ){
-                imp.setPersonId(bean.getId()); 
-                imp.setReferencedByPersonId(bean);
-                FlFaceManager.getInstance().save( (FlFaceBean)this.dbConverter.getFaceBeanConverter().toNative(imp) );
-            }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
-        if( null != impFlLogbyPersonId) {
-            for ( LogBean imp : impFlLogbyPersonId ){
-                imp.setPersonId(bean.getId()); 
-                imp.setReferencedByPersonId(bean);
-                FlLogManager.getInstance().save( (FlLogBean)this.dbConverter.getLogBeanConverter().toNative(imp) );
-            }
-        }
-        return bean;
     }   
     /**
      * Transaction version for sync save
@@ -820,7 +778,7 @@ public class PersonManager
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
-    @Override
+    //@Override
     public <T> T setReferencedBean(PersonBean bean,T beanToSet,String fkName)throws DAOException{
         Object[] params = REF_METHODS.get(fkName);
         if(null==params)
@@ -860,37 +818,37 @@ public class PersonManager
 
 
     /**
-     * Retrieves the {@link FlImageBean} object referenced by {@link PersonBean#getPhotoId}() field.<br>
+     * Retrieves the {@link ImageBean} object referenced by {@link PersonBean#getPhotoId}() field.<br>
      * FK_NAME : fl_person_ibfk_1
      * @param bean the {@link PersonBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public FlImageBean getReferencedByPhotoId(PersonBean bean) throws DAOException
+    public ImageBean getReferencedByPhotoId(PersonBean bean) throws DAOException
     {
         if(null == bean)return null;
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setMd5(bean.getPhotoId()); 
-        bean.setReferencedByPhotoId(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
+        bean.setReferencedByPhotoId(this.dbConverter.getImageBeanConverter().fromNative(FlImageManager.getInstance().loadUniqueUsingTemplate(other))); 
         return bean.getReferencedByPhotoId();
     }
 
     /**
-     * Associates the {@link PersonBean} object to the {@link FlImageBean} object by {@link PersonBean#getPhotoId}() field.
+     * Associates the {@link PersonBean} object to the {@link ImageBean} object by {@link PersonBean#getPhotoId}() field.
      *
      * @param bean the {@link PersonBean} object to use
-     * @param beanToSet the {@link FlImageBean} object to associate to the {@link PersonBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
+     * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FlImageBean setReferencedByPhotoId(PersonBean bean, FlImageBean beanToSet) throws DAOException
+    public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet) throws DAOException
     {
         if(null == bean || null == beanToSet) return null;
         bean.setPhotoId(beanToSet.getMd5());
         bean.setReferencedByPhotoId(beanToSet);
-        return FlImageManager.getInstance().save(beanToSet);
+        return this.dbConverter.getImageBeanConverter().fromNative(FlImageManager.getInstance().save((FlImageBean)this.dbConverter.getImageBeanConverter().toNative(beanToSet)));
     }
 
     //////////////////////////////////////
@@ -917,21 +875,19 @@ public class PersonManager
      * Loads each row from fl_person and dealt with action.
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //5-1
-    public int loadAll(Action action) throws DAOException
+    public int loadAll(Action action)
     {
-        return this.nativeManager.loadUsingTemplate(null,action);
+        return this.loadUsingTemplate(null,action);
     }
     /**
      * Loads all the rows from fl_person.
      *
-     * @return a list of FlPersonManager bean
-     * @throws DAOException
+     * @return a list of PersonBean bean
      */
     //5-2
-    public List<PersonBean> loadAllAsList() throws DAOException
+    public List<PersonBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
     }
@@ -943,10 +899,9 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return an array of FlPersonManager bean
-     * @throws DAOException
      */
     //6
-    public PersonBean[] loadAll(int startRow, int numRows) throws DAOException
+    public PersonBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
     }
@@ -956,10 +911,9 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //6-1
-    public int loadAll(int startRow, int numRows,Action action) throws DAOException
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -969,10 +923,9 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of FlPersonManager bean
-     * @throws DAOException
      */
     //6-2
-    public List<PersonBean> loadAllAsList(int startRow, int numRows) throws DAOException
+    public List<PersonBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
     }
@@ -985,10 +938,9 @@ public class PersonManager
      *
      * @param where the sql 'where' clause
      * @return the resulting PersonBean table
-     * @throws DAOException
      */
     //7
-    public PersonBean[] loadByWhere(String where) throws DAOException
+    public PersonBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
@@ -997,10 +949,9 @@ public class PersonManager
      *
      * @param where the sql 'where' clause
      * @return the resulting PersonBean table
-     * @throws DAOException
      */
     //7
-    public List<PersonBean> loadByWhereAsList(String where) throws DAOException
+    public List<PersonBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
     }
@@ -1009,10 +960,9 @@ public class PersonManager
      * @param where the sql 'where' clause
      * @param action  Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //7-1
-    public int loadByWhere(String where,Action action) throws DAOException
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -1023,10 +973,9 @@ public class PersonManager
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @return the resulting PersonBean table
-     * @throws DAOException
      */
     //8
-    public PersonBean[] loadByWhere(String where, int[] fieldList) throws DAOException
+    public PersonBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
     }
@@ -1039,10 +988,9 @@ public class PersonManager
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @return the resulting PersonBean table
-     * @throws DAOException
      */
     //8
-    public List<PersonBean> loadByWhereAsList(String where, int[] fieldList) throws DAOException
+    public List<PersonBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
     }
@@ -1054,10 +1002,9 @@ public class PersonManager
      * @param fieldList array of field's ID
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action) throws DAOException
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -1071,10 +1018,9 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting PersonBean table
-     * @throws DAOException
      */
     //9
-    public PersonBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows) throws DAOException
+    public PersonBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (PersonBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new PersonBean[0]);
     }
@@ -1089,10 +1035,9 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -1106,14 +1051,17 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the resulting PersonBean table
-     * @throws DAOException
      */
     //9-2
-    public List<PersonBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<PersonBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
-        ListAction action = new ListAction();
-        loadByWhereForAction(where,fieldList,startRow,numRows,action);              
-        return action.getList();
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Retrieves each row of PersonBean given a sql where clause and a list of fields, and startRow and numRows,
@@ -1126,23 +1074,25 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
-        String sql=createSqlString(fieldList, where);
-        // System.out.println("loadByWhere: " + sql);
-        return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
+        try{
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * Deletes all rows from fl_person table.
      * @return the number of deleted rows.
-     * @throws DAOException
      */
     //10
-    public int deleteAll() throws DAOException
+    public int deleteAll()
     {
         return this.deleteByWhere("");
     }
@@ -1154,30 +1104,16 @@ public class PersonManager
      *
      * @param where the sql 'where' clause
      * @return the number of deleted rows
-     * @throws DAOException
      */
     //11
-    public int deleteByWhere(String where) throws DAOException
+    public int deleteByWhere(String where)
     {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try
-        {
-            c = this.getConnection();
-            StringBuilder sql = new StringBuilder("DELETE FROM fl_person " + where);
-            // System.out.println("deleteByWhere: " + sql);
-            ps = c.prepareStatement(sql.toString());
-            return ps.executeUpdate();
+        try{
+            return this.nativeManager.deleteByWhere(where);
         }
-        catch(SQLException e)
+        catch(DAOException e)
         {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(ps);
-            this.freeConnection(c);
+            throw new RuntimeException(e);
         }
     }
 
@@ -1190,10 +1126,9 @@ public class PersonManager
      *
      * @param bean the PersonBean bean to be saved
      * @return the inserted or updated bean
-     * @throws DAOException
      */
     //12
-    public PersonBean save(PersonBean bean) throws DAOException
+    public PersonBean save(PersonBean bean)
     {
         if (bean.isNew()) {
             return this.insert(bean);
@@ -1207,175 +1142,16 @@ public class PersonManager
      *
      * @param bean the PersonBean bean to be saved
      * @return the inserted bean
-     * @throws DAOException
      */
     //13
-    public PersonBean insert(PersonBean bean) throws DAOException
+    public PersonBean insert(PersonBean bean)
     {
-        // mini checks
-        if (!bean.isModified()) {
-            return bean; // should not we log something ?
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.insert((FlPersonBean)this.beanConverter.toNative(bean)));
         }
-        if (!bean.isNew()){
-            return this.update(bean);
-        }
-
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = null;
-
-        try
+        catch(DAOException e)
         {
-            c = this.getConnection();
-            this.beforeInsert(bean); // listener callback
-            int _dirtyCount = 0;
-            sql = new StringBuilder("INSERT into fl_person (");
-
-            if (bean.isIdModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("id");
-                _dirtyCount++;
-            }
-
-            if (bean.isGroupIdModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("group_id");
-                _dirtyCount++;
-            }
-
-            if (bean.isNameModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("name");
-                _dirtyCount++;
-            }
-
-            if (bean.isSexModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("sex");
-                _dirtyCount++;
-            }
-
-            if (bean.isBirthdateModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("birthdate");
-                _dirtyCount++;
-            }
-
-            if (bean.isPapersTypeModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("papers_type");
-                _dirtyCount++;
-            }
-
-            if (bean.isPapersNumModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("papers_num");
-                _dirtyCount++;
-            }
-
-            if (bean.isPhotoIdModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("photo_id");
-                _dirtyCount++;
-            }
-
-            if (bean.isFaceMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("face_md5");
-                _dirtyCount++;
-            }
-
-            if (bean.isExpiryDateModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("expiry_date");
-                _dirtyCount++;
-            }
-
-            if (bean.isCreateTimeModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("create_time");
-                _dirtyCount++;
-            }
-
-            if (bean.isUpdateTimeModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("update_time");
-                _dirtyCount++;
-            }
-
-            sql.append(") values (");
-            if(_dirtyCount > 0) {
-                sql.append("?");
-                for(int i = 1; i < _dirtyCount; i++) {
-                    sql.append(",?");
-                }
-            }
-            sql.append(")");
-
-
-            // System.out.println("insert : " + sql.toString());
-
-            ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
-
-            ps.executeUpdate();
-
-            if (!bean.isIdModified())
-            {
-                PreparedStatement ps2 = null;
-                ResultSet rs = null;
-                try {
-                    ps2 = c.prepareStatement("SELECT last_insert_id()");
-                    rs = ps2.executeQuery();
-                    if(rs.next()) {
-                        bean.setId(Manager.getInteger(rs, 1));
-                    } else {
-                        this.getManager().log("ATTENTION: Could not retrieve generated key!");
-                    }
-                } finally {
-                    this.getManager().close(ps2, rs);
-                }
-            }
-
-            bean.isNew(false);
-            bean.resetIsModified();
-            this.afterInsert(bean); // listener callback
-            return bean;
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            sql = null;
-            this.getManager().close(ps);
-            this.freeConnection(c);
+            throw new RuntimeException(e);
         }
     }
 
@@ -1384,168 +1160,16 @@ public class PersonManager
      *
      * @param bean the PersonBean bean to be updated
      * @return the updated bean
-     * @throws DAOException
      */
     //14
-    public PersonBean update(PersonBean bean) throws DAOException
+    public PersonBean update(PersonBean bean)
     {
-        // mini checks
-        if (!bean.isModified()) {
-            return bean; // should not we log something ?
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.update((FlPersonBean)this.beanConverter.toNative(bean)));
         }
-        if (bean.isNew()){
-            return this.insert(bean);
-        }
-
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = null;
-
-        try
+        catch(DAOException e)
         {
-            c = this.getConnection();
-
-            this.beforeUpdate(bean); // listener callback
-            sql = new StringBuilder("UPDATE fl_person SET ");
-            boolean useComma=false;
-
-            if (bean.isIdModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("id=?");
-            }
-
-            if (bean.isGroupIdModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("group_id=?");
-            }
-
-            if (bean.isNameModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("name=?");
-            }
-
-            if (bean.isSexModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("sex=?");
-            }
-
-            if (bean.isBirthdateModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("birthdate=?");
-            }
-
-            if (bean.isPapersTypeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("papers_type=?");
-            }
-
-            if (bean.isPapersNumModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("papers_num=?");
-            }
-
-            if (bean.isPhotoIdModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("photo_id=?");
-            }
-
-            if (bean.isFaceMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("face_md5=?");
-            }
-
-            if (bean.isExpiryDateModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("expiry_date=?");
-            }
-
-            if (bean.isCreateTimeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("create_time=?");
-            }
-
-            if (bean.isUpdateTimeModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("update_time=?");
-            }
-            sql.append(" WHERE ");
-            sql.append("id=?");
-            // System.out.println("update : " + sql.toString());
-            ps = c.prepareStatement(sql.toString(),
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
-
-            if (_dirtyCount == 0) {
-                // System.out.println("The bean to look is not initialized... do not update.");
-                return bean;
-            }
-
-            if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
-            ps.executeUpdate();
-            bean.resetIsModified();
-            this.afterUpdate(bean); // listener callback
-
-            return bean;
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            sql = null;
-            this.getManager().close(ps);
-            this.freeConnection(c);
+            throw new RuntimeException(e);
         }
     }
 
@@ -1554,10 +1178,9 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be saved
      * @return the saved PersonBean array.
-     * @throws DAOException
      */
     //15
-    public PersonBean[] save(PersonBean[] beans) throws DAOException
+    public PersonBean[] save(PersonBean[] beans)
     {
         for (PersonBean bean : beans) 
         {
@@ -1571,10 +1194,9 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be saved
      * @return the saved PersonBean array.
-     * @throws DAOException
      */
     //15-2
-    public <T extends Collection<PersonBean>>T save(T beans) throws DAOException
+    public <T extends Collection<PersonBean>>T save(T beans)
     {
         for (PersonBean bean : beans) 
         {
@@ -1591,8 +1213,8 @@ public class PersonManager
      * @see #save(PersonBean[])
      */
     //15-3
-    public PersonBean[] saveAsTransaction(final PersonBean[] beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<PersonBean[]>(){
+    public PersonBean[] saveAsTransaction(final PersonBean[] beans) {
+        return this.runAsTransaction(new Callable<PersonBean[]>(){
             @Override
             public PersonBean[] call() throws Exception {
                 return save(beans);
@@ -1603,12 +1225,11 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be saved
      * @return the saved PersonBean array.
-     * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<PersonBean>> T saveAsTransaction(final T beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<T>(){
+    public <T extends Collection<PersonBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
             public T call() throws Exception {
                 return save(beans);
@@ -1619,10 +1240,9 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      */
     //16
-    public PersonBean[] insert(PersonBean[] beans) throws DAOException
+    public PersonBean[] insert(PersonBean[] beans)
     {
         return this.save(beans);
     }
@@ -1632,10 +1252,9 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      */
     //16-2
-    public <T extends Collection<PersonBean>> T insert(T beans) throws DAOException
+    public <T extends Collection<PersonBean>> T insert(T beans)
     {
         return this.save(beans);
     }
@@ -1645,11 +1264,10 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(PersonBean[])
      */
     //16-3
-    public PersonBean[] insertAsTransaction(PersonBean[] beans) throws DAOException
+    public PersonBean[] insertAsTransaction(PersonBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1659,11 +1277,10 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<PersonBean>> T insertAsTransaction(T beans) throws DAOException
+    public <T extends Collection<PersonBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1674,10 +1291,9 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      */
     //17
-    public PersonBean[] update(PersonBean[] beans) throws DAOException
+    public PersonBean[] update(PersonBean[] beans)
     {
         return this.save(beans);
     }
@@ -1690,7 +1306,7 @@ public class PersonManager
      * @throws DAOException
      */
     //17-2
-    public <T extends Collection<PersonBean>> T update(T beans) throws DAOException
+    public <T extends Collection<PersonBean>> T update(T beans)
     {
         return this.save(beans);
     }
@@ -1700,11 +1316,10 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(PersonBean[])
      */
     //17-3
-    public PersonBean[] updateAsTransaction(PersonBean[] beans) throws DAOException
+    public PersonBean[] updateAsTransaction(PersonBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1714,11 +1329,10 @@ public class PersonManager
      *
      * @param beans the PersonBean bean table to be inserted
      * @return the saved PersonBean array.
-     * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<PersonBean>> T updateAsTransaction(T beans) throws DAOException
+    public <T extends Collection<PersonBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1732,19 +1346,17 @@ public class PersonManager
      *
      * @param bean the PersonBean bean to look for
      * @return the bean matching the template
-     * @throws DAOException
      */
     //18
-    public PersonBean loadUniqueUsingTemplate(PersonBeanBase bean) throws DAOException
+    public PersonBean loadUniqueUsingTemplate(PersonBean bean)
     {
-         PersonBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
-             return null;
-         }
-         if (beans.length > 1) {
-             throw new ObjectRetrievalException("More than one element !!");
-         }
-         return beans[0];
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlPersonBean)this.beanConverter.toNative(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
      }
 
     /**
@@ -1752,10 +1364,9 @@ public class PersonManager
      *
      * @param bean the PersonBean template to look for
      * @return all the PersonBean matching the template
-     * @throws DAOException
      */
     //19
-    public PersonBean[] loadUsingTemplate(PersonBeanBase bean) throws DAOException
+    public PersonBean[] loadUsingTemplate(PersonBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1765,10 +1376,9 @@ public class PersonManager
      * @param bean the PersonBean template to look for
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(PersonBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(PersonBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1778,10 +1388,9 @@ public class PersonManager
      *
      * @param bean the PersonBean template to look for
      * @return all the PersonBean matching the template
-     * @throws DAOException
      */
     //19-2
-    public List<PersonBean> loadUsingTemplateAsList(PersonBeanBase bean) throws DAOException
+    public List<PersonBean> loadUsingTemplateAsList(PersonBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1796,7 +1405,7 @@ public class PersonManager
      * @throws DAOException
      */
     //20
-    public PersonBean[] loadUsingTemplate(PersonBeanBase bean, int startRow, int numRows) throws DAOException
+    public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1808,10 +1417,9 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(PersonBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(PersonBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1822,10 +1430,9 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return all the PersonBean matching the template
-     * @throws DAOException
      */
     //20-2
-    public List<PersonBean> loadUsingTemplateAsList(PersonBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<PersonBean> loadUsingTemplateAsList(PersonBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1838,10 +1445,9 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return all the PersonBean matching the template
-     * @throws DAOException
      */
     //20-3
-    public PersonBean[] loadUsingTemplate(PersonBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows, int searchType)
     {
     	return (PersonBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new PersonBean[0]);
     }
@@ -1854,15 +1460,17 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return all the PersonBean matching the template
-     * @throws DAOException
      */
     //20-4
-    public List<PersonBean> loadUsingTemplateAsList(PersonBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<PersonBean> loadUsingTemplateAsList(PersonBean beanBase, int startRow, int numRows, int searchType)
     {
-        ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
-        return (List<PersonBean>) action.getList();
-        
+        try{
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlPersonBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }        
     }
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -1873,32 +1481,16 @@ public class PersonManager
      * @param searchType exact ?  like ? starting like ?
      * @param action Action object for do something(not null)
      * @return the count dealt by action
-     * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(PersonBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(PersonBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
-        PersonBean bean=PersonBeanBase.toFullBean(beanBase);
-        // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
-        StringBuilder sqlWhere = new StringBuilder("");
-        String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
-        PreparedStatement ps = null;
-        Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
-            connection = this.getConnection();
-            ps = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
-            return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
-            throw e;
-        }catch (SQLException e) {
-            throw new DataAccessException(e);
-        } finally {
-            this.getManager().close(ps);
-            this.freeConnection(connection);
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
     /**
@@ -1906,54 +1498,16 @@ public class PersonManager
      *
      * @param bean the PersonBean object(s) to be deleted
      * @return the number of deleted objects
-     * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(PersonBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(PersonBean beanBase)
     {
-        PersonBean bean=PersonBeanBase.toFullBean(beanBase);
-        if (bean.isIdInitialized()) {
-            return this.deleteByPrimaryKey(bean.getId());
+        try{
+            return this.nativeManager.deleteUsingTemplate((FlPersonBean)this.beanConverter.toNative(beanBase));
         }
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = new StringBuilder("DELETE FROM fl_person ");
-        StringBuilder sqlWhere = new StringBuilder("");
-
-        try
+        catch(DAOException e)
         {
-            this.beforeDelete(bean); // listener callback
-            if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
-            {
-                sql.append(" WHERE ").append(sqlWhere);
-            }
-            else
-            {
-                // System.out.println("The bean to look is not initialized... deleting all");
-            }
-            // System.out.println("deleteUsingTemplate: " + sql.toString());
-
-            c = this.getConnection();
-            ps = c.prepareStatement(sql.toString(),
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
-
-            int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
-            return _rows;
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(ps);
-            this.freeConnection(c);
-            sql = null;
-            sqlWhere = null;
+            throw new RuntimeException(e);
         }
     }
 
@@ -1968,11 +1522,19 @@ public class PersonManager
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return an array of PersonBean
-     * @throws DAOException
      */
-    public PersonBean[] loadByface_md5(String faceMd5) throws DAOException
+    public PersonBean[] loadByface_md5(String faceMd5)
     {
-        return (PersonBean[])this.loadByface_md5AsList(faceMd5).toArray(new PersonBean[0]);
+        try{        
+            PersonBean bean= new PersonBean ();
+            bean.setFaceMd5(faceMd5);
+            return loadUsingTemplate(bean);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
     }
     
     /**
@@ -1984,7 +1546,7 @@ public class PersonManager
      */
     public List<PersonBean> loadByface_md5AsList(String faceMd5) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setFaceMd5(faceMd5);
         return loadUsingTemplateAsList(bean);
     }
@@ -1998,7 +1560,7 @@ public class PersonManager
      */
     public int deleteByface_md5(String faceMd5) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setFaceMd5(faceMd5);
         return deleteUsingTemplate(bean);
     }
@@ -2008,11 +1570,19 @@ public class PersonManager
      *
      * @param papersNum the papers_num column's value filter.
      * @return an array of PersonBean
-     * @throws DAOException
      */
-    public PersonBean[] loadBypapers_num(String papersNum) throws DAOException
+    public PersonBean[] loadBypapers_num(String papersNum)
     {
-        return (PersonBean[])this.loadBypapers_numAsList(papersNum).toArray(new PersonBean[0]);
+        try{        
+            PersonBean bean= new PersonBean ();
+            bean.setPapersNum(papersNum);
+            return loadUsingTemplate(bean);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
     }
     
     /**
@@ -2024,7 +1594,7 @@ public class PersonManager
      */
     public List<PersonBean> loadBypapers_numAsList(String papersNum) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setPapersNum(papersNum);
         return loadUsingTemplateAsList(bean);
     }
@@ -2038,7 +1608,7 @@ public class PersonManager
      */
     public int deleteBypapers_num(String papersNum) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setPapersNum(papersNum);
         return deleteUsingTemplate(bean);
     }
@@ -2048,11 +1618,19 @@ public class PersonManager
      *
      * @param photoId the photo_id column's value filter.
      * @return an array of PersonBean
-     * @throws DAOException
      */
-    public PersonBean[] loadByphoto_id(String photoId) throws DAOException
+    public PersonBean[] loadByphoto_id(String photoId)
     {
-        return (PersonBean[])this.loadByphoto_idAsList(photoId).toArray(new PersonBean[0]);
+        try{        
+            PersonBean bean= new PersonBean ();
+            bean.setPhotoId(photoId);
+            return loadUsingTemplate(bean);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
     }
     
     /**
@@ -2064,7 +1642,7 @@ public class PersonManager
      */
     public List<PersonBean> loadByphoto_idAsList(String photoId) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setPhotoId(photoId);
         return loadUsingTemplateAsList(bean);
     }
@@ -2078,7 +1656,7 @@ public class PersonManager
      */
     public int deleteByphoto_id(String photoId) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setPhotoId(photoId);
         return deleteUsingTemplate(bean);
     }
@@ -2088,11 +1666,19 @@ public class PersonManager
      *
      * @param expiryDate the expiry_date column's value filter.
      * @return an array of PersonBean
-     * @throws DAOException
      */
-    public PersonBean[] loadByexpiry_date(java.util.Date expiryDate) throws DAOException
+    public PersonBean[] loadByexpiry_date(java.util.Date expiryDate)
     {
-        return (PersonBean[])this.loadByexpiry_dateAsList(expiryDate).toArray(new PersonBean[0]);
+        try{        
+            PersonBean bean= new PersonBean ();
+            bean.setExpiryDate(expiryDate);
+            return loadUsingTemplate(bean);
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
     }
     
     /**
@@ -2104,7 +1690,7 @@ public class PersonManager
      */
     public List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setExpiryDate(expiryDate);
         return loadUsingTemplateAsList(bean);
     }
@@ -2118,7 +1704,7 @@ public class PersonManager
      */
     public int deleteByexpiry_date(java.util.Date expiryDate) throws DAOException
     {
-        PersonBean bean = this.createBean();
+        PersonBean bean = new PersonBean ();
         bean.setExpiryDate(expiryDate);
         return deleteUsingTemplate(bean);
     }
@@ -2134,10 +1720,9 @@ public class PersonManager
      * Retrieves the number of rows of the table fl_person.
      *
      * @return the number of rows returned
-     * @throws DAOException
      */
     //24
-    public int countAll() throws DAOException
+    public int countAll() 
     {
         return this.countWhere("");
     }
@@ -2148,74 +1733,17 @@ public class PersonManager
      *
      * @param where the restriction clause
      * @return the number of rows returned
-     * @throws DAOException
      */
     //25
-    public int countWhere(String where) throws DAOException
+    public int countWhere(String where)
     {
-        String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_person " + where;
-        // System.out.println("countWhere: " + sql);
-        Connection c = null;
-        Statement st = null;
-        ResultSet rs =  null;
-        try
-        {
-            int iReturn = -1;
-            c = this.getConnection();
-            st = c.createStatement();
-            rs =  st.executeQuery(sql);
-            if (rs.next())
-            {
-                iReturn = rs.getInt("MCOUNT");
-            }
-            if (iReturn != -1) {
-                return iReturn;
-            }
+        try{
+            return this.nativeManager.countWhere(where);
         }
-        catch(SQLException e)
+        catch(DAOException e)
         {
-            throw new DataAccessException(e);
+            throw new RuntimeException(e);
         }
-        finally
-        {
-            this.getManager().close(st, rs);
-            this.freeConnection(c);
-            sql = null;
-        }
-        throw new DataAccessException("Error in countWhere where=[" + where + "]");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_person with a prepared statement.
-     *
-     * @param ps the PreparedStatement to be used
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //26
-    private int countByPreparedStatement(PreparedStatement ps) throws DAOException
-    {
-        ResultSet rs =  null;
-        try
-        {
-            int iReturn = -1;
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                iReturn = rs.getInt("MCOUNT");
-            }
-            if (iReturn != -1) {
-                return iReturn;
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(rs);
-        }
-       throw new DataAccessException("Error in countByPreparedStatement");
     }
 
     /**
@@ -2223,10 +1751,9 @@ public class PersonManager
      *
      * @param bean the PersonBean bean to look for ant count
      * @return the number of rows returned
-     * @throws DAOException
      */
     //27
-    public int countUsingTemplate(PersonBeanBase bean) throws DAOException
+    public int countUsingTemplate(PersonBean bean)
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -2238,10 +1765,9 @@ public class PersonManager
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return the number of rows returned
-     * @throws DAOException
      */
     //20
-    public int countUsingTemplate(PersonBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(PersonBean bean, int startRow, int numRows)
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -2254,815 +1780,76 @@ public class PersonManager
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
-     * @throws DAOException
      */
     //20
-    public int countUsingTemplate(PersonBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(PersonBean beanBase, int startRow, int numRows, int searchType)
     {
-        PersonBean bean=PersonBeanBase.toFullBean(beanBase);
-        Connection c = null;
-        PreparedStatement ps = null;
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_person");
-        StringBuilder sqlWhere = new StringBuilder("");
-
-        try
-        {
-            if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
-            {
-                sql.append(" WHERE ").append(sqlWhere);
-            }
-            else
-            {
-                // System.out.println("The bean to look is not initialized... counting all...");
-            }
-            // System.out.println("countUsingTemplate: " + sql.toString());
-
-            c = this.getConnection();
-            ps = c.prepareStatement(sql.toString(),
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
-
-            return this.countByPreparedStatement(ps);
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        finally
-        {
-            this.getManager().close(ps);
-            this.freeConnection(c);
-            sql = null;
-            sqlWhere = null;
-        }
-    }
-
-    //
-
-
-    /**
-     * fills the given StringBuilder with the sql where clausis constructed using the bean and the search type
-     * @param sqlWhere the StringBuilder that will be filled
-     * @param bean the bean to use for creating the where clausis
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
-     */
-    protected int fillWhere(StringBuilder sqlWhere, PersonBean bean, int searchType)
-    {
-        if (bean == null) {
-            return 0;
-        }
-        int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
-        try
-        {
-            if (bean.isIdModified()) {
-                _dirtyCount ++;
-                if (bean.getId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
-                }
-            }
-            if (bean.isGroupIdModified()) {
-                _dirtyCount ++;
-                if (bean.getGroupId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id = ?");
-                }
-            }
-            if (bean.isNameModified()) {
-                _dirtyCount ++;
-                if (bean.getName() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isSexModified()) {
-                _dirtyCount ++;
-                if (bean.getSex() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex = ?");
-                }
-            }
-            if (bean.isBirthdateModified()) {
-                _dirtyCount ++;
-                if (bean.getBirthdate() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate = ?");
-                }
-            }
-            if (bean.isPapersTypeModified()) {
-                _dirtyCount ++;
-                if (bean.getPapersType() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type = ?");
-                }
-            }
-            if (bean.isPapersNumModified()) {
-                _dirtyCount ++;
-                if (bean.getPapersNum() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isPhotoIdModified()) {
-                _dirtyCount ++;
-                if (bean.getPhotoId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isFaceMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getFaceMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 ").append(sqlEqualsOperation).append("?");
-                }
-            }
-            if (bean.isExpiryDateModified()) {
-                _dirtyCount ++;
-                if (bean.getExpiryDate() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date = ?");
-                }
-            }
-            if (bean.isCreateTimeModified()) {
-                _dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
-                }
-            }
-            if (bean.isUpdateTimeModified()) {
-                _dirtyCount ++;
-                if (bean.getUpdateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time = ?");
-                }
-            }
-        }
-        finally
-        {
-            sqlEqualsOperation = null;
-        }
-        return _dirtyCount;
-    }
-
-    /**
-     * fill the given prepared statement with the bean values and a search type
-     * @param ps the PreparedStatement that will be filled
-     * @param bean the bean to use for creating the where clausis
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
-     * @throws DAOException
-     */
-    protected int fillPreparedStatement(PreparedStatement ps, PersonBean bean, int searchType) throws DAOException
-    {
-        if (bean == null) {
-            return 0;
-        }
-        int _dirtyCount = 0;
-        try
-        {
-            if (bean.isIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
-            }
-            if (bean.isGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
-                if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
-            }
-            if (bean.isNameModified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
-                        if (bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isSexModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
-                if (bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getSex()); }
-            }
-            if (bean.isBirthdateModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getBirthdate() + "]");
-                if (bean.getBirthdate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
-            }
-            if (bean.isPapersTypeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
-                if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
-            }
-            if (bean.isPapersNumModified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "]");
-                        if (bean.getPapersNum() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "%]");
-                        if ( bean.getPapersNum()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPapersNum() + "]");
-                        if ( bean.getPapersNum() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPapersNum()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "%]");
-                        if (bean.getPapersNum()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getPapersNum() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isPhotoIdModified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPhotoId() + "]");
-                        if (bean.getPhotoId() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getPhotoId()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPhotoId() + "%]");
-                        if ( bean.getPhotoId()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPhotoId() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getPhotoId() + "]");
-                        if ( bean.getPhotoId() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getPhotoId()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPhotoId() + "%]");
-                        if (bean.getPhotoId()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getPhotoId() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isFaceMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "]");
-                        if (bean.getFaceMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "%]");
-                        if ( bean.getFaceMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFaceMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFaceMd5() + "]");
-                        if ( bean.getFaceMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFaceMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "%]");
-                        if (bean.getFaceMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFaceMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.isExpiryDateModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExpiryDate() + "]");
-                if (bean.getExpiryDate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
-            }
-            if (bean.isCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
-            }
-            if (bean.isUpdateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
-                if (bean.getUpdateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        return _dirtyCount;
-    }
-
-
-    //_____________________________________________________________________
-    //
-    // DECODE RESULT SET
-    //_____________________________________________________________________
-
-    /**
-     * decode a resultset in an array of PersonBean objects
-     *
-     * @param rs the resultset to decode
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting PersonBean table
-     * @throws DAOException
-     */
-    //28
-    public PersonBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-    	return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new PersonBean[0]);
-    }
-
-    /**
-     * decode a resultset in a list of PersonBean objects
-     *
-     * @param rs the resultset to decode
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting PersonBean table
-     * @throws DAOException
-     */
-    //28-1
-    public List<PersonBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        actionOnResultSet(rs, fieldList, numRows, numRows, action);
-        return action.getList();
-    }
-    /** decode a resultset and call action
-     * @param rs the resultset to decode
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action interface obj for do something
-     * @return the count dealt by action  
-     * @throws DAOException
-     * @throws IllegalArgumentException
-     */
-    //28-2
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action action) throws DAOException{
         try{
-            int count = 0;
-            if(0!=numRows){
-                if( startRow<1 )
-                    throw new IllegalArgumentException("invalid argument:startRow (must >=1)");
-                if( null==action || null==rs )
-                    throw new IllegalArgumentException("invalid argument:action OR rs (must not be null)");                    
-                for(;startRow>1&&rs.next();--startRow);//skip to last of startRow
-                if (fieldList == null) {
-                    if(numRows<0)
-                        for(;rs.next();++count)
-                            action.call(decodeRow(rs, action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
-                            action.call(decodeRow(rs, action.getBean()));
-                }else {
-                    if(numRows<0)
-                        for(;rs.next();++count)
-                            action.call(decodeRow(rs, fieldList,action.getBean()));
-                    else
-                        for(;rs.next() && count<numRows;++count)
-                            action.call(decodeRow(rs, fieldList,action.getBean()));
-                }
-            }
-            return count;
-        }catch(DAOException e){
-            throw e;
-        }catch(SQLException e){
-            throw new DataAccessException(e);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
         }
-    }
-
-    /**
-     * Transforms a ResultSet iterating on the fl_person on a PersonBean bean.
-     *
-     * @param rs the ResultSet to be transformed
-     * @return bean resulting PersonBean bean
-     * @throws DAOException
-     */
-    //29
-    public PersonBean decodeRow(ResultSet rs,PersonBean bean) throws DAOException
-    {
-        if(null==bean)
-            bean = this.createBean();
-        try
+        catch(DAOException e)
         {
-            bean.setId(Manager.getInteger(rs, 1));
-            bean.setGroupId(Manager.getInteger(rs, 2));
-            bean.setName(rs.getString(3));
-            bean.setSex(Manager.getInteger(rs, 4));
-            bean.setBirthdate(rs.getDate(5));
-            bean.setPapersType(Manager.getInteger(rs, 6));
-            bean.setPapersNum(rs.getString(7));
-            bean.setPhotoId(rs.getString(8));
-            bean.setFaceMd5(rs.getString(9));
-            bean.setExpiryDate(rs.getDate(10));
-            bean.setCreateTime(rs.getTimestamp(11));
-            bean.setUpdateTime(rs.getTimestamp(12));
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        bean.isNew(false);
-        bean.resetIsModified();
-
-        return bean;
-    }
-
-    /**
-     * Transforms a ResultSet iterating on the fl_person table on a PersonBean bean according to a list of fields.
-     *
-     * @param rs the ResultSet to be transformed
-     * @param fieldList table of the field's associated constants
-     * @return bean resulting PersonBean bean
-     * @throws DAOException
-     */
-    //30
-    public PersonBean decodeRow(ResultSet rs, int[] fieldList,PersonBean bean) throws DAOException
-    {
-        if(null==bean)
-            bean = this.createBean();
-        int pos = 0;
-        try
-        {
-            for(int i = 0; i < fieldList.length; i++)
-            {
-                switch(fieldList[i])
-                {
-                    case ID_ID:
-                        ++pos;
-                        bean.setId(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_GROUP_ID:
-                        ++pos;
-                        bean.setGroupId(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_NAME:
-                        ++pos;
-                        bean.setName(rs.getString(pos));
-                        break;
-                    case ID_SEX:
-                        ++pos;
-                        bean.setSex(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_BIRTHDATE:
-                        ++pos;
-                        bean.setBirthdate(rs.getDate(pos));
-                        break;
-                    case ID_PAPERS_TYPE:
-                        ++pos;
-                        bean.setPapersType(Manager.getInteger(rs, pos));
-                        break;
-                    case ID_PAPERS_NUM:
-                        ++pos;
-                        bean.setPapersNum(rs.getString(pos));
-                        break;
-                    case ID_PHOTO_ID:
-                        ++pos;
-                        bean.setPhotoId(rs.getString(pos));
-                        break;
-                    case ID_FACE_MD5:
-                        ++pos;
-                        bean.setFaceMd5(rs.getString(pos));
-                        break;
-                    case ID_EXPIRY_DATE:
-                        ++pos;
-                        bean.setExpiryDate(rs.getDate(pos));
-                        break;
-                    case ID_CREATE_TIME:
-                        ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
-                        break;
-                    case ID_UPDATE_TIME:
-                        ++pos;
-                        bean.setUpdateTime(rs.getTimestamp(pos));
-                        break;
-                    default:
-                        throw new DAOException("Unknown field id " + fieldList[i]);
-                }
-            }
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-        bean.isNew(false);
-        bean.resetIsModified();
-
-        return bean;
-    }
-
-    /**
-     * Transforms a ResultSet iterating on the fl_person on a PersonBean bean using the names of the columns
-     *
-     * @param rs the ResultSet to be transformed
-     * @return bean resulting PersonBean bean
-     * @throws DAOException
-     */
-    //31
-    public PersonBean metaDataDecodeRow(ResultSet rs) throws DAOException
-    {
-        PersonBean bean = this.createBean();
-        try
-        {
-            bean.setId(Manager.getInteger(rs, "id"));
-            bean.setGroupId(Manager.getInteger(rs, "group_id"));
-            bean.setName(rs.getString("name"));
-            bean.setSex(Manager.getInteger(rs, "sex"));
-            bean.setBirthdate(rs.getDate("birthdate"));
-            bean.setPapersType(Manager.getInteger(rs, "papers_type"));
-            bean.setPapersNum(rs.getString("papers_num"));
-            bean.setPhotoId(rs.getString("photo_id"));
-            bean.setFaceMd5(rs.getString("face_md5"));
-            bean.setExpiryDate(rs.getDate("expiry_date"));
-            bean.setCreateTime(rs.getTimestamp("create_time"));
-            bean.setUpdateTime(rs.getTimestamp("update_time"));
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-
-        bean.isNew(false);
-        bean.resetIsModified();
-
-        return bean;
-    }
-
-    //////////////////////////////////////
-    // PREPARED STATEMENT LOADER
-    //////////////////////////////////////
-
-    /**
-     * Loads all the elements using a prepared statement.
-     *
-     * @param ps the PreparedStatement to be used
-     * @return an array of PersonBean
-     * @throws DAOException
-     */
-    //32
-    public PersonBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
-    {
-        return this.loadByPreparedStatement(ps, null);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement.
-     *
-     * @param ps the PreparedStatement to be used
-     * @return an array of PersonBean
-     * @throws DAOException
-     */
-    //32
-    public List<PersonBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
-    {
-        return this.loadByPreparedStatementAsList(ps, null);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param fieldList table of the field's associated constants
-     * @return an array of PersonBean
-     * @throws DAOException
-     */
-    //33
-    public PersonBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
-    {
-        return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new PersonBean[0]);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param fieldList table of the field's associated constants
-     * @return an array of PersonBean
-     * @throws DAOException
-     */
-    //33
-    public List<PersonBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
-    { 
-        return loadByPreparedStatementAsList(ps,fieldList,1,-1);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
-     * and specifying the start row and the number of rows.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
-     * @return an array of PersonBean
-     * @throws DAOException
-     */
-    //34
-    public PersonBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new PersonBean[0]);
-    }
-
-    /**
-     * Loads all the elements using a prepared statement specifying a list of fields to be retrieved,
-     * and specifying the start row and the number of rows.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
-     * @return an array of PersonBean
-     * @throws DAOException
-     */
-    //34-1
-    public List<PersonBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
-        return action.getList();
-    }
-    /**
-     * Loads each element using a prepared statement specifying a list of fields to be retrieved,
-     * and specifying the start row and the number of rows 
-     * and dealt by action.
-     *
-     * @param ps the PreparedStatement to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param fieldList table of the field's associated constants
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */     
-    //34-2
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        ResultSet rs =  null;
-        try {
-            ps.setFetchSize(100);
-            rs = ps.executeQuery();
-            return this.actionOnResultSet(rs, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
-            throw e;
-        } catch (SQLException e) {
-            throw new DataAccessException(e);
-        } finally {
-            this.getManager().close(rs);
+            throw new RuntimeException(e);
         }
     }
+
+
     //_____________________________________________________________________
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlPersonListener listener = null;
 
     /**
-     * Registers a unique FlPersonListener listener.
+     * Registers a unique PersonListener listener.
      */
     //35
     public void registerListener(TableListener listener)
     {
-        this.listener = (FlPersonListener)listener;
+        this.nativeManager.registerListener(this.toNative((PersonListener)listener));
     }
 
-    /**
-     * Before the save of the PersonBean bean.
-     *
-     * @param bean the PersonBean bean to be saved
-     */
-    //36
-    private void beforeInsert(PersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeInsert(bean);
-        }
-    }
+    private FlPersonListener toNative(final PersonListener listener) {
+		return null == listener ?null:new FlPersonListener (){
 
-    /**
-     * After the save of the PersonBean bean.
-     *
-     * @param bean the PersonBean bean to be saved
-     */
-    //37
-    private void afterInsert(PersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterInsert(bean);
-        }
-    }
+			@Override
+			public void beforeInsert(FlPersonBean bean) throws DAOException {
+				listener.beforeInsert(PersonManager.this.beanConverter.fromNative(bean));				
+			}
 
-    /**
-     * Before the update of the PersonBean bean.
-     *
-     * @param bean the PersonBean bean to be updated
-     */
-    //38
-    private void beforeUpdate(PersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeUpdate(bean);
-        }
-    }
+			@Override
+			public void afterInsert(FlDeviceBean bean) throws DAOException {
+				listener.afterInsert(PersonManager.this.beanConverter.fromNative(bean));
+				
+			}
 
-    /**
-     * After the update of the PersonBean bean.
-     *
-     * @param bean the PersonBean bean to be updated
-     */
-    //39
-    private void afterUpdate(PersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterUpdate(bean);
-        }
-    }
+			@Override
+			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+				listener.beforeUpdate(PersonManager.this.beanConverter.fromNative(bean));
+				
+			}
 
-    /**
-     * Before the delete of the PersonBean bean.
-     *
-     * @param bean the PersonBean bean to be deleted
-     */
-    private void beforeDelete(PersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeDelete(bean);
-        }
-    }
+			@Override
+			public void afterUpdate(FlDeviceBean bean) throws DAOException {
+				listener.afterUpdate(PersonManager.this.beanConverter.fromNative(bean));
+			}
 
-    /**
-     * After the delete of the PersonBean bean.
-     *
-     * @param bean the PersonBean bean to be deleted
-     */
-    private void afterDelete(PersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterDelete(bean);
-        }
-    }
+			@Override
+			public void beforeDelete(FlDeviceBean bean) throws DAOException {
+				listener.beforeDelete(PersonManager.this.beanConverter.fromNative(bean));
+			}
+
+			@Override
+			public void afterDelete(FlDeviceBean bean) throws DAOException {
+				listener.afterDelete(PersonManager.this.beanConverter.fromNative(bean));
+			}};
+	}
 
     //_____________________________________________________________________
     //
     // UTILS
     //_____________________________________________________________________
 
-    /**
-     * Retrieves the manager object used to get connections.
-     *
-     * @return the manager used
-     */
-    //40
-    private Manager getManager()
-    {
-        return Manager.getInstance();
-    }
 
-    /**
-     * Frees the connection.
-     *
-     * @param c the connection to release
-     */
-    //41
-    private void freeConnection(Connection c)
-    {
-        this.getManager().releaseConnection(c); // back to pool
-    }
-
-    /**
-     * Gets the connection.
-     */
-    //42
-    private Connection getConnection() throws DAOException
-    {
-        try
-        {
-            return this.getManager().getConnection();
-        }
-        catch(SQLException e)
-        {
-            throw new DataAccessException(e);
-        }
-    }
     /**
      * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
      * return false if @{code column} is null or empty 
@@ -3075,26 +1862,6 @@ public class PersonManager
         for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
         return false;
     }
-    /**
-     * Fill the given prepared statement with the values in argList
-     * @param ps the PreparedStatement that will be filled
-     * @param argList the arguments to use fill given prepared statement
-     * @throws DAOException
-     */
-    private void fillPrepareStatement(PreparedStatement ps, Object[] argList) throws DAOException{
-        try {
-            if (!(argList == null || ps == null)) {
-                for (int i = 0; i < argList.length; i++) {
-                    if (argList[i].getClass().equals(byte[].class)) {
-                        ps.setBytes(i + 1, (byte[]) argList[i]);
-                    } else
-                        ps.setObject(i + 1, argList[i]);
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-    }
     
     /**
      * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
@@ -3102,9 +1869,8 @@ public class PersonManager
      * @param argList the arguments to use fill given prepared statement,may be null
      * @param fieldList table of the field's associated constants
      * @return an array of PersonBean
-     * @throws DAOException 
      */
-    public PersonBean[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException {
+    public PersonBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new PersonBean[0]);
     }
     /**
@@ -3113,109 +1879,50 @@ public class PersonManager
      * @param argList the arguments to use fill given prepared statement,may be null
      * @param fieldList table of the field's associated constants
      * @return an list of PersonBean
-     * @throws DAOException
      */
-    public List<PersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException{
-        ListAction action = new ListAction();
-        loadBySqlForAction(sql,argList,fieldList,1,-1,action);
-        return action.getList();
-    }
-    /**
-     * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
-        PreparedStatement ps = null;
-        Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
-        try {
-            connection = this.getConnection();
-            ps = connection.prepareStatement(sql,
-                    ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_READ_ONLY);
-            fillPrepareStatement(ps, argList);
-            return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
-        } catch (DAOException e) {
-            throw e;
-        }catch (SQLException e) {
-            throw new DataAccessException(e);
-        } finally {
-            this.getManager().close(ps);
-            this.freeConnection(connection);
+    public List<PersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+        try{
+            this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
-    private String createSqlString(int[] fieldList,String where){
-        StringBuffer sql = new StringBuffer(128);
-        if(fieldList == null) {
-            sql.append("SELECT ").append(ALL_FIELDS);
-        } else{
-            sql.append("SELECT ");
-            for(int i = 0; i < fieldList.length; ++i){
-                if(i != 0) {
-                    sql.append(",");
-                }
-                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
-            }            
+
+    
+    //@Override
+    public <T>T runAsTransaction(Callable<T> fun) {
+        try{
+            return this.nativeManager.runAsTransaction(fun);
         }
-        sql.append(" FROM fl_person ");
-        if(null!=where)
-            sql.append(where);
-        return sql.toString();
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
-    class ListAction implements Action {
-        final List<PersonBean> list;
-        protected ListAction(List<PersonBean> list) {
-            if(null==list)
-                throw new IllegalArgumentException("list must not be null");
-            this.list = list;
+    //@Override
+    public void runAsTransaction(final Runnable fun){
+        try{
+            this.nativeManager.runAsTransaction(fun);
         }
-
-        protected ListAction() {
-            list=new ArrayList<PersonBean>();
-        }
-
-        public List<PersonBean> getList() {
-            return list;
-        }
-
-        @Override
-        public void call(PersonBean bean) {
-            list.add(bean);
-        }
-
-        @Override
-        public PersonBean getBean() {
-            return null;
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
         }
     }
-    public static abstract class NoListAction implements Action {
-        SoftReference<PersonBean> sf=new SoftReference<PersonBean>(new PersonBean());
-        @Override
-        public final PersonBean getBean() {
-            PersonBean bean = sf.get();
-            if(null==bean){
-                sf=new SoftReference<PersonBean>(bean=new PersonBean());
+    private FlPersonManager.Action toNative(final Action action){
+        return new FlPersonManager.Action(){
+
+            @Override
+            public void call(FlPersonBean bean) {
+                action.call(PersonManager.this.beanConverter.fromNative(bean));
             }
-            return bean.clean();
-        }
-    }
-    
-    @Override
-    public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
-        return Manager.getInstance().runAsTransaction(fun);
-    }
-    
-    @Override
-    public void runAsTransaction(final Runnable fun) throws DAOException{
-        Manager.getInstance().runAsTransaction(fun);
-    }
 
+            @Override
+            public FlPersonBean getBean() {
+                return (FlPersonBean) PersonManager.this.beanConverter.toNative(action.getBean());
+            }};
+    }
 }
