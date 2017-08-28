@@ -17,6 +17,11 @@ import net.gdface.facelog.dborm.face.FlFaceLightBean;
 import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.log.FlLogLightBean;
 
+/**
+ * converter between general type({@code <L>}) and native type ({@code <R>}) for  all Beans
+ * @author guyadong
+ *
+ */
 public interface IDbConverter {
     public abstract IBeanConverter<DeviceBean, FlDeviceBean> getDeviceBeanConverter();
     public abstract IBeanConverter<FaceBean, FlFaceBean> getFaceBeanConverter();
@@ -29,20 +34,20 @@ public interface IDbConverter {
     public abstract IBeanConverter<LogLightBean, FlLogLightBean> getLogLightBeanConverter();
 
     /**
-     * @param <G> general type
-     * @param <N> native type
-     * @param gClass
-     * @param nClass
+     * @param <L> general type
+     * @param <R> native type
+     * @param lClass
+     * @param rClass
      * @return
      */
-    public abstract<G, N> IBeanConverter<G,N> getBeanConverter(Class<G> gClass,Class<N> nClass);
+    public abstract<L, R> IBeanConverter<L,R> getBeanConverter(Class<L> lClass,Class<R> rClass);
     /**
-     * @param <G> general type
-     * @param <N> native type
-     * @param gClass
-     * @param nClass
+     * @param <L> general type
+     * @param <R> native type
+     * @param lClass
+     * @param rClass
      * @param converter
      */
-    public abstract <G, N> void setBeanConverter(Class<G> gClass, Class<N> nClass, IBeanConverter<G,N>converter);
+    public abstract <L, R> void setBeanConverter(Class<L> lClass, Class<R> rClass, IBeanConverter<L,R>converter);
 
 }

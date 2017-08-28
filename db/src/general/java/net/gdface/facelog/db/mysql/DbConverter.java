@@ -20,12 +20,16 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.FaceLightBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.LogLightBean;
-
+/**
+ * {@link IDbConverter} implemention for MySQL
+ * @author guyadong
+ *
+ */
 public class DbConverter implements IDbConverter {
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> _converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
         @Override
-        public DeviceBean fromNative(net.gdface.facelog.dborm.device.FlDeviceBean bean) {
+        public DeviceBean fromRight(net.gdface.facelog.dborm.device.FlDeviceBean bean) {
             DeviceBean generalBean= new DeviceBean();
             generalBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -46,7 +50,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.device.FlDeviceBean toNative(DeviceBean bean) {
+        public net.gdface.facelog.dborm.device.FlDeviceBean toRight(DeviceBean bean) {
             net.gdface.facelog.dborm.device.FlDeviceBean nativeBean= new net.gdface.facelog.dborm.device.FlDeviceBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -71,7 +75,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> _converterFaceBean=new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean>(){
 
         @Override
-        public FaceBean fromNative(net.gdface.facelog.dborm.face.FlFaceBean bean) {
+        public FaceBean fromRight(net.gdface.facelog.dborm.face.FlFaceBean bean) {
             FaceBean generalBean= new FaceBean();
             generalBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -120,7 +124,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.face.FlFaceBean toNative(FaceBean bean) {
+        public net.gdface.facelog.dborm.face.FlFaceBean toRight(FaceBean bean) {
             net.gdface.facelog.dborm.face.FlFaceBean nativeBean= new net.gdface.facelog.dborm.face.FlFaceBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -172,7 +176,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> _converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.dborm.image.FlImageBean>(){
 
         @Override
-        public ImageBean fromNative(net.gdface.facelog.dborm.image.FlImageBean bean) {
+        public ImageBean fromRight(net.gdface.facelog.dborm.image.FlImageBean bean) {
             ImageBean generalBean= new ImageBean();
             generalBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -195,7 +199,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.image.FlImageBean toNative(ImageBean bean) {
+        public net.gdface.facelog.dborm.image.FlImageBean toRight(ImageBean bean) {
             net.gdface.facelog.dborm.image.FlImageBean nativeBean= new net.gdface.facelog.dborm.image.FlImageBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -220,7 +224,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> _converterLogBean=new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.dborm.log.FlLogBean>(){
 
         @Override
-        public LogBean fromNative(net.gdface.facelog.dborm.log.FlLogBean bean) {
+        public LogBean fromRight(net.gdface.facelog.dborm.log.FlLogBean bean) {
             LogBean generalBean= new LogBean();
             generalBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -243,7 +247,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.log.FlLogBean toNative(LogBean bean) {
+        public net.gdface.facelog.dborm.log.FlLogBean toRight(LogBean bean) {
             net.gdface.facelog.dborm.log.FlLogBean nativeBean= new net.gdface.facelog.dborm.log.FlLogBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -269,7 +273,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> _converterPersonBean=new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean>(){
 
         @Override
-        public PersonBean fromNative(net.gdface.facelog.dborm.person.FlPersonBean bean) {
+        public PersonBean fromRight(net.gdface.facelog.dborm.person.FlPersonBean bean) {
             PersonBean generalBean= new PersonBean();
             generalBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -300,7 +304,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.person.FlPersonBean toNative(PersonBean bean) {
+        public net.gdface.facelog.dborm.person.FlPersonBean toRight(PersonBean bean) {
             net.gdface.facelog.dborm.person.FlPersonBean nativeBean= new net.gdface.facelog.dborm.person.FlPersonBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -335,7 +339,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> _converterStoreBean=new IBeanConverter.AbstractHandle<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean>(){
 
         @Override
-        public StoreBean fromNative(net.gdface.facelog.dborm.image.FlStoreBean bean) {
+        public StoreBean fromRight(net.gdface.facelog.dborm.image.FlStoreBean bean) {
             StoreBean generalBean= new StoreBean();
             generalBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -348,7 +352,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.image.FlStoreBean toNative(StoreBean bean) {
+        public net.gdface.facelog.dborm.image.FlStoreBean toRight(StoreBean bean) {
             net.gdface.facelog.dborm.image.FlStoreBean nativeBean= new net.gdface.facelog.dborm.image.FlStoreBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -363,7 +367,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean> _converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean>(){
 
         @Override
-        public FaceLightBean fromNative(net.gdface.facelog.dborm.face.FlFaceLightBean bean) {
+        public FaceLightBean fromRight(net.gdface.facelog.dborm.face.FlFaceLightBean bean) {
             FaceLightBean generalBean= new FaceLightBean();
             generalBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -410,7 +414,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.face.FlFaceLightBean toNative(FaceLightBean bean) {
+        public net.gdface.facelog.dborm.face.FlFaceLightBean toRight(FaceLightBean bean) {
             net.gdface.facelog.dborm.face.FlFaceLightBean nativeBean= new net.gdface.facelog.dborm.face.FlFaceLightBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -460,7 +464,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> _converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
 
         @Override
-        public FeatureBean fromNative(net.gdface.facelog.dborm.face.FlFeatureBean bean) {
+        public FeatureBean fromRight(net.gdface.facelog.dborm.face.FlFeatureBean bean) {
             FeatureBean generalBean= new FeatureBean();
             generalBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -477,7 +481,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.face.FlFeatureBean toNative(FeatureBean bean) {
+        public net.gdface.facelog.dborm.face.FlFeatureBean toRight(FeatureBean bean) {
             net.gdface.facelog.dborm.face.FlFeatureBean nativeBean= new net.gdface.facelog.dborm.face.FlFeatureBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getMd5() != null)
@@ -497,7 +501,7 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean> _converterLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean>(){
 
         @Override
-        public LogLightBean fromNative(net.gdface.facelog.dborm.log.FlLogLightBean bean) {
+        public LogLightBean fromRight(net.gdface.facelog.dborm.log.FlLogLightBean bean) {
             LogLightBean generalBean= new LogLightBean();
             generalBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -516,7 +520,7 @@ public class DbConverter implements IDbConverter {
         }
 
         @Override
-        public net.gdface.facelog.dborm.log.FlLogLightBean toNative(LogLightBean bean) {
+        public net.gdface.facelog.dborm.log.FlLogLightBean toRight(LogLightBean bean) {
             net.gdface.facelog.dborm.log.FlLogLightBean nativeBean= new net.gdface.facelog.dborm.log.FlLogLightBean();
             nativeBean.isNew(bean.isNew());
             if(bean.getId() != null)
@@ -553,28 +557,28 @@ public class DbConverter implements IDbConverter {
             add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
         }};
     
-    private static final <G,N> int getIndex(Class<G> gClass,Class<N> nClass){
+    private static final <L,R> int getIndex(Class<L> lClass,Class<R> rClass){
             Vector<Integer>find= new Vector<Integer>();
-            if(null!=gClass && null != nClass){
+            if(null!=lClass && null != rClass){
                 for(int i=0;i<converters.size();++i){
                     Object[] converter = converters.get(i);
-                    if(((Class<?>)converter[0]).isAssignableFrom(gClass) 
-                            && ((Class<?>)converter[1]).isAssignableFrom(nClass)){
+                    if(((Class<?>)converter[0]).isAssignableFrom(lClass) 
+                            && ((Class<?>)converter[1]).isAssignableFrom(rClass)){
                         return i;
                     }
                 }
-            }else if(null != gClass){
+            }else if(null != lClass){
                 for(int i=0;i<converters.size();++i){
                     Object[] converter = converters.get(i);
-                    if(((Class<?>)converter[0]).isAssignableFrom(gClass) 
+                    if(((Class<?>)converter[0]).isAssignableFrom(lClass) 
                             ){
                         find.add(i);
                     }
                 }
-            }else if(null != nClass){
+            }else if(null != rClass){
                 for(int i=0;i<converters.size();++i){
                     Object[] converter = converters.get(i);
-                    if(((Class<?>)converter[1]).isAssignableFrom(nClass)){
+                    if(((Class<?>)converter[1]).isAssignableFrom(rClass)){
                         find.add(i);
                     }
                 }
@@ -584,22 +588,22 @@ public class DbConverter implements IDbConverter {
         
     @Override
     @SuppressWarnings("unchecked")
-    public <G,N>IBeanConverter<G,N>getBeanConverter(Class<G> gClass,Class<N> nClass){
-        int index = getIndex(gClass, nClass);
+    public <L,R>IBeanConverter<L,R>getBeanConverter(Class<L> lClass,Class<R> rClass){
+        int index = getIndex(lClass, rClass);
         if(index<0)
             throw new IllegalArgumentException(
                     String.format("not found converter for (%s,%s)"
-                            ,null==gClass?"null":gClass.getSimpleName()
-                            ,null==nClass?"null":nClass.getSimpleName()));
-        return (IBeanConverter<G, N>) converters.get(index)[2];
+                            ,null==lClass?"null":lClass.getSimpleName()
+                            ,null==rClass?"null":rClass.getSimpleName()));
+        return (IBeanConverter<L, R>) converters.get(index)[2];
     }
     
     @Override
-    public synchronized <G,N>void setBeanConverter(Class<G> gClass,Class<N> nClass,IBeanConverter<G,N>converter){
-        if(null == gClass || null == nClass || null == converter)
+    public synchronized <L,R>void setBeanConverter(Class<L> lClass,Class<R> rClass,IBeanConverter<L,R>converter){
+        if(null == lClass || null == rClass || null == converter)
             throw new NullPointerException();
-        Object[] c = new Object[]{gClass,nClass,converter};
-        int index = getIndex(gClass, nClass);
+        Object[] c = new Object[]{lClass,rClass,converter};
+        int index = getIndex(lClass, rClass);
         if(index<0){
             converters.add(c);
         }else{

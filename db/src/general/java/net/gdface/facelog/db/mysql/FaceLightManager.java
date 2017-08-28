@@ -366,7 +366,7 @@ public class FaceLightManager
     public FaceLightBean[] loadAll()
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplate(null));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
         }
         catch(DAOException e)
         {
@@ -558,7 +558,7 @@ public class FaceLightManager
     public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -581,7 +581,7 @@ public class FaceLightManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -649,7 +649,7 @@ public class FaceLightManager
     public FaceLightBean insert(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -667,7 +667,7 @@ public class FaceLightManager
     public FaceLightBean update(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -851,7 +851,7 @@ public class FaceLightManager
     public FaceLightBean loadUniqueUsingTemplate(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -964,7 +964,7 @@ public class FaceLightManager
     public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -985,7 +985,7 @@ public class FaceLightManager
     public int loadUsingTemplate(FaceLightBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -1002,7 +1002,7 @@ public class FaceLightManager
     public int deleteUsingTemplate(FaceLightBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
         }
         catch(DAOException e)
         {
@@ -1086,7 +1086,7 @@ public class FaceLightManager
     public int countUsingTemplate(FaceLightBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {
@@ -1106,42 +1106,42 @@ public class FaceLightManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toNative((FaceLightListener)listener));
+        this.nativeManager.registerListener(this.toRight((FaceLightListener)listener));
     }
 
-    private FlFaceLightListener toNative(final FaceLightListener listener) {
+    private FlFaceLightListener toRight(final FaceLightListener listener) {
         return null == listener ?null:new FlFaceLightListener (){
 
             @Override
             public void beforeInsert(FlFaceLightBean bean) throws DAOException {
-                listener.beforeInsert(FaceLightManager.this.beanConverter.fromNative(bean));                
+                listener.beforeInsert(FaceLightManager.this.beanConverter.fromRight(bean));                
             }
 
             @Override
             public void afterInsert(FlFaceLightBean bean) throws DAOException {
-                listener.afterInsert(FaceLightManager.this.beanConverter.fromNative(bean));
+                listener.afterInsert(FaceLightManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void beforeUpdate(FlFaceLightBean bean) throws DAOException {
-                listener.beforeUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
+                listener.beforeUpdate(FaceLightManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void afterUpdate(FlFaceLightBean bean) throws DAOException {
-                listener.afterUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
+                listener.afterUpdate(FaceLightManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void beforeDelete(FlFaceLightBean bean) throws DAOException {
-                listener.beforeDelete(FaceLightManager.this.beanConverter.fromNative(bean));
+                listener.beforeDelete(FaceLightManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void afterDelete(FlFaceLightBean bean) throws DAOException {
-                listener.afterDelete(FaceLightManager.this.beanConverter.fromNative(bean));
+                listener.afterDelete(FaceLightManager.this.beanConverter.fromRight(bean));
             }};
     }
 
@@ -1183,7 +1183,7 @@ public class FaceLightManager
      */
     public List<FaceLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {
@@ -1213,19 +1213,19 @@ public class FaceLightManager
             throw new RuntimeException(e);
         }
     }
-    private FlFaceLightManager.Action toNative(final Action action){
+    private FlFaceLightManager.Action toRight(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFaceLightManager.Action(){
 
             @Override
             public void call(FlFaceLightBean bean) {
-                action.call(FaceLightManager.this.beanConverter.fromNative(bean));
+                action.call(FaceLightManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public FlFaceLightBean getBean() {
-                return  FaceLightManager.this.beanConverter.toNative(action.getBean());
+                return  FaceLightManager.this.beanConverter.toRight(action.getBean());
             }};
     }
 }

@@ -255,7 +255,7 @@ public class PersonManager
     public PersonBean loadByPrimaryKey(Integer id)
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.loadByPrimaryKey(id));
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(id));
         }
         catch(DAOException e)
         {
@@ -275,7 +275,7 @@ public class PersonManager
     public PersonBean loadByPrimaryKey(PersonBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByPrimaryKey(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -341,7 +341,7 @@ public class PersonManager
     public int deleteByPrimaryKey(PersonBean bean)
     {
         try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toNative(bean));
+            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
         }
         catch(DAOException e)
         {
@@ -366,7 +366,7 @@ public class PersonManager
     //@Override
     public <T> T[] getImportedBeans(PersonBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeans( this.beanConverter.toNative(bean),fkName);
+            return nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName);
         }
         catch(DAOException e)
         {
@@ -387,7 +387,7 @@ public class PersonManager
     //@Override
     public <T> List<T> getImportedBeansAsList(PersonBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeansAsList( this.beanConverter.toNative(bean),fkName);
+            return nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName);
         }
         catch(DAOException e)
         {
@@ -410,7 +410,7 @@ public class PersonManager
     //@Override
     public <T> T[] setImportedBeans(PersonBean bean,T[] importedBeans,String fkName){
         try {
-            return nativeManager.setImportedBeans( this.beanConverter.toNative(bean),importedBeans,fkName);
+            return nativeManager.setImportedBeans( this.beanConverter.toRight(bean),importedBeans,fkName);
         }
         catch(DAOException e)
         {
@@ -433,7 +433,7 @@ public class PersonManager
     //@Override
     public <T extends Collection<PersonBean>> T setImportedBeans(PersonBean bean,T importedBeans,String fkName){
         try {
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromRight(nativeManager.setImportedBeans( this.beanConverter.toRight(bean),this.beanConverter.toRight(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -455,7 +455,7 @@ public class PersonManager
     public FaceBean[] getFlFaceBeansByPersonId(PersonBean bean)
     {
         try {
-            return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.getFlFaceBeansByPersonId( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByPersonId( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -473,7 +473,7 @@ public class PersonManager
     public List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean)
     {
         try {
-            return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.getFlFaceBeansByPersonIdAsList( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -493,9 +493,9 @@ public class PersonManager
     public FaceBean[] setFlFaceBeansByPersonId(PersonBean bean , FaceBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.setFlFaceBeansByPersonId(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
+            return this.dbConverter.getFaceBeanConverter().fromRight(this.nativeManager.setFlFaceBeansByPersonId(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getFaceBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -517,9 +517,9 @@ public class PersonManager
     public <T extends Collection<FaceBean>> T setFlFaceBeansByPersonId(PersonBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.setFlFaceBeansByPersonId(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
+            return (T) this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.setFlFaceBeansByPersonId(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getFaceBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -538,7 +538,7 @@ public class PersonManager
     public LogBean[] getFlLogBeansByPersonId(PersonBean bean)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByPersonId( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByPersonId( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -556,7 +556,7 @@ public class PersonManager
     public List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByPersonIdAsList( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -576,9 +576,9 @@ public class PersonManager
     public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromNative(this.nativeManager.setFlLogBeansByPersonId(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getLogBeanConverter().toNative(importedBeans)
+            return this.dbConverter.getLogBeanConverter().fromRight(this.nativeManager.setFlLogBeansByPersonId(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -600,9 +600,9 @@ public class PersonManager
     public <T extends Collection<LogBean>> T setFlLogBeansByPersonId(PersonBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getLogBeanConverter().fromNative(nativeManager.setFlLogBeansByPersonId(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getLogBeanConverter().toNative(importedBeans)
+            return (T) this.dbConverter.getLogBeanConverter().fromRight(nativeManager.setFlLogBeansByPersonId(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -628,8 +628,8 @@ public class PersonManager
         , FaceBean[] impFlFacebyPersonId , LogBean[] impFlLogbyPersonId )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
-            , this.dbConverter.getImageBeanConverter().toNative(refFlImagebyPhotoId)             , this.dbConverter.getFaceBeanConverter().toNative(impFlFacebyPersonId)  , this.dbConverter.getLogBeanConverter().toNative(impFlLogbyPersonId)  ));
+            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
+            , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyPhotoId)             , this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyPersonId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId)  ));
         }
         catch(DAOException e)
         {
@@ -666,8 +666,8 @@ public class PersonManager
         , Collection<FaceBean> impFlFacebyPersonId , Collection<LogBean> impFlLogbyPersonId )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
-            , this.dbConverter.getImageBeanConverter().toNative(refFlImagebyPhotoId)             , this.dbConverter.getFaceBeanConverter().toNative(impFlFacebyPersonId)  , this.dbConverter.getLogBeanConverter().toNative(impFlLogbyPersonId)  ));
+            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
+            , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyPhotoId)             , this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyPersonId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId)  ));
         }
         catch(DAOException e)
         {
@@ -710,7 +710,7 @@ public class PersonManager
     //@Override
     public <T> T getReferencedBean(PersonBean bean,String fkName){
         try {
-            return this.nativeManager.getReferencedBean( this.beanConverter.toNative(bean), fkName);
+            return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
         catch(DAOException e)
         {
@@ -741,7 +741,7 @@ public class PersonManager
             IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromNative(this.nativeManager.setReferencedBean( this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
+            return (T) converter.fromRight(this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
         }
         catch(DAOException e)
         {
@@ -764,7 +764,7 @@ public class PersonManager
     public ImageBean getReferencedByPhotoId(PersonBean bean)
     {
         try{
-            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.getReferencedByPhotoId(this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.getReferencedByPhotoId(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -785,7 +785,7 @@ public class PersonManager
     public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet) throws DAOException
     {
         try{
-            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setReferencedByPhotoId(this.beanConverter.toNative(bean),this.dbConverter.getImageBeanConverter().toNative(beanToSet)));
+            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.setReferencedByPhotoId(this.beanConverter.toRight(bean),this.dbConverter.getImageBeanConverter().toRight(beanToSet)));
         }
         catch(DAOException e)
         {
@@ -806,7 +806,7 @@ public class PersonManager
     public PersonBean[] loadAll()
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplate(null));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
         }
         catch(DAOException e)
         {
@@ -998,7 +998,7 @@ public class PersonManager
     public List<PersonBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -1021,7 +1021,7 @@ public class PersonManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -1089,7 +1089,7 @@ public class PersonManager
     public PersonBean insert(PersonBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1107,7 +1107,7 @@ public class PersonManager
     public PersonBean update(PersonBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1291,7 +1291,7 @@ public class PersonManager
     public PersonBean loadUniqueUsingTemplate(PersonBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1404,7 +1404,7 @@ public class PersonManager
     public List<PersonBean> loadUsingTemplateAsList(PersonBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1425,7 +1425,7 @@ public class PersonManager
     public int loadUsingTemplate(PersonBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -1442,7 +1442,7 @@ public class PersonManager
     public int deleteUsingTemplate(PersonBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
         }
         catch(DAOException e)
         {
@@ -1465,7 +1465,7 @@ public class PersonManager
     public PersonBean loadByface_md5(String faceMd5)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByface_md5(faceMd5));
+            return this.beanConverter.fromRight(this.nativeManager.loadByface_md5(faceMd5));
         }
         catch(DAOException e)
         {
@@ -1500,7 +1500,7 @@ public class PersonManager
     public PersonBean loadBypapers_num(String papersNum)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadBypapers_num(papersNum));
+            return this.beanConverter.fromRight(this.nativeManager.loadBypapers_num(papersNum));
         }
         catch(DAOException e)
         {
@@ -1535,7 +1535,7 @@ public class PersonManager
     public PersonBean loadByphoto_id(String photoId)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByphoto_id(photoId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByphoto_id(photoId));
         }
         catch(DAOException e)
         {
@@ -1570,7 +1570,7 @@ public class PersonManager
     public PersonBean[] loadByexpiry_date(java.util.Date expiryDate)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByexpiry_date(expiryDate));
+            return this.beanConverter.fromRight(this.nativeManager.loadByexpiry_date(expiryDate));
         }
         catch(DAOException e)
         {
@@ -1587,7 +1587,7 @@ public class PersonManager
     public List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByexpiry_dateAsList(expiryDate));
+            return this.beanConverter.fromRight(this.nativeManager.loadByexpiry_dateAsList(expiryDate));
         }
         catch(DAOException e)
         {
@@ -1688,7 +1688,7 @@ public class PersonManager
     public int countUsingTemplate(PersonBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {
@@ -1708,42 +1708,42 @@ public class PersonManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toNative((PersonListener)listener));
+        this.nativeManager.registerListener(this.toRight((PersonListener)listener));
     }
 
-    private FlPersonListener toNative(final PersonListener listener) {
+    private FlPersonListener toRight(final PersonListener listener) {
         return null == listener ?null:new FlPersonListener (){
 
             @Override
             public void beforeInsert(FlPersonBean bean) throws DAOException {
-                listener.beforeInsert(PersonManager.this.beanConverter.fromNative(bean));                
+                listener.beforeInsert(PersonManager.this.beanConverter.fromRight(bean));                
             }
 
             @Override
             public void afterInsert(FlPersonBean bean) throws DAOException {
-                listener.afterInsert(PersonManager.this.beanConverter.fromNative(bean));
+                listener.afterInsert(PersonManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void beforeUpdate(FlPersonBean bean) throws DAOException {
-                listener.beforeUpdate(PersonManager.this.beanConverter.fromNative(bean));
+                listener.beforeUpdate(PersonManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void afterUpdate(FlPersonBean bean) throws DAOException {
-                listener.afterUpdate(PersonManager.this.beanConverter.fromNative(bean));
+                listener.afterUpdate(PersonManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void beforeDelete(FlPersonBean bean) throws DAOException {
-                listener.beforeDelete(PersonManager.this.beanConverter.fromNative(bean));
+                listener.beforeDelete(PersonManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void afterDelete(FlPersonBean bean) throws DAOException {
-                listener.afterDelete(PersonManager.this.beanConverter.fromNative(bean));
+                listener.afterDelete(PersonManager.this.beanConverter.fromRight(bean));
             }};
     }
 
@@ -1785,7 +1785,7 @@ public class PersonManager
      */
     public List<PersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {
@@ -1815,19 +1815,19 @@ public class PersonManager
             throw new RuntimeException(e);
         }
     }
-    private FlPersonManager.Action toNative(final Action action){
+    private FlPersonManager.Action toRight(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlPersonManager.Action(){
 
             @Override
             public void call(FlPersonBean bean) {
-                action.call(PersonManager.this.beanConverter.fromNative(bean));
+                action.call(PersonManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public FlPersonBean getBean() {
-                return  PersonManager.this.beanConverter.toNative(action.getBean());
+                return  PersonManager.this.beanConverter.toRight(action.getBean());
             }};
     }
 }

@@ -172,7 +172,7 @@ public class StoreManager
     public StoreBean loadByPrimaryKey(String md5)
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.loadByPrimaryKey(md5));
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(md5));
         }
         catch(DAOException e)
         {
@@ -192,7 +192,7 @@ public class StoreManager
     public StoreBean loadByPrimaryKey(StoreBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByPrimaryKey(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -258,7 +258,7 @@ public class StoreManager
     public int deleteByPrimaryKey(StoreBean bean)
     {
         try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toNative(bean));
+            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
         }
         catch(DAOException e)
         {
@@ -283,7 +283,7 @@ public class StoreManager
     //@Override
     public <T> T[] getImportedBeans(StoreBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeans( this.beanConverter.toNative(bean),fkName);
+            return nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName);
         }
         catch(DAOException e)
         {
@@ -304,7 +304,7 @@ public class StoreManager
     //@Override
     public <T> List<T> getImportedBeansAsList(StoreBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeansAsList( this.beanConverter.toNative(bean),fkName);
+            return nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName);
         }
         catch(DAOException e)
         {
@@ -327,7 +327,7 @@ public class StoreManager
     //@Override
     public <T> T[] setImportedBeans(StoreBean bean,T[] importedBeans,String fkName){
         try {
-            return nativeManager.setImportedBeans( this.beanConverter.toNative(bean),importedBeans,fkName);
+            return nativeManager.setImportedBeans( this.beanConverter.toRight(bean),importedBeans,fkName);
         }
         catch(DAOException e)
         {
@@ -350,7 +350,7 @@ public class StoreManager
     //@Override
     public <T extends Collection<StoreBean>> T setImportedBeans(StoreBean bean,T importedBeans,String fkName){
         try {
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromRight(nativeManager.setImportedBeans( this.beanConverter.toRight(bean),this.beanConverter.toRight(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -372,7 +372,7 @@ public class StoreManager
     public ImageBean[] getFlImageBeansByMd5(StoreBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByMd5( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByMd5( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -390,7 +390,7 @@ public class StoreManager
     public List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByMd5AsList( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -410,9 +410,9 @@ public class StoreManager
     public ImageBean[] setFlImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setFlImageBeansByMd5(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getImageBeanConverter().toNative(importedBeans)
+            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.setFlImageBeansByMd5(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getImageBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -434,9 +434,9 @@ public class StoreManager
     public <T extends Collection<ImageBean>> T setFlImageBeansByMd5(StoreBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getImageBeanConverter().fromNative(nativeManager.setFlImageBeansByMd5(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getImageBeanConverter().toNative(importedBeans)
+            return (T) this.dbConverter.getImageBeanConverter().fromRight(nativeManager.setFlImageBeansByMd5(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getImageBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -455,7 +455,7 @@ public class StoreManager
     public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByThumbMd5( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByThumbMd5( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -473,7 +473,7 @@ public class StoreManager
     public List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByThumbMd5AsList( this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByThumbMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -493,9 +493,9 @@ public class StoreManager
     public ImageBean[] setFlImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setFlImageBeansByThumbMd5(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getImageBeanConverter().toNative(importedBeans)
+            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.setFlImageBeansByThumbMd5(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getImageBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -517,9 +517,9 @@ public class StoreManager
     public <T extends Collection<ImageBean>> T setFlImageBeansByThumbMd5(StoreBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getImageBeanConverter().fromNative(nativeManager.setFlImageBeansByThumbMd5(
-                 this.beanConverter.toNative(bean),
-                this.dbConverter.getImageBeanConverter().toNative(importedBeans)
+            return (T) this.dbConverter.getImageBeanConverter().fromRight(nativeManager.setFlImageBeansByThumbMd5(
+                 this.beanConverter.toRight(bean),
+                this.dbConverter.getImageBeanConverter().toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -544,8 +544,8 @@ public class StoreManager
         , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
-                        , this.dbConverter.getImageBeanConverter().toNative(impFlImagebyMd5)  , this.dbConverter.getImageBeanConverter().toNative(impFlImagebyThumbMd5)  ));
+            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
+                        , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyMd5)  , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyThumbMd5)  ));
         }
         catch(DAOException e)
         {
@@ -581,8 +581,8 @@ public class StoreManager
         , Collection<ImageBean> impFlImagebyMd5 , Collection<ImageBean> impFlImagebyThumbMd5 )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
-                        , this.dbConverter.getImageBeanConverter().toNative(impFlImagebyMd5)  , this.dbConverter.getImageBeanConverter().toNative(impFlImagebyThumbMd5)  ));
+            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
+                        , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyMd5)  , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyThumbMd5)  ));
         }
         catch(DAOException e)
         {
@@ -628,7 +628,7 @@ public class StoreManager
     public StoreBean[] loadAll()
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplate(null));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
         }
         catch(DAOException e)
         {
@@ -820,7 +820,7 @@ public class StoreManager
     public List<StoreBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -843,7 +843,7 @@ public class StoreManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -911,7 +911,7 @@ public class StoreManager
     public StoreBean insert(StoreBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -929,7 +929,7 @@ public class StoreManager
     public StoreBean update(StoreBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1113,7 +1113,7 @@ public class StoreManager
     public StoreBean loadUniqueUsingTemplate(StoreBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1226,7 +1226,7 @@ public class StoreManager
     public List<StoreBean> loadUsingTemplateAsList(StoreBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1247,7 +1247,7 @@ public class StoreManager
     public int loadUsingTemplate(StoreBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -1264,7 +1264,7 @@ public class StoreManager
     public int deleteUsingTemplate(StoreBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
         }
         catch(DAOException e)
         {
@@ -1348,7 +1348,7 @@ public class StoreManager
     public int countUsingTemplate(StoreBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {
@@ -1368,42 +1368,42 @@ public class StoreManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toNative((StoreListener)listener));
+        this.nativeManager.registerListener(this.toRight((StoreListener)listener));
     }
 
-    private FlStoreListener toNative(final StoreListener listener) {
+    private FlStoreListener toRight(final StoreListener listener) {
         return null == listener ?null:new FlStoreListener (){
 
             @Override
             public void beforeInsert(FlStoreBean bean) throws DAOException {
-                listener.beforeInsert(StoreManager.this.beanConverter.fromNative(bean));                
+                listener.beforeInsert(StoreManager.this.beanConverter.fromRight(bean));                
             }
 
             @Override
             public void afterInsert(FlStoreBean bean) throws DAOException {
-                listener.afterInsert(StoreManager.this.beanConverter.fromNative(bean));
+                listener.afterInsert(StoreManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void beforeUpdate(FlStoreBean bean) throws DAOException {
-                listener.beforeUpdate(StoreManager.this.beanConverter.fromNative(bean));
+                listener.beforeUpdate(StoreManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void afterUpdate(FlStoreBean bean) throws DAOException {
-                listener.afterUpdate(StoreManager.this.beanConverter.fromNative(bean));
+                listener.afterUpdate(StoreManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void beforeDelete(FlStoreBean bean) throws DAOException {
-                listener.beforeDelete(StoreManager.this.beanConverter.fromNative(bean));
+                listener.beforeDelete(StoreManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void afterDelete(FlStoreBean bean) throws DAOException {
-                listener.afterDelete(StoreManager.this.beanConverter.fromNative(bean));
+                listener.afterDelete(StoreManager.this.beanConverter.fromRight(bean));
             }};
     }
 
@@ -1445,7 +1445,7 @@ public class StoreManager
      */
     public List<StoreBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {
@@ -1475,19 +1475,19 @@ public class StoreManager
             throw new RuntimeException(e);
         }
     }
-    private FlStoreManager.Action toNative(final Action action){
+    private FlStoreManager.Action toRight(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlStoreManager.Action(){
 
             @Override
             public void call(FlStoreBean bean) {
-                action.call(StoreManager.this.beanConverter.fromNative(bean));
+                action.call(StoreManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public FlStoreBean getBean() {
-                return  StoreManager.this.beanConverter.toNative(action.getBean());
+                return  StoreManager.this.beanConverter.toRight(action.getBean());
             }};
     }
 }

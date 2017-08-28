@@ -231,7 +231,7 @@ public class FeatureManager
     public FeatureBean[] loadAll()
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplate(null));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
         }
         catch(DAOException e)
         {
@@ -423,7 +423,7 @@ public class FeatureManager
     public List<FeatureBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -446,7 +446,7 @@ public class FeatureManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -514,7 +514,7 @@ public class FeatureManager
     public FeatureBean insert(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -532,7 +532,7 @@ public class FeatureManager
     public FeatureBean update(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -716,7 +716,7 @@ public class FeatureManager
     public FeatureBean loadUniqueUsingTemplate(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -829,7 +829,7 @@ public class FeatureManager
     public List<FeatureBean> loadUsingTemplateAsList(FeatureBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -850,7 +850,7 @@ public class FeatureManager
     public int loadUsingTemplate(FeatureBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -867,7 +867,7 @@ public class FeatureManager
     public int deleteUsingTemplate(FeatureBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
         }
         catch(DAOException e)
         {
@@ -951,7 +951,7 @@ public class FeatureManager
     public int countUsingTemplate(FeatureBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {
@@ -971,42 +971,42 @@ public class FeatureManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toNative((FeatureListener)listener));
+        this.nativeManager.registerListener(this.toRight((FeatureListener)listener));
     }
 
-    private FlFeatureListener toNative(final FeatureListener listener) {
+    private FlFeatureListener toRight(final FeatureListener listener) {
         return null == listener ?null:new FlFeatureListener (){
 
             @Override
             public void beforeInsert(FlFeatureBean bean) throws DAOException {
-                listener.beforeInsert(FeatureManager.this.beanConverter.fromNative(bean));                
+                listener.beforeInsert(FeatureManager.this.beanConverter.fromRight(bean));                
             }
 
             @Override
             public void afterInsert(FlFeatureBean bean) throws DAOException {
-                listener.afterInsert(FeatureManager.this.beanConverter.fromNative(bean));
+                listener.afterInsert(FeatureManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void beforeUpdate(FlFeatureBean bean) throws DAOException {
-                listener.beforeUpdate(FeatureManager.this.beanConverter.fromNative(bean));
+                listener.beforeUpdate(FeatureManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void afterUpdate(FlFeatureBean bean) throws DAOException {
-                listener.afterUpdate(FeatureManager.this.beanConverter.fromNative(bean));
+                listener.afterUpdate(FeatureManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void beforeDelete(FlFeatureBean bean) throws DAOException {
-                listener.beforeDelete(FeatureManager.this.beanConverter.fromNative(bean));
+                listener.beforeDelete(FeatureManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void afterDelete(FlFeatureBean bean) throws DAOException {
-                listener.afterDelete(FeatureManager.this.beanConverter.fromNative(bean));
+                listener.afterDelete(FeatureManager.this.beanConverter.fromRight(bean));
             }};
     }
 
@@ -1048,7 +1048,7 @@ public class FeatureManager
      */
     public List<FeatureBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {
@@ -1078,19 +1078,19 @@ public class FeatureManager
             throw new RuntimeException(e);
         }
     }
-    private FlFeatureManager.Action toNative(final Action action){
+    private FlFeatureManager.Action toRight(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFeatureManager.Action(){
 
             @Override
             public void call(FlFeatureBean bean) {
-                action.call(FeatureManager.this.beanConverter.fromNative(bean));
+                action.call(FeatureManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public FlFeatureBean getBean() {
-                return  FeatureManager.this.beanConverter.toNative(action.getBean());
+                return  FeatureManager.this.beanConverter.toRight(action.getBean());
             }};
     }
 }

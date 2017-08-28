@@ -240,7 +240,7 @@ public class LogLightManager
     public LogLightBean[] loadAll()
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplate(null));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
         }
         catch(DAOException e)
         {
@@ -432,7 +432,7 @@ public class LogLightManager
     public List<LogLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
+            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -455,7 +455,7 @@ public class LogLightManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -523,7 +523,7 @@ public class LogLightManager
     public LogLightBean insert(LogLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -541,7 +541,7 @@ public class LogLightManager
     public LogLightBean update(LogLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -725,7 +725,7 @@ public class LogLightManager
     public LogLightBean loadUniqueUsingTemplate(LogLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -838,7 +838,7 @@ public class LogLightManager
     public List<LogLightBean> loadUsingTemplateAsList(LogLightBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -859,7 +859,7 @@ public class LogLightManager
     public int loadUsingTemplate(LogLightBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toNative(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
         }
         catch(DAOException e)
         {
@@ -876,7 +876,7 @@ public class LogLightManager
     public int deleteUsingTemplate(LogLightBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
         }
         catch(DAOException e)
         {
@@ -960,7 +960,7 @@ public class LogLightManager
     public int countUsingTemplate(LogLightBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toNative(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {
@@ -980,42 +980,42 @@ public class LogLightManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toNative((LogLightListener)listener));
+        this.nativeManager.registerListener(this.toRight((LogLightListener)listener));
     }
 
-    private FlLogLightListener toNative(final LogLightListener listener) {
+    private FlLogLightListener toRight(final LogLightListener listener) {
         return null == listener ?null:new FlLogLightListener (){
 
             @Override
             public void beforeInsert(FlLogLightBean bean) throws DAOException {
-                listener.beforeInsert(LogLightManager.this.beanConverter.fromNative(bean));                
+                listener.beforeInsert(LogLightManager.this.beanConverter.fromRight(bean));                
             }
 
             @Override
             public void afterInsert(FlLogLightBean bean) throws DAOException {
-                listener.afterInsert(LogLightManager.this.beanConverter.fromNative(bean));
+                listener.afterInsert(LogLightManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void beforeUpdate(FlLogLightBean bean) throws DAOException {
-                listener.beforeUpdate(LogLightManager.this.beanConverter.fromNative(bean));
+                listener.beforeUpdate(LogLightManager.this.beanConverter.fromRight(bean));
                 
             }
 
             @Override
             public void afterUpdate(FlLogLightBean bean) throws DAOException {
-                listener.afterUpdate(LogLightManager.this.beanConverter.fromNative(bean));
+                listener.afterUpdate(LogLightManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void beforeDelete(FlLogLightBean bean) throws DAOException {
-                listener.beforeDelete(LogLightManager.this.beanConverter.fromNative(bean));
+                listener.beforeDelete(LogLightManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public void afterDelete(FlLogLightBean bean) throws DAOException {
-                listener.afterDelete(LogLightManager.this.beanConverter.fromNative(bean));
+                listener.afterDelete(LogLightManager.this.beanConverter.fromRight(bean));
             }};
     }
 
@@ -1057,7 +1057,7 @@ public class LogLightManager
      */
     public List<LogLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
         }
         catch(DAOException e)
         {
@@ -1087,19 +1087,19 @@ public class LogLightManager
             throw new RuntimeException(e);
         }
     }
-    private FlLogLightManager.Action toNative(final Action action){
+    private FlLogLightManager.Action toRight(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlLogLightManager.Action(){
 
             @Override
             public void call(FlLogLightBean bean) {
-                action.call(LogLightManager.this.beanConverter.fromNative(bean));
+                action.call(LogLightManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
             public FlLogLightBean getBean() {
-                return  LogLightManager.this.beanConverter.toNative(action.getBean());
+                return  LogLightManager.this.beanConverter.toRight(action.getBean());
             }};
     }
 }
