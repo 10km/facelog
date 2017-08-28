@@ -22,13 +22,6 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
-import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceManager;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogListener;
@@ -384,10 +377,10 @@ public class LogManager
     private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlDevicebyDeviceId",new Class<?>[]{DeviceBean.class,FlDeviceBean.class});
-    put("refFlFacebyVerifyFace",new Class<?>[]{FaceBean.class,FlFaceBean.class});
-    put("refFlFacebyCompareFace",new Class<?>[]{FaceBean.class,FlFaceBean.class});
-    put("refFlPersonbyPersonId",new Class<?>[]{PersonBean.class,FlPersonBean.class});
+    put("refFlDevicebyDeviceId",new Class<?>[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class});
+    put("refFlFacebyVerifyFace",new Class<?>[]{FaceBean.class,net.gdface.facelog.dborm.face.FlFaceBean.class});
+    put("refFlFacebyCompareFace",new Class<?>[]{FaceBean.class,net.gdface.facelog.dborm.face.FlFaceBean.class});
+    put("refFlPersonbyPersonId",new Class<?>[]{PersonBean.class,net.gdface.facelog.dborm.person.FlPersonBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
@@ -482,10 +475,13 @@ public class LogManager
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setDeviceId(beanToSet.getId());
-        bean.setReferencedByDeviceId(beanToSet);
-        return this.dbConverter.getDeviceBeanConverter().fromNative(FlDeviceManager.getInstance().save(this.dbConverter.getDeviceBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getDeviceBeanConverter().fromNative(this.nativeManager.setReferencedByDeviceId(this.beanConverter.toNative(bean),this.dbConverter.getDeviceBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -518,10 +514,13 @@ public class LogManager
     //5.2 SET REFERENCED 
     public FaceBean setReferencedByVerifyFace(LogBean bean, FaceBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setVerifyFace(beanToSet.getMd5());
-        bean.setReferencedByVerifyFace(beanToSet);
-        return this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().save(this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.setReferencedByVerifyFace(this.beanConverter.toNative(bean),this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -554,10 +553,13 @@ public class LogManager
     //5.2 SET REFERENCED 
     public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setCompareFace(beanToSet.getMd5());
-        bean.setReferencedByCompareFace(beanToSet);
-        return this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().save(this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.setReferencedByCompareFace(this.beanConverter.toNative(bean),this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -590,10 +592,13 @@ public class LogManager
     //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setPersonId(beanToSet.getId());
-        bean.setReferencedByPersonId(beanToSet);
-        return this.dbConverter.getPersonBeanConverter().fromNative(FlPersonManager.getInstance().save(this.dbConverter.getPersonBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getPersonBeanConverter().fromNative(this.nativeManager.setReferencedByPersonId(this.beanConverter.toNative(bean),this.dbConverter.getPersonBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //////////////////////////////////////

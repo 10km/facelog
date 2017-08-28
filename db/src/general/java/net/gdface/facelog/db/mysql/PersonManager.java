@@ -22,13 +22,6 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceManager;
-import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogManager;
-import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonListener;
@@ -701,7 +694,7 @@ public class PersonManager
     private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlImagebyPhotoId",new Class<?>[]{ImageBean.class,FlImageBean.class});
+    put("refFlImagebyPhotoId",new Class<?>[]{ImageBean.class,net.gdface.facelog.dborm.image.FlImageBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
@@ -790,10 +783,13 @@ public class PersonManager
     //5.2 SET REFERENCED 
     public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setPhotoId(beanToSet.getMd5());
-        bean.setReferencedByPhotoId(beanToSet);
-        return this.dbConverter.getImageBeanConverter().fromNative(FlImageManager.getInstance().save(this.dbConverter.getImageBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setReferencedByPhotoId(this.beanConverter.toNative(bean),this.dbConverter.getImageBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //////////////////////////////////////

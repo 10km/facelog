@@ -23,15 +23,6 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceManager;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
-import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreManager;
 import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageListener;
@@ -672,9 +663,9 @@ public class ImageManager
     private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlDevicebyDeviceId",new Class<?>[]{DeviceBean.class,FlDeviceBean.class});
-    put("refFlStorebyMd5",new Class<?>[]{StoreBean.class,FlStoreBean.class});
-    put("refFlStorebyThumbMd5",new Class<?>[]{StoreBean.class,FlStoreBean.class});
+    put("refFlDevicebyDeviceId",new Class<?>[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class});
+    put("refFlStorebyMd5",new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
+    put("refFlStorebyThumbMd5",new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
@@ -767,10 +758,13 @@ public class ImageManager
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setDeviceId(beanToSet.getId());
-        bean.setReferencedByDeviceId(beanToSet);
-        return this.dbConverter.getDeviceBeanConverter().fromNative(FlDeviceManager.getInstance().save(this.dbConverter.getDeviceBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getDeviceBeanConverter().fromNative(this.nativeManager.setReferencedByDeviceId(this.beanConverter.toNative(bean),this.dbConverter.getDeviceBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -803,10 +797,13 @@ public class ImageManager
     //5.2 SET REFERENCED 
     public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setMd5(beanToSet.getMd5());
-        bean.setReferencedByMd5(beanToSet);
-        return this.dbConverter.getStoreBeanConverter().fromNative(FlStoreManager.getInstance().save(this.dbConverter.getStoreBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getStoreBeanConverter().fromNative(this.nativeManager.setReferencedByMd5(this.beanConverter.toNative(bean),this.dbConverter.getStoreBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -839,10 +836,13 @@ public class ImageManager
     //5.2 SET REFERENCED 
     public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setThumbMd5(beanToSet.getMd5());
-        bean.setReferencedByThumbMd5(beanToSet);
-        return this.dbConverter.getStoreBeanConverter().fromNative(FlStoreManager.getInstance().save(this.dbConverter.getStoreBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getStoreBeanConverter().fromNative(this.nativeManager.setReferencedByThumbMd5(this.beanConverter.toNative(bean),this.dbConverter.getStoreBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //////////////////////////////////////

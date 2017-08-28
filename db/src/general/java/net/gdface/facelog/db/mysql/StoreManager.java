@@ -20,9 +20,6 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
-import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.image.FlStoreManager;
 import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.image.FlStoreListener;

@@ -22,13 +22,6 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
-import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogManager;
-import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceListener;
@@ -784,8 +777,8 @@ public class FaceManager
     private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlImagebyImgMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
-    put("refFlPersonbyPersonId",new Class<?>[]{PersonBean.class,FlPersonBean.class});
+    put("refFlImagebyImgMd5",new Class<?>[]{ImageBean.class,net.gdface.facelog.dborm.image.FlImageBean.class});
+    put("refFlPersonbyPersonId",new Class<?>[]{PersonBean.class,net.gdface.facelog.dborm.person.FlPersonBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
@@ -876,10 +869,13 @@ public class FaceManager
     //5.2 SET REFERENCED 
     public ImageBean setReferencedByImgMd5(FaceBean bean, ImageBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setImgMd5(beanToSet.getMd5());
-        bean.setReferencedByImgMd5(beanToSet);
-        return this.dbConverter.getImageBeanConverter().fromNative(FlImageManager.getInstance().save(this.dbConverter.getImageBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setReferencedByImgMd5(this.beanConverter.toNative(bean),this.dbConverter.getImageBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -912,10 +908,13 @@ public class FaceManager
     //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(FaceBean bean, PersonBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setPersonId(beanToSet.getId());
-        bean.setReferencedByPersonId(beanToSet);
-        return this.dbConverter.getPersonBeanConverter().fromNative(FlPersonManager.getInstance().save(this.dbConverter.getPersonBeanConverter().toNative(beanToSet)));
+        try{
+            return this.dbConverter.getPersonBeanConverter().fromNative(this.nativeManager.setReferencedByPersonId(this.beanConverter.toNative(bean),this.dbConverter.getPersonBeanConverter().toNative(beanToSet)));
+        }
+        catch(DAOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //////////////////////////////////////

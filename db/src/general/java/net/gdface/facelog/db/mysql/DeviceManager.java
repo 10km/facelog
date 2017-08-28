@@ -21,11 +21,6 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-
-import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceListener;
