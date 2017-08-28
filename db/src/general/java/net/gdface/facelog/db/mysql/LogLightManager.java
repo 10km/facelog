@@ -72,7 +72,7 @@ public class LogLightManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_log_light";
+        public static final String TABLE_NAME="fl_log_light";
     /**
      * Contains all the full fields of the fl_log_light table.
      */
@@ -821,7 +821,7 @@ public class LogLightManager
     //20-3
     public LogLightBean[] loadUsingTemplate(LogLightBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogLightBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogLightBean[0]);
     }
 
     /**
@@ -983,40 +983,40 @@ public class LogLightManager
     }
 
     private FlLogLightListener toNative(final LogLightListener listener) {
-		return null == listener ?null:new FlLogLightListener (){
+        return null == listener ?null:new FlLogLightListener (){
 
-			@Override
-			public void beforeInsert(FlLogLightBean bean) throws DAOException {
-				listener.beforeInsert(LogLightManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlLogLightBean bean) throws DAOException {
+                listener.beforeInsert(LogLightManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlLogLightBean bean) throws DAOException {
-				listener.afterInsert(LogLightManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlLogLightBean bean) throws DAOException {
+                listener.afterInsert(LogLightManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlLogLightBean bean) throws DAOException {
-				listener.beforeUpdate(LogLightManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlLogLightBean bean) throws DAOException {
+                listener.beforeUpdate(LogLightManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlLogLightBean bean) throws DAOException {
-				listener.afterUpdate(LogLightManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlLogLightBean bean) throws DAOException {
+                listener.afterUpdate(LogLightManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlLogLightBean bean) throws DAOException {
-				listener.beforeDelete(LogLightManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlLogLightBean bean) throws DAOException {
+                listener.beforeDelete(LogLightManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlLogLightBean bean) throws DAOException {
-				listener.afterDelete(LogLightManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlLogLightBean bean) throws DAOException {
+                listener.afterDelete(LogLightManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1087,6 +1087,8 @@ public class LogLightManager
         }
     }
     private FlLogLightManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlLogLightManager.Action(){
 
             @Override

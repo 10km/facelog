@@ -58,7 +58,7 @@ public class StoreManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_store";
+        public static final String TABLE_NAME="fl_store";
     /**
      * Contains all the full fields of the fl_store table.
      */
@@ -348,7 +348,7 @@ public class StoreManager
     @SuppressWarnings("unchecked")
     //@Override
     public <T extends Collection<StoreBean>> T setImportedBeans(StoreBean bean,T importedBeans,String fkName){
-        try {        	
+        try {
             return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
@@ -370,7 +370,7 @@ public class StoreManager
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByMd5(StoreBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByMd5( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -388,7 +388,7 @@ public class StoreManager
     //3.2 GET IMPORTED
     public List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByMd5AsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -408,7 +408,7 @@ public class StoreManager
     //3.3 SET IMPORTED
     public ImageBean[] setFlImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setFlImageBeansByMd5(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
@@ -432,7 +432,7 @@ public class StoreManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<ImageBean>> T setFlImageBeansByMd5(StoreBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getImageBeanConverter().fromNative(nativeManager.setFlImageBeansByMd5(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
@@ -453,7 +453,7 @@ public class StoreManager
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByThumbMd5( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -471,7 +471,7 @@ public class StoreManager
     //3.2 GET IMPORTED
     public List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByThumbMd5AsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -491,7 +491,7 @@ public class StoreManager
     //3.3 SET IMPORTED
     public ImageBean[] setFlImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setFlImageBeansByThumbMd5(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
@@ -515,7 +515,7 @@ public class StoreManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<ImageBean>> T setFlImageBeansByThumbMd5(StoreBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getImageBeanConverter().fromNative(nativeManager.setFlImageBeansByThumbMd5(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
@@ -1209,7 +1209,7 @@ public class StoreManager
     //20-3
     public StoreBean[] loadUsingTemplate(StoreBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new StoreBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new StoreBean[0]);
     }
 
     /**
@@ -1371,40 +1371,40 @@ public class StoreManager
     }
 
     private FlStoreListener toNative(final StoreListener listener) {
-		return null == listener ?null:new FlStoreListener (){
+        return null == listener ?null:new FlStoreListener (){
 
-			@Override
-			public void beforeInsert(FlStoreBean bean) throws DAOException {
-				listener.beforeInsert(StoreManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlStoreBean bean) throws DAOException {
+                listener.beforeInsert(StoreManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlStoreBean bean) throws DAOException {
-				listener.afterInsert(StoreManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlStoreBean bean) throws DAOException {
+                listener.afterInsert(StoreManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlStoreBean bean) throws DAOException {
-				listener.beforeUpdate(StoreManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlStoreBean bean) throws DAOException {
+                listener.beforeUpdate(StoreManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlStoreBean bean) throws DAOException {
-				listener.afterUpdate(StoreManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlStoreBean bean) throws DAOException {
+                listener.afterUpdate(StoreManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlStoreBean bean) throws DAOException {
-				listener.beforeDelete(StoreManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlStoreBean bean) throws DAOException {
+                listener.beforeDelete(StoreManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlStoreBean bean) throws DAOException {
-				listener.afterDelete(StoreManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlStoreBean bean) throws DAOException {
+                listener.afterDelete(StoreManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1475,6 +1475,8 @@ public class StoreManager
         }
     }
     private FlStoreManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlStoreManager.Action(){
 
             @Override

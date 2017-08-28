@@ -142,7 +142,7 @@ public class FaceLightManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_face_light";
+        public static final String TABLE_NAME="fl_face_light";
     /**
      * Contains all the full fields of the fl_face_light table.
      */
@@ -947,7 +947,7 @@ public class FaceLightManager
     //20-3
     public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceLightBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceLightBean[0]);
     }
 
     /**
@@ -1109,40 +1109,40 @@ public class FaceLightManager
     }
 
     private FlFaceLightListener toNative(final FaceLightListener listener) {
-		return null == listener ?null:new FlFaceLightListener (){
+        return null == listener ?null:new FlFaceLightListener (){
 
-			@Override
-			public void beforeInsert(FlFaceLightBean bean) throws DAOException {
-				listener.beforeInsert(FaceLightManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlFaceLightBean bean) throws DAOException {
+                listener.beforeInsert(FaceLightManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlFaceLightBean bean) throws DAOException {
-				listener.afterInsert(FaceLightManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlFaceLightBean bean) throws DAOException {
+                listener.afterInsert(FaceLightManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlFaceLightBean bean) throws DAOException {
-				listener.beforeUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlFaceLightBean bean) throws DAOException {
+                listener.beforeUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlFaceLightBean bean) throws DAOException {
-				listener.afterUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlFaceLightBean bean) throws DAOException {
+                listener.afterUpdate(FaceLightManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlFaceLightBean bean) throws DAOException {
-				listener.beforeDelete(FaceLightManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlFaceLightBean bean) throws DAOException {
+                listener.beforeDelete(FaceLightManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlFaceLightBean bean) throws DAOException {
-				listener.afterDelete(FaceLightManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlFaceLightBean bean) throws DAOException {
+                listener.afterDelete(FaceLightManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1213,6 +1213,8 @@ public class FaceLightManager
         }
     }
     private FlFaceLightManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlFaceLightManager.Action(){
 
             @Override

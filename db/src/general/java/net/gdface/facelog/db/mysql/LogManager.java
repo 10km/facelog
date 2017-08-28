@@ -85,7 +85,7 @@ public class LogManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_log";
+        public static final String TABLE_NAME="fl_log";
     /**
      * Contains all the full fields of the fl_log table.
      */
@@ -429,7 +429,7 @@ public class LogManager
             if(null == types)
                 throw new IllegalArgumentException(String.format("invalid fkName :%s",fkName));
             @SuppressWarnings("rawtypes")
-			IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
+            IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
             return (T) converter.fromNative(this.nativeManager.setReferencedBean( this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
@@ -1196,7 +1196,7 @@ public class LogManager
     //20-3
     public LogBean[] loadUsingTemplate(LogBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogBean[0]);
     }
 
     /**
@@ -1520,40 +1520,40 @@ public class LogManager
     }
 
     private FlLogListener toNative(final LogListener listener) {
-		return null == listener ?null:new FlLogListener (){
+        return null == listener ?null:new FlLogListener (){
 
-			@Override
-			public void beforeInsert(FlLogBean bean) throws DAOException {
-				listener.beforeInsert(LogManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlLogBean bean) throws DAOException {
+                listener.beforeInsert(LogManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlLogBean bean) throws DAOException {
-				listener.afterInsert(LogManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlLogBean bean) throws DAOException {
+                listener.afterInsert(LogManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlLogBean bean) throws DAOException {
-				listener.beforeUpdate(LogManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlLogBean bean) throws DAOException {
+                listener.beforeUpdate(LogManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlLogBean bean) throws DAOException {
-				listener.afterUpdate(LogManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlLogBean bean) throws DAOException {
+                listener.afterUpdate(LogManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlLogBean bean) throws DAOException {
-				listener.beforeDelete(LogManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlLogBean bean) throws DAOException {
+                listener.beforeDelete(LogManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlLogBean bean) throws DAOException {
-				listener.afterDelete(LogManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlLogBean bean) throws DAOException {
+                listener.afterDelete(LogManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1624,6 +1624,8 @@ public class LogManager
         }
     }
     private FlLogManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlLogManager.Action(){
 
             @Override

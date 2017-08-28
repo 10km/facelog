@@ -79,7 +79,7 @@ public class DeviceManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_device";
+        public static final String TABLE_NAME="fl_device";
     /**
      * Contains all the full fields of the fl_device table.
      */
@@ -385,7 +385,7 @@ public class DeviceManager
     @SuppressWarnings("unchecked")
     //@Override
     public <T extends Collection<DeviceBean>> T setImportedBeans(DeviceBean bean,T importedBeans,String fkName){
-        try {        	
+        try {
             return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
@@ -407,7 +407,7 @@ public class DeviceManager
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByDeviceId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -425,7 +425,7 @@ public class DeviceManager
     //3.2 GET IMPORTED
     public List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByDeviceIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -445,7 +445,7 @@ public class DeviceManager
     //3.3 SET IMPORTED
     public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setFlImageBeansByDeviceId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
@@ -469,7 +469,7 @@ public class DeviceManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<ImageBean>> T setFlImageBeansByDeviceId(DeviceBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getImageBeanConverter().fromNative(nativeManager.setFlImageBeansByDeviceId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
@@ -490,7 +490,7 @@ public class DeviceManager
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByDeviceId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -508,7 +508,7 @@ public class DeviceManager
     //3.2 GET IMPORTED
     public List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByDeviceIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -528,7 +528,7 @@ public class DeviceManager
     //3.3 SET IMPORTED
     public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getLogBeanConverter().fromNative(this.nativeManager.setFlLogBeansByDeviceId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getLogBeanConverter().toNative(importedBeans)
@@ -552,7 +552,7 @@ public class DeviceManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<LogBean>> T setFlLogBeansByDeviceId(DeviceBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getLogBeanConverter().fromNative(nativeManager.setFlLogBeansByDeviceId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getLogBeanConverter().toNative(importedBeans)
@@ -1246,7 +1246,7 @@ public class DeviceManager
     //20-3
     public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
     }
 
     /**
@@ -1408,40 +1408,40 @@ public class DeviceManager
     }
 
     private FlDeviceListener toNative(final DeviceListener listener) {
-		return null == listener ?null:new FlDeviceListener (){
+        return null == listener ?null:new FlDeviceListener (){
 
-			@Override
-			public void beforeInsert(FlDeviceBean bean) throws DAOException {
-				listener.beforeInsert(DeviceManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlDeviceBean bean) throws DAOException {
+                listener.beforeInsert(DeviceManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlDeviceBean bean) throws DAOException {
-				listener.afterInsert(DeviceManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlDeviceBean bean) throws DAOException {
+                listener.afterInsert(DeviceManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlDeviceBean bean) throws DAOException {
-				listener.beforeUpdate(DeviceManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+                listener.beforeUpdate(DeviceManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlDeviceBean bean) throws DAOException {
-				listener.afterUpdate(DeviceManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlDeviceBean bean) throws DAOException {
+                listener.afterUpdate(DeviceManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlDeviceBean bean) throws DAOException {
-				listener.beforeDelete(DeviceManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlDeviceBean bean) throws DAOException {
+                listener.beforeDelete(DeviceManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlDeviceBean bean) throws DAOException {
-				listener.afterDelete(DeviceManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlDeviceBean bean) throws DAOException {
+                listener.afterDelete(DeviceManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1512,6 +1512,8 @@ public class DeviceManager
         }
     }
     private FlDeviceManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlDeviceManager.Action(){
 
             @Override

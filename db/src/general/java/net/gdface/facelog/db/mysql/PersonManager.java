@@ -105,7 +105,7 @@ public class PersonManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_person";
+        public static final String TABLE_NAME="fl_person";
     /**
      * Contains all the full fields of the fl_person table.
      */
@@ -431,7 +431,7 @@ public class PersonManager
     @SuppressWarnings("unchecked")
     //@Override
     public <T extends Collection<PersonBean>> T setImportedBeans(PersonBean bean,T importedBeans,String fkName){
-        try {        	
+        try {
             return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
@@ -453,7 +453,7 @@ public class PersonManager
     //3.1 GET IMPORTED
     public FaceBean[] getFlFaceBeansByPersonId(PersonBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.getFlFaceBeansByPersonId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -471,7 +471,7 @@ public class PersonManager
     //3.2 GET IMPORTED
     public List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.getFlFaceBeansByPersonIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -491,7 +491,7 @@ public class PersonManager
     //3.3 SET IMPORTED
     public FaceBean[] setFlFaceBeansByPersonId(PersonBean bean , FaceBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.setFlFaceBeansByPersonId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
@@ -515,7 +515,7 @@ public class PersonManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<FaceBean>> T setFlFaceBeansByPersonId(PersonBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.setFlFaceBeansByPersonId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
@@ -536,7 +536,7 @@ public class PersonManager
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByPersonId(PersonBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByPersonId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -554,7 +554,7 @@ public class PersonManager
     //3.2 GET IMPORTED
     public List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByPersonIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -574,7 +574,7 @@ public class PersonManager
     //3.3 SET IMPORTED
     public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getLogBeanConverter().fromNative(this.nativeManager.setFlLogBeansByPersonId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getLogBeanConverter().toNative(importedBeans)
@@ -598,7 +598,7 @@ public class PersonManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<LogBean>> T setFlLogBeansByPersonId(PersonBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getLogBeanConverter().fromNative(nativeManager.setFlLogBeansByPersonId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getLogBeanConverter().toNative(importedBeans)
@@ -737,7 +737,7 @@ public class PersonManager
             if(null == types)
                 throw new IllegalArgumentException(String.format("invalid fkName :%s",fkName));
             @SuppressWarnings("rawtypes")
-			IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
+            IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
             return (T) converter.fromNative(this.nativeManager.setReferencedBean( this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
@@ -1387,7 +1387,7 @@ public class PersonManager
     //20-3
     public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new PersonBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new PersonBean[0]);
     }
 
     /**
@@ -1711,40 +1711,40 @@ public class PersonManager
     }
 
     private FlPersonListener toNative(final PersonListener listener) {
-		return null == listener ?null:new FlPersonListener (){
+        return null == listener ?null:new FlPersonListener (){
 
-			@Override
-			public void beforeInsert(FlPersonBean bean) throws DAOException {
-				listener.beforeInsert(PersonManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlPersonBean bean) throws DAOException {
+                listener.beforeInsert(PersonManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlPersonBean bean) throws DAOException {
-				listener.afterInsert(PersonManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlPersonBean bean) throws DAOException {
+                listener.afterInsert(PersonManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlPersonBean bean) throws DAOException {
-				listener.beforeUpdate(PersonManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlPersonBean bean) throws DAOException {
+                listener.beforeUpdate(PersonManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlPersonBean bean) throws DAOException {
-				listener.afterUpdate(PersonManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlPersonBean bean) throws DAOException {
+                listener.afterUpdate(PersonManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlPersonBean bean) throws DAOException {
-				listener.beforeDelete(PersonManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlPersonBean bean) throws DAOException {
+                listener.beforeDelete(PersonManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlPersonBean bean) throws DAOException {
-				listener.afterDelete(PersonManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlPersonBean bean) throws DAOException {
+                listener.afterDelete(PersonManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1815,6 +1815,8 @@ public class PersonManager
         }
     }
     private FlPersonManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlPersonManager.Action(){
 
             @Override

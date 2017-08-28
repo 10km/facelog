@@ -67,7 +67,7 @@ public class FeatureManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_feature";
+        public static final String TABLE_NAME="fl_feature";
     /**
      * Contains all the full fields of the fl_feature table.
      */
@@ -812,7 +812,7 @@ public class FeatureManager
     //20-3
     public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
     }
 
     /**
@@ -974,40 +974,40 @@ public class FeatureManager
     }
 
     private FlFeatureListener toNative(final FeatureListener listener) {
-		return null == listener ?null:new FlFeatureListener (){
+        return null == listener ?null:new FlFeatureListener (){
 
-			@Override
-			public void beforeInsert(FlFeatureBean bean) throws DAOException {
-				listener.beforeInsert(FeatureManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlFeatureBean bean) throws DAOException {
+                listener.beforeInsert(FeatureManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlFeatureBean bean) throws DAOException {
-				listener.afterInsert(FeatureManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlFeatureBean bean) throws DAOException {
+                listener.afterInsert(FeatureManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlFeatureBean bean) throws DAOException {
-				listener.beforeUpdate(FeatureManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlFeatureBean bean) throws DAOException {
+                listener.beforeUpdate(FeatureManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlFeatureBean bean) throws DAOException {
-				listener.afterUpdate(FeatureManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlFeatureBean bean) throws DAOException {
+                listener.afterUpdate(FeatureManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlFeatureBean bean) throws DAOException {
-				listener.beforeDelete(FeatureManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlFeatureBean bean) throws DAOException {
+                listener.beforeDelete(FeatureManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlFeatureBean bean) throws DAOException {
-				listener.afterDelete(FeatureManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlFeatureBean bean) throws DAOException {
+                listener.afterDelete(FeatureManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1078,6 +1078,8 @@ public class FeatureManager
         }
     }
     private FlFeatureManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlFeatureManager.Action(){
 
             @Override

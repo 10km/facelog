@@ -86,7 +86,7 @@ public class ImageManager
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_image";
+        public static final String TABLE_NAME="fl_image";
     /**
      * Contains all the full fields of the fl_image table.
      */
@@ -396,7 +396,7 @@ public class ImageManager
     @SuppressWarnings("unchecked")
     //@Override
     public <T extends Collection<ImageBean>> T setImportedBeans(ImageBean bean,T importedBeans,String fkName){
-        try {        	
+        try {
             return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
@@ -418,7 +418,7 @@ public class ImageManager
     //3.1 GET IMPORTED
     public FaceBean[] getFlFaceBeansByImgMd5(ImageBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.getFlFaceBeansByImgMd5( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -436,7 +436,7 @@ public class ImageManager
     //3.2 GET IMPORTED
     public List<FaceBean> getFlFaceBeansByImgMd5AsList(ImageBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.getFlFaceBeansByImgMd5AsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -456,7 +456,7 @@ public class ImageManager
     //3.3 SET IMPORTED
     public FaceBean[] setFlFaceBeansByImgMd5(ImageBean bean , FaceBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getFaceBeanConverter().fromNative(this.nativeManager.setFlFaceBeansByImgMd5(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
@@ -480,7 +480,7 @@ public class ImageManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<FaceBean>> T setFlFaceBeansByImgMd5(ImageBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getFaceBeanConverter().fromNative(nativeManager.setFlFaceBeansByImgMd5(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getFaceBeanConverter().toNative(importedBeans)
@@ -501,7 +501,7 @@ public class ImageManager
     //3.1 GET IMPORTED
     public PersonBean[] getFlPersonBeansByPhotoId(ImageBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getPersonBeanConverter().fromNative(nativeManager.getFlPersonBeansByPhotoId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -519,7 +519,7 @@ public class ImageManager
     //3.2 GET IMPORTED
     public List<PersonBean> getFlPersonBeansByPhotoIdAsList(ImageBean bean)
     {
-        try {        	
+        try {
             return this.dbConverter.getPersonBeanConverter().fromNative(nativeManager.getFlPersonBeansByPhotoIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
@@ -539,7 +539,7 @@ public class ImageManager
     //3.3 SET IMPORTED
     public PersonBean[] setFlPersonBeansByPhotoId(ImageBean bean , PersonBean[] importedBeans)
     {
-        try {        	
+        try {
             return this.dbConverter.getPersonBeanConverter().fromNative(this.nativeManager.setFlPersonBeansByPhotoId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getPersonBeanConverter().toNative(importedBeans)
@@ -563,7 +563,7 @@ public class ImageManager
     @SuppressWarnings("unchecked")
     public <T extends Collection<PersonBean>> T setFlPersonBeansByPhotoId(ImageBean bean , T importedBeans)
     {
-        try {        	
+        try {
             return (T) this.dbConverter.getPersonBeanConverter().fromNative(nativeManager.setFlPersonBeansByPhotoId(
                  this.beanConverter.toNative(bean),
                 this.dbConverter.getPersonBeanConverter().toNative(importedBeans)
@@ -712,7 +712,7 @@ public class ImageManager
             if(null == types)
                 throw new IllegalArgumentException(String.format("invalid fkName :%s",fkName));
             @SuppressWarnings("rawtypes")
-			IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
+            IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
             return (T) converter.fromNative(this.nativeManager.setReferencedBean( this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
@@ -1440,7 +1440,7 @@ public class ImageManager
     //20-3
     public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows, int searchType)
     {
-    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new ImageBean[0]);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new ImageBean[0]);
     }
 
     /**
@@ -1686,40 +1686,40 @@ public class ImageManager
     }
 
     private FlImageListener toNative(final ImageListener listener) {
-		return null == listener ?null:new FlImageListener (){
+        return null == listener ?null:new FlImageListener (){
 
-			@Override
-			public void beforeInsert(FlImageBean bean) throws DAOException {
-				listener.beforeInsert(ImageManager.this.beanConverter.fromNative(bean));				
-			}
+            @Override
+            public void beforeInsert(FlImageBean bean) throws DAOException {
+                listener.beforeInsert(ImageManager.this.beanConverter.fromNative(bean));                
+            }
 
-			@Override
-			public void afterInsert(FlImageBean bean) throws DAOException {
-				listener.afterInsert(ImageManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void afterInsert(FlImageBean bean) throws DAOException {
+                listener.afterInsert(ImageManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void beforeUpdate(FlImageBean bean) throws DAOException {
-				listener.beforeUpdate(ImageManager.this.beanConverter.fromNative(bean));
-				
-			}
+            @Override
+            public void beforeUpdate(FlImageBean bean) throws DAOException {
+                listener.beforeUpdate(ImageManager.this.beanConverter.fromNative(bean));
+                
+            }
 
-			@Override
-			public void afterUpdate(FlImageBean bean) throws DAOException {
-				listener.afterUpdate(ImageManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void afterUpdate(FlImageBean bean) throws DAOException {
+                listener.afterUpdate(ImageManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void beforeDelete(FlImageBean bean) throws DAOException {
-				listener.beforeDelete(ImageManager.this.beanConverter.fromNative(bean));
-			}
+            @Override
+            public void beforeDelete(FlImageBean bean) throws DAOException {
+                listener.beforeDelete(ImageManager.this.beanConverter.fromNative(bean));
+            }
 
-			@Override
-			public void afterDelete(FlImageBean bean) throws DAOException {
-				listener.afterDelete(ImageManager.this.beanConverter.fromNative(bean));
-			}};
-	}
+            @Override
+            public void afterDelete(FlImageBean bean) throws DAOException {
+                listener.afterDelete(ImageManager.this.beanConverter.fromNative(bean));
+            }};
+    }
 
     //_____________________________________________________________________
     //
@@ -1790,6 +1790,8 @@ public class ImageManager
         }
     }
     private FlImageManager.Action toNative(final Action action){
+        if(null == action)
+            throw new NullPointerException();
         return new FlImageManager.Action(){
 
             @Override
