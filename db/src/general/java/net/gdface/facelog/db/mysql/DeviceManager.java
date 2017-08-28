@@ -1400,7 +1400,7 @@ public class DeviceManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique DeviceListener listener.
+     * Registers a unique {@link DeviceListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

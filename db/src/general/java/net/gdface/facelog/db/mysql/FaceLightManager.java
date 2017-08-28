@@ -1101,7 +1101,7 @@ public class FaceLightManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique FaceLightListener listener.
+     * Registers a unique {@link FaceLightListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

@@ -1774,7 +1774,7 @@ public class FaceManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique FaceListener listener.
+     * Registers a unique {@link FaceListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

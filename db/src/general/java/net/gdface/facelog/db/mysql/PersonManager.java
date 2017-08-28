@@ -1703,7 +1703,7 @@ public class PersonManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique PersonListener listener.
+     * Registers a unique {@link PersonListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

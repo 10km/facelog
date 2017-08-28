@@ -975,7 +975,7 @@ public class LogLightManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique LogLightListener listener.
+     * Registers a unique {@link LogLightListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

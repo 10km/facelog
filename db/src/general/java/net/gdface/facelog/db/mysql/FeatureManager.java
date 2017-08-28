@@ -966,7 +966,7 @@ public class FeatureManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique FeatureListener listener.
+     * Registers a unique {@link FeatureListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

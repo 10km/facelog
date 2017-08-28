@@ -1363,7 +1363,7 @@ public class StoreManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique StoreListener listener.
+     * Registers a unique {@link StoreListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

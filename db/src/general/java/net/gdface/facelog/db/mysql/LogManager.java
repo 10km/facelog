@@ -1560,7 +1560,7 @@ public class LogManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique LogListener listener.
+     * Registers a unique {@link LogListener} listener.
      */
     //35
     public void registerListener(TableListener listener)

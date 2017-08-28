@@ -1702,7 +1702,7 @@ public class ImageManager
     //_____________________________________________________________________
 
     /**
-     * Registers a unique ImageListener listener.
+     * Registers a unique {@link ImageListener} listener.
      */
     //35
     public void registerListener(TableListener listener)
