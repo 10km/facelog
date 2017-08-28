@@ -22,6 +22,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
+
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 import net.gdface.facelog.dborm.face.FlFaceBean;
@@ -354,8 +355,8 @@ public class LogManager
         )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save((FlLogBean)this.beanConverter.toNative(bean)
-            , (FlDeviceBean)this.dbConverter.getDeviceBeanConverter().toNative(refFlDevicebyDeviceId) , (FlFaceBean)this.dbConverter.getFaceBeanConverter().toNative(refFlFacebyVerifyFace) , (FlFaceBean)this.dbConverter.getFaceBeanConverter().toNative(refFlFacebyCompareFace) , (FlPersonBean)this.dbConverter.getPersonBeanConverter().toNative(refFlPersonbyPersonId)             ));
+            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
+            , this.dbConverter.getDeviceBeanConverter().toNative(refFlDevicebyDeviceId) , this.dbConverter.getFaceBeanConverter().toNative(refFlFacebyVerifyFace) , this.dbConverter.getFaceBeanConverter().toNative(refFlFacebyCompareFace) , this.dbConverter.getPersonBeanConverter().toNative(refFlPersonbyPersonId)             ));
         }
         catch(DAOException e)
         {
@@ -404,7 +405,7 @@ public class LogManager
     //@Override
     public <T> T getReferencedBean(LogBean bean,String fkName){
         try {
-            return this.nativeManager.getReferencedBean((FlLogBean) this.beanConverter.toNative(bean), fkName);
+            return this.nativeManager.getReferencedBean( this.beanConverter.toNative(bean), fkName);
         }
         catch(DAOException e)
         {
@@ -438,7 +439,7 @@ public class LogManager
 			IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromNative(this.nativeManager.setReferencedBean((FlLogBean) this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
+            return (T) converter.fromNative(this.nativeManager.setReferencedBean( this.beanConverter.toNative(bean), converter.toNative(beanToSet), fkName));
         }
         catch(DAOException e)
         {
@@ -484,7 +485,7 @@ public class LogManager
         if(null == bean || null == beanToSet) return null;
         bean.setDeviceId(beanToSet.getId());
         bean.setReferencedByDeviceId(beanToSet);
-        return this.dbConverter.getDeviceBeanConverter().fromNative(FlDeviceManager.getInstance().save((FlDeviceBean)this.dbConverter.getDeviceBeanConverter().toNative(beanToSet)));
+        return this.dbConverter.getDeviceBeanConverter().fromNative(FlDeviceManager.getInstance().save(this.dbConverter.getDeviceBeanConverter().toNative(beanToSet)));
     }
 
     /**
@@ -520,7 +521,7 @@ public class LogManager
         if(null == bean || null == beanToSet) return null;
         bean.setVerifyFace(beanToSet.getMd5());
         bean.setReferencedByVerifyFace(beanToSet);
-        return this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().save((FlFaceBean)this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
+        return this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().save(this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
     }
 
     /**
@@ -556,7 +557,7 @@ public class LogManager
         if(null == bean || null == beanToSet) return null;
         bean.setCompareFace(beanToSet.getMd5());
         bean.setReferencedByCompareFace(beanToSet);
-        return this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().save((FlFaceBean)this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
+        return this.dbConverter.getFaceBeanConverter().fromNative(FlFaceManager.getInstance().save(this.dbConverter.getFaceBeanConverter().toNative(beanToSet)));
     }
 
     /**
@@ -592,7 +593,7 @@ public class LogManager
         if(null == bean || null == beanToSet) return null;
         bean.setPersonId(beanToSet.getId());
         bean.setReferencedByPersonId(beanToSet);
-        return this.dbConverter.getPersonBeanConverter().fromNative(FlPersonManager.getInstance().save((FlPersonBean)this.dbConverter.getPersonBeanConverter().toNative(beanToSet)));
+        return this.dbConverter.getPersonBeanConverter().fromNative(FlPersonManager.getInstance().save(this.dbConverter.getPersonBeanConverter().toNative(beanToSet)));
     }
 
     //////////////////////////////////////
@@ -891,7 +892,7 @@ public class LogManager
     public LogBean insert(LogBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert((FlLogBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -909,7 +910,7 @@ public class LogManager
     public LogBean update(LogBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update((FlLogBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -1093,7 +1094,7 @@ public class LogManager
     public LogBean loadUniqueUsingTemplate(LogBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlLogBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -1190,7 +1191,7 @@ public class LogManager
     //20-3
     public LogBean[] loadUsingTemplate(LogBean bean, int startRow, int numRows, int searchType)
     {
-    	return (LogBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogBean[0]);
+    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogBean[0]);
     }
 
     /**
@@ -1206,7 +1207,7 @@ public class LogManager
     public List<LogBean> loadUsingTemplateAsList(LogBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlLogBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1244,7 +1245,7 @@ public class LogManager
     public int deleteUsingTemplate(LogBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate((FlLogBean)this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
         }
         catch(DAOException e)
         {
@@ -1627,7 +1628,7 @@ public class LogManager
 
             @Override
             public FlLogBean getBean() {
-                return (FlLogBean) LogManager.this.beanConverter.toNative(action.getBean());
+                return  LogManager.this.beanConverter.toNative(action.getBean());
             }};
     }
 }

@@ -19,6 +19,7 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
+
 import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.face.FlFeatureListener;
@@ -513,7 +514,7 @@ public class FeatureManager
     public FeatureBean insert(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert((FlFeatureBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -531,7 +532,7 @@ public class FeatureManager
     public FeatureBean update(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update((FlFeatureBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -715,7 +716,7 @@ public class FeatureManager
     public FeatureBean loadUniqueUsingTemplate(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlFeatureBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -812,7 +813,7 @@ public class FeatureManager
     //20-3
     public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
     {
-    	return (FeatureBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
+    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
     }
 
     /**
@@ -828,7 +829,7 @@ public class FeatureManager
     public List<FeatureBean> loadUsingTemplateAsList(FeatureBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlFeatureBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -866,7 +867,7 @@ public class FeatureManager
     public int deleteUsingTemplate(FeatureBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate((FlFeatureBean)this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
         }
         catch(DAOException e)
         {
@@ -1087,7 +1088,7 @@ public class FeatureManager
 
             @Override
             public FlFeatureBean getBean() {
-                return (FlFeatureBean) FeatureManager.this.beanConverter.toNative(action.getBean());
+                return  FeatureManager.this.beanConverter.toNative(action.getBean());
             }};
     }
 }

@@ -21,6 +21,7 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
+
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
@@ -323,7 +324,7 @@ public class DeviceManager
     //@Override
     public <T> T[] getImportedBeans(DeviceBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeans((FlDeviceBean) this.beanConverter.toNative(bean),fkName);
+            return nativeManager.getImportedBeans( this.beanConverter.toNative(bean),fkName);
         }
         catch(DAOException e)
         {
@@ -344,7 +345,7 @@ public class DeviceManager
     //@Override
     public <T> List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeansAsList((FlDeviceBean) this.beanConverter.toNative(bean),fkName);
+            return nativeManager.getImportedBeansAsList( this.beanConverter.toNative(bean),fkName);
         }
         catch(DAOException e)
         {
@@ -367,7 +368,7 @@ public class DeviceManager
     //@Override
     public <T> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,String fkName){
         try {
-            return nativeManager.setImportedBeans((FlDeviceBean) this.beanConverter.toNative(bean),importedBeans,fkName);
+            return nativeManager.setImportedBeans( this.beanConverter.toNative(bean),importedBeans,fkName);
         }
         catch(DAOException e)
         {
@@ -390,7 +391,7 @@ public class DeviceManager
     //@Override
     public <T extends Collection<DeviceBean>> T setImportedBeans(DeviceBean bean,T importedBeans,String fkName){
         try {        	
-            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans((FlDeviceBean) this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
+            return (T) this.beanConverter.fromNative(nativeManager.setImportedBeans( this.beanConverter.toNative(bean),this.beanConverter.toNative(importedBeans),fkName));
         }
         catch(DAOException e)
         {
@@ -412,7 +413,7 @@ public class DeviceManager
     public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean)
     {
         try {        	
-            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByDeviceId((FlDeviceBean) this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByDeviceId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -430,7 +431,7 @@ public class DeviceManager
     public List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {        	
-            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByDeviceIdAsList((FlDeviceBean) this.beanConverter.toNative(bean)));
+            return this.dbConverter.getImageBeanConverter().fromNative(nativeManager.getFlImageBeansByDeviceIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -451,8 +452,8 @@ public class DeviceManager
     {
         try {        	
             return this.dbConverter.getImageBeanConverter().fromNative(this.nativeManager.setFlImageBeansByDeviceId(
-                (FlDeviceBean) this.beanConverter.toNative(bean),
-                (FlImageBean[])this.dbConverter.getImageBeanConverter().toNative(importedBeans)
+                 this.beanConverter.toNative(bean),
+                this.dbConverter.getImageBeanConverter().toNative(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -475,7 +476,7 @@ public class DeviceManager
     {
         try {        	
             return (T) this.dbConverter.getImageBeanConverter().fromNative(nativeManager.setFlImageBeansByDeviceId(
-                (FlDeviceBean) this.beanConverter.toNative(bean),
+                 this.beanConverter.toNative(bean),
                 this.dbConverter.getImageBeanConverter().toNative(importedBeans)
                 ));
         }
@@ -495,7 +496,7 @@ public class DeviceManager
     public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean)
     {
         try {        	
-            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByDeviceId((FlDeviceBean) this.beanConverter.toNative(bean)));
+            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByDeviceId( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -513,7 +514,7 @@ public class DeviceManager
     public List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {        	
-            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByDeviceIdAsList((FlDeviceBean) this.beanConverter.toNative(bean)));
+            return this.dbConverter.getLogBeanConverter().fromNative(nativeManager.getFlLogBeansByDeviceIdAsList( this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -534,8 +535,8 @@ public class DeviceManager
     {
         try {        	
             return this.dbConverter.getLogBeanConverter().fromNative(this.nativeManager.setFlLogBeansByDeviceId(
-                (FlDeviceBean) this.beanConverter.toNative(bean),
-                (FlLogBean[])this.dbConverter.getLogBeanConverter().toNative(importedBeans)
+                 this.beanConverter.toNative(bean),
+                this.dbConverter.getLogBeanConverter().toNative(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -558,7 +559,7 @@ public class DeviceManager
     {
         try {        	
             return (T) this.dbConverter.getLogBeanConverter().fromNative(nativeManager.setFlLogBeansByDeviceId(
-                (FlDeviceBean) this.beanConverter.toNative(bean),
+                 this.beanConverter.toNative(bean),
                 this.dbConverter.getLogBeanConverter().toNative(importedBeans)
                 ));
         }
@@ -584,8 +585,8 @@ public class DeviceManager
         , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save((FlDeviceBean)this.beanConverter.toNative(bean)
-                        , (FlImageBean[])this.dbConverter.getImageBeanConverter().toNative(impFlImagebyDeviceId)  , (FlLogBean[])this.dbConverter.getLogBeanConverter().toNative(impFlLogbyDeviceId)  ));
+            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
+                        , this.dbConverter.getImageBeanConverter().toNative(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toNative(impFlLogbyDeviceId)  ));
         }
         catch(DAOException e)
         {
@@ -621,8 +622,8 @@ public class DeviceManager
         , Collection<ImageBean> impFlImagebyDeviceId , Collection<LogBean> impFlLogbyDeviceId )
     {
         try{
-            return this.beanConverter.fromNative(nativeManager.save((FlDeviceBean)this.beanConverter.toNative(bean)
-                        , (Collection<FlImageBean>)this.dbConverter.getImageBeanConverter().toNative(impFlImagebyDeviceId)  , (Collection<FlLogBean>)this.dbConverter.getLogBeanConverter().toNative(impFlLogbyDeviceId)  ));
+            return this.beanConverter.fromNative(nativeManager.save(this.beanConverter.toNative(bean)
+                        , this.dbConverter.getImageBeanConverter().toNative(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toNative(impFlLogbyDeviceId)  ));
         }
         catch(DAOException e)
         {
@@ -951,7 +952,7 @@ public class DeviceManager
     public DeviceBean insert(DeviceBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert((FlDeviceBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -969,7 +970,7 @@ public class DeviceManager
     public DeviceBean update(DeviceBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update((FlDeviceBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -1153,7 +1154,7 @@ public class DeviceManager
     public DeviceBean loadUniqueUsingTemplate(DeviceBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlDeviceBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -1250,7 +1251,7 @@ public class DeviceManager
     //20-3
     public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
     {
-    	return (DeviceBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
+    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
     }
 
     /**
@@ -1266,7 +1267,7 @@ public class DeviceManager
     public List<DeviceBean> loadUsingTemplateAsList(DeviceBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlDeviceBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1304,7 +1305,7 @@ public class DeviceManager
     public int deleteUsingTemplate(DeviceBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate((FlDeviceBean)this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
         }
         catch(DAOException e)
         {
@@ -1525,7 +1526,7 @@ public class DeviceManager
 
             @Override
             public FlDeviceBean getBean() {
-                return (FlDeviceBean) DeviceManager.this.beanConverter.toNative(action.getBean());
+                return  DeviceManager.this.beanConverter.toNative(action.getBean());
             }};
     }
 }

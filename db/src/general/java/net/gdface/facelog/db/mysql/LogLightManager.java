@@ -19,6 +19,7 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
+
 import net.gdface.facelog.dborm.log.FlLogLightManager;
 import net.gdface.facelog.dborm.log.FlLogLightBean;
 import net.gdface.facelog.dborm.log.FlLogLightListener;
@@ -522,7 +523,7 @@ public class LogLightManager
     public LogLightBean insert(LogLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert((FlLogLightBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -540,7 +541,7 @@ public class LogLightManager
     public LogLightBean update(LogLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update((FlLogLightBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -724,7 +725,7 @@ public class LogLightManager
     public LogLightBean loadUniqueUsingTemplate(LogLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlLogLightBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -821,7 +822,7 @@ public class LogLightManager
     //20-3
     public LogLightBean[] loadUsingTemplate(LogLightBean bean, int startRow, int numRows, int searchType)
     {
-    	return (LogLightBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogLightBean[0]);
+    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogLightBean[0]);
     }
 
     /**
@@ -837,7 +838,7 @@ public class LogLightManager
     public List<LogLightBean> loadUsingTemplateAsList(LogLightBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlLogLightBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -875,7 +876,7 @@ public class LogLightManager
     public int deleteUsingTemplate(LogLightBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate((FlLogLightBean)this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
         }
         catch(DAOException e)
         {
@@ -1096,7 +1097,7 @@ public class LogLightManager
 
             @Override
             public FlLogLightBean getBean() {
-                return (FlLogLightBean) LogLightManager.this.beanConverter.toNative(action.getBean());
+                return  LogLightManager.this.beanConverter.toNative(action.getBean());
             }};
     }
 }

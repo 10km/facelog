@@ -19,6 +19,7 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableListener;
 
 import net.gdface.facelog.dborm.exception.DAOException;
+
 import net.gdface.facelog.dborm.face.FlFaceLightManager;
 import net.gdface.facelog.dborm.face.FlFaceLightBean;
 import net.gdface.facelog.dborm.face.FlFaceLightListener;
@@ -648,7 +649,7 @@ public class FaceLightManager
     public FaceLightBean insert(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.insert((FlFaceLightBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.insert(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -666,7 +667,7 @@ public class FaceLightManager
     public FaceLightBean update(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.update((FlFaceLightBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.update(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -850,7 +851,7 @@ public class FaceLightManager
     public FaceLightBean loadUniqueUsingTemplate(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate((FlFaceLightBean)this.beanConverter.toNative(bean)));
+            return this.beanConverter.fromNative(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toNative(bean)));
         }
         catch(DAOException e)
         {
@@ -947,7 +948,7 @@ public class FaceLightManager
     //20-3
     public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
-    	return (FaceLightBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceLightBean[0]);
+    	return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceLightBean[0]);
     }
 
     /**
@@ -963,7 +964,7 @@ public class FaceLightManager
     public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean beanBase, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList((FlFaceLightBean)this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromNative(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toNative(beanBase),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1001,7 +1002,7 @@ public class FaceLightManager
     public int deleteUsingTemplate(FaceLightBean beanBase)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate((FlFaceLightBean)this.beanConverter.toNative(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toNative(beanBase));
         }
         catch(DAOException e)
         {
@@ -1222,7 +1223,7 @@ public class FaceLightManager
 
             @Override
             public FlFaceLightBean getBean() {
-                return (FlFaceLightBean) FaceLightManager.this.beanConverter.toNative(action.getBean());
+                return  FaceLightManager.this.beanConverter.toNative(action.getBean());
             }};
     }
 }
