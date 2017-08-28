@@ -173,8 +173,8 @@ public class LogManager
         return PRIMARYKEY_NAMES;
     }
     private FlLogManager nativeManager = FlLogManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<LogBean,FlLogBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<LogBean,FlLogBean> beanConverter = dbConverter.getLogBeanConverter();
     private static LogManager singleton = new LogManager();
 
     /**

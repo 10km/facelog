@@ -163,8 +163,8 @@ public class DeviceManager
         return PRIMARYKEY_NAMES;
     }
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
 
     /**

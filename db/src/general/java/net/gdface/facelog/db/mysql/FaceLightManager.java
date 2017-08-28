@@ -277,8 +277,8 @@ public class FaceLightManager
         return PRIMARYKEY_NAMES;
     }
     private FlFaceLightManager nativeManager = FlFaceLightManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<FaceLightBean,FlFaceLightBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<FaceLightBean,FlFaceLightBean> beanConverter = dbConverter.getFaceLightBeanConverter();
     private static FaceLightManager singleton = new FaceLightManager();
 
     /**

@@ -126,8 +126,8 @@ public class StoreManager
         return PRIMARYKEY_NAMES;
     }
     private FlStoreManager nativeManager = FlStoreManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<StoreBean,FlStoreBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<StoreBean,FlStoreBean> beanConverter = dbConverter.getStoreBeanConverter();
     private static StoreManager singleton = new StoreManager();
 
     /**

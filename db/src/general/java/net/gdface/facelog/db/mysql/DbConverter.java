@@ -543,6 +543,10 @@ public class DbConverter implements IDbConverter {
             return nativeBean;
         }};
         
+    public static final DbConverter INSTANCE = new DbConverter();
+    protected DbConverter() {
+    	
+    }
 
     private static final Vector<Object[]> converters= new Vector<Object[]>(){
         private static final long serialVersionUID = 1L;

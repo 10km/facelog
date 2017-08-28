@@ -174,8 +174,8 @@ public class ImageManager
         return PRIMARYKEY_NAMES;
     }
     private FlImageManager nativeManager = FlImageManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<ImageBean,FlImageBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<ImageBean,FlImageBean> beanConverter = dbConverter.getImageBeanConverter();
     private static ImageManager singleton = new ImageManager();
 
     /**

@@ -209,8 +209,8 @@ public class PersonManager
         return PRIMARYKEY_NAMES;
     }
     private FlPersonManager nativeManager = FlPersonManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<PersonBean,FlPersonBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<PersonBean,FlPersonBean> beanConverter = dbConverter.getPersonBeanConverter();
     private static PersonManager singleton = new PersonManager();
 
     /**

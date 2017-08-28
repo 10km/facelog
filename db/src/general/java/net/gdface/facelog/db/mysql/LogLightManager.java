@@ -151,8 +151,8 @@ public class LogLightManager
         return PRIMARYKEY_NAMES;
     }
     private FlLogLightManager nativeManager = FlLogLightManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<LogLightBean,FlLogLightBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<LogLightBean,FlLogLightBean> beanConverter = dbConverter.getLogLightBeanConverter();
     private static LogLightManager singleton = new LogLightManager();
 
     /**

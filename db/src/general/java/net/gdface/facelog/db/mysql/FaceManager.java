@@ -290,8 +290,8 @@ public class FaceManager
         return PRIMARYKEY_NAMES;
     }
     private FlFaceManager nativeManager = FlFaceManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<FaceBean,FlFaceBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<FaceBean,FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
     private static FaceManager singleton = new FaceManager();
 
     /**

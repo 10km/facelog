@@ -142,8 +142,8 @@ public class FeatureManager
         return PRIMARYKEY_NAMES;
     }
     private FlFeatureManager nativeManager = FlFeatureManager.getInstance();
-    private IDbConverter dbConverter = new DbConverter();
-    private IBeanConverter<FeatureBean,FlFeatureBean> beanConverter;
+    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<FeatureBean,FlFeatureBean> beanConverter = dbConverter.getFeatureBeanConverter();
     private static FeatureManager singleton = new FeatureManager();
 
     /**
