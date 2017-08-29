@@ -26,7 +26,8 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceListener;
-
+import net.gdface.facelog.dborm.image.FlImageBean;
+import net.gdface.facelog.dborm.log.FlLogBean;
 /**
  * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -314,6 +315,21 @@ public class DeviceManager
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
+    private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
+        private static final long serialVersionUID = 1L;
+    {        
+    put("impFlImagebyDeviceId",new Class<?>[]{ImageBean.class,FlImageBean.class});
+    put("impFlLogbyDeviceId",new Class<?>[]{LogBean.class,FlLogBean.class});
+    }} ;
+    
+    @SuppressWarnings("unchecked")
+    private final <T> IBeanConverter<T,Object> getBeanConverter(String fkName){
+        Class<?>[] resultClass=IMPORT_RESULT_TYPES.get(fkName);
+        if(null == resultClass)
+            throw new IllegalArgumentException("invalid fkName: " + fkName);
+        return (IBeanConverter<T, Object>) this.dbConverter.getBeanConverter(resultClass[0],resultClass[1]);
+    }
+    
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
@@ -328,7 +344,8 @@ public class DeviceManager
     //@Override
     public <T> T[] getImportedBeans(DeviceBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName);
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
         }
         catch(DAOException e)
         {
@@ -349,7 +366,8 @@ public class DeviceManager
     //@Override
     public <T> List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName);
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
         }
         catch(DAOException e)
         {
@@ -365,14 +383,18 @@ public class DeviceManager
      *     <li> impFlLogbyDeviceId -> LogBean</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
-     * @param importedBeans the ${importedClass} array to associate to the {@link DeviceBean}
+     * @param importedBeans the LogBean array to associate to the {@link DeviceBean}
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return importedBeans always
      */
     //@Override
     public <T> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,String fkName){
         try {
-            return nativeManager.setImportedBeans( this.beanConverter.toRight(bean),importedBeans,fkName);
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
+                this.beanConverter.toRight(bean),
+                resultConverter.toRight(importedBeans),
+                fkName));
         }
         catch(DAOException e)
         {
@@ -393,9 +415,22 @@ public class DeviceManager
      */
     @SuppressWarnings("unchecked")
     //@Override
-    public <T extends Collection<DeviceBean>> T setImportedBeans(DeviceBean bean,T importedBeans,String fkName){
+    public <T,C extends Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,String fkName){
         try {
-            return (T) this.beanConverter.fromRight(nativeManager.setImportedBeans( this.beanConverter.toRight(bean),this.beanConverter.toRight(importedBeans),fkName));
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            if(importedBeans instanceof List){
+                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+                        this.beanConverter.toRight(bean),
+                        resultConverter.toRight(importedBeans),
+                        fkName));            	
+            }else{
+                T[] array = importedBeans.toArray((T[])new Object[importedBeans.size()]);
+                resultConverter.fromRight(array,nativeManager.setImportedBeans( 
+                    this.beanConverter.toRight(bean),
+                    resultConverter.toRight(array),
+                    fkName));                
+            }
+            return importedBeans;
         }
         catch(DAOException e)
         {
@@ -455,9 +490,11 @@ public class DeviceManager
     public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.setFlImageBeansByDeviceId(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getImageBeanConverter().toRight(importedBeans)
+            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
+            return importedConverter.fromRight(importedBeans,
+                this.nativeManager.setFlImageBeansByDeviceId(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -475,14 +512,23 @@ public class DeviceManager
      * @see {@link FlImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    @SuppressWarnings("unchecked")
     public <T extends Collection<ImageBean>> T setFlImageBeansByDeviceId(DeviceBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getImageBeanConverter().fromRight(nativeManager.setFlImageBeansByDeviceId(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getImageBeanConverter().toRight(importedBeans)
-                ));
+            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
+            if(importedBeans instanceof List){
+                importedConverter.fromRight((List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByDeviceId(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
+                    ));
+            }else{
+                ImageBean[] array = importedBeans.toArray(new ImageBean[0]);
+                importedConverter.fromRight(array,nativeManager.setFlImageBeansByDeviceId(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(array)
+                    ));
+            }
+            return importedBeans;
         }
         catch(DAOException e)
         {
@@ -538,9 +584,11 @@ public class DeviceManager
     public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(this.nativeManager.setFlLogBeansByDeviceId(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
+            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
+            return importedConverter.fromRight(importedBeans,
+                this.nativeManager.setFlLogBeansByDeviceId(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -558,14 +606,23 @@ public class DeviceManager
      * @see {@link FlLogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    @SuppressWarnings("unchecked")
     public <T extends Collection<LogBean>> T setFlLogBeansByDeviceId(DeviceBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getLogBeanConverter().fromRight(nativeManager.setFlLogBeansByDeviceId(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
-                ));
+            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
+            if(importedBeans instanceof List){
+                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByDeviceId(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
+                    ));
+            }else{
+                LogBean[] array = importedBeans.toArray(new LogBean[0]);
+                importedConverter.fromRight(array,nativeManager.setFlLogBeansByDeviceId(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(array)
+                    ));
+            }
+            return importedBeans;
         }
         catch(DAOException e)
         {
@@ -589,8 +646,8 @@ public class DeviceManager
         , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId )
     {
         try{
-            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
-                        , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
+            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
+                                , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
         }
         catch(DAOException e)
         {
@@ -626,8 +683,8 @@ public class DeviceManager
         , Collection<ImageBean> impFlImagebyDeviceId , Collection<LogBean> impFlLogbyDeviceId )
     {
         try{
-            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
-                        , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
+            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
+                                , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
         }
         catch(DAOException e)
         {
@@ -956,7 +1013,7 @@ public class DeviceManager
     public DeviceBean insert(DeviceBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -974,7 +1031,7 @@ public class DeviceManager
     public DeviceBean update(DeviceBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1268,10 +1325,10 @@ public class DeviceManager
      * @return all the DeviceBean matching the template
      */
     //20-4
-    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean beanBase, int startRow, int numRows, int searchType)
+    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1289,10 +1346,10 @@ public class DeviceManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(DeviceBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1306,10 +1363,10 @@ public class DeviceManager
      * @return the number of deleted objects
      */
     //21
-    public int deleteUsingTemplate(DeviceBean beanBase)
+    public int deleteUsingTemplate(DeviceBean bean)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
         catch(DAOException e)
         {
@@ -1390,10 +1447,10 @@ public class DeviceManager
      * @return the number of rows returned
      */
     //20
-    public int countUsingTemplate(DeviceBean beanBase, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {

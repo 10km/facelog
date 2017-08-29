@@ -354,7 +354,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         throw new UnsupportedOperationException();
     }    
     @Override
-    public <T extends Collection<? extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlLogBean bean,T importedBeans,String fkName)throws DAOException{
+    public <T extends Collection<?>> T setImportedBeans(FlLogBean bean,T importedBeans,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
  
@@ -1261,10 +1261,10 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Saves a list of FlLogBean beans into the database.
+     * Saves a collection of FlLogBean beans into the database.
      *
      * @param beans the FlLogBean bean table to be saved
-     * @return the saved FlLogBean array.
+     * @return the saved FlLogBean collection.
      * @throws DAOException
      */
     //15-2

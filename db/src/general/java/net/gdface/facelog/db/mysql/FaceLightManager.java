@@ -24,7 +24,6 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFaceLightManager;
 import net.gdface.facelog.dborm.face.FlFaceLightBean;
 import net.gdface.facelog.dborm.face.FlFaceLightListener;
-
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face_light table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -344,7 +343,7 @@ public class FaceLightManager
         throw new UnsupportedOperationException();
     }    
     //@Override
-    public <T extends Collection<FaceLightBean>> T setImportedBeans(FaceLightBean bean,T importedBeans,String fkName){
+    public <T,C extends Collection<T>> C setImportedBeans(FaceLightBean bean,C importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }
  
@@ -657,7 +656,7 @@ public class FaceLightManager
     public FaceLightBean insert(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -675,7 +674,7 @@ public class FaceLightManager
     public FaceLightBean update(FaceLightBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -969,10 +968,10 @@ public class FaceLightManager
      * @return all the FaceLightBean matching the template
      */
     //20-4
-    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean beanBase, int startRow, int numRows, int searchType)
+    public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -990,10 +989,10 @@ public class FaceLightManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(FaceLightBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    public int loadUsingTemplate(FaceLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1007,10 +1006,10 @@ public class FaceLightManager
      * @return the number of deleted objects
      */
     //21
-    public int deleteUsingTemplate(FaceLightBean beanBase)
+    public int deleteUsingTemplate(FaceLightBean bean)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
         catch(DAOException e)
         {
@@ -1091,10 +1090,10 @@ public class FaceLightManager
      * @return the number of rows returned
      */
     //20
-    public int countUsingTemplate(FaceLightBean beanBase, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {

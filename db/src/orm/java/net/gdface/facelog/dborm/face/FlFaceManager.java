@@ -15,7 +15,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -483,8 +482,8 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     @Override
     public <T> T[] getImportedBeans(FlFaceBean bean,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null == params)
+            throw new IllegalArgumentException("invalid fkName: " + fkName);
         try {
             return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -610,14 +609,14 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Collection<?extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlFaceBean bean,T importedBeans,String fkName)throws DAOException{
+    public <C extends Collection<?>> C setImportedBeans(FlFaceBean bean,C importedBeans,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==importedBeans)
             throw new NullPointerException();
         try {            
-            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
+            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -1881,10 +1880,10 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Saves a list of FlFaceBean beans into the database.
+     * Saves a collection of FlFaceBean beans into the database.
      *
      * @param beans the FlFaceBean bean table to be saved
-     * @return the saved FlFaceBean array.
+     * @return the saved FlFaceBean collection.
      * @throws DAOException
      */
     //15-2
@@ -1892,8 +1891,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     {
         for (FlFaceBean bean : beans) 
         {
-            bean.copy(this.save(bean));
-            bean.resetIsModified();
+            this.save(bean);
         }
         return beans;
     }

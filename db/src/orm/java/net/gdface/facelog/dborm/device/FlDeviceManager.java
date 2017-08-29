@@ -354,8 +354,8 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     @Override
     public <T> T[] getImportedBeans(FlDeviceBean bean,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null == params)
+            throw new IllegalArgumentException("invalid fkName: " + fkName);
         try {
             return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -481,14 +481,14 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Collection<?extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlDeviceBean bean,T importedBeans,String fkName)throws DAOException{
+    public <C extends Collection<?>> C setImportedBeans(FlDeviceBean bean,C importedBeans,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==importedBeans)
             throw new NullPointerException();
         try {            
-            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
+            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -1349,10 +1349,10 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Saves a list of FlDeviceBean beans into the database.
+     * Saves a collection of FlDeviceBean beans into the database.
      *
      * @param beans the FlDeviceBean bean table to be saved
-     * @return the saved FlDeviceBean array.
+     * @return the saved FlDeviceBean collection.
      * @throws DAOException
      */
     //15-2

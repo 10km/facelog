@@ -401,8 +401,8 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     @Override
     public <T> T[] getImportedBeans(FlPersonBean bean,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null == params)
+            throw new IllegalArgumentException("invalid fkName: " + fkName);
         try {
             return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -528,14 +528,14 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Collection<?extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlPersonBean bean,T importedBeans,String fkName)throws DAOException{
+    public <C extends Collection<?>> C setImportedBeans(FlPersonBean bean,C importedBeans,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==importedBeans)
             throw new NullPointerException();
         try {            
-            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
+            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -1615,10 +1615,10 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
 
     /**
-     * Saves a list of FlPersonBean beans into the database.
+     * Saves a collection of FlPersonBean beans into the database.
      *
      * @param beans the FlPersonBean bean table to be saved
-     * @return the saved FlPersonBean array.
+     * @return the saved FlPersonBean collection.
      * @throws DAOException
      */
     //15-2

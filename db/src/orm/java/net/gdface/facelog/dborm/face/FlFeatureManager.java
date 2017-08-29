@@ -193,7 +193,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         throw new UnsupportedOperationException();
     }    
     @Override
-    public <T extends Collection<? extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlFeatureBean bean,T importedBeans,String fkName)throws DAOException{
+    public <T extends Collection<?>> T setImportedBeans(FlFeatureBean bean,T importedBeans,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
  
@@ -742,10 +742,10 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Saves a list of FlFeatureBean beans into the database.
+     * Saves a collection of FlFeatureBean beans into the database.
      *
      * @param beans the FlFeatureBean bean table to be saved
-     * @return the saved FlFeatureBean array.
+     * @return the saved FlFeatureBean collection.
      * @throws DAOException
      */
     //15-2

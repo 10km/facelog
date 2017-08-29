@@ -24,7 +24,6 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.face.FlFeatureListener;
-
 /**
  * Handles database calls (save, load, count, etc...) for the fl_feature table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -209,7 +208,7 @@ public class FeatureManager
         throw new UnsupportedOperationException();
     }    
     //@Override
-    public <T extends Collection<FeatureBean>> T setImportedBeans(FeatureBean bean,T importedBeans,String fkName){
+    public <T,C extends Collection<T>> C setImportedBeans(FeatureBean bean,C importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }
  
@@ -522,7 +521,7 @@ public class FeatureManager
     public FeatureBean insert(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -540,7 +539,7 @@ public class FeatureManager
     public FeatureBean update(FeatureBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -834,10 +833,10 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //20-4
-    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean beanBase, int startRow, int numRows, int searchType)
+    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -855,10 +854,10 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(FeatureBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -872,10 +871,10 @@ public class FeatureManager
      * @return the number of deleted objects
      */
     //21
-    public int deleteUsingTemplate(FeatureBean beanBase)
+    public int deleteUsingTemplate(FeatureBean bean)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
         catch(DAOException e)
         {
@@ -956,10 +955,10 @@ public class FeatureManager
      * @return the number of rows returned
      */
     //20
-    public int countUsingTemplate(FeatureBean beanBase, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {

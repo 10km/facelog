@@ -367,8 +367,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     @Override
     public <T> T[] getImportedBeans(FlImageBean bean,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null == params)
+            throw new IllegalArgumentException("invalid fkName: " + fkName);
         try {
             return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -494,14 +494,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Collection<?extends net.gdface.facelog.dborm.FullBean<?>>> T setImportedBeans(FlImageBean bean,T importedBeans,String fkName)throws DAOException{
+    public <C extends Collection<?>> C setImportedBeans(FlImageBean bean,C importedBeans,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
         if(null==bean || null==importedBeans)
             throw new NullPointerException();
         try {            
-            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
+            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -1592,10 +1592,10 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Saves a list of FlImageBean beans into the database.
+     * Saves a collection of FlImageBean beans into the database.
      *
      * @param beans the FlImageBean bean table to be saved
-     * @return the saved FlImageBean array.
+     * @return the saved FlImageBean collection.
      * @throws DAOException
      */
     //15-2

@@ -59,12 +59,12 @@ public interface IBeanConverter<L,R> {
 
         @Override
         public L fromRight(R bean) {
-            return fromRight(_newInstanceL(),bean);
+            return null == bean? null : fromRight(_newInstanceL(),bean);
         }
 
         @Override
         public R toRight(L bean) {
-            return toRight(bean,_newInstanceR());
+            return null == bean? null : toRight(bean,_newInstanceR());
         }
 
         @SuppressWarnings("unchecked")
@@ -102,13 +102,13 @@ public interface IBeanConverter<L,R> {
         @SuppressWarnings("unchecked")
         @Override
         public R[] toRight(L[] beans) {
-            return this.toRight(beans,(R[]) new Object[beans.length]);
+            return null == beans? null : this.toRight(beans,(R[]) new Object[beans.length]);
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public L[] fromRight(R[] beans) {
-            return this.fromRight( (L[]) new Object[beans.length],beans);
+            return null == beans? null : this.fromRight( (L[]) new Object[beans.length],beans);
         }
 
         @Override
@@ -163,14 +163,12 @@ public interface IBeanConverter<L,R> {
 
         @Override
         public List<R> toRight(List<L> beans) {
-            if(null == beans)return null;
-            return this.toRight(beans,new ArrayList<R>(beans.size()));
+            return null == beans? null : this.toRight(beans,new ArrayList<R>(beans.size()));
         }
 
         @Override
         public List<L> fromRight(List<R> beans) {
-            if(null == beans)return null;
-            return this.fromRight(new ArrayList<L>(beans.size()),beans);
+            return null == beans? null : this.fromRight(new ArrayList<L>(beans.size()),beans);
         }
     }
 

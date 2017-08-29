@@ -27,7 +27,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceListener;
-
+import net.gdface.facelog.dborm.log.FlLogBean;
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -441,6 +441,21 @@ public class FaceManager
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
+    private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
+        private static final long serialVersionUID = 1L;
+    {        
+    put("impFlLogbyVerifyFace",new Class<?>[]{LogBean.class,FlLogBean.class});
+    put("impFlLogbyCompareFace",new Class<?>[]{LogBean.class,FlLogBean.class});
+    }} ;
+    
+    @SuppressWarnings("unchecked")
+    private final <T> IBeanConverter<T,Object> getBeanConverter(String fkName){
+        Class<?>[] resultClass=IMPORT_RESULT_TYPES.get(fkName);
+        if(null == resultClass)
+            throw new IllegalArgumentException("invalid fkName: " + fkName);
+        return (IBeanConverter<T, Object>) this.dbConverter.getBeanConverter(resultClass[0],resultClass[1]);
+    }
+    
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
@@ -455,7 +470,8 @@ public class FaceManager
     //@Override
     public <T> T[] getImportedBeans(FaceBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName);
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
         }
         catch(DAOException e)
         {
@@ -476,7 +492,8 @@ public class FaceManager
     //@Override
     public <T> List<T> getImportedBeansAsList(FaceBean bean,String fkName){
         try {
-            return nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName);
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
         }
         catch(DAOException e)
         {
@@ -492,14 +509,18 @@ public class FaceManager
      *     <li> impFlLogbyCompareFace -> LogBean</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
-     * @param importedBeans the ${importedClass} array to associate to the {@link FaceBean}
+     * @param importedBeans the LogBean array to associate to the {@link FaceBean}
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return importedBeans always
      */
     //@Override
     public <T> T[] setImportedBeans(FaceBean bean,T[] importedBeans,String fkName){
         try {
-            return nativeManager.setImportedBeans( this.beanConverter.toRight(bean),importedBeans,fkName);
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
+                this.beanConverter.toRight(bean),
+                resultConverter.toRight(importedBeans),
+                fkName));
         }
         catch(DAOException e)
         {
@@ -520,9 +541,22 @@ public class FaceManager
      */
     @SuppressWarnings("unchecked")
     //@Override
-    public <T extends Collection<FaceBean>> T setImportedBeans(FaceBean bean,T importedBeans,String fkName){
+    public <T,C extends Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,String fkName){
         try {
-            return (T) this.beanConverter.fromRight(nativeManager.setImportedBeans( this.beanConverter.toRight(bean),this.beanConverter.toRight(importedBeans),fkName));
+            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
+            if(importedBeans instanceof List){
+                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+                        this.beanConverter.toRight(bean),
+                        resultConverter.toRight(importedBeans),
+                        fkName));            	
+            }else{
+                T[] array = importedBeans.toArray((T[])new Object[importedBeans.size()]);
+                resultConverter.fromRight(array,nativeManager.setImportedBeans( 
+                    this.beanConverter.toRight(bean),
+                    resultConverter.toRight(array),
+                    fkName));                
+            }
+            return importedBeans;
         }
         catch(DAOException e)
         {
@@ -582,9 +616,11 @@ public class FaceManager
     public LogBean[] setFlLogBeansByVerifyFace(FaceBean bean , LogBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(this.nativeManager.setFlLogBeansByVerifyFace(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
+            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
+            return importedConverter.fromRight(importedBeans,
+                this.nativeManager.setFlLogBeansByVerifyFace(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -602,14 +638,23 @@ public class FaceManager
      * @see {@link FlLogManager#setReferencedByVerifyFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
-    @SuppressWarnings("unchecked")
     public <T extends Collection<LogBean>> T setFlLogBeansByVerifyFace(FaceBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getLogBeanConverter().fromRight(nativeManager.setFlLogBeansByVerifyFace(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
-                ));
+            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
+            if(importedBeans instanceof List){
+                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByVerifyFace(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
+                    ));
+            }else{
+                LogBean[] array = importedBeans.toArray(new LogBean[0]);
+                importedConverter.fromRight(array,nativeManager.setFlLogBeansByVerifyFace(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(array)
+                    ));
+            }
+            return importedBeans;
         }
         catch(DAOException e)
         {
@@ -665,9 +710,11 @@ public class FaceManager
     public LogBean[] setFlLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(this.nativeManager.setFlLogBeansByCompareFace(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
+            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
+            return importedConverter.fromRight(importedBeans,
+                this.nativeManager.setFlLogBeansByCompareFace(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
                 ));
         }
         catch(DAOException e)
@@ -685,14 +732,23 @@ public class FaceManager
      * @see {@link FlLogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
-    @SuppressWarnings("unchecked")
     public <T extends Collection<LogBean>> T setFlLogBeansByCompareFace(FaceBean bean , T importedBeans)
     {
         try {
-            return (T) this.dbConverter.getLogBeanConverter().fromRight(nativeManager.setFlLogBeansByCompareFace(
-                 this.beanConverter.toRight(bean),
-                this.dbConverter.getLogBeanConverter().toRight(importedBeans)
-                ));
+            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
+            if(importedBeans instanceof List){
+                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByCompareFace(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(importedBeans)
+                    ));
+            }else{
+                LogBean[] array = importedBeans.toArray(new LogBean[0]);
+                importedConverter.fromRight(array,nativeManager.setFlLogBeansByCompareFace(
+                    this.beanConverter.toRight(bean),
+                    importedConverter.toRight(array)
+                    ));
+            }
+            return importedBeans;
         }
         catch(DAOException e)
         {
@@ -718,8 +774,8 @@ public class FaceManager
         , LogBean[] impFlLogbyVerifyFace , LogBean[] impFlLogbyCompareFace )
     {
         try{
-            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
-            , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImgMd5) , this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId)             , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyVerifyFace)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyCompareFace)  ));
+            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
+                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImgMd5) , this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId)                 , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyVerifyFace)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyCompareFace)  ));
         }
         catch(DAOException e)
         {
@@ -757,8 +813,8 @@ public class FaceManager
         , Collection<LogBean> impFlLogbyVerifyFace , Collection<LogBean> impFlLogbyCompareFace )
     {
         try{
-            return this.beanConverter.fromRight(nativeManager.save(this.beanConverter.toRight(bean)
-            , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImgMd5) , this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId)             , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyVerifyFace)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyCompareFace)  ));
+            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
+                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImgMd5) , this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId)                 , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyVerifyFace)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyCompareFace)  ));
         }
         catch(DAOException e)
         {
@@ -835,7 +891,7 @@ public class FaceManager
             IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromRight(this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
+            return (T) converter.fromRight(beanToSet,this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
         }
         catch(DAOException e)
         {
@@ -879,7 +935,7 @@ public class FaceManager
     public ImageBean setReferencedByImgMd5(FaceBean bean, ImageBean beanToSet) throws DAOException
     {
         try{
-            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.setReferencedByImgMd5(this.beanConverter.toRight(bean),this.dbConverter.getImageBeanConverter().toRight(beanToSet)));
+            return this.dbConverter.getImageBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByImgMd5(this.beanConverter.toRight(bean),this.dbConverter.getImageBeanConverter().toRight(beanToSet)));
         }
         catch(DAOException e)
         {
@@ -918,7 +974,7 @@ public class FaceManager
     public PersonBean setReferencedByPersonId(FaceBean bean, PersonBean beanToSet) throws DAOException
     {
         try{
-            return this.dbConverter.getPersonBeanConverter().fromRight(this.nativeManager.setReferencedByPersonId(this.beanConverter.toRight(bean),this.dbConverter.getPersonBeanConverter().toRight(beanToSet)));
+            return this.dbConverter.getPersonBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByPersonId(this.beanConverter.toRight(bean),this.dbConverter.getPersonBeanConverter().toRight(beanToSet)));
         }
         catch(DAOException e)
         {
@@ -1222,7 +1278,7 @@ public class FaceManager
     public FaceBean insert(FaceBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.insert(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1240,7 +1296,7 @@ public class FaceManager
     public FaceBean update(FaceBean bean)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.update(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -1534,10 +1590,10 @@ public class FaceManager
      * @return all the FaceBean matching the template
      */
     //20-4
-    public List<FaceBean> loadUsingTemplateAsList(FaceBean beanBase, int startRow, int numRows, int searchType)
+    public List<FaceBean> loadUsingTemplateAsList(FaceBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(beanBase),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
         }
         catch(DAOException e)
         {
@@ -1555,10 +1611,10 @@ public class FaceManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(FaceBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1572,10 +1628,10 @@ public class FaceManager
      * @return the number of deleted objects
      */
     //21
-    public int deleteUsingTemplate(FaceBean beanBase)
+    public int deleteUsingTemplate(FaceBean bean)
     {
         try{
-            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(beanBase));
+            return this.nativeManager.deleteUsingTemplate(this.beanConverter.toRight(bean));
         }
         catch(DAOException e)
         {
@@ -1764,10 +1820,10 @@ public class FaceManager
      * @return the number of rows returned
      */
     //20
-    public int countUsingTemplate(FaceBean beanBase, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(FaceBean bean, int startRow, int numRows, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(beanBase),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
         }
         catch(DAOException e)
         {
