@@ -27,7 +27,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlImageBeanBase
     implements Serializable,BaseBean<FlImageBeanBase>,Comparable<FlImageBean>
 {
-	private static final long serialVersionUID = -6828373541550111918L;
+	private static final long serialVersionUID = -5767781148754638855L;
 	
     /**
      * comments:主键,图像md5检验码,同时也是外键fl_store(md5)

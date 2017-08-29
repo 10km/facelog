@@ -20,6 +20,7 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.DeviceListener;
+import net.gdface.facelog.db.WrapDAOException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
@@ -213,7 +214,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -233,7 +234,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -280,7 +281,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -299,7 +300,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -324,7 +325,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -345,7 +346,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -368,7 +369,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -391,7 +392,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -413,7 +414,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -431,7 +432,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -454,7 +455,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -478,7 +479,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -496,7 +497,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -514,7 +515,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -537,7 +538,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -561,7 +562,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -586,7 +587,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     } 
     /**
@@ -623,7 +624,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }   
     /**
@@ -669,7 +670,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -861,7 +862,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -884,7 +885,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -914,7 +915,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -952,7 +953,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -970,7 +971,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1154,7 +1155,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
      }
 
@@ -1267,7 +1268,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }        
     }
     /**
@@ -1288,7 +1289,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -1305,7 +1306,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1342,7 +1343,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1389,7 +1390,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1486,7 +1487,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1498,7 +1499,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1509,7 +1510,7 @@ public class DeviceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     private FlDeviceManager.Action toRight(final Action action){

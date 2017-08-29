@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class DeviceBean
     implements Serializable,BaseBean,Comparable<DeviceBean>
 {
-	private static final long serialVersionUID = -4213651520222308253L;
-	
+    private static final long serialVersionUID = -1983784566394161565L;
+    
     /**
      * comments:设备id
      */

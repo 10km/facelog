@@ -21,7 +21,7 @@ public class FlImageBean
     extends FlImageBeanBase
     implements FullBean<FlImageBeanBase>
 {
-	private static final long serialVersionUID = 8197469897888210996L;
+	private static final long serialVersionUID = 646979810912117585L;
 	
     private boolean md5IsModified = false;
     private boolean md5IsInitialized = false;

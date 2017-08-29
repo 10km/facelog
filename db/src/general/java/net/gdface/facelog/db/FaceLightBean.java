@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class FaceLightBean
     implements Serializable,BaseBean,Comparable<FaceLightBean>
 {
-	private static final long serialVersionUID = 3775783205561936829L;
-	
+    private static final long serialVersionUID = -990429198278915105L;
+    
     /**
      * comments:主键,特征数据md5校验码
      */

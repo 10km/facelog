@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class LogLightBean
     implements Serializable,BaseBean,Comparable<LogLightBean>
 {
-	private static final long serialVersionUID = 2673972231747829539L;
-	
+    private static final long serialVersionUID = 4419196843551738129L;
+    
     /**
      * comments:日志id
      */

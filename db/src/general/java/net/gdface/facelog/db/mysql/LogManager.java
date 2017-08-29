@@ -21,6 +21,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.LogListener;
+import net.gdface.facelog.db.WrapDAOException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.log.FlLogManager;
@@ -223,7 +224,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -243,7 +244,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -290,7 +291,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -309,7 +310,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -354,7 +355,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     } 
     /**
@@ -403,7 +404,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -437,7 +438,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
      
@@ -460,7 +461,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
         
     }
@@ -481,7 +482,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -499,7 +500,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
         
     }
@@ -520,7 +521,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -538,7 +539,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
         
     }
@@ -559,7 +560,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -577,7 +578,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
         
     }
@@ -598,7 +599,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -619,7 +620,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -811,7 +812,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -834,7 +835,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -864,7 +865,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -902,7 +903,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -920,7 +921,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1104,7 +1105,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
      }
 
@@ -1217,7 +1218,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }        
     }
     /**
@@ -1238,7 +1239,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -1255,7 +1256,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1278,7 +1279,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1295,7 +1296,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -1312,7 +1313,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1329,7 +1330,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1346,7 +1347,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -1363,7 +1364,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1380,7 +1381,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1397,7 +1398,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -1414,7 +1415,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1431,7 +1432,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1448,7 +1449,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -1465,7 +1466,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1502,7 +1503,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1549,7 +1550,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1646,7 +1647,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1658,7 +1659,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1669,7 +1670,7 @@ public class LogManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     private FlLogManager.Action toRight(final Action action){

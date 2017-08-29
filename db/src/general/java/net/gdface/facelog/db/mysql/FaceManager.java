@@ -21,6 +21,7 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.FaceListener;
+import net.gdface.facelog.db.WrapDAOException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFaceManager;
@@ -340,7 +341,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -360,7 +361,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -407,7 +408,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -426,7 +427,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -451,7 +452,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -472,7 +473,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -495,7 +496,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -518,7 +519,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -540,7 +541,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -558,7 +559,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -581,7 +582,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -605,7 +606,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -623,7 +624,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -641,7 +642,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -664,7 +665,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -688,7 +689,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -715,7 +716,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     } 
     /**
@@ -754,7 +755,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }   
     /**
@@ -799,7 +800,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -831,7 +832,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
      
@@ -854,7 +855,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
         
     }
@@ -875,7 +876,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -893,7 +894,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
         
     }
@@ -914,7 +915,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -935,7 +936,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -1127,7 +1128,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -1150,7 +1151,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1180,7 +1181,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1218,7 +1219,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1236,7 +1237,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1420,7 +1421,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
      }
 
@@ -1533,7 +1534,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }        
     }
     /**
@@ -1554,7 +1555,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -1571,7 +1572,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1594,7 +1595,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1611,7 +1612,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -1628,7 +1629,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1645,7 +1646,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1662,7 +1663,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -1679,7 +1680,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1716,7 +1717,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1763,7 +1764,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1860,7 +1861,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1872,7 +1873,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1883,7 +1884,7 @@ public class FaceManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     private FlFaceManager.Action toRight(final Action action){

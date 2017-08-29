@@ -19,6 +19,7 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.StoreListener;
+import net.gdface.facelog.db.WrapDAOException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.image.FlStoreManager;
@@ -176,7 +177,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -196,7 +197,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -243,7 +244,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -262,7 +263,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -287,7 +288,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -308,7 +309,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -331,7 +332,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -354,7 +355,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
  
@@ -376,7 +377,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -394,7 +395,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -417,7 +418,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -441,7 +442,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -459,7 +460,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -477,7 +478,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -500,7 +501,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -524,7 +525,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -549,7 +550,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     } 
     /**
@@ -586,7 +587,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }   
     /**
@@ -632,7 +633,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -824,7 +825,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -847,7 +848,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -877,7 +878,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -915,7 +916,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -933,7 +934,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1117,7 +1118,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
      }
 
@@ -1230,7 +1231,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }        
     }
     /**
@@ -1251,7 +1252,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     /**
@@ -1268,7 +1269,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1305,7 +1306,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1352,7 +1353,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1449,7 +1450,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
 
@@ -1461,7 +1462,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     
@@ -1472,7 +1473,7 @@ public class StoreManager
         }
         catch(DAOException e)
         {
-            throw new RuntimeException(e);
+            throw new WrapDAOException(e);
         }
     }
     private FlStoreManager.Action toRight(final Action action){

@@ -20,6 +20,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.FaceLightBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.LogLightBean;
+
 /**
  * {@link IDbConverter} implemention for MySQL
  * @author guyadong

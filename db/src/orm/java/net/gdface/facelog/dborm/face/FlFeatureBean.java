@@ -21,7 +21,7 @@ public class FlFeatureBean
     extends FlFeatureBeanBase
     implements FullBean<FlFeatureBeanBase>
 {
-	private static final long serialVersionUID = -9030529272695775391L;
+	private static final long serialVersionUID = 9009645819979798812L;
 	
     private boolean md5IsModified = false;
     private boolean md5IsInitialized = false;

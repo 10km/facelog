@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class ImageBean
     implements Serializable,BaseBean,Comparable<ImageBean>
 {
-	private static final long serialVersionUID = 7820154512811374438L;
-	
+    private static final long serialVersionUID = -5491214114261088424L;
+    
     /**
      * comments:主键,图像md5检验码,同时也是外键fl_store(md5)
      */

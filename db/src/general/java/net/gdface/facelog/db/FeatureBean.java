@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class FeatureBean
     implements Serializable,BaseBean,Comparable<FeatureBean>
 {
-	private static final long serialVersionUID = -6585826736099463903L;
-	
+    private static final long serialVersionUID = -2191238184879882524L;
+    
     /**
      * comments:主键,特征数据md5校验码
      */

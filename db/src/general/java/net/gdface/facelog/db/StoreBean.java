@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class StoreBean
     implements Serializable,BaseBean,Comparable<StoreBean>
 {
-	private static final long serialVersionUID = -280751867286513772L;
-	
+    private static final long serialVersionUID = -1684185165668832146L;
+    
     /**
      * comments:主键,md5检验码
      */

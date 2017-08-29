@@ -21,7 +21,7 @@ public class FlLogBean
     extends FlLogBeanBase
     implements FullBean<FlLogBeanBase>
 {
-	private static final long serialVersionUID = -1281153514489833773L;
+	private static final long serialVersionUID = 7869683986300606649L;
 	
     private boolean idIsModified = false;
     private boolean idIsInitialized = false;

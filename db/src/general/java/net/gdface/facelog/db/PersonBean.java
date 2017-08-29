@@ -20,8 +20,8 @@ import java.io.Serializable;
 public class PersonBean
     implements Serializable,BaseBean,Comparable<PersonBean>
 {
-	private static final long serialVersionUID = -2769739969695818768L;
-	
+    private static final long serialVersionUID = 7741617836285025804L;
+    
     /**
      * comments:用户识别码
      */

@@ -25,7 +25,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
 public class FlFaceLightBeanBase
     implements Serializable,BaseBean<FlFaceLightBeanBase>,Comparable<FlFaceLightBean>
 {
-	private static final long serialVersionUID = 204071059176436333L;
+	private static final long serialVersionUID = 7633869814177675190L;
 	
     /**
      * comments:主键,特征数据md5校验码

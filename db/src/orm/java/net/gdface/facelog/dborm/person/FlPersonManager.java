@@ -2014,7 +2014,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     /**
      * Retrieves an unique FlPersonBean using the face_md5 index.
      *
-     * @param faceMd5 the face_md5 column's value filter.
+     * @param faceMd5 the face_md5 column's value filter. must not be null
      * @return a list of FlPersonBean
      * @throws DAOException
      */
@@ -2043,7 +2043,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     /**
      * Retrieves an unique FlPersonBean using the papers_num index.
      *
-     * @param papersNum the papers_num column's value filter.
+     * @param papersNum the papers_num column's value filter. must not be null
      * @return a list of FlPersonBean
      * @throws DAOException
      */
@@ -2072,7 +2072,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     /**
      * Retrieves an unique FlPersonBean using the photo_id index.
      *
-     * @param photoId the photo_id column's value filter.
+     * @param photoId the photo_id column's value filter. must not be null
      * @return a list of FlPersonBean
      * @throws DAOException
      */
