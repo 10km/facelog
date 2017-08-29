@@ -582,7 +582,7 @@ public class FaceLightManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -986,7 +986,7 @@ public class FaceLightManager
     public int loadUsingTemplate(FaceLightBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1107,10 +1107,10 @@ public class FaceLightManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((FaceLightListener)listener));
+        this.nativeManager.registerListener(this.toNative((FaceLightListener)listener));
     }
 
-    private FlFaceLightListener toRight(final FaceLightListener listener) {
+    private FlFaceLightListener toNative(final FaceLightListener listener) {
         return null == listener ?null:new FlFaceLightListener (){
 
             @Override
@@ -1214,7 +1214,7 @@ public class FaceLightManager
             throw new WrapDAOException(e);
         }
     }
-    private FlFaceLightManager.Action toRight(final Action action){
+    private FlFaceLightManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFaceLightManager.Action(){

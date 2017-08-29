@@ -1147,7 +1147,7 @@ public class FaceManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1551,7 +1551,7 @@ public class FaceManager
     public int loadUsingTemplate(FaceBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1780,10 +1780,10 @@ public class FaceManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((FaceListener)listener));
+        this.nativeManager.registerListener(this.toNative((FaceListener)listener));
     }
 
-    private FlFaceListener toRight(final FaceListener listener) {
+    private FlFaceListener toNative(final FaceListener listener) {
         return null == listener ?null:new FlFaceListener (){
 
             @Override
@@ -1887,7 +1887,7 @@ public class FaceManager
             throw new WrapDAOException(e);
         }
     }
-    private FlFaceManager.Action toRight(final Action action){
+    private FlFaceManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFaceManager.Action(){

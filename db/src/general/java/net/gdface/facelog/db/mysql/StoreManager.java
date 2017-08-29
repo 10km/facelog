@@ -844,7 +844,7 @@ public class StoreManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1248,7 +1248,7 @@ public class StoreManager
     public int loadUsingTemplate(StoreBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1369,10 +1369,10 @@ public class StoreManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((StoreListener)listener));
+        this.nativeManager.registerListener(this.toNative((StoreListener)listener));
     }
 
-    private FlStoreListener toRight(final StoreListener listener) {
+    private FlStoreListener toNative(final StoreListener listener) {
         return null == listener ?null:new FlStoreListener (){
 
             @Override
@@ -1476,7 +1476,7 @@ public class StoreManager
             throw new WrapDAOException(e);
         }
     }
-    private FlStoreManager.Action toRight(final Action action){
+    private FlStoreManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlStoreManager.Action(){

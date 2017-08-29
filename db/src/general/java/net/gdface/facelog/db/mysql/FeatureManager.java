@@ -447,7 +447,7 @@ public class FeatureManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -851,7 +851,7 @@ public class FeatureManager
     public int loadUsingTemplate(FeatureBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -972,10 +972,10 @@ public class FeatureManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((FeatureListener)listener));
+        this.nativeManager.registerListener(this.toNative((FeatureListener)listener));
     }
 
-    private FlFeatureListener toRight(final FeatureListener listener) {
+    private FlFeatureListener toNative(final FeatureListener listener) {
         return null == listener ?null:new FlFeatureListener (){
 
             @Override
@@ -1079,7 +1079,7 @@ public class FeatureManager
             throw new WrapDAOException(e);
         }
     }
-    private FlFeatureManager.Action toRight(final Action action){
+    private FlFeatureManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFeatureManager.Action(){

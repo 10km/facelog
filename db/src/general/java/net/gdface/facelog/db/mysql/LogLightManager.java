@@ -456,7 +456,7 @@ public class LogLightManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -860,7 +860,7 @@ public class LogLightManager
     public int loadUsingTemplate(LogLightBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -981,10 +981,10 @@ public class LogLightManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((LogLightListener)listener));
+        this.nativeManager.registerListener(this.toNative((LogLightListener)listener));
     }
 
-    private FlLogLightListener toRight(final LogLightListener listener) {
+    private FlLogLightListener toNative(final LogLightListener listener) {
         return null == listener ?null:new FlLogLightListener (){
 
             @Override
@@ -1088,7 +1088,7 @@ public class LogLightManager
             throw new WrapDAOException(e);
         }
     }
-    private FlLogLightManager.Action toRight(final Action action){
+    private FlLogLightManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlLogLightManager.Action(){

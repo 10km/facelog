@@ -1022,7 +1022,7 @@ public class PersonManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1426,7 +1426,7 @@ public class PersonManager
     public int loadUsingTemplate(PersonBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1709,10 +1709,10 @@ public class PersonManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((PersonListener)listener));
+        this.nativeManager.registerListener(this.toNative((PersonListener)listener));
     }
 
-    private FlPersonListener toRight(final PersonListener listener) {
+    private FlPersonListener toNative(final PersonListener listener) {
         return null == listener ?null:new FlPersonListener (){
 
             @Override
@@ -1816,7 +1816,7 @@ public class PersonManager
             throw new WrapDAOException(e);
         }
     }
-    private FlPersonManager.Action toRight(final Action action){
+    private FlPersonManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlPersonManager.Action(){

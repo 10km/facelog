@@ -881,7 +881,7 @@ public class DeviceManager
     public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toRight(action));
+            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1285,7 +1285,7 @@ public class DeviceManager
     public int loadUsingTemplate(DeviceBean beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toRight(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(beanBase),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1406,10 +1406,10 @@ public class DeviceManager
     //35
     public void registerListener(TableListener listener)
     {
-        this.nativeManager.registerListener(this.toRight((DeviceListener)listener));
+        this.nativeManager.registerListener(this.toNative((DeviceListener)listener));
     }
 
-    private FlDeviceListener toRight(final DeviceListener listener) {
+    private FlDeviceListener toNative(final DeviceListener listener) {
         return null == listener ?null:new FlDeviceListener (){
 
             @Override
@@ -1513,7 +1513,7 @@ public class DeviceManager
             throw new WrapDAOException(e);
         }
     }
-    private FlDeviceManager.Action toRight(final Action action){
+    private FlDeviceManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlDeviceManager.Action(){
