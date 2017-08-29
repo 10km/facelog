@@ -6,98 +6,104 @@ public class MyDbConverter extends DbConverter {
 	public static final IBeanConverter<FaceLightBean,FaceBean> faceLightConverter=new IBeanConverter.AbstractHandle<FaceLightBean, FaceBean>() {
 
 		@Override
-		public FaceLightBean fromRight(FaceBean bean) {
-			FaceLightBean generalBean= new FaceLightBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                generalBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                generalBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                generalBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFaceLeft() != null)
-                generalBean.setFaceLeft(bean.getFaceLeft());
-            if(bean.getFaceTop() != null)
-                generalBean.setFaceTop(bean.getFaceTop());
-            if(bean.getFaceWidth() != null)
-                generalBean.setFaceWidth(bean.getFaceWidth());
-            if(bean.getFaceHeight() != null)
-                generalBean.setFaceHeight(bean.getFaceHeight());
-            if(bean.getEyeLeftx() != null)
-                generalBean.setEyeLeftx(bean.getEyeLeftx());
-            if(bean.getEyeLefty() != null)
-                generalBean.setEyeLefty(bean.getEyeLefty());
-            if(bean.getEyeRightx() != null)
-                generalBean.setEyeRightx(bean.getEyeRightx());
-            if(bean.getEyeRighty() != null)
-                generalBean.setEyeRighty(bean.getEyeRighty());
-            if(bean.getMouthX() != null)
-                generalBean.setMouthX(bean.getMouthX());
-            if(bean.getMouthY() != null)
-                generalBean.setMouthY(bean.getMouthY());
-            if(bean.getNoseX() != null)
-                generalBean.setNoseX(bean.getNoseX());
-            if(bean.getNoseY() != null)
-                generalBean.setNoseY(bean.getNoseY());
-            if(bean.getAngleYaw() != null)
-                generalBean.setAngleYaw(bean.getAngleYaw());
-            if(bean.getAnglePitch() != null)
-                generalBean.setAnglePitch(bean.getAnglePitch());
-            if(bean.getAngleRoll() != null)
-                generalBean.setAngleRoll(bean.getAngleRoll());
-            if(bean.getExtInfo() != null)
-                generalBean.setExtInfo(bean.getExtInfo());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            return generalBean;
+		protected FaceLightBean _newInstanceL() {
+			return new FaceLightBean();
+		}
+
+		@Override
+		protected FaceBean _newInstanceR() {
+			return new FaceBean();
+		}
+		
+		@Override
+		public void _fromRight(FaceLightBean left,FaceBean right) {
+            left.isNew(right.isNew());
+            if(right.getMd5() != null)
+                left.setMd5(right.getMd5());
+            if(right.getPersonId() != null)
+                left.setPersonId(right.getPersonId());
+            if(right.getImgMd5() != null)
+                left.setImgMd5(right.getImgMd5());
+            if(right.getFaceLeft() != null)
+                left.setFaceLeft(right.getFaceLeft());
+            if(right.getFaceTop() != null)
+                left.setFaceTop(right.getFaceTop());
+            if(right.getFaceWidth() != null)
+                left.setFaceWidth(right.getFaceWidth());
+            if(right.getFaceHeight() != null)
+                left.setFaceHeight(right.getFaceHeight());
+            if(right.getEyeLeftx() != null)
+                left.setEyeLeftx(right.getEyeLeftx());
+            if(right.getEyeLefty() != null)
+                left.setEyeLefty(right.getEyeLefty());
+            if(right.getEyeRightx() != null)
+                left.setEyeRightx(right.getEyeRightx());
+            if(right.getEyeRighty() != null)
+                left.setEyeRighty(right.getEyeRighty());
+            if(right.getMouthX() != null)
+                left.setMouthX(right.getMouthX());
+            if(right.getMouthY() != null)
+                left.setMouthY(right.getMouthY());
+            if(right.getNoseX() != null)
+                left.setNoseX(right.getNoseX());
+            if(right.getNoseY() != null)
+                left.setNoseY(right.getNoseY());
+            if(right.getAngleYaw() != null)
+                left.setAngleYaw(right.getAngleYaw());
+            if(right.getAnglePitch() != null)
+                left.setAnglePitch(right.getAnglePitch());
+            if(right.getAngleRoll() != null)
+                left.setAngleRoll(right.getAngleRoll());
+            if(right.getExtInfo() != null)
+                left.setExtInfo(right.getExtInfo());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
         }
 
 		@Override
-		public FaceBean toRight(FaceLightBean bean) {
-            FaceBean nativeBean= new FaceBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                nativeBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                nativeBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                nativeBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFaceLeft() != null)
-                nativeBean.setFaceLeft(bean.getFaceLeft());
-            if(bean.getFaceTop() != null)
-                nativeBean.setFaceTop(bean.getFaceTop());
-            if(bean.getFaceWidth() != null)
-                nativeBean.setFaceWidth(bean.getFaceWidth());
-            if(bean.getFaceHeight() != null)
-                nativeBean.setFaceHeight(bean.getFaceHeight());
-            if(bean.getEyeLeftx() != null)
-                nativeBean.setEyeLeftx(bean.getEyeLeftx());
-            if(bean.getEyeLefty() != null)
-                nativeBean.setEyeLefty(bean.getEyeLefty());
-            if(bean.getEyeRightx() != null)
-                nativeBean.setEyeRightx(bean.getEyeRightx());
-            if(bean.getEyeRighty() != null)
-                nativeBean.setEyeRighty(bean.getEyeRighty());
-            if(bean.getMouthX() != null)
-                nativeBean.setMouthX(bean.getMouthX());
-            if(bean.getMouthY() != null)
-                nativeBean.setMouthY(bean.getMouthY());
-            if(bean.getNoseX() != null)
-                nativeBean.setNoseX(bean.getNoseX());
-            if(bean.getNoseY() != null)
-                nativeBean.setNoseY(bean.getNoseY());
-            if(bean.getAngleYaw() != null)
-                nativeBean.setAngleYaw(bean.getAngleYaw());
-            if(bean.getAnglePitch() != null)
-                nativeBean.setAnglePitch(bean.getAnglePitch());
-            if(bean.getAngleRoll() != null)
-                nativeBean.setAngleRoll(bean.getAngleRoll());
-            if(bean.getExtInfo() != null)
-                nativeBean.setExtInfo(bean.getExtInfo());
+		public void _toRight(FaceLightBean left,FaceBean right) {
+            right.isNew(left.isNew());
+            if(left.getMd5() != null)
+                right.setMd5(left.getMd5());
+            if(left.getPersonId() != null)
+                right.setPersonId(left.getPersonId());
+            if(left.getImgMd5() != null)
+                right.setImgMd5(left.getImgMd5());
+            if(left.getFaceLeft() != null)
+                right.setFaceLeft(left.getFaceLeft());
+            if(left.getFaceTop() != null)
+                right.setFaceTop(left.getFaceTop());
+            if(left.getFaceWidth() != null)
+                right.setFaceWidth(left.getFaceWidth());
+            if(left.getFaceHeight() != null)
+                right.setFaceHeight(left.getFaceHeight());
+            if(left.getEyeLeftx() != null)
+                right.setEyeLeftx(left.getEyeLeftx());
+            if(left.getEyeLefty() != null)
+                right.setEyeLefty(left.getEyeLefty());
+            if(left.getEyeRightx() != null)
+                right.setEyeRightx(left.getEyeRightx());
+            if(left.getEyeRighty() != null)
+                right.setEyeRighty(left.getEyeRighty());
+            if(left.getMouthX() != null)
+                right.setMouthX(left.getMouthX());
+            if(left.getMouthY() != null)
+                right.setMouthY(left.getMouthY());
+            if(left.getNoseX() != null)
+                right.setNoseX(left.getNoseX());
+            if(left.getNoseY() != null)
+                right.setNoseY(left.getNoseY());
+            if(left.getAngleYaw() != null)
+                right.setAngleYaw(left.getAngleYaw());
+            if(left.getAnglePitch() != null)
+                right.setAnglePitch(left.getAnglePitch());
+            if(left.getAngleRoll() != null)
+                right.setAngleRoll(left.getAngleRoll());
+            if(left.getExtInfo() != null)
+                right.setExtInfo(left.getExtInfo());
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(bean.getCreateTime() != null)
 //                 nativeBean.setCreateTime(bean.getCreateTime());
-            return nativeBean;
         }};
 	public MyDbConverter() {
 		this.setBeanConverter(FaceLightBean.class,FaceBean.class, faceLightConverter);
