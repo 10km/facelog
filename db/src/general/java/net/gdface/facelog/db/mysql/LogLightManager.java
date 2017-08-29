@@ -26,7 +26,8 @@ import net.gdface.facelog.dborm.log.FlLogLightBean;
 import net.gdface.facelog.dborm.log.FlLogLightListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_log_light table.
+ * Handles database calls (save, load, count, etc...) for the fl_log_light table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class LogLightManager 
@@ -151,15 +152,16 @@ public class LogLightManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlLogLightManager nativeManager = FlLogLightManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<LogLightBean,FlLogLightBean> beanConverter = dbConverter.getLogLightBeanConverter();
     private static LogLightManager singleton = new LogLightManager();
 
     /**
-     * Get the LogLightManager singleton.
+     * Get the {@link LogLightManager} singleton.
      *
-     * @return LogLightManager
+     * @return {@link LogLightManager}
      */
     public static LogLightManager getInstance()
     {
@@ -178,7 +180,12 @@ public class LogLightManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

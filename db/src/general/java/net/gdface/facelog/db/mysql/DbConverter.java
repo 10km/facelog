@@ -30,513 +30,567 @@ public class DbConverter implements IDbConverter {
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> _converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
         @Override
-        public DeviceBean fromRight(net.gdface.facelog.dborm.device.FlDeviceBean bean) {
-            DeviceBean generalBean= new DeviceBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                generalBean.setId(bean.getId());
-            if(bean.getName() != null)
-                generalBean.setName(bean.getName());
-            if(bean.getOnline() != null)
-                generalBean.setOnline(bean.getOnline());
-            if(bean.getGroupId() != null)
-                generalBean.setGroupId(bean.getGroupId());
-            if(bean.getVersion() != null)
-                generalBean.setVersion(bean.getVersion());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            if(bean.getUpdateTime() != null)
-                generalBean.setUpdateTime(bean.getUpdateTime());
-            return generalBean;
+        protected DeviceBean _newInstanceL(){
+            return new DeviceBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.device.FlDeviceBean toRight(DeviceBean bean) {
-            net.gdface.facelog.dborm.device.FlDeviceBean nativeBean= new net.gdface.facelog.dborm.device.FlDeviceBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                nativeBean.setId(bean.getId());
-            if(bean.getName() != null)
-                nativeBean.setName(bean.getName());
-            if(bean.getOnline() != null)
-                nativeBean.setOnline(bean.getOnline());
-            if(bean.getGroupId() != null)
-                nativeBean.setGroupId(bean.getGroupId());
-            if(bean.getVersion() != null)
-                nativeBean.setVersion(bean.getVersion());
+        protected net.gdface.facelog.dborm.device.FlDeviceBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.device.FlDeviceBean();
+        }
+
+        @Override
+        protected void _fromRight(DeviceBean left, net.gdface.facelog.dborm.device.FlDeviceBean right) {
+            left.isNew(right.isNew());
+            if(right.getId() != null)
+                left.setId(right.getId());
+            if(right.getName() != null)
+                left.setName(right.getName());
+            if(right.getOnline() != null)
+                left.setOnline(right.getOnline());
+            if(right.getGroupId() != null)
+                left.setGroupId(right.getGroupId());
+            if(right.getVersion() != null)
+                left.setVersion(right.getVersion());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
+            if(right.getUpdateTime() != null)
+                left.setUpdateTime(right.getUpdateTime());
+        }
+
+        @Override
+        protected void _toRight(DeviceBean left, net.gdface.facelog.dborm.device.FlDeviceBean right) {
+            right.isNew(left.isNew());
+            if(left.getId() != null)
+                right.setId(left.getId());
+            if(left.getName() != null)
+                right.setName(left.getName());
+            if(left.getOnline() != null)
+                right.setOnline(left.getOnline());
+            if(left.getGroupId() != null)
+                right.setGroupId(left.getGroupId());
+            if(left.getVersion() != null)
+                right.setVersion(left.getVersion());
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getCreateTime() != null)
-//                 nativeBean.setCreateTime(bean.getCreateTime());
+//             if(left.getCreateTime() != null)
+//                 right.setCreateTime(left.getCreateTime());
 // IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getUpdateTime() != null)
-//                 nativeBean.setUpdateTime(bean.getUpdateTime());
-            return nativeBean;
+//             if(left.getUpdateTime() != null)
+//                 right.setUpdateTime(left.getUpdateTime());
         }};
         
     public static final IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> _converterFaceBean=new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean>(){
 
         @Override
-        public FaceBean fromRight(net.gdface.facelog.dborm.face.FlFaceBean bean) {
-            FaceBean generalBean= new FaceBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                generalBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                generalBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                generalBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFaceLeft() != null)
-                generalBean.setFaceLeft(bean.getFaceLeft());
-            if(bean.getFaceTop() != null)
-                generalBean.setFaceTop(bean.getFaceTop());
-            if(bean.getFaceWidth() != null)
-                generalBean.setFaceWidth(bean.getFaceWidth());
-            if(bean.getFaceHeight() != null)
-                generalBean.setFaceHeight(bean.getFaceHeight());
-            if(bean.getEyeLeftx() != null)
-                generalBean.setEyeLeftx(bean.getEyeLeftx());
-            if(bean.getEyeLefty() != null)
-                generalBean.setEyeLefty(bean.getEyeLefty());
-            if(bean.getEyeRightx() != null)
-                generalBean.setEyeRightx(bean.getEyeRightx());
-            if(bean.getEyeRighty() != null)
-                generalBean.setEyeRighty(bean.getEyeRighty());
-            if(bean.getMouthX() != null)
-                generalBean.setMouthX(bean.getMouthX());
-            if(bean.getMouthY() != null)
-                generalBean.setMouthY(bean.getMouthY());
-            if(bean.getNoseX() != null)
-                generalBean.setNoseX(bean.getNoseX());
-            if(bean.getNoseY() != null)
-                generalBean.setNoseY(bean.getNoseY());
-            if(bean.getAngleYaw() != null)
-                generalBean.setAngleYaw(bean.getAngleYaw());
-            if(bean.getAnglePitch() != null)
-                generalBean.setAnglePitch(bean.getAnglePitch());
-            if(bean.getAngleRoll() != null)
-                generalBean.setAngleRoll(bean.getAngleRoll());
-            if(bean.getExtInfo() != null)
-                generalBean.setExtInfo(bean.getExtInfo());
-            if(bean.getFeature() != null)
-                generalBean.setFeature(bean.getFeature());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            return generalBean;
+        protected FaceBean _newInstanceL(){
+            return new FaceBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.face.FlFaceBean toRight(FaceBean bean) {
-            net.gdface.facelog.dborm.face.FlFaceBean nativeBean= new net.gdface.facelog.dborm.face.FlFaceBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                nativeBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                nativeBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                nativeBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFaceLeft() != null)
-                nativeBean.setFaceLeft(bean.getFaceLeft());
-            if(bean.getFaceTop() != null)
-                nativeBean.setFaceTop(bean.getFaceTop());
-            if(bean.getFaceWidth() != null)
-                nativeBean.setFaceWidth(bean.getFaceWidth());
-            if(bean.getFaceHeight() != null)
-                nativeBean.setFaceHeight(bean.getFaceHeight());
-            if(bean.getEyeLeftx() != null)
-                nativeBean.setEyeLeftx(bean.getEyeLeftx());
-            if(bean.getEyeLefty() != null)
-                nativeBean.setEyeLefty(bean.getEyeLefty());
-            if(bean.getEyeRightx() != null)
-                nativeBean.setEyeRightx(bean.getEyeRightx());
-            if(bean.getEyeRighty() != null)
-                nativeBean.setEyeRighty(bean.getEyeRighty());
-            if(bean.getMouthX() != null)
-                nativeBean.setMouthX(bean.getMouthX());
-            if(bean.getMouthY() != null)
-                nativeBean.setMouthY(bean.getMouthY());
-            if(bean.getNoseX() != null)
-                nativeBean.setNoseX(bean.getNoseX());
-            if(bean.getNoseY() != null)
-                nativeBean.setNoseY(bean.getNoseY());
-            if(bean.getAngleYaw() != null)
-                nativeBean.setAngleYaw(bean.getAngleYaw());
-            if(bean.getAnglePitch() != null)
-                nativeBean.setAnglePitch(bean.getAnglePitch());
-            if(bean.getAngleRoll() != null)
-                nativeBean.setAngleRoll(bean.getAngleRoll());
-            if(bean.getExtInfo() != null)
-                nativeBean.setExtInfo(bean.getExtInfo());
-            if(bean.getFeature() != null)
-                nativeBean.setFeature(bean.getFeature());
+        protected net.gdface.facelog.dborm.face.FlFaceBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.face.FlFaceBean();
+        }
+
+        @Override
+        protected void _fromRight(FaceBean left, net.gdface.facelog.dborm.face.FlFaceBean right) {
+            left.isNew(right.isNew());
+            if(right.getMd5() != null)
+                left.setMd5(right.getMd5());
+            if(right.getPersonId() != null)
+                left.setPersonId(right.getPersonId());
+            if(right.getImgMd5() != null)
+                left.setImgMd5(right.getImgMd5());
+            if(right.getFaceLeft() != null)
+                left.setFaceLeft(right.getFaceLeft());
+            if(right.getFaceTop() != null)
+                left.setFaceTop(right.getFaceTop());
+            if(right.getFaceWidth() != null)
+                left.setFaceWidth(right.getFaceWidth());
+            if(right.getFaceHeight() != null)
+                left.setFaceHeight(right.getFaceHeight());
+            if(right.getEyeLeftx() != null)
+                left.setEyeLeftx(right.getEyeLeftx());
+            if(right.getEyeLefty() != null)
+                left.setEyeLefty(right.getEyeLefty());
+            if(right.getEyeRightx() != null)
+                left.setEyeRightx(right.getEyeRightx());
+            if(right.getEyeRighty() != null)
+                left.setEyeRighty(right.getEyeRighty());
+            if(right.getMouthX() != null)
+                left.setMouthX(right.getMouthX());
+            if(right.getMouthY() != null)
+                left.setMouthY(right.getMouthY());
+            if(right.getNoseX() != null)
+                left.setNoseX(right.getNoseX());
+            if(right.getNoseY() != null)
+                left.setNoseY(right.getNoseY());
+            if(right.getAngleYaw() != null)
+                left.setAngleYaw(right.getAngleYaw());
+            if(right.getAnglePitch() != null)
+                left.setAnglePitch(right.getAnglePitch());
+            if(right.getAngleRoll() != null)
+                left.setAngleRoll(right.getAngleRoll());
+            if(right.getExtInfo() != null)
+                left.setExtInfo(right.getExtInfo());
+            if(right.getFeature() != null)
+                left.setFeature(right.getFeature());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
+        }
+
+        @Override
+        protected void _toRight(FaceBean left, net.gdface.facelog.dborm.face.FlFaceBean right) {
+            right.isNew(left.isNew());
+            if(left.getMd5() != null)
+                right.setMd5(left.getMd5());
+            if(left.getPersonId() != null)
+                right.setPersonId(left.getPersonId());
+            if(left.getImgMd5() != null)
+                right.setImgMd5(left.getImgMd5());
+            if(left.getFaceLeft() != null)
+                right.setFaceLeft(left.getFaceLeft());
+            if(left.getFaceTop() != null)
+                right.setFaceTop(left.getFaceTop());
+            if(left.getFaceWidth() != null)
+                right.setFaceWidth(left.getFaceWidth());
+            if(left.getFaceHeight() != null)
+                right.setFaceHeight(left.getFaceHeight());
+            if(left.getEyeLeftx() != null)
+                right.setEyeLeftx(left.getEyeLeftx());
+            if(left.getEyeLefty() != null)
+                right.setEyeLefty(left.getEyeLefty());
+            if(left.getEyeRightx() != null)
+                right.setEyeRightx(left.getEyeRightx());
+            if(left.getEyeRighty() != null)
+                right.setEyeRighty(left.getEyeRighty());
+            if(left.getMouthX() != null)
+                right.setMouthX(left.getMouthX());
+            if(left.getMouthY() != null)
+                right.setMouthY(left.getMouthY());
+            if(left.getNoseX() != null)
+                right.setNoseX(left.getNoseX());
+            if(left.getNoseY() != null)
+                right.setNoseY(left.getNoseY());
+            if(left.getAngleYaw() != null)
+                right.setAngleYaw(left.getAngleYaw());
+            if(left.getAnglePitch() != null)
+                right.setAnglePitch(left.getAnglePitch());
+            if(left.getAngleRoll() != null)
+                right.setAngleRoll(left.getAngleRoll());
+            if(left.getExtInfo() != null)
+                right.setExtInfo(left.getExtInfo());
+            if(left.getFeature() != null)
+                right.setFeature(left.getFeature());
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getCreateTime() != null)
-//                 nativeBean.setCreateTime(bean.getCreateTime());
-            return nativeBean;
+//             if(left.getCreateTime() != null)
+//                 right.setCreateTime(left.getCreateTime());
         }};
         
     public static final IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> _converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.dborm.image.FlImageBean>(){
 
         @Override
-        public ImageBean fromRight(net.gdface.facelog.dborm.image.FlImageBean bean) {
-            ImageBean generalBean= new ImageBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                generalBean.setMd5(bean.getMd5());
-            if(bean.getFormat() != null)
-                generalBean.setFormat(bean.getFormat());
-            if(bean.getWidth() != null)
-                generalBean.setWidth(bean.getWidth());
-            if(bean.getHeight() != null)
-                generalBean.setHeight(bean.getHeight());
-            if(bean.getDepth() != null)
-                generalBean.setDepth(bean.getDepth());
-            if(bean.getFaceNum() != null)
-                generalBean.setFaceNum(bean.getFaceNum());
-            if(bean.getThumbMd5() != null)
-                generalBean.setThumbMd5(bean.getThumbMd5());
-            if(bean.getDeviceId() != null)
-                generalBean.setDeviceId(bean.getDeviceId());
-            return generalBean;
+        protected ImageBean _newInstanceL(){
+            return new ImageBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.image.FlImageBean toRight(ImageBean bean) {
-            net.gdface.facelog.dborm.image.FlImageBean nativeBean= new net.gdface.facelog.dborm.image.FlImageBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                nativeBean.setMd5(bean.getMd5());
-            if(bean.getFormat() != null)
-                nativeBean.setFormat(bean.getFormat());
-            if(bean.getWidth() != null)
-                nativeBean.setWidth(bean.getWidth());
-            if(bean.getHeight() != null)
-                nativeBean.setHeight(bean.getHeight());
-            if(bean.getDepth() != null)
-                nativeBean.setDepth(bean.getDepth());
-            if(bean.getFaceNum() != null)
-                nativeBean.setFaceNum(bean.getFaceNum());
-            if(bean.getThumbMd5() != null)
-                nativeBean.setThumbMd5(bean.getThumbMd5());
-            if(bean.getDeviceId() != null)
-                nativeBean.setDeviceId(bean.getDeviceId());
-            return nativeBean;
+        protected net.gdface.facelog.dborm.image.FlImageBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.image.FlImageBean();
+        }
+
+        @Override
+        protected void _fromRight(ImageBean left, net.gdface.facelog.dborm.image.FlImageBean right) {
+            left.isNew(right.isNew());
+            if(right.getMd5() != null)
+                left.setMd5(right.getMd5());
+            if(right.getFormat() != null)
+                left.setFormat(right.getFormat());
+            if(right.getWidth() != null)
+                left.setWidth(right.getWidth());
+            if(right.getHeight() != null)
+                left.setHeight(right.getHeight());
+            if(right.getDepth() != null)
+                left.setDepth(right.getDepth());
+            if(right.getFaceNum() != null)
+                left.setFaceNum(right.getFaceNum());
+            if(right.getThumbMd5() != null)
+                left.setThumbMd5(right.getThumbMd5());
+            if(right.getDeviceId() != null)
+                left.setDeviceId(right.getDeviceId());
+        }
+
+        @Override
+        protected void _toRight(ImageBean left, net.gdface.facelog.dborm.image.FlImageBean right) {
+            right.isNew(left.isNew());
+            if(left.getMd5() != null)
+                right.setMd5(left.getMd5());
+            if(left.getFormat() != null)
+                right.setFormat(left.getFormat());
+            if(left.getWidth() != null)
+                right.setWidth(left.getWidth());
+            if(left.getHeight() != null)
+                right.setHeight(left.getHeight());
+            if(left.getDepth() != null)
+                right.setDepth(left.getDepth());
+            if(left.getFaceNum() != null)
+                right.setFaceNum(left.getFaceNum());
+            if(left.getThumbMd5() != null)
+                right.setThumbMd5(left.getThumbMd5());
+            if(left.getDeviceId() != null)
+                right.setDeviceId(left.getDeviceId());
         }};
         
     public static final IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> _converterLogBean=new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.dborm.log.FlLogBean>(){
 
         @Override
-        public LogBean fromRight(net.gdface.facelog.dborm.log.FlLogBean bean) {
-            LogBean generalBean= new LogBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                generalBean.setId(bean.getId());
-            if(bean.getPersonId() != null)
-                generalBean.setPersonId(bean.getPersonId());
-            if(bean.getDeviceId() != null)
-                generalBean.setDeviceId(bean.getDeviceId());
-            if(bean.getVerifyFace() != null)
-                generalBean.setVerifyFace(bean.getVerifyFace());
-            if(bean.getCompareFace() != null)
-                generalBean.setCompareFace(bean.getCompareFace());
-            if(bean.getSimilarty() != null)
-                generalBean.setSimilarty(bean.getSimilarty());
-            if(bean.getVerifyTime() != null)
-                generalBean.setVerifyTime(bean.getVerifyTime());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            return generalBean;
+        protected LogBean _newInstanceL(){
+            return new LogBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.log.FlLogBean toRight(LogBean bean) {
-            net.gdface.facelog.dborm.log.FlLogBean nativeBean= new net.gdface.facelog.dborm.log.FlLogBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                nativeBean.setId(bean.getId());
-            if(bean.getPersonId() != null)
-                nativeBean.setPersonId(bean.getPersonId());
-            if(bean.getDeviceId() != null)
-                nativeBean.setDeviceId(bean.getDeviceId());
-            if(bean.getVerifyFace() != null)
-                nativeBean.setVerifyFace(bean.getVerifyFace());
-            if(bean.getCompareFace() != null)
-                nativeBean.setCompareFace(bean.getCompareFace());
-            if(bean.getSimilarty() != null)
-                nativeBean.setSimilarty(bean.getSimilarty());
-            if(bean.getVerifyTime() != null)
-                nativeBean.setVerifyTime(bean.getVerifyTime());
+        protected net.gdface.facelog.dborm.log.FlLogBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.log.FlLogBean();
+        }
+
+        @Override
+        protected void _fromRight(LogBean left, net.gdface.facelog.dborm.log.FlLogBean right) {
+            left.isNew(right.isNew());
+            if(right.getId() != null)
+                left.setId(right.getId());
+            if(right.getPersonId() != null)
+                left.setPersonId(right.getPersonId());
+            if(right.getDeviceId() != null)
+                left.setDeviceId(right.getDeviceId());
+            if(right.getVerifyFace() != null)
+                left.setVerifyFace(right.getVerifyFace());
+            if(right.getCompareFace() != null)
+                left.setCompareFace(right.getCompareFace());
+            if(right.getSimilarty() != null)
+                left.setSimilarty(right.getSimilarty());
+            if(right.getVerifyTime() != null)
+                left.setVerifyTime(right.getVerifyTime());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
+        }
+
+        @Override
+        protected void _toRight(LogBean left, net.gdface.facelog.dborm.log.FlLogBean right) {
+            right.isNew(left.isNew());
+            if(left.getId() != null)
+                right.setId(left.getId());
+            if(left.getPersonId() != null)
+                right.setPersonId(left.getPersonId());
+            if(left.getDeviceId() != null)
+                right.setDeviceId(left.getDeviceId());
+            if(left.getVerifyFace() != null)
+                right.setVerifyFace(left.getVerifyFace());
+            if(left.getCompareFace() != null)
+                right.setCompareFace(left.getCompareFace());
+            if(left.getSimilarty() != null)
+                right.setSimilarty(left.getSimilarty());
+            if(left.getVerifyTime() != null)
+                right.setVerifyTime(left.getVerifyTime());
 // IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getCreateTime() != null)
-//                 nativeBean.setCreateTime(bean.getCreateTime());
-            return nativeBean;
+//             if(left.getCreateTime() != null)
+//                 right.setCreateTime(left.getCreateTime());
         }};
         
     public static final IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> _converterPersonBean=new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean>(){
 
         @Override
-        public PersonBean fromRight(net.gdface.facelog.dborm.person.FlPersonBean bean) {
-            PersonBean generalBean= new PersonBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                generalBean.setId(bean.getId());
-            if(bean.getGroupId() != null)
-                generalBean.setGroupId(bean.getGroupId());
-            if(bean.getName() != null)
-                generalBean.setName(bean.getName());
-            if(bean.getSex() != null)
-                generalBean.setSex(bean.getSex());
-            if(bean.getBirthdate() != null)
-                generalBean.setBirthdate(bean.getBirthdate());
-            if(bean.getPapersType() != null)
-                generalBean.setPapersType(bean.getPapersType());
-            if(bean.getPapersNum() != null)
-                generalBean.setPapersNum(bean.getPapersNum());
-            if(bean.getPhotoId() != null)
-                generalBean.setPhotoId(bean.getPhotoId());
-            if(bean.getFaceMd5() != null)
-                generalBean.setFaceMd5(bean.getFaceMd5());
-            if(bean.getExpiryDate() != null)
-                generalBean.setExpiryDate(bean.getExpiryDate());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            if(bean.getUpdateTime() != null)
-                generalBean.setUpdateTime(bean.getUpdateTime());
-            return generalBean;
+        protected PersonBean _newInstanceL(){
+            return new PersonBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.person.FlPersonBean toRight(PersonBean bean) {
-            net.gdface.facelog.dborm.person.FlPersonBean nativeBean= new net.gdface.facelog.dborm.person.FlPersonBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                nativeBean.setId(bean.getId());
-            if(bean.getGroupId() != null)
-                nativeBean.setGroupId(bean.getGroupId());
-            if(bean.getName() != null)
-                nativeBean.setName(bean.getName());
-            if(bean.getSex() != null)
-                nativeBean.setSex(bean.getSex());
-            if(bean.getBirthdate() != null)
-                nativeBean.setBirthdate(bean.getBirthdate());
-            if(bean.getPapersType() != null)
-                nativeBean.setPapersType(bean.getPapersType());
-            if(bean.getPapersNum() != null)
-                nativeBean.setPapersNum(bean.getPapersNum());
-            if(bean.getPhotoId() != null)
-                nativeBean.setPhotoId(bean.getPhotoId());
-            if(bean.getFaceMd5() != null)
-                nativeBean.setFaceMd5(bean.getFaceMd5());
-            if(bean.getExpiryDate() != null)
-                nativeBean.setExpiryDate(bean.getExpiryDate());
+        protected net.gdface.facelog.dborm.person.FlPersonBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.person.FlPersonBean();
+        }
+
+        @Override
+        protected void _fromRight(PersonBean left, net.gdface.facelog.dborm.person.FlPersonBean right) {
+            left.isNew(right.isNew());
+            if(right.getId() != null)
+                left.setId(right.getId());
+            if(right.getGroupId() != null)
+                left.setGroupId(right.getGroupId());
+            if(right.getName() != null)
+                left.setName(right.getName());
+            if(right.getSex() != null)
+                left.setSex(right.getSex());
+            if(right.getBirthdate() != null)
+                left.setBirthdate(right.getBirthdate());
+            if(right.getPapersType() != null)
+                left.setPapersType(right.getPapersType());
+            if(right.getPapersNum() != null)
+                left.setPapersNum(right.getPapersNum());
+            if(right.getPhotoId() != null)
+                left.setPhotoId(right.getPhotoId());
+            if(right.getFaceMd5() != null)
+                left.setFaceMd5(right.getFaceMd5());
+            if(right.getExpiryDate() != null)
+                left.setExpiryDate(right.getExpiryDate());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
+            if(right.getUpdateTime() != null)
+                left.setUpdateTime(right.getUpdateTime());
+        }
+
+        @Override
+        protected void _toRight(PersonBean left, net.gdface.facelog.dborm.person.FlPersonBean right) {
+            right.isNew(left.isNew());
+            if(left.getId() != null)
+                right.setId(left.getId());
+            if(left.getGroupId() != null)
+                right.setGroupId(left.getGroupId());
+            if(left.getName() != null)
+                right.setName(left.getName());
+            if(left.getSex() != null)
+                right.setSex(left.getSex());
+            if(left.getBirthdate() != null)
+                right.setBirthdate(left.getBirthdate());
+            if(left.getPapersType() != null)
+                right.setPapersType(left.getPapersType());
+            if(left.getPapersNum() != null)
+                right.setPapersNum(left.getPapersNum());
+            if(left.getPhotoId() != null)
+                right.setPhotoId(left.getPhotoId());
+            if(left.getFaceMd5() != null)
+                right.setFaceMd5(left.getFaceMd5());
+            if(left.getExpiryDate() != null)
+                right.setExpiryDate(left.getExpiryDate());
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getCreateTime() != null)
-//                 nativeBean.setCreateTime(bean.getCreateTime());
+//             if(left.getCreateTime() != null)
+//                 right.setCreateTime(left.getCreateTime());
 // IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getUpdateTime() != null)
-//                 nativeBean.setUpdateTime(bean.getUpdateTime());
-            return nativeBean;
+//             if(left.getUpdateTime() != null)
+//                 right.setUpdateTime(left.getUpdateTime());
         }};
         
     public static final IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> _converterStoreBean=new IBeanConverter.AbstractHandle<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean>(){
 
         @Override
-        public StoreBean fromRight(net.gdface.facelog.dborm.image.FlStoreBean bean) {
-            StoreBean generalBean= new StoreBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                generalBean.setMd5(bean.getMd5());
-            if(bean.getEncoding() != null)
-                generalBean.setEncoding(bean.getEncoding());
-            if(bean.getData() != null)
-                generalBean.setData(bean.getData());
-            return generalBean;
+        protected StoreBean _newInstanceL(){
+            return new StoreBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.image.FlStoreBean toRight(StoreBean bean) {
-            net.gdface.facelog.dborm.image.FlStoreBean nativeBean= new net.gdface.facelog.dborm.image.FlStoreBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                nativeBean.setMd5(bean.getMd5());
-            if(bean.getEncoding() != null)
-                nativeBean.setEncoding(bean.getEncoding());
-            if(bean.getData() != null)
-                nativeBean.setData(bean.getData());
-            return nativeBean;
+        protected net.gdface.facelog.dborm.image.FlStoreBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.image.FlStoreBean();
+        }
+
+        @Override
+        protected void _fromRight(StoreBean left, net.gdface.facelog.dborm.image.FlStoreBean right) {
+            left.isNew(right.isNew());
+            if(right.getMd5() != null)
+                left.setMd5(right.getMd5());
+            if(right.getEncoding() != null)
+                left.setEncoding(right.getEncoding());
+            if(right.getData() != null)
+                left.setData(right.getData());
+        }
+
+        @Override
+        protected void _toRight(StoreBean left, net.gdface.facelog.dborm.image.FlStoreBean right) {
+            right.isNew(left.isNew());
+            if(left.getMd5() != null)
+                right.setMd5(left.getMd5());
+            if(left.getEncoding() != null)
+                right.setEncoding(left.getEncoding());
+            if(left.getData() != null)
+                right.setData(left.getData());
         }};
         
     public static final IBeanConverter<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean> _converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean>(){
 
         @Override
-        public FaceLightBean fromRight(net.gdface.facelog.dborm.face.FlFaceLightBean bean) {
-            FaceLightBean generalBean= new FaceLightBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                generalBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                generalBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                generalBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFaceLeft() != null)
-                generalBean.setFaceLeft(bean.getFaceLeft());
-            if(bean.getFaceTop() != null)
-                generalBean.setFaceTop(bean.getFaceTop());
-            if(bean.getFaceWidth() != null)
-                generalBean.setFaceWidth(bean.getFaceWidth());
-            if(bean.getFaceHeight() != null)
-                generalBean.setFaceHeight(bean.getFaceHeight());
-            if(bean.getEyeLeftx() != null)
-                generalBean.setEyeLeftx(bean.getEyeLeftx());
-            if(bean.getEyeLefty() != null)
-                generalBean.setEyeLefty(bean.getEyeLefty());
-            if(bean.getEyeRightx() != null)
-                generalBean.setEyeRightx(bean.getEyeRightx());
-            if(bean.getEyeRighty() != null)
-                generalBean.setEyeRighty(bean.getEyeRighty());
-            if(bean.getMouthX() != null)
-                generalBean.setMouthX(bean.getMouthX());
-            if(bean.getMouthY() != null)
-                generalBean.setMouthY(bean.getMouthY());
-            if(bean.getNoseX() != null)
-                generalBean.setNoseX(bean.getNoseX());
-            if(bean.getNoseY() != null)
-                generalBean.setNoseY(bean.getNoseY());
-            if(bean.getAngleYaw() != null)
-                generalBean.setAngleYaw(bean.getAngleYaw());
-            if(bean.getAnglePitch() != null)
-                generalBean.setAnglePitch(bean.getAnglePitch());
-            if(bean.getAngleRoll() != null)
-                generalBean.setAngleRoll(bean.getAngleRoll());
-            if(bean.getExtInfo() != null)
-                generalBean.setExtInfo(bean.getExtInfo());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            return generalBean;
+        protected FaceLightBean _newInstanceL(){
+            return new FaceLightBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.face.FlFaceLightBean toRight(FaceLightBean bean) {
-            net.gdface.facelog.dborm.face.FlFaceLightBean nativeBean= new net.gdface.facelog.dborm.face.FlFaceLightBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                nativeBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                nativeBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                nativeBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFaceLeft() != null)
-                nativeBean.setFaceLeft(bean.getFaceLeft());
-            if(bean.getFaceTop() != null)
-                nativeBean.setFaceTop(bean.getFaceTop());
-            if(bean.getFaceWidth() != null)
-                nativeBean.setFaceWidth(bean.getFaceWidth());
-            if(bean.getFaceHeight() != null)
-                nativeBean.setFaceHeight(bean.getFaceHeight());
-            if(bean.getEyeLeftx() != null)
-                nativeBean.setEyeLeftx(bean.getEyeLeftx());
-            if(bean.getEyeLefty() != null)
-                nativeBean.setEyeLefty(bean.getEyeLefty());
-            if(bean.getEyeRightx() != null)
-                nativeBean.setEyeRightx(bean.getEyeRightx());
-            if(bean.getEyeRighty() != null)
-                nativeBean.setEyeRighty(bean.getEyeRighty());
-            if(bean.getMouthX() != null)
-                nativeBean.setMouthX(bean.getMouthX());
-            if(bean.getMouthY() != null)
-                nativeBean.setMouthY(bean.getMouthY());
-            if(bean.getNoseX() != null)
-                nativeBean.setNoseX(bean.getNoseX());
-            if(bean.getNoseY() != null)
-                nativeBean.setNoseY(bean.getNoseY());
-            if(bean.getAngleYaw() != null)
-                nativeBean.setAngleYaw(bean.getAngleYaw());
-            if(bean.getAnglePitch() != null)
-                nativeBean.setAnglePitch(bean.getAnglePitch());
-            if(bean.getAngleRoll() != null)
-                nativeBean.setAngleRoll(bean.getAngleRoll());
-            if(bean.getExtInfo() != null)
-                nativeBean.setExtInfo(bean.getExtInfo());
+        protected net.gdface.facelog.dborm.face.FlFaceLightBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.face.FlFaceLightBean();
+        }
+
+        @Override
+        protected void _fromRight(FaceLightBean left, net.gdface.facelog.dborm.face.FlFaceLightBean right) {
+            left.isNew(right.isNew());
+            if(right.getMd5() != null)
+                left.setMd5(right.getMd5());
+            if(right.getPersonId() != null)
+                left.setPersonId(right.getPersonId());
+            if(right.getImgMd5() != null)
+                left.setImgMd5(right.getImgMd5());
+            if(right.getFaceLeft() != null)
+                left.setFaceLeft(right.getFaceLeft());
+            if(right.getFaceTop() != null)
+                left.setFaceTop(right.getFaceTop());
+            if(right.getFaceWidth() != null)
+                left.setFaceWidth(right.getFaceWidth());
+            if(right.getFaceHeight() != null)
+                left.setFaceHeight(right.getFaceHeight());
+            if(right.getEyeLeftx() != null)
+                left.setEyeLeftx(right.getEyeLeftx());
+            if(right.getEyeLefty() != null)
+                left.setEyeLefty(right.getEyeLefty());
+            if(right.getEyeRightx() != null)
+                left.setEyeRightx(right.getEyeRightx());
+            if(right.getEyeRighty() != null)
+                left.setEyeRighty(right.getEyeRighty());
+            if(right.getMouthX() != null)
+                left.setMouthX(right.getMouthX());
+            if(right.getMouthY() != null)
+                left.setMouthY(right.getMouthY());
+            if(right.getNoseX() != null)
+                left.setNoseX(right.getNoseX());
+            if(right.getNoseY() != null)
+                left.setNoseY(right.getNoseY());
+            if(right.getAngleYaw() != null)
+                left.setAngleYaw(right.getAngleYaw());
+            if(right.getAnglePitch() != null)
+                left.setAnglePitch(right.getAnglePitch());
+            if(right.getAngleRoll() != null)
+                left.setAngleRoll(right.getAngleRoll());
+            if(right.getExtInfo() != null)
+                left.setExtInfo(right.getExtInfo());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
+        }
+
+        @Override
+        protected void _toRight(FaceLightBean left, net.gdface.facelog.dborm.face.FlFaceLightBean right) {
+            right.isNew(left.isNew());
+            if(left.getMd5() != null)
+                right.setMd5(left.getMd5());
+            if(left.getPersonId() != null)
+                right.setPersonId(left.getPersonId());
+            if(left.getImgMd5() != null)
+                right.setImgMd5(left.getImgMd5());
+            if(left.getFaceLeft() != null)
+                right.setFaceLeft(left.getFaceLeft());
+            if(left.getFaceTop() != null)
+                right.setFaceTop(left.getFaceTop());
+            if(left.getFaceWidth() != null)
+                right.setFaceWidth(left.getFaceWidth());
+            if(left.getFaceHeight() != null)
+                right.setFaceHeight(left.getFaceHeight());
+            if(left.getEyeLeftx() != null)
+                right.setEyeLeftx(left.getEyeLeftx());
+            if(left.getEyeLefty() != null)
+                right.setEyeLefty(left.getEyeLefty());
+            if(left.getEyeRightx() != null)
+                right.setEyeRightx(left.getEyeRightx());
+            if(left.getEyeRighty() != null)
+                right.setEyeRighty(left.getEyeRighty());
+            if(left.getMouthX() != null)
+                right.setMouthX(left.getMouthX());
+            if(left.getMouthY() != null)
+                right.setMouthY(left.getMouthY());
+            if(left.getNoseX() != null)
+                right.setNoseX(left.getNoseX());
+            if(left.getNoseY() != null)
+                right.setNoseY(left.getNoseY());
+            if(left.getAngleYaw() != null)
+                right.setAngleYaw(left.getAngleYaw());
+            if(left.getAnglePitch() != null)
+                right.setAnglePitch(left.getAnglePitch());
+            if(left.getAngleRoll() != null)
+                right.setAngleRoll(left.getAngleRoll());
+            if(left.getExtInfo() != null)
+                right.setExtInfo(left.getExtInfo());
 // IGNORE field fl_face_light.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getCreateTime() != null)
-//                 nativeBean.setCreateTime(bean.getCreateTime());
-            return nativeBean;
+//             if(left.getCreateTime() != null)
+//                 right.setCreateTime(left.getCreateTime());
         }};
         
     public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> _converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
 
         @Override
-        public FeatureBean fromRight(net.gdface.facelog.dborm.face.FlFeatureBean bean) {
-            FeatureBean generalBean= new FeatureBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                generalBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                generalBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                generalBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFeature() != null)
-                generalBean.setFeature(bean.getFeature());
-            if(bean.getCreateTime() != null)
-                generalBean.setCreateTime(bean.getCreateTime());
-            return generalBean;
+        protected FeatureBean _newInstanceL(){
+            return new FeatureBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.face.FlFeatureBean toRight(FeatureBean bean) {
-            net.gdface.facelog.dborm.face.FlFeatureBean nativeBean= new net.gdface.facelog.dborm.face.FlFeatureBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getMd5() != null)
-                nativeBean.setMd5(bean.getMd5());
-            if(bean.getPersonId() != null)
-                nativeBean.setPersonId(bean.getPersonId());
-            if(bean.getImgMd5() != null)
-                nativeBean.setImgMd5(bean.getImgMd5());
-            if(bean.getFeature() != null)
-                nativeBean.setFeature(bean.getFeature());
+        protected net.gdface.facelog.dborm.face.FlFeatureBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.face.FlFeatureBean();
+        }
+
+        @Override
+        protected void _fromRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
+            left.isNew(right.isNew());
+            if(right.getMd5() != null)
+                left.setMd5(right.getMd5());
+            if(right.getPersonId() != null)
+                left.setPersonId(right.getPersonId());
+            if(right.getImgMd5() != null)
+                left.setImgMd5(right.getImgMd5());
+            if(right.getFeature() != null)
+                left.setFeature(right.getFeature());
+            if(right.getCreateTime() != null)
+                left.setCreateTime(right.getCreateTime());
+        }
+
+        @Override
+        protected void _toRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
+            right.isNew(left.isNew());
+            if(left.getMd5() != null)
+                right.setMd5(left.getMd5());
+            if(left.getPersonId() != null)
+                right.setPersonId(left.getPersonId());
+            if(left.getImgMd5() != null)
+                right.setImgMd5(left.getImgMd5());
+            if(left.getFeature() != null)
+                right.setFeature(left.getFeature());
 // IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(bean.getCreateTime() != null)
-//                 nativeBean.setCreateTime(bean.getCreateTime());
-            return nativeBean;
+//             if(left.getCreateTime() != null)
+//                 right.setCreateTime(left.getCreateTime());
         }};
         
     public static final IBeanConverter<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean> _converterLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean>(){
 
         @Override
-        public LogLightBean fromRight(net.gdface.facelog.dborm.log.FlLogLightBean bean) {
-            LogLightBean generalBean= new LogLightBean();
-            generalBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                generalBean.setId(bean.getId());
-            if(bean.getPersonId() != null)
-                generalBean.setPersonId(bean.getPersonId());
-            if(bean.getName() != null)
-                generalBean.setName(bean.getName());
-            if(bean.getPapersType() != null)
-                generalBean.setPapersType(bean.getPapersType());
-            if(bean.getPapersNum() != null)
-                generalBean.setPapersNum(bean.getPapersNum());
-            if(bean.getVerifyTime() != null)
-                generalBean.setVerifyTime(bean.getVerifyTime());
-            return generalBean;
+        protected LogLightBean _newInstanceL(){
+            return new LogLightBean();
         }
 
         @Override
-        public net.gdface.facelog.dborm.log.FlLogLightBean toRight(LogLightBean bean) {
-            net.gdface.facelog.dborm.log.FlLogLightBean nativeBean= new net.gdface.facelog.dborm.log.FlLogLightBean();
-            nativeBean.isNew(bean.isNew());
-            if(bean.getId() != null)
-                nativeBean.setId(bean.getId());
-            if(bean.getPersonId() != null)
-                nativeBean.setPersonId(bean.getPersonId());
-            if(bean.getName() != null)
-                nativeBean.setName(bean.getName());
-            if(bean.getPapersType() != null)
-                nativeBean.setPapersType(bean.getPapersType());
-            if(bean.getPapersNum() != null)
-                nativeBean.setPapersNum(bean.getPapersNum());
-            if(bean.getVerifyTime() != null)
-                nativeBean.setVerifyTime(bean.getVerifyTime());
-            return nativeBean;
+        protected net.gdface.facelog.dborm.log.FlLogLightBean _newInstanceR(){
+            return new net.gdface.facelog.dborm.log.FlLogLightBean();
+        }
+
+        @Override
+        protected void _fromRight(LogLightBean left, net.gdface.facelog.dborm.log.FlLogLightBean right) {
+            left.isNew(right.isNew());
+            if(right.getId() != null)
+                left.setId(right.getId());
+            if(right.getPersonId() != null)
+                left.setPersonId(right.getPersonId());
+            if(right.getName() != null)
+                left.setName(right.getName());
+            if(right.getPapersType() != null)
+                left.setPapersType(right.getPapersType());
+            if(right.getPapersNum() != null)
+                left.setPapersNum(right.getPapersNum());
+            if(right.getVerifyTime() != null)
+                left.setVerifyTime(right.getVerifyTime());
+        }
+
+        @Override
+        protected void _toRight(LogLightBean left, net.gdface.facelog.dborm.log.FlLogLightBean right) {
+            right.isNew(left.isNew());
+            if(left.getId() != null)
+                right.setId(left.getId());
+            if(left.getPersonId() != null)
+                right.setPersonId(left.getPersonId());
+            if(left.getName() != null)
+                right.setName(left.getName());
+            if(left.getPapersType() != null)
+                right.setPapersType(left.getPapersType());
+            if(left.getPapersNum() != null)
+                right.setPapersNum(left.getPapersNum());
+            if(left.getVerifyTime() != null)
+                right.setVerifyTime(left.getVerifyTime());
         }};
         
     public static final DbConverter INSTANCE = new DbConverter();
@@ -547,14 +601,14 @@ public class DbConverter implements IDbConverter {
     private static final Vector<Object[]> converters= new Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
         {
-            add(new Object[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class,_converterDeviceBean});
-            add(new Object[]{FaceBean.class,net.gdface.facelog.dborm.face.FlFaceBean.class,_converterFaceBean});
-            add(new Object[]{ImageBean.class,net.gdface.facelog.dborm.image.FlImageBean.class,_converterImageBean});
-            add(new Object[]{LogBean.class,net.gdface.facelog.dborm.log.FlLogBean.class,_converterLogBean});
-            add(new Object[]{PersonBean.class,net.gdface.facelog.dborm.person.FlPersonBean.class,_converterPersonBean});
-            add(new Object[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class,_converterStoreBean});
-            add(new Object[]{FaceLightBean.class,net.gdface.facelog.dborm.face.FlFaceLightBean.class,_converterFaceLightBean});
-            add(new Object[]{FeatureBean.class,net.gdface.facelog.dborm.face.FlFeatureBean.class,_converterFeatureBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
             add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
         }};
     
@@ -611,47 +665,38 @@ public class DbConverter implements IDbConverter {
             converters.set(index, c);
         }
     }
-
     @Override
     public IBeanConverter<DeviceBean, net.gdface.facelog.dborm.device.FlDeviceBean> getDeviceBeanConverter() {
         return _converterDeviceBean;
     }
-
     @Override
     public IBeanConverter<FaceBean, net.gdface.facelog.dborm.face.FlFaceBean> getFaceBeanConverter() {
         return _converterFaceBean;
     }
-
     @Override
     public IBeanConverter<ImageBean, net.gdface.facelog.dborm.image.FlImageBean> getImageBeanConverter() {
         return _converterImageBean;
     }
-
     @Override
     public IBeanConverter<LogBean, net.gdface.facelog.dborm.log.FlLogBean> getLogBeanConverter() {
         return _converterLogBean;
     }
-
     @Override
     public IBeanConverter<PersonBean, net.gdface.facelog.dborm.person.FlPersonBean> getPersonBeanConverter() {
         return _converterPersonBean;
     }
-
     @Override
     public IBeanConverter<StoreBean, net.gdface.facelog.dborm.image.FlStoreBean> getStoreBeanConverter() {
         return _converterStoreBean;
     }
-
     @Override
     public IBeanConverter<FaceLightBean, net.gdface.facelog.dborm.face.FlFaceLightBean> getFaceLightBeanConverter() {
         return _converterFaceLightBean;
     }
-
     @Override
     public IBeanConverter<FeatureBean, net.gdface.facelog.dborm.face.FlFeatureBean> getFeatureBeanConverter() {
         return _converterFeatureBean;
     }
-
     @Override
     public IBeanConverter<LogLightBean, net.gdface.facelog.dborm.log.FlLogLightBean> getLogLightBeanConverter() {
         return _converterLogLightBean;

@@ -27,7 +27,8 @@ import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.image.FlStoreListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_store table.
+ * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class StoreManager 
@@ -126,15 +127,16 @@ public class StoreManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlStoreManager nativeManager = FlStoreManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<StoreBean,FlStoreBean> beanConverter = dbConverter.getStoreBeanConverter();
     private static StoreManager singleton = new StoreManager();
 
     /**
-     * Get the StoreManager singleton.
+     * Get the {@link StoreManager} singleton.
      *
-     * @return StoreManager
+     * @return {@link StoreManager}
      */
     public static StoreManager getInstance()
     {
@@ -153,7 +155,12 @@ public class StoreManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

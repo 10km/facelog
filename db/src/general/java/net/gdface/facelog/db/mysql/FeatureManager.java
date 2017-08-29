@@ -26,7 +26,8 @@ import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.face.FlFeatureListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_feature table.
+ * Handles database calls (save, load, count, etc...) for the fl_feature table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class FeatureManager 
@@ -142,15 +143,16 @@ public class FeatureManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlFeatureManager nativeManager = FlFeatureManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<FeatureBean,FlFeatureBean> beanConverter = dbConverter.getFeatureBeanConverter();
     private static FeatureManager singleton = new FeatureManager();
 
     /**
-     * Get the FeatureManager singleton.
+     * Get the {@link FeatureManager} singleton.
      *
-     * @return FeatureManager
+     * @return {@link FeatureManager}
      */
     public static FeatureManager getInstance()
     {
@@ -169,7 +171,12 @@ public class FeatureManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

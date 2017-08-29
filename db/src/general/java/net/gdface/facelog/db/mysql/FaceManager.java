@@ -29,7 +29,8 @@ import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_face table.
+ * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class FaceManager 
@@ -290,15 +291,16 @@ public class FaceManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlFaceManager nativeManager = FlFaceManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<FaceBean,FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
     private static FaceManager singleton = new FaceManager();
 
     /**
-     * Get the FaceManager singleton.
+     * Get the {@link FaceManager} singleton.
      *
-     * @return FaceManager
+     * @return {@link FaceManager}
      */
     public static FaceManager getInstance()
     {
@@ -317,7 +319,12 @@ public class FaceManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

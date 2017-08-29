@@ -28,7 +28,8 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_device table.
+ * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class DeviceManager 
@@ -163,15 +164,16 @@ public class DeviceManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
 
     /**
-     * Get the DeviceManager singleton.
+     * Get the {@link DeviceManager} singleton.
      *
-     * @return DeviceManager
+     * @return {@link DeviceManager}
      */
     public static DeviceManager getInstance()
     {
@@ -190,7 +192,12 @@ public class DeviceManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

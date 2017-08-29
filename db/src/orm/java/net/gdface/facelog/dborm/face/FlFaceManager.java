@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
@@ -1891,7 +1892,8 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     {
         for (FlFaceBean bean : beans) 
         {
-            this.save(bean);
+            bean.copy(this.save(bean));
+            bean.resetIsModified();
         }
         return beans;
     }

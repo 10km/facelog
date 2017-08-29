@@ -29,7 +29,8 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_person table.
+ * Handles database calls (save, load, count, etc...) for the fl_person table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class PersonManager 
@@ -209,15 +210,16 @@ public class PersonManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlPersonManager nativeManager = FlPersonManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<PersonBean,FlPersonBean> beanConverter = dbConverter.getPersonBeanConverter();
     private static PersonManager singleton = new PersonManager();
 
     /**
-     * Get the PersonManager singleton.
+     * Get the {@link PersonManager} singleton.
      *
-     * @return PersonManager
+     * @return {@link PersonManager}
      */
     public static PersonManager getInstance()
     {
@@ -236,7 +238,12 @@ public class PersonManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

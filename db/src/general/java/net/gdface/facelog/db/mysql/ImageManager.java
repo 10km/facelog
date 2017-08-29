@@ -30,7 +30,8 @@ import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_image table.
+ * Handles database calls (save, load, count, etc...) for the fl_image table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class ImageManager 
@@ -174,15 +175,16 @@ public class ImageManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlImageManager nativeManager = FlImageManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<ImageBean,FlImageBean> beanConverter = dbConverter.getImageBeanConverter();
     private static ImageManager singleton = new ImageManager();
 
     /**
-     * Get the ImageManager singleton.
+     * Get the {@link ImageManager} singleton.
      *
-     * @return ImageManager
+     * @return {@link ImageManager}
      */
     public static ImageManager getInstance()
     {
@@ -201,7 +203,12 @@ public class ImageManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;

@@ -29,7 +29,8 @@ import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogListener;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_log table.
+ * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
 public class LogManager 
@@ -173,15 +174,16 @@ public class LogManager
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
+    
     private FlLogManager nativeManager = FlLogManager.getInstance();
     private IDbConverter dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<LogBean,FlLogBean> beanConverter = dbConverter.getLogBeanConverter();
     private static LogManager singleton = new LogManager();
 
     /**
-     * Get the LogManager singleton.
+     * Get the {@link LogManager} singleton.
      *
-     * @return LogManager
+     * @return {@link LogManager}
      */
     public static LogManager getInstance()
     {
@@ -200,7 +202,12 @@ public class LogManager
         return dbConverter;
     }
 
-    public void setDbConverter(IDbConverter dbConverter) {
+    /**
+     * set  {@link IDbConverter} as converter used by manager.<br>
+     * throw {@link NullPointerException} if {@code dbConverter} is null
+     * @param dbConverter
+     */
+    public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
         this.dbConverter = dbConverter;
