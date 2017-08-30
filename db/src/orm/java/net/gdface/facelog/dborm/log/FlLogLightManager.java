@@ -16,7 +16,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -2072,7 +2072,7 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
         }
 
         protected ListAction() {
-            list=new ArrayList<FlLogLightBean>();
+            list=new LinkedList<FlLogLightBean>();
         }
 
         public List<FlLogLightBean> getList() {

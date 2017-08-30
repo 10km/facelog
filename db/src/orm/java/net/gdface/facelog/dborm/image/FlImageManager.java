@@ -16,7 +16,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -3034,7 +3034,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         }
 
         protected ListAction() {
-            list=new ArrayList<FlImageBean>();
+            list=new LinkedList<FlImageBean>();
         }
 
         public List<FlImageBean> getList() {

@@ -16,7 +16,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -2028,7 +2028,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         }
 
         protected ListAction() {
-            list=new ArrayList<FlFeatureBean>();
+            list=new LinkedList<FlFeatureBean>();
         }
 
         public List<FlFeatureBean> getList() {

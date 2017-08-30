@@ -34,15 +34,6 @@ import net.gdface.facelog.dborm.face.FlFeatureListener;
 public class FeatureManager implements TableManager<FeatureBean>
 {
 
-    /* set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /* set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /* set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /* set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
-
     /**
      * Identify the md5 field.
      */
@@ -823,7 +814,7 @@ public class FeatureManager implements TableManager<FeatureBean>
     @Override
     public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows)
     {
-        return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -838,7 +829,7 @@ public class FeatureManager implements TableManager<FeatureBean>
     @Override
     public int loadUsingTemplate(FeatureBean bean, int startRow, int numRows,Action<FeatureBean> action)
     {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
+        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
     }
     /**
      * Loads a list of FeatureBean from a template one, given the start row and number of rows.
@@ -852,7 +843,7 @@ public class FeatureManager implements TableManager<FeatureBean>
     @Override
     public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows)
     {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
 
     /**
@@ -866,7 +857,7 @@ public class FeatureManager implements TableManager<FeatureBean>
      */
     //20-3
     @Override
-    public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
+    public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows, SearchType searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
     }
@@ -882,10 +873,10 @@ public class FeatureManager implements TableManager<FeatureBean>
      */
     //20-4
     @Override
-    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows, int searchType)
+    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows, SearchType searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
         }
         catch(DAOException e)
         {
@@ -904,10 +895,10 @@ public class FeatureManager implements TableManager<FeatureBean>
      */
     //20-5
     @Override
-    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action)
+    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<FeatureBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -997,7 +988,7 @@ public class FeatureManager implements TableManager<FeatureBean>
     @Override
     public int countUsingTemplate(FeatureBean bean, int startRow, int numRows)
     {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
 
     /**
@@ -1011,10 +1002,10 @@ public class FeatureManager implements TableManager<FeatureBean>
      */
     //20
     @Override
-    public int countUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(FeatureBean bean, int startRow, int numRows, SearchType searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
         }
         catch(DAOException e)
         {

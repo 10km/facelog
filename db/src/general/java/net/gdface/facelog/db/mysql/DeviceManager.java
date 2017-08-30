@@ -38,15 +38,6 @@ import net.gdface.facelog.dborm.log.FlLogBean;
 public class DeviceManager implements TableManager<DeviceBean>
 {
 
-    /* set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /* set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /* set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /* set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
-
     /**
      * Identify the id field.
      */
@@ -1311,7 +1302,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     @Override
     public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows)
     {
-        return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -1326,7 +1317,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     @Override
     public int loadUsingTemplate(DeviceBean bean, int startRow, int numRows,Action<DeviceBean> action)
     {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
+        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
     }
     /**
      * Loads a list of DeviceBean from a template one, given the start row and number of rows.
@@ -1340,7 +1331,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     @Override
     public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows)
     {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
 
     /**
@@ -1354,7 +1345,7 @@ public class DeviceManager implements TableManager<DeviceBean>
      */
     //20-3
     @Override
-    public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
+    public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows, SearchType searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
     }
@@ -1370,10 +1361,10 @@ public class DeviceManager implements TableManager<DeviceBean>
      */
     //20-4
     @Override
-    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows, int searchType)
+    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows, SearchType searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
         }
         catch(DAOException e)
         {
@@ -1392,10 +1383,10 @@ public class DeviceManager implements TableManager<DeviceBean>
      */
     //20-5
     @Override
-    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action)
+    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<DeviceBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1485,7 +1476,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     @Override
     public int countUsingTemplate(DeviceBean bean, int startRow, int numRows)
     {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
 
     /**
@@ -1499,10 +1490,10 @@ public class DeviceManager implements TableManager<DeviceBean>
      */
     //20
     @Override
-    public int countUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(DeviceBean bean, int startRow, int numRows, SearchType searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
         }
         catch(DAOException e)
         {

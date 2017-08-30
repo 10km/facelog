@@ -16,7 +16,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -2664,7 +2664,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
         }
 
         protected ListAction() {
-            list=new ArrayList<FlDeviceBean>();
+            list=new LinkedList<FlDeviceBean>();
         }
 
         public List<FlDeviceBean> getList() {

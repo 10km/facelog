@@ -40,15 +40,6 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 public class ImageManager implements TableManager<ImageBean>
 {
 
-    /* set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /* set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /* set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /* set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
-
     /**
      * Identify the md5 field.
      */
@@ -1505,7 +1496,7 @@ public class ImageManager implements TableManager<ImageBean>
     @Override
     public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows)
     {
-        return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -1520,7 +1511,7 @@ public class ImageManager implements TableManager<ImageBean>
     @Override
     public int loadUsingTemplate(ImageBean bean, int startRow, int numRows,Action<ImageBean> action)
     {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
+        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
     }
     /**
      * Loads a list of ImageBean from a template one, given the start row and number of rows.
@@ -1534,7 +1525,7 @@ public class ImageManager implements TableManager<ImageBean>
     @Override
     public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows)
     {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
+        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
 
     /**
@@ -1548,7 +1539,7 @@ public class ImageManager implements TableManager<ImageBean>
      */
     //20-3
     @Override
-    public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows, int searchType)
+    public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows, SearchType searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new ImageBean[0]);
     }
@@ -1564,10 +1555,10 @@ public class ImageManager implements TableManager<ImageBean>
      */
     //20-4
     @Override
-    public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows, int searchType)
+    public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows, SearchType searchType)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType));
+            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
         }
         catch(DAOException e)
         {
@@ -1586,10 +1577,10 @@ public class ImageManager implements TableManager<ImageBean>
      */
     //20-5
     @Override
-    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action)
+    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<ImageBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
         }
         catch(DAOException e)
         {
@@ -1787,7 +1778,7 @@ public class ImageManager implements TableManager<ImageBean>
     @Override
     public int countUsingTemplate(ImageBean bean, int startRow, int numRows)
     {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
     }
 
     /**
@@ -1801,10 +1792,10 @@ public class ImageManager implements TableManager<ImageBean>
      */
     //20
     @Override
-    public int countUsingTemplate(ImageBean bean, int startRow, int numRows, int searchType)
+    public int countUsingTemplate(ImageBean bean, int startRow, int numRows, SearchType searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType);
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
         }
         catch(DAOException e)
         {
