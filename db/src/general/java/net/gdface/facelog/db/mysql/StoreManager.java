@@ -16,6 +16,8 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
+import net.gdface.facelog.db.BaseBean;
+import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.StoreListener;
@@ -31,7 +33,7 @@ import net.gdface.facelog.dborm.image.FlImageBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class StoreManager 
+public class StoreManager implements TableManager<StoreBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -101,11 +103,6 @@ public class StoreManager
     public static final String ALL_FIELDS = "md5"
                             + ",encoding"
                             + ",data";
-
-    public static interface Action{
-          void call(StoreBean bean);
-          StoreBean getBean();
-     }
 
     /**
     * @return tableName
@@ -229,7 +226,7 @@ public class StoreManager
      * @see {@link #loadByPrimaryKey(StoreBean bean)}
      */
     //1.4
-    //@Override
+    @Override
     public boolean existsPrimaryKey(StoreBean bean)
     {
         return null!=loadByPrimaryKey(bean);
@@ -263,6 +260,7 @@ public class StoreManager
      * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
+    @Override
     public int deleteByPrimaryKey(StoreBean bean)
     {
         try{
@@ -303,8 +301,8 @@ public class StoreManager
      * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    //@Override
-    public <T> T[] getImportedBeans(StoreBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(StoreBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
@@ -325,8 +323,8 @@ public class StoreManager
      * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    //@Override
-    public <T> List<T> getImportedBeansAsList(StoreBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> List<T> getImportedBeansAsList(StoreBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -349,8 +347,8 @@ public class StoreManager
      * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
      * @return importedBeans always
      */
-    //@Override
-    public <T> T[] setImportedBeans(StoreBean bean,T[] importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean> T[] setImportedBeans(StoreBean bean,T[] importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
@@ -376,8 +374,8 @@ public class StoreManager
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
-    //@Override
-    public <T,C extends Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             if(importedBeans instanceof List){
@@ -474,7 +472,7 @@ public class StoreManager
      * @see {@link FlImageManager#setReferencedByMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<ImageBean>> T setFlImageBeansByMd5(StoreBean bean , T importedBeans)
+    public <C extends Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans)
     {
         try {
             IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
@@ -568,7 +566,7 @@ public class StoreManager
      * @see {@link FlImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<ImageBean>> T setFlImageBeansByThumbMd5(StoreBean bean , T importedBeans)
+    public <C extends Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans)
     {
         try {
             IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
@@ -669,12 +667,12 @@ public class StoreManager
             }});
     }
   
-    //@Override
-    public <T> T getReferencedBean(StoreBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T getReferencedBean(StoreBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> T setReferencedBean(StoreBean bean,T beanToSet,String fkName){
+    @Override
+    public <T extends BaseBean> T setReferencedBean(StoreBean bean,T beanToSet,String fkName){
         throw new UnsupportedOperationException();
     }
      
@@ -689,6 +687,7 @@ public class StoreManager
      * @return an array of FlStoreManager bean
      */
     //5
+    @Override
     public StoreBean[] loadAll()
     {
         try{
@@ -705,7 +704,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //5-1
-    public int loadAll(Action action)
+    @Override
+    public int loadAll(Action<StoreBean> action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -715,6 +715,7 @@ public class StoreManager
      * @return a list of StoreBean bean
      */
     //5-2
+    @Override
     public List<StoreBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -729,6 +730,7 @@ public class StoreManager
      * @return an array of FlStoreManager bean
      */
     //6
+    @Override
     public StoreBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -741,7 +743,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //6-1
-    public int loadAll(int startRow, int numRows,Action action)
+    @Override
+    public int loadAll(int startRow, int numRows,Action<StoreBean> action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -753,6 +756,7 @@ public class StoreManager
      * @return a list of FlStoreManager bean
      */
     //6-2
+    @Override
     public List<StoreBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -768,10 +772,12 @@ public class StoreManager
      * @return the resulting StoreBean table
      */
     //7
+    @Override
     public StoreBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
+    
     /**
      * Retrieves a list of StoreBean given a sql 'where' clause.
      *
@@ -779,6 +785,7 @@ public class StoreManager
      * @return the resulting StoreBean table
      */
     //7
+    @Override
     public List<StoreBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -790,7 +797,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //7-1
-    public int loadByWhere(String where,Action action)
+    @Override
+    public int loadByWhere(String where,Action<StoreBean> action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -803,6 +811,7 @@ public class StoreManager
      * @return the resulting StoreBean table
      */
     //8
+    @Override
     public StoreBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -818,6 +827,7 @@ public class StoreManager
      * @return the resulting StoreBean table
      */
     //8
+    @Override
     public List<StoreBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -832,7 +842,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList,Action<StoreBean> action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -848,6 +859,7 @@ public class StoreManager
      * @return the resulting StoreBean table
      */
     //9
+    @Override
     public StoreBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (StoreBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new StoreBean[0]);
@@ -865,7 +877,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<StoreBean> action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -881,6 +894,7 @@ public class StoreManager
      * @return the resulting StoreBean table
      */
     //9-2
+    @Override
     public List<StoreBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -904,7 +918,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<StoreBean> action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -920,6 +935,7 @@ public class StoreManager
      * @return the number of deleted rows.
      */
     //10
+    @Override
     public int deleteAll()
     {
         return this.deleteByWhere("");
@@ -934,6 +950,7 @@ public class StoreManager
      * @return the number of deleted rows
      */
     //11
+    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -950,14 +967,16 @@ public class StoreManager
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the StoreBean bean into the database.
+     * Saves the {@link StoreBean} bean into the database.
      *
-     * @param bean the StoreBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link StoreBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      */
     //12
+    @Override
     public StoreBean save(StoreBean bean)
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -966,12 +985,13 @@ public class StoreManager
     }
 
     /**
-     * Insert the StoreBean bean into the database.
+     * Insert the {@link StoreBean} bean into the database.
      *
-     * @param bean the StoreBean bean to be saved
-     * @return the inserted bean
+     * @param bean the {@link StoreBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      */
     //13
+    @Override
     public StoreBean insert(StoreBean bean)
     {
         try{
@@ -984,12 +1004,13 @@ public class StoreManager
     }
 
     /**
-     * Update the StoreBean bean record in the database according to the changes.
+     * Update the {@link StoreBean} bean record in the database according to the changes.
      *
-     * @param bean the StoreBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link StoreBean} bean to be updated
+     * @return the updated bean or null if bean is null
      */
     //14
+    @Override
     public StoreBean update(StoreBean bean)
     {
         try{
@@ -1002,44 +1023,50 @@ public class StoreManager
     }
 
     /**
-     * Saves an array of StoreBean beans into the database.
+     * Saves an array of {@link StoreBean} bean into the database.
      *
-     * @param beans the StoreBean bean table to be saved
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be saved
+     * @return the saved {@link StoreBean} beans or null if beans is null.
      */
     //15
     public StoreBean[] save(StoreBean[] beans)
     {
-        for (StoreBean bean : beans) 
-        {
-            this.save(bean);
+        if(null !=beans){
+            for (StoreBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a list of StoreBean beans into the database.
+     * Saves a collection of {@link StoreBean} bean into the database.
      *
-     * @param beans the StoreBean bean table to be saved
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be saved
+     * @return the saved {@link StoreBean} beans or null if beans is null.
      */
     //15-2
-    public <T extends Collection<StoreBean>>T save(T beans)
+    @Override
+    public <C extends Collection<StoreBean>> C save(C beans)
     {
-        for (StoreBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (StoreBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of StoreBean beans as transaction into the database.
+     * Saves an array of {@link StoreBean} bean into the database as transaction.
      *
-     * @param beans the StoreBean bean table to be saved
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be saved
+     * @return the saved {@link StoreBean} beans.
      * @see #save(StoreBean[])
      */
     //15-3
+    @Override
     public StoreBean[] saveAsTransaction(final StoreBean[] beans) {
         return this.runAsTransaction(new Callable<StoreBean[]>(){
             @Override
@@ -1048,117 +1075,126 @@ public class StoreManager
             }});
     }
     /**
-     * Saves a list of StoreBean beans as transaction into the database.
+     * Saves a collection of {@link StoreBean} bean into the database as transaction.
      *
-     * @param beans the StoreBean bean table to be saved
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be saved
+     * @return the saved {@link StoreBean} beans.
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<StoreBean>> T saveAsTransaction(final T beans){
-        return this.runAsTransaction(new Callable<T>(){
+    @Override
+    public <C extends Collection<StoreBean>> C saveAsTransaction(final C beans){
+        return this.runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of StoreBean beans into the database.
+     * Insert an array of {@link StoreBean} bean into the database.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      */
     //16
+    @Override
     public StoreBean[] insert(StoreBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a list of StoreBean beans into the database.
+     * Insert a collection of {@link StoreBean} bean into the database.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      */
     //16-2
-    public <T extends Collection<StoreBean>> T insert(T beans)
+    @Override
+    public <C extends Collection<StoreBean>> C insert(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of StoreBean beans as transaction into the database.
+     * Insert an array of {@link StoreBean} bean into the database as transaction.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      * @see #saveAsTransaction(StoreBean[])
      */
     //16-3
+    @Override
     public StoreBean[] insertAsTransaction(StoreBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a list of StoreBean beans as transaction into the database.
+     * Insert a collection of {@link StoreBean} bean as transaction into the database.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<StoreBean>> T insertAsTransaction(T beans)
+    @Override
+    public <C extends Collection<StoreBean>> C insertAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of StoreBean beans into the database.
+     * Update an array of {@link StoreBean} bean into the database.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      */
     //17
+    @Override
     public StoreBean[] update(StoreBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Updates a list of StoreBean beans into the database.
+     * Update a collection of {@link StoreBean} bean into the database.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      */
     //17-2
-    public <T extends Collection<StoreBean>> T update(T beans)
+    @Override
+    public <C extends Collection<StoreBean>> C update(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of StoreBean beans as transaction into the database.
+     * Update an array of {@link StoreBean} bean into the database as transaction.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} beans table to be inserted
+     * @return the saved {@link StoreBean} beans.
      * @see #saveAsTransaction(StoreBean[])
      */
     //17-3
+    @Override
     public StoreBean[] updateAsTransaction(StoreBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Updates a list of StoreBean beans as transaction into the database.
+     * Update a collection of {@link StoreBean} bean into the database as transaction.
      *
-     * @param beans the StoreBean bean table to be inserted
-     * @return the saved StoreBean array.
+     * @param beans the {@link StoreBean} bean table to be inserted
+     * @return the saved {@link StoreBean} beans.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<StoreBean>> T updateAsTransaction(T beans)
+    @Override
+    public <C extends Collection<StoreBean>> C updateAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1174,6 +1210,7 @@ public class StoreManager
      * @return the bean matching the template
      */
     //18
+    @Override
     public StoreBean loadUniqueUsingTemplate(StoreBean bean)
     {
         try{
@@ -1192,6 +1229,7 @@ public class StoreManager
      * @return all the StoreBean matching the template
      */
     //19
+    @Override
     public StoreBean[] loadUsingTemplate(StoreBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -1204,7 +1242,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //19-1
-    public int loadUsingTemplate(StoreBean bean,Action action)
+    @Override
+    public int loadUsingTemplate(StoreBean bean,Action<StoreBean> action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1216,6 +1255,7 @@ public class StoreManager
      * @return all the StoreBean matching the template
      */
     //19-2
+    @Override
     public List<StoreBean> loadUsingTemplateAsList(StoreBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -1230,6 +1270,7 @@ public class StoreManager
      * @return all the StoreBean matching the template
      */
     //20
+    @Override
     public StoreBean[] loadUsingTemplate(StoreBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1244,7 +1285,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //20-1
-    public int loadUsingTemplate(StoreBean bean, int startRow, int numRows,Action action)
+    @Override
+    public int loadUsingTemplate(StoreBean bean, int startRow, int numRows,Action<StoreBean> action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1257,6 +1299,7 @@ public class StoreManager
      * @return all the StoreBean matching the template
      */
     //20-2
+    @Override
     public List<StoreBean> loadUsingTemplateAsList(StoreBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -1272,6 +1315,7 @@ public class StoreManager
      * @return all the StoreBean matching the template
      */
     //20-3
+    @Override
     public StoreBean[] loadUsingTemplate(StoreBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new StoreBean[0]);
@@ -1287,6 +1331,7 @@ public class StoreManager
      * @return all the StoreBean matching the template
      */
     //20-4
+    @Override
     public List<StoreBean> loadUsingTemplateAsList(StoreBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1308,7 +1353,8 @@ public class StoreManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    @Override
+    public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1325,6 +1371,7 @@ public class StoreManager
      * @return the number of deleted objects
      */
     //21
+    @Override
     public int deleteUsingTemplate(StoreBean bean)
     {
         try{
@@ -1349,6 +1396,7 @@ public class StoreManager
      * @return the number of rows returned
      */
     //24
+    @Override
     public int countAll() 
     {
         return this.countWhere("");
@@ -1362,6 +1410,7 @@ public class StoreManager
      * @return the number of rows returned
      */
     //25
+    @Override
     public int countWhere(String where)
     {
         try{
@@ -1380,6 +1429,7 @@ public class StoreManager
      * @return the number of rows returned
      */
     //27
+    @Override
     public int countUsingTemplate(StoreBean bean)
     {
         return this.countUsingTemplate(bean, -1, -1);
@@ -1394,6 +1444,7 @@ public class StoreManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(StoreBean bean, int startRow, int numRows)
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1409,6 +1460,7 @@ public class StoreManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(StoreBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1430,6 +1482,7 @@ public class StoreManager
      * Registers a unique {@link StoreListener} listener.
      */
     //35
+    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((StoreListener)listener));
@@ -1497,6 +1550,7 @@ public class StoreManager
      * @param fieldList table of the field's associated constants
      * @return an array of StoreBean
      */
+    @Override
     public StoreBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new StoreBean[0]);
     }
@@ -1507,6 +1561,7 @@ public class StoreManager
      * @param fieldList table of the field's associated constants
      * @return an list of StoreBean
      */
+    @Override
     public List<StoreBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1518,7 +1573,7 @@ public class StoreManager
     }
 
     
-    //@Override
+    @Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1529,7 +1584,7 @@ public class StoreManager
         }
     }
     
-    //@Override
+    @Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1539,7 +1594,7 @@ public class StoreManager
             throw new WrapDAOException(e);
         }
     }
-    private FlStoreManager.Action toNative(final Action action){
+    private FlStoreManager.Action toNative(final Action<StoreBean> action){
         if(null == action)
             throw new NullPointerException();
         return new FlStoreManager.Action(){

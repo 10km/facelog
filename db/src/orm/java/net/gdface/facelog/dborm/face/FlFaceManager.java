@@ -686,7 +686,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     //3.3 SET IMPORTED
     public FlLogBean[] setFlLogBeansByVerifyFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
                 FlLogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
             }
@@ -704,9 +704,9 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see {@link FlLogManager#setReferencedByVerifyFace(FlLogBean, FlFaceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FlLogBean>> T setFlLogBeansByVerifyFace(FlFaceBean bean , T importedBeans) throws DAOException
+    public <C extends Collection<FlLogBean>> C setFlLogBeansByVerifyFace(FlFaceBean bean , C importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
                 FlLogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
             }
@@ -758,7 +758,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     //3.3 SET IMPORTED
     public FlLogBean[] setFlLogBeansByCompareFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
                 FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
             }
@@ -776,9 +776,9 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FlLogBean>> T setFlLogBeansByCompareFace(FlFaceBean bean , T importedBeans) throws DAOException
+    public <C extends Collection<FlLogBean>> C setFlLogBeansByCompareFace(FlFaceBean bean , C importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
                 FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
             }
@@ -864,29 +864,13 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         , Collection<FlLogBean> impFlLogbyVerifyFace , Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
     {
         if(null == bean) return null;
-        if( null != refFlImagebyImgMd5) {
-            refFlImagebyImgMd5 = FlImageManager.getInstance().save( refFlImagebyImgMd5 );
-            bean.setReferencedByImgMd5(refFlImagebyImgMd5);
-        }
-        if( null != refFlPersonbyPersonId) {
-            refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
-            bean.setReferencedByPersonId(refFlPersonbyPersonId);
-        }
+        this.setReferencedByImgMd5(bean,refFlImagebyImgMd5);
+        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
         bean = this.save( bean );
-        if( null != impFlLogbyVerifyFace) {
-            for ( FlLogBean imp : impFlLogbyVerifyFace ){
-                imp.setVerifyFace(bean.getMd5()); 
-                imp.setReferencedByVerifyFace(bean);
-                FlLogManager.getInstance().save( imp );
-            }
-        }
-        if( null != impFlLogbyCompareFace) {
-            for ( FlLogBean imp : impFlLogbyCompareFace ){
-                imp.setCompareFace(bean.getMd5()); 
-                imp.setReferencedByCompareFace(bean);
-                FlLogManager.getInstance().save( imp );
-            }
-        }
+        this.setFlLogBeansByVerifyFace(bean,impFlLogbyVerifyFace);
+        FlLogManager.getInstance().save( impFlLogbyVerifyFace );
+        this.setFlLogBeansByCompareFace(bean,impFlLogbyCompareFace);
+        FlLogManager.getInstance().save( impFlLogbyCompareFace );
         return bean;
     }   
     /**
@@ -964,7 +948,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -973,10 +957,8 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
         Object[] params = REF_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==beanToSet)
-            throw new NullPointerException();
         Class<?> resultClass = (Class<?>)params[2];
-        if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
+        if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
@@ -1029,16 +1011,22 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlFaceBean}
-     * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlImageBean setReferencedByImgMd5(FlFaceBean bean, FlImageBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setImgMd5(beanToSet.getMd5());
-        bean.setReferencedByImgMd5(beanToSet);
-        return FlImageManager.getInstance().save(beanToSet);
+        if(null != bean){
+            FlImageManager.getInstance().save(beanToSet);
+            bean.setReferencedByImgMd5(beanToSet);
+            if( null == beanToSet){
+                bean.setImgMd5(null);
+            }else{
+                bean.setImgMd5(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
     }
 
     /**
@@ -1063,16 +1051,22 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFaceBean}
-     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlPersonBean setReferencedByPersonId(FlFaceBean bean, FlPersonBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setPersonId(beanToSet.getId());
-        bean.setReferencedByPersonId(beanToSet);
-        return FlPersonManager.getInstance().save(beanToSet);
+        if(null != bean){
+            FlPersonManager.getInstance().save(beanToSet);
+            bean.setReferencedByPersonId(beanToSet);
+            if( null == beanToSet){
+                bean.setPersonId(null);
+            }else{
+                bean.setPersonId(beanToSet.getId());
+            }
+        }
+        return beanToSet;
     }
 
     //////////////////////////////////////
@@ -1363,15 +1357,16 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the FlFaceBean bean into the database.
+     * Saves the {@link FlFaceBean} bean into the database.
      *
-     * @param bean the FlFaceBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      * @throws DAOException
      */
     //12
     public FlFaceBean save(FlFaceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1380,17 +1375,17 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Insert the FlFaceBean bean into the database.
-     *
-     * @param bean the FlFaceBean bean to be saved
-     * @return the inserted bean
+     * Insert the {@link FlFaceBean} bean into the database.
+     * 
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      * @throws DAOException
      */
     //13
     public FlFaceBean insert(FlFaceBean bean) throws DAOException
     {
         // mini checks
-        if (!bean.isModified()) {
+        if (null == bean || !bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (!bean.isNew()){
@@ -1612,17 +1607,17 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Update the FlFaceBean bean record in the database according to the changes.
+     * Update the {@link FlFaceBean} bean record in the database according to the changes.
      *
-     * @param bean the FlFaceBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link FlFaceBean} bean to be updated
+     * @return the updated bean or null if bean is null
      * @throws DAOException
      */
     //14
     public FlFaceBean update(FlFaceBean bean) throws DAOException
     {
         // mini checks
-        if (!bean.isModified()) {
+        if (null == bean || !bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (bean.isNew()){
@@ -1863,43 +1858,47 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Saves an array of FlFaceBean beans into the database.
+     * Saves an array of {@link FlFaceBean} bean into the database.
      *
-     * @param beans the FlFaceBean bean table to be saved
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be saved
+     * @return the saved {@link FlFaceBean} beans or null if beans is null.
      * @throws DAOException
      */
     //15
     public FlFaceBean[] save(FlFaceBean[] beans) throws DAOException
     {
-        for (FlFaceBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FlFaceBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a collection of FlFaceBean beans into the database.
+     * Saves a collection of {@link FlFaceBean} beans into the database.
      *
-     * @param beans the FlFaceBean bean table to be saved
-     * @return the saved FlFaceBean collection.
+     * @param beans the {@link FlFaceBean} bean table to be saved
+     * @return the saved {@link FlFaceBean} beans or null if beans is null.
      * @throws DAOException
      */
     //15-2
-    public <T extends Collection<FlFaceBean>>T save(T beans) throws DAOException
+    public <C extends Collection<FlFaceBean>>C save(C beans) throws DAOException
     {
-        for (FlFaceBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FlFaceBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of FlFaceBean beans as transaction into the database.
+     * Saves an array of {@link FlFaceBean} bean into the database as transaction.
      *
-     * @param beans the FlFaceBean bean table to be saved
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be saved
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      * @see #save(FlFaceBean[])
      */
@@ -1912,26 +1911,26 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
             }});
     }
     /**
-     * Saves a list of FlFaceBean beans as transaction into the database.
+     * Saves a collection of {@link FlFaceBean} bean into the database as transaction.
      *
-     * @param beans the FlFaceBean bean table to be saved
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be saved
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<FlFaceBean>> T saveAsTransaction(final T beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<T>(){
+    public <C extends Collection<FlFaceBean>> C saveAsTransaction(final C beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of FlFaceBean beans into the database.
+     * Insert an array of {@link FlFaceBean} bean into the database.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      */
     //16
@@ -1941,23 +1940,23 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Insert a list of FlFaceBean beans into the database.
+     * Insert a collection of {@link FlFaceBean} bean into the database.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      */
     //16-2
-    public <T extends Collection<FlFaceBean>> T insert(T beans) throws DAOException
+    public <C extends Collection<FlFaceBean>> C insert(C beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of FlFaceBean beans as transaction into the database.
+     * Insert an array of {@link FlFaceBean} beans into the database as transaction.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link {@link FlFaceBean}} bean table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(FlFaceBean[])
      */
@@ -1968,25 +1967,25 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Insert a list of FlFaceBean beans as transaction into the database.
+     * Insert a collection of {@link FlFaceBean} bean into the database as transaction.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<FlFaceBean>> T insertAsTransaction(T beans) throws DAOException
+    public <C extends Collection<FlFaceBean>> C insertAsTransaction(C beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of FlFaceBean beans into the database.
+     * Update an array of {@link FlFaceBean} bean into the database.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} bean table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      */
     //17
@@ -1996,23 +1995,23 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Updates a list of FlFaceBean beans into the database.
+     * Update a collection of {@link FlFaceBean} bean into the database.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} beans table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      */
     //17-2
-    public <T extends Collection<FlFaceBean>> T update(T beans) throws DAOException
+    public <C extends Collection<FlFaceBean>> C update(C beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of FlFaceBean beans as transaction into the database.
+     * Update an array of {@link FlFaceBean} bean into the database as transaction.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} beans table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(FlFaceBean[])
      */
@@ -2023,15 +2022,15 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
 
     /**
-     * Updates a list of FlFaceBean beans as transaction into the database.
+     * Update a collection of {@link FlFaceBean} bean into the database as transaction.
      *
-     * @param beans the FlFaceBean bean table to be inserted
-     * @return the saved FlFaceBean array.
+     * @param beans the {@link FlFaceBean} beans table to be inserted
+     * @return the saved {@link FlFaceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<FlFaceBean>> T updateAsTransaction(T beans) throws DAOException
+    public <C extends Collection<FlFaceBean>> C updateAsTransaction(C beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

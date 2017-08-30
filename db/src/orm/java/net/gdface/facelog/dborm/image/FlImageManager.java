@@ -571,7 +571,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //3.3 SET IMPORTED
     public FlFaceBean[] setFlFaceBeansByImgMd5(FlImageBean bean , FlFaceBean[] importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
                 FlFaceManager.getInstance().setReferencedByImgMd5(importBean , bean);
             }
@@ -589,9 +589,9 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see {@link FlFaceManager#setReferencedByImgMd5(FlFaceBean, FlImageBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FlFaceBean>> T setFlFaceBeansByImgMd5(FlImageBean bean , T importedBeans) throws DAOException
+    public <C extends Collection<FlFaceBean>> C setFlFaceBeansByImgMd5(FlImageBean bean , C importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
                 FlFaceManager.getInstance().setReferencedByImgMd5(importBean , bean);
             }
@@ -643,7 +643,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //3.3 SET IMPORTED
     public FlPersonBean[] setFlPersonBeansByPhotoId(FlImageBean bean , FlPersonBean[] importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
                 FlPersonManager.getInstance().setReferencedByPhotoId(importBean , bean);
             }
@@ -661,9 +661,9 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see {@link FlPersonManager#setReferencedByPhotoId(FlPersonBean, FlImageBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FlPersonBean>> T setFlPersonBeansByPhotoId(FlImageBean bean , T importedBeans) throws DAOException
+    public <C extends Collection<FlPersonBean>> C setFlPersonBeansByPhotoId(FlImageBean bean , C importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
                 FlPersonManager.getInstance().setReferencedByPhotoId(importBean , bean);
             }
@@ -756,33 +756,14 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         , Collection<FlFaceBean> impFlFacebyImgMd5 , Collection<FlPersonBean> impFlPersonbyPhotoId ) throws DAOException
     {
         if(null == bean) return null;
-        if( null != refFlDevicebyDeviceId) {
-            refFlDevicebyDeviceId = FlDeviceManager.getInstance().save( refFlDevicebyDeviceId );
-            bean.setReferencedByDeviceId(refFlDevicebyDeviceId);
-        }
-        if( null != refFlStorebyMd5) {
-            refFlStorebyMd5 = FlStoreManager.getInstance().save( refFlStorebyMd5 );
-            bean.setReferencedByMd5(refFlStorebyMd5);
-        }
-        if( null != refFlStorebyThumbMd5) {
-            refFlStorebyThumbMd5 = FlStoreManager.getInstance().save( refFlStorebyThumbMd5 );
-            bean.setReferencedByThumbMd5(refFlStorebyThumbMd5);
-        }
+        this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
+        this.setReferencedByMd5(bean,refFlStorebyMd5);
+        this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
         bean = this.save( bean );
-        if( null != impFlFacebyImgMd5) {
-            for ( FlFaceBean imp : impFlFacebyImgMd5 ){
-                imp.setImgMd5(bean.getMd5()); 
-                imp.setReferencedByImgMd5(bean);
-                FlFaceManager.getInstance().save( imp );
-            }
-        }
-        if( null != impFlPersonbyPhotoId) {
-            for ( FlPersonBean imp : impFlPersonbyPhotoId ){
-                imp.setPhotoId(bean.getMd5()); 
-                imp.setReferencedByPhotoId(bean);
-                FlPersonManager.getInstance().save( imp );
-            }
-        }
+        this.setFlFaceBeansByImgMd5(bean,impFlFacebyImgMd5);
+        FlFaceManager.getInstance().save( impFlFacebyImgMd5 );
+        this.setFlPersonBeansByPhotoId(bean,impFlPersonbyPhotoId);
+        FlPersonManager.getInstance().save( impFlPersonbyPhotoId );
         return bean;
     }   
     /**
@@ -863,7 +844,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlImageBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -872,10 +853,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
         Object[] params = REF_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==beanToSet)
-            throw new NullPointerException();
         Class<?> resultClass = (Class<?>)params[2];
-        if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
+        if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
@@ -928,16 +907,22 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      *
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlImageBean}
-     * @return the associated {@link FlDeviceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlDeviceBean setReferencedByDeviceId(FlImageBean bean, FlDeviceBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setDeviceId(beanToSet.getId());
-        bean.setReferencedByDeviceId(beanToSet);
-        return FlDeviceManager.getInstance().save(beanToSet);
+        if(null != bean){
+            FlDeviceManager.getInstance().save(beanToSet);
+            bean.setReferencedByDeviceId(beanToSet);
+            if( null == beanToSet){
+                bean.setDeviceId(null);
+            }else{
+                bean.setDeviceId(beanToSet.getId());
+            }
+        }
+        return beanToSet;
     }
 
     /**
@@ -962,16 +947,22 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      *
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlStoreBean setReferencedByMd5(FlImageBean bean, FlStoreBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setMd5(beanToSet.getMd5());
-        bean.setReferencedByMd5(beanToSet);
-        return FlStoreManager.getInstance().save(beanToSet);
+        if(null != bean){
+            FlStoreManager.getInstance().save(beanToSet);
+            bean.setReferencedByMd5(beanToSet);
+            if( null == beanToSet){
+                bean.setMd5(null);
+            }else{
+                bean.setMd5(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
     }
 
     /**
@@ -996,16 +987,22 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      *
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlStoreBean setReferencedByThumbMd5(FlImageBean bean, FlStoreBean beanToSet) throws DAOException
     {
-        if(null == bean || null == beanToSet) return null;
-        bean.setThumbMd5(beanToSet.getMd5());
-        bean.setReferencedByThumbMd5(beanToSet);
-        return FlStoreManager.getInstance().save(beanToSet);
+        if(null != bean){
+            FlStoreManager.getInstance().save(beanToSet);
+            bean.setReferencedByThumbMd5(beanToSet);
+            if( null == beanToSet){
+                bean.setThumbMd5(null);
+            }else{
+                bean.setThumbMd5(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
     }
 
     //////////////////////////////////////
@@ -1296,15 +1293,16 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the FlImageBean bean into the database.
+     * Saves the {@link FlImageBean} bean into the database.
      *
-     * @param bean the FlImageBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link FlImageBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      * @throws DAOException
      */
     //12
     public FlImageBean save(FlImageBean bean) throws DAOException
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1313,17 +1311,17 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Insert the FlImageBean bean into the database.
-     *
-     * @param bean the FlImageBean bean to be saved
-     * @return the inserted bean
+     * Insert the {@link FlImageBean} bean into the database.
+     * 
+     * @param bean the {@link FlImageBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      * @throws DAOException
      */
     //13
     public FlImageBean insert(FlImageBean bean) throws DAOException
     {
         // mini checks
-        if (!bean.isModified()) {
+        if (null == bean || !bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (!bean.isNew()){
@@ -1441,17 +1439,17 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Update the FlImageBean bean record in the database according to the changes.
+     * Update the {@link FlImageBean} bean record in the database according to the changes.
      *
-     * @param bean the FlImageBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link FlImageBean} bean to be updated
+     * @return the updated bean or null if bean is null
      * @throws DAOException
      */
     //14
     public FlImageBean update(FlImageBean bean) throws DAOException
     {
         // mini checks
-        if (!bean.isModified()) {
+        if (null == bean || !bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (bean.isNew()){
@@ -1575,43 +1573,47 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Saves an array of FlImageBean beans into the database.
+     * Saves an array of {@link FlImageBean} bean into the database.
      *
-     * @param beans the FlImageBean bean table to be saved
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be saved
+     * @return the saved {@link FlImageBean} beans or null if beans is null.
      * @throws DAOException
      */
     //15
     public FlImageBean[] save(FlImageBean[] beans) throws DAOException
     {
-        for (FlImageBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FlImageBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a collection of FlImageBean beans into the database.
+     * Saves a collection of {@link FlImageBean} beans into the database.
      *
-     * @param beans the FlImageBean bean table to be saved
-     * @return the saved FlImageBean collection.
+     * @param beans the {@link FlImageBean} bean table to be saved
+     * @return the saved {@link FlImageBean} beans or null if beans is null.
      * @throws DAOException
      */
     //15-2
-    public <T extends Collection<FlImageBean>>T save(T beans) throws DAOException
+    public <C extends Collection<FlImageBean>>C save(C beans) throws DAOException
     {
-        for (FlImageBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FlImageBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of FlImageBean beans as transaction into the database.
+     * Saves an array of {@link FlImageBean} bean into the database as transaction.
      *
-     * @param beans the FlImageBean bean table to be saved
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be saved
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      * @see #save(FlImageBean[])
      */
@@ -1624,26 +1626,26 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             }});
     }
     /**
-     * Saves a list of FlImageBean beans as transaction into the database.
+     * Saves a collection of {@link FlImageBean} bean into the database as transaction.
      *
-     * @param beans the FlImageBean bean table to be saved
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be saved
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<FlImageBean>> T saveAsTransaction(final T beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<T>(){
+    public <C extends Collection<FlImageBean>> C saveAsTransaction(final C beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of FlImageBean beans into the database.
+     * Insert an array of {@link FlImageBean} bean into the database.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      */
     //16
@@ -1653,23 +1655,23 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Insert a list of FlImageBean beans into the database.
+     * Insert a collection of {@link FlImageBean} bean into the database.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      */
     //16-2
-    public <T extends Collection<FlImageBean>> T insert(T beans) throws DAOException
+    public <C extends Collection<FlImageBean>> C insert(C beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of FlImageBean beans as transaction into the database.
+     * Insert an array of {@link FlImageBean} beans into the database as transaction.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link {@link FlImageBean}} bean table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(FlImageBean[])
      */
@@ -1680,25 +1682,25 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Insert a list of FlImageBean beans as transaction into the database.
+     * Insert a collection of {@link FlImageBean} bean into the database as transaction.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<FlImageBean>> T insertAsTransaction(T beans) throws DAOException
+    public <C extends Collection<FlImageBean>> C insertAsTransaction(C beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of FlImageBean beans into the database.
+     * Update an array of {@link FlImageBean} bean into the database.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} bean table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      */
     //17
@@ -1708,23 +1710,23 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Updates a list of FlImageBean beans into the database.
+     * Update a collection of {@link FlImageBean} bean into the database.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} beans table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      */
     //17-2
-    public <T extends Collection<FlImageBean>> T update(T beans) throws DAOException
+    public <C extends Collection<FlImageBean>> C update(C beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of FlImageBean beans as transaction into the database.
+     * Update an array of {@link FlImageBean} bean into the database as transaction.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} beans table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(FlImageBean[])
      */
@@ -1735,15 +1737,15 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
 
     /**
-     * Updates a list of FlImageBean beans as transaction into the database.
+     * Update a collection of {@link FlImageBean} bean into the database as transaction.
      *
-     * @param beans the FlImageBean bean table to be inserted
-     * @return the saved FlImageBean array.
+     * @param beans the {@link FlImageBean} beans table to be inserted
+     * @return the saved {@link FlImageBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<FlImageBean>> T updateAsTransaction(T beans) throws DAOException
+    public <C extends Collection<FlImageBean>> C updateAsTransaction(C beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

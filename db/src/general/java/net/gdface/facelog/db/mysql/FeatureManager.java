@@ -16,6 +16,8 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
+import net.gdface.facelog.db.BaseBean;
+import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.FeatureListener;
 import net.gdface.facelog.db.WrapDAOException;
@@ -29,7 +31,7 @@ import net.gdface.facelog.dborm.face.FlFeatureListener;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FeatureManager 
+public class FeatureManager implements TableManager<FeatureBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -117,11 +119,6 @@ public class FeatureManager
                             + ",feature"
                             + ",create_time";
 
-    public static interface Action{
-          void call(FeatureBean bean);
-          FeatureBean getBean();
-     }
-
     /**
     * @return tableName
     */
@@ -181,46 +178,51 @@ public class FeatureManager
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getFeatureBeanConverter();
     }
+    @Override
     public FeatureBean loadByPrimaryKey(FeatureBean bean)
     {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
     public boolean existsPrimaryKey(FeatureBean bean)
     {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
     public int deleteByPrimaryKey(FeatureBean bean)
     {
         throw new UnsupportedOperationException();
     }
  
 
-    //@Override
-    public <T> T[] getImportedBeans(FeatureBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(FeatureBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> List<T> getImportedBeansAsList(FeatureBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> List<T> getImportedBeansAsList(FeatureBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> T[] setImportedBeans(FeatureBean bean,T[] importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean> T[] setImportedBeans(FeatureBean bean,T[] importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }    
-    //@Override
-    public <T,C extends Collection<T>> C setImportedBeans(FeatureBean bean,C importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(FeatureBean bean,C importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }
  
 
 
  
-    //@Override
-    public <T> T getReferencedBean(FeatureBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T getReferencedBean(FeatureBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> T setReferencedBean(FeatureBean bean,T beanToSet,String fkName){
+    @Override
+    public <T extends BaseBean> T setReferencedBean(FeatureBean bean,T beanToSet,String fkName){
         throw new UnsupportedOperationException();
     }
      
@@ -235,6 +237,7 @@ public class FeatureManager
      * @return an array of FlFeatureManager bean
      */
     //5
+    @Override
     public FeatureBean[] loadAll()
     {
         try{
@@ -251,7 +254,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //5-1
-    public int loadAll(Action action)
+    @Override
+    public int loadAll(Action<FeatureBean> action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -261,6 +265,7 @@ public class FeatureManager
      * @return a list of FeatureBean bean
      */
     //5-2
+    @Override
     public List<FeatureBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -275,6 +280,7 @@ public class FeatureManager
      * @return an array of FlFeatureManager bean
      */
     //6
+    @Override
     public FeatureBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -287,7 +293,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //6-1
-    public int loadAll(int startRow, int numRows,Action action)
+    @Override
+    public int loadAll(int startRow, int numRows,Action<FeatureBean> action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -299,6 +306,7 @@ public class FeatureManager
      * @return a list of FlFeatureManager bean
      */
     //6-2
+    @Override
     public List<FeatureBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -314,10 +322,12 @@ public class FeatureManager
      * @return the resulting FeatureBean table
      */
     //7
+    @Override
     public FeatureBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
+    
     /**
      * Retrieves a list of FeatureBean given a sql 'where' clause.
      *
@@ -325,6 +335,7 @@ public class FeatureManager
      * @return the resulting FeatureBean table
      */
     //7
+    @Override
     public List<FeatureBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -336,7 +347,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //7-1
-    public int loadByWhere(String where,Action action)
+    @Override
+    public int loadByWhere(String where,Action<FeatureBean> action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -349,6 +361,7 @@ public class FeatureManager
      * @return the resulting FeatureBean table
      */
     //8
+    @Override
     public FeatureBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -364,6 +377,7 @@ public class FeatureManager
      * @return the resulting FeatureBean table
      */
     //8
+    @Override
     public List<FeatureBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -378,7 +392,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList,Action<FeatureBean> action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -394,6 +409,7 @@ public class FeatureManager
      * @return the resulting FeatureBean table
      */
     //9
+    @Override
     public FeatureBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (FeatureBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FeatureBean[0]);
@@ -411,7 +427,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<FeatureBean> action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -427,6 +444,7 @@ public class FeatureManager
      * @return the resulting FeatureBean table
      */
     //9-2
+    @Override
     public List<FeatureBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -450,7 +468,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<FeatureBean> action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -466,6 +485,7 @@ public class FeatureManager
      * @return the number of deleted rows.
      */
     //10
+    @Override
     public int deleteAll()
     {
         return this.deleteByWhere("");
@@ -480,6 +500,7 @@ public class FeatureManager
      * @return the number of deleted rows
      */
     //11
+    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -496,14 +517,16 @@ public class FeatureManager
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the FeatureBean bean into the database.
+     * Saves the {@link FeatureBean} bean into the database.
      *
-     * @param bean the FeatureBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link FeatureBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      */
     //12
+    @Override
     public FeatureBean save(FeatureBean bean)
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -512,12 +535,13 @@ public class FeatureManager
     }
 
     /**
-     * Insert the FeatureBean bean into the database.
+     * Insert the {@link FeatureBean} bean into the database.
      *
-     * @param bean the FeatureBean bean to be saved
-     * @return the inserted bean
+     * @param bean the {@link FeatureBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      */
     //13
+    @Override
     public FeatureBean insert(FeatureBean bean)
     {
         try{
@@ -530,12 +554,13 @@ public class FeatureManager
     }
 
     /**
-     * Update the FeatureBean bean record in the database according to the changes.
+     * Update the {@link FeatureBean} bean record in the database according to the changes.
      *
-     * @param bean the FeatureBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link FeatureBean} bean to be updated
+     * @return the updated bean or null if bean is null
      */
     //14
+    @Override
     public FeatureBean update(FeatureBean bean)
     {
         try{
@@ -548,44 +573,50 @@ public class FeatureManager
     }
 
     /**
-     * Saves an array of FeatureBean beans into the database.
+     * Saves an array of {@link FeatureBean} bean into the database.
      *
-     * @param beans the FeatureBean bean table to be saved
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be saved
+     * @return the saved {@link FeatureBean} beans or null if beans is null.
      */
     //15
     public FeatureBean[] save(FeatureBean[] beans)
     {
-        for (FeatureBean bean : beans) 
-        {
-            this.save(bean);
+        if(null !=beans){
+            for (FeatureBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a list of FeatureBean beans into the database.
+     * Saves a collection of {@link FeatureBean} bean into the database.
      *
-     * @param beans the FeatureBean bean table to be saved
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be saved
+     * @return the saved {@link FeatureBean} beans or null if beans is null.
      */
     //15-2
-    public <T extends Collection<FeatureBean>>T save(T beans)
+    @Override
+    public <C extends Collection<FeatureBean>> C save(C beans)
     {
-        for (FeatureBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FeatureBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of FeatureBean beans as transaction into the database.
+     * Saves an array of {@link FeatureBean} bean into the database as transaction.
      *
-     * @param beans the FeatureBean bean table to be saved
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be saved
+     * @return the saved {@link FeatureBean} beans.
      * @see #save(FeatureBean[])
      */
     //15-3
+    @Override
     public FeatureBean[] saveAsTransaction(final FeatureBean[] beans) {
         return this.runAsTransaction(new Callable<FeatureBean[]>(){
             @Override
@@ -594,117 +625,126 @@ public class FeatureManager
             }});
     }
     /**
-     * Saves a list of FeatureBean beans as transaction into the database.
+     * Saves a collection of {@link FeatureBean} bean into the database as transaction.
      *
-     * @param beans the FeatureBean bean table to be saved
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be saved
+     * @return the saved {@link FeatureBean} beans.
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<FeatureBean>> T saveAsTransaction(final T beans){
-        return this.runAsTransaction(new Callable<T>(){
+    @Override
+    public <C extends Collection<FeatureBean>> C saveAsTransaction(final C beans){
+        return this.runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of FeatureBean beans into the database.
+     * Insert an array of {@link FeatureBean} bean into the database.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      */
     //16
+    @Override
     public FeatureBean[] insert(FeatureBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a list of FeatureBean beans into the database.
+     * Insert a collection of {@link FeatureBean} bean into the database.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      */
     //16-2
-    public <T extends Collection<FeatureBean>> T insert(T beans)
+    @Override
+    public <C extends Collection<FeatureBean>> C insert(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of FeatureBean beans as transaction into the database.
+     * Insert an array of {@link FeatureBean} bean into the database as transaction.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      * @see #saveAsTransaction(FeatureBean[])
      */
     //16-3
+    @Override
     public FeatureBean[] insertAsTransaction(FeatureBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a list of FeatureBean beans as transaction into the database.
+     * Insert a collection of {@link FeatureBean} bean as transaction into the database.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<FeatureBean>> T insertAsTransaction(T beans)
+    @Override
+    public <C extends Collection<FeatureBean>> C insertAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of FeatureBean beans into the database.
+     * Update an array of {@link FeatureBean} bean into the database.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      */
     //17
+    @Override
     public FeatureBean[] update(FeatureBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Updates a list of FeatureBean beans into the database.
+     * Update a collection of {@link FeatureBean} bean into the database.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      */
     //17-2
-    public <T extends Collection<FeatureBean>> T update(T beans)
+    @Override
+    public <C extends Collection<FeatureBean>> C update(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of FeatureBean beans as transaction into the database.
+     * Update an array of {@link FeatureBean} bean into the database as transaction.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} beans table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      * @see #saveAsTransaction(FeatureBean[])
      */
     //17-3
+    @Override
     public FeatureBean[] updateAsTransaction(FeatureBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Updates a list of FeatureBean beans as transaction into the database.
+     * Update a collection of {@link FeatureBean} bean into the database as transaction.
      *
-     * @param beans the FeatureBean bean table to be inserted
-     * @return the saved FeatureBean array.
+     * @param beans the {@link FeatureBean} bean table to be inserted
+     * @return the saved {@link FeatureBean} beans.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<FeatureBean>> T updateAsTransaction(T beans)
+    @Override
+    public <C extends Collection<FeatureBean>> C updateAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -720,6 +760,7 @@ public class FeatureManager
      * @return the bean matching the template
      */
     //18
+    @Override
     public FeatureBean loadUniqueUsingTemplate(FeatureBean bean)
     {
         try{
@@ -738,6 +779,7 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //19
+    @Override
     public FeatureBean[] loadUsingTemplate(FeatureBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -750,7 +792,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //19-1
-    public int loadUsingTemplate(FeatureBean bean,Action action)
+    @Override
+    public int loadUsingTemplate(FeatureBean bean,Action<FeatureBean> action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -762,6 +805,7 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //19-2
+    @Override
     public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -776,6 +820,7 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //20
+    @Override
     public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -790,7 +835,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //20-1
-    public int loadUsingTemplate(FeatureBean bean, int startRow, int numRows,Action action)
+    @Override
+    public int loadUsingTemplate(FeatureBean bean, int startRow, int numRows,Action<FeatureBean> action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -803,6 +849,7 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //20-2
+    @Override
     public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -818,6 +865,7 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //20-3
+    @Override
     public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
@@ -833,6 +881,7 @@ public class FeatureManager
      * @return all the FeatureBean matching the template
      */
     //20-4
+    @Override
     public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -854,7 +903,8 @@ public class FeatureManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    @Override
+    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -871,6 +921,7 @@ public class FeatureManager
      * @return the number of deleted objects
      */
     //21
+    @Override
     public int deleteUsingTemplate(FeatureBean bean)
     {
         try{
@@ -895,6 +946,7 @@ public class FeatureManager
      * @return the number of rows returned
      */
     //24
+    @Override
     public int countAll() 
     {
         return this.countWhere("");
@@ -908,6 +960,7 @@ public class FeatureManager
      * @return the number of rows returned
      */
     //25
+    @Override
     public int countWhere(String where)
     {
         try{
@@ -926,6 +979,7 @@ public class FeatureManager
      * @return the number of rows returned
      */
     //27
+    @Override
     public int countUsingTemplate(FeatureBean bean)
     {
         return this.countUsingTemplate(bean, -1, -1);
@@ -940,6 +994,7 @@ public class FeatureManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(FeatureBean bean, int startRow, int numRows)
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -955,6 +1010,7 @@ public class FeatureManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(FeatureBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -976,6 +1032,7 @@ public class FeatureManager
      * Registers a unique {@link FeatureListener} listener.
      */
     //35
+    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((FeatureListener)listener));
@@ -1043,6 +1100,7 @@ public class FeatureManager
      * @param fieldList table of the field's associated constants
      * @return an array of FeatureBean
      */
+    @Override
     public FeatureBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new FeatureBean[0]);
     }
@@ -1053,6 +1111,7 @@ public class FeatureManager
      * @param fieldList table of the field's associated constants
      * @return an list of FeatureBean
      */
+    @Override
     public List<FeatureBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1064,7 +1123,7 @@ public class FeatureManager
     }
 
     
-    //@Override
+    @Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1075,7 +1134,7 @@ public class FeatureManager
         }
     }
     
-    //@Override
+    @Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1085,7 +1144,7 @@ public class FeatureManager
             throw new WrapDAOException(e);
         }
     }
-    private FlFeatureManager.Action toNative(final Action action){
+    private FlFeatureManager.Action toNative(final Action<FeatureBean> action){
         if(null == action)
             throw new NullPointerException();
         return new FlFeatureManager.Action(){

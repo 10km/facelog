@@ -16,6 +16,8 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
+import net.gdface.facelog.db.BaseBean;
+import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceBean;
@@ -35,7 +37,7 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class ImageManager 
+public class ImageManager implements TableManager<ImageBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -150,11 +152,6 @@ public class ImageManager
                             + ",face_num"
                             + ",thumb_md5"
                             + ",device_id";
-
-    public static interface Action{
-          void call(ImageBean bean);
-          ImageBean getBean();
-     }
 
     /**
     * @return tableName
@@ -278,7 +275,7 @@ public class ImageManager
      * @see {@link #loadByPrimaryKey(ImageBean bean)}
      */
     //1.4
-    //@Override
+    @Override
     public boolean existsPrimaryKey(ImageBean bean)
     {
         return null!=loadByPrimaryKey(bean);
@@ -312,6 +309,7 @@ public class ImageManager
      * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
+    @Override
     public int deleteByPrimaryKey(ImageBean bean)
     {
         try{
@@ -352,8 +350,8 @@ public class ImageManager
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    //@Override
-    public <T> T[] getImportedBeans(ImageBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(ImageBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
@@ -374,8 +372,8 @@ public class ImageManager
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    //@Override
-    public <T> List<T> getImportedBeansAsList(ImageBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> List<T> getImportedBeansAsList(ImageBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -398,8 +396,8 @@ public class ImageManager
      * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
      * @return importedBeans always
      */
-    //@Override
-    public <T> T[] setImportedBeans(ImageBean bean,T[] importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean> T[] setImportedBeans(ImageBean bean,T[] importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
@@ -425,8 +423,8 @@ public class ImageManager
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
-    //@Override
-    public <T,C extends Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             if(importedBeans instanceof List){
@@ -523,7 +521,7 @@ public class ImageManager
      * @see {@link FlFaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FaceBean>> T setFlFaceBeansByImgMd5(ImageBean bean , T importedBeans)
+    public <C extends Collection<FaceBean>> C setFlFaceBeansByImgMd5(ImageBean bean , C importedBeans)
     {
         try {
             IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
@@ -617,7 +615,7 @@ public class ImageManager
      * @see {@link FlPersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<PersonBean>> T setFlPersonBeansByPhotoId(ImageBean bean , T importedBeans)
+    public <C extends Collection<PersonBean>> C setFlPersonBeansByPhotoId(ImageBean bean , C importedBeans)
     {
         try {
             IBeanConverter<PersonBean,FlPersonBean> importedConverter = this.dbConverter.getPersonBeanConverter();
@@ -745,8 +743,8 @@ public class ImageManager
      * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
-    //@Override
-    public <T> T getReferencedBean(ImageBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T getReferencedBean(ImageBean bean,String fkName){
         try {
             return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
@@ -767,11 +765,11 @@ public class ImageManager
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link ImageBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
-     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")
-    //@Override
-    public <T> T setReferencedBean(ImageBean bean,T beanToSet,String fkName){
+    @Override
+    public <T extends BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -818,7 +816,7 @@ public class ImageManager
      *
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link ImageBean}
-     * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -857,7 +855,7 @@ public class ImageManager
      *
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the {@link StoreBean} object to associate to the {@link ImageBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -896,7 +894,7 @@ public class ImageManager
      *
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the {@link StoreBean} object to associate to the {@link ImageBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
+     * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -921,6 +919,7 @@ public class ImageManager
      * @return an array of FlImageManager bean
      */
     //5
+    @Override
     public ImageBean[] loadAll()
     {
         try{
@@ -937,7 +936,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //5-1
-    public int loadAll(Action action)
+    @Override
+    public int loadAll(Action<ImageBean> action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -947,6 +947,7 @@ public class ImageManager
      * @return a list of ImageBean bean
      */
     //5-2
+    @Override
     public List<ImageBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -961,6 +962,7 @@ public class ImageManager
      * @return an array of FlImageManager bean
      */
     //6
+    @Override
     public ImageBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -973,7 +975,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //6-1
-    public int loadAll(int startRow, int numRows,Action action)
+    @Override
+    public int loadAll(int startRow, int numRows,Action<ImageBean> action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -985,6 +988,7 @@ public class ImageManager
      * @return a list of FlImageManager bean
      */
     //6-2
+    @Override
     public List<ImageBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -1000,10 +1004,12 @@ public class ImageManager
      * @return the resulting ImageBean table
      */
     //7
+    @Override
     public ImageBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
+    
     /**
      * Retrieves a list of ImageBean given a sql 'where' clause.
      *
@@ -1011,6 +1017,7 @@ public class ImageManager
      * @return the resulting ImageBean table
      */
     //7
+    @Override
     public List<ImageBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -1022,7 +1029,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //7-1
-    public int loadByWhere(String where,Action action)
+    @Override
+    public int loadByWhere(String where,Action<ImageBean> action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -1035,6 +1043,7 @@ public class ImageManager
      * @return the resulting ImageBean table
      */
     //8
+    @Override
     public ImageBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -1050,6 +1059,7 @@ public class ImageManager
      * @return the resulting ImageBean table
      */
     //8
+    @Override
     public List<ImageBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -1064,7 +1074,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList,Action<ImageBean> action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -1080,6 +1091,7 @@ public class ImageManager
      * @return the resulting ImageBean table
      */
     //9
+    @Override
     public ImageBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (ImageBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new ImageBean[0]);
@@ -1097,7 +1109,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<ImageBean> action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -1113,6 +1126,7 @@ public class ImageManager
      * @return the resulting ImageBean table
      */
     //9-2
+    @Override
     public List<ImageBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -1136,7 +1150,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<ImageBean> action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -1152,6 +1167,7 @@ public class ImageManager
      * @return the number of deleted rows.
      */
     //10
+    @Override
     public int deleteAll()
     {
         return this.deleteByWhere("");
@@ -1166,6 +1182,7 @@ public class ImageManager
      * @return the number of deleted rows
      */
     //11
+    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -1182,14 +1199,16 @@ public class ImageManager
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the ImageBean bean into the database.
+     * Saves the {@link ImageBean} bean into the database.
      *
-     * @param bean the ImageBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link ImageBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      */
     //12
+    @Override
     public ImageBean save(ImageBean bean)
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1198,12 +1217,13 @@ public class ImageManager
     }
 
     /**
-     * Insert the ImageBean bean into the database.
+     * Insert the {@link ImageBean} bean into the database.
      *
-     * @param bean the ImageBean bean to be saved
-     * @return the inserted bean
+     * @param bean the {@link ImageBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      */
     //13
+    @Override
     public ImageBean insert(ImageBean bean)
     {
         try{
@@ -1216,12 +1236,13 @@ public class ImageManager
     }
 
     /**
-     * Update the ImageBean bean record in the database according to the changes.
+     * Update the {@link ImageBean} bean record in the database according to the changes.
      *
-     * @param bean the ImageBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link ImageBean} bean to be updated
+     * @return the updated bean or null if bean is null
      */
     //14
+    @Override
     public ImageBean update(ImageBean bean)
     {
         try{
@@ -1234,44 +1255,50 @@ public class ImageManager
     }
 
     /**
-     * Saves an array of ImageBean beans into the database.
+     * Saves an array of {@link ImageBean} bean into the database.
      *
-     * @param beans the ImageBean bean table to be saved
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be saved
+     * @return the saved {@link ImageBean} beans or null if beans is null.
      */
     //15
     public ImageBean[] save(ImageBean[] beans)
     {
-        for (ImageBean bean : beans) 
-        {
-            this.save(bean);
+        if(null !=beans){
+            for (ImageBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a list of ImageBean beans into the database.
+     * Saves a collection of {@link ImageBean} bean into the database.
      *
-     * @param beans the ImageBean bean table to be saved
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be saved
+     * @return the saved {@link ImageBean} beans or null if beans is null.
      */
     //15-2
-    public <T extends Collection<ImageBean>>T save(T beans)
+    @Override
+    public <C extends Collection<ImageBean>> C save(C beans)
     {
-        for (ImageBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (ImageBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of ImageBean beans as transaction into the database.
+     * Saves an array of {@link ImageBean} bean into the database as transaction.
      *
-     * @param beans the ImageBean bean table to be saved
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be saved
+     * @return the saved {@link ImageBean} beans.
      * @see #save(ImageBean[])
      */
     //15-3
+    @Override
     public ImageBean[] saveAsTransaction(final ImageBean[] beans) {
         return this.runAsTransaction(new Callable<ImageBean[]>(){
             @Override
@@ -1280,117 +1307,126 @@ public class ImageManager
             }});
     }
     /**
-     * Saves a list of ImageBean beans as transaction into the database.
+     * Saves a collection of {@link ImageBean} bean into the database as transaction.
      *
-     * @param beans the ImageBean bean table to be saved
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be saved
+     * @return the saved {@link ImageBean} beans.
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<ImageBean>> T saveAsTransaction(final T beans){
-        return this.runAsTransaction(new Callable<T>(){
+    @Override
+    public <C extends Collection<ImageBean>> C saveAsTransaction(final C beans){
+        return this.runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of ImageBean beans into the database.
+     * Insert an array of {@link ImageBean} bean into the database.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      */
     //16
+    @Override
     public ImageBean[] insert(ImageBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a list of ImageBean beans into the database.
+     * Insert a collection of {@link ImageBean} bean into the database.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      */
     //16-2
-    public <T extends Collection<ImageBean>> T insert(T beans)
+    @Override
+    public <C extends Collection<ImageBean>> C insert(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of ImageBean beans as transaction into the database.
+     * Insert an array of {@link ImageBean} bean into the database as transaction.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      * @see #saveAsTransaction(ImageBean[])
      */
     //16-3
+    @Override
     public ImageBean[] insertAsTransaction(ImageBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a list of ImageBean beans as transaction into the database.
+     * Insert a collection of {@link ImageBean} bean as transaction into the database.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<ImageBean>> T insertAsTransaction(T beans)
+    @Override
+    public <C extends Collection<ImageBean>> C insertAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of ImageBean beans into the database.
+     * Update an array of {@link ImageBean} bean into the database.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      */
     //17
+    @Override
     public ImageBean[] update(ImageBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Updates a list of ImageBean beans into the database.
+     * Update a collection of {@link ImageBean} bean into the database.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      */
     //17-2
-    public <T extends Collection<ImageBean>> T update(T beans)
+    @Override
+    public <C extends Collection<ImageBean>> C update(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of ImageBean beans as transaction into the database.
+     * Update an array of {@link ImageBean} bean into the database as transaction.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} beans table to be inserted
+     * @return the saved {@link ImageBean} beans.
      * @see #saveAsTransaction(ImageBean[])
      */
     //17-3
+    @Override
     public ImageBean[] updateAsTransaction(ImageBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Updates a list of ImageBean beans as transaction into the database.
+     * Update a collection of {@link ImageBean} bean into the database as transaction.
      *
-     * @param beans the ImageBean bean table to be inserted
-     * @return the saved ImageBean array.
+     * @param beans the {@link ImageBean} bean table to be inserted
+     * @return the saved {@link ImageBean} beans.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<ImageBean>> T updateAsTransaction(T beans)
+    @Override
+    public <C extends Collection<ImageBean>> C updateAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1406,6 +1442,7 @@ public class ImageManager
      * @return the bean matching the template
      */
     //18
+    @Override
     public ImageBean loadUniqueUsingTemplate(ImageBean bean)
     {
         try{
@@ -1424,6 +1461,7 @@ public class ImageManager
      * @return all the ImageBean matching the template
      */
     //19
+    @Override
     public ImageBean[] loadUsingTemplate(ImageBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -1436,7 +1474,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //19-1
-    public int loadUsingTemplate(ImageBean bean,Action action)
+    @Override
+    public int loadUsingTemplate(ImageBean bean,Action<ImageBean> action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1448,6 +1487,7 @@ public class ImageManager
      * @return all the ImageBean matching the template
      */
     //19-2
+    @Override
     public List<ImageBean> loadUsingTemplateAsList(ImageBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -1462,6 +1502,7 @@ public class ImageManager
      * @return all the ImageBean matching the template
      */
     //20
+    @Override
     public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1476,7 +1517,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //20-1
-    public int loadUsingTemplate(ImageBean bean, int startRow, int numRows,Action action)
+    @Override
+    public int loadUsingTemplate(ImageBean bean, int startRow, int numRows,Action<ImageBean> action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1489,6 +1531,7 @@ public class ImageManager
      * @return all the ImageBean matching the template
      */
     //20-2
+    @Override
     public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -1504,6 +1547,7 @@ public class ImageManager
      * @return all the ImageBean matching the template
      */
     //20-3
+    @Override
     public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new ImageBean[0]);
@@ -1519,6 +1563,7 @@ public class ImageManager
      * @return all the ImageBean matching the template
      */
     //20-4
+    @Override
     public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1540,7 +1585,8 @@ public class ImageManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    @Override
+    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1557,6 +1603,7 @@ public class ImageManager
      * @return the number of deleted objects
      */
     //21
+    @Override
     public int deleteUsingTemplate(ImageBean bean)
     {
         try{
@@ -1689,6 +1736,7 @@ public class ImageManager
      * @return the number of rows returned
      */
     //24
+    @Override
     public int countAll() 
     {
         return this.countWhere("");
@@ -1702,6 +1750,7 @@ public class ImageManager
      * @return the number of rows returned
      */
     //25
+    @Override
     public int countWhere(String where)
     {
         try{
@@ -1720,6 +1769,7 @@ public class ImageManager
      * @return the number of rows returned
      */
     //27
+    @Override
     public int countUsingTemplate(ImageBean bean)
     {
         return this.countUsingTemplate(bean, -1, -1);
@@ -1734,6 +1784,7 @@ public class ImageManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(ImageBean bean, int startRow, int numRows)
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1749,6 +1800,7 @@ public class ImageManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(ImageBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1770,6 +1822,7 @@ public class ImageManager
      * Registers a unique {@link ImageListener} listener.
      */
     //35
+    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((ImageListener)listener));
@@ -1837,6 +1890,7 @@ public class ImageManager
      * @param fieldList table of the field's associated constants
      * @return an array of ImageBean
      */
+    @Override
     public ImageBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new ImageBean[0]);
     }
@@ -1847,6 +1901,7 @@ public class ImageManager
      * @param fieldList table of the field's associated constants
      * @return an list of ImageBean
      */
+    @Override
     public List<ImageBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1858,7 +1913,7 @@ public class ImageManager
     }
 
     
-    //@Override
+    @Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1869,7 +1924,7 @@ public class ImageManager
         }
     }
     
-    //@Override
+    @Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1879,7 +1934,7 @@ public class ImageManager
             throw new WrapDAOException(e);
         }
     }
-    private FlImageManager.Action toNative(final Action action){
+    private FlImageManager.Action toNative(final Action<ImageBean> action){
         if(null == action)
             throw new NullPointerException();
         return new FlImageManager.Action(){
