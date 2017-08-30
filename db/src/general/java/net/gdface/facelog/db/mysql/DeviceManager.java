@@ -16,8 +16,6 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
-import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
@@ -35,7 +33,7 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class DeviceManager extends TableManager.Adapter<DeviceBean>
+public class DeviceManager 
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -141,6 +139,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
                             + ",version"
                             + ",create_time"
                             + ",update_time";
+
+    public static interface Action{
+          void call(DeviceBean bean);
+          DeviceBean getBean();
+     }
 
     /**
     * @return tableName
@@ -264,7 +267,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @see {@link #loadByPrimaryKey(DeviceBean bean)}
      */
     //1.4
-    @Override
+    //@Override
     public boolean existsPrimaryKey(DeviceBean bean)
     {
         return null!=loadByPrimaryKey(bean);
@@ -298,7 +301,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
-    @Override
     public int deleteByPrimaryKey(DeviceBean bean)
     {
         try{
@@ -339,8 +341,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> T[] getImportedBeans(DeviceBean bean,String fkName){
+    //@Override
+    public <T> T[] getImportedBeans(DeviceBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
@@ -361,8 +363,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
+    //@Override
+    public <T> List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -385,8 +387,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
      * @return importedBeans always
      */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,String fkName){
+    //@Override
+    public <T> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
@@ -412,8 +414,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,String fkName){
+    //@Override
+    public <T,C extends Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             if(importedBeans instanceof List){
@@ -510,7 +512,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @see {@link FlImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans)
+    public <T extends Collection<ImageBean>> T setFlImageBeansByDeviceId(DeviceBean bean , T importedBeans)
     {
         try {
             IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
@@ -604,7 +606,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @see {@link FlLogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans)
+    public <T extends Collection<LogBean>> T setFlLogBeansByDeviceId(DeviceBean bean , T importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
@@ -705,12 +707,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
             }});
     }
   
-    @Override
-    public <T extends BaseBean> T getReferencedBean(DeviceBean bean,String fkName){
+    //@Override
+    public <T> T getReferencedBean(DeviceBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(DeviceBean bean,T beanToSet,String fkName){
+    //@Override
+    public <T> T setReferencedBean(DeviceBean bean,T beanToSet,String fkName){
         throw new UnsupportedOperationException();
     }
      
@@ -725,7 +727,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return an array of FlDeviceManager bean
      */
     //5
-    @Override
     public DeviceBean[] loadAll()
     {
         try{
@@ -742,8 +743,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //5-1
-    @Override
-    public int loadAll(Action<DeviceBean> action)
+    public int loadAll(Action action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -753,7 +753,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return a list of DeviceBean bean
      */
     //5-2
-    @Override
     public List<DeviceBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -768,7 +767,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return an array of FlDeviceManager bean
      */
     //6
-    @Override
     public DeviceBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -781,8 +779,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<DeviceBean> action)
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -794,7 +791,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return a list of FlDeviceManager bean
      */
     //6-2
-    @Override
     public List<DeviceBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -810,12 +806,10 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the resulting DeviceBean table
      */
     //7
-    @Override
     public DeviceBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
-    
     /**
      * Retrieves a list of DeviceBean given a sql 'where' clause.
      *
@@ -823,7 +817,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the resulting DeviceBean table
      */
     //7
-    @Override
     public List<DeviceBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -835,8 +828,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //7-1
-    @Override
-    public int loadByWhere(String where,Action<DeviceBean> action)
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -849,7 +841,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the resulting DeviceBean table
      */
     //8
-    @Override
     public DeviceBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -865,7 +856,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the resulting DeviceBean table
      */
     //8
-    @Override
     public List<DeviceBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -880,8 +870,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<DeviceBean> action)
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -897,7 +886,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the resulting DeviceBean table
      */
     //9
-    @Override
     public DeviceBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (DeviceBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new DeviceBean[0]);
@@ -915,8 +903,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<DeviceBean> action)
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -932,7 +919,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the resulting DeviceBean table
      */
     //9-2
-    @Override
     public List<DeviceBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -956,8 +942,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<DeviceBean> action)
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -969,6 +954,16 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     }
 
     /**
+     * Deletes all rows from fl_device table.
+     * @return the number of deleted rows.
+     */
+    //10
+    public int deleteAll()
+    {
+        return this.deleteByWhere("");
+    }
+
+    /**
      * Deletes rows from the fl_device table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clausis.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
@@ -977,7 +972,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the number of deleted rows
      */
     //11
-    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -994,16 +988,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link DeviceBean} bean into the database.
+     * Saves the DeviceBean bean into the database.
      *
-     * @param bean the {@link DeviceBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the DeviceBean bean to be saved
+     * @return the inserted or updated bean
      */
     //12
-    @Override
     public DeviceBean save(DeviceBean bean)
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1012,13 +1004,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     }
 
     /**
-     * Insert the {@link DeviceBean} bean into the database.
+     * Insert the DeviceBean bean into the database.
      *
-     * @param bean the {@link DeviceBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * @param bean the DeviceBean bean to be saved
+     * @return the inserted bean
      */
     //13
-    @Override
     public DeviceBean insert(DeviceBean bean)
     {
         try{
@@ -1031,13 +1022,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     }
 
     /**
-     * Update the {@link DeviceBean} bean record in the database according to the changes.
+     * Update the DeviceBean bean record in the database according to the changes.
      *
-     * @param bean the {@link DeviceBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the DeviceBean bean to be updated
+     * @return the updated bean
      */
     //14
-    @Override
     public DeviceBean update(DeviceBean bean)
     {
         try{
@@ -1050,50 +1040,44 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     }
 
     /**
-     * Saves an array of {@link DeviceBean} bean into the database.
+     * Saves an array of DeviceBean beans into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be saved
+     * @return the saved DeviceBean array.
      */
     //15
     public DeviceBean[] save(DeviceBean[] beans)
     {
-        if(null !=beans){
-            for (DeviceBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (DeviceBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link DeviceBean} bean into the database.
+     * Saves a list of DeviceBean beans into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be saved
+     * @return the saved DeviceBean array.
      */
     //15-2
-    @Override
-    public <C extends Collection<DeviceBean>> C save(C beans)
+    public <T extends Collection<DeviceBean>>T save(T beans)
     {
-        if(null != beans){
-            for (DeviceBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (DeviceBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link DeviceBean} bean into the database as transaction.
+     * Saves an array of DeviceBean beans as transaction into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be saved
+     * @return the saved DeviceBean array.
      * @see #save(DeviceBean[])
      */
     //15-3
-    @Override
     public DeviceBean[] saveAsTransaction(final DeviceBean[] beans) {
         return this.runAsTransaction(new Callable<DeviceBean[]>(){
             @Override
@@ -1102,126 +1086,117 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
             }});
     }
     /**
-     * Saves a collection of {@link DeviceBean} bean into the database as transaction.
+     * Saves a list of DeviceBean beans as transaction into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be saved
+     * @return the saved DeviceBean array.
      * @see #save(List)
      */
     //15-4
-    @Override
-    public <C extends Collection<DeviceBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
+    public <T extends Collection<DeviceBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link DeviceBean} bean into the database.
+     * Insert an array of DeviceBean beans into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      */
     //16
-    @Override
     public DeviceBean[] insert(DeviceBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a collection of {@link DeviceBean} bean into the database.
+     * Insert a list of DeviceBean beans into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      */
     //16-2
-    @Override
-    public <C extends Collection<DeviceBean>> C insert(C beans)
+    public <T extends Collection<DeviceBean>> T insert(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link DeviceBean} bean into the database as transaction.
+     * Insert an array of DeviceBean beans as transaction into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      * @see #saveAsTransaction(DeviceBean[])
      */
     //16-3
-    @Override
     public DeviceBean[] insertAsTransaction(DeviceBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a collection of {@link DeviceBean} bean as transaction into the database.
+     * Insert a list of DeviceBean beans as transaction into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    @Override
-    public <C extends Collection<DeviceBean>> C insertAsTransaction(C beans)
+    public <T extends Collection<DeviceBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link DeviceBean} bean into the database.
+     * Updates an array of DeviceBean beans into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      */
     //17
-    @Override
     public DeviceBean[] update(DeviceBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Update a collection of {@link DeviceBean} bean into the database.
+     * Updates a list of DeviceBean beans into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      */
     //17-2
-    @Override
-    public <C extends Collection<DeviceBean>> C update(C beans)
+    public <T extends Collection<DeviceBean>> T update(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link DeviceBean} bean into the database as transaction.
+     * Updates an array of DeviceBean beans as transaction into the database.
      *
-     * @param beans the {@link DeviceBean} beans table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      * @see #saveAsTransaction(DeviceBean[])
      */
     //17-3
-    @Override
     public DeviceBean[] updateAsTransaction(DeviceBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Update a collection of {@link DeviceBean} bean into the database as transaction.
+     * Updates a list of DeviceBean beans as transaction into the database.
      *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
+     * @param beans the DeviceBean bean table to be inserted
+     * @return the saved DeviceBean array.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    @Override
-    public <C extends Collection<DeviceBean>> C updateAsTransaction(C beans)
+    public <T extends Collection<DeviceBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1237,7 +1212,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the bean matching the template
      */
     //18
-    @Override
     public DeviceBean loadUniqueUsingTemplate(DeviceBean bean)
     {
         try{
@@ -1256,7 +1230,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return all the DeviceBean matching the template
      */
     //19
-    @Override
     public DeviceBean[] loadUsingTemplate(DeviceBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -1269,8 +1242,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //19-1
-    @Override
-    public int loadUsingTemplate(DeviceBean bean,Action<DeviceBean> action)
+    public int loadUsingTemplate(DeviceBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1282,7 +1254,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return all the DeviceBean matching the template
      */
     //19-2
-    @Override
     public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -1297,7 +1268,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return all the DeviceBean matching the template
      */
     //20
-    @Override
     public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1312,8 +1282,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //20-1
-    @Override
-    public int loadUsingTemplate(DeviceBean bean, int startRow, int numRows,Action<DeviceBean> action)
+    public int loadUsingTemplate(DeviceBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1326,7 +1295,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return all the DeviceBean matching the template
      */
     //20-2
-    @Override
     public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -1342,7 +1310,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return all the DeviceBean matching the template
      */
     //20-3
-    @Override
     public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
@@ -1358,7 +1325,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return all the DeviceBean matching the template
      */
     //20-4
-    @Override
     public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1380,8 +1346,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the count dealt by action
      */
     //20-5
-    @Override
-    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action)
+    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1398,7 +1363,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the number of deleted objects
      */
     //21
-    @Override
     public int deleteUsingTemplate(DeviceBean bean)
     {
         try{
@@ -1412,7 +1376,21 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
 
 
 
+    //_____________________________________________________________________
+    //
+    // COUNT
+    //_____________________________________________________________________
 
+    /**
+     * Retrieves the number of rows of the table fl_device.
+     *
+     * @return the number of rows returned
+     */
+    //24
+    public int countAll() 
+    {
+        return this.countWhere("");
+    }
 
     /**
      * Retrieves the number of rows of the table fl_device with a 'where' clause.
@@ -1422,7 +1400,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the number of rows returned
      */
     //25
-    @Override
     public int countWhere(String where)
     {
         try{
@@ -1434,6 +1411,31 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         }
     }
 
+    /**
+     * count the number of elements of a specific DeviceBean bean
+     *
+     * @param bean the DeviceBean bean to look for ant count
+     * @return the number of rows returned
+     */
+    //27
+    public int countUsingTemplate(DeviceBean bean)
+    {
+        return this.countUsingTemplate(bean, -1, -1);
+    }
+
+    /**
+     * count the number of elements of a specific DeviceBean bean , given the start row and number of rows.
+     *
+     * @param bean the DeviceBean template to look for and count
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the number of rows returned
+     */
+    //20
+    public int countUsingTemplate(DeviceBean bean, int startRow, int numRows)
+    {
+        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+    }
 
     /**
      * count the number of elements of a specific DeviceBean bean given the start row and number of rows and the search type
@@ -1445,7 +1447,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @return the number of rows returned
      */
     //20
-    @Override
     public int countUsingTemplate(DeviceBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1467,7 +1468,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * Registers a unique {@link DeviceListener} listener.
      */
     //35
-    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((DeviceListener)listener));
@@ -1535,7 +1535,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param fieldList table of the field's associated constants
      * @return an array of DeviceBean
      */
-    @Override
     public DeviceBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new DeviceBean[0]);
     }
@@ -1546,7 +1545,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param fieldList table of the field's associated constants
      * @return an list of DeviceBean
      */
-    @Override
     public List<DeviceBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1558,7 +1556,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     }
 
     
-    @Override
+    //@Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1569,7 +1567,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         }
     }
     
-    @Override
+    //@Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1579,7 +1577,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlDeviceManager.Action toNative(final Action<DeviceBean> action){
+    private FlDeviceManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlDeviceManager.Action(){

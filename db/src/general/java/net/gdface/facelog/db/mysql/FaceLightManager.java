@@ -16,8 +16,6 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.FaceLightBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
-import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.FaceLightListener;
 import net.gdface.facelog.db.WrapDAOException;
@@ -31,7 +29,7 @@ import net.gdface.facelog.dborm.face.FlFaceLightListener;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
+public class FaceLightManager 
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -254,6 +252,11 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
                             + ",ext_info"
                             + ",create_time";
 
+    public static interface Action{
+          void call(FaceLightBean bean);
+          FaceLightBean getBean();
+     }
+
     /**
     * @return tableName
     */
@@ -313,51 +316,46 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getFaceLightBeanConverter();
     }
-    @Override
     public FaceLightBean loadByPrimaryKey(FaceLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    
-    @Override
     public boolean existsPrimaryKey(FaceLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
-    
-    @Override
     public int deleteByPrimaryKey(FaceLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
  
 
-    @Override
-    public <T extends BaseBean> T[] getImportedBeans(FaceLightBean bean,String fkName){
+    //@Override
+    public <T> T[] getImportedBeans(FaceLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(FaceLightBean bean,String fkName){
+    //@Override
+    public <T> List<T> getImportedBeansAsList(FaceLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(FaceLightBean bean,T[] importedBeans,String fkName){
+    //@Override
+    public <T> T[] setImportedBeans(FaceLightBean bean,T[] importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }    
-    @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(FaceLightBean bean,C importedBeans,String fkName){
+    //@Override
+    public <T,C extends Collection<T>> C setImportedBeans(FaceLightBean bean,C importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }
  
 
 
  
-    @Override
-    public <T extends BaseBean> T getReferencedBean(FaceLightBean bean,String fkName){
+    //@Override
+    public <T> T getReferencedBean(FaceLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(FaceLightBean bean,T beanToSet,String fkName){
+    //@Override
+    public <T> T setReferencedBean(FaceLightBean bean,T beanToSet,String fkName){
         throw new UnsupportedOperationException();
     }
      
@@ -372,7 +370,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return an array of FlFaceLightManager bean
      */
     //5
-    @Override
     public FaceLightBean[] loadAll()
     {
         try{
@@ -389,8 +386,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //5-1
-    @Override
-    public int loadAll(Action<FaceLightBean> action)
+    public int loadAll(Action action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -400,7 +396,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return a list of FaceLightBean bean
      */
     //5-2
-    @Override
     public List<FaceLightBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -415,7 +410,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return an array of FlFaceLightManager bean
      */
     //6
-    @Override
     public FaceLightBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -428,8 +422,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<FaceLightBean> action)
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -441,7 +434,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return a list of FlFaceLightManager bean
      */
     //6-2
-    @Override
     public List<FaceLightBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -457,12 +449,10 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the resulting FaceLightBean table
      */
     //7
-    @Override
     public FaceLightBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
-    
     /**
      * Retrieves a list of FaceLightBean given a sql 'where' clause.
      *
@@ -470,7 +460,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the resulting FaceLightBean table
      */
     //7
-    @Override
     public List<FaceLightBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -482,8 +471,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //7-1
-    @Override
-    public int loadByWhere(String where,Action<FaceLightBean> action)
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -496,7 +484,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the resulting FaceLightBean table
      */
     //8
-    @Override
     public FaceLightBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -512,7 +499,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the resulting FaceLightBean table
      */
     //8
-    @Override
     public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -527,8 +513,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<FaceLightBean> action)
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -544,7 +529,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the resulting FaceLightBean table
      */
     //9
-    @Override
     public FaceLightBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (FaceLightBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FaceLightBean[0]);
@@ -562,8 +546,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<FaceLightBean> action)
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -579,7 +562,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the resulting FaceLightBean table
      */
     //9-2
-    @Override
     public List<FaceLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -603,8 +585,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<FaceLightBean> action)
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -616,6 +597,16 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
     }
 
     /**
+     * Deletes all rows from fl_face_light table.
+     * @return the number of deleted rows.
+     */
+    //10
+    public int deleteAll()
+    {
+        return this.deleteByWhere("");
+    }
+
+    /**
      * Deletes rows from the fl_face_light table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clausis.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
@@ -624,7 +615,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the number of deleted rows
      */
     //11
-    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -641,16 +631,14 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link FaceLightBean} bean into the database.
+     * Saves the FaceLightBean bean into the database.
      *
-     * @param bean the {@link FaceLightBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the FaceLightBean bean to be saved
+     * @return the inserted or updated bean
      */
     //12
-    @Override
     public FaceLightBean save(FaceLightBean bean)
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -659,13 +647,12 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
     }
 
     /**
-     * Insert the {@link FaceLightBean} bean into the database.
+     * Insert the FaceLightBean bean into the database.
      *
-     * @param bean the {@link FaceLightBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * @param bean the FaceLightBean bean to be saved
+     * @return the inserted bean
      */
     //13
-    @Override
     public FaceLightBean insert(FaceLightBean bean)
     {
         try{
@@ -678,13 +665,12 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
     }
 
     /**
-     * Update the {@link FaceLightBean} bean record in the database according to the changes.
+     * Update the FaceLightBean bean record in the database according to the changes.
      *
-     * @param bean the {@link FaceLightBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the FaceLightBean bean to be updated
+     * @return the updated bean
      */
     //14
-    @Override
     public FaceLightBean update(FaceLightBean bean)
     {
         try{
@@ -697,50 +683,44 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
     }
 
     /**
-     * Saves an array of {@link FaceLightBean} bean into the database.
+     * Saves an array of FaceLightBean beans into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be saved
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be saved
+     * @return the saved FaceLightBean array.
      */
     //15
     public FaceLightBean[] save(FaceLightBean[] beans)
     {
-        if(null !=beans){
-            for (FaceLightBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FaceLightBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link FaceLightBean} bean into the database.
+     * Saves a list of FaceLightBean beans into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be saved
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be saved
+     * @return the saved FaceLightBean array.
      */
     //15-2
-    @Override
-    public <C extends Collection<FaceLightBean>> C save(C beans)
+    public <T extends Collection<FaceLightBean>>T save(T beans)
     {
-        if(null != beans){
-            for (FaceLightBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FaceLightBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link FaceLightBean} bean into the database as transaction.
+     * Saves an array of FaceLightBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be saved
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be saved
+     * @return the saved FaceLightBean array.
      * @see #save(FaceLightBean[])
      */
     //15-3
-    @Override
     public FaceLightBean[] saveAsTransaction(final FaceLightBean[] beans) {
         return this.runAsTransaction(new Callable<FaceLightBean[]>(){
             @Override
@@ -749,126 +729,117 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
             }});
     }
     /**
-     * Saves a collection of {@link FaceLightBean} bean into the database as transaction.
+     * Saves a list of FaceLightBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be saved
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be saved
+     * @return the saved FaceLightBean array.
      * @see #save(List)
      */
     //15-4
-    @Override
-    public <C extends Collection<FaceLightBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
+    public <T extends Collection<FaceLightBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link FaceLightBean} bean into the database.
+     * Insert an array of FaceLightBean beans into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      */
     //16
-    @Override
     public FaceLightBean[] insert(FaceLightBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a collection of {@link FaceLightBean} bean into the database.
+     * Insert a list of FaceLightBean beans into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      */
     //16-2
-    @Override
-    public <C extends Collection<FaceLightBean>> C insert(C beans)
+    public <T extends Collection<FaceLightBean>> T insert(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link FaceLightBean} bean into the database as transaction.
+     * Insert an array of FaceLightBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      * @see #saveAsTransaction(FaceLightBean[])
      */
     //16-3
-    @Override
     public FaceLightBean[] insertAsTransaction(FaceLightBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a collection of {@link FaceLightBean} bean as transaction into the database.
+     * Insert a list of FaceLightBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    @Override
-    public <C extends Collection<FaceLightBean>> C insertAsTransaction(C beans)
+    public <T extends Collection<FaceLightBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link FaceLightBean} bean into the database.
+     * Updates an array of FaceLightBean beans into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      */
     //17
-    @Override
     public FaceLightBean[] update(FaceLightBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Update a collection of {@link FaceLightBean} bean into the database.
+     * Updates a list of FaceLightBean beans into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      */
     //17-2
-    @Override
-    public <C extends Collection<FaceLightBean>> C update(C beans)
+    public <T extends Collection<FaceLightBean>> T update(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link FaceLightBean} bean into the database as transaction.
+     * Updates an array of FaceLightBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceLightBean} beans table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      * @see #saveAsTransaction(FaceLightBean[])
      */
     //17-3
-    @Override
     public FaceLightBean[] updateAsTransaction(FaceLightBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Update a collection of {@link FaceLightBean} bean into the database as transaction.
+     * Updates a list of FaceLightBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceLightBean} bean table to be inserted
-     * @return the saved {@link FaceLightBean} beans.
+     * @param beans the FaceLightBean bean table to be inserted
+     * @return the saved FaceLightBean array.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    @Override
-    public <C extends Collection<FaceLightBean>> C updateAsTransaction(C beans)
+    public <T extends Collection<FaceLightBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -884,7 +855,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the bean matching the template
      */
     //18
-    @Override
     public FaceLightBean loadUniqueUsingTemplate(FaceLightBean bean)
     {
         try{
@@ -903,7 +873,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return all the FaceLightBean matching the template
      */
     //19
-    @Override
     public FaceLightBean[] loadUsingTemplate(FaceLightBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -916,8 +885,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //19-1
-    @Override
-    public int loadUsingTemplate(FaceLightBean bean,Action<FaceLightBean> action)
+    public int loadUsingTemplate(FaceLightBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -929,7 +897,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return all the FaceLightBean matching the template
      */
     //19-2
-    @Override
     public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -944,7 +911,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return all the FaceLightBean matching the template
      */
     //20
-    @Override
     public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -959,8 +925,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //20-1
-    @Override
-    public int loadUsingTemplate(FaceLightBean bean, int startRow, int numRows,Action<FaceLightBean> action)
+    public int loadUsingTemplate(FaceLightBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -973,7 +938,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return all the FaceLightBean matching the template
      */
     //20-2
-    @Override
     public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -989,7 +953,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return all the FaceLightBean matching the template
      */
     //20-3
-    @Override
     public FaceLightBean[] loadUsingTemplate(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceLightBean[0]);
@@ -1005,7 +968,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return all the FaceLightBean matching the template
      */
     //20-4
-    @Override
     public List<FaceLightBean> loadUsingTemplateAsList(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1027,8 +989,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the count dealt by action
      */
     //20-5
-    @Override
-    public int loadUsingTemplate(FaceLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceLightBean> action)
+    public int loadUsingTemplate(FaceLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1045,7 +1006,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the number of deleted objects
      */
     //21
-    @Override
     public int deleteUsingTemplate(FaceLightBean bean)
     {
         try{
@@ -1059,7 +1019,21 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
 
 
 
+    //_____________________________________________________________________
+    //
+    // COUNT
+    //_____________________________________________________________________
 
+    /**
+     * Retrieves the number of rows of the table fl_face_light.
+     *
+     * @return the number of rows returned
+     */
+    //24
+    public int countAll() 
+    {
+        return this.countWhere("");
+    }
 
     /**
      * Retrieves the number of rows of the table fl_face_light with a 'where' clause.
@@ -1069,7 +1043,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the number of rows returned
      */
     //25
-    @Override
     public int countWhere(String where)
     {
         try{
@@ -1081,6 +1054,31 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
         }
     }
 
+    /**
+     * count the number of elements of a specific FaceLightBean bean
+     *
+     * @param bean the FaceLightBean bean to look for ant count
+     * @return the number of rows returned
+     */
+    //27
+    public int countUsingTemplate(FaceLightBean bean)
+    {
+        return this.countUsingTemplate(bean, -1, -1);
+    }
+
+    /**
+     * count the number of elements of a specific FaceLightBean bean , given the start row and number of rows.
+     *
+     * @param bean the FaceLightBean template to look for and count
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the number of rows returned
+     */
+    //20
+    public int countUsingTemplate(FaceLightBean bean, int startRow, int numRows)
+    {
+        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+    }
 
     /**
      * count the number of elements of a specific FaceLightBean bean given the start row and number of rows and the search type
@@ -1092,7 +1090,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @return the number of rows returned
      */
     //20
-    @Override
     public int countUsingTemplate(FaceLightBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1114,7 +1111,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * Registers a unique {@link FaceLightListener} listener.
      */
     //35
-    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((FaceLightListener)listener));
@@ -1182,7 +1178,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @param fieldList table of the field's associated constants
      * @return an array of FaceLightBean
      */
-    @Override
     public FaceLightBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new FaceLightBean[0]);
     }
@@ -1193,7 +1188,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
      * @param fieldList table of the field's associated constants
      * @return an list of FaceLightBean
      */
-    @Override
     public List<FaceLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1205,7 +1199,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
     }
 
     
-    @Override
+    //@Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1216,7 +1210,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
         }
     }
     
-    @Override
+    //@Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1226,7 +1220,7 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlFaceLightManager.Action toNative(final Action<FaceLightBean> action){
+    private FlFaceLightManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFaceLightManager.Action(){

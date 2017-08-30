@@ -520,7 +520,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     //3.3 SET IMPORTED
     public FlImageBean[] setFlImageBeansByMd5(FlStoreBean bean , FlImageBean[] importedBeans) throws DAOException
     {
-        if(null != importedBeans){
+        if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
                 FlImageManager.getInstance().setReferencedByMd5(importBean , bean);
             }
@@ -538,9 +538,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @see {@link FlImageManager#setReferencedByMd5(FlImageBean, FlStoreBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FlImageBean>> C setFlImageBeansByMd5(FlStoreBean bean , C importedBeans) throws DAOException
+    public <T extends Collection<FlImageBean>> T setFlImageBeansByMd5(FlStoreBean bean , T importedBeans) throws DAOException
     {
-        if(null != importedBeans){
+        if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
                 FlImageManager.getInstance().setReferencedByMd5(importBean , bean);
             }
@@ -592,7 +592,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     //3.3 SET IMPORTED
     public FlImageBean[] setFlImageBeansByThumbMd5(FlStoreBean bean , FlImageBean[] importedBeans) throws DAOException
     {
-        if(null != importedBeans){
+        if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
                 FlImageManager.getInstance().setReferencedByThumbMd5(importBean , bean);
             }
@@ -610,9 +610,9 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @see {@link FlImageManager#setReferencedByThumbMd5(FlImageBean, FlStoreBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FlImageBean>> C setFlImageBeansByThumbMd5(FlStoreBean bean , C importedBeans) throws DAOException
+    public <T extends Collection<FlImageBean>> T setFlImageBeansByThumbMd5(FlStoreBean bean , T importedBeans) throws DAOException
     {
-        if(null != importedBeans){
+        if(null != bean && null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
                 FlImageManager.getInstance().setReferencedByThumbMd5(importBean , bean);
             }
@@ -685,10 +685,20 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
-        FlImageManager.getInstance().save( impFlImagebyMd5 );
-        this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
-        FlImageManager.getInstance().save( impFlImagebyThumbMd5 );
+        if( null != impFlImagebyMd5) {
+            for ( FlImageBean imp : impFlImagebyMd5 ){
+                imp.setMd5(bean.getMd5()); 
+                imp.setReferencedByMd5(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
+        if( null != impFlImagebyThumbMd5) {
+            for ( FlImageBean imp : impFlImagebyThumbMd5 ){
+                imp.setThumbMd5(bean.getMd5()); 
+                imp.setReferencedByThumbMd5(bean);
+                FlImageManager.getInstance().save( imp );
+            }
+        }
         return bean;
     }   
     /**
@@ -1005,16 +1015,15 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link FlStoreBean} bean into the database.
+     * Saves the FlStoreBean bean into the database.
      *
-     * @param bean the {@link FlStoreBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the FlStoreBean bean to be saved
+     * @return the inserted or updated bean
      * @throws DAOException
      */
     //12
     public FlStoreBean save(FlStoreBean bean) throws DAOException
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1023,17 +1032,17 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Insert the {@link FlStoreBean} bean into the database.
-     * 
-     * @param bean the {@link FlStoreBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * Insert the FlStoreBean bean into the database.
+     *
+     * @param bean the FlStoreBean bean to be saved
+     * @return the inserted bean
      * @throws DAOException
      */
     //13
     public FlStoreBean insert(FlStoreBean bean) throws DAOException
     {
         // mini checks
-        if (null == bean || !bean.isModified()) {
+        if (!bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (!bean.isNew()){
@@ -1111,17 +1120,17 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Update the {@link FlStoreBean} bean record in the database according to the changes.
+     * Update the FlStoreBean bean record in the database according to the changes.
      *
-     * @param bean the {@link FlStoreBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the FlStoreBean bean to be updated
+     * @return the updated bean
      * @throws DAOException
      */
     //14
     public FlStoreBean update(FlStoreBean bean) throws DAOException
     {
         // mini checks
-        if (null == bean || !bean.isModified()) {
+        if (!bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (bean.isNew()){
@@ -1200,47 +1209,43 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Saves an array of {@link FlStoreBean} bean into the database.
+     * Saves an array of FlStoreBean beans into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be saved
-     * @return the saved {@link FlStoreBean} beans or null if beans is null.
+     * @param beans the FlStoreBean bean table to be saved
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      */
     //15
     public FlStoreBean[] save(FlStoreBean[] beans) throws DAOException
     {
-        if(null != beans){
-            for (FlStoreBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FlStoreBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link FlStoreBean} beans into the database.
+     * Saves a collection of FlStoreBean beans into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be saved
-     * @return the saved {@link FlStoreBean} beans or null if beans is null.
+     * @param beans the FlStoreBean bean table to be saved
+     * @return the saved FlStoreBean collection.
      * @throws DAOException
      */
     //15-2
-    public <C extends Collection<FlStoreBean>>C save(C beans) throws DAOException
+    public <T extends Collection<FlStoreBean>>T save(T beans) throws DAOException
     {
-        if(null != beans){
-            for (FlStoreBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FlStoreBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link FlStoreBean} bean into the database as transaction.
+     * Saves an array of FlStoreBean beans as transaction into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be saved
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be saved
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      * @see #save(FlStoreBean[])
      */
@@ -1253,26 +1258,26 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             }});
     }
     /**
-     * Saves a collection of {@link FlStoreBean} bean into the database as transaction.
+     * Saves a list of FlStoreBean beans as transaction into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be saved
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be saved
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <C extends Collection<FlStoreBean>> C saveAsTransaction(final C beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<C>(){
+    public <T extends Collection<FlStoreBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link FlStoreBean} bean into the database.
+     * Insert an array of FlStoreBean beans into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      */
     //16
@@ -1282,23 +1287,23 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Insert a collection of {@link FlStoreBean} bean into the database.
+     * Insert a list of FlStoreBean beans into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      */
     //16-2
-    public <C extends Collection<FlStoreBean>> C insert(C beans) throws DAOException
+    public <T extends Collection<FlStoreBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link FlStoreBean} beans into the database as transaction.
+     * Insert an array of FlStoreBean beans as transaction into the database.
      *
-     * @param beans the {@link {@link FlStoreBean}} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      * @see #saveAsTransaction(FlStoreBean[])
      */
@@ -1309,25 +1314,25 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Insert a collection of {@link FlStoreBean} bean into the database as transaction.
+     * Insert a list of FlStoreBean beans as transaction into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <C extends Collection<FlStoreBean>> C insertAsTransaction(C beans) throws DAOException
+    public <T extends Collection<FlStoreBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link FlStoreBean} bean into the database.
+     * Updates an array of FlStoreBean beans into the database.
      *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      */
     //17
@@ -1337,23 +1342,23 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Update a list of {@link FlStoreBean} bean into the database.
+     * Updates a list of FlStoreBean beans into the database.
      *
-     * @param beans the {@link FlStoreBean} beans table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      */
     //17-2
-    public <C extends Collection<FlStoreBean>> C update(C beans) throws DAOException
+    public <T extends Collection<FlStoreBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link FlStoreBean} bean into the database as transaction.
+     * Updates an array of FlStoreBean beans as transaction into the database.
      *
-     * @param beans the {@link FlStoreBean} beans table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      * @see #saveAsTransaction(FlStoreBean[])
      */
@@ -1364,15 +1369,15 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     }
 
     /**
-     * Update a collection of {@link FlStoreBean} bean into the database as transaction.
+     * Updates a list of FlStoreBean beans as transaction into the database.
      *
-     * @param beans the {@link FlStoreBean} beans table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
+     * @param beans the FlStoreBean bean table to be inserted
+     * @return the saved FlStoreBean array.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <C extends Collection<FlStoreBean>> C updateAsTransaction(C beans) throws DAOException
+    public <T extends Collection<FlStoreBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

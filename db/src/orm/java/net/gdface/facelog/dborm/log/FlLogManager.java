@@ -354,7 +354,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         throw new UnsupportedOperationException();
     }    
     @Override
-    public <C extends Collection<?>> C setImportedBeans(FlLogBean bean,C importedBeans,String fkName)throws DAOException{
+    public <T extends Collection<?>> T setImportedBeans(FlLogBean bean,T importedBeans,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
  
@@ -481,7 +481,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlLogBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
-     * @return always beanToSet saved
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
@@ -490,8 +490,10 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
         Object[] params = REF_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
+        if(null==bean || null==beanToSet)
+            throw new NullPointerException();
         Class<?> resultClass = (Class<?>)params[2];
-        if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
+        if(!resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
         }
         try {            
@@ -544,22 +546,16 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      *
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link FlDeviceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlDeviceBean setReferencedByDeviceId(FlLogBean bean, FlDeviceBean beanToSet) throws DAOException
     {
-        if(null != bean){
-            FlDeviceManager.getInstance().save(beanToSet);
-            bean.setReferencedByDeviceId(beanToSet);
-            if( null == beanToSet){
-                bean.setDeviceId(null);
-            }else{
-                bean.setDeviceId(beanToSet.getId());
-            }
-        }
-        return beanToSet;
+        if(null == bean || null == beanToSet) return null;
+        bean.setDeviceId(beanToSet.getId());
+        bean.setReferencedByDeviceId(beanToSet);
+        return FlDeviceManager.getInstance().save(beanToSet);
     }
 
     /**
@@ -584,22 +580,16 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      *
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlFaceBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlFaceBean setReferencedByVerifyFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
     {
-        if(null != bean){
-            FlFaceManager.getInstance().save(beanToSet);
-            bean.setReferencedByVerifyFace(beanToSet);
-            if( null == beanToSet){
-                bean.setVerifyFace(null);
-            }else{
-                bean.setVerifyFace(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
+        if(null == bean || null == beanToSet) return null;
+        bean.setVerifyFace(beanToSet.getMd5());
+        bean.setReferencedByVerifyFace(beanToSet);
+        return FlFaceManager.getInstance().save(beanToSet);
     }
 
     /**
@@ -624,22 +614,16 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      *
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlFaceBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
     {
-        if(null != bean){
-            FlFaceManager.getInstance().save(beanToSet);
-            bean.setReferencedByCompareFace(beanToSet);
-            if( null == beanToSet){
-                bean.setCompareFace(null);
-            }else{
-                bean.setCompareFace(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
+        if(null == bean || null == beanToSet) return null;
+        bean.setCompareFace(beanToSet.getMd5());
+        bean.setReferencedByCompareFace(beanToSet);
+        return FlFaceManager.getInstance().save(beanToSet);
     }
 
     /**
@@ -664,22 +648,16 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      *
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
     public FlPersonBean setReferencedByPersonId(FlLogBean bean, FlPersonBean beanToSet) throws DAOException
     {
-        if(null != bean){
-            FlPersonManager.getInstance().save(beanToSet);
-            bean.setReferencedByPersonId(beanToSet);
-            if( null == beanToSet){
-                bean.setPersonId(null);
-            }else{
-                bean.setPersonId(beanToSet.getId());
-            }
-        }
-        return beanToSet;
+        if(null == bean || null == beanToSet) return null;
+        bean.setPersonId(beanToSet.getId());
+        bean.setReferencedByPersonId(beanToSet);
+        return FlPersonManager.getInstance().save(beanToSet);
     }
 
     //////////////////////////////////////
@@ -970,16 +948,15 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link FlLogBean} bean into the database.
+     * Saves the FlLogBean bean into the database.
      *
-     * @param bean the {@link FlLogBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the FlLogBean bean to be saved
+     * @return the inserted or updated bean
      * @throws DAOException
      */
     //12
     public FlLogBean save(FlLogBean bean) throws DAOException
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -988,17 +965,17 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Insert the {@link FlLogBean} bean into the database.
-     * 
-     * @param bean the {@link FlLogBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * Insert the FlLogBean bean into the database.
+     *
+     * @param bean the FlLogBean bean to be saved
+     * @return the inserted bean
      * @throws DAOException
      */
     //13
     public FlLogBean insert(FlLogBean bean) throws DAOException
     {
         // mini checks
-        if (null == bean || !bean.isModified()) {
+        if (!bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (!bean.isNew()){
@@ -1133,17 +1110,17 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Update the {@link FlLogBean} bean record in the database according to the changes.
+     * Update the FlLogBean bean record in the database according to the changes.
      *
-     * @param bean the {@link FlLogBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the FlLogBean bean to be updated
+     * @return the updated bean
      * @throws DAOException
      */
     //14
     public FlLogBean update(FlLogBean bean) throws DAOException
     {
         // mini checks
-        if (null == bean || !bean.isModified()) {
+        if (!bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (bean.isNew()){
@@ -1267,47 +1244,43 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Saves an array of {@link FlLogBean} bean into the database.
+     * Saves an array of FlLogBean beans into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be saved
-     * @return the saved {@link FlLogBean} beans or null if beans is null.
+     * @param beans the FlLogBean bean table to be saved
+     * @return the saved FlLogBean array.
      * @throws DAOException
      */
     //15
     public FlLogBean[] save(FlLogBean[] beans) throws DAOException
     {
-        if(null != beans){
-            for (FlLogBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FlLogBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link FlLogBean} beans into the database.
+     * Saves a collection of FlLogBean beans into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be saved
-     * @return the saved {@link FlLogBean} beans or null if beans is null.
+     * @param beans the FlLogBean bean table to be saved
+     * @return the saved FlLogBean collection.
      * @throws DAOException
      */
     //15-2
-    public <C extends Collection<FlLogBean>>C save(C beans) throws DAOException
+    public <T extends Collection<FlLogBean>>T save(T beans) throws DAOException
     {
-        if(null != beans){
-            for (FlLogBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FlLogBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link FlLogBean} bean into the database as transaction.
+     * Saves an array of FlLogBean beans as transaction into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be saved
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be saved
+     * @return the saved FlLogBean array.
      * @throws DAOException
      * @see #save(FlLogBean[])
      */
@@ -1320,26 +1293,26 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
             }});
     }
     /**
-     * Saves a collection of {@link FlLogBean} bean into the database as transaction.
+     * Saves a list of FlLogBean beans as transaction into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be saved
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be saved
+     * @return the saved FlLogBean array.
      * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <C extends Collection<FlLogBean>> C saveAsTransaction(final C beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<C>(){
+    public <T extends Collection<FlLogBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link FlLogBean} bean into the database.
+     * Insert an array of FlLogBean beans into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      */
     //16
@@ -1349,23 +1322,23 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Insert a collection of {@link FlLogBean} bean into the database.
+     * Insert a list of FlLogBean beans into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      */
     //16-2
-    public <C extends Collection<FlLogBean>> C insert(C beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link FlLogBean} beans into the database as transaction.
+     * Insert an array of FlLogBean beans as transaction into the database.
      *
-     * @param beans the {@link {@link FlLogBean}} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      * @see #saveAsTransaction(FlLogBean[])
      */
@@ -1376,25 +1349,25 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Insert a collection of {@link FlLogBean} bean into the database as transaction.
+     * Insert a list of FlLogBean beans as transaction into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <C extends Collection<FlLogBean>> C insertAsTransaction(C beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link FlLogBean} bean into the database.
+     * Updates an array of FlLogBean beans into the database.
      *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      */
     //17
@@ -1404,23 +1377,23 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Update a list of {@link FlLogBean} bean into the database.
+     * Updates a list of FlLogBean beans into the database.
      *
-     * @param beans the {@link FlLogBean} beans table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      */
     //17-2
-    public <C extends Collection<FlLogBean>> C update(C beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link FlLogBean} bean into the database as transaction.
+     * Updates an array of FlLogBean beans as transaction into the database.
      *
-     * @param beans the {@link FlLogBean} beans table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      * @see #saveAsTransaction(FlLogBean[])
      */
@@ -1431,15 +1404,15 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     }
 
     /**
-     * Update a collection of {@link FlLogBean} bean into the database as transaction.
+     * Updates a list of FlLogBean beans as transaction into the database.
      *
-     * @param beans the {@link FlLogBean} beans table to be inserted
-     * @return the saved {@link FlLogBean} beans.
+     * @param beans the FlLogBean bean table to be inserted
+     * @return the saved FlLogBean array.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <C extends Collection<FlLogBean>> C updateAsTransaction(C beans) throws DAOException
+    public <T extends Collection<FlLogBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

@@ -193,7 +193,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         throw new UnsupportedOperationException();
     }    
     @Override
-    public <C extends Collection<?>> C setImportedBeans(FlFeatureBean bean,C importedBeans,String fkName)throws DAOException{
+    public <T extends Collection<?>> T setImportedBeans(FlFeatureBean bean,T importedBeans,String fkName)throws DAOException{
         throw new UnsupportedOperationException();
     }
  
@@ -498,16 +498,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link FlFeatureBean} bean into the database.
+     * Saves the FlFeatureBean bean into the database.
      *
-     * @param bean the {@link FlFeatureBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the FlFeatureBean bean to be saved
+     * @return the inserted or updated bean
      * @throws DAOException
      */
     //12
     public FlFeatureBean save(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -516,17 +515,17 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Insert the {@link FlFeatureBean} bean into the database.
-     * 
-     * @param bean the {@link FlFeatureBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * Insert the FlFeatureBean bean into the database.
+     *
+     * @param bean the FlFeatureBean bean to be saved
+     * @return the inserted bean
      * @throws DAOException
      */
     //13
     public FlFeatureBean insert(FlFeatureBean bean) throws DAOException
     {
         // mini checks
-        if (null == bean || !bean.isModified()) {
+        if (!bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (!bean.isNew()){
@@ -620,17 +619,17 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Update the {@link FlFeatureBean} bean record in the database according to the changes.
+     * Update the FlFeatureBean bean record in the database according to the changes.
      *
-     * @param bean the {@link FlFeatureBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the FlFeatureBean bean to be updated
+     * @return the updated bean
      * @throws DAOException
      */
     //14
     public FlFeatureBean update(FlFeatureBean bean) throws DAOException
     {
         // mini checks
-        if (null == bean || !bean.isModified()) {
+        if (!bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (bean.isNew()){
@@ -726,47 +725,43 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Saves an array of {@link FlFeatureBean} bean into the database.
+     * Saves an array of FlFeatureBean beans into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans or null if beans is null.
+     * @param beans the FlFeatureBean bean table to be saved
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
     //15
     public FlFeatureBean[] save(FlFeatureBean[] beans) throws DAOException
     {
-        if(null != beans){
-            for (FlFeatureBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FlFeatureBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link FlFeatureBean} beans into the database.
+     * Saves a collection of FlFeatureBean beans into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans or null if beans is null.
+     * @param beans the FlFeatureBean bean table to be saved
+     * @return the saved FlFeatureBean collection.
      * @throws DAOException
      */
     //15-2
-    public <C extends Collection<FlFeatureBean>>C save(C beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>>T save(T beans) throws DAOException
     {
-        if(null != beans){
-            for (FlFeatureBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FlFeatureBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link FlFeatureBean} bean into the database as transaction.
+     * Saves an array of FlFeatureBean beans as transaction into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be saved
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      * @see #save(FlFeatureBean[])
      */
@@ -779,26 +774,26 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             }});
     }
     /**
-     * Saves a collection of {@link FlFeatureBean} bean into the database as transaction.
+     * Saves a list of FlFeatureBean beans as transaction into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be saved
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <C extends Collection<FlFeatureBean>> C saveAsTransaction(final C beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<C>(){
+    public <T extends Collection<FlFeatureBean>> T saveAsTransaction(final T beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link FlFeatureBean} bean into the database.
+     * Insert an array of FlFeatureBean beans into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
     //16
@@ -808,23 +803,23 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Insert a collection of {@link FlFeatureBean} bean into the database.
+     * Insert a list of FlFeatureBean beans into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
     //16-2
-    public <C extends Collection<FlFeatureBean>> C insert(C beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T insert(T beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link FlFeatureBean} beans into the database as transaction.
+     * Insert an array of FlFeatureBean beans as transaction into the database.
      *
-     * @param beans the {@link {@link FlFeatureBean}} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      * @see #saveAsTransaction(FlFeatureBean[])
      */
@@ -835,25 +830,25 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Insert a collection of {@link FlFeatureBean} bean into the database as transaction.
+     * Insert a list of FlFeatureBean beans as transaction into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <C extends Collection<FlFeatureBean>> C insertAsTransaction(C beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T insertAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link FlFeatureBean} bean into the database.
+     * Updates an array of FlFeatureBean beans into the database.
      *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
     //17
@@ -863,23 +858,23 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Update a list of {@link FlFeatureBean} bean into the database.
+     * Updates a list of FlFeatureBean beans into the database.
      *
-     * @param beans the {@link FlFeatureBean} beans table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      */
     //17-2
-    public <C extends Collection<FlFeatureBean>> C update(C beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T update(T beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link FlFeatureBean} bean into the database as transaction.
+     * Updates an array of FlFeatureBean beans as transaction into the database.
      *
-     * @param beans the {@link FlFeatureBean} beans table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      * @see #saveAsTransaction(FlFeatureBean[])
      */
@@ -890,15 +885,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     }
 
     /**
-     * Update a collection of {@link FlFeatureBean} bean into the database as transaction.
+     * Updates a list of FlFeatureBean beans as transaction into the database.
      *
-     * @param beans the {@link FlFeatureBean} beans table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
+     * @param beans the FlFeatureBean bean table to be inserted
+     * @return the saved FlFeatureBean array.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <C extends Collection<FlFeatureBean>> C updateAsTransaction(C beans) throws DAOException
+    public <T extends Collection<FlFeatureBean>> T updateAsTransaction(T beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

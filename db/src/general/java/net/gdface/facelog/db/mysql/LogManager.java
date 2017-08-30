@@ -16,8 +16,6 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
-import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
@@ -34,7 +32,7 @@ import net.gdface.facelog.dborm.log.FlLogListener;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class LogManager extends TableManager.Adapter<LogBean>
+public class LogManager 
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -149,6 +147,11 @@ public class LogManager extends TableManager.Adapter<LogBean>
                             + ",similarty"
                             + ",verify_time"
                             + ",create_time";
+
+    public static interface Action{
+          void call(LogBean bean);
+          LogBean getBean();
+     }
 
     /**
     * @return tableName
@@ -272,7 +275,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @see {@link #loadByPrimaryKey(LogBean bean)}
      */
     //1.4
-    @Override
+    //@Override
     public boolean existsPrimaryKey(LogBean bean)
     {
         return null!=loadByPrimaryKey(bean);
@@ -306,7 +309,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
-    @Override
     public int deleteByPrimaryKey(LogBean bean)
     {
         try{
@@ -319,20 +321,20 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
  
 
-    @Override
-    public <T extends BaseBean> T[] getImportedBeans(LogBean bean,String fkName){
+    //@Override
+    public <T> T[] getImportedBeans(LogBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(LogBean bean,String fkName){
+    //@Override
+    public <T> List<T> getImportedBeansAsList(LogBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(LogBean bean,T[] importedBeans,String fkName){
+    //@Override
+    public <T> T[] setImportedBeans(LogBean bean,T[] importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }    
-    @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(LogBean bean,C importedBeans,String fkName){
+    //@Override
+    public <T,C extends Collection<T>> C setImportedBeans(LogBean bean,C importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }
  
@@ -401,8 +403,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> T getReferencedBean(LogBean bean,String fkName){
+    //@Override
+    public <T> T getReferencedBean(LogBean bean,String fkName){
         try {
             return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
@@ -424,11 +426,11 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link LogBean}
      * @param fkName valid values: refFlDevicebyDeviceId,refFlFacebyVerifyFace,refFlFacebyCompareFace,refFlPersonbyPersonId
-     * @return always beanToSet saved
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BaseBean> T setReferencedBean(LogBean bean,T beanToSet,String fkName){
+    //@Override
+    public <T> T setReferencedBean(LogBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -475,7 +477,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      *
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -514,7 +516,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      *
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -553,7 +555,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      *
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -592,7 +594,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      *
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
+     * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -617,7 +619,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return an array of FlLogManager bean
      */
     //5
-    @Override
     public LogBean[] loadAll()
     {
         try{
@@ -634,8 +635,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //5-1
-    @Override
-    public int loadAll(Action<LogBean> action)
+    public int loadAll(Action action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -645,7 +645,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return a list of LogBean bean
      */
     //5-2
-    @Override
     public List<LogBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -660,7 +659,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return an array of FlLogManager bean
      */
     //6
-    @Override
     public LogBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -673,8 +671,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<LogBean> action)
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -686,7 +683,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return a list of FlLogManager bean
      */
     //6-2
-    @Override
     public List<LogBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -702,12 +698,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the resulting LogBean table
      */
     //7
-    @Override
     public LogBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
-    
     /**
      * Retrieves a list of LogBean given a sql 'where' clause.
      *
@@ -715,7 +709,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the resulting LogBean table
      */
     //7
-    @Override
     public List<LogBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -727,8 +720,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //7-1
-    @Override
-    public int loadByWhere(String where,Action<LogBean> action)
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -741,7 +733,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the resulting LogBean table
      */
     //8
-    @Override
     public LogBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -757,7 +748,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the resulting LogBean table
      */
     //8
-    @Override
     public List<LogBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -772,8 +762,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<LogBean> action)
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -789,7 +778,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the resulting LogBean table
      */
     //9
-    @Override
     public LogBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (LogBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new LogBean[0]);
@@ -807,8 +795,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<LogBean> action)
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -824,7 +811,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the resulting LogBean table
      */
     //9-2
-    @Override
     public List<LogBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -848,8 +834,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<LogBean> action)
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -861,6 +846,16 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
 
     /**
+     * Deletes all rows from fl_log table.
+     * @return the number of deleted rows.
+     */
+    //10
+    public int deleteAll()
+    {
+        return this.deleteByWhere("");
+    }
+
+    /**
      * Deletes rows from the fl_log table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clausis.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
@@ -869,7 +864,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the number of deleted rows
      */
     //11
-    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -886,16 +880,14 @@ public class LogManager extends TableManager.Adapter<LogBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link LogBean} bean into the database.
+     * Saves the LogBean bean into the database.
      *
-     * @param bean the {@link LogBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the LogBean bean to be saved
+     * @return the inserted or updated bean
      */
     //12
-    @Override
     public LogBean save(LogBean bean)
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -904,13 +896,12 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
 
     /**
-     * Insert the {@link LogBean} bean into the database.
+     * Insert the LogBean bean into the database.
      *
-     * @param bean the {@link LogBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * @param bean the LogBean bean to be saved
+     * @return the inserted bean
      */
     //13
-    @Override
     public LogBean insert(LogBean bean)
     {
         try{
@@ -923,13 +914,12 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
 
     /**
-     * Update the {@link LogBean} bean record in the database according to the changes.
+     * Update the LogBean bean record in the database according to the changes.
      *
-     * @param bean the {@link LogBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the LogBean bean to be updated
+     * @return the updated bean
      */
     //14
-    @Override
     public LogBean update(LogBean bean)
     {
         try{
@@ -942,50 +932,44 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
 
     /**
-     * Saves an array of {@link LogBean} bean into the database.
+     * Saves an array of LogBean beans into the database.
      *
-     * @param beans the {@link LogBean} bean table to be saved
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be saved
+     * @return the saved LogBean array.
      */
     //15
     public LogBean[] save(LogBean[] beans)
     {
-        if(null !=beans){
-            for (LogBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (LogBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link LogBean} bean into the database.
+     * Saves a list of LogBean beans into the database.
      *
-     * @param beans the {@link LogBean} bean table to be saved
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be saved
+     * @return the saved LogBean array.
      */
     //15-2
-    @Override
-    public <C extends Collection<LogBean>> C save(C beans)
+    public <T extends Collection<LogBean>>T save(T beans)
     {
-        if(null != beans){
-            for (LogBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (LogBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link LogBean} bean into the database as transaction.
+     * Saves an array of LogBean beans as transaction into the database.
      *
-     * @param beans the {@link LogBean} bean table to be saved
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be saved
+     * @return the saved LogBean array.
      * @see #save(LogBean[])
      */
     //15-3
-    @Override
     public LogBean[] saveAsTransaction(final LogBean[] beans) {
         return this.runAsTransaction(new Callable<LogBean[]>(){
             @Override
@@ -994,126 +978,117 @@ public class LogManager extends TableManager.Adapter<LogBean>
             }});
     }
     /**
-     * Saves a collection of {@link LogBean} bean into the database as transaction.
+     * Saves a list of LogBean beans as transaction into the database.
      *
-     * @param beans the {@link LogBean} bean table to be saved
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be saved
+     * @return the saved LogBean array.
      * @see #save(List)
      */
     //15-4
-    @Override
-    public <C extends Collection<LogBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
+    public <T extends Collection<LogBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link LogBean} bean into the database.
+     * Insert an array of LogBean beans into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      */
     //16
-    @Override
     public LogBean[] insert(LogBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a collection of {@link LogBean} bean into the database.
+     * Insert a list of LogBean beans into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      */
     //16-2
-    @Override
-    public <C extends Collection<LogBean>> C insert(C beans)
+    public <T extends Collection<LogBean>> T insert(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link LogBean} bean into the database as transaction.
+     * Insert an array of LogBean beans as transaction into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      * @see #saveAsTransaction(LogBean[])
      */
     //16-3
-    @Override
     public LogBean[] insertAsTransaction(LogBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a collection of {@link LogBean} bean as transaction into the database.
+     * Insert a list of LogBean beans as transaction into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    @Override
-    public <C extends Collection<LogBean>> C insertAsTransaction(C beans)
+    public <T extends Collection<LogBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link LogBean} bean into the database.
+     * Updates an array of LogBean beans into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      */
     //17
-    @Override
     public LogBean[] update(LogBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Update a collection of {@link LogBean} bean into the database.
+     * Updates a list of LogBean beans into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      */
     //17-2
-    @Override
-    public <C extends Collection<LogBean>> C update(C beans)
+    public <T extends Collection<LogBean>> T update(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link LogBean} bean into the database as transaction.
+     * Updates an array of LogBean beans as transaction into the database.
      *
-     * @param beans the {@link LogBean} beans table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      * @see #saveAsTransaction(LogBean[])
      */
     //17-3
-    @Override
     public LogBean[] updateAsTransaction(LogBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Update a collection of {@link LogBean} bean into the database as transaction.
+     * Updates a list of LogBean beans as transaction into the database.
      *
-     * @param beans the {@link LogBean} bean table to be inserted
-     * @return the saved {@link LogBean} beans.
+     * @param beans the LogBean bean table to be inserted
+     * @return the saved LogBean array.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    @Override
-    public <C extends Collection<LogBean>> C updateAsTransaction(C beans)
+    public <T extends Collection<LogBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1129,7 +1104,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the bean matching the template
      */
     //18
-    @Override
     public LogBean loadUniqueUsingTemplate(LogBean bean)
     {
         try{
@@ -1148,7 +1122,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return all the LogBean matching the template
      */
     //19
-    @Override
     public LogBean[] loadUsingTemplate(LogBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -1161,8 +1134,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //19-1
-    @Override
-    public int loadUsingTemplate(LogBean bean,Action<LogBean> action)
+    public int loadUsingTemplate(LogBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1174,7 +1146,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return all the LogBean matching the template
      */
     //19-2
-    @Override
     public List<LogBean> loadUsingTemplateAsList(LogBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -1189,7 +1160,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return all the LogBean matching the template
      */
     //20
-    @Override
     public LogBean[] loadUsingTemplate(LogBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1204,8 +1174,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //20-1
-    @Override
-    public int loadUsingTemplate(LogBean bean, int startRow, int numRows,Action<LogBean> action)
+    public int loadUsingTemplate(LogBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1218,7 +1187,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return all the LogBean matching the template
      */
     //20-2
-    @Override
     public List<LogBean> loadUsingTemplateAsList(LogBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -1234,7 +1202,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return all the LogBean matching the template
      */
     //20-3
-    @Override
     public LogBean[] loadUsingTemplate(LogBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogBean[0]);
@@ -1250,7 +1217,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return all the LogBean matching the template
      */
     //20-4
-    @Override
     public List<LogBean> loadUsingTemplateAsList(LogBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1272,8 +1238,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the count dealt by action
      */
     //20-5
-    @Override
-    public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action)
+    public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1290,7 +1255,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the number of deleted objects
      */
     //21
-    @Override
     public int deleteUsingTemplate(LogBean bean)
     {
         try{
@@ -1514,7 +1478,21 @@ public class LogManager extends TableManager.Adapter<LogBean>
     
 
 
+    //_____________________________________________________________________
+    //
+    // COUNT
+    //_____________________________________________________________________
 
+    /**
+     * Retrieves the number of rows of the table fl_log.
+     *
+     * @return the number of rows returned
+     */
+    //24
+    public int countAll() 
+    {
+        return this.countWhere("");
+    }
 
     /**
      * Retrieves the number of rows of the table fl_log with a 'where' clause.
@@ -1524,7 +1502,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the number of rows returned
      */
     //25
-    @Override
     public int countWhere(String where)
     {
         try{
@@ -1536,6 +1513,31 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
+    /**
+     * count the number of elements of a specific LogBean bean
+     *
+     * @param bean the LogBean bean to look for ant count
+     * @return the number of rows returned
+     */
+    //27
+    public int countUsingTemplate(LogBean bean)
+    {
+        return this.countUsingTemplate(bean, -1, -1);
+    }
+
+    /**
+     * count the number of elements of a specific LogBean bean , given the start row and number of rows.
+     *
+     * @param bean the LogBean template to look for and count
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the number of rows returned
+     */
+    //20
+    public int countUsingTemplate(LogBean bean, int startRow, int numRows)
+    {
+        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+    }
 
     /**
      * count the number of elements of a specific LogBean bean given the start row and number of rows and the search type
@@ -1547,7 +1549,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @return the number of rows returned
      */
     //20
-    @Override
     public int countUsingTemplate(LogBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1569,7 +1570,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * Registers a unique {@link LogListener} listener.
      */
     //35
-    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((LogListener)listener));
@@ -1637,7 +1637,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param fieldList table of the field's associated constants
      * @return an array of LogBean
      */
-    @Override
     public LogBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new LogBean[0]);
     }
@@ -1648,7 +1647,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param fieldList table of the field's associated constants
      * @return an list of LogBean
      */
-    @Override
     public List<LogBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1660,7 +1658,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
 
     
-    @Override
+    //@Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1671,7 +1669,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
     
-    @Override
+    //@Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1681,7 +1679,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlLogManager.Action toNative(final Action<LogBean> action){
+    private FlLogManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlLogManager.Action(){

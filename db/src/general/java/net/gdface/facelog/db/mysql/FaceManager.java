@@ -16,8 +16,6 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
-import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
@@ -35,7 +33,7 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FaceManager extends TableManager.Adapter<FaceBean>
+public class FaceManager 
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -268,6 +266,11 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
                             + ",feature"
                             + ",create_time";
 
+    public static interface Action{
+          void call(FaceBean bean);
+          FaceBean getBean();
+     }
+
     /**
     * @return tableName
     */
@@ -390,7 +393,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @see {@link #loadByPrimaryKey(FaceBean bean)}
      */
     //1.4
-    @Override
+    //@Override
     public boolean existsPrimaryKey(FaceBean bean)
     {
         return null!=loadByPrimaryKey(bean);
@@ -424,7 +427,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
-    @Override
     public int deleteByPrimaryKey(FaceBean bean)
     {
         try{
@@ -465,8 +467,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> T[] getImportedBeans(FaceBean bean,String fkName){
+    //@Override
+    public <T> T[] getImportedBeans(FaceBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
@@ -487,8 +489,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(FaceBean bean,String fkName){
+    //@Override
+    public <T> List<T> getImportedBeansAsList(FaceBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -511,8 +513,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
      * @return importedBeans always
      */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(FaceBean bean,T[] importedBeans,String fkName){
+    //@Override
+    public <T> T[] setImportedBeans(FaceBean bean,T[] importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
@@ -538,8 +540,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,String fkName){
+    //@Override
+    public <T,C extends Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             if(importedBeans instanceof List){
@@ -636,7 +638,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @see {@link FlLogManager#setReferencedByVerifyFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByVerifyFace(FaceBean bean , C importedBeans)
+    public <T extends Collection<LogBean>> T setFlLogBeansByVerifyFace(FaceBean bean , T importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
@@ -730,7 +732,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @see {@link FlLogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByCompareFace(FaceBean bean , C importedBeans)
+    public <T extends Collection<LogBean>> T setFlLogBeansByCompareFace(FaceBean bean , T importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
@@ -854,8 +856,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> T getReferencedBean(FaceBean bean,String fkName){
+    //@Override
+    public <T> T getReferencedBean(FaceBean bean,String fkName){
         try {
             return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
@@ -875,11 +877,11 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FaceBean}
      * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
-     * @return always beanToSet saved
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BaseBean> T setReferencedBean(FaceBean bean,T beanToSet,String fkName){
+    //@Override
+    public <T> T setReferencedBean(FaceBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -926,7 +928,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      *
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link FaceBean}
-     * @return always beanToSet saved
+     * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -965,7 +967,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      *
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link FaceBean}
-     * @return always beanToSet saved
+     * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -990,7 +992,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return an array of FlFaceManager bean
      */
     //5
-    @Override
     public FaceBean[] loadAll()
     {
         try{
@@ -1007,8 +1008,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //5-1
-    @Override
-    public int loadAll(Action<FaceBean> action)
+    public int loadAll(Action action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -1018,7 +1018,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return a list of FaceBean bean
      */
     //5-2
-    @Override
     public List<FaceBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -1033,7 +1032,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return an array of FlFaceManager bean
      */
     //6
-    @Override
     public FaceBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -1046,8 +1044,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<FaceBean> action)
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -1059,7 +1056,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return a list of FlFaceManager bean
      */
     //6-2
-    @Override
     public List<FaceBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -1075,12 +1071,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the resulting FaceBean table
      */
     //7
-    @Override
     public FaceBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
-    
     /**
      * Retrieves a list of FaceBean given a sql 'where' clause.
      *
@@ -1088,7 +1082,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the resulting FaceBean table
      */
     //7
-    @Override
     public List<FaceBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -1100,8 +1093,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //7-1
-    @Override
-    public int loadByWhere(String where,Action<FaceBean> action)
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -1114,7 +1106,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the resulting FaceBean table
      */
     //8
-    @Override
     public FaceBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -1130,7 +1121,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the resulting FaceBean table
      */
     //8
-    @Override
     public List<FaceBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -1145,8 +1135,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<FaceBean> action)
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -1162,7 +1151,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the resulting FaceBean table
      */
     //9
-    @Override
     public FaceBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (FaceBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FaceBean[0]);
@@ -1180,8 +1168,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<FaceBean> action)
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -1197,7 +1184,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the resulting FaceBean table
      */
     //9-2
-    @Override
     public List<FaceBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -1221,8 +1207,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<FaceBean> action)
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -1234,6 +1219,16 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
 
     /**
+     * Deletes all rows from fl_face table.
+     * @return the number of deleted rows.
+     */
+    //10
+    public int deleteAll()
+    {
+        return this.deleteByWhere("");
+    }
+
+    /**
      * Deletes rows from the fl_face table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clausis.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
@@ -1242,7 +1237,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the number of deleted rows
      */
     //11
-    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -1259,16 +1253,14 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link FaceBean} bean into the database.
+     * Saves the FaceBean bean into the database.
      *
-     * @param bean the {@link FaceBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the FaceBean bean to be saved
+     * @return the inserted or updated bean
      */
     //12
-    @Override
     public FaceBean save(FaceBean bean)
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1277,13 +1269,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
 
     /**
-     * Insert the {@link FaceBean} bean into the database.
+     * Insert the FaceBean bean into the database.
      *
-     * @param bean the {@link FaceBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * @param bean the FaceBean bean to be saved
+     * @return the inserted bean
      */
     //13
-    @Override
     public FaceBean insert(FaceBean bean)
     {
         try{
@@ -1296,13 +1287,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
 
     /**
-     * Update the {@link FaceBean} bean record in the database according to the changes.
+     * Update the FaceBean bean record in the database according to the changes.
      *
-     * @param bean the {@link FaceBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the FaceBean bean to be updated
+     * @return the updated bean
      */
     //14
-    @Override
     public FaceBean update(FaceBean bean)
     {
         try{
@@ -1315,50 +1305,44 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
 
     /**
-     * Saves an array of {@link FaceBean} bean into the database.
+     * Saves an array of FaceBean beans into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be saved
+     * @return the saved FaceBean array.
      */
     //15
     public FaceBean[] save(FaceBean[] beans)
     {
-        if(null !=beans){
-            for (FaceBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FaceBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link FaceBean} bean into the database.
+     * Saves a list of FaceBean beans into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be saved
+     * @return the saved FaceBean array.
      */
     //15-2
-    @Override
-    public <C extends Collection<FaceBean>> C save(C beans)
+    public <T extends Collection<FaceBean>>T save(T beans)
     {
-        if(null != beans){
-            for (FaceBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (FaceBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link FaceBean} bean into the database as transaction.
+     * Saves an array of FaceBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be saved
+     * @return the saved FaceBean array.
      * @see #save(FaceBean[])
      */
     //15-3
-    @Override
     public FaceBean[] saveAsTransaction(final FaceBean[] beans) {
         return this.runAsTransaction(new Callable<FaceBean[]>(){
             @Override
@@ -1367,126 +1351,117 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
             }});
     }
     /**
-     * Saves a collection of {@link FaceBean} bean into the database as transaction.
+     * Saves a list of FaceBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be saved
+     * @return the saved FaceBean array.
      * @see #save(List)
      */
     //15-4
-    @Override
-    public <C extends Collection<FaceBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
+    public <T extends Collection<FaceBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link FaceBean} bean into the database.
+     * Insert an array of FaceBean beans into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      */
     //16
-    @Override
     public FaceBean[] insert(FaceBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a collection of {@link FaceBean} bean into the database.
+     * Insert a list of FaceBean beans into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      */
     //16-2
-    @Override
-    public <C extends Collection<FaceBean>> C insert(C beans)
+    public <T extends Collection<FaceBean>> T insert(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link FaceBean} bean into the database as transaction.
+     * Insert an array of FaceBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      * @see #saveAsTransaction(FaceBean[])
      */
     //16-3
-    @Override
     public FaceBean[] insertAsTransaction(FaceBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a collection of {@link FaceBean} bean as transaction into the database.
+     * Insert a list of FaceBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    @Override
-    public <C extends Collection<FaceBean>> C insertAsTransaction(C beans)
+    public <T extends Collection<FaceBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link FaceBean} bean into the database.
+     * Updates an array of FaceBean beans into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      */
     //17
-    @Override
     public FaceBean[] update(FaceBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Update a collection of {@link FaceBean} bean into the database.
+     * Updates a list of FaceBean beans into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      */
     //17-2
-    @Override
-    public <C extends Collection<FaceBean>> C update(C beans)
+    public <T extends Collection<FaceBean>> T update(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link FaceBean} bean into the database as transaction.
+     * Updates an array of FaceBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceBean} beans table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      * @see #saveAsTransaction(FaceBean[])
      */
     //17-3
-    @Override
     public FaceBean[] updateAsTransaction(FaceBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Update a collection of {@link FaceBean} bean into the database as transaction.
+     * Updates a list of FaceBean beans as transaction into the database.
      *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
+     * @param beans the FaceBean bean table to be inserted
+     * @return the saved FaceBean array.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    @Override
-    public <C extends Collection<FaceBean>> C updateAsTransaction(C beans)
+    public <T extends Collection<FaceBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1502,7 +1477,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the bean matching the template
      */
     //18
-    @Override
     public FaceBean loadUniqueUsingTemplate(FaceBean bean)
     {
         try{
@@ -1521,7 +1495,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return all the FaceBean matching the template
      */
     //19
-    @Override
     public FaceBean[] loadUsingTemplate(FaceBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -1534,8 +1507,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //19-1
-    @Override
-    public int loadUsingTemplate(FaceBean bean,Action<FaceBean> action)
+    public int loadUsingTemplate(FaceBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1547,7 +1519,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return all the FaceBean matching the template
      */
     //19-2
-    @Override
     public List<FaceBean> loadUsingTemplateAsList(FaceBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -1562,7 +1533,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return all the FaceBean matching the template
      */
     //20
-    @Override
     public FaceBean[] loadUsingTemplate(FaceBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1577,8 +1547,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //20-1
-    @Override
-    public int loadUsingTemplate(FaceBean bean, int startRow, int numRows,Action<FaceBean> action)
+    public int loadUsingTemplate(FaceBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1591,7 +1560,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return all the FaceBean matching the template
      */
     //20-2
-    @Override
     public List<FaceBean> loadUsingTemplateAsList(FaceBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -1607,7 +1575,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return all the FaceBean matching the template
      */
     //20-3
-    @Override
     public FaceBean[] loadUsingTemplate(FaceBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceBean[0]);
@@ -1623,7 +1590,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return all the FaceBean matching the template
      */
     //20-4
-    @Override
     public List<FaceBean> loadUsingTemplateAsList(FaceBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1645,8 +1611,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the count dealt by action
      */
     //20-5
-    @Override
-    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action)
+    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1663,7 +1628,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the number of deleted objects
      */
     //21
-    @Override
     public int deleteUsingTemplate(FaceBean bean)
     {
         try{
@@ -1785,7 +1749,21 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     
 
 
+    //_____________________________________________________________________
+    //
+    // COUNT
+    //_____________________________________________________________________
 
+    /**
+     * Retrieves the number of rows of the table fl_face.
+     *
+     * @return the number of rows returned
+     */
+    //24
+    public int countAll() 
+    {
+        return this.countWhere("");
+    }
 
     /**
      * Retrieves the number of rows of the table fl_face with a 'where' clause.
@@ -1795,7 +1773,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the number of rows returned
      */
     //25
-    @Override
     public int countWhere(String where)
     {
         try{
@@ -1807,6 +1784,31 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
+    /**
+     * count the number of elements of a specific FaceBean bean
+     *
+     * @param bean the FaceBean bean to look for ant count
+     * @return the number of rows returned
+     */
+    //27
+    public int countUsingTemplate(FaceBean bean)
+    {
+        return this.countUsingTemplate(bean, -1, -1);
+    }
+
+    /**
+     * count the number of elements of a specific FaceBean bean , given the start row and number of rows.
+     *
+     * @param bean the FaceBean template to look for and count
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the number of rows returned
+     */
+    //20
+    public int countUsingTemplate(FaceBean bean, int startRow, int numRows)
+    {
+        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+    }
 
     /**
      * count the number of elements of a specific FaceBean bean given the start row and number of rows and the search type
@@ -1818,7 +1820,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @return the number of rows returned
      */
     //20
-    @Override
     public int countUsingTemplate(FaceBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1840,7 +1841,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Registers a unique {@link FaceListener} listener.
      */
     //35
-    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((FaceListener)listener));
@@ -1908,7 +1908,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param fieldList table of the field's associated constants
      * @return an array of FaceBean
      */
-    @Override
     public FaceBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new FaceBean[0]);
     }
@@ -1919,7 +1918,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param fieldList table of the field's associated constants
      * @return an list of FaceBean
      */
-    @Override
     public List<FaceBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1931,7 +1929,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
 
     
-    @Override
+    //@Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1942,7 +1940,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
     
-    @Override
+    //@Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1952,7 +1950,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlFaceManager.Action toNative(final Action<FaceBean> action){
+    private FlFaceManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlFaceManager.Action(){

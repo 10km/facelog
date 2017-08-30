@@ -16,8 +16,6 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
-import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
@@ -36,7 +34,7 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class PersonManager extends TableManager.Adapter<PersonBean>
+public class PersonManager 
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -188,6 +186,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
                             + ",create_time"
                             + ",update_time";
 
+    public static interface Action{
+          void call(PersonBean bean);
+          PersonBean getBean();
+     }
+
     /**
     * @return tableName
     */
@@ -310,7 +313,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @see {@link #loadByPrimaryKey(PersonBean bean)}
      */
     //1.4
-    @Override
+    //@Override
     public boolean existsPrimaryKey(PersonBean bean)
     {
         return null!=loadByPrimaryKey(bean);
@@ -344,7 +347,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
-    @Override
     public int deleteByPrimaryKey(PersonBean bean)
     {
         try{
@@ -385,8 +387,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> T[] getImportedBeans(PersonBean bean,String fkName){
+    //@Override
+    public <T> T[] getImportedBeans(PersonBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
@@ -407,8 +409,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(PersonBean bean,String fkName){
+    //@Override
+    public <T> List<T> getImportedBeansAsList(PersonBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -431,8 +433,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
      * @return importedBeans always
      */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(PersonBean bean,T[] importedBeans,String fkName){
+    //@Override
+    public <T> T[] setImportedBeans(PersonBean bean,T[] importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
@@ -458,8 +460,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,String fkName){
+    //@Override
+    public <T,C extends Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             if(importedBeans instanceof List){
@@ -556,7 +558,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @see {@link FlFaceManager#setReferencedByPersonId(FaceBean, PersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FaceBean>> C setFlFaceBeansByPersonId(PersonBean bean , C importedBeans)
+    public <T extends Collection<FaceBean>> T setFlFaceBeansByPersonId(PersonBean bean , T importedBeans)
     {
         try {
             IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
@@ -650,7 +652,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @see {@link FlLogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans)
+    public <T extends Collection<LogBean>> T setFlLogBeansByPersonId(PersonBean bean , T importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
@@ -770,8 +772,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param fkName valid values: refFlImagebyPhotoId
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
-    @Override
-    public <T extends BaseBean> T getReferencedBean(PersonBean bean,String fkName){
+    //@Override
+    public <T> T getReferencedBean(PersonBean bean,String fkName){
         try {
             return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
@@ -790,11 +792,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link PersonBean}
      * @param fkName valid values: refFlImagebyPhotoId
-     * @return always beanToSet saved
+     * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,String fkName){
+    //@Override
+    public <T> T setReferencedBean(PersonBean bean,T beanToSet,String fkName){
         try {
             if(null == beanToSet) return null;
             Class<?>[] types=REF_METHODS.get(fkName);
@@ -841,7 +843,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      *
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
-     * @return always beanToSet saved
+     * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws Exception
      */
     //5.2 SET REFERENCED 
@@ -866,7 +868,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return an array of FlPersonManager bean
      */
     //5
-    @Override
     public PersonBean[] loadAll()
     {
         try{
@@ -883,8 +884,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //5-1
-    @Override
-    public int loadAll(Action<PersonBean> action)
+    public int loadAll(Action action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -894,7 +894,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return a list of PersonBean bean
      */
     //5-2
-    @Override
     public List<PersonBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -909,7 +908,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return an array of FlPersonManager bean
      */
     //6
-    @Override
     public PersonBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -922,8 +920,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<PersonBean> action)
+    public int loadAll(int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -935,7 +932,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return a list of FlPersonManager bean
      */
     //6-2
-    @Override
     public List<PersonBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -951,12 +947,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the resulting PersonBean table
      */
     //7
-    @Override
     public PersonBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
-    
     /**
      * Retrieves a list of PersonBean given a sql 'where' clause.
      *
@@ -964,7 +958,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the resulting PersonBean table
      */
     //7
-    @Override
     public List<PersonBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -976,8 +969,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //7-1
-    @Override
-    public int loadByWhere(String where,Action<PersonBean> action)
+    public int loadByWhere(String where,Action action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -990,7 +982,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the resulting PersonBean table
      */
     //8
-    @Override
     public PersonBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -1006,7 +997,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the resulting PersonBean table
      */
     //8
-    @Override
     public List<PersonBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -1021,8 +1011,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<PersonBean> action)
+    public int loadByWhere(String where, int[] fieldList,Action action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -1038,7 +1027,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the resulting PersonBean table
      */
     //9
-    @Override
     public PersonBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (PersonBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new PersonBean[0]);
@@ -1056,8 +1044,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<PersonBean> action)
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -1073,7 +1060,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the resulting PersonBean table
      */
     //9-2
-    @Override
     public List<PersonBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -1097,8 +1083,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<PersonBean> action)
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -1110,6 +1095,16 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
     /**
+     * Deletes all rows from fl_person table.
+     * @return the number of deleted rows.
+     */
+    //10
+    public int deleteAll()
+    {
+        return this.deleteByWhere("");
+    }
+
+    /**
      * Deletes rows from the fl_person table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clausis.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
@@ -1118,7 +1113,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the number of deleted rows
      */
     //11
-    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -1135,16 +1129,14 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the {@link PersonBean} bean into the database.
+     * Saves the PersonBean bean into the database.
      *
-     * @param bean the {@link PersonBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
+     * @param bean the PersonBean bean to be saved
+     * @return the inserted or updated bean
      */
     //12
-    @Override
     public PersonBean save(PersonBean bean)
     {
-        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1153,13 +1145,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
     /**
-     * Insert the {@link PersonBean} bean into the database.
+     * Insert the PersonBean bean into the database.
      *
-     * @param bean the {@link PersonBean} bean to be saved
-     * @return the inserted bean or null if bean is null
+     * @param bean the PersonBean bean to be saved
+     * @return the inserted bean
      */
     //13
-    @Override
     public PersonBean insert(PersonBean bean)
     {
         try{
@@ -1172,13 +1163,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
     /**
-     * Update the {@link PersonBean} bean record in the database according to the changes.
+     * Update the PersonBean bean record in the database according to the changes.
      *
-     * @param bean the {@link PersonBean} bean to be updated
-     * @return the updated bean or null if bean is null
+     * @param bean the PersonBean bean to be updated
+     * @return the updated bean
      */
     //14
-    @Override
     public PersonBean update(PersonBean bean)
     {
         try{
@@ -1191,50 +1181,44 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
     /**
-     * Saves an array of {@link PersonBean} bean into the database.
+     * Saves an array of PersonBean beans into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be saved
+     * @return the saved PersonBean array.
      */
     //15
     public PersonBean[] save(PersonBean[] beans)
     {
-        if(null !=beans){
-            for (PersonBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (PersonBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
 
     /**
-     * Saves a collection of {@link PersonBean} bean into the database.
+     * Saves a list of PersonBean beans into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be saved
+     * @return the saved PersonBean array.
      */
     //15-2
-    @Override
-    public <C extends Collection<PersonBean>> C save(C beans)
+    public <T extends Collection<PersonBean>>T save(T beans)
     {
-        if(null != beans){
-            for (PersonBean bean : beans) 
-            {
-                this.save(bean);
-            }
+        for (PersonBean bean : beans) 
+        {
+            this.save(bean);
         }
         return beans;
     }
     /**
-     * Saves an array of {@link PersonBean} bean into the database as transaction.
+     * Saves an array of PersonBean beans as transaction into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be saved
+     * @return the saved PersonBean array.
      * @see #save(PersonBean[])
      */
     //15-3
-    @Override
     public PersonBean[] saveAsTransaction(final PersonBean[] beans) {
         return this.runAsTransaction(new Callable<PersonBean[]>(){
             @Override
@@ -1243,126 +1227,117 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
             }});
     }
     /**
-     * Saves a collection of {@link PersonBean} bean into the database as transaction.
+     * Saves a list of PersonBean beans as transaction into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be saved
+     * @return the saved PersonBean array.
      * @see #save(List)
      */
     //15-4
-    @Override
-    public <C extends Collection<PersonBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
+    public <T extends Collection<PersonBean>> T saveAsTransaction(final T beans){
+        return this.runAsTransaction(new Callable<T>(){
             @Override
-            public C call() throws Exception {
+            public T call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of {@link PersonBean} bean into the database.
+     * Insert an array of PersonBean beans into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      */
     //16
-    @Override
     public PersonBean[] insert(PersonBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a collection of {@link PersonBean} bean into the database.
+     * Insert a list of PersonBean beans into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      */
     //16-2
-    @Override
-    public <C extends Collection<PersonBean>> C insert(C beans)
+    public <T extends Collection<PersonBean>> T insert(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of {@link PersonBean} bean into the database as transaction.
+     * Insert an array of PersonBean beans as transaction into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      * @see #saveAsTransaction(PersonBean[])
      */
     //16-3
-    @Override
     public PersonBean[] insertAsTransaction(PersonBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a collection of {@link PersonBean} bean as transaction into the database.
+     * Insert a list of PersonBean beans as transaction into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    @Override
-    public <C extends Collection<PersonBean>> C insertAsTransaction(C beans)
+    public <T extends Collection<PersonBean>> T insertAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Update an array of {@link PersonBean} bean into the database.
+     * Updates an array of PersonBean beans into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      */
     //17
-    @Override
     public PersonBean[] update(PersonBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Update a collection of {@link PersonBean} bean into the database.
+     * Updates a list of PersonBean beans into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      */
     //17-2
-    @Override
-    public <C extends Collection<PersonBean>> C update(C beans)
+    public <T extends Collection<PersonBean>> T update(T beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Update an array of {@link PersonBean} bean into the database as transaction.
+     * Updates an array of PersonBean beans as transaction into the database.
      *
-     * @param beans the {@link PersonBean} beans table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      * @see #saveAsTransaction(PersonBean[])
      */
     //17-3
-    @Override
     public PersonBean[] updateAsTransaction(PersonBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Update a collection of {@link PersonBean} bean into the database as transaction.
+     * Updates a list of PersonBean beans as transaction into the database.
      *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
+     * @param beans the PersonBean bean table to be inserted
+     * @return the saved PersonBean array.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    @Override
-    public <C extends Collection<PersonBean>> C updateAsTransaction(C beans)
+    public <T extends Collection<PersonBean>> T updateAsTransaction(T beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -1378,7 +1353,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the bean matching the template
      */
     //18
-    @Override
     public PersonBean loadUniqueUsingTemplate(PersonBean bean)
     {
         try{
@@ -1397,7 +1371,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return all the PersonBean matching the template
      */
     //19
-    @Override
     public PersonBean[] loadUsingTemplate(PersonBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -1410,8 +1383,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //19-1
-    @Override
-    public int loadUsingTemplate(PersonBean bean,Action<PersonBean> action)
+    public int loadUsingTemplate(PersonBean bean,Action action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1423,7 +1395,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return all the PersonBean matching the template
      */
     //19-2
-    @Override
     public List<PersonBean> loadUsingTemplateAsList(PersonBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -1438,7 +1409,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return all the PersonBean matching the template
      */
     //20
-    @Override
     public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -1453,8 +1423,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //20-1
-    @Override
-    public int loadUsingTemplate(PersonBean bean, int startRow, int numRows,Action<PersonBean> action)
+    public int loadUsingTemplate(PersonBean bean, int startRow, int numRows,Action action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1467,7 +1436,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return all the PersonBean matching the template
      */
     //20-2
-    @Override
     public List<PersonBean> loadUsingTemplateAsList(PersonBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -1483,7 +1451,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return all the PersonBean matching the template
      */
     //20-3
-    @Override
     public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new PersonBean[0]);
@@ -1499,7 +1466,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return all the PersonBean matching the template
      */
     //20-4
-    @Override
     public List<PersonBean> loadUsingTemplateAsList(PersonBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1521,8 +1487,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the count dealt by action
      */
     //20-5
-    @Override
-    public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action)
+    public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -1539,7 +1504,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the number of deleted objects
      */
     //21
-    @Override
     public int deleteUsingTemplate(PersonBean bean)
     {
         try{
@@ -1715,7 +1679,21 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     
 
 
+    //_____________________________________________________________________
+    //
+    // COUNT
+    //_____________________________________________________________________
 
+    /**
+     * Retrieves the number of rows of the table fl_person.
+     *
+     * @return the number of rows returned
+     */
+    //24
+    public int countAll() 
+    {
+        return this.countWhere("");
+    }
 
     /**
      * Retrieves the number of rows of the table fl_person with a 'where' clause.
@@ -1725,7 +1703,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the number of rows returned
      */
     //25
-    @Override
     public int countWhere(String where)
     {
         try{
@@ -1737,6 +1714,31 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
+    /**
+     * count the number of elements of a specific PersonBean bean
+     *
+     * @param bean the PersonBean bean to look for ant count
+     * @return the number of rows returned
+     */
+    //27
+    public int countUsingTemplate(PersonBean bean)
+    {
+        return this.countUsingTemplate(bean, -1, -1);
+    }
+
+    /**
+     * count the number of elements of a specific PersonBean bean , given the start row and number of rows.
+     *
+     * @param bean the PersonBean template to look for and count
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the number of rows returned
+     */
+    //20
+    public int countUsingTemplate(PersonBean bean, int startRow, int numRows)
+    {
+        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
+    }
 
     /**
      * count the number of elements of a specific PersonBean bean given the start row and number of rows and the search type
@@ -1748,7 +1750,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @return the number of rows returned
      */
     //20
-    @Override
     public int countUsingTemplate(PersonBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -1770,7 +1771,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Registers a unique {@link PersonListener} listener.
      */
     //35
-    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((PersonListener)listener));
@@ -1838,7 +1838,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param fieldList table of the field's associated constants
      * @return an array of PersonBean
      */
-    @Override
     public PersonBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new PersonBean[0]);
     }
@@ -1849,7 +1848,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param fieldList table of the field's associated constants
      * @return an list of PersonBean
      */
-    @Override
     public List<PersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1861,7 +1859,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
     
-    @Override
+    //@Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1872,7 +1870,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
-    @Override
+    //@Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1882,7 +1880,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlPersonManager.Action toNative(final Action<PersonBean> action){
+    private FlPersonManager.Action toNative(final Action action){
         if(null == action)
             throw new NullPointerException();
         return new FlPersonManager.Action(){
