@@ -558,7 +558,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     //3.3 SET IMPORTED
     public FlImageBean[] setFlImageBeansByDeviceId(FlDeviceBean bean , FlImageBean[] importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
                 FlImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
             }
@@ -576,9 +576,9 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link FlImageManager#setReferencedByDeviceId(FlImageBean, FlDeviceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FlImageBean>> T setFlImageBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
+    public <C extends Collection<FlImageBean>> C setFlImageBeansByDeviceId(FlDeviceBean bean , C importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlImageBean importBean : importedBeans ){
                 FlImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
             }
@@ -630,7 +630,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     //3.3 SET IMPORTED
     public FlLogBean[] setFlLogBeansByDeviceId(FlDeviceBean bean , FlLogBean[] importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
                 FlLogManager.getInstance().setReferencedByDeviceId(importBean , bean);
             }
@@ -648,9 +648,9 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link FlLogManager#setReferencedByDeviceId(FlLogBean, FlDeviceBean)
      */
     //3.4 SET IMPORTED
-    public <T extends Collection<FlLogBean>> T setFlLogBeansByDeviceId(FlDeviceBean bean , T importedBeans) throws DAOException
+    public <C extends Collection<FlLogBean>> C setFlLogBeansByDeviceId(FlDeviceBean bean , C importedBeans) throws DAOException
     {
-        if(null != bean && null != importedBeans){
+        if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
                 FlLogManager.getInstance().setReferencedByDeviceId(importBean , bean);
             }
@@ -723,20 +723,10 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        if( null != impFlImagebyDeviceId) {
-            for ( FlImageBean imp : impFlImagebyDeviceId ){
-                imp.setDeviceId(bean.getId()); 
-                imp.setReferencedByDeviceId(bean);
-                FlImageManager.getInstance().save( imp );
-            }
-        }
-        if( null != impFlLogbyDeviceId) {
-            for ( FlLogBean imp : impFlLogbyDeviceId ){
-                imp.setDeviceId(bean.getId()); 
-                imp.setReferencedByDeviceId(bean);
-                FlLogManager.getInstance().save( imp );
-            }
-        }
+        this.setFlImageBeansByDeviceId(bean,impFlImagebyDeviceId);
+        FlImageManager.getInstance().save( impFlImagebyDeviceId );
+        this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
+        FlLogManager.getInstance().save( impFlLogbyDeviceId );
         return bean;
     }   
     /**
@@ -1053,15 +1043,16 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the FlDeviceBean bean into the database.
+     * Saves the {@link FlDeviceBean} bean into the database.
      *
-     * @param bean the FlDeviceBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link FlDeviceBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      * @throws DAOException
      */
     //12
     public FlDeviceBean save(FlDeviceBean bean) throws DAOException
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -1070,17 +1061,17 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Insert the FlDeviceBean bean into the database.
-     *
-     * @param bean the FlDeviceBean bean to be saved
-     * @return the inserted bean
+     * Insert the {@link FlDeviceBean} bean into the database.
+     * 
+     * @param bean the {@link FlDeviceBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      * @throws DAOException
      */
     //13
     public FlDeviceBean insert(FlDeviceBean bean) throws DAOException
     {
         // mini checks
-        if (!bean.isModified()) {
+        if (null == bean || !bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (!bean.isNew()){
@@ -1207,17 +1198,17 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Update the FlDeviceBean bean record in the database according to the changes.
+     * Update the {@link FlDeviceBean} bean record in the database according to the changes.
      *
-     * @param bean the FlDeviceBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link FlDeviceBean} bean to be updated
+     * @return the updated bean or null if bean is null
      * @throws DAOException
      */
     //14
     public FlDeviceBean update(FlDeviceBean bean) throws DAOException
     {
         // mini checks
-        if (!bean.isModified()) {
+        if (null == bean || !bean.isModified()) {
             return bean; // should not we log something ?
         }
         if (bean.isNew()){
@@ -1332,43 +1323,47 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Saves an array of FlDeviceBean beans into the database.
+     * Saves an array of {@link FlDeviceBean} bean into the database.
      *
-     * @param beans the FlDeviceBean bean table to be saved
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be saved
+     * @return the saved {@link FlDeviceBean} beans or null if beans is null.
      * @throws DAOException
      */
     //15
     public FlDeviceBean[] save(FlDeviceBean[] beans) throws DAOException
     {
-        for (FlDeviceBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FlDeviceBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a collection of FlDeviceBean beans into the database.
+     * Saves a collection of {@link FlDeviceBean} beans into the database.
      *
-     * @param beans the FlDeviceBean bean table to be saved
-     * @return the saved FlDeviceBean collection.
+     * @param beans the {@link FlDeviceBean} bean table to be saved
+     * @return the saved {@link FlDeviceBean} beans or null if beans is null.
      * @throws DAOException
      */
     //15-2
-    public <T extends Collection<FlDeviceBean>>T save(T beans) throws DAOException
+    public <C extends Collection<FlDeviceBean>>C save(C beans) throws DAOException
     {
-        for (FlDeviceBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (FlDeviceBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of FlDeviceBean beans as transaction into the database.
+     * Saves an array of {@link FlDeviceBean} bean into the database as transaction.
      *
-     * @param beans the FlDeviceBean bean table to be saved
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be saved
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      * @see #save(FlDeviceBean[])
      */
@@ -1381,26 +1376,26 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             }});
     }
     /**
-     * Saves a list of FlDeviceBean beans as transaction into the database.
+     * Saves a collection of {@link FlDeviceBean} bean into the database as transaction.
      *
-     * @param beans the FlDeviceBean bean table to be saved
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be saved
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<FlDeviceBean>> T saveAsTransaction(final T beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<T>(){
+    public <C extends Collection<FlDeviceBean>> C saveAsTransaction(final C beans) throws DAOException {
+        return Manager.getInstance().runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of FlDeviceBean beans into the database.
+     * Insert an array of {@link FlDeviceBean} bean into the database.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      */
     //16
@@ -1410,23 +1405,23 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Insert a list of FlDeviceBean beans into the database.
+     * Insert a collection of {@link FlDeviceBean} bean into the database.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      */
     //16-2
-    public <T extends Collection<FlDeviceBean>> T insert(T beans) throws DAOException
+    public <C extends Collection<FlDeviceBean>> C insert(C beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of FlDeviceBean beans as transaction into the database.
+     * Insert an array of {@link FlDeviceBean} beans into the database as transaction.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link {@link FlDeviceBean}} bean table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(FlDeviceBean[])
      */
@@ -1437,25 +1432,25 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Insert a list of FlDeviceBean beans as transaction into the database.
+     * Insert a collection of {@link FlDeviceBean} bean into the database as transaction.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<FlDeviceBean>> T insertAsTransaction(T beans) throws DAOException
+    public <C extends Collection<FlDeviceBean>> C insertAsTransaction(C beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of FlDeviceBean beans into the database.
+     * Update an array of {@link FlDeviceBean} bean into the database.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} bean table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      */
     //17
@@ -1465,23 +1460,23 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Updates a list of FlDeviceBean beans into the database.
+     * Update a list of {@link FlDeviceBean} bean into the database.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} beans table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      */
     //17-2
-    public <T extends Collection<FlDeviceBean>> T update(T beans) throws DAOException
+    public <C extends Collection<FlDeviceBean>> C update(C beans) throws DAOException
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of FlDeviceBean beans as transaction into the database.
+     * Update an array of {@link FlDeviceBean} bean into the database as transaction.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} beans table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(FlDeviceBean[])
      */
@@ -1492,15 +1487,15 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
 
     /**
-     * Updates a list of FlDeviceBean beans as transaction into the database.
+     * Update a collection of {@link FlDeviceBean} bean into the database as transaction.
      *
-     * @param beans the FlDeviceBean bean table to be inserted
-     * @return the saved FlDeviceBean array.
+     * @param beans the {@link FlDeviceBean} beans table to be inserted
+     * @return the saved {@link FlDeviceBean} beans.
      * @throws DAOException
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<FlDeviceBean>> T updateAsTransaction(T beans) throws DAOException
+    public <C extends Collection<FlDeviceBean>> C updateAsTransaction(C beans) throws DAOException
     {
         return this.saveAsTransaction(beans);
     }

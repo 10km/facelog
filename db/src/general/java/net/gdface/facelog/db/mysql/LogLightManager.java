@@ -16,6 +16,8 @@ import java.util.concurrent.Callable;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
+import net.gdface.facelog.db.BaseBean;
+import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.LogLightListener;
 import net.gdface.facelog.db.WrapDAOException;
@@ -29,7 +31,7 @@ import net.gdface.facelog.dborm.log.FlLogLightListener;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class LogLightManager 
+public class LogLightManager extends TableManager.Adapter<LogLightBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -126,11 +128,6 @@ public class LogLightManager
                             + ",papers_num"
                             + ",verify_time";
 
-    public static interface Action{
-          void call(LogLightBean bean);
-          LogLightBean getBean();
-     }
-
     /**
     * @return tableName
     */
@@ -190,46 +187,51 @@ public class LogLightManager
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getLogLightBeanConverter();
     }
+    @Override
     public LogLightBean loadByPrimaryKey(LogLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
     public boolean existsPrimaryKey(LogLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
+    
+    @Override
     public int deleteByPrimaryKey(LogLightBean bean)
     {
         throw new UnsupportedOperationException();
     }
  
 
-    //@Override
-    public <T> T[] getImportedBeans(LogLightBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(LogLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> List<T> getImportedBeansAsList(LogLightBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> List<T> getImportedBeansAsList(LogLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> T[] setImportedBeans(LogLightBean bean,T[] importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean> T[] setImportedBeans(LogLightBean bean,T[] importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }    
-    //@Override
-    public <T,C extends Collection<T>> C setImportedBeans(LogLightBean bean,C importedBeans,String fkName){
+    @Override
+    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(LogLightBean bean,C importedBeans,String fkName){
         throw new UnsupportedOperationException();
     }
  
 
 
  
-    //@Override
-    public <T> T getReferencedBean(LogLightBean bean,String fkName){
+    @Override
+    public <T extends BaseBean> T getReferencedBean(LogLightBean bean,String fkName){
         throw new UnsupportedOperationException();
     }
-    //@Override
-    public <T> T setReferencedBean(LogLightBean bean,T beanToSet,String fkName){
+    @Override
+    public <T extends BaseBean> T setReferencedBean(LogLightBean bean,T beanToSet,String fkName){
         throw new UnsupportedOperationException();
     }
      
@@ -244,6 +246,7 @@ public class LogLightManager
      * @return an array of FlLogLightManager bean
      */
     //5
+    @Override
     public LogLightBean[] loadAll()
     {
         try{
@@ -260,7 +263,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //5-1
-    public int loadAll(Action action)
+    @Override
+    public int loadAll(Action<LogLightBean> action)
     {
         return this.loadUsingTemplate(null,action);
     }
@@ -270,6 +274,7 @@ public class LogLightManager
      * @return a list of LogLightBean bean
      */
     //5-2
+    @Override
     public List<LogLightBean> loadAllAsList()
     {
         return this.loadUsingTemplateAsList(null);
@@ -284,6 +289,7 @@ public class LogLightManager
      * @return an array of FlLogLightManager bean
      */
     //6
+    @Override
     public LogLightBean[] loadAll(int startRow, int numRows)
     {
         return this.loadUsingTemplate(null, startRow, numRows);
@@ -296,7 +302,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //6-1
-    public int loadAll(int startRow, int numRows,Action action)
+    @Override
+    public int loadAll(int startRow, int numRows,Action<LogLightBean> action)
     {
         return this.loadUsingTemplate(null, startRow, numRows,action);
     }
@@ -308,6 +315,7 @@ public class LogLightManager
      * @return a list of FlLogLightManager bean
      */
     //6-2
+    @Override
     public List<LogLightBean> loadAllAsList(int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(null, startRow, numRows);
@@ -323,10 +331,12 @@ public class LogLightManager
      * @return the resulting LogLightBean table
      */
     //7
+    @Override
     public LogLightBean[] loadByWhere(String where)
     {
         return this.loadByWhere(where, (int[])null);
     }
+    
     /**
      * Retrieves a list of LogLightBean given a sql 'where' clause.
      *
@@ -334,6 +344,7 @@ public class LogLightManager
      * @return the resulting LogLightBean table
      */
     //7
+    @Override
     public List<LogLightBean> loadByWhereAsList(String where)
     {
         return this.loadByWhereAsList(where, null);
@@ -345,7 +356,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //7-1
-    public int loadByWhere(String where,Action action)
+    @Override
+    public int loadByWhere(String where,Action<LogLightBean> action)
     {
         return this.loadByWhere(where, null,action);
     }
@@ -358,6 +370,7 @@ public class LogLightManager
      * @return the resulting LogLightBean table
      */
     //8
+    @Override
     public LogLightBean[] loadByWhere(String where, int[] fieldList)
     {
         return this.loadByWhere(where, fieldList, 1, -1);
@@ -373,6 +386,7 @@ public class LogLightManager
      * @return the resulting LogLightBean table
      */
     //8
+    @Override
     public List<LogLightBean> loadByWhereAsList(String where, int[] fieldList)
     {
         return this.loadByWhereAsList(where, fieldList, 1, -1);
@@ -387,7 +401,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList,Action<LogLightBean> action)
     {
         return this.loadByWhere(where, fieldList, 1, -1,action);
     }
@@ -403,6 +418,7 @@ public class LogLightManager
      * @return the resulting LogLightBean table
      */
     //9
+    @Override
     public LogLightBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
     {
         return (LogLightBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new LogLightBean[0]);
@@ -420,7 +436,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<LogLightBean> action)
     {
         return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
     }
@@ -436,6 +453,7 @@ public class LogLightManager
      * @return the resulting LogLightBean table
      */
     //9-2
+    @Override
     public List<LogLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
     {
         try{
@@ -459,7 +477,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action)
+    @Override
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<LogLightBean> action)
     {
         try{
             return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
@@ -471,16 +490,6 @@ public class LogLightManager
     }
 
     /**
-     * Deletes all rows from fl_log_light table.
-     * @return the number of deleted rows.
-     */
-    //10
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
      * Deletes rows from the fl_log_light table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clausis.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
@@ -489,6 +498,7 @@ public class LogLightManager
      * @return the number of deleted rows
      */
     //11
+    @Override
     public int deleteByWhere(String where)
     {
         try{
@@ -505,14 +515,16 @@ public class LogLightManager
     // SAVE
     //_____________________________________________________________________
     /**
-     * Saves the LogLightBean bean into the database.
+     * Saves the {@link LogLightBean} bean into the database.
      *
-     * @param bean the LogLightBean bean to be saved
-     * @return the inserted or updated bean
+     * @param bean the {@link LogLightBean} bean to be saved
+     * @return the inserted or updated bean,or null if bean is null
      */
     //12
+    @Override
     public LogLightBean save(LogLightBean bean)
     {
+        if(null == bean)return null;
         if (bean.isNew()) {
             return this.insert(bean);
         } else {
@@ -521,12 +533,13 @@ public class LogLightManager
     }
 
     /**
-     * Insert the LogLightBean bean into the database.
+     * Insert the {@link LogLightBean} bean into the database.
      *
-     * @param bean the LogLightBean bean to be saved
-     * @return the inserted bean
+     * @param bean the {@link LogLightBean} bean to be saved
+     * @return the inserted bean or null if bean is null
      */
     //13
+    @Override
     public LogLightBean insert(LogLightBean bean)
     {
         try{
@@ -539,12 +552,13 @@ public class LogLightManager
     }
 
     /**
-     * Update the LogLightBean bean record in the database according to the changes.
+     * Update the {@link LogLightBean} bean record in the database according to the changes.
      *
-     * @param bean the LogLightBean bean to be updated
-     * @return the updated bean
+     * @param bean the {@link LogLightBean} bean to be updated
+     * @return the updated bean or null if bean is null
      */
     //14
+    @Override
     public LogLightBean update(LogLightBean bean)
     {
         try{
@@ -557,44 +571,50 @@ public class LogLightManager
     }
 
     /**
-     * Saves an array of LogLightBean beans into the database.
+     * Saves an array of {@link LogLightBean} bean into the database.
      *
-     * @param beans the LogLightBean bean table to be saved
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be saved
+     * @return the saved {@link LogLightBean} beans.
      */
     //15
     public LogLightBean[] save(LogLightBean[] beans)
     {
-        for (LogLightBean bean : beans) 
-        {
-            this.save(bean);
+        if(null !=beans){
+            for (LogLightBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
 
     /**
-     * Saves a list of LogLightBean beans into the database.
+     * Saves a collection of {@link LogLightBean} bean into the database.
      *
-     * @param beans the LogLightBean bean table to be saved
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be saved
+     * @return the saved {@link LogLightBean} beans.
      */
     //15-2
-    public <T extends Collection<LogLightBean>>T save(T beans)
+    @Override
+    public <C extends Collection<LogLightBean>> C save(C beans)
     {
-        for (LogLightBean bean : beans) 
-        {
-            this.save(bean);
+        if(null != beans){
+            for (LogLightBean bean : beans) 
+            {
+                this.save(bean);
+            }
         }
         return beans;
     }
     /**
-     * Saves an array of LogLightBean beans as transaction into the database.
+     * Saves an array of {@link LogLightBean} bean into the database as transaction.
      *
-     * @param beans the LogLightBean bean table to be saved
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be saved
+     * @return the saved {@link LogLightBean} beans.
      * @see #save(LogLightBean[])
      */
     //15-3
+    @Override
     public LogLightBean[] saveAsTransaction(final LogLightBean[] beans) {
         return this.runAsTransaction(new Callable<LogLightBean[]>(){
             @Override
@@ -603,117 +623,126 @@ public class LogLightManager
             }});
     }
     /**
-     * Saves a list of LogLightBean beans as transaction into the database.
+     * Saves a collection of {@link LogLightBean} bean into the database as transaction.
      *
-     * @param beans the LogLightBean bean table to be saved
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be saved
+     * @return the saved {@link LogLightBean} beans.
      * @see #save(List)
      */
     //15-4
-    public <T extends Collection<LogLightBean>> T saveAsTransaction(final T beans){
-        return this.runAsTransaction(new Callable<T>(){
+    @Override
+    public <C extends Collection<LogLightBean>> C saveAsTransaction(final C beans){
+        return this.runAsTransaction(new Callable<C>(){
             @Override
-            public T call() throws Exception {
+            public C call() throws Exception {
                 return save(beans);
             }});
     }
     /**
-     * Insert an array of LogLightBean beans into the database.
+     * Insert an array of {@link LogLightBean} bean into the database.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      */
     //16
+    @Override
     public LogLightBean[] insert(LogLightBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Insert a list of LogLightBean beans into the database.
+     * Insert a collection of {@link LogLightBean} bean into the database.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      */
     //16-2
-    public <T extends Collection<LogLightBean>> T insert(T beans)
+    @Override
+    public <C extends Collection<LogLightBean>> C insert(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Insert an array of LogLightBean beans as transaction into the database.
+     * Insert an array of {@link LogLightBean} bean into the database as transaction.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      * @see #saveAsTransaction(LogLightBean[])
      */
     //16-3
+    @Override
     public LogLightBean[] insertAsTransaction(LogLightBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Insert a list of LogLightBean beans as transaction into the database.
+     * Insert a collection of {@link LogLightBean} bean as transaction into the database.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      * @see #saveAsTransaction(List)
      */
     //16-4
-    public <T extends Collection<LogLightBean>> T insertAsTransaction(T beans)
+    @Override
+    public <C extends Collection<LogLightBean>> C insertAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
 
 
     /**
-     * Updates an array of LogLightBean beans into the database.
+     * Update an array of {@link LogLightBean} bean into the database.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      */
     //17
+    @Override
     public LogLightBean[] update(LogLightBean[] beans)
     {
         return this.save(beans);
     }
 
     /**
-     * Updates a list of LogLightBean beans into the database.
+     * Update a collection of {@link LogLightBean} bean into the database.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      */
     //17-2
-    public <T extends Collection<LogLightBean>> T update(T beans)
+    @Override
+    public <C extends Collection<LogLightBean>> C update(C beans)
     {
         return this.save(beans);
     }
     
     /**
-     * Updates an array of LogLightBean beans as transaction into the database.
+     * Update an array of {@link LogLightBean} bean into the database as transaction.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} beans table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      * @see #saveAsTransaction(LogLightBean[])
      */
     //17-3
+    @Override
     public LogLightBean[] updateAsTransaction(LogLightBean[] beans)
     {
         return this.saveAsTransaction(beans);
     }
 
     /**
-     * Updates a list of LogLightBean beans as transaction into the database.
+     * Update a collection of {@link LogLightBean} bean into the database as transaction.
      *
-     * @param beans the LogLightBean bean table to be inserted
-     * @return the saved LogLightBean array.
+     * @param beans the {@link LogLightBean} bean table to be inserted
+     * @return the saved {@link LogLightBean} beans.
      * @see #saveAsTransaction(List)
      */
     //17-4
-    public <T extends Collection<LogLightBean>> T updateAsTransaction(T beans)
+    @Override
+    public <C extends Collection<LogLightBean>> C updateAsTransaction(C beans)
     {
         return this.saveAsTransaction(beans);
     }
@@ -729,6 +758,7 @@ public class LogLightManager
      * @return the bean matching the template
      */
     //18
+    @Override
     public LogLightBean loadUniqueUsingTemplate(LogLightBean bean)
     {
         try{
@@ -747,6 +777,7 @@ public class LogLightManager
      * @return all the LogLightBean matching the template
      */
     //19
+    @Override
     public LogLightBean[] loadUsingTemplate(LogLightBean bean)
     {
         return this.loadUsingTemplate(bean, 1, -1);
@@ -759,7 +790,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //19-1
-    public int loadUsingTemplate(LogLightBean bean,Action action)
+    @Override
+    public int loadUsingTemplate(LogLightBean bean,Action<LogLightBean> action)
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -771,6 +803,7 @@ public class LogLightManager
      * @return all the LogLightBean matching the template
      */
     //19-2
+    @Override
     public List<LogLightBean> loadUsingTemplateAsList(LogLightBean bean)
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
@@ -785,6 +818,7 @@ public class LogLightManager
      * @return all the LogLightBean matching the template
      */
     //20
+    @Override
     public LogLightBean[] loadUsingTemplate(LogLightBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
@@ -799,7 +833,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //20-1
-    public int loadUsingTemplate(LogLightBean bean, int startRow, int numRows,Action action)
+    @Override
+    public int loadUsingTemplate(LogLightBean bean, int startRow, int numRows,Action<LogLightBean> action)
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -812,6 +847,7 @@ public class LogLightManager
      * @return all the LogLightBean matching the template
      */
     //20-2
+    @Override
     public List<LogLightBean> loadUsingTemplateAsList(LogLightBean bean, int startRow, int numRows)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
@@ -827,6 +863,7 @@ public class LogLightManager
      * @return all the LogLightBean matching the template
      */
     //20-3
+    @Override
     public LogLightBean[] loadUsingTemplate(LogLightBean bean, int startRow, int numRows, int searchType)
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new LogLightBean[0]);
@@ -842,6 +879,7 @@ public class LogLightManager
      * @return all the LogLightBean matching the template
      */
     //20-4
+    @Override
     public List<LogLightBean> loadUsingTemplateAsList(LogLightBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -863,7 +901,8 @@ public class LogLightManager
      * @return the count dealt by action
      */
     //20-5
-    public int loadUsingTemplate(LogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action)
+    @Override
+    public int loadUsingTemplate(LogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogLightBean> action)
     {
         try {
             return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
@@ -880,6 +919,7 @@ public class LogLightManager
      * @return the number of deleted objects
      */
     //21
+    @Override
     public int deleteUsingTemplate(LogLightBean bean)
     {
         try{
@@ -893,21 +933,7 @@ public class LogLightManager
 
 
 
-    //_____________________________________________________________________
-    //
-    // COUNT
-    //_____________________________________________________________________
 
-    /**
-     * Retrieves the number of rows of the table fl_log_light.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
 
     /**
      * Retrieves the number of rows of the table fl_log_light with a 'where' clause.
@@ -917,6 +943,7 @@ public class LogLightManager
      * @return the number of rows returned
      */
     //25
+    @Override
     public int countWhere(String where)
     {
         try{
@@ -928,31 +955,6 @@ public class LogLightManager
         }
     }
 
-    /**
-     * count the number of elements of a specific LogLightBean bean
-     *
-     * @param bean the LogLightBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    public int countUsingTemplate(LogLightBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific LogLightBean bean , given the start row and number of rows.
-     *
-     * @param bean the LogLightBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
-    //20
-    public int countUsingTemplate(LogLightBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
 
     /**
      * count the number of elements of a specific LogLightBean bean given the start row and number of rows and the search type
@@ -964,6 +966,7 @@ public class LogLightManager
      * @return the number of rows returned
      */
     //20
+    @Override
     public int countUsingTemplate(LogLightBean bean, int startRow, int numRows, int searchType)
     {
         try{
@@ -985,6 +988,7 @@ public class LogLightManager
      * Registers a unique {@link LogLightListener} listener.
      */
     //35
+    @Override
     public void registerListener(TableListener listener)
     {
         this.nativeManager.registerListener(this.toNative((LogLightListener)listener));
@@ -1052,6 +1056,7 @@ public class LogLightManager
      * @param fieldList table of the field's associated constants
      * @return an array of LogLightBean
      */
+    @Override
     public LogLightBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
         return loadBySqlAsList(sql, argList, fieldList).toArray(new LogLightBean[0]);
     }
@@ -1062,6 +1067,7 @@ public class LogLightManager
      * @param fieldList table of the field's associated constants
      * @return an list of LogLightBean
      */
+    @Override
     public List<LogLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
@@ -1073,7 +1079,7 @@ public class LogLightManager
     }
 
     
-    //@Override
+    @Override
     public <T>T runAsTransaction(Callable<T> fun) {
         try{
             return this.nativeManager.runAsTransaction(fun);
@@ -1084,7 +1090,7 @@ public class LogLightManager
         }
     }
     
-    //@Override
+    @Override
     public void runAsTransaction(final Runnable fun){
         try{
             this.nativeManager.runAsTransaction(fun);
@@ -1094,7 +1100,7 @@ public class LogLightManager
             throw new WrapDAOException(e);
         }
     }
-    private FlLogLightManager.Action toNative(final Action action){
+    private FlLogLightManager.Action toNative(final Action<LogLightBean> action){
         if(null == action)
             throw new NullPointerException();
         return new FlLogLightManager.Action(){
