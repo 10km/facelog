@@ -1394,6 +1394,23 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
 
             ps.executeUpdate();
 
+            if (!bean.isIdModified())
+            {
+                PreparedStatement ps2 = null;
+                ResultSet rs = null;
+                try {
+                    ps2 = c.prepareStatement("SELECT last_insert_id()");
+                    rs = ps2.executeQuery();
+                    if(rs.next()) {
+                        bean.setId(Manager.getInteger(rs, 1));
+                    } else {
+                        this.getManager().log("ATTENTION: Could not retrieve generated key!");
+                    }
+                } finally {
+                    this.getManager().close(ps2, rs);
+                }
+            }
+
             bean.isNew(false);
             bean.resetIsModified();
             this.afterInsert(bean); // listener callback
