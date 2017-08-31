@@ -19,13 +19,11 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.LogLightListener;
 import net.gdface.facelog.db.WrapDAOException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.log.FlLogLightManager;
 import net.gdface.facelog.dborm.log.FlLogLightBean;
-import net.gdface.facelog.dborm.log.FlLogLightListener;
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log_light table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -141,7 +139,7 @@ public class LogLightManager implements TableManager<LogLightBean>
     }
     
     private FlLogLightManager nativeManager = FlLogLightManager.getInstance();
-    private IDbConverter dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<LogLightBean,FlLogLightBean> beanConverter = dbConverter.getLogLightBeanConverter();
     private static LogLightManager singleton = new LogLightManager();
 
@@ -154,16 +152,8 @@ public class LogLightManager implements TableManager<LogLightBean>
     {
         return singleton;
     }
-    
-    public FlLogLightManager getNativeManager() {
-        return nativeManager;
-    }
-
-    public void setNativeManager(FlLogLightManager nativeManager) {
-        this.nativeManager = nativeManager;
-    }
-    
-    public IDbConverter getDbConverter() {
+   
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -172,6 +162,7 @@ public class LogLightManager implements TableManager<LogLightBean>
      * throw {@link NullPointerException} if {@code dbConverter} is null
      * @param dbConverter
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized void setDbConverter(IDbConverter dbConverter) {
         if( null == dbConverter)
             throw new NullPointerException();
@@ -1033,13 +1024,13 @@ public class LogLightManager implements TableManager<LogLightBean>
      */
     //35
     @Override
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<LogLightBean> listener)
     {
-        this.nativeManager.registerListener(this.toNative((LogLightListener)listener));
+        this.nativeManager.registerListener(this.toNative(listener));
     }
 
-    private FlLogLightListener toNative(final LogLightListener listener) {
-        return null == listener ?null:new FlLogLightListener (){
+    private net.gdface.facelog.dborm.TableListener<FlLogLightBean> toNative(final TableListener<LogLightBean> listener) {
+        return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlLogLightBean> (){
 
             @Override
             public void beforeInsert(FlLogLightBean bean) throws DAOException {

@@ -3290,15 +3290,15 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlFaceListener listener = null;
+    private TableListener<FlFaceBean> listener = null;
 
     /**
      * Registers a unique FlFaceListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlFaceBean> listener)
     {
-        this.listener = (FlFaceListener)listener;
+        this.listener = listener;
     }
 
     /**

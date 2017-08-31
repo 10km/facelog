@@ -2419,15 +2419,15 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlDeviceListener listener = null;
+    private TableListener<FlDeviceBean> listener = null;
 
     /**
      * Registers a unique FlDeviceListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlDeviceBean> listener)
     {
-        this.listener = (FlDeviceListener)listener;
+        this.listener = listener;
     }
 
     /**

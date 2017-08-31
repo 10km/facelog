@@ -1827,15 +1827,15 @@ public class FlLogLightManager implements TableManager<FlLogLightBeanBase,FlLogL
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlLogLightListener listener = null;
+    private TableListener<FlLogLightBean> listener = null;
 
     /**
      * Registers a unique FlLogLightListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlLogLightBean> listener)
     {
-        this.listener = (FlLogLightListener)listener;
+        this.listener = listener;
     }
 
     /**

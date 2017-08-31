@@ -7,31 +7,21 @@
 
 package net.gdface.facelog.db;
 
-import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.face.FlFaceLightBean;
-import net.gdface.facelog.dborm.face.FlFeatureBean;
-import net.gdface.facelog.dborm.log.FlLogLightBean;
-
 /**
  * converter between general type({@code <L>}) and native type ({@code <R>}) for  all Beans
  * @author guyadong
  *
  */
-public interface IDbConverter {
-    public abstract IBeanConverter<DeviceBean, FlDeviceBean> getDeviceBeanConverter();
-    public abstract IBeanConverter<FaceBean, FlFaceBean> getFaceBeanConverter();
-    public abstract IBeanConverter<ImageBean, FlImageBean> getImageBeanConverter();
-    public abstract IBeanConverter<LogBean, FlLogBean> getLogBeanConverter();
-    public abstract IBeanConverter<PersonBean, FlPersonBean> getPersonBeanConverter();
-    public abstract IBeanConverter<StoreBean, FlStoreBean> getStoreBeanConverter();
-    public abstract IBeanConverter<FaceLightBean, FlFaceLightBean> getFaceLightBeanConverter();
-    public abstract IBeanConverter<FeatureBean, FlFeatureBean> getFeatureBeanConverter();
-    public abstract IBeanConverter<LogLightBean, FlLogLightBean> getLogLightBeanConverter();
+public interface IDbConverter<N_DEVICE,N_FACE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_FACELIGHT,N_FEATURE,N_LOGLIGHT> {
+    public abstract IBeanConverter<DeviceBean, N_DEVICE> getDeviceBeanConverter();
+    public abstract IBeanConverter<FaceBean, N_FACE> getFaceBeanConverter();
+    public abstract IBeanConverter<ImageBean, N_IMAGE> getImageBeanConverter();
+    public abstract IBeanConverter<LogBean, N_LOG> getLogBeanConverter();
+    public abstract IBeanConverter<PersonBean, N_PERSON> getPersonBeanConverter();
+    public abstract IBeanConverter<StoreBean, N_STORE> getStoreBeanConverter();
+    public abstract IBeanConverter<FaceLightBean, N_FACELIGHT> getFaceLightBeanConverter();
+    public abstract IBeanConverter<FeatureBean, N_FEATURE> getFeatureBeanConverter();
+    public abstract IBeanConverter<LogLightBean, N_LOGLIGHT> getLogLightBeanConverter();
 
     /**
      * @param <L> general type

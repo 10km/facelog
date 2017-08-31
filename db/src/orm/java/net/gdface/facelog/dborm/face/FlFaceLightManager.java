@@ -2443,15 +2443,15 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBeanBase,FlFa
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlFaceLightListener listener = null;
+    private TableListener<FlFaceLightBean> listener = null;
 
     /**
      * Registers a unique FlFaceLightListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlFaceLightBean> listener)
     {
-        this.listener = (FlFaceLightListener)listener;
+        this.listener = listener;
     }
 
     /**

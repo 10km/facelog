@@ -2944,15 +2944,15 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlPersonListener listener = null;
+    private TableListener<FlPersonBean> listener = null;
 
     /**
      * Registers a unique FlPersonListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlPersonBean> listener)
     {
-        this.listener = (FlPersonListener)listener;
+        this.listener = listener;
     }
 
     /**

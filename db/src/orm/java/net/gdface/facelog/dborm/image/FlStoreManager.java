@@ -2224,15 +2224,15 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlStoreListener listener = null;
+    private TableListener<FlStoreBean> listener = null;
 
     /**
      * Registers a unique FlStoreListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlStoreBean> listener)
     {
-        this.listener = (FlStoreListener)listener;
+        this.listener = listener;
     }
 
     /**

@@ -2789,15 +2789,15 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlImageListener listener = null;
+    private TableListener<FlImageBean> listener = null;
 
     /**
      * Registers a unique FlImageListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlImageBean> listener)
     {
-        this.listener = (FlImageListener)listener;
+        this.listener = listener;
     }
 
     /**

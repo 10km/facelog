@@ -2543,15 +2543,15 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlLogListener listener = null;
+    private TableListener<FlLogBean> listener = null;
 
     /**
      * Registers a unique FlLogListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlLogBean> listener)
     {
-        this.listener = (FlLogListener)listener;
+        this.listener = listener;
     }
 
     /**

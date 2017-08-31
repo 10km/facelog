@@ -1783,15 +1783,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
     //
     // LISTENER
     //_____________________________________________________________________
-    private FlFeatureListener listener = null;
+    private TableListener<FlFeatureBean> listener = null;
 
     /**
      * Registers a unique FlFeatureListener listener.
      */
     //35
-    public void registerListener(TableListener listener)
+    public void registerListener(TableListener<FlFeatureBean> listener)
     {
-        this.listener = (FlFeatureListener)listener;
+        this.listener = listener;
     }
 
     /**
