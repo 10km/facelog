@@ -546,7 +546,6 @@ public class LogLightManager implements TableManager<LogLightBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public LogLightBean insert(LogLightBean bean)
     {
         try{
@@ -565,7 +564,6 @@ public class LogLightManager implements TableManager<LogLightBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public LogLightBean update(LogLightBean bean)
     {
         try{
@@ -644,114 +642,6 @@ public class LogLightManager implements TableManager<LogLightBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link LogLightBean} bean into the database.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     */
-    //16
-    @Override
-    public LogLightBean[] insert(LogLightBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link LogLightBean} bean into the database.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<LogLightBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link LogLightBean} bean into the database as transaction.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     * @see #saveAsTransaction(LogLightBean[])
-     */
-    //16-3
-    @Override
-    public LogLightBean[] insertAsTransaction(LogLightBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link LogLightBean} bean as transaction into the database.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<LogLightBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link LogLightBean} bean into the database.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     */
-    //17
-    @Override
-    public LogLightBean[] update(LogLightBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link LogLightBean} bean into the database.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<LogLightBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link LogLightBean} bean into the database as transaction.
-     *
-     * @param beans the {@link LogLightBean} beans table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     * @see #saveAsTransaction(LogLightBean[])
-     */
-    //17-3
-    @Override
-    public LogLightBean[] updateAsTransaction(LogLightBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link LogLightBean} bean into the database as transaction.
-     *
-     * @param beans the {@link LogLightBean} bean table to be inserted
-     * @return the saved {@link LogLightBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<LogLightBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

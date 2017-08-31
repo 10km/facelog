@@ -31,7 +31,7 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  * Handles database calls (save, load, count, etc...) for the fl_store table.
  * @author sql2java
  */
-public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
+public class FlStoreManager implements TableManager<FlStoreBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -208,7 +208,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.2
-    public FlStoreBean loadByPrimaryKey(FlStoreBeanBase bean) throws DAOException
+    public FlStoreBean loadByPrimaryKey(FlStoreBean bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getMd5());
     }
@@ -236,7 +236,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      */
     //1.4
     @Override
-    public boolean existsPrimaryKey(FlStoreBeanBase bean) throws DAOException
+    public boolean existsPrimaryKey(FlStoreBean bean) throws DAOException
     {
         return null!=loadByPrimaryKey(bean);
     }
@@ -295,7 +295,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
-    public int deleteByPrimaryKey(FlStoreBeanBase bean) throws DAOException
+    public int deleteByPrimaryKey(FlStoreBean bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
@@ -1277,114 +1277,6 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
                 return save(beans);
             }});
     }
-    /**
-     * Insert an array of {@link FlStoreBean} bean into the database.
-     *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     */
-    //16
-    public FlStoreBean[] insert(FlStoreBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlStoreBean} bean into the database.
-     *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     */
-    //16-2
-    public <C extends Collection<FlStoreBean>> C insert(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FlStoreBean} beans into the database as transaction.
-     *
-     * @param beans the {@link {@link FlStoreBean}} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlStoreBean[])
-     */
-    //16-3
-    public FlStoreBean[] insertAsTransaction(FlStoreBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlStoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    public <C extends Collection<FlStoreBean>> C insertAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FlStoreBean} bean into the database.
-     *
-     * @param beans the {@link FlStoreBean} bean table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     */
-    //17
-    public FlStoreBean[] update(FlStoreBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlStoreBean} bean into the database.
-     *
-     * @param beans the {@link FlStoreBean} beans table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     */
-    //17-2
-    public <C extends Collection<FlStoreBean>> C update(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FlStoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlStoreBean} beans table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlStoreBean[])
-     */
-    //17-3
-    public FlStoreBean[] updateAsTransaction(FlStoreBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlStoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlStoreBean} beans table to be inserted
-     * @return the saved {@link FlStoreBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    public <C extends Collection<FlStoreBean>> C updateAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
     
     //_____________________________________________________________________
     //
@@ -1398,7 +1290,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //18
-    public FlStoreBean loadUniqueUsingTemplate(FlStoreBeanBase bean) throws DAOException
+    public FlStoreBean loadUniqueUsingTemplate(FlStoreBean bean) throws DAOException
     {
          FlStoreBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -1418,7 +1310,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //19
-    public FlStoreBean[] loadUsingTemplate(FlStoreBeanBase bean) throws DAOException
+    public FlStoreBean[] loadUsingTemplate(FlStoreBean bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1431,7 +1323,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FlStoreBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FlStoreBean bean,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1444,7 +1336,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //19-2
-    public List<FlStoreBean> loadUsingTemplateAsList(FlStoreBeanBase bean) throws DAOException
+    public List<FlStoreBean> loadUsingTemplateAsList(FlStoreBean bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1459,7 +1351,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20
-    public FlStoreBean[] loadUsingTemplate(FlStoreBeanBase bean, int startRow, int numRows) throws DAOException
+    public FlStoreBean[] loadUsingTemplate(FlStoreBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1474,7 +1366,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FlStoreBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FlStoreBean bean, int startRow, int numRows,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1488,7 +1380,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20-2
-    public List<FlStoreBean> loadUsingTemplateAsList(FlStoreBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FlStoreBean> loadUsingTemplateAsList(FlStoreBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1504,7 +1396,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20-3
-    public FlStoreBean[] loadUsingTemplate(FlStoreBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FlStoreBean[] loadUsingTemplate(FlStoreBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (FlStoreBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlStoreBean[0]);
     }
@@ -1520,10 +1412,10 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20-4
-    public List<FlStoreBean> loadUsingTemplateAsList(FlStoreBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FlStoreBean> loadUsingTemplateAsList(FlStoreBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
         ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
         return (List<FlStoreBean>) action.getList();
         
     }
@@ -1539,9 +1431,8 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FlStoreBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FlStoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
     {
-        FlStoreBean bean=FlStoreBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
         String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
@@ -1572,9 +1463,8 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FlStoreBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FlStoreBean bean) throws DAOException
     {
-        FlStoreBean bean=FlStoreBeanBase.toFullBean(beanBase);
         if(bean.isMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
@@ -1585,7 +1475,6 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
 
         try
         {
-            this.beforeDelete(bean); // listener callback
             if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
             {
                 sql.append(" WHERE ").append(sqlWhere);
@@ -1603,8 +1492,6 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -1723,7 +1610,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FlStoreBeanBase bean) throws DAOException
+    public int countUsingTemplate(FlStoreBean bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -1738,7 +1625,7 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlStoreBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FlStoreBean bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1754,9 +1641,8 @@ public class FlStoreManager implements TableManager<FlStoreBeanBase,FlStoreBean>
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlStoreBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlStoreBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
-        FlStoreBean bean=FlStoreBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_store");

@@ -29,7 +29,7 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  * Handles database calls (save, load, count, etc...) for the fl_feature table.
  * @author sql2java
  */
-public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatureBean>
+public class FlFeatureManager implements TableManager<FlFeatureBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -166,15 +166,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
         return new FlFeatureBean();
     }
 
-    public FlFeatureBean loadByPrimaryKey(FlFeatureBeanBase bean) throws DAOException
+    public FlFeatureBean loadByPrimaryKey(FlFeatureBean bean) throws DAOException
     {
         throw new UnsupportedOperationException();
     }
-    public boolean existsPrimaryKey(FlFeatureBeanBase bean) throws DAOException
+    public boolean existsPrimaryKey(FlFeatureBean bean) throws DAOException
     {
         throw new UnsupportedOperationException();
     }
-    public int deleteByPrimaryKey(FlFeatureBeanBase bean) throws DAOException
+    public int deleteByPrimaryKey(FlFeatureBean bean) throws DAOException
     {
         throw new UnsupportedOperationException();
     }
@@ -794,114 +794,6 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
                 return save(beans);
             }});
     }
-    /**
-     * Insert an array of {@link FlFeatureBean} bean into the database.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     */
-    //16
-    public FlFeatureBean[] insert(FlFeatureBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlFeatureBean} bean into the database.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     */
-    //16-2
-    public <C extends Collection<FlFeatureBean>> C insert(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FlFeatureBean} beans into the database as transaction.
-     *
-     * @param beans the {@link {@link FlFeatureBean}} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlFeatureBean[])
-     */
-    //16-3
-    public FlFeatureBean[] insertAsTransaction(FlFeatureBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlFeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    public <C extends Collection<FlFeatureBean>> C insertAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FlFeatureBean} bean into the database.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     */
-    //17
-    public FlFeatureBean[] update(FlFeatureBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlFeatureBean} bean into the database.
-     *
-     * @param beans the {@link FlFeatureBean} beans table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     */
-    //17-2
-    public <C extends Collection<FlFeatureBean>> C update(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FlFeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFeatureBean} beans table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlFeatureBean[])
-     */
-    //17-3
-    public FlFeatureBean[] updateAsTransaction(FlFeatureBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlFeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFeatureBean} beans table to be inserted
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    public <C extends Collection<FlFeatureBean>> C updateAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
     
     //_____________________________________________________________________
     //
@@ -915,7 +807,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //18
-    public FlFeatureBean loadUniqueUsingTemplate(FlFeatureBeanBase bean) throws DAOException
+    public FlFeatureBean loadUniqueUsingTemplate(FlFeatureBean bean) throws DAOException
     {
          FlFeatureBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -935,7 +827,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //19
-    public FlFeatureBean[] loadUsingTemplate(FlFeatureBeanBase bean) throws DAOException
+    public FlFeatureBean[] loadUsingTemplate(FlFeatureBean bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -948,7 +840,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FlFeatureBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FlFeatureBean bean,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -961,7 +853,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //19-2
-    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBeanBase bean) throws DAOException
+    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBean bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -976,7 +868,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20
-    public FlFeatureBean[] loadUsingTemplate(FlFeatureBeanBase bean, int startRow, int numRows) throws DAOException
+    public FlFeatureBean[] loadUsingTemplate(FlFeatureBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -991,7 +883,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FlFeatureBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FlFeatureBean bean, int startRow, int numRows,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1005,7 +897,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20-2
-    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1021,7 +913,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20-3
-    public FlFeatureBean[] loadUsingTemplate(FlFeatureBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FlFeatureBean[] loadUsingTemplate(FlFeatureBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (FlFeatureBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlFeatureBean[0]);
     }
@@ -1037,10 +929,10 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20-4
-    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
         ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
         return (List<FlFeatureBean>) action.getList();
         
     }
@@ -1056,9 +948,8 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FlFeatureBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FlFeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
     {
-        FlFeatureBean bean=FlFeatureBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
         String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
@@ -1089,9 +980,8 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FlFeatureBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FlFeatureBean bean) throws DAOException
     {
-        FlFeatureBean bean=FlFeatureBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("DELETE FROM fl_feature ");
@@ -1099,7 +989,6 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
 
         try
         {
-            this.beforeDelete(bean); // listener callback
             if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
             {
                 sql.append(" WHERE ").append(sqlWhere);
@@ -1117,8 +1006,6 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -1237,7 +1124,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FlFeatureBeanBase bean) throws DAOException
+    public int countUsingTemplate(FlFeatureBean bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -1252,7 +1139,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlFeatureBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FlFeatureBean bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1268,9 +1155,8 @@ public class FlFeatureManager implements TableManager<FlFeatureBeanBase,FlFeatur
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlFeatureBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlFeatureBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
-        FlFeatureBean bean=FlFeatureBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_feature");

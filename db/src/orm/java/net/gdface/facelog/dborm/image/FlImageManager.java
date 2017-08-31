@@ -37,7 +37,7 @@ import net.gdface.facelog.dborm.image.FlStoreManager;
  * Handles database calls (save, load, count, etc...) for the fl_image table.
  * @author sql2java
  */
-public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
+public class FlImageManager implements TableManager<FlImageBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -259,7 +259,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.2
-    public FlImageBean loadByPrimaryKey(FlImageBeanBase bean) throws DAOException
+    public FlImageBean loadByPrimaryKey(FlImageBean bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getMd5());
     }
@@ -287,7 +287,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      */
     //1.4
     @Override
-    public boolean existsPrimaryKey(FlImageBeanBase bean) throws DAOException
+    public boolean existsPrimaryKey(FlImageBean bean) throws DAOException
     {
         return null!=loadByPrimaryKey(bean);
     }
@@ -346,7 +346,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @see {@link #deleteByPrimaryKey(String md5)}
      */
     //2.1
-    public int deleteByPrimaryKey(FlImageBeanBase bean) throws DAOException
+    public int deleteByPrimaryKey(FlImageBean bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getMd5());
     }
@@ -1650,114 +1650,6 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
                 return save(beans);
             }});
     }
-    /**
-     * Insert an array of {@link FlImageBean} bean into the database.
-     *
-     * @param beans the {@link FlImageBean} bean table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     */
-    //16
-    public FlImageBean[] insert(FlImageBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlImageBean} bean into the database.
-     *
-     * @param beans the {@link FlImageBean} bean table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     */
-    //16-2
-    public <C extends Collection<FlImageBean>> C insert(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FlImageBean} beans into the database as transaction.
-     *
-     * @param beans the {@link {@link FlImageBean}} bean table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlImageBean[])
-     */
-    //16-3
-    public FlImageBean[] insertAsTransaction(FlImageBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlImageBean} bean table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    public <C extends Collection<FlImageBean>> C insertAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FlImageBean} bean into the database.
-     *
-     * @param beans the {@link FlImageBean} bean table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     */
-    //17
-    public FlImageBean[] update(FlImageBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlImageBean} bean into the database.
-     *
-     * @param beans the {@link FlImageBean} beans table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     */
-    //17-2
-    public <C extends Collection<FlImageBean>> C update(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FlImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlImageBean} beans table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlImageBean[])
-     */
-    //17-3
-    public FlImageBean[] updateAsTransaction(FlImageBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlImageBean} beans table to be inserted
-     * @return the saved {@link FlImageBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    public <C extends Collection<FlImageBean>> C updateAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
     
     //_____________________________________________________________________
     //
@@ -1771,7 +1663,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //18
-    public FlImageBean loadUniqueUsingTemplate(FlImageBeanBase bean) throws DAOException
+    public FlImageBean loadUniqueUsingTemplate(FlImageBean bean) throws DAOException
     {
          FlImageBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -1791,7 +1683,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //19
-    public FlImageBean[] loadUsingTemplate(FlImageBeanBase bean) throws DAOException
+    public FlImageBean[] loadUsingTemplate(FlImageBean bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1804,7 +1696,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FlImageBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FlImageBean bean,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1817,7 +1709,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //19-2
-    public List<FlImageBean> loadUsingTemplateAsList(FlImageBeanBase bean) throws DAOException
+    public List<FlImageBean> loadUsingTemplateAsList(FlImageBean bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1832,7 +1724,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20
-    public FlImageBean[] loadUsingTemplate(FlImageBeanBase bean, int startRow, int numRows) throws DAOException
+    public FlImageBean[] loadUsingTemplate(FlImageBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1847,7 +1739,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FlImageBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FlImageBean bean, int startRow, int numRows,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1861,7 +1753,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20-2
-    public List<FlImageBean> loadUsingTemplateAsList(FlImageBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FlImageBean> loadUsingTemplateAsList(FlImageBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1877,7 +1769,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20-3
-    public FlImageBean[] loadUsingTemplate(FlImageBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FlImageBean[] loadUsingTemplate(FlImageBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (FlImageBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlImageBean[0]);
     }
@@ -1893,10 +1785,10 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20-4
-    public List<FlImageBean> loadUsingTemplateAsList(FlImageBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FlImageBean> loadUsingTemplateAsList(FlImageBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
         ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
         return (List<FlImageBean>) action.getList();
         
     }
@@ -1912,9 +1804,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FlImageBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FlImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
     {
-        FlImageBean bean=FlImageBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
         String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
@@ -1945,9 +1836,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FlImageBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FlImageBean bean) throws DAOException
     {
-        FlImageBean bean=FlImageBeanBase.toFullBean(beanBase);
         if(bean.isMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
@@ -1958,7 +1848,6 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
 
         try
         {
-            this.beforeDelete(bean); // listener callback
             if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
             {
                 sql.append(" WHERE ").append(sqlWhere);
@@ -1976,8 +1865,6 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -2180,7 +2067,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FlImageBeanBase bean) throws DAOException
+    public int countUsingTemplate(FlImageBean bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -2195,7 +2082,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlImageBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FlImageBean bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -2211,9 +2098,8 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlImageBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlImageBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
-        FlImageBean bean=FlImageBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_image");

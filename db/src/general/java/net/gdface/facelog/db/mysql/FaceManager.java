@@ -1324,7 +1324,6 @@ public class FaceManager implements TableManager<FaceBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public FaceBean insert(FaceBean bean)
     {
         try{
@@ -1343,7 +1342,6 @@ public class FaceManager implements TableManager<FaceBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public FaceBean update(FaceBean bean)
     {
         try{
@@ -1422,114 +1420,6 @@ public class FaceManager implements TableManager<FaceBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link FaceBean} bean into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     */
-    //16
-    @Override
-    public FaceBean[] insert(FaceBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FaceBean} bean into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<FaceBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FaceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     * @see #saveAsTransaction(FaceBean[])
-     */
-    //16-3
-    @Override
-    public FaceBean[] insertAsTransaction(FaceBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FaceBean} bean as transaction into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<FaceBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FaceBean} bean into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     */
-    //17
-    @Override
-    public FaceBean[] update(FaceBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FaceBean} bean into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<FaceBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FaceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FaceBean} beans table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     * @see #saveAsTransaction(FaceBean[])
-     */
-    //17-3
-    @Override
-    public FaceBean[] updateAsTransaction(FaceBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FaceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FaceBean} bean table to be inserted
-     * @return the saved {@link FaceBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<FaceBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

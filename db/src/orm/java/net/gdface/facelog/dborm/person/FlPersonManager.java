@@ -35,7 +35,7 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  * Handles database calls (save, load, count, etc...) for the fl_person table.
  * @author sql2java
  */
-public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBean>
+public class FlPersonManager implements TableManager<FlPersonBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -293,7 +293,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.2
-    public FlPersonBean loadByPrimaryKey(FlPersonBeanBase bean) throws DAOException
+    public FlPersonBean loadByPrimaryKey(FlPersonBean bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getId());
     }
@@ -321,7 +321,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      */
     //1.4
     @Override
-    public boolean existsPrimaryKey(FlPersonBeanBase bean) throws DAOException
+    public boolean existsPrimaryKey(FlPersonBean bean) throws DAOException
     {
         return null!=loadByPrimaryKey(bean);
     }
@@ -380,7 +380,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
-    public int deleteByPrimaryKey(FlPersonBeanBase bean) throws DAOException
+    public int deleteByPrimaryKey(FlPersonBean bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
@@ -1667,114 +1667,6 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
                 return save(beans);
             }});
     }
-    /**
-     * Insert an array of {@link FlPersonBean} bean into the database.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     */
-    //16
-    public FlPersonBean[] insert(FlPersonBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlPersonBean} bean into the database.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     */
-    //16-2
-    public <C extends Collection<FlPersonBean>> C insert(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FlPersonBean} beans into the database as transaction.
-     *
-     * @param beans the {@link {@link FlPersonBean}} bean table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlPersonBean[])
-     */
-    //16-3
-    public FlPersonBean[] insertAsTransaction(FlPersonBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlPersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    public <C extends Collection<FlPersonBean>> C insertAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FlPersonBean} bean into the database.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     */
-    //17
-    public FlPersonBean[] update(FlPersonBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlPersonBean} bean into the database.
-     *
-     * @param beans the {@link FlPersonBean} beans table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     */
-    //17-2
-    public <C extends Collection<FlPersonBean>> C update(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FlPersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlPersonBean} beans table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlPersonBean[])
-     */
-    //17-3
-    public FlPersonBean[] updateAsTransaction(FlPersonBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlPersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlPersonBean} beans table to be inserted
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    public <C extends Collection<FlPersonBean>> C updateAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
     
     //_____________________________________________________________________
     //
@@ -1788,7 +1680,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //18
-    public FlPersonBean loadUniqueUsingTemplate(FlPersonBeanBase bean) throws DAOException
+    public FlPersonBean loadUniqueUsingTemplate(FlPersonBean bean) throws DAOException
     {
          FlPersonBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -1808,7 +1700,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //19
-    public FlPersonBean[] loadUsingTemplate(FlPersonBeanBase bean) throws DAOException
+    public FlPersonBean[] loadUsingTemplate(FlPersonBean bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1821,7 +1713,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FlPersonBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FlPersonBean bean,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1834,7 +1726,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //19-2
-    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBeanBase bean) throws DAOException
+    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBean bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1849,7 +1741,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20
-    public FlPersonBean[] loadUsingTemplate(FlPersonBeanBase bean, int startRow, int numRows) throws DAOException
+    public FlPersonBean[] loadUsingTemplate(FlPersonBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1864,7 +1756,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FlPersonBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FlPersonBean bean, int startRow, int numRows,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1878,7 +1770,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20-2
-    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1894,7 +1786,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20-3
-    public FlPersonBean[] loadUsingTemplate(FlPersonBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FlPersonBean[] loadUsingTemplate(FlPersonBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (FlPersonBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlPersonBean[0]);
     }
@@ -1910,10 +1802,10 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20-4
-    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
         ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
         return (List<FlPersonBean>) action.getList();
         
     }
@@ -1929,9 +1821,8 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FlPersonBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FlPersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
     {
-        FlPersonBean bean=FlPersonBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
         String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
@@ -1962,9 +1853,8 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FlPersonBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FlPersonBean bean) throws DAOException
     {
-        FlPersonBean bean=FlPersonBeanBase.toFullBean(beanBase);
         if(bean.isIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
@@ -1975,7 +1865,6 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
 
         try
         {
-            this.beforeDelete(bean); // listener callback
             if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
             {
                 sql.append(" WHERE ").append(sqlWhere);
@@ -1993,8 +1882,6 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -2245,7 +2132,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FlPersonBeanBase bean) throws DAOException
+    public int countUsingTemplate(FlPersonBean bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -2260,7 +2147,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlPersonBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FlPersonBean bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -2276,9 +2163,8 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlPersonBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlPersonBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
-        FlPersonBean bean=FlPersonBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_person");

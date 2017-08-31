@@ -1200,7 +1200,6 @@ public class PersonManager implements TableManager<PersonBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public PersonBean insert(PersonBean bean)
     {
         try{
@@ -1219,7 +1218,6 @@ public class PersonManager implements TableManager<PersonBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public PersonBean update(PersonBean bean)
     {
         try{
@@ -1298,114 +1296,6 @@ public class PersonManager implements TableManager<PersonBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link PersonBean} bean into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     */
-    //16
-    @Override
-    public PersonBean[] insert(PersonBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link PersonBean} bean into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<PersonBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link PersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     * @see #saveAsTransaction(PersonBean[])
-     */
-    //16-3
-    @Override
-    public PersonBean[] insertAsTransaction(PersonBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link PersonBean} bean as transaction into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<PersonBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link PersonBean} bean into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     */
-    //17
-    @Override
-    public PersonBean[] update(PersonBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link PersonBean} bean into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<PersonBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link PersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link PersonBean} beans table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     * @see #saveAsTransaction(PersonBean[])
-     */
-    //17-3
-    @Override
-    public PersonBean[] updateAsTransaction(PersonBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link PersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link PersonBean} bean table to be inserted
-     * @return the saved {@link PersonBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<PersonBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

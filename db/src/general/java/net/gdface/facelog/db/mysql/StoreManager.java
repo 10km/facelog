@@ -1021,7 +1021,6 @@ public class StoreManager implements TableManager<StoreBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public StoreBean insert(StoreBean bean)
     {
         try{
@@ -1040,7 +1039,6 @@ public class StoreManager implements TableManager<StoreBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public StoreBean update(StoreBean bean)
     {
         try{
@@ -1119,114 +1117,6 @@ public class StoreManager implements TableManager<StoreBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link StoreBean} bean into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     */
-    //16
-    @Override
-    public StoreBean[] insert(StoreBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link StoreBean} bean into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<StoreBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link StoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     * @see #saveAsTransaction(StoreBean[])
-     */
-    //16-3
-    @Override
-    public StoreBean[] insertAsTransaction(StoreBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link StoreBean} bean as transaction into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<StoreBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link StoreBean} bean into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     */
-    //17
-    @Override
-    public StoreBean[] update(StoreBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link StoreBean} bean into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<StoreBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link StoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link StoreBean} beans table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     * @see #saveAsTransaction(StoreBean[])
-     */
-    //17-3
-    @Override
-    public StoreBean[] updateAsTransaction(StoreBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link StoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link StoreBean} bean table to be inserted
-     * @return the saved {@link StoreBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<StoreBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

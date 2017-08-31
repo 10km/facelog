@@ -33,7 +33,7 @@ import net.gdface.facelog.dborm.log.FlLogManager;
  * Handles database calls (save, load, count, etc...) for the fl_device table.
  * @author sql2java
  */
-public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBean>
+public class FlDeviceManager implements TableManager<FlDeviceBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -246,7 +246,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.2
-    public FlDeviceBean loadByPrimaryKey(FlDeviceBeanBase bean) throws DAOException
+    public FlDeviceBean loadByPrimaryKey(FlDeviceBean bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getId());
     }
@@ -274,7 +274,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      */
     //1.4
     @Override
-    public boolean existsPrimaryKey(FlDeviceBeanBase bean) throws DAOException
+    public boolean existsPrimaryKey(FlDeviceBean bean) throws DAOException
     {
         return null!=loadByPrimaryKey(bean);
     }
@@ -333,7 +333,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
-    public int deleteByPrimaryKey(FlDeviceBeanBase bean) throws DAOException
+    public int deleteByPrimaryKey(FlDeviceBean bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
@@ -1400,114 +1400,6 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
                 return save(beans);
             }});
     }
-    /**
-     * Insert an array of {@link FlDeviceBean} bean into the database.
-     *
-     * @param beans the {@link FlDeviceBean} bean table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     */
-    //16
-    public FlDeviceBean[] insert(FlDeviceBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlDeviceBean} bean into the database.
-     *
-     * @param beans the {@link FlDeviceBean} bean table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     */
-    //16-2
-    public <C extends Collection<FlDeviceBean>> C insert(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FlDeviceBean} beans into the database as transaction.
-     *
-     * @param beans the {@link {@link FlDeviceBean}} bean table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlDeviceBean[])
-     */
-    //16-3
-    public FlDeviceBean[] insertAsTransaction(FlDeviceBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlDeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlDeviceBean} bean table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    public <C extends Collection<FlDeviceBean>> C insertAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FlDeviceBean} bean into the database.
-     *
-     * @param beans the {@link FlDeviceBean} bean table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     */
-    //17
-    public FlDeviceBean[] update(FlDeviceBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlDeviceBean} bean into the database.
-     *
-     * @param beans the {@link FlDeviceBean} beans table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     */
-    //17-2
-    public <C extends Collection<FlDeviceBean>> C update(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FlDeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlDeviceBean} beans table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlDeviceBean[])
-     */
-    //17-3
-    public FlDeviceBean[] updateAsTransaction(FlDeviceBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlDeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlDeviceBean} beans table to be inserted
-     * @return the saved {@link FlDeviceBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    public <C extends Collection<FlDeviceBean>> C updateAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
     
     //_____________________________________________________________________
     //
@@ -1521,7 +1413,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //18
-    public FlDeviceBean loadUniqueUsingTemplate(FlDeviceBeanBase bean) throws DAOException
+    public FlDeviceBean loadUniqueUsingTemplate(FlDeviceBean bean) throws DAOException
     {
          FlDeviceBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -1541,7 +1433,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //19
-    public FlDeviceBean[] loadUsingTemplate(FlDeviceBeanBase bean) throws DAOException
+    public FlDeviceBean[] loadUsingTemplate(FlDeviceBean bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1554,7 +1446,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FlDeviceBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FlDeviceBean bean,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1567,7 +1459,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //19-2
-    public List<FlDeviceBean> loadUsingTemplateAsList(FlDeviceBeanBase bean) throws DAOException
+    public List<FlDeviceBean> loadUsingTemplateAsList(FlDeviceBean bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1582,7 +1474,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20
-    public FlDeviceBean[] loadUsingTemplate(FlDeviceBeanBase bean, int startRow, int numRows) throws DAOException
+    public FlDeviceBean[] loadUsingTemplate(FlDeviceBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1597,7 +1489,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FlDeviceBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FlDeviceBean bean, int startRow, int numRows,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1611,7 +1503,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20-2
-    public List<FlDeviceBean> loadUsingTemplateAsList(FlDeviceBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FlDeviceBean> loadUsingTemplateAsList(FlDeviceBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1627,7 +1519,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20-3
-    public FlDeviceBean[] loadUsingTemplate(FlDeviceBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FlDeviceBean[] loadUsingTemplate(FlDeviceBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (FlDeviceBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlDeviceBean[0]);
     }
@@ -1643,10 +1535,10 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20-4
-    public List<FlDeviceBean> loadUsingTemplateAsList(FlDeviceBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FlDeviceBean> loadUsingTemplateAsList(FlDeviceBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
         ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
         return (List<FlDeviceBean>) action.getList();
         
     }
@@ -1662,9 +1554,8 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FlDeviceBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FlDeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
     {
-        FlDeviceBean bean=FlDeviceBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
         String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
@@ -1695,9 +1586,8 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FlDeviceBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FlDeviceBean bean) throws DAOException
     {
-        FlDeviceBean bean=FlDeviceBeanBase.toFullBean(beanBase);
         if(bean.isIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
@@ -1708,7 +1598,6 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
 
         try
         {
-            this.beforeDelete(bean); // listener callback
             if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
             {
                 sql.append(" WHERE ").append(sqlWhere);
@@ -1726,8 +1615,6 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -1846,7 +1733,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FlDeviceBeanBase bean) throws DAOException
+    public int countUsingTemplate(FlDeviceBean bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -1861,7 +1748,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlDeviceBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FlDeviceBean bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1877,9 +1764,8 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlDeviceBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlDeviceBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
-        FlDeviceBean bean=FlDeviceBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_device");

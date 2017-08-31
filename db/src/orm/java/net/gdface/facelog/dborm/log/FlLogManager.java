@@ -35,7 +35,7 @@ import net.gdface.facelog.dborm.person.FlPersonManager;
  * Handles database calls (save, load, count, etc...) for the fl_log table.
  * @author sql2java
  */
-public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
+public class FlLogManager implements TableManager<FlLogBean>
 {
 
     /* set =QUERY for loadUsingTemplate */
@@ -257,7 +257,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.2
-    public FlLogBean loadByPrimaryKey(FlLogBeanBase bean) throws DAOException
+    public FlLogBean loadByPrimaryKey(FlLogBean bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getId());
     }
@@ -285,7 +285,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      */
     //1.4
     @Override
-    public boolean existsPrimaryKey(FlLogBeanBase bean) throws DAOException
+    public boolean existsPrimaryKey(FlLogBean bean) throws DAOException
     {
         return null!=loadByPrimaryKey(bean);
     }
@@ -344,7 +344,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
     //2.1
-    public int deleteByPrimaryKey(FlLogBeanBase bean) throws DAOException
+    public int deleteByPrimaryKey(FlLogBean bean) throws DAOException
     {
         return bean==null?0:deleteByPrimaryKey( bean.getId());
     }
@@ -1344,114 +1344,6 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
                 return save(beans);
             }});
     }
-    /**
-     * Insert an array of {@link FlLogBean} bean into the database.
-     *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     */
-    //16
-    public FlLogBean[] insert(FlLogBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlLogBean} bean into the database.
-     *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     */
-    //16-2
-    public <C extends Collection<FlLogBean>> C insert(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FlLogBean} beans into the database as transaction.
-     *
-     * @param beans the {@link {@link FlLogBean}} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlLogBean[])
-     */
-    //16-3
-    public FlLogBean[] insertAsTransaction(FlLogBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FlLogBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    public <C extends Collection<FlLogBean>> C insertAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FlLogBean} bean into the database.
-     *
-     * @param beans the {@link FlLogBean} bean table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     */
-    //17
-    public FlLogBean[] update(FlLogBean[] beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlLogBean} bean into the database.
-     *
-     * @param beans the {@link FlLogBean} beans table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     */
-    //17-2
-    public <C extends Collection<FlLogBean>> C update(C beans) throws DAOException
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FlLogBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlLogBean} beans table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(FlLogBean[])
-     */
-    //17-3
-    public FlLogBean[] updateAsTransaction(FlLogBean[] beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FlLogBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlLogBean} beans table to be inserted
-     * @return the saved {@link FlLogBean} beans.
-     * @throws DAOException
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    public <C extends Collection<FlLogBean>> C updateAsTransaction(C beans) throws DAOException
-    {
-        return this.saveAsTransaction(beans);
-    }
     
     //_____________________________________________________________________
     //
@@ -1465,7 +1357,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //18
-    public FlLogBean loadUniqueUsingTemplate(FlLogBeanBase bean) throws DAOException
+    public FlLogBean loadUniqueUsingTemplate(FlLogBean bean) throws DAOException
     {
          FlLogBean[] beans = this.loadUsingTemplate(bean);
          if (beans.length == 0) {
@@ -1485,7 +1377,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //19
-    public FlLogBean[] loadUsingTemplate(FlLogBeanBase bean) throws DAOException
+    public FlLogBean[] loadUsingTemplate(FlLogBean bean) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1);
     }
@@ -1498,7 +1390,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //19-1
-    public int loadUsingTemplate(FlLogBeanBase bean,Action action) throws DAOException
+    public int loadUsingTemplate(FlLogBean bean,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, 1, -1,action);
     }
@@ -1511,7 +1403,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //19-2
-    public List<FlLogBean> loadUsingTemplateAsList(FlLogBeanBase bean) throws DAOException
+    public List<FlLogBean> loadUsingTemplateAsList(FlLogBean bean) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, 1, -1);
     }
@@ -1526,7 +1418,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20
-    public FlLogBean[] loadUsingTemplate(FlLogBeanBase bean, int startRow, int numRows) throws DAOException
+    public FlLogBean[] loadUsingTemplate(FlLogBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1541,7 +1433,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20-1
-    public int loadUsingTemplate(FlLogBeanBase bean, int startRow, int numRows,Action action) throws DAOException
+    public int loadUsingTemplate(FlLogBean bean, int startRow, int numRows,Action action) throws DAOException
     {
         return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
     }
@@ -1555,7 +1447,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20-2
-    public List<FlLogBean> loadUsingTemplateAsList(FlLogBeanBase bean, int startRow, int numRows) throws DAOException
+    public List<FlLogBean> loadUsingTemplateAsList(FlLogBean bean, int startRow, int numRows) throws DAOException
     {
         return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1571,7 +1463,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20-3
-    public FlLogBean[] loadUsingTemplate(FlLogBeanBase bean, int startRow, int numRows, int searchType) throws DAOException
+    public FlLogBean[] loadUsingTemplate(FlLogBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
     	return (FlLogBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlLogBean[0]);
     }
@@ -1587,10 +1479,10 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20-4
-    public List<FlLogBean> loadUsingTemplateAsList(FlLogBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public List<FlLogBean> loadUsingTemplateAsList(FlLogBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
         ListAction action = new ListAction();
-        loadUsingTemplate(beanBase,null,startRow,numRows,searchType, action);
+        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
         return (List<FlLogBean>) action.getList();
         
     }
@@ -1606,9 +1498,8 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20-5
-    public int loadUsingTemplate(FlLogBeanBase beanBase, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    public int loadUsingTemplate(FlLogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
     {
-        FlLogBean bean=FlLogBeanBase.toFullBean(beanBase);
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
         String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
@@ -1639,9 +1530,8 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //21
-    public int deleteUsingTemplate(FlLogBeanBase beanBase) throws DAOException
+    public int deleteUsingTemplate(FlLogBean bean) throws DAOException
     {
-        FlLogBean bean=FlLogBeanBase.toFullBean(beanBase);
         if(bean.isIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
@@ -1652,7 +1542,6 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
 
         try
         {
-            this.beforeDelete(bean); // listener callback
             if (this.fillWhere(sqlWhere, bean, SEARCH_EXACT) > 0)
             {
                 sql.append(" WHERE ").append(sqlWhere);
@@ -1670,8 +1559,6 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             int _rows = ps.executeUpdate();
-            if(_rows>0)
-                this.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -1952,7 +1839,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //27
-    public int countUsingTemplate(FlLogBeanBase bean) throws DAOException
+    public int countUsingTemplate(FlLogBean bean) throws DAOException
     {
         return this.countUsingTemplate(bean, -1, -1);
     }
@@ -1967,7 +1854,7 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlLogBeanBase bean, int startRow, int numRows) throws DAOException
+    public int countUsingTemplate(FlLogBean bean, int startRow, int numRows) throws DAOException
     {
         return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
     }
@@ -1983,9 +1870,8 @@ public class FlLogManager implements TableManager<FlLogBeanBase,FlLogBean>
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlLogBeanBase beanBase, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlLogBean bean, int startRow, int numRows, int searchType) throws DAOException
     {
-        FlLogBean bean=FlLogBeanBase.toFullBean(beanBase);
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_log");

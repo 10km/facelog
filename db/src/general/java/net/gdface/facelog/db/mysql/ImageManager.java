@@ -1253,7 +1253,6 @@ public class ImageManager implements TableManager<ImageBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public ImageBean insert(ImageBean bean)
     {
         try{
@@ -1272,7 +1271,6 @@ public class ImageManager implements TableManager<ImageBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public ImageBean update(ImageBean bean)
     {
         try{
@@ -1351,114 +1349,6 @@ public class ImageManager implements TableManager<ImageBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link ImageBean} bean into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     */
-    //16
-    @Override
-    public ImageBean[] insert(ImageBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link ImageBean} bean into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<ImageBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link ImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     * @see #saveAsTransaction(ImageBean[])
-     */
-    //16-3
-    @Override
-    public ImageBean[] insertAsTransaction(ImageBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link ImageBean} bean as transaction into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<ImageBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link ImageBean} bean into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     */
-    //17
-    @Override
-    public ImageBean[] update(ImageBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link ImageBean} bean into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<ImageBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link ImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link ImageBean} beans table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     * @see #saveAsTransaction(ImageBean[])
-     */
-    //17-3
-    @Override
-    public ImageBean[] updateAsTransaction(ImageBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link ImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link ImageBean} bean table to be inserted
-     * @return the saved {@link ImageBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<ImageBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

@@ -1059,7 +1059,6 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public DeviceBean insert(DeviceBean bean)
     {
         try{
@@ -1078,7 +1077,6 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public DeviceBean update(DeviceBean bean)
     {
         try{
@@ -1157,114 +1155,6 @@ public class DeviceManager implements TableManager<DeviceBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link DeviceBean} bean into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     */
-    //16
-    @Override
-    public DeviceBean[] insert(DeviceBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link DeviceBean} bean into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<DeviceBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link DeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     * @see #saveAsTransaction(DeviceBean[])
-     */
-    //16-3
-    @Override
-    public DeviceBean[] insertAsTransaction(DeviceBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link DeviceBean} bean as transaction into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<DeviceBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link DeviceBean} bean into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     */
-    //17
-    @Override
-    public DeviceBean[] update(DeviceBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link DeviceBean} bean into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<DeviceBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link DeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link DeviceBean} beans table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     * @see #saveAsTransaction(DeviceBean[])
-     */
-    //17-3
-    @Override
-    public DeviceBean[] updateAsTransaction(DeviceBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link DeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link DeviceBean} bean table to be inserted
-     * @return the saved {@link DeviceBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<DeviceBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

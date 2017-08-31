@@ -537,7 +537,6 @@ public class FeatureManager implements TableManager<FeatureBean>
      * @return the inserted bean or null if bean is null
      */
     //13
-    @Override
     public FeatureBean insert(FeatureBean bean)
     {
         try{
@@ -556,7 +555,6 @@ public class FeatureManager implements TableManager<FeatureBean>
      * @return the updated bean or null if bean is null
      */
     //14
-    @Override
     public FeatureBean update(FeatureBean bean)
     {
         try{
@@ -635,114 +633,6 @@ public class FeatureManager implements TableManager<FeatureBean>
             public C call() throws Exception {
                 return save(beans);
             }});
-    }
-    /**
-     * Insert an array of {@link FeatureBean} bean into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     */
-    //16
-    @Override
-    public FeatureBean[] insert(FeatureBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FeatureBean} bean into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     */
-    //16-2
-    @Override
-    public <C extends Collection<FeatureBean>> C insert(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Insert an array of {@link FeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     * @see #saveAsTransaction(FeatureBean[])
-     */
-    //16-3
-    @Override
-    public FeatureBean[] insertAsTransaction(FeatureBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Insert a collection of {@link FeatureBean} bean as transaction into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //16-4
-    @Override
-    public <C extends Collection<FeatureBean>> C insertAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-
-    /**
-     * Update an array of {@link FeatureBean} bean into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     */
-    //17
-    @Override
-    public FeatureBean[] update(FeatureBean[] beans)
-    {
-        return this.save(beans);
-    }
-
-    /**
-     * Update a collection of {@link FeatureBean} bean into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     */
-    //17-2
-    @Override
-    public <C extends Collection<FeatureBean>> C update(C beans)
-    {
-        return this.save(beans);
-    }
-    
-    /**
-     * Update an array of {@link FeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FeatureBean} beans table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     * @see #saveAsTransaction(FeatureBean[])
-     */
-    //17-3
-    @Override
-    public FeatureBean[] updateAsTransaction(FeatureBean[] beans)
-    {
-        return this.saveAsTransaction(beans);
-    }
-
-    /**
-     * Update a collection of {@link FeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FeatureBean} bean table to be inserted
-     * @return the saved {@link FeatureBean} beans.
-     * @see #saveAsTransaction(List)
-     */
-    //17-4
-    @Override
-    public <C extends Collection<FeatureBean>> C updateAsTransaction(C beans)
-    {
-        return this.saveAsTransaction(beans);
     }
     
     //_____________________________________________________________________

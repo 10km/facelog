@@ -57,16 +57,6 @@ public interface TableManager<B extends BaseBean> {
 
     public abstract String getTableName();
 
-    public abstract B insert(B bean);
-
-    public abstract B[] insert(B[] beans);
-
-    public abstract <C extends Collection<B>> C insert(C beans);
-
-    public abstract B[] insertAsTransaction(B[] beans);
-
-    public abstract <C extends Collection<B>> C insertAsTransaction(C beans);
-
     public abstract B[] loadAll();
     
     public abstract int loadAll(Action<B> action);
@@ -138,16 +128,6 @@ public interface TableManager<B extends BaseBean> {
     public abstract B[] saveAsTransaction(B[] beans);
 
     public abstract <C extends Collection<B>> C save(C beans);
-
-    public abstract B update(B bean);
-
-    public abstract B[] update(B[] beans);
-
-    public abstract <C extends Collection<B>> C update(C beans);
-    
-    public abstract B[] updateAsTransaction(B[] beans);
-
-    public abstract <C extends Collection<B>> C updateAsTransaction(C beans);
 
     public abstract B[] loadBySql(String sql, Object[] argList, int[] fieldList);
     
