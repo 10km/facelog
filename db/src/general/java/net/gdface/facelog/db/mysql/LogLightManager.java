@@ -174,15 +174,29 @@ public class LogLightManager implements TableManager<LogLightBean>
     {
         throw new UnsupportedOperationException();
     }
-    
+    @Override
+    public LogLightBean loadByPrimaryKey(Object ...keys)
+    {
+        throw new UnsupportedOperationException();
+    }    
     @Override
     public boolean existsPrimaryKey(LogLightBean bean)
+    {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public boolean existsPrimaryKey(Object ...keys)
     {
         throw new UnsupportedOperationException();
     }
     
     @Override
     public int deleteByPrimaryKey(LogLightBean bean)
+    {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public int deleteByPrimaryKey(Object ...keys)
     {
         throw new UnsupportedOperationException();
     }

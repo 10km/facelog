@@ -205,12 +205,13 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
     }
 
+
     /**
      * Loads a {@link DeviceBean} from the fl_device using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link DeviceBean} with primary key fields
-     * @return a unique {@link DeviceBean} or {@code null} if not found
+     * @return a unique {@link DeviceBean} or {@code null} if not found or bean is null
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.2
@@ -225,18 +226,47 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
     }
     /**
+     * Loads a {@link DeviceBean} from the fl_device using primary key fields.
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param keys primary keys value:<br> 
+     *             PK# 1:Integer     
+     * @return a unique {@link DeviceBean} or {@code null} if not found
+     * @see {@link #loadByPrimaryKey(Integer id)}
+     */
+    //1.3
+    public DeviceBean loadByPrimaryKey(Object ...keys){
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        return loadByPrimaryKey((Integer)keys[0]);
+    }
+    
+    /**
      * Returns true if this fl_device contains row with primary key fields.
      * @author guyadong
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey(Integer id)
      */
-    //1.3
+    //1.4
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
 
     }
-
+    /**
+     * Returns true if this fl_device contains row with primary key fields.
+     * @param keys primary keys value:<br>
+     *             PK# 1:Integer     
+     * @author guyadong
+     * @see #loadByPrimaryKey(Object...)
+     */
+    //1.5
+    public boolean existsPrimaryKey(Object ...keys)
+    {
+        return null!=loadByPrimaryKey(keys);
+    }
     /**
      * Returns true if this fl_device contains row specified by primary key fields of {@link DeviceBean}.<br>
      * when you don't know which is primary key of table,you can use the method.
@@ -245,7 +275,7 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return 
      * @see {@link #loadByPrimaryKey(DeviceBean bean)}
      */
-    //1.4
+    //1.6
     @Override
     public boolean existsPrimaryKey(DeviceBean bean)
     {
@@ -254,7 +284,8 @@ public class DeviceManager implements TableManager<DeviceBean>
     }
     
     /**
-     * Delete row according to its primary keys.
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -271,6 +302,23 @@ public class DeviceManager implements TableManager<DeviceBean>
             throw new WrapDAOException(e);
         }
     }
+
+    /**
+     * Delete row according to its primary keys.
+     *
+     * @param keys primary keys value:<br> 
+     *             PK# 1:Integer     
+     * @return the number of deleted rows
+     * @see {@link #deleteByPrimaryKey(Integer id)}
+     */   
+    //2.1
+    public int deleteByPrimaryKey(Object ...keys){
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        return deleteByPrimaryKey((Integer)keys[0]);
+    }
     /**
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
@@ -279,7 +327,7 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
-    //2.1
+    //2.2
     @Override
     public int deleteByPrimaryKey(DeviceBean bean)
     {
@@ -298,8 +346,8 @@ public class DeviceManager implements TableManager<DeviceBean>
     private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("impFlImagebyDeviceId",new Class<?>[]{ImageBean.class,FlImageBean.class});
-    put("impFlLogbyDeviceId",new Class<?>[]{LogBean.class,FlLogBean.class});
+        put("impFlImagebyDeviceId",new Class<?>[]{ImageBean.class,FlImageBean.class});
+        put("impFlLogbyDeviceId",new Class<?>[]{LogBean.class,FlLogBean.class});
     }} ;
     
     @SuppressWarnings("unchecked")

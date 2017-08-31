@@ -300,15 +300,29 @@ public class FaceLightManager implements TableManager<FaceLightBean>
     {
         throw new UnsupportedOperationException();
     }
-    
+    @Override
+    public FaceLightBean loadByPrimaryKey(Object ...keys)
+    {
+        throw new UnsupportedOperationException();
+    }    
     @Override
     public boolean existsPrimaryKey(FaceLightBean bean)
+    {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public boolean existsPrimaryKey(Object ...keys)
     {
         throw new UnsupportedOperationException();
     }
     
     @Override
     public int deleteByPrimaryKey(FaceLightBean bean)
+    {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public int deleteByPrimaryKey(Object ...keys)
     {
         throw new UnsupportedOperationException();
     }

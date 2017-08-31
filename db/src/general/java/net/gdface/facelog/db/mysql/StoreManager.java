@@ -167,12 +167,13 @@ public class StoreManager implements TableManager<StoreBean>
         }
     }
 
+
     /**
      * Loads a {@link StoreBean} from the fl_store using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link StoreBean} with primary key fields
-     * @return a unique {@link StoreBean} or {@code null} if not found
+     * @return a unique {@link StoreBean} or {@code null} if not found or bean is null
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.2
@@ -187,18 +188,47 @@ public class StoreManager implements TableManager<StoreBean>
         }
     }
     /**
+     * Loads a {@link StoreBean} from the fl_store using primary key fields.
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param keys primary keys value:<br> 
+     *             PK# 1:String     
+     * @return a unique {@link StoreBean} or {@code null} if not found
+     * @see {@link #loadByPrimaryKey(String md5)}
+     */
+    //1.3
+    public StoreBean loadByPrimaryKey(Object ...keys){
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof String))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        return loadByPrimaryKey((String)keys[0]);
+    }
+    
+    /**
      * Returns true if this fl_store contains row with primary key fields.
      * @author guyadong
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey(String md5)
      */
-    //1.3
+    //1.4
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
 
     }
-
+    /**
+     * Returns true if this fl_store contains row with primary key fields.
+     * @param keys primary keys value:<br>
+     *             PK# 1:String     
+     * @author guyadong
+     * @see #loadByPrimaryKey(Object...)
+     */
+    //1.5
+    public boolean existsPrimaryKey(Object ...keys)
+    {
+        return null!=loadByPrimaryKey(keys);
+    }
     /**
      * Returns true if this fl_store contains row specified by primary key fields of {@link StoreBean}.<br>
      * when you don't know which is primary key of table,you can use the method.
@@ -207,7 +237,7 @@ public class StoreManager implements TableManager<StoreBean>
      * @return 
      * @see {@link #loadByPrimaryKey(StoreBean bean)}
      */
-    //1.4
+    //1.6
     @Override
     public boolean existsPrimaryKey(StoreBean bean)
     {
@@ -216,7 +246,8 @@ public class StoreManager implements TableManager<StoreBean>
     }
     
     /**
-     * Delete row according to its primary keys.
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
      *
      * @param md5 String - PK# 1
      * @return the number of deleted rows
@@ -233,6 +264,23 @@ public class StoreManager implements TableManager<StoreBean>
             throw new WrapDAOException(e);
         }
     }
+
+    /**
+     * Delete row according to its primary keys.
+     *
+     * @param keys primary keys value:<br> 
+     *             PK# 1:String     
+     * @return the number of deleted rows
+     * @see {@link #deleteByPrimaryKey(String md5)}
+     */   
+    //2.1
+    public int deleteByPrimaryKey(Object ...keys){
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof String))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+        return deleteByPrimaryKey((String)keys[0]);
+    }
     /**
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
@@ -241,7 +289,7 @@ public class StoreManager implements TableManager<StoreBean>
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(String md5)}
      */
-    //2.1
+    //2.2
     @Override
     public int deleteByPrimaryKey(StoreBean bean)
     {
@@ -260,8 +308,8 @@ public class StoreManager implements TableManager<StoreBean>
     private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("impFlImagebyMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
-    put("impFlImagebyThumbMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
+        put("impFlImagebyMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
+        put("impFlImagebyThumbMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
     }} ;
     
     @SuppressWarnings("unchecked")

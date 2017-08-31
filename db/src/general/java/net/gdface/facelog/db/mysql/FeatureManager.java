@@ -165,15 +165,29 @@ public class FeatureManager implements TableManager<FeatureBean>
     {
         throw new UnsupportedOperationException();
     }
-    
+    @Override
+    public FeatureBean loadByPrimaryKey(Object ...keys)
+    {
+        throw new UnsupportedOperationException();
+    }    
     @Override
     public boolean existsPrimaryKey(FeatureBean bean)
+    {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public boolean existsPrimaryKey(Object ...keys)
     {
         throw new UnsupportedOperationException();
     }
     
     @Override
     public int deleteByPrimaryKey(FeatureBean bean)
+    {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public int deleteByPrimaryKey(Object ...keys)
     {
         throw new UnsupportedOperationException();
     }

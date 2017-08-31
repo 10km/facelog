@@ -598,41 +598,41 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
     	
     }
 
-    private static final Vector<Object[]> converters= new Vector<Object[]>(){
+    private static final Vector<Object[]> CONVERTERS= new Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
         {
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
-            add(new Object[]{LogLightBean.class,net.gdface.facelog.dborm.log.FlLogLightBean.class,_converterLogLightBean});
+            add(new Object[]{DeviceBean.class, net.gdface.facelog.dborm.device.FlDeviceBean.class, _converterDeviceBean});
+            add(new Object[]{FaceBean.class, net.gdface.facelog.dborm.face.FlFaceBean.class, _converterFaceBean});
+            add(new Object[]{ImageBean.class, net.gdface.facelog.dborm.image.FlImageBean.class, _converterImageBean});
+            add(new Object[]{LogBean.class, net.gdface.facelog.dborm.log.FlLogBean.class, _converterLogBean});
+            add(new Object[]{PersonBean.class, net.gdface.facelog.dborm.person.FlPersonBean.class, _converterPersonBean});
+            add(new Object[]{StoreBean.class, net.gdface.facelog.dborm.image.FlStoreBean.class, _converterStoreBean});
+            add(new Object[]{FaceLightBean.class, net.gdface.facelog.dborm.face.FlFaceLightBean.class, _converterFaceLightBean});
+            add(new Object[]{FeatureBean.class, net.gdface.facelog.dborm.face.FlFeatureBean.class, _converterFeatureBean});
+            add(new Object[]{LogLightBean.class, net.gdface.facelog.dborm.log.FlLogLightBean.class, _converterLogLightBean});
         }};
     
     private static final <L,R> int getIndex(Class<L> lClass,Class<R> rClass){
             Vector<Integer>find= new Vector<Integer>();
             if(null!=lClass && null != rClass){
-                for(int i=0;i<converters.size();++i){
-                    Object[] converter = converters.get(i);
+                for(int i=0;i<CONVERTERS.size();++i){
+                    Object[] converter = CONVERTERS.get(i);
                     if(((Class<?>)converter[0]).isAssignableFrom(lClass) 
                             && ((Class<?>)converter[1]).isAssignableFrom(rClass)){
                         return i;
                     }
                 }
             }else if(null != lClass){
-                for(int i=0;i<converters.size();++i){
-                    Object[] converter = converters.get(i);
+                for(int i=0;i<CONVERTERS.size();++i){
+                    Object[] converter = CONVERTERS.get(i);
                     if(((Class<?>)converter[0]).isAssignableFrom(lClass) 
                             ){
                         find.add(i);
                     }
                 }
             }else if(null != rClass){
-                for(int i=0;i<converters.size();++i){
-                    Object[] converter = converters.get(i);
+                for(int i=0;i<CONVERTERS.size();++i){
+                    Object[] converter = CONVERTERS.get(i);
                     if(((Class<?>)converter[1]).isAssignableFrom(rClass)){
                         find.add(i);
                     }
@@ -650,7 +650,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                     String.format("not found converter for (%s,%s)"
                             ,null==lClass?"null":lClass.getSimpleName()
                             ,null==rClass?"null":rClass.getSimpleName()));
-        return (IBeanConverter<L, R>) converters.get(index)[2];
+        return (IBeanConverter<L, R>) CONVERTERS.get(index)[2];
     }
     
     @Override
@@ -660,9 +660,9 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         Object[] c = new Object[]{lClass,rClass,converter};
         int index = getIndex(lClass, rClass);
         if(index<0){
-            converters.add(c);
+            CONVERTERS.add(c);
         }else{
-            converters.set(index, c);
+            CONVERTERS.set(index, c);
         }
     }
     @Override

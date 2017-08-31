@@ -244,12 +244,16 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
      *
      * @param id Integer - PK# 1
-     * @return a unique FlPersonBean or {@code null} if not found
+     * @return a unique FlPersonBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
     //1
+    @SuppressWarnings("unused")
     public FlPersonBean loadByPrimaryKey(Integer id) throws DAOException
     {
+        if(null == id){
+            return null;
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -284,7 +288,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link FlPersonBean} with primary key fields
-     * @return a unique {@link FlPersonBean} or {@code null} if not found
+     * @return a unique {@link FlPersonBean} or {@code null} if not found or bean is null
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
@@ -323,15 +327,20 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     }
     
     /**
-     * Delete row according to its primary keys.
-     *
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
+     * 
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DAOException
      */
     //2
+    @SuppressWarnings("unused")
     public int deleteByPrimaryKey(Integer id) throws DAOException
     {
+        if(null == id){
+            throw new IllegalArgumentException("primary keys must no be null ");
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -1385,23 +1394,6 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
 
             ps.executeUpdate();
 
-            if (!bean.isIdModified())
-            {
-                PreparedStatement ps2 = null;
-                ResultSet rs = null;
-                try {
-                    ps2 = c.prepareStatement("SELECT last_insert_id()");
-                    rs = ps2.executeQuery();
-                    if(rs.next()) {
-                        bean.setId(Manager.getInteger(rs, 1));
-                    } else {
-                        this.getManager().log("ATTENTION: Could not retrieve generated key!");
-                    }
-                } finally {
-                    this.getManager().close(ps2, rs);
-                }
-            }
-
             bean.isNew(false);
             bean.resetIsModified();
             this.afterInsert(bean); // listener callback
@@ -1956,7 +1948,7 @@ public class FlPersonManager implements TableManager<FlPersonBeanBase,FlPersonBe
     public int deleteUsingTemplate(FlPersonBeanBase beanBase) throws DAOException
     {
         FlPersonBean bean=FlPersonBeanBase.toFullBean(beanBase);
-        if (bean.isIdInitialized()) {
+        if(bean.isIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
         Connection c = null;

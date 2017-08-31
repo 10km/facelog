@@ -325,12 +325,16 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * Loads a {@link FlFaceBean} from the fl_face using primary key fields.
      *
      * @param md5 String - PK# 1
-     * @return a unique FlFaceBean or {@code null} if not found
+     * @return a unique FlFaceBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
     //1
+    @SuppressWarnings("unused")
     public FlFaceBean loadByPrimaryKey(String md5) throws DAOException
     {
+        if(null == md5){
+            return null;
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -365,7 +369,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link FlFaceBean} with primary key fields
-     * @return a unique {@link FlFaceBean} or {@code null} if not found
+     * @return a unique {@link FlFaceBean} or {@code null} if not found or bean is null
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(String md5)}
      */
@@ -404,15 +408,20 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     }
     
     /**
-     * Delete row according to its primary keys.
-     *
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
+     * 
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      * @throws DAOException
      */
     //2
+    @SuppressWarnings("unused")
     public int deleteByPrimaryKey(String md5) throws DAOException
     {
+        if(null == md5){
+            throw new IllegalArgumentException("primary keys must no be null ");
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -2224,7 +2233,7 @@ public class FlFaceManager implements TableManager<FlFaceBeanBase,FlFaceBean>
     public int deleteUsingTemplate(FlFaceBeanBase beanBase) throws DAOException
     {
         FlFaceBean bean=FlFaceBeanBase.toFullBean(beanBase);
-        if (bean.isMd5Initialized()) {
+        if(bean.isMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
         Connection c = null;

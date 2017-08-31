@@ -210,12 +210,16 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * Loads a {@link FlImageBean} from the fl_image using primary key fields.
      *
      * @param md5 String - PK# 1
-     * @return a unique FlImageBean or {@code null} if not found
+     * @return a unique FlImageBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
     //1
+    @SuppressWarnings("unused")
     public FlImageBean loadByPrimaryKey(String md5) throws DAOException
     {
+        if(null == md5){
+            return null;
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -250,7 +254,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link FlImageBean} with primary key fields
-     * @return a unique {@link FlImageBean} or {@code null} if not found
+     * @return a unique {@link FlImageBean} or {@code null} if not found or bean is null
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(String md5)}
      */
@@ -289,15 +293,20 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     }
     
     /**
-     * Delete row according to its primary keys.
-     *
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
+     * 
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      * @throws DAOException
      */
     //2
+    @SuppressWarnings("unused")
     public int deleteByPrimaryKey(String md5) throws DAOException
     {
+        if(null == md5){
+            throw new IllegalArgumentException("primary keys must no be null ");
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -1939,7 +1948,7 @@ public class FlImageManager implements TableManager<FlImageBeanBase,FlImageBean>
     public int deleteUsingTemplate(FlImageBeanBase beanBase) throws DAOException
     {
         FlImageBean bean=FlImageBeanBase.toFullBean(beanBase);
-        if (bean.isMd5Initialized()) {
+        if(bean.isMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
         Connection c = null;

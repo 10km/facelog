@@ -251,12 +251,13 @@ public class PersonManager implements TableManager<PersonBean>
         }
     }
 
+
     /**
      * Loads a {@link PersonBean} from the fl_person using primary key fields of {@code bean}.
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link PersonBean} with primary key fields
-     * @return a unique {@link PersonBean} or {@code null} if not found
+     * @return a unique {@link PersonBean} or {@code null} if not found or bean is null
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.2
@@ -271,18 +272,47 @@ public class PersonManager implements TableManager<PersonBean>
         }
     }
     /**
+     * Loads a {@link PersonBean} from the fl_person using primary key fields.
+     * when you don't know which is primary key of table,you can use the method.
+     * @author guyadong
+     * @param keys primary keys value:<br> 
+     *             PK# 1:Integer     
+     * @return a unique {@link PersonBean} or {@code null} if not found
+     * @see {@link #loadByPrimaryKey(Integer id)}
+     */
+    //1.3
+    public PersonBean loadByPrimaryKey(Object ...keys){
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        return loadByPrimaryKey((Integer)keys[0]);
+    }
+    
+    /**
      * Returns true if this fl_person contains row with primary key fields.
      * @author guyadong
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey(Integer id)
      */
-    //1.3
+    //1.4
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
 
     }
-
+    /**
+     * Returns true if this fl_person contains row with primary key fields.
+     * @param keys primary keys value:<br>
+     *             PK# 1:Integer     
+     * @author guyadong
+     * @see #loadByPrimaryKey(Object...)
+     */
+    //1.5
+    public boolean existsPrimaryKey(Object ...keys)
+    {
+        return null!=loadByPrimaryKey(keys);
+    }
     /**
      * Returns true if this fl_person contains row specified by primary key fields of {@link PersonBean}.<br>
      * when you don't know which is primary key of table,you can use the method.
@@ -291,7 +321,7 @@ public class PersonManager implements TableManager<PersonBean>
      * @return 
      * @see {@link #loadByPrimaryKey(PersonBean bean)}
      */
-    //1.4
+    //1.6
     @Override
     public boolean existsPrimaryKey(PersonBean bean)
     {
@@ -300,7 +330,8 @@ public class PersonManager implements TableManager<PersonBean>
     }
     
     /**
-     * Delete row according to its primary keys.
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
      *
      * @param id Integer - PK# 1
      * @return the number of deleted rows
@@ -317,6 +348,23 @@ public class PersonManager implements TableManager<PersonBean>
             throw new WrapDAOException(e);
         }
     }
+
+    /**
+     * Delete row according to its primary keys.
+     *
+     * @param keys primary keys value:<br> 
+     *             PK# 1:Integer     
+     * @return the number of deleted rows
+     * @see {@link #deleteByPrimaryKey(Integer id)}
+     */   
+    //2.1
+    public int deleteByPrimaryKey(Object ...keys){
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        return deleteByPrimaryKey((Integer)keys[0]);
+    }
     /**
      * Delete row according to Primary Key fileds of the parameter{@code bean},
      * when you don't know which is primary key of table,you can use the method.
@@ -325,7 +373,7 @@ public class PersonManager implements TableManager<PersonBean>
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */
-    //2.1
+    //2.2
     @Override
     public int deleteByPrimaryKey(PersonBean bean)
     {
@@ -344,8 +392,8 @@ public class PersonManager implements TableManager<PersonBean>
     private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("impFlFacebyPersonId",new Class<?>[]{FaceBean.class,FlFaceBean.class});
-    put("impFlLogbyPersonId",new Class<?>[]{LogBean.class,FlLogBean.class});
+        put("impFlFacebyPersonId",new Class<?>[]{FaceBean.class,FlFaceBean.class});
+        put("impFlLogbyPersonId",new Class<?>[]{LogBean.class,FlLogBean.class});
     }} ;
     
     @SuppressWarnings("unchecked")

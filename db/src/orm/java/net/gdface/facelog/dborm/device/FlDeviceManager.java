@@ -197,12 +197,16 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * Loads a {@link FlDeviceBean} from the fl_device using primary key fields.
      *
      * @param id Integer - PK# 1
-     * @return a unique FlDeviceBean or {@code null} if not found
+     * @return a unique FlDeviceBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
     //1
+    @SuppressWarnings("unused")
     public FlDeviceBean loadByPrimaryKey(Integer id) throws DAOException
     {
+        if(null == id){
+            return null;
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -237,7 +241,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
      * when you don't know which is primary key of table,you can use the method.
      * @author guyadong
      * @param bean the {@link FlDeviceBean} with primary key fields
-     * @return a unique {@link FlDeviceBean} or {@code null} if not found
+     * @return a unique {@link FlDeviceBean} or {@code null} if not found or bean is null
      * @throws DAOException
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
@@ -276,15 +280,20 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     }
     
     /**
-     * Delete row according to its primary keys.
-     *
+     * Delete row according to its primary keys.<br>
+     * all keys must not be null
+     * 
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DAOException
      */
     //2
+    @SuppressWarnings("unused")
     public int deleteByPrimaryKey(Integer id) throws DAOException
     {
+        if(null == id){
+            throw new IllegalArgumentException("primary keys must no be null ");
+        }
         Connection c = null;
         PreparedStatement ps = null;
         try
@@ -1163,23 +1172,6 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
 
             ps.executeUpdate();
 
-            if (!bean.isIdModified())
-            {
-                PreparedStatement ps2 = null;
-                ResultSet rs = null;
-                try {
-                    ps2 = c.prepareStatement("SELECT last_insert_id()");
-                    rs = ps2.executeQuery();
-                    if(rs.next()) {
-                        bean.setId(Manager.getInteger(rs, 1));
-                    } else {
-                        this.getManager().log("ATTENTION: Could not retrieve generated key!");
-                    }
-                } finally {
-                    this.getManager().close(ps2, rs);
-                }
-            }
-
             bean.isNew(false);
             bean.resetIsModified();
             this.afterInsert(bean); // listener callback
@@ -1689,7 +1681,7 @@ public class FlDeviceManager implements TableManager<FlDeviceBeanBase,FlDeviceBe
     public int deleteUsingTemplate(FlDeviceBeanBase beanBase) throws DAOException
     {
         FlDeviceBean bean=FlDeviceBeanBase.toFullBean(beanBase);
-        if (bean.isIdInitialized()) {
+        if(bean.isIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
         Connection c = null;
