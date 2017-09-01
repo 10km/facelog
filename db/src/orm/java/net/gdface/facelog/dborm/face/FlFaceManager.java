@@ -908,30 +908,32 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+
+    private static final  java.util.Vector<Object[]> REF_METHODS=new java.util.Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
-    {        
-    put("refFlImagebyImgMd5",new Object[]{"getReferencedByImgMd5","setReferencedByImgMd5",FlImageBean.class});
-    put("refFlPersonbyPersonId",new Object[]{"getReferencedByPersonId","setReferencedByPersonId",FlPersonBean.class});
+    {
+        add(new Object[]{"getReferencedByImgMd5","setReferencedByImgMd5",FlImageBean.class});
+        add(new Object[]{"getReferencedByPersonId","setReferencedByPersonId",FlPersonBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> refFlImagebyImgMd5 -> FlImageBean</li>
-     *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
+     *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
-     * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlFaceBean bean,String fkName)throws DAOException{
+    public <T> T getReferencedBean(FlFaceBean bean,int fkName)throws DAOException{
+        if(fkName >= REF_METHODS.size() || fkName <0)
+            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
         Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
             return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -959,21 +961,22 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * 
      * @param <T>
      * <ul>
-     *     <li> refFlImagebyImgMd5 -> FlImageBean</li>
-     *     <li> refFlPersonbyPersonId -> FlPersonBean</li>
+     *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
-     * @param fkName valid values: refFlImagebyImgMd5,refFlPersonbyPersonId
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlFaceBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkName)throws DAOException{
+        if(fkName >= REF_METHODS.size() || fkName <0)
+            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
         Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         Class<?> resultClass = (Class<?>)params[2];
         if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());

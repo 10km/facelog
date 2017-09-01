@@ -91,15 +91,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean>
  
 
 
- 
-    @Override
-    public <T extends BaseBean> T getReferencedBean(FeatureBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(FeatureBean bean,T beanToSet,String fkName){
-        throw new UnsupportedOperationException();
-    }
      
 
     //////////////////////////////////////

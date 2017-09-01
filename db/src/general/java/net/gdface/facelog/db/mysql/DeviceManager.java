@@ -585,16 +585,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
                 return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
             }});
     }
-  
-    @Override
-    public <T extends BaseBean> T getReferencedBean(DeviceBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(DeviceBean bean,T beanToSet,String fkName){
-        throw new UnsupportedOperationException();
-    }
-     
+      
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

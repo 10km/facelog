@@ -801,32 +801,34 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+
+    private static final  java.util.Vector<Object[]> REF_METHODS=new java.util.Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
-    {        
-    put("refFlDevicebyDeviceId",new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
-    put("refFlStorebyMd5",new Object[]{"getReferencedByMd5","setReferencedByMd5",FlStoreBean.class});
-    put("refFlStorebyThumbMd5",new Object[]{"getReferencedByThumbMd5","setReferencedByThumbMd5",FlStoreBean.class});
+    {
+        add(new Object[]{"getReferencedByDeviceId","setReferencedByDeviceId",FlDeviceBean.class});
+        add(new Object[]{"getReferencedByMd5","setReferencedByMd5",FlStoreBean.class});
+        add(new Object[]{"getReferencedByThumbMd5","setReferencedByThumbMd5",FlStoreBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
-     *     <li> refFlStorebyMd5 -> FlStoreBean</li>
-     *     <li> refFlStorebyThumbMd5 -> FlStoreBean</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link FlStoreBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
-     * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlImageBean bean,String fkName)throws DAOException{
+    public <T> T getReferencedBean(FlImageBean bean,int fkName)throws DAOException{
+        if(fkName >= REF_METHODS.size() || fkName <0)
+            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
         Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
             return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -854,22 +856,23 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * 
      * @param <T>
      * <ul>
-     *     <li> refFlDevicebyDeviceId -> FlDeviceBean</li>
-     *     <li> refFlStorebyMd5 -> FlStoreBean</li>
-     *     <li> refFlStorebyThumbMd5 -> FlStoreBean</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link FlStoreBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlImageBean}
-     * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlImageBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(FlImageBean bean,T beanToSet,int fkName)throws DAOException{
+        if(fkName >= REF_METHODS.size() || fkName <0)
+            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
         Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         Class<?> resultClass = (Class<?>)params[2];
         if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());

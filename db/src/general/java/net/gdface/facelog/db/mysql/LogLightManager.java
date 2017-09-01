@@ -91,15 +91,6 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean>
  
 
 
- 
-    @Override
-    public <T extends BaseBean> T getReferencedBean(LogLightBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(LogLightBean bean,T beanToSet,String fkName){
-        throw new UnsupportedOperationException();
-    }
      
 
     //////////////////////////////////////

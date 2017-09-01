@@ -591,23 +591,24 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
+    private static final  java.util.Vector<Class<?>[]> REF_METHODS=new java.util.Vector<Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlImagebyPhotoId",new Class<?>[]{ImageBean.class,net.gdface.facelog.dborm.image.FlImageBean.class});
+        add(new Class<?>[]{ImageBean.class,net.gdface.facelog.dborm.image.FlImageBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> refFlImagebyPhotoId -> ImageBean</li>
+     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param fkName valid values: refFlImagebyPhotoId
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @Override
-    public <T extends BaseBean> T getReferencedBean(PersonBean bean,String fkName){
+    public <T extends BaseBean> T getReferencedBean(PersonBean bean,int fkName){
         try {
             return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
@@ -621,33 +622,35 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * 
      * @param <T>
      * <ul>
-     *     <li> refFlImagebyPhotoId -> ImageBean</li>
+     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link PersonBean}
-     * @param fkName valid values: refFlImagebyPhotoId
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,String fkName){
+    public <T extends BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,int fkName){
         try {
             if(null == beanToSet) return null;
+            if(fkName >= REF_METHODS.size() || fkName <0)
+                throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
             Class<?>[] types=REF_METHODS.get(fkName);
-            if(null == types)
-                throw new IllegalArgumentException(String.format("invalid fkName :%s",fkName));
             @SuppressWarnings("rawtypes")
             IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromRight(beanToSet,this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
+            return (T) converter.fromRight(beanToSet,
+                    this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-     
+    
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

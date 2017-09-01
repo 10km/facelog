@@ -596,27 +596,28 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Class<?>[]> REF_METHODS=new java.util.HashMap<String,Class<?>[]>(){
+    private static final  java.util.Vector<Class<?>[]> REF_METHODS=new java.util.Vector<Class<?>[]>(){
         private static final long serialVersionUID = 1L;
     {        
-    put("refFlDevicebyDeviceId",new Class<?>[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class});
-    put("refFlStorebyMd5",new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
-    put("refFlStorebyThumbMd5",new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
+        add(new Class<?>[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class});
+        add(new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
+        add(new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> refFlDevicebyDeviceId -> DeviceBean</li>
-     *     <li> refFlStorebyMd5 -> StoreBean</li>
-     *     <li> refFlStorebyThumbMd5 -> StoreBean</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
-     * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @Override
-    public <T extends BaseBean> T getReferencedBean(ImageBean bean,String fkName){
+    public <T extends BaseBean> T getReferencedBean(ImageBean bean,int fkName){
         try {
             return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
         }
@@ -630,35 +631,37 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * 
      * @param <T>
      * <ul>
-     *     <li> refFlDevicebyDeviceId -> DeviceBean</li>
-     *     <li> refFlStorebyMd5 -> StoreBean</li>
-     *     <li> refFlStorebyThumbMd5 -> StoreBean</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link ImageBean}
-     * @param fkName valid values: refFlDevicebyDeviceId,refFlStorebyMd5,refFlStorebyThumbMd5
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,String fkName){
+    public <T extends BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,int fkName){
         try {
             if(null == beanToSet) return null;
+            if(fkName >= REF_METHODS.size() || fkName <0)
+                throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
             Class<?>[] types=REF_METHODS.get(fkName);
-            if(null == types)
-                throw new IllegalArgumentException(String.format("invalid fkName :%s",fkName));
             @SuppressWarnings("rawtypes")
             IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
             if( null == converter )
                 throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromRight(beanToSet,this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
+            return (T) converter.fromRight(beanToSet,
+                    this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-     
+    
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

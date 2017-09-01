@@ -819,28 +819,30 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> REF_METHODS=new java.util.HashMap<String,Object[]>(){
+
+    private static final  java.util.Vector<Object[]> REF_METHODS=new java.util.Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
-    {        
-    put("refFlImagebyPhotoId",new Object[]{"getReferencedByPhotoId","setReferencedByPhotoId",FlImageBean.class});
+    {
+        add(new Object[]{"getReferencedByPhotoId","setReferencedByPhotoId",FlImageBean.class});
     }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> refFlImagebyPhotoId -> FlImageBean</li>
+     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param fkName valid values: refFlImagebyPhotoId
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlPersonBean bean,String fkName)throws DAOException{
+    public <T> T getReferencedBean(FlPersonBean bean,int fkName)throws DAOException{
+        if(fkName >= REF_METHODS.size() || fkName <0)
+            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
         Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         try {
             return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
         } catch (SecurityException e) {
@@ -868,20 +870,21 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * 
      * @param <T>
      * <ul>
-     *     <li> refFlImagebyPhotoId -> FlImageBean</li>
+     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlPersonBean}
-     * @param fkName valid values: refFlImagebyPhotoId
+     * @param fkName valid values: <br>
+     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,String fkName)throws DAOException{
+    public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkName)throws DAOException{
+        if(fkName >= REF_METHODS.size() || fkName <0)
+            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
         Object[] params = REF_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
         Class<?> resultClass = (Class<?>)params[2];
         if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
             throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());

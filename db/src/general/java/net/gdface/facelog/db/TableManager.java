@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 
-
 /**
  * Interface to handle database calls (save, load, count, etc...) for table.
  * @author guyadong
@@ -28,6 +27,30 @@ public interface TableManager<B extends BaseBean> {
     /** set QUERY% for loadLikeTemplate */
     public static final int SEARCH_ENDING_LIKE = 3;
     
+    //////////////////////////////////////
+    // FOREIGN KEY INDEX DECLARE
+    //////////////////////////////////////    
+    /** foreign key fl_face(img_md5) -> fl_image */
+    public static final int FL_FACE_FK_IMG_MD5=0;
+    /** foreign key fl_face(person_id) -> fl_person */
+    public static final int FL_FACE_FK_PERSON_ID=1;
+    /** foreign key fl_image(device_id) -> fl_device */
+    public static final int FL_IMAGE_FK_DEVICE_ID=0;
+    /** foreign key fl_image(md5) -> fl_store */
+    public static final int FL_IMAGE_FK_MD5=1;
+    /** foreign key fl_image(thumb_md5) -> fl_store */
+    public static final int FL_IMAGE_FK_THUMB_MD5=2;
+    /** foreign key fl_log(device_id) -> fl_device */
+    public static final int FL_LOG_FK_DEVICE_ID=0;
+    /** foreign key fl_log(verify_face) -> fl_face */
+    public static final int FL_LOG_FK_VERIFY_FACE=1;
+    /** foreign key fl_log(compare_face) -> fl_face */
+    public static final int FL_LOG_FK_COMPARE_FACE=2;
+    /** foreign key fl_log(person_id) -> fl_person */
+    public static final int FL_LOG_FK_PERSON_ID=3;
+    /** foreign key fl_person(photo_id) -> fl_image */
+    public static final int FL_PERSON_FK_PHOTO_ID=0;
+
     public interface Action<B>{
         public abstract class Adapter<B> implements Action<B>{
             @Override
@@ -319,12 +342,12 @@ public interface TableManager<B extends BaseBean> {
         }
         
         @Override
-        public <T extends BaseBean> T getReferencedBean(B bean, String fkName){
+        public <T extends BaseBean> T getReferencedBean(B bean, int fkName){
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean> T setReferencedBean(B bean, T beanToSet, String fkName){
+        public <T extends BaseBean> T setReferencedBean(B bean, T beanToSet, int fkName){
             throw new UnsupportedOperationException();
         }
 
@@ -935,7 +958,7 @@ public interface TableManager<B extends BaseBean> {
      * @param fkName foreign key name. for detail see implementation class
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      */
-    public abstract <T extends BaseBean> T getReferencedBean(B bean,String fkName);
+    public abstract <T extends BaseBean> T getReferencedBean(B bean,int fkName);
     
     /**
      * Associates the B object to the T object by fkName field.<br>
@@ -944,7 +967,7 @@ public interface TableManager<B extends BaseBean> {
      * @param fkName
      * @return always beanToSet saved
      */
-    public abstract <T extends BaseBean> T setReferencedBean(B bean,T beanToSet,String fkName);
+    public abstract <T extends BaseBean> T setReferencedBean(B bean,T beanToSet,int fkName);
     
     /**
      * Retrieves imported T objects by fkName.<br>

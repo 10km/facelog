@@ -583,16 +583,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
                 return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
             }});
     }
-  
-    @Override
-    public <T extends BaseBean> T getReferencedBean(StoreBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(StoreBean bean,T beanToSet,String fkName){
-        throw new UnsupportedOperationException();
-    }
-     
+      
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

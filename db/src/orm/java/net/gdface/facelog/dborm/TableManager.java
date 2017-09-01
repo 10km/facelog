@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import net.gdface.facelog.dborm.exception.DAOException;
-
 /**
  * Interface to handle database calls (save, load, count, etc...) for table.
  * @author guyadong
@@ -27,6 +26,30 @@ public interface TableManager<B extends FullBean<?>> {
     /** set QUERY% for loadLikeTemplate */
     public static final int SEARCH_ENDING_LIKE = 3;
     
+    //////////////////////////////////////
+    // FOREIGN KEY INDEX DECLARE
+    //////////////////////////////////////    
+    /** foreign key fl_face(img_md5) -> fl_image */
+    public static final int FL_FACE_FK_IMG_MD5=0;
+    /** foreign key fl_face(person_id) -> fl_person */
+    public static final int FL_FACE_FK_PERSON_ID=1;
+    /** foreign key fl_image(device_id) -> fl_device */
+    public static final int FL_IMAGE_FK_DEVICE_ID=0;
+    /** foreign key fl_image(md5) -> fl_store */
+    public static final int FL_IMAGE_FK_MD5=1;
+    /** foreign key fl_image(thumb_md5) -> fl_store */
+    public static final int FL_IMAGE_FK_THUMB_MD5=2;
+    /** foreign key fl_log(device_id) -> fl_device */
+    public static final int FL_LOG_FK_DEVICE_ID=0;
+    /** foreign key fl_log(verify_face) -> fl_face */
+    public static final int FL_LOG_FK_VERIFY_FACE=1;
+    /** foreign key fl_log(compare_face) -> fl_face */
+    public static final int FL_LOG_FK_COMPARE_FACE=2;
+    /** foreign key fl_log(person_id) -> fl_person */
+    public static final int FL_LOG_FK_PERSON_ID=3;
+    /** foreign key fl_person(photo_id) -> fl_image */
+    public static final int FL_PERSON_FK_PHOTO_ID=0;
+
     public interface Action<B>{
         public abstract class Adapter<B> implements Action<B>{
             @Override
@@ -320,12 +343,12 @@ public interface TableManager<B extends FullBean<?>> {
         }
         
         @Override
-        public <T> T getReferencedBean(B bean, String fkName)throws DAOException{
+        public <T> T getReferencedBean(B bean, int fkName)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T> T setReferencedBean(B bean, T beanToSet, String fkName)throws DAOException{
+        public <T> T setReferencedBean(B bean, T beanToSet, int fkName)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
@@ -986,7 +1009,7 @@ public interface TableManager<B extends FullBean<?>> {
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      * @throws DAOException
      */
-    public abstract <T> T getReferencedBean(B bean,String fkName)throws DAOException;
+    public abstract <T> T getReferencedBean(B bean,int fkName)throws DAOException;
     
     /**
      * Associates the B object to the T object by fkName field.<br>
@@ -996,7 +1019,7 @@ public interface TableManager<B extends FullBean<?>> {
      * @return always beanToSet saved
      * @throws DAOException
      */
-    public abstract <T> T setReferencedBean(B bean,T beanToSet,String fkName)throws DAOException;
+    public abstract <T> T setReferencedBean(B bean,T beanToSet,int fkName)throws DAOException;
     
     /**
      * Retrieves imported T objects by fkName.<br>

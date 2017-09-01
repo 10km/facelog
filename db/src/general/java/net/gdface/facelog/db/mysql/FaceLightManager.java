@@ -91,15 +91,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
  
 
 
- 
-    @Override
-    public <T extends BaseBean> T getReferencedBean(FaceLightBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> T setReferencedBean(FaceLightBean bean,T beanToSet,String fkName){
-        throw new UnsupportedOperationException();
-    }
      
 
     //////////////////////////////////////
