@@ -5,12 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-
-
 package net.gdface.facelog.db.mysql;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import net.gdface.facelog.db.FaceBean;
@@ -33,256 +29,42 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FaceManager implements TableManager<FaceBean>
+public class FaceManager extends TableManager.Adapter<FaceBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the person_id field.
-     */
-    public static final int ID_PERSON_ID = 1;
-
-    /**
-     * Identify the img_md5 field.
-     */
-    public static final int ID_IMG_MD5 = 2;
-
-    /**
-     * Identify the face_left field.
-     */
-    public static final int ID_FACE_LEFT = 3;
-
-    /**
-     * Identify the face_top field.
-     */
-    public static final int ID_FACE_TOP = 4;
-
-    /**
-     * Identify the face_width field.
-     */
-    public static final int ID_FACE_WIDTH = 5;
-
-    /**
-     * Identify the face_height field.
-     */
-    public static final int ID_FACE_HEIGHT = 6;
-
-    /**
-     * Identify the eye_leftx field.
-     */
-    public static final int ID_EYE_LEFTX = 7;
-
-    /**
-     * Identify the eye_lefty field.
-     */
-    public static final int ID_EYE_LEFTY = 8;
-
-    /**
-     * Identify the eye_rightx field.
-     */
-    public static final int ID_EYE_RIGHTX = 9;
-
-    /**
-     * Identify the eye_righty field.
-     */
-    public static final int ID_EYE_RIGHTY = 10;
-
-    /**
-     * Identify the mouth_x field.
-     */
-    public static final int ID_MOUTH_X = 11;
-
-    /**
-     * Identify the mouth_y field.
-     */
-    public static final int ID_MOUTH_Y = 12;
-
-    /**
-     * Identify the nose_x field.
-     */
-    public static final int ID_NOSE_X = 13;
-
-    /**
-     * Identify the nose_y field.
-     */
-    public static final int ID_NOSE_Y = 14;
-
-    /**
-     * Identify the angle_yaw field.
-     */
-    public static final int ID_ANGLE_YAW = 15;
-
-    /**
-     * Identify the angle_pitch field.
-     */
-    public static final int ID_ANGLE_PITCH = 16;
-
-    /**
-     * Identify the angle_roll field.
-     */
-    public static final int ID_ANGLE_ROLL = 17;
-
-    /**
-     * Identify the ext_info field.
-     */
-    public static final int ID_EXT_INFO = 18;
-
-    /**
-     * Identify the feature field.
-     */
-    public static final int ID_FEATURE = 19;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 20;
-
-    /**
-     * Tablename.
-     */
-        public static final String TABLE_NAME="fl_face";
-    /**
-     * Contains all the full fields of the fl_face table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_face.md5"
-        ,"fl_face.person_id"
-        ,"fl_face.img_md5"
-        ,"fl_face.face_left"
-        ,"fl_face.face_top"
-        ,"fl_face.face_width"
-        ,"fl_face.face_height"
-        ,"fl_face.eye_leftx"
-        ,"fl_face.eye_lefty"
-        ,"fl_face.eye_rightx"
-        ,"fl_face.eye_righty"
-        ,"fl_face.mouth_x"
-        ,"fl_face.mouth_y"
-        ,"fl_face.nose_x"
-        ,"fl_face.nose_y"
-        ,"fl_face.angle_yaw"
-        ,"fl_face.angle_pitch"
-        ,"fl_face.angle_roll"
-        ,"fl_face.ext_info"
-        ,"fl_face.feature"
-        ,"fl_face.create_time"
-    };
-
-    /**
-     * Contains all the fields of the fl_face table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"person_id"
-        ,"img_md5"
-        ,"face_left"
-        ,"face_top"
-        ,"face_width"
-        ,"face_height"
-        ,"eye_leftx"
-        ,"eye_lefty"
-        ,"eye_rightx"
-        ,"eye_righty"
-        ,"mouth_x"
-        ,"mouth_y"
-        ,"nose_x"
-        ,"nose_y"
-        ,"angle_yaw"
-        ,"angle_pitch"
-        ,"angle_roll"
-        ,"ext_info"
-        ,"feature"
-        ,"create_time"
-    };
-   /**
-     * Contains all the primarykey fields of the fl_face table.
-     */
-    public static final String[] PRIMARYKEY_NAMES =
-    {
-        "md5"
-    };
-    /**
-     * Field that contains the comma separated fields of the fl_face table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_face.md5"
-                            + ",fl_face.person_id"
-                            + ",fl_face.img_md5"
-                            + ",fl_face.face_left"
-                            + ",fl_face.face_top"
-                            + ",fl_face.face_width"
-                            + ",fl_face.face_height"
-                            + ",fl_face.eye_leftx"
-                            + ",fl_face.eye_lefty"
-                            + ",fl_face.eye_rightx"
-                            + ",fl_face.eye_righty"
-                            + ",fl_face.mouth_x"
-                            + ",fl_face.mouth_y"
-                            + ",fl_face.nose_x"
-                            + ",fl_face.nose_y"
-                            + ",fl_face.angle_yaw"
-                            + ",fl_face.angle_pitch"
-                            + ",fl_face.angle_roll"
-                            + ",fl_face.ext_info"
-                            + ",fl_face.feature"
-                            + ",fl_face.create_time";
-
-    /**
-     * Field that contains the comma separated fields of the fl_face table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",person_id"
-                            + ",img_md5"
-                            + ",face_left"
-                            + ",face_top"
-                            + ",face_width"
-                            + ",face_height"
-                            + ",eye_leftx"
-                            + ",eye_lefty"
-                            + ",eye_rightx"
-                            + ",eye_righty"
-                            + ",mouth_x"
-                            + ",mouth_y"
-                            + ",nose_x"
-                            + ",nose_y"
-                            + ",angle_yaw"
-                            + ",angle_pitch"
-                            + ",angle_roll"
-                            + ",ext_info"
-                            + ",feature"
-                            + ",create_time";
-
-    /**
-    * @return tableName
-    */
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    /**
-    * @return primarykeyNames
-    */
-    public String[] getPrimarykeyNames() {
-        return PRIMARYKEY_NAMES;
-    }
-    
     private FlFaceManager nativeManager = FlFaceManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<FaceBean,FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
     private static FaceManager singleton = new FaceManager();
 
+    /**
+    * @return table name
+    */
+    public String getTableName() {
+        return this.nativeManager.getTableName();
+    }
+
+    /**
+    * @return field names of table
+    */
+    public String[] getFieldNames() {
+        return this.nativeManager.getFieldNames();
+    }
+
+    public String getFieldNamesAsString() {
+        return this.nativeManager.getFieldNamesAsString();
+    }
+    
+    public String[] getFullFieldNames() {
+        return this.nativeManager.getFullFieldNames();
+    }
+    
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return this.nativeManager.getPrimarykeyNames();
+    }
+    
     /**
      * Get the {@link FaceManager} singleton.
      *
@@ -331,16 +113,8 @@ public class FaceManager implements TableManager<FaceBean>
         }
     }
 
-
-    /**
-     * Loads a {@link FaceBean} from the fl_face using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link FaceBean} with primary key fields
-     * @return a unique {@link FaceBean} or {@code null} if not found or bean is null
-     * @see {@link #loadByPrimaryKey(String md5)}
-     */
     //1.2
+    @Override
     public FaceBean loadByPrimaryKey(FaceBean bean)
     {
         try{
@@ -354,7 +128,6 @@ public class FaceManager implements TableManager<FaceBean>
     /**
      * Loads a {@link FaceBean} from the fl_face using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
      * @param keys primary keys value:<br> 
      *             PK# 1:String     
      * @return a unique {@link FaceBean} or {@code null} if not found
@@ -371,7 +144,6 @@ public class FaceManager implements TableManager<FaceBean>
     
     /**
      * Returns true if this fl_face contains row with primary key fields.
-     * @author guyadong
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey(String md5)
      */
@@ -379,34 +151,6 @@ public class FaceManager implements TableManager<FaceBean>
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
-
-    }
-    /**
-     * Returns true if this fl_face contains row with primary key fields.
-     * @param keys primary keys value:<br>
-     *             PK# 1:String     
-     * @author guyadong
-     * @see #loadByPrimaryKey(Object...)
-     */
-    //1.5
-    public boolean existsPrimaryKey(Object ...keys)
-    {
-        return null!=loadByPrimaryKey(keys);
-    }
-    /**
-     * Returns true if this fl_face contains row specified by primary key fields of {@link FaceBean}.<br>
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link FaceBean} with primary key fields
-     * @return 
-     * @see {@link #loadByPrimaryKey(FaceBean bean)}
-     */
-    //1.6
-    @Override
-    public boolean existsPrimaryKey(FaceBean bean)
-    {
-        return null!=loadByPrimaryKey(bean);
-
     }
     
     /**
@@ -445,26 +189,7 @@ public class FaceManager implements TableManager<FaceBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return deleteByPrimaryKey((String)keys[0]);
     }
-    /**
-     * Delete row according to Primary Key fileds of the parameter{@code bean},
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the FaceBean with primary key fields
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(String md5)}
-     */
-    //2.2
-    @Override
-    public int deleteByPrimaryKey(FaceBean bean)
-    {
-        try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
+
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
@@ -518,7 +243,7 @@ public class FaceManager implements TableManager<FaceBean>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(FaceBean bean,String fkName){
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(FaceBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -559,8 +284,8 @@ public class FaceManager implements TableManager<FaceBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlLogbyVerifyFace -> LogBean Collection</li>
-     *     <li> impFlLogbyCompareFace -> LogBean Collection</li>
+     *     <li> impFlLogbyVerifyFace -> LogBean java.util.Collection</li>
+     *     <li> impFlLogbyCompareFace -> LogBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FaceBean}
@@ -569,11 +294,11 @@ public class FaceManager implements TableManager<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,String fkName){
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof List){
-                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+            if(importedBeans instanceof java.util.List){
+                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
                         this.beanConverter.toRight(bean),
                         resultConverter.toRight(importedBeans),
                         fkName));            	
@@ -621,7 +346,7 @@ public class FaceManager implements TableManager<FaceBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<LogBean> getFlLogBeansByVerifyFaceAsList(FaceBean bean)
+    public java.util.List<LogBean> getFlLogBeansByVerifyFaceAsList(FaceBean bean)
     {
         try {
             return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByVerifyFaceAsList( this.beanConverter.toRight(bean)));
@@ -658,7 +383,7 @@ public class FaceManager implements TableManager<FaceBean>
     }
 
     /**
-     * set  the {@link LogBean} object collection associate to FaceBean by the fl_log.verify_face field.<BR>
+     * set  the {@link LogBean} object java.util.Collection associate to FaceBean by the fl_log.verify_face field.<BR>
      * FK_NAME:fl_log_ibfk_3
      * @param bean the referenced {@link FaceBean} 
      * @param importedBeans imported beans from fl_log 
@@ -666,12 +391,12 @@ public class FaceManager implements TableManager<FaceBean>
      * @see {@link FlLogManager#setReferencedByVerifyFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByVerifyFace(FaceBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByVerifyFace(FaceBean bean , C importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByVerifyFace(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByVerifyFace(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -715,7 +440,7 @@ public class FaceManager implements TableManager<FaceBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<LogBean> getFlLogBeansByCompareFaceAsList(FaceBean bean)
+    public java.util.List<LogBean> getFlLogBeansByCompareFaceAsList(FaceBean bean)
     {
         try {
             return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByCompareFaceAsList( this.beanConverter.toRight(bean)));
@@ -752,7 +477,7 @@ public class FaceManager implements TableManager<FaceBean>
     }
 
     /**
-     * set  the {@link LogBean} object collection associate to FaceBean by the fl_log.compare_face field.<BR>
+     * set  the {@link LogBean} object java.util.Collection associate to FaceBean by the fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
      * @param bean the referenced {@link FaceBean} 
      * @param importedBeans imported beans from fl_log 
@@ -760,12 +485,12 @@ public class FaceManager implements TableManager<FaceBean>
      * @see {@link FlLogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByCompareFace(FaceBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByCompareFace(FaceBean bean , C importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByCompareFace(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByCompareFace(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -838,7 +563,7 @@ public class FaceManager implements TableManager<FaceBean>
     //3.7 SYNC SAVE 
     public FaceBean save(FaceBean bean
         , ImageBean refFlImagebyImgMd5 , PersonBean refFlPersonbyPersonId 
-        , Collection<LogBean> impFlLogbyVerifyFace , Collection<LogBean> impFlLogbyCompareFace )
+        , java.util.Collection<LogBean> impFlLogbyVerifyFace , java.util.Collection<LogBean> impFlLogbyCompareFace )
     {
         try{
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
@@ -851,12 +576,12 @@ public class FaceManager implements TableManager<FaceBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(FaceBean , ImageBean , PersonBean , Collection , Collection )}
+     * @see {@link #save(FaceBean , ImageBean , PersonBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final ImageBean refFlImagebyImgMd5 ,final PersonBean refFlPersonbyPersonId 
-        ,final  Collection<LogBean> impFlLogbyVerifyFace ,final  Collection<LogBean> impFlLogbyCompareFace ) throws DAOException
+        ,final  java.util.Collection<LogBean> impFlLogbyVerifyFace ,final  java.util.Collection<LogBean> impFlLogbyCompareFace ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FaceBean>(){
             @Override
@@ -1011,277 +736,9 @@ public class FaceManager implements TableManager<FaceBean>
     }
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_face.
-     *
-     * @return an array of FlFaceManager bean
-     */
-    //5
-    @Override
-    public FaceBean[] loadAll()
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Loads each row from fl_face and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //5-1
-    @Override
-    public int loadAll(Action<FaceBean> action)
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_face.
-     *
-     * @return a list of FaceBean bean
-     */
-    //5-2
-    @Override
-    public List<FaceBean> loadAllAsList()
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_face, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlFaceManager bean
-     */
-    //6
-    @Override
-    public FaceBean[] loadAll(int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_face, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<FaceBean> action)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_face, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlFaceManager bean
-     */
-    //6-2
-    @Override
-    public List<FaceBean> loadAllAsList(int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves an array of FaceBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FaceBean table
-     */
-    //7
-    @Override
-    public FaceBean[] loadByWhere(String where)
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    
-    /**
-     * Retrieves a list of FaceBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FaceBean table
-     */
-    //7
-    @Override
-    public List<FaceBean> loadByWhereAsList(String where)
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of FaceBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //7-1
-    @Override
-    public int loadByWhere(String where,Action<FaceBean> action)
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of FaceBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FaceBean table
-     */
-    //8
-    @Override
-    public FaceBean[] loadByWhere(String where, int[] fieldList)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
 
-
-    /**
-     * Retrieves a list of FaceBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FaceBean table
-     */
-    //8
-    @Override
-    public List<FaceBean> loadByWhereAsList(String where, int[] fieldList)
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of FaceBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<FaceBean> action)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of FaceBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FaceBean table
-     */
-    //9
-    @Override
-    public FaceBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
-    {
-        return (FaceBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FaceBean[0]);
-    }
-    /**
-     * Retrieves each row of  FaceBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<FaceBean> action)
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of FaceBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FaceBean table
-     */
-    //9-2
-    @Override
-    public List<FaceBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Retrieves each row of FaceBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<FaceBean> action)
-    {
-        try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    /**
-     * Deletes all rows from fl_face table.
-     * @return the number of deleted rows.
-     */
-    //10
-    @Override
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
-     * Deletes rows from the fl_face table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * <br>Attention, if 'WHERE' is omitted it will delete all records.
-     *
-     * @param where the sql 'where' clause
-     * @return the number of deleted rows
-     */
     //11
     @Override
     public int deleteByWhere(String where)
@@ -1299,32 +756,10 @@ public class FaceManager implements TableManager<FaceBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link FaceBean} bean into the database.
-     *
-     * @param bean the {@link FaceBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     */
-    //12
-    @Override
-    public FaceBean save(FaceBean bean)
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link FaceBean} bean into the database.
-     *
-     * @param bean the {@link FaceBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     */
     //13
-    public FaceBean insert(FaceBean bean)
+    @Override
+    protected FaceBean insert(FaceBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
@@ -1335,14 +770,9 @@ public class FaceManager implements TableManager<FaceBean>
         }
     }
 
-    /**
-     * Update the {@link FaceBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link FaceBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     */
     //14
-    public FaceBean update(FaceBean bean)
+    @Override
+    protected FaceBean update(FaceBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
@@ -1353,85 +783,10 @@ public class FaceManager implements TableManager<FaceBean>
         }
     }
 
-    /**
-     * Saves an array of {@link FaceBean} bean into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans or null if beans is null.
-     */
-    //15
-    public FaceBean[] save(FaceBean[] beans)
-    {
-        if(null !=beans){
-            for (FaceBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link FaceBean} bean into the database.
-     *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans or null if beans is null.
-     */
-    //15-2
-    @Override
-    public <C extends Collection<FaceBean>> C save(C beans)
-    {
-        if(null != beans){
-            for (FaceBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link FaceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans.
-     * @see #save(FaceBean[])
-     */
-    //15-3
-    @Override
-    public FaceBean[] saveAsTransaction(final FaceBean[] beans) {
-        return this.runAsTransaction(new Callable<FaceBean[]>(){
-            @Override
-            public FaceBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link FaceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FaceBean} bean table to be saved
-     * @return the saved {@link FaceBean} beans.
-     * @see #save(List)
-     */
-    //15-4
-    @Override
-    public <C extends Collection<FaceBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique FaceBean bean from a template one giving a c
-     *
-     * @param bean the FaceBean bean to look for
-     * @return the bean matching the template
-     */
     //18
     @Override
     public FaceBean loadUniqueUsingTemplate(FaceBean bean)
@@ -1445,154 +800,19 @@ public class FaceManager implements TableManager<FaceBean>
         }
      }
 
-    /**
-     * Loads an array of FaceBean from a template one.
-     *
-     * @param bean the FaceBean template to look for
-     * @return all the FaceBean matching the template
-     */
-    //19
-    @Override
-    public FaceBean[] loadUsingTemplate(FaceBean bean)
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the FaceBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //19-1
-    @Override
-    public int loadUsingTemplate(FaceBean bean,Action<FaceBean> action)
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of FaceBean from a template one.
-     *
-     * @param bean the FaceBean template to look for
-     * @return all the FaceBean matching the template
-     */
-    //19-2
-    @Override
-    public List<FaceBean> loadUsingTemplateAsList(FaceBean bean)
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of FaceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FaceBean matching the template
-     */
-    //20
-    @Override
-    public FaceBean[] loadUsingTemplate(FaceBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //20-1
-    @Override
-    public int loadUsingTemplate(FaceBean bean, int startRow, int numRows,Action<FaceBean> action)
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of FaceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FaceBean matching the template
-     */
-    //20-2
-    @Override
-    public List<FaceBean> loadUsingTemplateAsList(FaceBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of FaceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FaceBean matching the template
-     */
-    //20-3
-    @Override
-    public FaceBean[] loadUsingTemplate(FaceBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FaceBean[0]);
-    }
-
-    /**
-     * Loads a list of FaceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FaceBean matching the template
-     */
-    //20-4
-    @Override
-    public List<FaceBean> loadUsingTemplateAsList(FaceBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
     //20-5
     @Override
-    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<FaceBean> action)
+    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Deletes rows using a FaceBean template.
-     *
-     * @param bean the FaceBean object(s) to be deleted
-     * @return the number of deleted objects
-     */
+
     //21
     @Override
     public int deleteUsingTemplate(FaceBean bean)
@@ -1635,7 +855,7 @@ public class FaceManager implements TableManager<FaceBean>
      * @param imgMd5 the img_md5 column's value filter.
      * @return a list of FaceBean
      */
-    public List<FaceBean> loadByimg_md5AsList(String imgMd5)
+    public java.util.List<FaceBean> loadByimg_md5AsList(String imgMd5)
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByimg_md5AsList(imgMd5));
@@ -1686,7 +906,7 @@ public class FaceManager implements TableManager<FaceBean>
      * @param personId the person_id column's value filter.
      * @return a list of FaceBean
      */
-    public List<FaceBean> loadByperson_idAsList(Integer personId)
+    public java.util.List<FaceBean> loadByperson_idAsList(Integer personId)
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByperson_idAsList(personId));
@@ -1715,31 +935,10 @@ public class FaceManager implements TableManager<FaceBean>
     }
     
 
-
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
-
-    /**
-     * Retrieves the number of rows of the table fl_face.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    @Override
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_face with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     */
     //25
     @Override
     public int countWhere(String where)
@@ -1753,49 +952,12 @@ public class FaceManager implements TableManager<FaceBean>
         }
     }
 
-    /**
-     * count the number of elements of a specific FaceBean bean
-     *
-     * @param bean the FaceBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    @Override
-    public int countUsingTemplate(FaceBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific FaceBean bean , given the start row and number of rows.
-     *
-     * @param bean the FaceBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
     //20
     @Override
-    public int countUsingTemplate(FaceBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific FaceBean bean given the start row and number of rows and the search type
-     *
-     * @param bean the FaceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of rows returned
-     */
-    //20
-    @Override
-    public int countUsingTemplate(FaceBean bean, int startRow, int numRows, SearchType searchType)
+    public int countUsingTemplate(FaceBean bean, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
         catch(DAOException e)
         {
@@ -1809,9 +971,6 @@ public class FaceManager implements TableManager<FaceBean>
     // LISTENER
     //_____________________________________________________________________
 
-    /**
-     * Registers a unique {@link FaceListener} listener.
-     */
     //35
     @Override
     public void registerListener(TableListener<FaceBean> listener)
@@ -1819,6 +978,13 @@ public class FaceManager implements TableManager<FaceBean>
         this.nativeManager.registerListener(this.toNative(listener));
     }
 
+    //36
+    @Override
+    public void unregisterListener(TableListener<FaceBean> listener)
+    {
+        this.nativeManager.unregisterListener(this.toNative(listener));
+    }
+    
     private net.gdface.facelog.dborm.TableListener<FlFaceBean> toNative(final TableListener<FaceBean> listener) {
         return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlFaceBean> (){
 
@@ -1860,49 +1026,22 @@ public class FaceManager implements TableManager<FaceBean>
     // UTILS
     //_____________________________________________________________________
 
-
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
     //43
-    public static boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
-        return false;
+    @Override
+    public boolean isPrimaryKey(String column){
+        return this.nativeManager.isPrimaryKey(column);
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of FaceBean
-     */
     @Override
-    public FaceBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new FaceBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of FaceBean
-     */
-    @Override
-    public List<FaceBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FaceBean> action){
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-
     
     @Override
     public <T>T runAsTransaction(Callable<T> fun) {
@@ -1925,10 +1064,10 @@ public class FaceManager implements TableManager<FaceBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlFaceManager.Action toNative(final Action<FaceBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<FlFaceBean> toNative(final Action<FaceBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new FlFaceManager.Action(){
+        return new net.gdface.facelog.dborm.TableManager.Action<FlFaceBean>(){
 
             @Override
             public void call(FlFaceBean bean) {

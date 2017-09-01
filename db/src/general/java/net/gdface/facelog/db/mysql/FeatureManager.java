@@ -5,12 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-
-
 package net.gdface.facelog.db.mysql;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import net.gdface.facelog.db.FeatureBean;
@@ -29,111 +25,42 @@ import net.gdface.facelog.dborm.face.FlFeatureBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FeatureManager implements TableManager<FeatureBean>
+public class FeatureManager extends TableManager.Adapter<FeatureBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the person_id field.
-     */
-    public static final int ID_PERSON_ID = 1;
-
-    /**
-     * Identify the img_md5 field.
-     */
-    public static final int ID_IMG_MD5 = 2;
-
-    /**
-     * Identify the feature field.
-     */
-    public static final int ID_FEATURE = 3;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 4;
-
-    /**
-     * Tablename.
-     */
-        public static final String TABLE_NAME="fl_feature";
-    /**
-     * Contains all the full fields of the fl_feature table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_feature.md5"
-        ,"fl_feature.person_id"
-        ,"fl_feature.img_md5"
-        ,"fl_feature.feature"
-        ,"fl_feature.create_time"
-    };
-
-    /**
-     * Contains all the fields of the fl_feature table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"person_id"
-        ,"img_md5"
-        ,"feature"
-        ,"create_time"
-    };
-   /**
-     * Contains all the primarykey fields of the fl_feature table.
-     */
-    public static final String[] PRIMARYKEY_NAMES =
-    {
-    };
-    /**
-     * Field that contains the comma separated fields of the fl_feature table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_feature.md5"
-                            + ",fl_feature.person_id"
-                            + ",fl_feature.img_md5"
-                            + ",fl_feature.feature"
-                            + ",fl_feature.create_time";
-
-    /**
-     * Field that contains the comma separated fields of the fl_feature table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",person_id"
-                            + ",img_md5"
-                            + ",feature"
-                            + ",create_time";
-
-    /**
-    * @return tableName
-    */
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    /**
-    * @return primarykeyNames
-    */
-    public String[] getPrimarykeyNames() {
-        return PRIMARYKEY_NAMES;
-    }
-    
     private FlFeatureManager nativeManager = FlFeatureManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<FeatureBean,FlFeatureBean> beanConverter = dbConverter.getFeatureBeanConverter();
     private static FeatureManager singleton = new FeatureManager();
 
+    /**
+    * @return table name
+    */
+    public String getTableName() {
+        return this.nativeManager.getTableName();
+    }
+
+    /**
+    * @return field names of table
+    */
+    public String[] getFieldNames() {
+        return this.nativeManager.getFieldNames();
+    }
+
+    public String getFieldNamesAsString() {
+        return this.nativeManager.getFieldNamesAsString();
+    }
+    
+    public String[] getFullFieldNames() {
+        return this.nativeManager.getFullFieldNames();
+    }
+    
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return this.nativeManager.getPrimarykeyNames();
+    }
+    
     /**
      * Get the {@link FeatureManager} singleton.
      *
@@ -160,55 +87,7 @@ public class FeatureManager implements TableManager<FeatureBean>
         this.dbConverter = dbConverter;
         this.beanConverter = this.dbConverter.getFeatureBeanConverter();
     }
-    @Override
-    public FeatureBean loadByPrimaryKey(FeatureBean bean)
-    {
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public FeatureBean loadByPrimaryKey(Object ...keys)
-    {
-        throw new UnsupportedOperationException();
-    }    
-    @Override
-    public boolean existsPrimaryKey(FeatureBean bean)
-    {
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public boolean existsPrimaryKey(Object ...keys)
-    {
-        throw new UnsupportedOperationException();
-    }
-    
-    @Override
-    public int deleteByPrimaryKey(FeatureBean bean)
-    {
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public int deleteByPrimaryKey(Object ...keys)
-    {
-        throw new UnsupportedOperationException();
-    }
  
-
-    @Override
-    public <T extends BaseBean> T[] getImportedBeans(FeatureBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(FeatureBean bean,String fkName){
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(FeatureBean bean,T[] importedBeans,String fkName){
-        throw new UnsupportedOperationException();
-    }    
-    @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(FeatureBean bean,C importedBeans,String fkName){
-        throw new UnsupportedOperationException();
-    }
  
 
 
@@ -224,277 +103,9 @@ public class FeatureManager implements TableManager<FeatureBean>
      
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_feature.
-     *
-     * @return an array of FlFeatureManager bean
-     */
-    //5
-    @Override
-    public FeatureBean[] loadAll()
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Loads each row from fl_feature and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //5-1
-    @Override
-    public int loadAll(Action<FeatureBean> action)
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_feature.
-     *
-     * @return a list of FeatureBean bean
-     */
-    //5-2
-    @Override
-    public List<FeatureBean> loadAllAsList()
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_feature, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlFeatureManager bean
-     */
-    //6
-    @Override
-    public FeatureBean[] loadAll(int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_feature, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<FeatureBean> action)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_feature, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlFeatureManager bean
-     */
-    //6-2
-    @Override
-    public List<FeatureBean> loadAllAsList(int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves an array of FeatureBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FeatureBean table
-     */
-    //7
-    @Override
-    public FeatureBean[] loadByWhere(String where)
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    
-    /**
-     * Retrieves a list of FeatureBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FeatureBean table
-     */
-    //7
-    @Override
-    public List<FeatureBean> loadByWhereAsList(String where)
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of FeatureBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //7-1
-    @Override
-    public int loadByWhere(String where,Action<FeatureBean> action)
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of FeatureBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FeatureBean table
-     */
-    //8
-    @Override
-    public FeatureBean[] loadByWhere(String where, int[] fieldList)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
 
-
-    /**
-     * Retrieves a list of FeatureBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FeatureBean table
-     */
-    //8
-    @Override
-    public List<FeatureBean> loadByWhereAsList(String where, int[] fieldList)
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of FeatureBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<FeatureBean> action)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of FeatureBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FeatureBean table
-     */
-    //9
-    @Override
-    public FeatureBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
-    {
-        return (FeatureBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FeatureBean[0]);
-    }
-    /**
-     * Retrieves each row of  FeatureBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<FeatureBean> action)
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of FeatureBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FeatureBean table
-     */
-    //9-2
-    @Override
-    public List<FeatureBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Retrieves each row of FeatureBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<FeatureBean> action)
-    {
-        try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    /**
-     * Deletes all rows from fl_feature table.
-     * @return the number of deleted rows.
-     */
-    //10
-    @Override
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
-     * Deletes rows from the fl_feature table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * <br>Attention, if 'WHERE' is omitted it will delete all records.
-     *
-     * @param where the sql 'where' clause
-     * @return the number of deleted rows
-     */
     //11
     @Override
     public int deleteByWhere(String where)
@@ -512,32 +123,10 @@ public class FeatureManager implements TableManager<FeatureBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link FeatureBean} bean into the database.
-     *
-     * @param bean the {@link FeatureBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     */
-    //12
-    @Override
-    public FeatureBean save(FeatureBean bean)
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link FeatureBean} bean into the database.
-     *
-     * @param bean the {@link FeatureBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     */
     //13
-    public FeatureBean insert(FeatureBean bean)
+    @Override
+    protected FeatureBean insert(FeatureBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
@@ -548,14 +137,9 @@ public class FeatureManager implements TableManager<FeatureBean>
         }
     }
 
-    /**
-     * Update the {@link FeatureBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link FeatureBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     */
     //14
-    public FeatureBean update(FeatureBean bean)
+    @Override
+    protected FeatureBean update(FeatureBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
@@ -566,85 +150,10 @@ public class FeatureManager implements TableManager<FeatureBean>
         }
     }
 
-    /**
-     * Saves an array of {@link FeatureBean} bean into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be saved
-     * @return the saved {@link FeatureBean} beans or null if beans is null.
-     */
-    //15
-    public FeatureBean[] save(FeatureBean[] beans)
-    {
-        if(null !=beans){
-            for (FeatureBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link FeatureBean} bean into the database.
-     *
-     * @param beans the {@link FeatureBean} bean table to be saved
-     * @return the saved {@link FeatureBean} beans or null if beans is null.
-     */
-    //15-2
-    @Override
-    public <C extends Collection<FeatureBean>> C save(C beans)
-    {
-        if(null != beans){
-            for (FeatureBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link FeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FeatureBean} bean table to be saved
-     * @return the saved {@link FeatureBean} beans.
-     * @see #save(FeatureBean[])
-     */
-    //15-3
-    @Override
-    public FeatureBean[] saveAsTransaction(final FeatureBean[] beans) {
-        return this.runAsTransaction(new Callable<FeatureBean[]>(){
-            @Override
-            public FeatureBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link FeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FeatureBean} bean table to be saved
-     * @return the saved {@link FeatureBean} beans.
-     * @see #save(List)
-     */
-    //15-4
-    @Override
-    public <C extends Collection<FeatureBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique FeatureBean bean from a template one giving a c
-     *
-     * @param bean the FeatureBean bean to look for
-     * @return the bean matching the template
-     */
     //18
     @Override
     public FeatureBean loadUniqueUsingTemplate(FeatureBean bean)
@@ -658,154 +167,19 @@ public class FeatureManager implements TableManager<FeatureBean>
         }
      }
 
-    /**
-     * Loads an array of FeatureBean from a template one.
-     *
-     * @param bean the FeatureBean template to look for
-     * @return all the FeatureBean matching the template
-     */
-    //19
-    @Override
-    public FeatureBean[] loadUsingTemplate(FeatureBean bean)
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //19-1
-    @Override
-    public int loadUsingTemplate(FeatureBean bean,Action<FeatureBean> action)
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of FeatureBean from a template one.
-     *
-     * @param bean the FeatureBean template to look for
-     * @return all the FeatureBean matching the template
-     */
-    //19-2
-    @Override
-    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean)
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of FeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FeatureBean matching the template
-     */
-    //20
-    @Override
-    public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //20-1
-    @Override
-    public int loadUsingTemplate(FeatureBean bean, int startRow, int numRows,Action<FeatureBean> action)
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of FeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FeatureBean matching the template
-     */
-    //20-2
-    @Override
-    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of FeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FeatureBean matching the template
-     */
-    //20-3
-    @Override
-    public FeatureBean[] loadUsingTemplate(FeatureBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FeatureBean[0]);
-    }
-
-    /**
-     * Loads a list of FeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FeatureBean matching the template
-     */
-    //20-4
-    @Override
-    public List<FeatureBean> loadUsingTemplateAsList(FeatureBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
     //20-5
     @Override
-    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<FeatureBean> action)
+    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Deletes rows using a FeatureBean template.
-     *
-     * @param bean the FeatureBean object(s) to be deleted
-     * @return the number of deleted objects
-     */
+
     //21
     @Override
     public int deleteUsingTemplate(FeatureBean bean)
@@ -820,31 +194,10 @@ public class FeatureManager implements TableManager<FeatureBean>
     }
 
 
-
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
-
-    /**
-     * Retrieves the number of rows of the table fl_feature.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    @Override
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_feature with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     */
     //25
     @Override
     public int countWhere(String where)
@@ -858,49 +211,12 @@ public class FeatureManager implements TableManager<FeatureBean>
         }
     }
 
-    /**
-     * count the number of elements of a specific FeatureBean bean
-     *
-     * @param bean the FeatureBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    @Override
-    public int countUsingTemplate(FeatureBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific FeatureBean bean , given the start row and number of rows.
-     *
-     * @param bean the FeatureBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
     //20
     @Override
-    public int countUsingTemplate(FeatureBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific FeatureBean bean given the start row and number of rows and the search type
-     *
-     * @param bean the FeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of rows returned
-     */
-    //20
-    @Override
-    public int countUsingTemplate(FeatureBean bean, int startRow, int numRows, SearchType searchType)
+    public int countUsingTemplate(FeatureBean bean, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
         catch(DAOException e)
         {
@@ -914,9 +230,6 @@ public class FeatureManager implements TableManager<FeatureBean>
     // LISTENER
     //_____________________________________________________________________
 
-    /**
-     * Registers a unique {@link FeatureListener} listener.
-     */
     //35
     @Override
     public void registerListener(TableListener<FeatureBean> listener)
@@ -924,6 +237,13 @@ public class FeatureManager implements TableManager<FeatureBean>
         this.nativeManager.registerListener(this.toNative(listener));
     }
 
+    //36
+    @Override
+    public void unregisterListener(TableListener<FeatureBean> listener)
+    {
+        this.nativeManager.unregisterListener(this.toNative(listener));
+    }
+    
     private net.gdface.facelog.dborm.TableListener<FlFeatureBean> toNative(final TableListener<FeatureBean> listener) {
         return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlFeatureBean> (){
 
@@ -965,49 +285,22 @@ public class FeatureManager implements TableManager<FeatureBean>
     // UTILS
     //_____________________________________________________________________
 
-
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
     //43
-    public static boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
-        return false;
+    @Override
+    public boolean isPrimaryKey(String column){
+        return this.nativeManager.isPrimaryKey(column);
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of FeatureBean
-     */
     @Override
-    public FeatureBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new FeatureBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of FeatureBean
-     */
-    @Override
-    public List<FeatureBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FeatureBean> action){
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-
     
     @Override
     public <T>T runAsTransaction(Callable<T> fun) {
@@ -1030,10 +323,10 @@ public class FeatureManager implements TableManager<FeatureBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlFeatureManager.Action toNative(final Action<FeatureBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<FlFeatureBean> toNative(final Action<FeatureBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new FlFeatureManager.Action(){
+        return new net.gdface.facelog.dborm.TableManager.Action<FlFeatureBean>(){
 
             @Override
             public void call(FlFeatureBean bean) {

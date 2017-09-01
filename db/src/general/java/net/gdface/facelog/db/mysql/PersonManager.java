@@ -5,12 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-
-
 package net.gdface.facelog.db.mysql;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import net.gdface.facelog.db.PersonBean;
@@ -34,175 +30,42 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class PersonManager implements TableManager<PersonBean>
+public class PersonManager extends TableManager.Adapter<PersonBean>
 {
-
-    /**
-     * Identify the id field.
-     */
-    public static final int ID_ID = 0;
-
-    /**
-     * Identify the group_id field.
-     */
-    public static final int ID_GROUP_ID = 1;
-
-    /**
-     * Identify the name field.
-     */
-    public static final int ID_NAME = 2;
-
-    /**
-     * Identify the sex field.
-     */
-    public static final int ID_SEX = 3;
-
-    /**
-     * Identify the birthdate field.
-     */
-    public static final int ID_BIRTHDATE = 4;
-
-    /**
-     * Identify the papers_type field.
-     */
-    public static final int ID_PAPERS_TYPE = 5;
-
-    /**
-     * Identify the papers_num field.
-     */
-    public static final int ID_PAPERS_NUM = 6;
-
-    /**
-     * Identify the photo_id field.
-     */
-    public static final int ID_PHOTO_ID = 7;
-
-    /**
-     * Identify the face_md5 field.
-     */
-    public static final int ID_FACE_MD5 = 8;
-
-    /**
-     * Identify the expiry_date field.
-     */
-    public static final int ID_EXPIRY_DATE = 9;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 10;
-
-    /**
-     * Identify the update_time field.
-     */
-    public static final int ID_UPDATE_TIME = 11;
-
-    /**
-     * Tablename.
-     */
-        public static final String TABLE_NAME="fl_person";
-    /**
-     * Contains all the full fields of the fl_person table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_person.id"
-        ,"fl_person.group_id"
-        ,"fl_person.name"
-        ,"fl_person.sex"
-        ,"fl_person.birthdate"
-        ,"fl_person.papers_type"
-        ,"fl_person.papers_num"
-        ,"fl_person.photo_id"
-        ,"fl_person.face_md5"
-        ,"fl_person.expiry_date"
-        ,"fl_person.create_time"
-        ,"fl_person.update_time"
-    };
-
-    /**
-     * Contains all the fields of the fl_person table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "id"
-        ,"group_id"
-        ,"name"
-        ,"sex"
-        ,"birthdate"
-        ,"papers_type"
-        ,"papers_num"
-        ,"photo_id"
-        ,"face_md5"
-        ,"expiry_date"
-        ,"create_time"
-        ,"update_time"
-    };
-   /**
-     * Contains all the primarykey fields of the fl_person table.
-     */
-    public static final String[] PRIMARYKEY_NAMES =
-    {
-        "id"
-    };
-    /**
-     * Field that contains the comma separated fields of the fl_person table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_person.id"
-                            + ",fl_person.group_id"
-                            + ",fl_person.name"
-                            + ",fl_person.sex"
-                            + ",fl_person.birthdate"
-                            + ",fl_person.papers_type"
-                            + ",fl_person.papers_num"
-                            + ",fl_person.photo_id"
-                            + ",fl_person.face_md5"
-                            + ",fl_person.expiry_date"
-                            + ",fl_person.create_time"
-                            + ",fl_person.update_time";
-
-    /**
-     * Field that contains the comma separated fields of the fl_person table.
-     */
-    public static final String ALL_FIELDS = "id"
-                            + ",group_id"
-                            + ",name"
-                            + ",sex"
-                            + ",birthdate"
-                            + ",papers_type"
-                            + ",papers_num"
-                            + ",photo_id"
-                            + ",face_md5"
-                            + ",expiry_date"
-                            + ",create_time"
-                            + ",update_time";
-
-    /**
-    * @return tableName
-    */
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    /**
-    * @return primarykeyNames
-    */
-    public String[] getPrimarykeyNames() {
-        return PRIMARYKEY_NAMES;
-    }
-    
     private FlPersonManager nativeManager = FlPersonManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<PersonBean,FlPersonBean> beanConverter = dbConverter.getPersonBeanConverter();
     private static PersonManager singleton = new PersonManager();
 
+    /**
+    * @return table name
+    */
+    public String getTableName() {
+        return this.nativeManager.getTableName();
+    }
+
+    /**
+    * @return field names of table
+    */
+    public String[] getFieldNames() {
+        return this.nativeManager.getFieldNames();
+    }
+
+    public String getFieldNamesAsString() {
+        return this.nativeManager.getFieldNamesAsString();
+    }
+    
+    public String[] getFullFieldNames() {
+        return this.nativeManager.getFullFieldNames();
+    }
+    
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return this.nativeManager.getPrimarykeyNames();
+    }
+    
     /**
      * Get the {@link PersonManager} singleton.
      *
@@ -251,16 +114,8 @@ public class PersonManager implements TableManager<PersonBean>
         }
     }
 
-
-    /**
-     * Loads a {@link PersonBean} from the fl_person using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link PersonBean} with primary key fields
-     * @return a unique {@link PersonBean} or {@code null} if not found or bean is null
-     * @see {@link #loadByPrimaryKey(Integer id)}
-     */
     //1.2
+    @Override
     public PersonBean loadByPrimaryKey(PersonBean bean)
     {
         try{
@@ -274,7 +129,6 @@ public class PersonManager implements TableManager<PersonBean>
     /**
      * Loads a {@link PersonBean} from the fl_person using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
      * @param keys primary keys value:<br> 
      *             PK# 1:Integer     
      * @return a unique {@link PersonBean} or {@code null} if not found
@@ -291,7 +145,6 @@ public class PersonManager implements TableManager<PersonBean>
     
     /**
      * Returns true if this fl_person contains row with primary key fields.
-     * @author guyadong
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey(Integer id)
      */
@@ -299,34 +152,6 @@ public class PersonManager implements TableManager<PersonBean>
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
-
-    }
-    /**
-     * Returns true if this fl_person contains row with primary key fields.
-     * @param keys primary keys value:<br>
-     *             PK# 1:Integer     
-     * @author guyadong
-     * @see #loadByPrimaryKey(Object...)
-     */
-    //1.5
-    public boolean existsPrimaryKey(Object ...keys)
-    {
-        return null!=loadByPrimaryKey(keys);
-    }
-    /**
-     * Returns true if this fl_person contains row specified by primary key fields of {@link PersonBean}.<br>
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link PersonBean} with primary key fields
-     * @return 
-     * @see {@link #loadByPrimaryKey(PersonBean bean)}
-     */
-    //1.6
-    @Override
-    public boolean existsPrimaryKey(PersonBean bean)
-    {
-        return null!=loadByPrimaryKey(bean);
-
     }
     
     /**
@@ -365,26 +190,7 @@ public class PersonManager implements TableManager<PersonBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return deleteByPrimaryKey((Integer)keys[0]);
     }
-    /**
-     * Delete row according to Primary Key fileds of the parameter{@code bean},
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the PersonBean with primary key fields
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(Integer id)}
-     */
-    //2.2
-    @Override
-    public int deleteByPrimaryKey(PersonBean bean)
-    {
-        try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
+
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
@@ -438,7 +244,7 @@ public class PersonManager implements TableManager<PersonBean>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(PersonBean bean,String fkName){
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(PersonBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -479,8 +285,8 @@ public class PersonManager implements TableManager<PersonBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyPersonId -> FaceBean Collection</li>
-     *     <li> impFlLogbyPersonId -> LogBean Collection</li>
+     *     <li> impFlFacebyPersonId -> FaceBean java.util.Collection</li>
+     *     <li> impFlLogbyPersonId -> LogBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link PersonBean}
@@ -489,11 +295,11 @@ public class PersonManager implements TableManager<PersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,String fkName){
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof List){
-                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+            if(importedBeans instanceof java.util.List){
+                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
                         this.beanConverter.toRight(bean),
                         resultConverter.toRight(importedBeans),
                         fkName));            	
@@ -541,7 +347,7 @@ public class PersonManager implements TableManager<PersonBean>
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean)
+    public java.util.List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean)
     {
         try {
             return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
@@ -578,7 +384,7 @@ public class PersonManager implements TableManager<PersonBean>
     }
 
     /**
-     * set  the {@link FaceBean} object collection associate to PersonBean by the fl_face.person_id field.<BR>
+     * set  the {@link FaceBean} object java.util.Collection associate to PersonBean by the fl_face.person_id field.<BR>
      * FK_NAME:fl_face_ibfk_2
      * @param bean the referenced {@link PersonBean} 
      * @param importedBeans imported beans from fl_face 
@@ -586,12 +392,12 @@ public class PersonManager implements TableManager<PersonBean>
      * @see {@link FlFaceManager#setReferencedByPersonId(FaceBean, PersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FaceBean>> C setFlFaceBeansByPersonId(PersonBean bean , C importedBeans)
+    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByPersonId(PersonBean bean , C importedBeans)
     {
         try {
             IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<FaceBean>)importedBeans,nativeManager.setFlFaceBeansByPersonId(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<FaceBean>)importedBeans,nativeManager.setFlFaceBeansByPersonId(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -635,7 +441,7 @@ public class PersonManager implements TableManager<PersonBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
+    public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
     {
         try {
             return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
@@ -672,7 +478,7 @@ public class PersonManager implements TableManager<PersonBean>
     }
 
     /**
-     * set  the {@link LogBean} object collection associate to PersonBean by the fl_log.person_id field.<BR>
+     * set  the {@link LogBean} object java.util.Collection associate to PersonBean by the fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
      * @param bean the referenced {@link PersonBean} 
      * @param importedBeans imported beans from fl_log 
@@ -680,12 +486,12 @@ public class PersonManager implements TableManager<PersonBean>
      * @see {@link FlLogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByPersonId(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByPersonId(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -756,7 +562,7 @@ public class PersonManager implements TableManager<PersonBean>
     //3.7 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refFlImagebyPhotoId 
-        , Collection<FaceBean> impFlFacebyPersonId , Collection<LogBean> impFlLogbyPersonId )
+        , java.util.Collection<FaceBean> impFlFacebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId )
     {
         try{
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
@@ -769,12 +575,12 @@ public class PersonManager implements TableManager<PersonBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , Collection , Collection )}
+     * @see {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refFlImagebyPhotoId 
-        ,final  Collection<FaceBean> impFlFacebyPersonId ,final  Collection<LogBean> impFlLogbyPersonId ) throws DAOException
+        ,final  java.util.Collection<FaceBean> impFlFacebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
@@ -887,277 +693,9 @@ public class PersonManager implements TableManager<PersonBean>
     }
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_person.
-     *
-     * @return an array of FlPersonManager bean
-     */
-    //5
-    @Override
-    public PersonBean[] loadAll()
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Loads each row from fl_person and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //5-1
-    @Override
-    public int loadAll(Action<PersonBean> action)
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_person.
-     *
-     * @return a list of PersonBean bean
-     */
-    //5-2
-    @Override
-    public List<PersonBean> loadAllAsList()
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_person, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlPersonManager bean
-     */
-    //6
-    @Override
-    public PersonBean[] loadAll(int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_person, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<PersonBean> action)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_person, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlPersonManager bean
-     */
-    //6-2
-    @Override
-    public List<PersonBean> loadAllAsList(int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves an array of PersonBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting PersonBean table
-     */
-    //7
-    @Override
-    public PersonBean[] loadByWhere(String where)
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    
-    /**
-     * Retrieves a list of PersonBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting PersonBean table
-     */
-    //7
-    @Override
-    public List<PersonBean> loadByWhereAsList(String where)
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of PersonBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //7-1
-    @Override
-    public int loadByWhere(String where,Action<PersonBean> action)
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of PersonBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting PersonBean table
-     */
-    //8
-    @Override
-    public PersonBean[] loadByWhere(String where, int[] fieldList)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
 
-
-    /**
-     * Retrieves a list of PersonBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting PersonBean table
-     */
-    //8
-    @Override
-    public List<PersonBean> loadByWhereAsList(String where, int[] fieldList)
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of PersonBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<PersonBean> action)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of PersonBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting PersonBean table
-     */
-    //9
-    @Override
-    public PersonBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
-    {
-        return (PersonBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new PersonBean[0]);
-    }
-    /**
-     * Retrieves each row of  PersonBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<PersonBean> action)
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of PersonBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting PersonBean table
-     */
-    //9-2
-    @Override
-    public List<PersonBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Retrieves each row of PersonBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<PersonBean> action)
-    {
-        try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    /**
-     * Deletes all rows from fl_person table.
-     * @return the number of deleted rows.
-     */
-    //10
-    @Override
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
-     * Deletes rows from the fl_person table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * <br>Attention, if 'WHERE' is omitted it will delete all records.
-     *
-     * @param where the sql 'where' clause
-     * @return the number of deleted rows
-     */
     //11
     @Override
     public int deleteByWhere(String where)
@@ -1175,32 +713,10 @@ public class PersonManager implements TableManager<PersonBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link PersonBean} bean into the database.
-     *
-     * @param bean the {@link PersonBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     */
-    //12
-    @Override
-    public PersonBean save(PersonBean bean)
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link PersonBean} bean into the database.
-     *
-     * @param bean the {@link PersonBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     */
     //13
-    public PersonBean insert(PersonBean bean)
+    @Override
+    protected PersonBean insert(PersonBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
@@ -1211,14 +727,9 @@ public class PersonManager implements TableManager<PersonBean>
         }
     }
 
-    /**
-     * Update the {@link PersonBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link PersonBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     */
     //14
-    public PersonBean update(PersonBean bean)
+    @Override
+    protected PersonBean update(PersonBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
@@ -1229,85 +740,10 @@ public class PersonManager implements TableManager<PersonBean>
         }
     }
 
-    /**
-     * Saves an array of {@link PersonBean} bean into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans or null if beans is null.
-     */
-    //15
-    public PersonBean[] save(PersonBean[] beans)
-    {
-        if(null !=beans){
-            for (PersonBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link PersonBean} bean into the database.
-     *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans or null if beans is null.
-     */
-    //15-2
-    @Override
-    public <C extends Collection<PersonBean>> C save(C beans)
-    {
-        if(null != beans){
-            for (PersonBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link PersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans.
-     * @see #save(PersonBean[])
-     */
-    //15-3
-    @Override
-    public PersonBean[] saveAsTransaction(final PersonBean[] beans) {
-        return this.runAsTransaction(new Callable<PersonBean[]>(){
-            @Override
-            public PersonBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link PersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link PersonBean} bean table to be saved
-     * @return the saved {@link PersonBean} beans.
-     * @see #save(List)
-     */
-    //15-4
-    @Override
-    public <C extends Collection<PersonBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique PersonBean bean from a template one giving a c
-     *
-     * @param bean the PersonBean bean to look for
-     * @return the bean matching the template
-     */
     //18
     @Override
     public PersonBean loadUniqueUsingTemplate(PersonBean bean)
@@ -1321,154 +757,19 @@ public class PersonManager implements TableManager<PersonBean>
         }
      }
 
-    /**
-     * Loads an array of PersonBean from a template one.
-     *
-     * @param bean the PersonBean template to look for
-     * @return all the PersonBean matching the template
-     */
-    //19
-    @Override
-    public PersonBean[] loadUsingTemplate(PersonBean bean)
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the PersonBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //19-1
-    @Override
-    public int loadUsingTemplate(PersonBean bean,Action<PersonBean> action)
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of PersonBean from a template one.
-     *
-     * @param bean the PersonBean template to look for
-     * @return all the PersonBean matching the template
-     */
-    //19-2
-    @Override
-    public List<PersonBean> loadUsingTemplateAsList(PersonBean bean)
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of PersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the PersonBean matching the template
-     */
-    //20
-    @Override
-    public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //20-1
-    @Override
-    public int loadUsingTemplate(PersonBean bean, int startRow, int numRows,Action<PersonBean> action)
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of PersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the PersonBean matching the template
-     */
-    //20-2
-    @Override
-    public List<PersonBean> loadUsingTemplateAsList(PersonBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of PersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the PersonBean matching the template
-     */
-    //20-3
-    @Override
-    public PersonBean[] loadUsingTemplate(PersonBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new PersonBean[0]);
-    }
-
-    /**
-     * Loads a list of PersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the PersonBean matching the template
-     */
-    //20-4
-    @Override
-    public List<PersonBean> loadUsingTemplateAsList(PersonBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
     //20-5
     @Override
-    public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<PersonBean> action)
+    public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Deletes rows using a PersonBean template.
-     *
-     * @param bean the PersonBean object(s) to be deleted
-     * @return the number of deleted objects
-     */
+
     //21
     @Override
     public int deleteUsingTemplate(PersonBean bean)
@@ -1616,7 +917,7 @@ public class PersonManager implements TableManager<PersonBean>
      * @param expiryDate the expiry_date column's value filter.
      * @return a list of PersonBean
      */
-    public List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate)
+    public java.util.List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate)
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadByexpiry_dateAsList(expiryDate));
@@ -1645,31 +946,10 @@ public class PersonManager implements TableManager<PersonBean>
     }
     
 
-
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
-
-    /**
-     * Retrieves the number of rows of the table fl_person.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    @Override
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_person with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     */
     //25
     @Override
     public int countWhere(String where)
@@ -1683,49 +963,12 @@ public class PersonManager implements TableManager<PersonBean>
         }
     }
 
-    /**
-     * count the number of elements of a specific PersonBean bean
-     *
-     * @param bean the PersonBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    @Override
-    public int countUsingTemplate(PersonBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific PersonBean bean , given the start row and number of rows.
-     *
-     * @param bean the PersonBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
     //20
     @Override
-    public int countUsingTemplate(PersonBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific PersonBean bean given the start row and number of rows and the search type
-     *
-     * @param bean the PersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of rows returned
-     */
-    //20
-    @Override
-    public int countUsingTemplate(PersonBean bean, int startRow, int numRows, SearchType searchType)
+    public int countUsingTemplate(PersonBean bean, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
         catch(DAOException e)
         {
@@ -1739,9 +982,6 @@ public class PersonManager implements TableManager<PersonBean>
     // LISTENER
     //_____________________________________________________________________
 
-    /**
-     * Registers a unique {@link PersonListener} listener.
-     */
     //35
     @Override
     public void registerListener(TableListener<PersonBean> listener)
@@ -1749,6 +989,13 @@ public class PersonManager implements TableManager<PersonBean>
         this.nativeManager.registerListener(this.toNative(listener));
     }
 
+    //36
+    @Override
+    public void unregisterListener(TableListener<PersonBean> listener)
+    {
+        this.nativeManager.unregisterListener(this.toNative(listener));
+    }
+    
     private net.gdface.facelog.dborm.TableListener<FlPersonBean> toNative(final TableListener<PersonBean> listener) {
         return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlPersonBean> (){
 
@@ -1790,49 +1037,22 @@ public class PersonManager implements TableManager<PersonBean>
     // UTILS
     //_____________________________________________________________________
 
-
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
     //43
-    public static boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
-        return false;
+    @Override
+    public boolean isPrimaryKey(String column){
+        return this.nativeManager.isPrimaryKey(column);
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of PersonBean
-     */
     @Override
-    public PersonBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new PersonBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of PersonBean
-     */
-    @Override
-    public List<PersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<PersonBean> action){
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-
     
     @Override
     public <T>T runAsTransaction(Callable<T> fun) {
@@ -1855,10 +1075,10 @@ public class PersonManager implements TableManager<PersonBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlPersonManager.Action toNative(final Action<PersonBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<FlPersonBean> toNative(final Action<PersonBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new FlPersonManager.Action(){
+        return new net.gdface.facelog.dborm.TableManager.Action<FlPersonBean>(){
 
             @Override
             public void call(FlPersonBean bean) {

@@ -6,7 +6,6 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.person;
-import java.lang.ref.SoftReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,9 +13,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
-import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -35,17 +35,8 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  * Handles database calls (save, load, count, etc...) for the fl_person table.
  * @author sql2java
  */
-public class FlPersonManager implements TableManager<FlPersonBean>
+public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 {
-
-    /* set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /* set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /* set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /* set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
      * Identify the id field.
@@ -110,7 +101,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_person";
+    public static final String TABLE_NAME="fl_person";
     /**
      * Contains all the full fields of the fl_person table.
      */
@@ -186,12 +177,6 @@ public class FlPersonManager implements TableManager<FlPersonBean>
                             + ",expiry_date"
                             + ",create_time"
                             + ",update_time";
-
-    public static interface Action{
-          void call(FlPersonBean bean);
-          FlPersonBean getBean();
-     }
-
     /**
     * @return tableName
     */
@@ -206,13 +191,21 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         return FIELD_NAMES;
     }
 
+    public String getFieldNamesAsString() {
+        return ALL_FIELDS;
+    }
+    
+    public String[] getFullFieldNames() {
+        return FULL_FIELD_NAMES;
+    }
+    
     /**
     * @return primarykeyNames
     */
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-	
+
     private static FlPersonManager singleton = new FlPersonManager();
 
     /**
@@ -283,23 +276,32 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         }
     }
 
-    /**
-     * Loads a {@link FlPersonBean} from the fl_person using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link FlPersonBean} with primary key fields
-     * @return a unique {@link FlPersonBean} or {@code null} if not found or bean is null
-     * @throws DAOException
-     * @see {@link #loadByPrimaryKey(Integer id)}
-     */
     //1.2
+    @Override
     public FlPersonBean loadByPrimaryKey(FlPersonBean bean) throws DAOException
     {
         return bean==null?null:loadByPrimaryKey( bean.getId());
     }
+    
+    /**
+     * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
+     * when you don't know which is primary key of table,you can use the method.
+     * @param keys primary keys value:<br> 
+     *             PK# 1:Integer     
+     * @return a unique {@link FlPersonBean} or {@code null} if not found
+     * @see {@link #loadByPrimaryKey(Integer id)}
+     */
+    //1.3
+    public FlPersonBean loadByPrimaryKey(Object ...keys) throws DAOException{
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        if(! (keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        return loadByPrimaryKey((Integer)keys[0]);
+    }
+    
     /**
      * Returns true if this fl_person contains row with primary key fields.
-     * @author guyadong
      * @param id Integer - PK# 1
      * @throws DAOException
      * @see #loadByPrimaryKey(Integer id)
@@ -309,22 +311,6 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     {
         return null!=loadByPrimaryKey(id );
     }
-
-    /**
-     * Returns true if this fl_person contains row specified by primary key fields of {@link FlPersonBean}.<br>
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link FlPersonBean} with primary key fields
-     * @return 
-     * @throws DAOException
-     * @see {@link #loadByPrimaryKey(FlPersonBeanBase bean)}
-     */
-    //1.4
-    @Override
-    public boolean existsPrimaryKey(FlPersonBean bean) throws DAOException
-    {
-        return null!=loadByPrimaryKey(bean);
-    }
     
     /**
      * Delete row according to its primary keys.<br>
@@ -333,31 +319,46 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DAOException
+     * @see {@link #delete(FlPersonBean)}
      */
     //2
-    @SuppressWarnings("unused")
     public int deleteByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
+        FlPersonBean bean=createBean();
+        bean.setId(id);
+        return this.delete(bean);
+    }
+
+    /**
+     * Delete row according to primary keys of bean.<br>
+     * 
+     * @param bean will be deleted ,all keys must not be null
+     * @return the number of deleted rows,0 returned if bean is null
+     * @throws DAOException
+     */
+    //2
+    @Override
+    public int delete(FlPersonBean bean) throws DAOException
+    {
+        if(null == bean) return 0;
+        if(null == bean.getId()){
             throw new IllegalArgumentException("primary keys must no be null ");
         }
         Connection c = null;
         PreparedStatement ps = null;
         try
         {
-            FlPersonBean bean=createBean();
-            bean.setId(id);
-            this.beforeDelete(bean); // listener callback
+            this.listenerContainer.beforeDelete(bean); // listener callback
             c = this.getConnection();
             StringBuilder sql = new StringBuilder("DELETE FROM fl_person WHERE id=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
             int _rows=ps.executeUpdate();
             if(_rows>0)
-                this.afterDelete(bean); // listener callback
+                this.listenerContainer.afterDelete(bean); // listener callback
             return _rows;
         }
         catch(SQLException e)
@@ -370,20 +371,27 @@ public class FlPersonManager implements TableManager<FlPersonBean>
             this.freeConnection(c);
         }
     }
+
     /**
-     * Delete row according to Primary Key fileds of the parameter{@code bean},
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the FlPersonBean with primary key fields
+     * Delete row according to its primary keys.
+     *
+     * @param keys primary keys value:<br> 
+     *             PK# 1:Integer     
      * @return the number of deleted rows
-     * @throws DAOException
-     * @see {@link #deleteByPrimaryKey(Integer id)}
-     */
+     * @see {@link #delete(FlPersonBean)}
+     */   
     //2.1
-    public int deleteByPrimaryKey(FlPersonBean bean) throws DAOException
-    {
-        return bean==null?0:deleteByPrimaryKey( bean.getId());
+    @Override
+    public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        FlPersonBean bean=createBean();   
+        if(null!= keys[0] && !(keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        bean.setId((Integer)keys[0]);
+        return delete(bean);
     }
+    
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
@@ -526,8 +534,8 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyPersonId -> FlFaceBean Collection</li>
-     *     <li> impFlLogbyPersonId -> FlLogBean Collection</li>
+     *     <li> impFlFacebyPersonId -> FlFaceBean java.util.Collection</li>
+     *     <li> impFlLogbyPersonId -> FlLogBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlPersonBean}
@@ -537,7 +545,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <C extends Collection<?>> C setImportedBeans(FlPersonBean bean,C importedBeans,String fkName)throws DAOException{
+    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,String fkName)throws DAOException{
         Object[] params = IMPORT_METHODS.get(fkName);
         if(null==params)
             throw new IllegalArgumentException("invalid fkName " + fkName);
@@ -632,7 +640,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * @see {@link FlFaceManager#setReferencedByPersonId(FlFaceBean, FlPersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FlFaceBean>> C setFlFaceBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlFaceBean>> C setFlFaceBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -704,7 +712,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * @see {@link FlLogManager#setReferencedByPersonId(FlLogBean, FlPersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FlLogBean>> C setFlLogBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -782,7 +790,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     //3.7 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
         , FlImageBean refFlImagebyPhotoId 
-        , Collection<FlFaceBean> impFlFacebyPersonId , Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
+        , java.util.Collection<FlFaceBean> impFlFacebyPersonId , java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
     {
         if(null == bean) return null;
         this.setReferencedByPhotoId(bean,refFlImagebyPhotoId);
@@ -795,12 +803,12 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , Collection , Collection )}
+     * @see {@link #save(FlPersonBean , FlImageBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
         ,final FlImageBean refFlImagebyPhotoId 
-        ,final  Collection<FlFaceBean> impFlFacebyPersonId ,final  Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
+        ,final  java.util.Collection<FlFaceBean> impFlFacebyPersonId ,final  java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlPersonBean>(){
             @Override
@@ -947,257 +955,11 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     }
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_person.
-     *
-     * @return an array of FlPersonManager bean
-     * @throws DAOException
-     */
-    //5
-    public FlPersonBean[] loadAll() throws DAOException
-    {
-        return this.loadUsingTemplate(null);
-    }
-    /**
-     * Loads each row from fl_person and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //5-1
-    public int loadAll(Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_person.
-     *
-     * @return a list of FlPersonManager bean
-     * @throws DAOException
-     */
-    //5-2
-    public List<FlPersonBean> loadAllAsList() throws DAOException
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_person, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlPersonManager bean
-     * @throws DAOException
-     */
-    //6
-    public FlPersonBean[] loadAll(int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_person, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //6-1
-    public int loadAll(int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_person, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlPersonManager bean
-     * @throws DAOException
-     */
-    //6-2
-    public List<FlPersonBean> loadAllAsList(int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
     /**
-     * Retrieves an array of FlPersonBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FlPersonBean table
-     * @throws DAOException
-     */
-    //7
-    public FlPersonBean[] loadByWhere(String where) throws DAOException
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    /**
-     * Retrieves a list of FlPersonBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FlPersonBean table
-     * @throws DAOException
-     */
-    //7
-    public List<FlPersonBean> loadByWhereAsList(String where) throws DAOException
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of FlPersonBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //7-1
-    public int loadByWhere(String where,Action action) throws DAOException
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of FlPersonBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FlPersonBean table
-     * @throws DAOException
-     */
-    //8
-    public FlPersonBean[] loadByWhere(String where, int[] fieldList) throws DAOException
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
-
-
-    /**
-     * Retrieves a list of FlPersonBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FlPersonBean table
-     * @throws DAOException
-     */
-    //8
-    public List<FlPersonBean> loadByWhereAsList(String where, int[] fieldList) throws DAOException
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of FlPersonBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action) throws DAOException
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of FlPersonBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlPersonBean table
-     * @throws DAOException
-     */
-    //9
-    public FlPersonBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        return (FlPersonBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FlPersonBean[0]);
-    }
-    /**
-     * Retrieves each row of  FlPersonBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of FlPersonBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlPersonBean table
-     * @throws DAOException
-     */
-    //9-2
-    public List<FlPersonBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadByWhereForAction(where,fieldList,startRow,numRows,action);              
-        return action.getList();
-    }
-    /**
-     * Retrieves each row of FlPersonBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        String sql=createSqlString(fieldList, where);
-        // System.out.println("loadByWhere: " + sql);
-        return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
-    }
-
-    /**
-     * Deletes all rows from fl_person table.
-     * @return the number of deleted rows.
-     * @throws DAOException
-     */
-    //10
-    public int deleteAll() throws DAOException
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
      * Deletes rows from the fl_person table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
      *
      * @param where the sql 'where' clause
@@ -1205,8 +967,14 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * @throws DAOException
      */
     //11
+    @Override
     public int deleteByWhere(String where) throws DAOException
     {
+        if( !this.listenerContainer.isEmpty()){
+            final DeleteBeanAction action = new DeleteBeanAction(); 
+            this.loadByWhere(where,action);
+            return action.getCount();
+        }
         Connection c = null;
         PreparedStatement ps = null;
 
@@ -1233,32 +1001,9 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link FlPersonBean} bean into the database.
-     *
-     * @param bean the {@link FlPersonBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     * @throws DAOException
-     */
-    //12
-    public FlPersonBean save(FlPersonBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link FlPersonBean} bean into the database.
-     * 
-     * @param bean the {@link FlPersonBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     * @throws DAOException
-     */
     //13
+    @Override
     public FlPersonBean insert(FlPersonBean bean) throws DAOException
     {
         // mini checks
@@ -1276,7 +1021,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         try
         {
             c = this.getConnection();
-            this.beforeInsert(bean); // listener callback
+            this.listenerContainer.beforeInsert(bean); // listener callback
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_person (");
 
@@ -1413,7 +1158,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.afterInsert(bean); // listener callback
+            this.listenerContainer.afterInsert(bean); // listener callback
             return bean;
         }
         catch(SQLException e)
@@ -1428,14 +1173,8 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         }
     }
 
-    /**
-     * Update the {@link FlPersonBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link FlPersonBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     * @throws DAOException
-     */
     //14
+    @Override
     public FlPersonBean update(FlPersonBean bean) throws DAOException
     {
         // mini checks
@@ -1454,7 +1193,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         {
             c = this.getConnection();
 
-            this.beforeUpdate(bean); // listener callback
+            this.listenerContainer.beforeUpdate(bean); // listener callback
             sql = new StringBuilder("UPDATE fl_person SET ");
             boolean useComma=false;
 
@@ -1582,7 +1321,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
             if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             ps.executeUpdate();
             bean.resetIsModified();
-            this.afterUpdate(bean); // listener callback
+            this.listenerContainer.afterUpdate(bean); // listener callback
 
             return bean;
         }
@@ -1598,88 +1337,12 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         }
     }
 
-    /**
-     * Saves an array of {@link FlPersonBean} bean into the database.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be saved
-     * @return the saved {@link FlPersonBean} beans or null if beans is null.
-     * @throws DAOException
-     */
-    //15
-    public FlPersonBean[] save(FlPersonBean[] beans) throws DAOException
-    {
-        if(null != beans){
-            for (FlPersonBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link FlPersonBean} beans into the database.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be saved
-     * @return the saved {@link FlPersonBean} beans or null if beans is null.
-     * @throws DAOException
-     */
-    //15-2
-    public <C extends Collection<FlPersonBean>>C save(C beans) throws DAOException
-    {
-        if(null != beans){
-            for (FlPersonBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link FlPersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be saved
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     * @see #save(FlPersonBean[])
-     */
-    //15-3
-    public FlPersonBean[] saveAsTransaction(final FlPersonBean[] beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<FlPersonBean[]>(){
-            @Override
-            public FlPersonBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link FlPersonBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlPersonBean} bean table to be saved
-     * @return the saved {@link FlPersonBean} beans.
-     * @throws DAOException
-     * @see #save(List)
-     */
-    //15-4
-    public <C extends Collection<FlPersonBean>> C saveAsTransaction(final C beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique FlPersonBean bean from a template one giving a c
-     *
-     * @param bean the FlPersonBean bean to look for
-     * @return the bean matching the template
-     * @throws DAOException
-     */
     //18
+    @Override
     public FlPersonBean loadUniqueUsingTemplate(FlPersonBean bean) throws DAOException
     {
          FlPersonBean[] beans = this.loadUsingTemplate(bean);
@@ -1692,140 +1355,13 @@ public class FlPersonManager implements TableManager<FlPersonBean>
          return beans[0];
      }
 
-    /**
-     * Loads an array of FlPersonBean from a template one.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @return all the FlPersonBean matching the template
-     * @throws DAOException
-     */
-    //19
-    public FlPersonBean[] loadUsingTemplate(FlPersonBean bean) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //19-1
-    public int loadUsingTemplate(FlPersonBean bean,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of FlPersonBean from a template one.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @return all the FlPersonBean matching the template
-     * @throws DAOException
-     */
-    //19-2
-    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBean bean) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of FlPersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FlPersonBean matching the template
-     * @throws DAOException
-     */
-    //20
-    public FlPersonBean[] loadUsingTemplate(FlPersonBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //20-1
-    public int loadUsingTemplate(FlPersonBean bean, int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of FlPersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FlPersonBean matching the template
-     * @throws DAOException
-     */
-    //20-2
-    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of FlPersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FlPersonBean matching the template
-     * @throws DAOException
-     */
-    //20-3
-    public FlPersonBean[] loadUsingTemplate(FlPersonBean bean, int startRow, int numRows, int searchType) throws DAOException
-    {
-    	return (FlPersonBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlPersonBean[0]);
-    }
-
-    /**
-     * Loads a list of FlPersonBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FlPersonBean matching the template
-     * @throws DAOException
-     */
-    //20-4
-    public List<FlPersonBean> loadUsingTemplateAsList(FlPersonBean bean, int startRow, int numRows, int searchType) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
-        return (List<FlPersonBean>) action.getList();
-        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
     //20-5
-    public int loadUsingTemplate(FlPersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    @Override
+    public int loadUsingTemplate(FlPersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPersonBean> action) throws DAOException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
-        String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
+        String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -1845,18 +1381,18 @@ public class FlPersonManager implements TableManager<FlPersonBean>
             this.freeConnection(connection);
         }
     }
-    /**
-     * Deletes rows using a FlPersonBean template.
-     *
-     * @param bean the FlPersonBean object(s) to be deleted
-     * @return the number of deleted objects
-     * @throws DAOException
-     */
+
     //21
+    @Override
     public int deleteUsingTemplate(FlPersonBean bean) throws DAOException
     {
         if(bean.isIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
+        }
+        if( !this.listenerContainer.isEmpty()){
+            final DeleteBeanAction action=new DeleteBeanAction(); 
+            this.loadUsingTemplate(bean,action);
+            return action.getCount();
         }
         Connection c = null;
         PreparedStatement ps = null;
@@ -2036,27 +1572,8 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     // COUNT
     //_____________________________________________________________________
 
-    /**
-     * Retrieves the number of rows of the table fl_person.
-     *
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //24
-    public int countAll() throws DAOException
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_person with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     * @throws DAOException
-     */
     //25
+    @Override
     public int countWhere(String where) throws DAOException
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_person " + where;
@@ -2125,45 +1642,15 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     }
 
     /**
-     * count the number of elements of a specific FlPersonBean bean
-     *
-     * @param bean the FlPersonBean bean to look for ant count
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //27
-    public int countUsingTemplate(FlPersonBean bean) throws DAOException
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific FlPersonBean bean , given the start row and number of rows.
-     *
-     * @param bean the FlPersonBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //20
-    public int countUsingTemplate(FlPersonBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific FlPersonBean bean given the start row and number of rows and the search type
+     * count the number of elements of a specific FlPersonBean bean given the search type
      *
      * @param bean the FlPersonBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlPersonBean bean, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlPersonBean bean, int searchType) throws DAOException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -2207,11 +1694,11 @@ public class FlPersonManager implements TableManager<FlPersonBean>
 
 
     /**
-     * fills the given StringBuilder with the sql where clausis constructed using the bean and the search type
+     * fills the given StringBuilder with the sql where clauses constructed using the bean and the search type
      * @param sqlWhere the StringBuilder that will be filled
-     * @param bean the bean to use for creating the where clausis
+     * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
+     * @return the number of clauses returned
      */
     protected int fillWhere(StringBuilder sqlWhere, FlPersonBean bean, int searchType)
     {
@@ -2332,9 +1819,9 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     /**
      * fill the given prepared statement with the bean values and a search type
      * @param ps the PreparedStatement that will be filled
-     * @param bean the bean to use for creating the where clausis
+     * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
+     * @return the number of clauses returned
      * @throws DAOException
      */
     protected int fillPreparedStatement(PreparedStatement ps, FlPersonBean bean, int searchType) throws DAOException
@@ -2492,7 +1979,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     //28
     public FlPersonBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-    	return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlPersonBean[0]);
+        return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlPersonBean[0]);
     }
 
     /**
@@ -2523,7 +2010,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * @throws IllegalArgumentException
      */
     //28-2
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action action) throws DAOException{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlPersonBean> action) throws DAOException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -2820,7 +2307,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
      * @throws DAOException
      */     
     //34-2
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlPersonBean> action) throws DAOException
     {
         ResultSet rs =  null;
         try {
@@ -2839,91 +2326,92 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private TableListener<FlPersonBean> listener = null;
+    class ListenerContainer implements TableListener<FlPersonBean> {
+        private final Set<TableListener<FlPersonBean>> listeners = new TreeSet<TableListener<FlPersonBean>>();
+        public ListenerContainer() {
+        }
+    
+        @Override
+        public void beforeInsert(FlPersonBean bean) throws DAOException {
+            for(TableListener<FlPersonBean> listener:listeners){
+                listener.beforeInsert(bean);
+            }
+        }
+    
+        @Override
+        public void afterInsert(FlPersonBean bean) throws DAOException {
+            for(TableListener<FlPersonBean> listener:listeners){
+                listener.afterInsert(bean);
+            }
+        }
+    
+        @Override
+        public void beforeUpdate(FlPersonBean bean) throws DAOException {
+            for(TableListener<FlPersonBean> listener:listeners){
+                listener.beforeUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void afterUpdate(FlPersonBean bean) throws DAOException {
+            for(TableListener<FlPersonBean> listener:listeners){
+                listener.afterUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void beforeDelete(FlPersonBean bean) throws DAOException {
+            for(TableListener<FlPersonBean> listener:listeners){
+                listener.beforeDelete(bean);
+            }
+        }
+    
+        @Override
+        public void afterDelete(FlPersonBean bean) throws DAOException {
+            for(TableListener<FlPersonBean> listener:listeners){
+                listener.afterDelete(bean);
+            }
+        }
+    
+        public boolean isEmpty() {
+            return listeners.isEmpty();
+        }
+    
+        public boolean contains(TableListener<FlPersonBean> o) {
+            return listeners.contains(o);
+        }
+    
+        public synchronized boolean add(TableListener<FlPersonBean> e) {
+            if(null == e)
+                throw new NullPointerException();
+            return listeners.add(e);
+        }
+    
+        public synchronized boolean remove(TableListener<FlPersonBean> o) {
+            return null == o? false : listeners.remove(o);
+        }
+    
+        public synchronized void clear() {
+            listeners.clear();
+        }    
+    }
+    private ListenerContainer listenerContainer = new ListenerContainer();
 
-    /**
-     * Registers a unique FlPersonListener listener.
-     */
     //35
+    @Override
     public void registerListener(TableListener<FlPersonBean> listener)
     {
-        this.listener = listener;
+        this.listenerContainer.add(listener);
     }
 
     /**
-     * Before the save of the FlPersonBean bean.
-     *
-     * @param bean the FlPersonBean bean to be saved
+     * remove listener.
      */
     //36
-    private void beforeInsert(FlPersonBean bean) throws DAOException
+    @Override
+    public void unregisterListener(TableListener<FlPersonBean> listener)
     {
-        if (listener != null) {
-            listener.beforeInsert(bean);
-        }
-    }
-
-    /**
-     * After the save of the FlPersonBean bean.
-     *
-     * @param bean the FlPersonBean bean to be saved
-     */
-    //37
-    private void afterInsert(FlPersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterInsert(bean);
-        }
-    }
-
-    /**
-     * Before the update of the FlPersonBean bean.
-     *
-     * @param bean the FlPersonBean bean to be updated
-     */
-    //38
-    private void beforeUpdate(FlPersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeUpdate(bean);
-        }
-    }
-
-    /**
-     * After the update of the FlPersonBean bean.
-     *
-     * @param bean the FlPersonBean bean to be updated
-     */
-    //39
-    private void afterUpdate(FlPersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterUpdate(bean);
-        }
-    }
-
-    /**
-     * Before the delete of the FlPersonBean bean.
-     *
-     * @param bean the FlPersonBean bean to be deleted
-     */
-    private void beforeDelete(FlPersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeDelete(bean);
-        }
-    }
-
-    /**
-     * After the delete of the FlPersonBean bean.
-     *
-     * @param bean the FlPersonBean bean to be deleted
-     */
-    private void afterDelete(FlPersonBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterDelete(bean);
-        }
+        this.listenerContainer.remove(listener);
     }
 
     //_____________________________________________________________________
@@ -2968,18 +2456,14 @@ public class FlPersonManager implements TableManager<FlPersonBean>
             throw new DataAccessException(e);
         }
     }
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
+
     //43
-    public static boolean isPrimaryKey(String column){
+    @Override
+    public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
         return false;
     }
+    
     /**
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
@@ -3001,42 +2485,8 @@ public class FlPersonManager implements TableManager<FlPersonBean>
         }
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of FlPersonBean
-     * @throws DAOException 
-     */
-    public FlPersonBean[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new FlPersonBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of FlPersonBean
-     * @throws DAOException
-     */
-    public List<FlPersonBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException{
-        ListAction action = new ListAction();
-        loadBySqlForAction(sql,argList,fieldList,1,-1,action);
-        return action.getList();
-    }
-    /**
-     * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    @Override    
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlPersonBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -3056,63 +2506,7 @@ public class FlPersonManager implements TableManager<FlPersonBean>
             this.freeConnection(connection);
         }
     }
-    private String createSqlString(int[] fieldList,String where){
-        StringBuffer sql = new StringBuffer(128);
-        if(fieldList == null) {
-            sql.append("SELECT ").append(ALL_FIELDS);
-        } else{
-            sql.append("SELECT ");
-            for(int i = 0; i < fieldList.length; ++i){
-                if(i != 0) {
-                    sql.append(",");
-                }
-                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
-            }            
-        }
-        sql.append(" FROM fl_person ");
-        if(null!=where)
-            sql.append(where);
-        return sql.toString();
-    }
-    
-    class ListAction implements Action {
-        final List<FlPersonBean> list;
-        protected ListAction(List<FlPersonBean> list) {
-            if(null==list)
-                throw new IllegalArgumentException("list must not be null");
-            this.list = list;
-        }
-
-        protected ListAction() {
-            list=new LinkedList<FlPersonBean>();
-        }
-
-        public List<FlPersonBean> getList() {
-            return list;
-        }
-
-        @Override
-        public void call(FlPersonBean bean) {
-            list.add(bean);
-        }
-
-        @Override
-        public FlPersonBean getBean() {
-            return null;
-        }
-    }
-    public static abstract class NoListAction implements Action {
-        SoftReference<FlPersonBean> sf=new SoftReference<FlPersonBean>(new FlPersonBean());
-        @Override
-        public final FlPersonBean getBean() {
-            FlPersonBean bean = sf.get();
-            if(null==bean){
-                sf=new SoftReference<FlPersonBean>(bean=new FlPersonBean());
-            }
-            return bean.clean();
-        }
-    }
-    
+   
     @Override
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
@@ -3122,5 +2516,16 @@ public class FlPersonManager implements TableManager<FlPersonBean>
     public void runAsTransaction(final Runnable fun) throws DAOException{
         Manager.getInstance().runAsTransaction(fun);
     }
-
+    
+    class DeleteBeanAction extends Action.Adapter<FlPersonBean>{
+        private final AtomicInteger count=new AtomicInteger(0);
+        @Override
+        public void call(FlPersonBean bean) throws DAOException {
+                FlPersonManager.this.delete(bean);
+                count.incrementAndGet();
+        }
+        int getCount(){
+            return count.get();
+        }
+    }
 }

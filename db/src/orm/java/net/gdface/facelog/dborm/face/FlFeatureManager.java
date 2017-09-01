@@ -6,7 +6,6 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.face;
-import java.lang.ref.SoftReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,9 +13,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
-import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -29,17 +29,8 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  * Handles database calls (save, load, count, etc...) for the fl_feature table.
  * @author sql2java
  */
-public class FlFeatureManager implements TableManager<FlFeatureBean>
+public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
 {
-
-    /* set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /* set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /* set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /* set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
      * Identify the md5 field.
@@ -69,7 +60,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_feature";
+    public static final String TABLE_NAME="fl_feature";
     /**
      * Contains all the full fields of the fl_feature table.
      */
@@ -116,12 +107,6 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
                             + ",img_md5"
                             + ",feature"
                             + ",create_time";
-
-    public static interface Action{
-          void call(FlFeatureBean bean);
-          FlFeatureBean getBean();
-     }
-
     /**
     * @return tableName
     */
@@ -136,13 +121,21 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
         return FIELD_NAMES;
     }
 
+    public String getFieldNamesAsString() {
+        return ALL_FIELDS;
+    }
+    
+    public String[] getFullFieldNames() {
+        return FULL_FIELD_NAMES;
+    }
+    
     /**
     * @return primarykeyNames
     */
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-	
+
     private static FlFeatureManager singleton = new FlFeatureManager();
 
     /**
@@ -166,302 +159,18 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
         return new FlFeatureBean();
     }
 
-    public FlFeatureBean loadByPrimaryKey(FlFeatureBean bean) throws DAOException
-    {
-        throw new UnsupportedOperationException();
-    }
-    public boolean existsPrimaryKey(FlFeatureBean bean) throws DAOException
-    {
-        throw new UnsupportedOperationException();
-    }
-    public int deleteByPrimaryKey(FlFeatureBean bean) throws DAOException
-    {
-        throw new UnsupportedOperationException();
-    }
  
-
-    @Override
-    public <T> T[] getImportedBeans(FlFeatureBean bean,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T> List<T> getImportedBeansAsList(FlFeatureBean bean,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T> T[] setImportedBeans(FlFeatureBean bean,T[] importedBeans,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }    
-    @Override
-    public <C extends Collection<?>> C setImportedBeans(FlFeatureBean bean,C importedBeans,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
  
 
 
- 
-    @Override
-    public <T> T getReferencedBean(FlFeatureBean bean,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T> T setReferencedBean(FlFeatureBean bean,T beanToSet,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-     
-
-    //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_feature.
-     *
-     * @return an array of FlFeatureManager bean
-     * @throws DAOException
-     */
-    //5
-    public FlFeatureBean[] loadAll() throws DAOException
-    {
-        return this.loadUsingTemplate(null);
-    }
-    /**
-     * Loads each row from fl_feature and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //5-1
-    public int loadAll(Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_feature.
-     *
-     * @return a list of FlFeatureManager bean
-     * @throws DAOException
-     */
-    //5-2
-    public List<FlFeatureBean> loadAllAsList() throws DAOException
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_feature, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlFeatureManager bean
-     * @throws DAOException
-     */
-    //6
-    public FlFeatureBean[] loadAll(int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_feature, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //6-1
-    public int loadAll(int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_feature, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlFeatureManager bean
-     * @throws DAOException
-     */
-    //6-2
-    public List<FlFeatureBean> loadAllAsList(int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
+      
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
     /**
-     * Retrieves an array of FlFeatureBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FlFeatureBean table
-     * @throws DAOException
-     */
-    //7
-    public FlFeatureBean[] loadByWhere(String where) throws DAOException
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    /**
-     * Retrieves a list of FlFeatureBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FlFeatureBean table
-     * @throws DAOException
-     */
-    //7
-    public List<FlFeatureBean> loadByWhereAsList(String where) throws DAOException
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of FlFeatureBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //7-1
-    public int loadByWhere(String where,Action action) throws DAOException
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of FlFeatureBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FlFeatureBean table
-     * @throws DAOException
-     */
-    //8
-    public FlFeatureBean[] loadByWhere(String where, int[] fieldList) throws DAOException
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
-
-
-    /**
-     * Retrieves a list of FlFeatureBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FlFeatureBean table
-     * @throws DAOException
-     */
-    //8
-    public List<FlFeatureBean> loadByWhereAsList(String where, int[] fieldList) throws DAOException
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of FlFeatureBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action) throws DAOException
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of FlFeatureBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlFeatureBean table
-     * @throws DAOException
-     */
-    //9
-    public FlFeatureBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        return (FlFeatureBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FlFeatureBean[0]);
-    }
-    /**
-     * Retrieves each row of  FlFeatureBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of FlFeatureBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlFeatureBean table
-     * @throws DAOException
-     */
-    //9-2
-    public List<FlFeatureBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadByWhereForAction(where,fieldList,startRow,numRows,action);              
-        return action.getList();
-    }
-    /**
-     * Retrieves each row of FlFeatureBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        String sql=createSqlString(fieldList, where);
-        // System.out.println("loadByWhere: " + sql);
-        return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
-    }
-
-    /**
-     * Deletes all rows from fl_feature table.
-     * @return the number of deleted rows.
-     * @throws DAOException
-     */
-    //10
-    public int deleteAll() throws DAOException
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
      * Deletes rows from the fl_feature table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
      *
      * @param where the sql 'where' clause
@@ -469,8 +178,14 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
      * @throws DAOException
      */
     //11
+    @Override
     public int deleteByWhere(String where) throws DAOException
     {
+        if( !this.listenerContainer.isEmpty()){
+            final DeleteBeanAction action = new DeleteBeanAction(); 
+            this.loadByWhere(where,action);
+            return action.getCount();
+        }
         Connection c = null;
         PreparedStatement ps = null;
 
@@ -497,32 +212,9 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link FlFeatureBean} bean into the database.
-     *
-     * @param bean the {@link FlFeatureBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     * @throws DAOException
-     */
-    //12
-    public FlFeatureBean save(FlFeatureBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link FlFeatureBean} bean into the database.
-     * 
-     * @param bean the {@link FlFeatureBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     * @throws DAOException
-     */
     //13
+    @Override
     public FlFeatureBean insert(FlFeatureBean bean) throws DAOException
     {
         // mini checks
@@ -540,7 +232,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
         try
         {
             c = this.getConnection();
-            this.beforeInsert(bean); // listener callback
+            this.listenerContainer.beforeInsert(bean); // listener callback
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_feature (");
 
@@ -604,7 +296,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.afterInsert(bean); // listener callback
+            this.listenerContainer.afterInsert(bean); // listener callback
             return bean;
         }
         catch(SQLException e)
@@ -619,14 +311,8 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
         }
     }
 
-    /**
-     * Update the {@link FlFeatureBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link FlFeatureBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     * @throws DAOException
-     */
     //14
+    @Override
     public FlFeatureBean update(FlFeatureBean bean) throws DAOException
     {
         // mini checks
@@ -646,7 +332,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
             c = this.getConnection();
 
 
-            this.beforeUpdate(bean); // listener callback
+            this.listenerContainer.beforeUpdate(bean); // listener callback
             sql = new StringBuilder("UPDATE fl_feature SET ");
             boolean useComma=false;
 
@@ -709,7 +395,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
 
             ps.executeUpdate();
             bean.resetIsModified();
-            this.afterUpdate(bean); // listener callback
+            this.listenerContainer.afterUpdate(bean); // listener callback
 
             return bean;
         }
@@ -725,88 +411,12 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
         }
     }
 
-    /**
-     * Saves an array of {@link FlFeatureBean} bean into the database.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans or null if beans is null.
-     * @throws DAOException
-     */
-    //15
-    public FlFeatureBean[] save(FlFeatureBean[] beans) throws DAOException
-    {
-        if(null != beans){
-            for (FlFeatureBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link FlFeatureBean} beans into the database.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans or null if beans is null.
-     * @throws DAOException
-     */
-    //15-2
-    public <C extends Collection<FlFeatureBean>>C save(C beans) throws DAOException
-    {
-        if(null != beans){
-            for (FlFeatureBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link FlFeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     * @see #save(FlFeatureBean[])
-     */
-    //15-3
-    public FlFeatureBean[] saveAsTransaction(final FlFeatureBean[] beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<FlFeatureBean[]>(){
-            @Override
-            public FlFeatureBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link FlFeatureBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFeatureBean} bean table to be saved
-     * @return the saved {@link FlFeatureBean} beans.
-     * @throws DAOException
-     * @see #save(List)
-     */
-    //15-4
-    public <C extends Collection<FlFeatureBean>> C saveAsTransaction(final C beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique FlFeatureBean bean from a template one giving a c
-     *
-     * @param bean the FlFeatureBean bean to look for
-     * @return the bean matching the template
-     * @throws DAOException
-     */
     //18
+    @Override
     public FlFeatureBean loadUniqueUsingTemplate(FlFeatureBean bean) throws DAOException
     {
          FlFeatureBean[] beans = this.loadUsingTemplate(bean);
@@ -819,140 +429,13 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
          return beans[0];
      }
 
-    /**
-     * Loads an array of FlFeatureBean from a template one.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @return all the FlFeatureBean matching the template
-     * @throws DAOException
-     */
-    //19
-    public FlFeatureBean[] loadUsingTemplate(FlFeatureBean bean) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //19-1
-    public int loadUsingTemplate(FlFeatureBean bean,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of FlFeatureBean from a template one.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @return all the FlFeatureBean matching the template
-     * @throws DAOException
-     */
-    //19-2
-    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBean bean) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of FlFeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FlFeatureBean matching the template
-     * @throws DAOException
-     */
-    //20
-    public FlFeatureBean[] loadUsingTemplate(FlFeatureBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //20-1
-    public int loadUsingTemplate(FlFeatureBean bean, int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of FlFeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FlFeatureBean matching the template
-     * @throws DAOException
-     */
-    //20-2
-    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of FlFeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FlFeatureBean matching the template
-     * @throws DAOException
-     */
-    //20-3
-    public FlFeatureBean[] loadUsingTemplate(FlFeatureBean bean, int startRow, int numRows, int searchType) throws DAOException
-    {
-    	return (FlFeatureBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlFeatureBean[0]);
-    }
-
-    /**
-     * Loads a list of FlFeatureBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FlFeatureBean matching the template
-     * @throws DAOException
-     */
-    //20-4
-    public List<FlFeatureBean> loadUsingTemplateAsList(FlFeatureBean bean, int startRow, int numRows, int searchType) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
-        return (List<FlFeatureBean>) action.getList();
-        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
     //20-5
-    public int loadUsingTemplate(FlFeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    @Override
+    public int loadUsingTemplate(FlFeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlFeatureBean> action) throws DAOException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
-        String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
+        String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -972,16 +455,16 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
             this.freeConnection(connection);
         }
     }
-    /**
-     * Deletes rows using a FlFeatureBean template.
-     *
-     * @param bean the FlFeatureBean object(s) to be deleted
-     * @return the number of deleted objects
-     * @throws DAOException
-     */
+
     //21
+    @Override
     public int deleteUsingTemplate(FlFeatureBean bean) throws DAOException
     {
+        if( !this.listenerContainer.isEmpty()){
+            final DeleteBeanAction action=new DeleteBeanAction(); 
+            this.loadUsingTemplate(bean,action);
+            return action.getCount();
+        }
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("DELETE FROM fl_feature ");
@@ -1028,27 +511,8 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     // COUNT
     //_____________________________________________________________________
 
-    /**
-     * Retrieves the number of rows of the table fl_feature.
-     *
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //24
-    public int countAll() throws DAOException
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_feature with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     * @throws DAOException
-     */
     //25
+    @Override
     public int countWhere(String where) throws DAOException
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_feature " + where;
@@ -1117,45 +581,15 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     }
 
     /**
-     * count the number of elements of a specific FlFeatureBean bean
-     *
-     * @param bean the FlFeatureBean bean to look for ant count
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //27
-    public int countUsingTemplate(FlFeatureBean bean) throws DAOException
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific FlFeatureBean bean , given the start row and number of rows.
-     *
-     * @param bean the FlFeatureBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //20
-    public int countUsingTemplate(FlFeatureBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific FlFeatureBean bean given the start row and number of rows and the search type
+     * count the number of elements of a specific FlFeatureBean bean given the search type
      *
      * @param bean the FlFeatureBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlFeatureBean bean, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlFeatureBean bean, int searchType) throws DAOException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -1199,11 +633,11 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
 
 
     /**
-     * fills the given StringBuilder with the sql where clausis constructed using the bean and the search type
+     * fills the given StringBuilder with the sql where clauses constructed using the bean and the search type
      * @param sqlWhere the StringBuilder that will be filled
-     * @param bean the bean to use for creating the where clausis
+     * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
+     * @return the number of clauses returned
      */
     protected int fillWhere(StringBuilder sqlWhere, FlFeatureBean bean, int searchType)
     {
@@ -1268,9 +702,9 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     /**
      * fill the given prepared statement with the bean values and a search type
      * @param ps the PreparedStatement that will be filled
-     * @param bean the bean to use for creating the where clausis
+     * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
+     * @return the number of clauses returned
      * @throws DAOException
      */
     protected int fillPreparedStatement(PreparedStatement ps, FlFeatureBean bean, int searchType) throws DAOException
@@ -1364,7 +798,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     //28
     public FlFeatureBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-    	return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlFeatureBean[0]);
+        return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlFeatureBean[0]);
     }
 
     /**
@@ -1395,7 +829,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
      * @throws IllegalArgumentException
      */
     //28-2
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action action) throws DAOException{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlFeatureBean> action) throws DAOException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -1650,7 +1084,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
      * @throws DAOException
      */     
     //34-2
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlFeatureBean> action) throws DAOException
     {
         ResultSet rs =  null;
         try {
@@ -1669,91 +1103,92 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private TableListener<FlFeatureBean> listener = null;
+    class ListenerContainer implements TableListener<FlFeatureBean> {
+        private final Set<TableListener<FlFeatureBean>> listeners = new TreeSet<TableListener<FlFeatureBean>>();
+        public ListenerContainer() {
+        }
+    
+        @Override
+        public void beforeInsert(FlFeatureBean bean) throws DAOException {
+            for(TableListener<FlFeatureBean> listener:listeners){
+                listener.beforeInsert(bean);
+            }
+        }
+    
+        @Override
+        public void afterInsert(FlFeatureBean bean) throws DAOException {
+            for(TableListener<FlFeatureBean> listener:listeners){
+                listener.afterInsert(bean);
+            }
+        }
+    
+        @Override
+        public void beforeUpdate(FlFeatureBean bean) throws DAOException {
+            for(TableListener<FlFeatureBean> listener:listeners){
+                listener.beforeUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void afterUpdate(FlFeatureBean bean) throws DAOException {
+            for(TableListener<FlFeatureBean> listener:listeners){
+                listener.afterUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void beforeDelete(FlFeatureBean bean) throws DAOException {
+            for(TableListener<FlFeatureBean> listener:listeners){
+                listener.beforeDelete(bean);
+            }
+        }
+    
+        @Override
+        public void afterDelete(FlFeatureBean bean) throws DAOException {
+            for(TableListener<FlFeatureBean> listener:listeners){
+                listener.afterDelete(bean);
+            }
+        }
+    
+        public boolean isEmpty() {
+            return listeners.isEmpty();
+        }
+    
+        public boolean contains(TableListener<FlFeatureBean> o) {
+            return listeners.contains(o);
+        }
+    
+        public synchronized boolean add(TableListener<FlFeatureBean> e) {
+            if(null == e)
+                throw new NullPointerException();
+            return listeners.add(e);
+        }
+    
+        public synchronized boolean remove(TableListener<FlFeatureBean> o) {
+            return null == o? false : listeners.remove(o);
+        }
+    
+        public synchronized void clear() {
+            listeners.clear();
+        }    
+    }
+    private ListenerContainer listenerContainer = new ListenerContainer();
 
-    /**
-     * Registers a unique FlFeatureListener listener.
-     */
     //35
+    @Override
     public void registerListener(TableListener<FlFeatureBean> listener)
     {
-        this.listener = listener;
+        this.listenerContainer.add(listener);
     }
 
     /**
-     * Before the save of the FlFeatureBean bean.
-     *
-     * @param bean the FlFeatureBean bean to be saved
+     * remove listener.
      */
     //36
-    private void beforeInsert(FlFeatureBean bean) throws DAOException
+    @Override
+    public void unregisterListener(TableListener<FlFeatureBean> listener)
     {
-        if (listener != null) {
-            listener.beforeInsert(bean);
-        }
-    }
-
-    /**
-     * After the save of the FlFeatureBean bean.
-     *
-     * @param bean the FlFeatureBean bean to be saved
-     */
-    //37
-    private void afterInsert(FlFeatureBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterInsert(bean);
-        }
-    }
-
-    /**
-     * Before the update of the FlFeatureBean bean.
-     *
-     * @param bean the FlFeatureBean bean to be updated
-     */
-    //38
-    private void beforeUpdate(FlFeatureBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeUpdate(bean);
-        }
-    }
-
-    /**
-     * After the update of the FlFeatureBean bean.
-     *
-     * @param bean the FlFeatureBean bean to be updated
-     */
-    //39
-    private void afterUpdate(FlFeatureBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterUpdate(bean);
-        }
-    }
-
-    /**
-     * Before the delete of the FlFeatureBean bean.
-     *
-     * @param bean the FlFeatureBean bean to be deleted
-     */
-    private void beforeDelete(FlFeatureBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeDelete(bean);
-        }
-    }
-
-    /**
-     * After the delete of the FlFeatureBean bean.
-     *
-     * @param bean the FlFeatureBean bean to be deleted
-     */
-    private void afterDelete(FlFeatureBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterDelete(bean);
-        }
+        this.listenerContainer.remove(listener);
     }
 
     //_____________________________________________________________________
@@ -1798,18 +1233,14 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
             throw new DataAccessException(e);
         }
     }
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
+
     //43
-    public static boolean isPrimaryKey(String column){
+    @Override
+    public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
         return false;
     }
+    
     /**
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
@@ -1831,42 +1262,8 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
         }
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of FlFeatureBean
-     * @throws DAOException 
-     */
-    public FlFeatureBean[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new FlFeatureBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of FlFeatureBean
-     * @throws DAOException
-     */
-    public List<FlFeatureBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException{
-        ListAction action = new ListAction();
-        loadBySqlForAction(sql,argList,fieldList,1,-1,action);
-        return action.getList();
-    }
-    /**
-     * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    @Override    
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlFeatureBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -1886,63 +1283,7 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
             this.freeConnection(connection);
         }
     }
-    private String createSqlString(int[] fieldList,String where){
-        StringBuffer sql = new StringBuffer(128);
-        if(fieldList == null) {
-            sql.append("SELECT ").append(ALL_FIELDS);
-        } else{
-            sql.append("SELECT ");
-            for(int i = 0; i < fieldList.length; ++i){
-                if(i != 0) {
-                    sql.append(",");
-                }
-                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
-            }            
-        }
-        sql.append(" FROM fl_feature ");
-        if(null!=where)
-            sql.append(where);
-        return sql.toString();
-    }
-    
-    class ListAction implements Action {
-        final List<FlFeatureBean> list;
-        protected ListAction(List<FlFeatureBean> list) {
-            if(null==list)
-                throw new IllegalArgumentException("list must not be null");
-            this.list = list;
-        }
-
-        protected ListAction() {
-            list=new LinkedList<FlFeatureBean>();
-        }
-
-        public List<FlFeatureBean> getList() {
-            return list;
-        }
-
-        @Override
-        public void call(FlFeatureBean bean) {
-            list.add(bean);
-        }
-
-        @Override
-        public FlFeatureBean getBean() {
-            return null;
-        }
-    }
-    public static abstract class NoListAction implements Action {
-        SoftReference<FlFeatureBean> sf=new SoftReference<FlFeatureBean>(new FlFeatureBean());
-        @Override
-        public final FlFeatureBean getBean() {
-            FlFeatureBean bean = sf.get();
-            if(null==bean){
-                sf=new SoftReference<FlFeatureBean>(bean=new FlFeatureBean());
-            }
-            return bean.clean();
-        }
-    }
-    
+   
     @Override
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
@@ -1952,5 +1293,16 @@ public class FlFeatureManager implements TableManager<FlFeatureBean>
     public void runAsTransaction(final Runnable fun) throws DAOException{
         Manager.getInstance().runAsTransaction(fun);
     }
-
+    
+    class DeleteBeanAction extends Action.Adapter<FlFeatureBean>{
+        private final AtomicInteger count=new AtomicInteger(0);
+        @Override
+        public void call(FlFeatureBean bean) throws DAOException {
+                FlFeatureManager.this.delete(bean);
+                count.incrementAndGet();
+        }
+        int getCount(){
+            return count.get();
+        }
+    }
 }

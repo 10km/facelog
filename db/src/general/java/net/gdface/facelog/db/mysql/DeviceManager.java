@@ -5,12 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-
-
 package net.gdface.facelog.db.mysql;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import net.gdface.facelog.db.DeviceBean;
@@ -33,130 +29,42 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class DeviceManager implements TableManager<DeviceBean>
+public class DeviceManager extends TableManager.Adapter<DeviceBean>
 {
-
-    /**
-     * Identify the id field.
-     */
-    public static final int ID_ID = 0;
-
-    /**
-     * Identify the name field.
-     */
-    public static final int ID_NAME = 1;
-
-    /**
-     * Identify the online field.
-     */
-    public static final int ID_ONLINE = 2;
-
-    /**
-     * Identify the group_id field.
-     */
-    public static final int ID_GROUP_ID = 3;
-
-    /**
-     * Identify the version field.
-     */
-    public static final int ID_VERSION = 4;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 5;
-
-    /**
-     * Identify the update_time field.
-     */
-    public static final int ID_UPDATE_TIME = 6;
-
-    /**
-     * Tablename.
-     */
-        public static final String TABLE_NAME="fl_device";
-    /**
-     * Contains all the full fields of the fl_device table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_device.id"
-        ,"fl_device.name"
-        ,"fl_device.online"
-        ,"fl_device.group_id"
-        ,"fl_device.version"
-        ,"fl_device.create_time"
-        ,"fl_device.update_time"
-    };
-
-    /**
-     * Contains all the fields of the fl_device table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "id"
-        ,"name"
-        ,"online"
-        ,"group_id"
-        ,"version"
-        ,"create_time"
-        ,"update_time"
-    };
-   /**
-     * Contains all the primarykey fields of the fl_device table.
-     */
-    public static final String[] PRIMARYKEY_NAMES =
-    {
-        "id"
-    };
-    /**
-     * Field that contains the comma separated fields of the fl_device table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_device.id"
-                            + ",fl_device.name"
-                            + ",fl_device.online"
-                            + ",fl_device.group_id"
-                            + ",fl_device.version"
-                            + ",fl_device.create_time"
-                            + ",fl_device.update_time";
-
-    /**
-     * Field that contains the comma separated fields of the fl_device table.
-     */
-    public static final String ALL_FIELDS = "id"
-                            + ",name"
-                            + ",online"
-                            + ",group_id"
-                            + ",version"
-                            + ",create_time"
-                            + ",update_time";
-
-    /**
-    * @return tableName
-    */
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    /**
-    * @return primarykeyNames
-    */
-    public String[] getPrimarykeyNames() {
-        return PRIMARYKEY_NAMES;
-    }
-    
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
 
+    /**
+    * @return table name
+    */
+    public String getTableName() {
+        return this.nativeManager.getTableName();
+    }
+
+    /**
+    * @return field names of table
+    */
+    public String[] getFieldNames() {
+        return this.nativeManager.getFieldNames();
+    }
+
+    public String getFieldNamesAsString() {
+        return this.nativeManager.getFieldNamesAsString();
+    }
+    
+    public String[] getFullFieldNames() {
+        return this.nativeManager.getFullFieldNames();
+    }
+    
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return this.nativeManager.getPrimarykeyNames();
+    }
+    
     /**
      * Get the {@link DeviceManager} singleton.
      *
@@ -205,16 +113,8 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
     }
 
-
-    /**
-     * Loads a {@link DeviceBean} from the fl_device using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link DeviceBean} with primary key fields
-     * @return a unique {@link DeviceBean} or {@code null} if not found or bean is null
-     * @see {@link #loadByPrimaryKey(Integer id)}
-     */
     //1.2
+    @Override
     public DeviceBean loadByPrimaryKey(DeviceBean bean)
     {
         try{
@@ -228,7 +128,6 @@ public class DeviceManager implements TableManager<DeviceBean>
     /**
      * Loads a {@link DeviceBean} from the fl_device using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
      * @param keys primary keys value:<br> 
      *             PK# 1:Integer     
      * @return a unique {@link DeviceBean} or {@code null} if not found
@@ -245,7 +144,6 @@ public class DeviceManager implements TableManager<DeviceBean>
     
     /**
      * Returns true if this fl_device contains row with primary key fields.
-     * @author guyadong
      * @param id Integer - PK# 1
      * @see #loadByPrimaryKey(Integer id)
      */
@@ -253,34 +151,6 @@ public class DeviceManager implements TableManager<DeviceBean>
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
-
-    }
-    /**
-     * Returns true if this fl_device contains row with primary key fields.
-     * @param keys primary keys value:<br>
-     *             PK# 1:Integer     
-     * @author guyadong
-     * @see #loadByPrimaryKey(Object...)
-     */
-    //1.5
-    public boolean existsPrimaryKey(Object ...keys)
-    {
-        return null!=loadByPrimaryKey(keys);
-    }
-    /**
-     * Returns true if this fl_device contains row specified by primary key fields of {@link DeviceBean}.<br>
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link DeviceBean} with primary key fields
-     * @return 
-     * @see {@link #loadByPrimaryKey(DeviceBean bean)}
-     */
-    //1.6
-    @Override
-    public boolean existsPrimaryKey(DeviceBean bean)
-    {
-        return null!=loadByPrimaryKey(bean);
-
     }
     
     /**
@@ -319,26 +189,7 @@ public class DeviceManager implements TableManager<DeviceBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return deleteByPrimaryKey((Integer)keys[0]);
     }
-    /**
-     * Delete row according to Primary Key fileds of the parameter{@code bean},
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the DeviceBean with primary key fields
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(Integer id)}
-     */
-    //2.2
-    @Override
-    public int deleteByPrimaryKey(DeviceBean bean)
-    {
-        try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
+
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
@@ -392,7 +243,7 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -433,8 +284,8 @@ public class DeviceManager implements TableManager<DeviceBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyDeviceId -> ImageBean Collection</li>
-     *     <li> impFlLogbyDeviceId -> LogBean Collection</li>
+     *     <li> impFlImagebyDeviceId -> ImageBean java.util.Collection</li>
+     *     <li> impFlLogbyDeviceId -> LogBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link DeviceBean}
@@ -443,11 +294,11 @@ public class DeviceManager implements TableManager<DeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,String fkName){
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof List){
-                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+            if(importedBeans instanceof java.util.List){
+                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
                         this.beanConverter.toRight(bean),
                         resultConverter.toRight(importedBeans),
                         fkName));            	
@@ -495,7 +346,7 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
+    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {
             return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByDeviceIdAsList( this.beanConverter.toRight(bean)));
@@ -532,7 +383,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     }
 
     /**
-     * set  the {@link ImageBean} object collection associate to DeviceBean by the fl_image.device_id field.<BR>
+     * set  the {@link ImageBean} object java.util.Collection associate to DeviceBean by the fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_3
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_image 
@@ -540,12 +391,12 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @see {@link FlImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans)
+    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
         try {
             IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByDeviceId(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByDeviceId(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -589,7 +440,7 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
+    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {
             return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByDeviceIdAsList( this.beanConverter.toRight(bean)));
@@ -626,7 +477,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     }
 
     /**
-     * set  the {@link LogBean} object collection associate to DeviceBean by the fl_log.device_id field.<BR>
+     * set  the {@link LogBean} object java.util.Collection associate to DeviceBean by the fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_log 
@@ -634,12 +485,12 @@ public class DeviceManager implements TableManager<DeviceBean>
      * @see {@link FlLogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
         try {
             IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<LogBean>)importedBeans,nativeManager.setFlLogBeansByDeviceId(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByDeviceId(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -708,7 +559,7 @@ public class DeviceManager implements TableManager<DeviceBean>
     //3.7 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         
-        , Collection<ImageBean> impFlImagebyDeviceId , Collection<LogBean> impFlLogbyDeviceId )
+        , java.util.Collection<ImageBean> impFlImagebyDeviceId , java.util.Collection<LogBean> impFlLogbyDeviceId )
     {
         try{
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
@@ -721,12 +572,12 @@ public class DeviceManager implements TableManager<DeviceBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceBean , Collection , Collection )}
+     * @see {@link #save(DeviceBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final  Collection<ImageBean> impFlImagebyDeviceId ,final  Collection<LogBean> impFlLogbyDeviceId ) throws DAOException
+        ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<DeviceBean>(){
             @Override
@@ -746,277 +597,9 @@ public class DeviceManager implements TableManager<DeviceBean>
      
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_device.
-     *
-     * @return an array of FlDeviceManager bean
-     */
-    //5
-    @Override
-    public DeviceBean[] loadAll()
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Loads each row from fl_device and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //5-1
-    @Override
-    public int loadAll(Action<DeviceBean> action)
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_device.
-     *
-     * @return a list of DeviceBean bean
-     */
-    //5-2
-    @Override
-    public List<DeviceBean> loadAllAsList()
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_device, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlDeviceManager bean
-     */
-    //6
-    @Override
-    public DeviceBean[] loadAll(int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_device, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<DeviceBean> action)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_device, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlDeviceManager bean
-     */
-    //6-2
-    @Override
-    public List<DeviceBean> loadAllAsList(int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves an array of DeviceBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting DeviceBean table
-     */
-    //7
-    @Override
-    public DeviceBean[] loadByWhere(String where)
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    
-    /**
-     * Retrieves a list of DeviceBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting DeviceBean table
-     */
-    //7
-    @Override
-    public List<DeviceBean> loadByWhereAsList(String where)
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of DeviceBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //7-1
-    @Override
-    public int loadByWhere(String where,Action<DeviceBean> action)
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of DeviceBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting DeviceBean table
-     */
-    //8
-    @Override
-    public DeviceBean[] loadByWhere(String where, int[] fieldList)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
 
-
-    /**
-     * Retrieves a list of DeviceBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting DeviceBean table
-     */
-    //8
-    @Override
-    public List<DeviceBean> loadByWhereAsList(String where, int[] fieldList)
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of DeviceBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<DeviceBean> action)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of DeviceBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting DeviceBean table
-     */
-    //9
-    @Override
-    public DeviceBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
-    {
-        return (DeviceBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new DeviceBean[0]);
-    }
-    /**
-     * Retrieves each row of  DeviceBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<DeviceBean> action)
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of DeviceBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting DeviceBean table
-     */
-    //9-2
-    @Override
-    public List<DeviceBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Retrieves each row of DeviceBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<DeviceBean> action)
-    {
-        try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    /**
-     * Deletes all rows from fl_device table.
-     * @return the number of deleted rows.
-     */
-    //10
-    @Override
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
-     * Deletes rows from the fl_device table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * <br>Attention, if 'WHERE' is omitted it will delete all records.
-     *
-     * @param where the sql 'where' clause
-     * @return the number of deleted rows
-     */
     //11
     @Override
     public int deleteByWhere(String where)
@@ -1034,32 +617,10 @@ public class DeviceManager implements TableManager<DeviceBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link DeviceBean} bean into the database.
-     *
-     * @param bean the {@link DeviceBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     */
-    //12
-    @Override
-    public DeviceBean save(DeviceBean bean)
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link DeviceBean} bean into the database.
-     *
-     * @param bean the {@link DeviceBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     */
     //13
-    public DeviceBean insert(DeviceBean bean)
+    @Override
+    protected DeviceBean insert(DeviceBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
@@ -1070,14 +631,9 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
     }
 
-    /**
-     * Update the {@link DeviceBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link DeviceBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     */
     //14
-    public DeviceBean update(DeviceBean bean)
+    @Override
+    protected DeviceBean update(DeviceBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
@@ -1088,85 +644,10 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
     }
 
-    /**
-     * Saves an array of {@link DeviceBean} bean into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans or null if beans is null.
-     */
-    //15
-    public DeviceBean[] save(DeviceBean[] beans)
-    {
-        if(null !=beans){
-            for (DeviceBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link DeviceBean} bean into the database.
-     *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans or null if beans is null.
-     */
-    //15-2
-    @Override
-    public <C extends Collection<DeviceBean>> C save(C beans)
-    {
-        if(null != beans){
-            for (DeviceBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link DeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans.
-     * @see #save(DeviceBean[])
-     */
-    //15-3
-    @Override
-    public DeviceBean[] saveAsTransaction(final DeviceBean[] beans) {
-        return this.runAsTransaction(new Callable<DeviceBean[]>(){
-            @Override
-            public DeviceBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link DeviceBean} bean into the database as transaction.
-     *
-     * @param beans the {@link DeviceBean} bean table to be saved
-     * @return the saved {@link DeviceBean} beans.
-     * @see #save(List)
-     */
-    //15-4
-    @Override
-    public <C extends Collection<DeviceBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique DeviceBean bean from a template one giving a c
-     *
-     * @param bean the DeviceBean bean to look for
-     * @return the bean matching the template
-     */
     //18
     @Override
     public DeviceBean loadUniqueUsingTemplate(DeviceBean bean)
@@ -1180,154 +661,19 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
      }
 
-    /**
-     * Loads an array of DeviceBean from a template one.
-     *
-     * @param bean the DeviceBean template to look for
-     * @return all the DeviceBean matching the template
-     */
-    //19
-    @Override
-    public DeviceBean[] loadUsingTemplate(DeviceBean bean)
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //19-1
-    @Override
-    public int loadUsingTemplate(DeviceBean bean,Action<DeviceBean> action)
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of DeviceBean from a template one.
-     *
-     * @param bean the DeviceBean template to look for
-     * @return all the DeviceBean matching the template
-     */
-    //19-2
-    @Override
-    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean)
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of DeviceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the DeviceBean matching the template
-     */
-    //20
-    @Override
-    public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //20-1
-    @Override
-    public int loadUsingTemplate(DeviceBean bean, int startRow, int numRows,Action<DeviceBean> action)
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of DeviceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the DeviceBean matching the template
-     */
-    //20-2
-    @Override
-    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of DeviceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the DeviceBean matching the template
-     */
-    //20-3
-    @Override
-    public DeviceBean[] loadUsingTemplate(DeviceBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new DeviceBean[0]);
-    }
-
-    /**
-     * Loads a list of DeviceBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the DeviceBean matching the template
-     */
-    //20-4
-    @Override
-    public List<DeviceBean> loadUsingTemplateAsList(DeviceBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
     //20-5
     @Override
-    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<DeviceBean> action)
+    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Deletes rows using a DeviceBean template.
-     *
-     * @param bean the DeviceBean object(s) to be deleted
-     * @return the number of deleted objects
-     */
+
     //21
     @Override
     public int deleteUsingTemplate(DeviceBean bean)
@@ -1342,31 +688,10 @@ public class DeviceManager implements TableManager<DeviceBean>
     }
 
 
-
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
-
-    /**
-     * Retrieves the number of rows of the table fl_device.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    @Override
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_device with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     */
     //25
     @Override
     public int countWhere(String where)
@@ -1380,49 +705,12 @@ public class DeviceManager implements TableManager<DeviceBean>
         }
     }
 
-    /**
-     * count the number of elements of a specific DeviceBean bean
-     *
-     * @param bean the DeviceBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    @Override
-    public int countUsingTemplate(DeviceBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific DeviceBean bean , given the start row and number of rows.
-     *
-     * @param bean the DeviceBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
     //20
     @Override
-    public int countUsingTemplate(DeviceBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific DeviceBean bean given the start row and number of rows and the search type
-     *
-     * @param bean the DeviceBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of rows returned
-     */
-    //20
-    @Override
-    public int countUsingTemplate(DeviceBean bean, int startRow, int numRows, SearchType searchType)
+    public int countUsingTemplate(DeviceBean bean, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
         catch(DAOException e)
         {
@@ -1436,9 +724,6 @@ public class DeviceManager implements TableManager<DeviceBean>
     // LISTENER
     //_____________________________________________________________________
 
-    /**
-     * Registers a unique {@link DeviceListener} listener.
-     */
     //35
     @Override
     public void registerListener(TableListener<DeviceBean> listener)
@@ -1446,6 +731,13 @@ public class DeviceManager implements TableManager<DeviceBean>
         this.nativeManager.registerListener(this.toNative(listener));
     }
 
+    //36
+    @Override
+    public void unregisterListener(TableListener<DeviceBean> listener)
+    {
+        this.nativeManager.unregisterListener(this.toNative(listener));
+    }
+    
     private net.gdface.facelog.dborm.TableListener<FlDeviceBean> toNative(final TableListener<DeviceBean> listener) {
         return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlDeviceBean> (){
 
@@ -1487,49 +779,22 @@ public class DeviceManager implements TableManager<DeviceBean>
     // UTILS
     //_____________________________________________________________________
 
-
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
     //43
-    public static boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
-        return false;
+    @Override
+    public boolean isPrimaryKey(String column){
+        return this.nativeManager.isPrimaryKey(column);
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of DeviceBean
-     */
     @Override
-    public DeviceBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new DeviceBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of DeviceBean
-     */
-    @Override
-    public List<DeviceBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<DeviceBean> action){
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-
     
     @Override
     public <T>T runAsTransaction(Callable<T> fun) {
@@ -1552,10 +817,10 @@ public class DeviceManager implements TableManager<DeviceBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlDeviceManager.Action toNative(final Action<DeviceBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<FlDeviceBean> toNative(final Action<DeviceBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new FlDeviceManager.Action(){
+        return new net.gdface.facelog.dborm.TableManager.Action<FlDeviceBean>(){
 
             @Override
             public void call(FlDeviceBean bean) {

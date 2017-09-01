@@ -5,12 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-
-
 package net.gdface.facelog.db.mysql;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import net.gdface.facelog.db.ImageBean;
@@ -35,139 +31,42 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class ImageManager implements TableManager<ImageBean>
+public class ImageManager extends TableManager.Adapter<ImageBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the format field.
-     */
-    public static final int ID_FORMAT = 1;
-
-    /**
-     * Identify the width field.
-     */
-    public static final int ID_WIDTH = 2;
-
-    /**
-     * Identify the height field.
-     */
-    public static final int ID_HEIGHT = 3;
-
-    /**
-     * Identify the depth field.
-     */
-    public static final int ID_DEPTH = 4;
-
-    /**
-     * Identify the face_num field.
-     */
-    public static final int ID_FACE_NUM = 5;
-
-    /**
-     * Identify the thumb_md5 field.
-     */
-    public static final int ID_THUMB_MD5 = 6;
-
-    /**
-     * Identify the device_id field.
-     */
-    public static final int ID_DEVICE_ID = 7;
-
-    /**
-     * Tablename.
-     */
-        public static final String TABLE_NAME="fl_image";
-    /**
-     * Contains all the full fields of the fl_image table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_image.md5"
-        ,"fl_image.format"
-        ,"fl_image.width"
-        ,"fl_image.height"
-        ,"fl_image.depth"
-        ,"fl_image.face_num"
-        ,"fl_image.thumb_md5"
-        ,"fl_image.device_id"
-    };
-
-    /**
-     * Contains all the fields of the fl_image table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"format"
-        ,"width"
-        ,"height"
-        ,"depth"
-        ,"face_num"
-        ,"thumb_md5"
-        ,"device_id"
-    };
-   /**
-     * Contains all the primarykey fields of the fl_image table.
-     */
-    public static final String[] PRIMARYKEY_NAMES =
-    {
-        "md5"
-    };
-    /**
-     * Field that contains the comma separated fields of the fl_image table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_image.md5"
-                            + ",fl_image.format"
-                            + ",fl_image.width"
-                            + ",fl_image.height"
-                            + ",fl_image.depth"
-                            + ",fl_image.face_num"
-                            + ",fl_image.thumb_md5"
-                            + ",fl_image.device_id";
-
-    /**
-     * Field that contains the comma separated fields of the fl_image table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",format"
-                            + ",width"
-                            + ",height"
-                            + ",depth"
-                            + ",face_num"
-                            + ",thumb_md5"
-                            + ",device_id";
-
-    /**
-    * @return tableName
-    */
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    /**
-    * @return primarykeyNames
-    */
-    public String[] getPrimarykeyNames() {
-        return PRIMARYKEY_NAMES;
-    }
-    
     private FlImageManager nativeManager = FlImageManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<ImageBean,FlImageBean> beanConverter = dbConverter.getImageBeanConverter();
     private static ImageManager singleton = new ImageManager();
 
+    /**
+    * @return table name
+    */
+    public String getTableName() {
+        return this.nativeManager.getTableName();
+    }
+
+    /**
+    * @return field names of table
+    */
+    public String[] getFieldNames() {
+        return this.nativeManager.getFieldNames();
+    }
+
+    public String getFieldNamesAsString() {
+        return this.nativeManager.getFieldNamesAsString();
+    }
+    
+    public String[] getFullFieldNames() {
+        return this.nativeManager.getFullFieldNames();
+    }
+    
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return this.nativeManager.getPrimarykeyNames();
+    }
+    
     /**
      * Get the {@link ImageManager} singleton.
      *
@@ -216,16 +115,8 @@ public class ImageManager implements TableManager<ImageBean>
         }
     }
 
-
-    /**
-     * Loads a {@link ImageBean} from the fl_image using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link ImageBean} with primary key fields
-     * @return a unique {@link ImageBean} or {@code null} if not found or bean is null
-     * @see {@link #loadByPrimaryKey(String md5)}
-     */
     //1.2
+    @Override
     public ImageBean loadByPrimaryKey(ImageBean bean)
     {
         try{
@@ -239,7 +130,6 @@ public class ImageManager implements TableManager<ImageBean>
     /**
      * Loads a {@link ImageBean} from the fl_image using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
      * @param keys primary keys value:<br> 
      *             PK# 1:String     
      * @return a unique {@link ImageBean} or {@code null} if not found
@@ -256,7 +146,6 @@ public class ImageManager implements TableManager<ImageBean>
     
     /**
      * Returns true if this fl_image contains row with primary key fields.
-     * @author guyadong
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey(String md5)
      */
@@ -264,34 +153,6 @@ public class ImageManager implements TableManager<ImageBean>
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
-
-    }
-    /**
-     * Returns true if this fl_image contains row with primary key fields.
-     * @param keys primary keys value:<br>
-     *             PK# 1:String     
-     * @author guyadong
-     * @see #loadByPrimaryKey(Object...)
-     */
-    //1.5
-    public boolean existsPrimaryKey(Object ...keys)
-    {
-        return null!=loadByPrimaryKey(keys);
-    }
-    /**
-     * Returns true if this fl_image contains row specified by primary key fields of {@link ImageBean}.<br>
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link ImageBean} with primary key fields
-     * @return 
-     * @see {@link #loadByPrimaryKey(ImageBean bean)}
-     */
-    //1.6
-    @Override
-    public boolean existsPrimaryKey(ImageBean bean)
-    {
-        return null!=loadByPrimaryKey(bean);
-
     }
     
     /**
@@ -330,26 +191,7 @@ public class ImageManager implements TableManager<ImageBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return deleteByPrimaryKey((String)keys[0]);
     }
-    /**
-     * Delete row according to Primary Key fileds of the parameter{@code bean},
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the ImageBean with primary key fields
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(String md5)}
-     */
-    //2.2
-    @Override
-    public int deleteByPrimaryKey(ImageBean bean)
-    {
-        try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
+
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
@@ -403,7 +245,7 @@ public class ImageManager implements TableManager<ImageBean>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(ImageBean bean,String fkName){
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(ImageBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -444,8 +286,8 @@ public class ImageManager implements TableManager<ImageBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyImgMd5 -> FaceBean Collection</li>
-     *     <li> impFlPersonbyPhotoId -> PersonBean Collection</li>
+     *     <li> impFlFacebyImgMd5 -> FaceBean java.util.Collection</li>
+     *     <li> impFlPersonbyPhotoId -> PersonBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param importedBeans the <T> object to associate to the {@link ImageBean}
@@ -454,11 +296,11 @@ public class ImageManager implements TableManager<ImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,String fkName){
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof List){
-                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+            if(importedBeans instanceof java.util.List){
+                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
                         this.beanConverter.toRight(bean),
                         resultConverter.toRight(importedBeans),
                         fkName));            	
@@ -506,7 +348,7 @@ public class ImageManager implements TableManager<ImageBean>
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<FaceBean> getFlFaceBeansByImgMd5AsList(ImageBean bean)
+    public java.util.List<FaceBean> getFlFaceBeansByImgMd5AsList(ImageBean bean)
     {
         try {
             return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByImgMd5AsList( this.beanConverter.toRight(bean)));
@@ -543,7 +385,7 @@ public class ImageManager implements TableManager<ImageBean>
     }
 
     /**
-     * set  the {@link FaceBean} object collection associate to ImageBean by the fl_face.img_md5 field.<BR>
+     * set  the {@link FaceBean} object java.util.Collection associate to ImageBean by the fl_face.img_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_face 
@@ -551,12 +393,12 @@ public class ImageManager implements TableManager<ImageBean>
      * @see {@link FlFaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<FaceBean>> C setFlFaceBeansByImgMd5(ImageBean bean , C importedBeans)
+    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByImgMd5(ImageBean bean , C importedBeans)
     {
         try {
             IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<FaceBean>)importedBeans,nativeManager.setFlFaceBeansByImgMd5(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<FaceBean>)importedBeans,nativeManager.setFlFaceBeansByImgMd5(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -600,7 +442,7 @@ public class ImageManager implements TableManager<ImageBean>
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<PersonBean> getFlPersonBeansByPhotoIdAsList(ImageBean bean)
+    public java.util.List<PersonBean> getFlPersonBeansByPhotoIdAsList(ImageBean bean)
     {
         try {
             return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getFlPersonBeansByPhotoIdAsList( this.beanConverter.toRight(bean)));
@@ -637,7 +479,7 @@ public class ImageManager implements TableManager<ImageBean>
     }
 
     /**
-     * set  the {@link PersonBean} object collection associate to ImageBean by the fl_person.photo_id field.<BR>
+     * set  the {@link PersonBean} object java.util.Collection associate to ImageBean by the fl_person.photo_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_person 
@@ -645,12 +487,12 @@ public class ImageManager implements TableManager<ImageBean>
      * @see {@link FlPersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<PersonBean>> C setFlPersonBeansByPhotoId(ImageBean bean , C importedBeans)
+    public <C extends java.util.Collection<PersonBean>> C setFlPersonBeansByPhotoId(ImageBean bean , C importedBeans)
     {
         try {
             IBeanConverter<PersonBean,FlPersonBean> importedConverter = this.dbConverter.getPersonBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<PersonBean>)importedBeans,nativeManager.setFlPersonBeansByPhotoId(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<PersonBean>)importedBeans,nativeManager.setFlPersonBeansByPhotoId(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -725,7 +567,7 @@ public class ImageManager implements TableManager<ImageBean>
     //3.7 SYNC SAVE 
     public ImageBean save(ImageBean bean
         , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
-        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyPhotoId )
+        , java.util.Collection<FaceBean> impFlFacebyImgMd5 , java.util.Collection<PersonBean> impFlPersonbyPhotoId )
     {
         try{
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
@@ -738,12 +580,12 @@ public class ImageManager implements TableManager<ImageBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , Collection , Collection )}
+     * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
-        ,final  Collection<FaceBean> impFlFacebyImgMd5 ,final  Collection<PersonBean> impFlPersonbyPhotoId ) throws DAOException
+        ,final  java.util.Collection<FaceBean> impFlFacebyImgMd5 ,final  java.util.Collection<PersonBean> impFlPersonbyPhotoId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<ImageBean>(){
             @Override
@@ -940,277 +782,9 @@ public class ImageManager implements TableManager<ImageBean>
     }
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_image.
-     *
-     * @return an array of FlImageManager bean
-     */
-    //5
-    @Override
-    public ImageBean[] loadAll()
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Loads each row from fl_image and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //5-1
-    @Override
-    public int loadAll(Action<ImageBean> action)
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_image.
-     *
-     * @return a list of ImageBean bean
-     */
-    //5-2
-    @Override
-    public List<ImageBean> loadAllAsList()
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_image, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlImageManager bean
-     */
-    //6
-    @Override
-    public ImageBean[] loadAll(int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_image, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<ImageBean> action)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_image, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlImageManager bean
-     */
-    //6-2
-    @Override
-    public List<ImageBean> loadAllAsList(int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves an array of ImageBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting ImageBean table
-     */
-    //7
-    @Override
-    public ImageBean[] loadByWhere(String where)
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    
-    /**
-     * Retrieves a list of ImageBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting ImageBean table
-     */
-    //7
-    @Override
-    public List<ImageBean> loadByWhereAsList(String where)
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of ImageBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //7-1
-    @Override
-    public int loadByWhere(String where,Action<ImageBean> action)
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of ImageBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting ImageBean table
-     */
-    //8
-    @Override
-    public ImageBean[] loadByWhere(String where, int[] fieldList)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
 
-
-    /**
-     * Retrieves a list of ImageBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting ImageBean table
-     */
-    //8
-    @Override
-    public List<ImageBean> loadByWhereAsList(String where, int[] fieldList)
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of ImageBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<ImageBean> action)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of ImageBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting ImageBean table
-     */
-    //9
-    @Override
-    public ImageBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
-    {
-        return (ImageBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new ImageBean[0]);
-    }
-    /**
-     * Retrieves each row of  ImageBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<ImageBean> action)
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of ImageBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting ImageBean table
-     */
-    //9-2
-    @Override
-    public List<ImageBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Retrieves each row of ImageBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<ImageBean> action)
-    {
-        try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    /**
-     * Deletes all rows from fl_image table.
-     * @return the number of deleted rows.
-     */
-    //10
-    @Override
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
-     * Deletes rows from the fl_image table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * <br>Attention, if 'WHERE' is omitted it will delete all records.
-     *
-     * @param where the sql 'where' clause
-     * @return the number of deleted rows
-     */
     //11
     @Override
     public int deleteByWhere(String where)
@@ -1228,32 +802,10 @@ public class ImageManager implements TableManager<ImageBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link ImageBean} bean into the database.
-     *
-     * @param bean the {@link ImageBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     */
-    //12
-    @Override
-    public ImageBean save(ImageBean bean)
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link ImageBean} bean into the database.
-     *
-     * @param bean the {@link ImageBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     */
     //13
-    public ImageBean insert(ImageBean bean)
+    @Override
+    protected ImageBean insert(ImageBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
@@ -1264,14 +816,9 @@ public class ImageManager implements TableManager<ImageBean>
         }
     }
 
-    /**
-     * Update the {@link ImageBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link ImageBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     */
     //14
-    public ImageBean update(ImageBean bean)
+    @Override
+    protected ImageBean update(ImageBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
@@ -1282,85 +829,10 @@ public class ImageManager implements TableManager<ImageBean>
         }
     }
 
-    /**
-     * Saves an array of {@link ImageBean} bean into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be saved
-     * @return the saved {@link ImageBean} beans or null if beans is null.
-     */
-    //15
-    public ImageBean[] save(ImageBean[] beans)
-    {
-        if(null !=beans){
-            for (ImageBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link ImageBean} bean into the database.
-     *
-     * @param beans the {@link ImageBean} bean table to be saved
-     * @return the saved {@link ImageBean} beans or null if beans is null.
-     */
-    //15-2
-    @Override
-    public <C extends Collection<ImageBean>> C save(C beans)
-    {
-        if(null != beans){
-            for (ImageBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link ImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link ImageBean} bean table to be saved
-     * @return the saved {@link ImageBean} beans.
-     * @see #save(ImageBean[])
-     */
-    //15-3
-    @Override
-    public ImageBean[] saveAsTransaction(final ImageBean[] beans) {
-        return this.runAsTransaction(new Callable<ImageBean[]>(){
-            @Override
-            public ImageBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link ImageBean} bean into the database as transaction.
-     *
-     * @param beans the {@link ImageBean} bean table to be saved
-     * @return the saved {@link ImageBean} beans.
-     * @see #save(List)
-     */
-    //15-4
-    @Override
-    public <C extends Collection<ImageBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique ImageBean bean from a template one giving a c
-     *
-     * @param bean the ImageBean bean to look for
-     * @return the bean matching the template
-     */
     //18
     @Override
     public ImageBean loadUniqueUsingTemplate(ImageBean bean)
@@ -1374,154 +846,19 @@ public class ImageManager implements TableManager<ImageBean>
         }
      }
 
-    /**
-     * Loads an array of ImageBean from a template one.
-     *
-     * @param bean the ImageBean template to look for
-     * @return all the ImageBean matching the template
-     */
-    //19
-    @Override
-    public ImageBean[] loadUsingTemplate(ImageBean bean)
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the ImageBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //19-1
-    @Override
-    public int loadUsingTemplate(ImageBean bean,Action<ImageBean> action)
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of ImageBean from a template one.
-     *
-     * @param bean the ImageBean template to look for
-     * @return all the ImageBean matching the template
-     */
-    //19-2
-    @Override
-    public List<ImageBean> loadUsingTemplateAsList(ImageBean bean)
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of ImageBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the ImageBean matching the template
-     */
-    //20
-    @Override
-    public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //20-1
-    @Override
-    public int loadUsingTemplate(ImageBean bean, int startRow, int numRows,Action<ImageBean> action)
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of ImageBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the ImageBean matching the template
-     */
-    //20-2
-    @Override
-    public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of ImageBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the ImageBean matching the template
-     */
-    //20-3
-    @Override
-    public ImageBean[] loadUsingTemplate(ImageBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new ImageBean[0]);
-    }
-
-    /**
-     * Loads a list of ImageBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the ImageBean matching the template
-     */
-    //20-4
-    @Override
-    public List<ImageBean> loadUsingTemplateAsList(ImageBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
     //20-5
     @Override
-    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<ImageBean> action)
+    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Deletes rows using a ImageBean template.
-     *
-     * @param bean the ImageBean object(s) to be deleted
-     * @return the number of deleted objects
-     */
+
     //21
     @Override
     public int deleteUsingTemplate(ImageBean bean)
@@ -1564,7 +901,7 @@ public class ImageManager implements TableManager<ImageBean>
      * @param deviceId the device_id column's value filter.
      * @return a list of ImageBean
      */
-    public List<ImageBean> loadBydevice_idAsList(Integer deviceId)
+    public java.util.List<ImageBean> loadBydevice_idAsList(Integer deviceId)
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBydevice_idAsList(deviceId));
@@ -1615,7 +952,7 @@ public class ImageManager implements TableManager<ImageBean>
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return a list of ImageBean
      */
-    public List<ImageBean> loadBythumb_md5AsList(String thumbMd5)
+    public java.util.List<ImageBean> loadBythumb_md5AsList(String thumbMd5)
     {
         try{
             return this.beanConverter.fromRight(this.nativeManager.loadBythumb_md5AsList(thumbMd5));
@@ -1644,31 +981,10 @@ public class ImageManager implements TableManager<ImageBean>
     }
     
 
-
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
-
-    /**
-     * Retrieves the number of rows of the table fl_image.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    @Override
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_image with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     */
     //25
     @Override
     public int countWhere(String where)
@@ -1682,49 +998,12 @@ public class ImageManager implements TableManager<ImageBean>
         }
     }
 
-    /**
-     * count the number of elements of a specific ImageBean bean
-     *
-     * @param bean the ImageBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    @Override
-    public int countUsingTemplate(ImageBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific ImageBean bean , given the start row and number of rows.
-     *
-     * @param bean the ImageBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
     //20
     @Override
-    public int countUsingTemplate(ImageBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific ImageBean bean given the start row and number of rows and the search type
-     *
-     * @param bean the ImageBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of rows returned
-     */
-    //20
-    @Override
-    public int countUsingTemplate(ImageBean bean, int startRow, int numRows, SearchType searchType)
+    public int countUsingTemplate(ImageBean bean, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
         catch(DAOException e)
         {
@@ -1738,9 +1017,6 @@ public class ImageManager implements TableManager<ImageBean>
     // LISTENER
     //_____________________________________________________________________
 
-    /**
-     * Registers a unique {@link ImageListener} listener.
-     */
     //35
     @Override
     public void registerListener(TableListener<ImageBean> listener)
@@ -1748,6 +1024,13 @@ public class ImageManager implements TableManager<ImageBean>
         this.nativeManager.registerListener(this.toNative(listener));
     }
 
+    //36
+    @Override
+    public void unregisterListener(TableListener<ImageBean> listener)
+    {
+        this.nativeManager.unregisterListener(this.toNative(listener));
+    }
+    
     private net.gdface.facelog.dborm.TableListener<FlImageBean> toNative(final TableListener<ImageBean> listener) {
         return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlImageBean> (){
 
@@ -1789,49 +1072,22 @@ public class ImageManager implements TableManager<ImageBean>
     // UTILS
     //_____________________________________________________________________
 
-
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
     //43
-    public static boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
-        return false;
+    @Override
+    public boolean isPrimaryKey(String column){
+        return this.nativeManager.isPrimaryKey(column);
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of ImageBean
-     */
     @Override
-    public ImageBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new ImageBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of ImageBean
-     */
-    @Override
-    public List<ImageBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<ImageBean> action){
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-
     
     @Override
     public <T>T runAsTransaction(Callable<T> fun) {
@@ -1854,10 +1110,10 @@ public class ImageManager implements TableManager<ImageBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlImageManager.Action toNative(final Action<ImageBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<FlImageBean> toNative(final Action<ImageBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new FlImageManager.Action(){
+        return new net.gdface.facelog.dborm.TableManager.Action<FlImageBean>(){
 
             @Override
             public void call(FlImageBean bean) {

@@ -6,7 +6,6 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.face;
-import java.lang.ref.SoftReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,9 +13,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
-import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
@@ -29,17 +29,8 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  * Handles database calls (save, load, count, etc...) for the fl_face_light table.
  * @author sql2java
  */
-public class FlFaceLightManager implements TableManager<FlFaceLightBean>
+public class FlFaceLightManager extends TableManager.Adapter<FlFaceLightBean>
 {
-
-    /* set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /* set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /* set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /* set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
 
     /**
      * Identify the md5 field.
@@ -144,7 +135,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     /**
      * Tablename.
      */
-		public static final String TABLE_NAME="fl_face_light";
+    public static final String TABLE_NAME="fl_face_light";
     /**
      * Contains all the full fields of the fl_face_light table.
      */
@@ -251,12 +242,6 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
                             + ",angle_roll"
                             + ",ext_info"
                             + ",create_time";
-
-    public static interface Action{
-          void call(FlFaceLightBean bean);
-          FlFaceLightBean getBean();
-     }
-
     /**
     * @return tableName
     */
@@ -271,13 +256,21 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
         return FIELD_NAMES;
     }
 
+    public String getFieldNamesAsString() {
+        return ALL_FIELDS;
+    }
+    
+    public String[] getFullFieldNames() {
+        return FULL_FIELD_NAMES;
+    }
+    
     /**
     * @return primarykeyNames
     */
     public String[] getPrimarykeyNames() {
         return PRIMARYKEY_NAMES;
     }
-	
+
     private static FlFaceLightManager singleton = new FlFaceLightManager();
 
     /**
@@ -301,302 +294,18 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
         return new FlFaceLightBean();
     }
 
-    public FlFaceLightBean loadByPrimaryKey(FlFaceLightBean bean) throws DAOException
-    {
-        throw new UnsupportedOperationException();
-    }
-    public boolean existsPrimaryKey(FlFaceLightBean bean) throws DAOException
-    {
-        throw new UnsupportedOperationException();
-    }
-    public int deleteByPrimaryKey(FlFaceLightBean bean) throws DAOException
-    {
-        throw new UnsupportedOperationException();
-    }
  
-
-    @Override
-    public <T> T[] getImportedBeans(FlFaceLightBean bean,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T> List<T> getImportedBeansAsList(FlFaceLightBean bean,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T> T[] setImportedBeans(FlFaceLightBean bean,T[] importedBeans,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }    
-    @Override
-    public <C extends Collection<?>> C setImportedBeans(FlFaceLightBean bean,C importedBeans,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
  
 
 
- 
-    @Override
-    public <T> T getReferencedBean(FlFaceLightBean bean,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-    @Override
-    public <T> T setReferencedBean(FlFaceLightBean bean,T beanToSet,String fkName)throws DAOException{
-        throw new UnsupportedOperationException();
-    }
-     
-
-    //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_face_light.
-     *
-     * @return an array of FlFaceLightManager bean
-     * @throws DAOException
-     */
-    //5
-    public FlFaceLightBean[] loadAll() throws DAOException
-    {
-        return this.loadUsingTemplate(null);
-    }
-    /**
-     * Loads each row from fl_face_light and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //5-1
-    public int loadAll(Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_face_light.
-     *
-     * @return a list of FlFaceLightManager bean
-     * @throws DAOException
-     */
-    //5-2
-    public List<FlFaceLightBean> loadAllAsList() throws DAOException
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_face_light, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlFaceLightManager bean
-     * @throws DAOException
-     */
-    //6
-    public FlFaceLightBean[] loadAll(int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_face_light, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //6-1
-    public int loadAll(int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_face_light, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlFaceLightManager bean
-     * @throws DAOException
-     */
-    //6-2
-    public List<FlFaceLightBean> loadAllAsList(int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
+      
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
     /**
-     * Retrieves an array of FlFaceLightBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FlFaceLightBean table
-     * @throws DAOException
-     */
-    //7
-    public FlFaceLightBean[] loadByWhere(String where) throws DAOException
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    /**
-     * Retrieves a list of FlFaceLightBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting FlFaceLightBean table
-     * @throws DAOException
-     */
-    //7
-    public List<FlFaceLightBean> loadByWhereAsList(String where) throws DAOException
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of FlFaceLightBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //7-1
-    public int loadByWhere(String where,Action action) throws DAOException
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of FlFaceLightBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FlFaceLightBean table
-     * @throws DAOException
-     */
-    //8
-    public FlFaceLightBean[] loadByWhere(String where, int[] fieldList) throws DAOException
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
-
-
-    /**
-     * Retrieves a list of FlFaceLightBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting FlFaceLightBean table
-     * @throws DAOException
-     */
-    //8
-    public List<FlFaceLightBean> loadByWhereAsList(String where, int[] fieldList) throws DAOException
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of FlFaceLightBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //8-1
-    public int loadByWhere(String where, int[] fieldList,Action action) throws DAOException
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of FlFaceLightBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlFaceLightBean table
-     * @throws DAOException
-     */
-    //9
-    public FlFaceLightBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        return (FlFaceLightBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new FlFaceLightBean[0]);
-    }
-    /**
-     * Retrieves each row of  FlFaceLightBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //9-1
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of FlFaceLightBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlFaceLightBean table
-     * @throws DAOException
-     */
-    //9-2
-    public List<FlFaceLightBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadByWhereForAction(where,fieldList,startRow,numRows,action);              
-        return action.getList();
-    }
-    /**
-     * Retrieves each row of FlFaceLightBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //9-3
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
-    {
-        String sql=createSqlString(fieldList, where);
-        // System.out.println("loadByWhere: " + sql);
-        return this.loadBySqlForAction(sql, null, fieldList, startRow, numRows, action);
-    }
-
-    /**
-     * Deletes all rows from fl_face_light table.
-     * @return the number of deleted rows.
-     * @throws DAOException
-     */
-    //10
-    public int deleteAll() throws DAOException
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
      * Deletes rows from the fl_face_light table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
      *
      * @param where the sql 'where' clause
@@ -604,8 +313,14 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
      * @throws DAOException
      */
     //11
+    @Override
     public int deleteByWhere(String where) throws DAOException
     {
+        if( !this.listenerContainer.isEmpty()){
+            final DeleteBeanAction action = new DeleteBeanAction(); 
+            this.loadByWhere(where,action);
+            return action.getCount();
+        }
         Connection c = null;
         PreparedStatement ps = null;
 
@@ -632,32 +347,9 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link FlFaceLightBean} bean into the database.
-     *
-     * @param bean the {@link FlFaceLightBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     * @throws DAOException
-     */
-    //12
-    public FlFaceLightBean save(FlFaceLightBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link FlFaceLightBean} bean into the database.
-     * 
-     * @param bean the {@link FlFaceLightBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     * @throws DAOException
-     */
     //13
+    @Override
     public FlFaceLightBean insert(FlFaceLightBean bean) throws DAOException
     {
         // mini checks
@@ -675,7 +367,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
         try
         {
             c = this.getConnection();
-            this.beforeInsert(bean); // listener callback
+            this.listenerContainer.beforeInsert(bean); // listener callback
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_face_light (");
 
@@ -859,7 +551,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
 
             bean.isNew(false);
             bean.resetIsModified();
-            this.afterInsert(bean); // listener callback
+            this.listenerContainer.afterInsert(bean); // listener callback
             return bean;
         }
         catch(SQLException e)
@@ -874,14 +566,8 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
         }
     }
 
-    /**
-     * Update the {@link FlFaceLightBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link FlFaceLightBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     * @throws DAOException
-     */
     //14
+    @Override
     public FlFaceLightBean update(FlFaceLightBean bean) throws DAOException
     {
         // mini checks
@@ -901,7 +587,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
             c = this.getConnection();
 
 
-            this.beforeUpdate(bean); // listener callback
+            this.listenerContainer.beforeUpdate(bean); // listener callback
             sql = new StringBuilder("UPDATE fl_face_light SET ");
             boolean useComma=false;
 
@@ -1099,7 +785,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
 
             ps.executeUpdate();
             bean.resetIsModified();
-            this.afterUpdate(bean); // listener callback
+            this.listenerContainer.afterUpdate(bean); // listener callback
 
             return bean;
         }
@@ -1115,88 +801,12 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
         }
     }
 
-    /**
-     * Saves an array of {@link FlFaceLightBean} bean into the database.
-     *
-     * @param beans the {@link FlFaceLightBean} bean table to be saved
-     * @return the saved {@link FlFaceLightBean} beans or null if beans is null.
-     * @throws DAOException
-     */
-    //15
-    public FlFaceLightBean[] save(FlFaceLightBean[] beans) throws DAOException
-    {
-        if(null != beans){
-            for (FlFaceLightBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link FlFaceLightBean} beans into the database.
-     *
-     * @param beans the {@link FlFaceLightBean} bean table to be saved
-     * @return the saved {@link FlFaceLightBean} beans or null if beans is null.
-     * @throws DAOException
-     */
-    //15-2
-    public <C extends Collection<FlFaceLightBean>>C save(C beans) throws DAOException
-    {
-        if(null != beans){
-            for (FlFaceLightBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link FlFaceLightBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFaceLightBean} bean table to be saved
-     * @return the saved {@link FlFaceLightBean} beans.
-     * @throws DAOException
-     * @see #save(FlFaceLightBean[])
-     */
-    //15-3
-    public FlFaceLightBean[] saveAsTransaction(final FlFaceLightBean[] beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<FlFaceLightBean[]>(){
-            @Override
-            public FlFaceLightBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link FlFaceLightBean} bean into the database as transaction.
-     *
-     * @param beans the {@link FlFaceLightBean} bean table to be saved
-     * @return the saved {@link FlFaceLightBean} beans.
-     * @throws DAOException
-     * @see #save(List)
-     */
-    //15-4
-    public <C extends Collection<FlFaceLightBean>> C saveAsTransaction(final C beans) throws DAOException {
-        return Manager.getInstance().runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique FlFaceLightBean bean from a template one giving a c
-     *
-     * @param bean the FlFaceLightBean bean to look for
-     * @return the bean matching the template
-     * @throws DAOException
-     */
     //18
+    @Override
     public FlFaceLightBean loadUniqueUsingTemplate(FlFaceLightBean bean) throws DAOException
     {
          FlFaceLightBean[] beans = this.loadUsingTemplate(bean);
@@ -1209,140 +819,13 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
          return beans[0];
      }
 
-    /**
-     * Loads an array of FlFaceLightBean from a template one.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @return all the FlFaceLightBean matching the template
-     * @throws DAOException
-     */
-    //19
-    public FlFaceLightBean[] loadUsingTemplate(FlFaceLightBean bean) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //19-1
-    public int loadUsingTemplate(FlFaceLightBean bean,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of FlFaceLightBean from a template one.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @return all the FlFaceLightBean matching the template
-     * @throws DAOException
-     */
-    //19-2
-    public List<FlFaceLightBean> loadUsingTemplateAsList(FlFaceLightBean bean) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of FlFaceLightBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FlFaceLightBean matching the template
-     * @throws DAOException
-     */
-    //20
-    public FlFaceLightBean[] loadUsingTemplate(FlFaceLightBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    //20-1
-    public int loadUsingTemplate(FlFaceLightBean bean, int startRow, int numRows,Action action) throws DAOException
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of FlFaceLightBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the FlFaceLightBean matching the template
-     * @throws DAOException
-     */
-    //20-2
-    public List<FlFaceLightBean> loadUsingTemplateAsList(FlFaceLightBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of FlFaceLightBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FlFaceLightBean matching the template
-     * @throws DAOException
-     */
-    //20-3
-    public FlFaceLightBean[] loadUsingTemplate(FlFaceLightBean bean, int startRow, int numRows, int searchType) throws DAOException
-    {
-    	return (FlFaceLightBean[])this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new FlFaceLightBean[0]);
-    }
-
-    /**
-     * Loads a list of FlFaceLightBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the FlFaceLightBean matching the template
-     * @throws DAOException
-     */
-    //20-4
-    public List<FlFaceLightBean> loadUsingTemplateAsList(FlFaceLightBean bean, int startRow, int numRows, int searchType) throws DAOException
-    {
-        ListAction action = new ListAction();
-        loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
-        return (List<FlFaceLightBean>) action.getList();
-        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
     //20-5
-    public int loadUsingTemplate(FlFaceLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action action) throws DAOException
+    @Override
+    public int loadUsingTemplate(FlFaceLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlFaceLightBean> action) throws DAOException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
-        String sql=createSqlString(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
+        String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -1362,16 +845,16 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
             this.freeConnection(connection);
         }
     }
-    /**
-     * Deletes rows using a FlFaceLightBean template.
-     *
-     * @param bean the FlFaceLightBean object(s) to be deleted
-     * @return the number of deleted objects
-     * @throws DAOException
-     */
+
     //21
+    @Override
     public int deleteUsingTemplate(FlFaceLightBean bean) throws DAOException
     {
+        if( !this.listenerContainer.isEmpty()){
+            final DeleteBeanAction action=new DeleteBeanAction(); 
+            this.loadUsingTemplate(bean,action);
+            return action.getCount();
+        }
         Connection c = null;
         PreparedStatement ps = null;
         StringBuilder sql = new StringBuilder("DELETE FROM fl_face_light ");
@@ -1418,27 +901,8 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     // COUNT
     //_____________________________________________________________________
 
-    /**
-     * Retrieves the number of rows of the table fl_face_light.
-     *
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //24
-    public int countAll() throws DAOException
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_face_light with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     * @throws DAOException
-     */
     //25
+    @Override
     public int countWhere(String where) throws DAOException
     {
         String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_face_light " + where;
@@ -1507,45 +971,15 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     }
 
     /**
-     * count the number of elements of a specific FlFaceLightBean bean
-     *
-     * @param bean the FlFaceLightBean bean to look for ant count
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //27
-    public int countUsingTemplate(FlFaceLightBean bean) throws DAOException
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific FlFaceLightBean bean , given the start row and number of rows.
-     *
-     * @param bean the FlFaceLightBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     * @throws DAOException
-     */
-    //20
-    public int countUsingTemplate(FlFaceLightBean bean, int startRow, int numRows) throws DAOException
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific FlFaceLightBean bean given the start row and number of rows and the search type
+     * count the number of elements of a specific FlFaceLightBean bean given the search type
      *
      * @param bean the FlFaceLightBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlFaceLightBean bean, int startRow, int numRows, int searchType) throws DAOException
+    public int countUsingTemplate(FlFaceLightBean bean, int searchType) throws DAOException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -1589,11 +1023,11 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
 
 
     /**
-     * fills the given StringBuilder with the sql where clausis constructed using the bean and the search type
+     * fills the given StringBuilder with the sql where clauses constructed using the bean and the search type
      * @param sqlWhere the StringBuilder that will be filled
-     * @param bean the bean to use for creating the where clausis
+     * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
+     * @return the number of clauses returned
      */
     protected int fillWhere(StringBuilder sqlWhere, FlFaceLightBean bean, int searchType)
     {
@@ -1778,9 +1212,9 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     /**
      * fill the given prepared statement with the bean values and a search type
      * @param ps the PreparedStatement that will be filled
-     * @param bean the bean to use for creating the where clausis
+     * @param bean the bean to use for creating the where clauses
      * @param searchType exact ?  like ? starting like ?
-     * @return the number of clausis returned
+     * @return the number of clauses returned
      * @throws DAOException
      */
     protected int fillPreparedStatement(PreparedStatement ps, FlFaceLightBean bean, int searchType) throws DAOException
@@ -1934,7 +1368,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     //28
     public FlFaceLightBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-    	return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlFaceLightBean[0]);
+        return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlFaceLightBean[0]);
     }
 
     /**
@@ -1965,7 +1399,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
      * @throws IllegalArgumentException
      */
     //28-2
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action action) throws DAOException{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlFaceLightBean> action) throws DAOException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -2310,7 +1744,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
      * @throws DAOException
      */     
     //34-2
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action action) throws DAOException
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlFaceLightBean> action) throws DAOException
     {
         ResultSet rs =  null;
         try {
@@ -2329,91 +1763,92 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    private TableListener<FlFaceLightBean> listener = null;
+    class ListenerContainer implements TableListener<FlFaceLightBean> {
+        private final Set<TableListener<FlFaceLightBean>> listeners = new TreeSet<TableListener<FlFaceLightBean>>();
+        public ListenerContainer() {
+        }
+    
+        @Override
+        public void beforeInsert(FlFaceLightBean bean) throws DAOException {
+            for(TableListener<FlFaceLightBean> listener:listeners){
+                listener.beforeInsert(bean);
+            }
+        }
+    
+        @Override
+        public void afterInsert(FlFaceLightBean bean) throws DAOException {
+            for(TableListener<FlFaceLightBean> listener:listeners){
+                listener.afterInsert(bean);
+            }
+        }
+    
+        @Override
+        public void beforeUpdate(FlFaceLightBean bean) throws DAOException {
+            for(TableListener<FlFaceLightBean> listener:listeners){
+                listener.beforeUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void afterUpdate(FlFaceLightBean bean) throws DAOException {
+            for(TableListener<FlFaceLightBean> listener:listeners){
+                listener.afterUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void beforeDelete(FlFaceLightBean bean) throws DAOException {
+            for(TableListener<FlFaceLightBean> listener:listeners){
+                listener.beforeDelete(bean);
+            }
+        }
+    
+        @Override
+        public void afterDelete(FlFaceLightBean bean) throws DAOException {
+            for(TableListener<FlFaceLightBean> listener:listeners){
+                listener.afterDelete(bean);
+            }
+        }
+    
+        public boolean isEmpty() {
+            return listeners.isEmpty();
+        }
+    
+        public boolean contains(TableListener<FlFaceLightBean> o) {
+            return listeners.contains(o);
+        }
+    
+        public synchronized boolean add(TableListener<FlFaceLightBean> e) {
+            if(null == e)
+                throw new NullPointerException();
+            return listeners.add(e);
+        }
+    
+        public synchronized boolean remove(TableListener<FlFaceLightBean> o) {
+            return null == o? false : listeners.remove(o);
+        }
+    
+        public synchronized void clear() {
+            listeners.clear();
+        }    
+    }
+    private ListenerContainer listenerContainer = new ListenerContainer();
 
-    /**
-     * Registers a unique FlFaceLightListener listener.
-     */
     //35
+    @Override
     public void registerListener(TableListener<FlFaceLightBean> listener)
     {
-        this.listener = listener;
+        this.listenerContainer.add(listener);
     }
 
     /**
-     * Before the save of the FlFaceLightBean bean.
-     *
-     * @param bean the FlFaceLightBean bean to be saved
+     * remove listener.
      */
     //36
-    private void beforeInsert(FlFaceLightBean bean) throws DAOException
+    @Override
+    public void unregisterListener(TableListener<FlFaceLightBean> listener)
     {
-        if (listener != null) {
-            listener.beforeInsert(bean);
-        }
-    }
-
-    /**
-     * After the save of the FlFaceLightBean bean.
-     *
-     * @param bean the FlFaceLightBean bean to be saved
-     */
-    //37
-    private void afterInsert(FlFaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterInsert(bean);
-        }
-    }
-
-    /**
-     * Before the update of the FlFaceLightBean bean.
-     *
-     * @param bean the FlFaceLightBean bean to be updated
-     */
-    //38
-    private void beforeUpdate(FlFaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeUpdate(bean);
-        }
-    }
-
-    /**
-     * After the update of the FlFaceLightBean bean.
-     *
-     * @param bean the FlFaceLightBean bean to be updated
-     */
-    //39
-    private void afterUpdate(FlFaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterUpdate(bean);
-        }
-    }
-
-    /**
-     * Before the delete of the FlFaceLightBean bean.
-     *
-     * @param bean the FlFaceLightBean bean to be deleted
-     */
-    private void beforeDelete(FlFaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.beforeDelete(bean);
-        }
-    }
-
-    /**
-     * After the delete of the FlFaceLightBean bean.
-     *
-     * @param bean the FlFaceLightBean bean to be deleted
-     */
-    private void afterDelete(FlFaceLightBean bean) throws DAOException
-    {
-        if (listener != null) {
-            listener.afterDelete(bean);
-        }
+        this.listenerContainer.remove(listener);
     }
 
     //_____________________________________________________________________
@@ -2458,18 +1893,14 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
             throw new DataAccessException(e);
         }
     }
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
+
     //43
-    public static boolean isPrimaryKey(String column){
+    @Override
+    public boolean isPrimaryKey(String column){
         for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
         return false;
     }
+    
     /**
      * Fill the given prepared statement with the values in argList
      * @param ps the PreparedStatement that will be filled
@@ -2491,42 +1922,8 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
         }
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of FlFaceLightBean
-     * @throws DAOException 
-     */
-    public FlFaceLightBean[] loadBySql(String sql, Object[] argList, int[] fieldList) throws DAOException {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new FlFaceLightBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of FlFaceLightBean
-     * @throws DAOException
-     */
-    public List<FlFaceLightBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList) throws DAOException{
-        ListAction action = new ListAction();
-        loadBySqlForAction(sql,argList,fieldList,1,-1,action);
-        return action.getList();
-    }
-    /**
-     * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     * @throws DAOException
-     */
-    private int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action action) throws DAOException{
+    @Override    
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlFaceLightBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -2546,63 +1943,7 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
             this.freeConnection(connection);
         }
     }
-    private String createSqlString(int[] fieldList,String where){
-        StringBuffer sql = new StringBuffer(128);
-        if(fieldList == null) {
-            sql.append("SELECT ").append(ALL_FIELDS);
-        } else{
-            sql.append("SELECT ");
-            for(int i = 0; i < fieldList.length; ++i){
-                if(i != 0) {
-                    sql.append(",");
-                }
-                sql.append(FULL_FIELD_NAMES[fieldList[i]]);
-            }            
-        }
-        sql.append(" FROM fl_face_light ");
-        if(null!=where)
-            sql.append(where);
-        return sql.toString();
-    }
-    
-    class ListAction implements Action {
-        final List<FlFaceLightBean> list;
-        protected ListAction(List<FlFaceLightBean> list) {
-            if(null==list)
-                throw new IllegalArgumentException("list must not be null");
-            this.list = list;
-        }
-
-        protected ListAction() {
-            list=new LinkedList<FlFaceLightBean>();
-        }
-
-        public List<FlFaceLightBean> getList() {
-            return list;
-        }
-
-        @Override
-        public void call(FlFaceLightBean bean) {
-            list.add(bean);
-        }
-
-        @Override
-        public FlFaceLightBean getBean() {
-            return null;
-        }
-    }
-    public static abstract class NoListAction implements Action {
-        SoftReference<FlFaceLightBean> sf=new SoftReference<FlFaceLightBean>(new FlFaceLightBean());
-        @Override
-        public final FlFaceLightBean getBean() {
-            FlFaceLightBean bean = sf.get();
-            if(null==bean){
-                sf=new SoftReference<FlFaceLightBean>(bean=new FlFaceLightBean());
-            }
-            return bean.clean();
-        }
-    }
-    
+   
     @Override
     public <T>T runAsTransaction(Callable<T> fun) throws DAOException{
         return Manager.getInstance().runAsTransaction(fun);
@@ -2612,5 +1953,16 @@ public class FlFaceLightManager implements TableManager<FlFaceLightBean>
     public void runAsTransaction(final Runnable fun) throws DAOException{
         Manager.getInstance().runAsTransaction(fun);
     }
-
+    
+    class DeleteBeanAction extends Action.Adapter<FlFaceLightBean>{
+        private final AtomicInteger count=new AtomicInteger(0);
+        @Override
+        public void call(FlFaceLightBean bean) throws DAOException {
+                FlFaceLightManager.this.delete(bean);
+                count.incrementAndGet();
+        }
+        int getCount(){
+            return count.get();
+        }
+    }
 }

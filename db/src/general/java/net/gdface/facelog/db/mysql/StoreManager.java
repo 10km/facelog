@@ -5,12 +5,8 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // ______________________________________________________
 
-
-
 package net.gdface.facelog.db.mysql;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import net.gdface.facelog.db.StoreBean;
@@ -31,94 +27,42 @@ import net.gdface.facelog.dborm.image.FlImageBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class StoreManager implements TableManager<StoreBean>
+public class StoreManager extends TableManager.Adapter<StoreBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the encoding field.
-     */
-    public static final int ID_ENCODING = 1;
-
-    /**
-     * Identify the data field.
-     */
-    public static final int ID_DATA = 2;
-
-    /**
-     * Tablename.
-     */
-        public static final String TABLE_NAME="fl_store";
-    /**
-     * Contains all the full fields of the fl_store table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_store.md5"
-        ,"fl_store.encoding"
-        ,"fl_store.data"
-    };
-
-    /**
-     * Contains all the fields of the fl_store table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"encoding"
-        ,"data"
-    };
-   /**
-     * Contains all the primarykey fields of the fl_store table.
-     */
-    public static final String[] PRIMARYKEY_NAMES =
-    {
-        "md5"
-    };
-    /**
-     * Field that contains the comma separated fields of the fl_store table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_store.md5"
-                            + ",fl_store.encoding"
-                            + ",fl_store.data";
-
-    /**
-     * Field that contains the comma separated fields of the fl_store table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",encoding"
-                            + ",data";
-
-    /**
-    * @return tableName
-    */
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    /**
-    * @return primarykeyNames
-    */
-    public String[] getPrimarykeyNames() {
-        return PRIMARYKEY_NAMES;
-    }
-    
     private FlStoreManager nativeManager = FlStoreManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<StoreBean,FlStoreBean> beanConverter = dbConverter.getStoreBeanConverter();
     private static StoreManager singleton = new StoreManager();
 
+    /**
+    * @return table name
+    */
+    public String getTableName() {
+        return this.nativeManager.getTableName();
+    }
+
+    /**
+    * @return field names of table
+    */
+    public String[] getFieldNames() {
+        return this.nativeManager.getFieldNames();
+    }
+
+    public String getFieldNamesAsString() {
+        return this.nativeManager.getFieldNamesAsString();
+    }
+    
+    public String[] getFullFieldNames() {
+        return this.nativeManager.getFullFieldNames();
+    }
+    
+    /**
+    * @return primarykeyNames
+    */
+    public String[] getPrimarykeyNames() {
+        return this.nativeManager.getPrimarykeyNames();
+    }
+    
     /**
      * Get the {@link StoreManager} singleton.
      *
@@ -167,16 +111,8 @@ public class StoreManager implements TableManager<StoreBean>
         }
     }
 
-
-    /**
-     * Loads a {@link StoreBean} from the fl_store using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link StoreBean} with primary key fields
-     * @return a unique {@link StoreBean} or {@code null} if not found or bean is null
-     * @see {@link #loadByPrimaryKey(String md5)}
-     */
     //1.2
+    @Override
     public StoreBean loadByPrimaryKey(StoreBean bean)
     {
         try{
@@ -190,7 +126,6 @@ public class StoreManager implements TableManager<StoreBean>
     /**
      * Loads a {@link StoreBean} from the fl_store using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
      * @param keys primary keys value:<br> 
      *             PK# 1:String     
      * @return a unique {@link StoreBean} or {@code null} if not found
@@ -207,7 +142,6 @@ public class StoreManager implements TableManager<StoreBean>
     
     /**
      * Returns true if this fl_store contains row with primary key fields.
-     * @author guyadong
      * @param md5 String - PK# 1
      * @see #loadByPrimaryKey(String md5)
      */
@@ -215,34 +149,6 @@ public class StoreManager implements TableManager<StoreBean>
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
-
-    }
-    /**
-     * Returns true if this fl_store contains row with primary key fields.
-     * @param keys primary keys value:<br>
-     *             PK# 1:String     
-     * @author guyadong
-     * @see #loadByPrimaryKey(Object...)
-     */
-    //1.5
-    public boolean existsPrimaryKey(Object ...keys)
-    {
-        return null!=loadByPrimaryKey(keys);
-    }
-    /**
-     * Returns true if this fl_store contains row specified by primary key fields of {@link StoreBean}.<br>
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the {@link StoreBean} with primary key fields
-     * @return 
-     * @see {@link #loadByPrimaryKey(StoreBean bean)}
-     */
-    //1.6
-    @Override
-    public boolean existsPrimaryKey(StoreBean bean)
-    {
-        return null!=loadByPrimaryKey(bean);
-
     }
     
     /**
@@ -281,26 +187,7 @@ public class StoreManager implements TableManager<StoreBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return deleteByPrimaryKey((String)keys[0]);
     }
-    /**
-     * Delete row according to Primary Key fileds of the parameter{@code bean},
-     * when you don't know which is primary key of table,you can use the method.
-     * @author guyadong
-     * @param bean the StoreBean with primary key fields
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(String md5)}
-     */
-    //2.2
-    @Override
-    public int deleteByPrimaryKey(StoreBean bean)
-    {
-        try{
-            return this.nativeManager.deleteByPrimaryKey(this.beanConverter.toRight(bean));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
+
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
@@ -354,7 +241,7 @@ public class StoreManager implements TableManager<StoreBean>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @Override
-    public <T extends BaseBean> List<T> getImportedBeansAsList(StoreBean bean,String fkName){
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
             return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
@@ -395,8 +282,8 @@ public class StoreManager implements TableManager<StoreBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyMd5 -> ImageBean Collection</li>
-     *     <li> impFlImagebyThumbMd5 -> ImageBean Collection</li>
+     *     <li> impFlImagebyMd5 -> ImageBean java.util.Collection</li>
+     *     <li> impFlImagebyThumbMd5 -> ImageBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link StoreBean}
@@ -405,11 +292,11 @@ public class StoreManager implements TableManager<StoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,String fkName){
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,String fkName){
         try {
             IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof List){
-                resultConverter.fromRight((List<T>)importedBeans,nativeManager.setImportedBeans( 
+            if(importedBeans instanceof java.util.List){
+                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
                         this.beanConverter.toRight(bean),
                         resultConverter.toRight(importedBeans),
                         fkName));            	
@@ -457,7 +344,7 @@ public class StoreManager implements TableManager<StoreBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean)
+    public java.util.List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean)
     {
         try {
             return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByMd5AsList( this.beanConverter.toRight(bean)));
@@ -494,7 +381,7 @@ public class StoreManager implements TableManager<StoreBean>
     }
 
     /**
-     * set  the {@link ImageBean} object collection associate to StoreBean by the fl_image.md5 field.<BR>
+     * set  the {@link ImageBean} object java.util.Collection associate to StoreBean by the fl_image.md5 field.<BR>
      * FK_NAME:fl_image_ibfk_1
      * @param bean the referenced {@link StoreBean} 
      * @param importedBeans imported beans from fl_image 
@@ -502,12 +389,12 @@ public class StoreManager implements TableManager<StoreBean>
      * @see {@link FlImageManager#setReferencedByMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans)
+    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans)
     {
         try {
             IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByMd5(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByMd5(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -551,7 +438,7 @@ public class StoreManager implements TableManager<StoreBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean)
+    public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean)
     {
         try {
             return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByThumbMd5AsList( this.beanConverter.toRight(bean)));
@@ -588,7 +475,7 @@ public class StoreManager implements TableManager<StoreBean>
     }
 
     /**
-     * set  the {@link ImageBean} object collection associate to StoreBean by the fl_image.thumb_md5 field.<BR>
+     * set  the {@link ImageBean} object java.util.Collection associate to StoreBean by the fl_image.thumb_md5 field.<BR>
      * FK_NAME:fl_image_ibfk_2
      * @param bean the referenced {@link StoreBean} 
      * @param importedBeans imported beans from fl_image 
@@ -596,12 +483,12 @@ public class StoreManager implements TableManager<StoreBean>
      * @see {@link FlImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
-    public <C extends Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans)
+    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans)
     {
         try {
             IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            if(importedBeans instanceof List){
-                importedConverter.fromRight((List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByThumbMd5(
+            if(importedBeans instanceof java.util.List){
+                importedConverter.fromRight((java.util.List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByThumbMd5(
                     this.beanConverter.toRight(bean),
                     importedConverter.toRight(importedBeans)
                     ));
@@ -670,7 +557,7 @@ public class StoreManager implements TableManager<StoreBean>
     //3.7 SYNC SAVE 
     public StoreBean save(StoreBean bean
         
-        , Collection<ImageBean> impFlImagebyMd5 , Collection<ImageBean> impFlImagebyThumbMd5 )
+        , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 )
     {
         try{
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
@@ -683,12 +570,12 @@ public class StoreManager implements TableManager<StoreBean>
     }   
     /**
      * Transaction version for sync save
-     * @see {@link #save(StoreBean , Collection , Collection )}
+     * @see {@link #save(StoreBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final  Collection<ImageBean> impFlImagebyMd5 ,final  Collection<ImageBean> impFlImagebyThumbMd5 ) throws DAOException
+        ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<StoreBean>(){
             @Override
@@ -708,277 +595,9 @@ public class StoreManager implements TableManager<StoreBean>
      
 
     //////////////////////////////////////
-    // LOAD ALL
-    //////////////////////////////////////
-
-    /**
-     * Loads all the rows from fl_store.
-     *
-     * @return an array of FlStoreManager bean
-     */
-    //5
-    @Override
-    public StoreBean[] loadAll()
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplate(null));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Loads each row from fl_store and dealt with action.
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //5-1
-    @Override
-    public int loadAll(Action<StoreBean> action)
-    {
-        return this.loadUsingTemplate(null,action);
-    }
-    /**
-     * Loads all the rows from fl_store.
-     *
-     * @return a list of StoreBean bean
-     */
-    //5-2
-    @Override
-    public List<StoreBean> loadAllAsList()
-    {
-        return this.loadUsingTemplateAsList(null);
-    }
-
-
-    /**
-     * Loads the given number of rows from fl_store, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlStoreManager bean
-     */
-    //6
-    @Override
-    public StoreBean[] loadAll(int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows);
-    }
-    /**
-     *  Loads the given number of rows from fl_store, given the start row and dealt with action.
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //6-1
-    @Override
-    public int loadAll(int startRow, int numRows,Action<StoreBean> action)
-    {
-        return this.loadUsingTemplate(null, startRow, numRows,action);
-    }
-    /**
-     * Loads the given number of rows from fl_store, given the start row.
-     *
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlStoreManager bean
-     */
-    //6-2
-    @Override
-    public List<StoreBean> loadAllAsList(int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(null, startRow, numRows);
-    }
-
-    //////////////////////////////////////
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves an array of StoreBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting StoreBean table
-     */
-    //7
-    @Override
-    public StoreBean[] loadByWhere(String where)
-    {
-        return this.loadByWhere(where, (int[])null);
-    }
-    
-    /**
-     * Retrieves a list of StoreBean given a sql 'where' clause.
-     *
-     * @param where the sql 'where' clause
-     * @return the resulting StoreBean table
-     */
-    //7
-    @Override
-    public List<StoreBean> loadByWhereAsList(String where)
-    {
-        return this.loadByWhereAsList(where, null);
-    }
-    /**
-     * Retrieves each row of StoreBean given a sql 'where' clause and dealt with action.
-     * @param where the sql 'where' clause
-     * @param action  Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //7-1
-    @Override
-    public int loadByWhere(String where,Action<StoreBean> action)
-    {
-        return this.loadByWhere(where, null,action);
-    }
-    /**
-     * Retrieves an array of StoreBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting StoreBean table
-     */
-    //8
-    @Override
-    public StoreBean[] loadByWhere(String where, int[] fieldList)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1);
-    }
 
-
-    /**
-     * Retrieves a list of StoreBean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @return the resulting StoreBean table
-     */
-    //8
-    @Override
-    public List<StoreBean> loadByWhereAsList(String where, int[] fieldList)
-    {
-        return this.loadByWhereAsList(where, fieldList, 1, -1);
-    }
-    /**
-     * Retrieves each row of StoreBean given a sql where clause, and a list of fields,
-     * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * @param where the sql 'WHERE' clause
-     * @param fieldList array of field's ID
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //8-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList,Action<StoreBean> action)
-    {
-        return this.loadByWhere(where, fieldList, 1, -1,action);
-    }
-
-    /**
-     * Retrieves an array of StoreBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting StoreBean table
-     */
-    //9
-    @Override
-    public StoreBean[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)
-    {
-        return (StoreBean[]) this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray(new StoreBean[0]);
-    }
-    /**
-     * Retrieves each row of  StoreBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-1
-    @Override
-    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<StoreBean> action)
-    {
-        return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
-    }
-
-    /**
-     * Retrieves a list of StoreBean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting StoreBean table
-     */
-    //9-2
-    @Override
-    public List<StoreBean> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByWhereAsList(where,fieldList,startRow,numRows));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Retrieves each row of StoreBean given a sql where clause and a list of fields, and startRow and numRows,
-     * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the sql 'where' clause
-     * @param fieldList table of the field's associated constants
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //9-3
-    @Override
-    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<StoreBean> action)
-    {
-        try{
-            return this.nativeManager.loadByWhereForAction(where,fieldList,startRow,numRows,this.toNative(action));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    /**
-     * Deletes all rows from fl_store table.
-     * @return the number of deleted rows.
-     */
-    //10
-    @Override
-    public int deleteAll()
-    {
-        return this.deleteByWhere("");
-    }
-
-    /**
-     * Deletes rows from the fl_store table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     * <br>Attention, if 'WHERE' is omitted it will delete all records.
-     *
-     * @param where the sql 'where' clause
-     * @return the number of deleted rows
-     */
     //11
     @Override
     public int deleteByWhere(String where)
@@ -996,32 +615,10 @@ public class StoreManager implements TableManager<StoreBean>
     //
     // SAVE
     //_____________________________________________________________________
-    /**
-     * Saves the {@link StoreBean} bean into the database.
-     *
-     * @param bean the {@link StoreBean} bean to be saved
-     * @return the inserted or updated bean,or null if bean is null
-     */
-    //12
-    @Override
-    public StoreBean save(StoreBean bean)
-    {
-        if(null == bean)return null;
-        if (bean.isNew()) {
-            return this.insert(bean);
-        } else {
-            return this.update(bean);
-        }
-    }
 
-    /**
-     * Insert the {@link StoreBean} bean into the database.
-     *
-     * @param bean the {@link StoreBean} bean to be saved
-     * @return the inserted bean or null if bean is null
-     */
     //13
-    public StoreBean insert(StoreBean bean)
+    @Override
+    protected StoreBean insert(StoreBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.insert(this.beanConverter.toRight(bean)));
@@ -1032,14 +629,9 @@ public class StoreManager implements TableManager<StoreBean>
         }
     }
 
-    /**
-     * Update the {@link StoreBean} bean record in the database according to the changes.
-     *
-     * @param bean the {@link StoreBean} bean to be updated
-     * @return the updated bean or null if bean is null
-     */
     //14
-    public StoreBean update(StoreBean bean)
+    @Override
+    protected StoreBean update(StoreBean bean)
     {
         try{
             return this.beanConverter.fromRight(bean,this.nativeManager.update(this.beanConverter.toRight(bean)));
@@ -1050,85 +642,10 @@ public class StoreManager implements TableManager<StoreBean>
         }
     }
 
-    /**
-     * Saves an array of {@link StoreBean} bean into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be saved
-     * @return the saved {@link StoreBean} beans or null if beans is null.
-     */
-    //15
-    public StoreBean[] save(StoreBean[] beans)
-    {
-        if(null !=beans){
-            for (StoreBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-
-    /**
-     * Saves a collection of {@link StoreBean} bean into the database.
-     *
-     * @param beans the {@link StoreBean} bean table to be saved
-     * @return the saved {@link StoreBean} beans or null if beans is null.
-     */
-    //15-2
-    @Override
-    public <C extends Collection<StoreBean>> C save(C beans)
-    {
-        if(null != beans){
-            for (StoreBean bean : beans) 
-            {
-                this.save(bean);
-            }
-        }
-        return beans;
-    }
-    /**
-     * Saves an array of {@link StoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link StoreBean} bean table to be saved
-     * @return the saved {@link StoreBean} beans.
-     * @see #save(StoreBean[])
-     */
-    //15-3
-    @Override
-    public StoreBean[] saveAsTransaction(final StoreBean[] beans) {
-        return this.runAsTransaction(new Callable<StoreBean[]>(){
-            @Override
-            public StoreBean[] call() throws Exception {
-                return save(beans);
-            }});
-    }
-    /**
-     * Saves a collection of {@link StoreBean} bean into the database as transaction.
-     *
-     * @param beans the {@link StoreBean} bean table to be saved
-     * @return the saved {@link StoreBean} beans.
-     * @see #save(List)
-     */
-    //15-4
-    @Override
-    public <C extends Collection<StoreBean>> C saveAsTransaction(final C beans){
-        return this.runAsTransaction(new Callable<C>(){
-            @Override
-            public C call() throws Exception {
-                return save(beans);
-            }});
-    }
-    
     //_____________________________________________________________________
     //
     // USING TEMPLATE
     //_____________________________________________________________________
-    /**
-     * Loads a unique StoreBean bean from a template one giving a c
-     *
-     * @param bean the StoreBean bean to look for
-     * @return the bean matching the template
-     */
     //18
     @Override
     public StoreBean loadUniqueUsingTemplate(StoreBean bean)
@@ -1142,154 +659,19 @@ public class StoreManager implements TableManager<StoreBean>
         }
      }
 
-    /**
-     * Loads an array of StoreBean from a template one.
-     *
-     * @param bean the StoreBean template to look for
-     * @return all the StoreBean matching the template
-     */
-    //19
-    @Override
-    public StoreBean[] loadUsingTemplate(StoreBean bean)
-    {
-        return this.loadUsingTemplate(bean, 1, -1);
-    }
-    /**
-     * Loads each row from a template one and dealt with action.
-     *
-     * @param bean the StoreBean template to look for
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //19-1
-    @Override
-    public int loadUsingTemplate(StoreBean bean,Action<StoreBean> action)
-    {
-        return this.loadUsingTemplate(bean, 1, -1,action);
-    }
-
-    /**
-     * Loads a list of StoreBean from a template one.
-     *
-     * @param bean the StoreBean template to look for
-     * @return all the StoreBean matching the template
-     */
-    //19-2
-    @Override
-    public List<StoreBean> loadUsingTemplateAsList(StoreBean bean)
-    {
-        return this.loadUsingTemplateAsList(bean, 1, -1);
-    }
-
-    /**
-     * Loads an array of StoreBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the StoreBean matching the template
-     */
-    //20
-    @Override
-    public StoreBean[] loadUsingTemplate(StoreBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
-    //20-1
-    @Override
-    public int loadUsingTemplate(StoreBean bean, int startRow, int numRows,Action<StoreBean> action)
-    {
-        return this.loadUsingTemplate(bean, null, startRow, numRows,SearchType.SEARCH_EXACT, action);
-    }
-    /**
-     * Loads a list of StoreBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return all the StoreBean matching the template
-     */
-    //20-2
-    @Override
-    public List<StoreBean> loadUsingTemplateAsList(StoreBean bean, int startRow, int numRows)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * Loads an array of StoreBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the StoreBean matching the template
-     */
-    //20-3
-    @Override
-    public StoreBean[] loadUsingTemplate(StoreBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray(new StoreBean[0]);
-    }
-
-    /**
-     * Loads a list of StoreBean from a template one, given the start row and number of rows.
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return all the StoreBean matching the template
-     */
-    //20-4
-    @Override
-    public List<StoreBean> loadUsingTemplateAsList(StoreBean bean, int startRow, int numRows, SearchType searchType)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUsingTemplateAsList(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal()));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }        
-    }
-    /**
-     * Loads each row from a template one, given the start row and number of rows and dealt with action.
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @param action Action object for do something(not null)
-     * @return the count dealt by action
-     */
     //20-5
     @Override
-    public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,SearchType searchType, Action<StoreBean> action)
+    public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action)
     {
         try {
-            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType.ordinal(),this.toNative(action));
+            return this.nativeManager.loadUsingTemplate(this.beanConverter.toRight(bean),fieldList,startRow,numRows,searchType,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Deletes rows using a StoreBean template.
-     *
-     * @param bean the StoreBean object(s) to be deleted
-     * @return the number of deleted objects
-     */
+
     //21
     @Override
     public int deleteUsingTemplate(StoreBean bean)
@@ -1304,31 +686,10 @@ public class StoreManager implements TableManager<StoreBean>
     }
 
 
-
     //_____________________________________________________________________
     //
     // COUNT
     //_____________________________________________________________________
-
-    /**
-     * Retrieves the number of rows of the table fl_store.
-     *
-     * @return the number of rows returned
-     */
-    //24
-    @Override
-    public int countAll() 
-    {
-        return this.countWhere("");
-    }
-
-    /**
-     * Retrieves the number of rows of the table fl_store with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
-     *
-     * @param where the restriction clause
-     * @return the number of rows returned
-     */
     //25
     @Override
     public int countWhere(String where)
@@ -1342,49 +703,12 @@ public class StoreManager implements TableManager<StoreBean>
         }
     }
 
-    /**
-     * count the number of elements of a specific StoreBean bean
-     *
-     * @param bean the StoreBean bean to look for ant count
-     * @return the number of rows returned
-     */
-    //27
-    @Override
-    public int countUsingTemplate(StoreBean bean)
-    {
-        return this.countUsingTemplate(bean, -1, -1);
-    }
-
-    /**
-     * count the number of elements of a specific StoreBean bean , given the start row and number of rows.
-     *
-     * @param bean the StoreBean template to look for and count
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the number of rows returned
-     */
     //20
     @Override
-    public int countUsingTemplate(StoreBean bean, int startRow, int numRows)
-    {
-        return this.countUsingTemplate(bean, startRow, numRows, SearchType.SEARCH_EXACT);
-    }
-
-    /**
-     * count the number of elements of a specific StoreBean bean given the start row and number of rows and the search type
-     *
-     * @param bean the StoreBean template to look for
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @param searchType exact ?  like ? starting like ?
-     * @return the number of rows returned
-     */
-    //20
-    @Override
-    public int countUsingTemplate(StoreBean bean, int startRow, int numRows, SearchType searchType)
+    public int countUsingTemplate(StoreBean bean, int searchType)
     {
         try{
-            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),startRow,numRows,searchType.ordinal());
+            return this.nativeManager.countUsingTemplate(this.beanConverter.toRight(bean),searchType);
         }
         catch(DAOException e)
         {
@@ -1398,9 +722,6 @@ public class StoreManager implements TableManager<StoreBean>
     // LISTENER
     //_____________________________________________________________________
 
-    /**
-     * Registers a unique {@link StoreListener} listener.
-     */
     //35
     @Override
     public void registerListener(TableListener<StoreBean> listener)
@@ -1408,6 +729,13 @@ public class StoreManager implements TableManager<StoreBean>
         this.nativeManager.registerListener(this.toNative(listener));
     }
 
+    //36
+    @Override
+    public void unregisterListener(TableListener<StoreBean> listener)
+    {
+        this.nativeManager.unregisterListener(this.toNative(listener));
+    }
+    
     private net.gdface.facelog.dborm.TableListener<FlStoreBean> toNative(final TableListener<StoreBean> listener) {
         return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlStoreBean> (){
 
@@ -1449,49 +777,22 @@ public class StoreManager implements TableManager<StoreBean>
     // UTILS
     //_____________________________________________________________________
 
-
-    /**
-     * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
-     * return false if @{code column} is null or empty 
-     * @param column
-     * @return
-     * @author guyadong
-     */
     //43
-    public static boolean isPrimaryKey(String column){
-        for(String c:PRIMARYKEY_NAMES)if(c.equalsIgnoreCase(column))return true;
-        return false;
+    @Override
+    public boolean isPrimaryKey(String column){
+        return this.nativeManager.isPrimaryKey(column);
     }
     
-    /**
-     * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an array of StoreBean
-     */
     @Override
-    public StoreBean[] loadBySql(String sql, Object[] argList, int[] fieldList) {
-        return loadBySqlAsList(sql, argList, fieldList).toArray(new StoreBean[0]);
-    }
-    /**
-     * Load all elements using a SQL statement specifying a list of fields to be retrieved.
-     * @param sql the SQL statement for retrieving
-     * @param argList the arguments to use fill given prepared statement,may be null
-     * @param fieldList table of the field's associated constants
-     * @return an list of StoreBean
-     */
-    @Override
-    public List<StoreBean> loadBySqlAsList(String sql, Object[] argList, int[] fieldList){
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<StoreBean> action){
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBySqlAsList(sql,argList,fieldList));
+            return this.nativeManager.loadBySqlForAction(sql,argList,fieldList,startRow,numRows,this.toNative(action));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
-
     
     @Override
     public <T>T runAsTransaction(Callable<T> fun) {
@@ -1514,10 +815,10 @@ public class StoreManager implements TableManager<StoreBean>
             throw new WrapDAOException(e);
         }
     }
-    private FlStoreManager.Action toNative(final Action<StoreBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<FlStoreBean> toNative(final Action<StoreBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new FlStoreManager.Action(){
+        return new net.gdface.facelog.dborm.TableManager.Action<FlStoreBean>(){
 
             @Override
             public void call(FlStoreBean bean) {
