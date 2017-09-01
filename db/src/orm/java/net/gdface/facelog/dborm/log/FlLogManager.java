@@ -1977,7 +1977,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             listeners.clear();
         }    
     }
-    private ListenerContainer listenerContainer = new ListenerContainer();
+    private final ListenerContainer listenerContainer = new ListenerContainer();
 
     //35
     @Override

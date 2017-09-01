@@ -464,6 +464,7 @@ public interface TableManager<B extends BaseBean> {
      *
      * @param keys primary keys value
      * @return the number of deleted rows
+     * @see #delete(B)
      */   
     //2.1
     public abstract int deleteByPrimaryKey(Object ...keys);

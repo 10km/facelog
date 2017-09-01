@@ -1861,7 +1861,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             listeners.clear();
         }    
     }
-    private ListenerContainer listenerContainer = new ListenerContainer();
+    private final ListenerContainer listenerContainer = new ListenerContainer();
 
     //35
     @Override

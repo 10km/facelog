@@ -2240,7 +2240,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             listeners.clear();
         }    
     }
-    private ListenerContainer listenerContainer = new ListenerContainer();
+    private final ListenerContainer listenerContainer = new ListenerContainer();
 
     //35
     @Override

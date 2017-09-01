@@ -1216,7 +1216,7 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
             listeners.clear();
         }    
     }
-    private ListenerContainer listenerContainer = new ListenerContainer();
+    private final ListenerContainer listenerContainer = new ListenerContainer();
 
     //35
     @Override
