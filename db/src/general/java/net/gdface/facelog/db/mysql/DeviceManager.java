@@ -46,12 +46,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     /**
     * @return field names of table
     */
-    public String[] getFieldNames() {
+    public String getFieldNames() {
         return this.nativeManager.getFieldNames();
-    }
-
-    public String getFieldNamesAsString() {
-        return this.nativeManager.getFieldNamesAsString();
     }
     
     public String[] getFullFieldNames() {

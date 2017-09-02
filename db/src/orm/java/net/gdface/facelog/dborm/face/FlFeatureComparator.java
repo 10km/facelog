@@ -8,13 +8,14 @@
 package net.gdface.facelog.dborm.face;
 
 import java.util.Comparator;
+import net.gdface.facelog.dborm.Constant;
 
 
 /**
  * Comparator class is used to sort the FlFeatureBean objects.
  * @author sql2java
  */
-public class FlFeatureComparator implements Comparator<FlFeatureBean>
+public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -30,16 +31,16 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFeatureComparator(FlFeatureManager.ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFeatureComparator(Constant.FL_FEATURE_ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlFeatureManager.ID_MD5
-     *   <li>FlFeatureManager.ID_PERSON_ID
-     *   <li>FlFeatureManager.ID_IMG_MD5
-     *   <li>FlFeatureManager.ID_CREATE_TIME
+     *   <li>{@link Constant#FL_FEATURE_ID_MD5}
+     *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID}
+     *   <li>{@link Constant#FL_FEATURE_ID_IMG_MD5}
+     *   <li>{@link Constant#FL_FEATURE_ID_CREATE_TIME}
      * </ul>
      */
     public FlFeatureComparator(int iType)
@@ -52,17 +53,17 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFeatureComparator(FlFeatureManager.ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFeatureComparator(Constant.FL_FEATURE_ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlFeatureManager.ID_MD5
-     *   <li>FlFeatureManager.ID_PERSON_ID
-     *   <li>FlFeatureManager.ID_IMG_MD5
-     *   <li>FlFeatureManager.ID_FEATURE
-     *   <li>FlFeatureManager.ID_CREATE_TIME
+     *   <li>{@link Constant#FL_FEATURE_ID_MD5})
+     *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID})
+     *   <li>{@link Constant#FL_FEATURE_ID_IMG_MD5})
+     *   <li>{@link Constant#FL_FEATURE_ID_FEATURE})
+     *   <li>{@link Constant#FL_FEATURE_ID_CREATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -79,7 +80,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlFeatureManager.ID_MD5:
+            case FL_FEATURE_ID_MD5:
                 if (b1.getMd5() == null && b2.getMd5() != null) {
                     iReturn = -1;
                 } else if (b1.getMd5() == null && b2.getMd5() == null) {
@@ -90,7 +91,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
                     iReturn = b1.getMd5().compareTo(b2.getMd5());
                 }
                 break;
-            case FlFeatureManager.ID_PERSON_ID:
+            case FL_FEATURE_ID_PERSON_ID:
                 if (b1.getPersonId() == null && b2.getPersonId() != null) {
                     iReturn = -1;
                 } else if (b1.getPersonId() == null && b2.getPersonId() == null) {
@@ -101,7 +102,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
                     iReturn = b1.getPersonId().compareTo(b2.getPersonId());
                 }
                 break;
-            case FlFeatureManager.ID_IMG_MD5:
+            case FL_FEATURE_ID_IMG_MD5:
                 if (b1.getImgMd5() == null && b2.getImgMd5() != null) {
                     iReturn = -1;
                 } else if (b1.getImgMd5() == null && b2.getImgMd5() == null) {
@@ -112,7 +113,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>
                     iReturn = b1.getImgMd5().compareTo(b2.getImgMd5());
                 }
                 break;
-            case FlFeatureManager.ID_CREATE_TIME:
+            case FL_FEATURE_ID_CREATE_TIME:
                 if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
                     iReturn = -1;
                 } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {

@@ -37,80 +37,11 @@ import net.gdface.facelog.dborm.person.FlPersonManager;
  */
 public class FlLogManager extends TableManager.Adapter<FlLogBean>
 {
-
-    /**
-     * Identify the id field.
-     */
-    public static final int ID_ID = 0;
-
-    /**
-     * Identify the person_id field.
-     */
-    public static final int ID_PERSON_ID = 1;
-
-    /**
-     * Identify the device_id field.
-     */
-    public static final int ID_DEVICE_ID = 2;
-
-    /**
-     * Identify the verify_face field.
-     */
-    public static final int ID_VERIFY_FACE = 3;
-
-    /**
-     * Identify the compare_face field.
-     */
-    public static final int ID_COMPARE_FACE = 4;
-
-    /**
-     * Identify the similarty field.
-     */
-    public static final int ID_SIMILARTY = 5;
-
-    /**
-     * Identify the verify_time field.
-     */
-    public static final int ID_VERIFY_TIME = 6;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 7;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_log";
-    /**
-     * Contains all the full fields of the fl_log table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_log.id"
-        ,"fl_log.person_id"
-        ,"fl_log.device_id"
-        ,"fl_log.verify_face"
-        ,"fl_log.compare_face"
-        ,"fl_log.similarty"
-        ,"fl_log.verify_time"
-        ,"fl_log.create_time"
-    };
 
-    /**
-     * Contains all the fields of the fl_log table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "id"
-        ,"person_id"
-        ,"device_id"
-        ,"verify_face"
-        ,"compare_face"
-        ,"similarty"
-        ,"verify_time"
-        ,"create_time"
-    };
    /**
      * Contains all the primarykey fields of the fl_log table.
      */
@@ -118,29 +49,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     {
         "id"
     };
-    /**
-     * Field that contains the comma separated fields of the fl_log table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_log.id"
-                            + ",fl_log.person_id"
-                            + ",fl_log.device_id"
-                            + ",fl_log.verify_face"
-                            + ",fl_log.compare_face"
-                            + ",fl_log.similarty"
-                            + ",fl_log.verify_time"
-                            + ",fl_log.create_time";
 
-    /**
-     * Field that contains the comma separated fields of the fl_log table.
-     */
-    public static final String ALL_FIELDS = "id"
-                            + ",person_id"
-                            + ",device_id"
-                            + ",verify_face"
-                            + ",compare_face"
-                            + ",similarty"
-                            + ",verify_time"
-                            + ",create_time";
     /**
     * @return tableName
     */
@@ -148,19 +57,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_LOG_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_LOG_FULL_FIELD_NAMES;
     }
     
     /**
@@ -216,7 +118,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + ALL_FIELDS + " FROM fl_log WHERE id=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_LOG_ALL_FIELDS + " FROM fl_log WHERE id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1748,35 +1650,35 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_ID:
+                    case FL_LOG_ID_ID:
                         ++pos;
                         bean.setId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_PERSON_ID:
+                    case FL_LOG_ID_PERSON_ID:
                         ++pos;
                         bean.setPersonId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_DEVICE_ID:
+                    case FL_LOG_ID_DEVICE_ID:
                         ++pos;
                         bean.setDeviceId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_VERIFY_FACE:
+                    case FL_LOG_ID_VERIFY_FACE:
                         ++pos;
                         bean.setVerifyFace(rs.getString(pos));
                         break;
-                    case ID_COMPARE_FACE:
+                    case FL_LOG_ID_COMPARE_FACE:
                         ++pos;
                         bean.setCompareFace(rs.getString(pos));
                         break;
-                    case ID_SIMILARTY:
+                    case FL_LOG_ID_SIMILARTY:
                         ++pos;
                         bean.setSimilarty(Manager.getDouble(rs, pos));
                         break;
-                    case ID_VERIFY_TIME:
+                    case FL_LOG_ID_VERIFY_TIME:
                         ++pos;
                         bean.setVerifyTime(rs.getTimestamp(pos));
                         break;
-                    case ID_CREATE_TIME:
+                    case FL_LOG_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;

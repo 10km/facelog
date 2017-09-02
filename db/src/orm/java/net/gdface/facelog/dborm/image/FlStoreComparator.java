@@ -8,13 +8,14 @@
 package net.gdface.facelog.dborm.image;
 
 import java.util.Comparator;
+import net.gdface.facelog.dborm.Constant;
 
 
 /**
  * Comparator class is used to sort the FlStoreBean objects.
  * @author sql2java
  */
-public class FlStoreComparator implements Comparator<FlStoreBean>
+public class FlStoreComparator implements Comparator<FlStoreBean>,Constant
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -30,14 +31,14 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlStoreComparator(FlStoreManager.ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlStoreComparator(Constant.FL_STORE_ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlStoreManager.ID_MD5
-     *   <li>FlStoreManager.ID_ENCODING
+     *   <li>{@link Constant#FL_STORE_ID_MD5}
+     *   <li>{@link Constant#FL_STORE_ID_ENCODING}
      * </ul>
      */
     public FlStoreComparator(int iType)
@@ -50,15 +51,15 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlStoreComparator(FlStoreManager.ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlStoreComparator(Constant.FL_STORE_ID_MD5, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlStoreManager.ID_MD5
-     *   <li>FlStoreManager.ID_ENCODING
-     *   <li>FlStoreManager.ID_DATA
+     *   <li>{@link Constant#FL_STORE_ID_MD5})
+     *   <li>{@link Constant#FL_STORE_ID_ENCODING})
+     *   <li>{@link Constant#FL_STORE_ID_DATA})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -75,7 +76,7 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlStoreManager.ID_MD5:
+            case FL_STORE_ID_MD5:
                 if (b1.getMd5() == null && b2.getMd5() != null) {
                     iReturn = -1;
                 } else if (b1.getMd5() == null && b2.getMd5() == null) {
@@ -86,7 +87,7 @@ public class FlStoreComparator implements Comparator<FlStoreBean>
                     iReturn = b1.getMd5().compareTo(b2.getMd5());
                 }
                 break;
-            case FlStoreManager.ID_ENCODING:
+            case FL_STORE_ID_ENCODING:
                 if (b1.getEncoding() == null && b2.getEncoding() != null) {
                     iReturn = -1;
                 } else if (b1.getEncoding() == null && b2.getEncoding() == null) {

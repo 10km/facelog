@@ -8,13 +8,14 @@
 package net.gdface.facelog.dborm.device;
 
 import java.util.Comparator;
+import net.gdface.facelog.dborm.Constant;
 
 
 /**
  * Comparator class is used to sort the FlDeviceBean objects.
  * @author sql2java
  */
-public class FlDeviceComparator implements Comparator<FlDeviceBean>
+public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -30,19 +31,19 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceComparator(FlDeviceManager.ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceComparator(Constant.FL_DEVICE_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlDeviceManager.ID_ID
-     *   <li>FlDeviceManager.ID_NAME
-     *   <li>FlDeviceManager.ID_ONLINE
-     *   <li>FlDeviceManager.ID_GROUP_ID
-     *   <li>FlDeviceManager.ID_VERSION
-     *   <li>FlDeviceManager.ID_CREATE_TIME
-     *   <li>FlDeviceManager.ID_UPDATE_TIME
+     *   <li>{@link Constant#FL_DEVICE_ID_ID}
+     *   <li>{@link Constant#FL_DEVICE_ID_NAME}
+     *   <li>{@link Constant#FL_DEVICE_ID_ONLINE}
+     *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID}
+     *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
+     *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME}
+     *   <li>{@link Constant#FL_DEVICE_ID_UPDATE_TIME}
      * </ul>
      */
     public FlDeviceComparator(int iType)
@@ -55,19 +56,19 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlDeviceComparator(FlDeviceManager.ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlDeviceComparator(Constant.FL_DEVICE_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlDeviceManager.ID_ID
-     *   <li>FlDeviceManager.ID_NAME
-     *   <li>FlDeviceManager.ID_ONLINE
-     *   <li>FlDeviceManager.ID_GROUP_ID
-     *   <li>FlDeviceManager.ID_VERSION
-     *   <li>FlDeviceManager.ID_CREATE_TIME
-     *   <li>FlDeviceManager.ID_UPDATE_TIME
+     *   <li>{@link Constant#FL_DEVICE_ID_ID})
+     *   <li>{@link Constant#FL_DEVICE_ID_NAME})
+     *   <li>{@link Constant#FL_DEVICE_ID_ONLINE})
+     *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID})
+     *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
+     *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME})
+     *   <li>{@link Constant#FL_DEVICE_ID_UPDATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -84,7 +85,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlDeviceManager.ID_ID:
+            case FL_DEVICE_ID_ID:
                 if (b1.getId() == null && b2.getId() != null) {
                     iReturn = -1;
                 } else if (b1.getId() == null && b2.getId() == null) {
@@ -95,7 +96,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getId().compareTo(b2.getId());
                 }
                 break;
-            case FlDeviceManager.ID_NAME:
+            case FL_DEVICE_ID_NAME:
                 if (b1.getName() == null && b2.getName() != null) {
                     iReturn = -1;
                 } else if (b1.getName() == null && b2.getName() == null) {
@@ -106,7 +107,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getName().compareTo(b2.getName());
                 }
                 break;
-            case FlDeviceManager.ID_ONLINE:
+            case FL_DEVICE_ID_ONLINE:
                 if (b1.getOnline() == null && b2.getOnline() != null) {
                     iReturn = -1;
                 } else if (b1.getOnline() == null && b2.getOnline() == null) {
@@ -117,7 +118,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getOnline().compareTo(b2.getOnline());
                 }
                 break;
-            case FlDeviceManager.ID_GROUP_ID:
+            case FL_DEVICE_ID_GROUP_ID:
                 if (b1.getGroupId() == null && b2.getGroupId() != null) {
                     iReturn = -1;
                 } else if (b1.getGroupId() == null && b2.getGroupId() == null) {
@@ -128,7 +129,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getGroupId().compareTo(b2.getGroupId());
                 }
                 break;
-            case FlDeviceManager.ID_VERSION:
+            case FL_DEVICE_ID_VERSION:
                 if (b1.getVersion() == null && b2.getVersion() != null) {
                     iReturn = -1;
                 } else if (b1.getVersion() == null && b2.getVersion() == null) {
@@ -139,7 +140,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getVersion().compareTo(b2.getVersion());
                 }
                 break;
-            case FlDeviceManager.ID_CREATE_TIME:
+            case FL_DEVICE_ID_CREATE_TIME:
                 if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
                     iReturn = -1;
                 } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
@@ -150,7 +151,7 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>
                     iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
                 }
                 break;
-            case FlDeviceManager.ID_UPDATE_TIME:
+            case FL_DEVICE_ID_UPDATE_TIME:
                 if (b1.getUpdateTime() == null && b2.getUpdateTime() != null) {
                     iReturn = -1;
                 } else if (b1.getUpdateTime() == null && b2.getUpdateTime() == null) {

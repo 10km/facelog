@@ -35,73 +35,11 @@ import net.gdface.facelog.dborm.log.FlLogManager;
  */
 public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
 {
-
-    /**
-     * Identify the id field.
-     */
-    public static final int ID_ID = 0;
-
-    /**
-     * Identify the name field.
-     */
-    public static final int ID_NAME = 1;
-
-    /**
-     * Identify the online field.
-     */
-    public static final int ID_ONLINE = 2;
-
-    /**
-     * Identify the group_id field.
-     */
-    public static final int ID_GROUP_ID = 3;
-
-    /**
-     * Identify the version field.
-     */
-    public static final int ID_VERSION = 4;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 5;
-
-    /**
-     * Identify the update_time field.
-     */
-    public static final int ID_UPDATE_TIME = 6;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_device";
-    /**
-     * Contains all the full fields of the fl_device table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_device.id"
-        ,"fl_device.name"
-        ,"fl_device.online"
-        ,"fl_device.group_id"
-        ,"fl_device.version"
-        ,"fl_device.create_time"
-        ,"fl_device.update_time"
-    };
 
-    /**
-     * Contains all the fields of the fl_device table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "id"
-        ,"name"
-        ,"online"
-        ,"group_id"
-        ,"version"
-        ,"create_time"
-        ,"update_time"
-    };
    /**
      * Contains all the primarykey fields of the fl_device table.
      */
@@ -109,27 +47,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         "id"
     };
-    /**
-     * Field that contains the comma separated fields of the fl_device table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_device.id"
-                            + ",fl_device.name"
-                            + ",fl_device.online"
-                            + ",fl_device.group_id"
-                            + ",fl_device.version"
-                            + ",fl_device.create_time"
-                            + ",fl_device.update_time";
 
-    /**
-     * Field that contains the comma separated fields of the fl_device table.
-     */
-    public static final String ALL_FIELDS = "id"
-                            + ",name"
-                            + ",online"
-                            + ",group_id"
-                            + ",version"
-                            + ",create_time"
-                            + ",update_time";
     /**
     * @return tableName
     */
@@ -137,19 +55,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_DEVICE_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_DEVICE_FULL_FIELD_NAMES;
     }
     
     /**
@@ -205,7 +116,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + ALL_FIELDS + " FROM fl_device WHERE id=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_DEVICE_ALL_FIELDS + " FROM fl_device WHERE id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1473,31 +1384,31 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_ID:
+                    case FL_DEVICE_ID_ID:
                         ++pos;
                         bean.setId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_NAME:
+                    case FL_DEVICE_ID_NAME:
                         ++pos;
                         bean.setName(rs.getString(pos));
                         break;
-                    case ID_ONLINE:
+                    case FL_DEVICE_ID_ONLINE:
                         ++pos;
                         bean.setOnline(Manager.getBoolean(rs, pos));
                         break;
-                    case ID_GROUP_ID:
+                    case FL_DEVICE_ID_GROUP_ID:
                         ++pos;
                         bean.setGroupId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_VERSION:
+                    case FL_DEVICE_ID_VERSION:
                         ++pos;
                         bean.setVersion(rs.getString(pos));
                         break;
-                    case ID_CREATE_TIME:
+                    case FL_DEVICE_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;
-                    case ID_UPDATE_TIME:
+                    case FL_DEVICE_ID_UPDATE_TIME:
                         ++pos;
                         bean.setUpdateTime(rs.getTimestamp(pos));
                         break;

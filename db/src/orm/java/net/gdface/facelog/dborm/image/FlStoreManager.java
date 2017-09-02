@@ -33,45 +33,11 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  */
 public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the encoding field.
-     */
-    public static final int ID_ENCODING = 1;
-
-    /**
-     * Identify the data field.
-     */
-    public static final int ID_DATA = 2;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_store";
-    /**
-     * Contains all the full fields of the fl_store table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_store.md5"
-        ,"fl_store.encoding"
-        ,"fl_store.data"
-    };
 
-    /**
-     * Contains all the fields of the fl_store table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"encoding"
-        ,"data"
-    };
    /**
      * Contains all the primarykey fields of the fl_store table.
      */
@@ -79,19 +45,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     {
         "md5"
     };
-    /**
-     * Field that contains the comma separated fields of the fl_store table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_store.md5"
-                            + ",fl_store.encoding"
-                            + ",fl_store.data";
 
-    /**
-     * Field that contains the comma separated fields of the fl_store table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",encoding"
-                            + ",data";
     /**
     * @return tableName
     */
@@ -99,19 +53,12 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_STORE_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_STORE_FULL_FIELD_NAMES;
     }
     
     /**
@@ -167,7 +114,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + ALL_FIELDS + " FROM fl_store WHERE md5=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_STORE_ALL_FIELDS + " FROM fl_store WHERE md5=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1298,15 +1245,15 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_MD5:
+                    case FL_STORE_ID_MD5:
                         ++pos;
                         bean.setMd5(rs.getString(pos));
                         break;
-                    case ID_ENCODING:
+                    case FL_STORE_ID_ENCODING:
                         ++pos;
                         bean.setEncoding(rs.getString(pos));
                         break;
-                    case ID_DATA:
+                    case FL_STORE_ID_DATA:
                         ++pos;
                         bean.setData(rs.getBytes(pos));
                         break;

@@ -31,91 +31,18 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  */
 public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
 {
-
-    /**
-     * Identify the id field.
-     */
-    public static final int ID_ID = 0;
-
-    /**
-     * Identify the person_id field.
-     */
-    public static final int ID_PERSON_ID = 1;
-
-    /**
-     * Identify the name field.
-     */
-    public static final int ID_NAME = 2;
-
-    /**
-     * Identify the papers_type field.
-     */
-    public static final int ID_PAPERS_TYPE = 3;
-
-    /**
-     * Identify the papers_num field.
-     */
-    public static final int ID_PAPERS_NUM = 4;
-
-    /**
-     * Identify the verify_time field.
-     */
-    public static final int ID_VERIFY_TIME = 5;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_log_light";
-    /**
-     * Contains all the full fields of the fl_log_light table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_log_light.id"
-        ,"fl_log_light.person_id"
-        ,"fl_log_light.name"
-        ,"fl_log_light.papers_type"
-        ,"fl_log_light.papers_num"
-        ,"fl_log_light.verify_time"
-    };
 
-    /**
-     * Contains all the fields of the fl_log_light table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "id"
-        ,"person_id"
-        ,"name"
-        ,"papers_type"
-        ,"papers_num"
-        ,"verify_time"
-    };
    /**
      * Contains all the primarykey fields of the fl_log_light table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {
     };
-    /**
-     * Field that contains the comma separated fields of the fl_log_light table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_log_light.id"
-                            + ",fl_log_light.person_id"
-                            + ",fl_log_light.name"
-                            + ",fl_log_light.papers_type"
-                            + ",fl_log_light.papers_num"
-                            + ",fl_log_light.verify_time";
 
-    /**
-     * Field that contains the comma separated fields of the fl_log_light table.
-     */
-    public static final String ALL_FIELDS = "id"
-                            + ",person_id"
-                            + ",name"
-                            + ",papers_type"
-                            + ",papers_num"
-                            + ",verify_time";
     /**
     * @return tableName
     */
@@ -123,19 +50,12 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_LOG_LIGHT_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_LOG_LIGHT_FULL_FIELD_NAMES;
     }
     
     /**
@@ -950,27 +870,27 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_ID:
+                    case FL_LOG_LIGHT_ID_ID:
                         ++pos;
                         bean.setId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_PERSON_ID:
+                    case FL_LOG_LIGHT_ID_PERSON_ID:
                         ++pos;
                         bean.setPersonId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_NAME:
+                    case FL_LOG_LIGHT_ID_NAME:
                         ++pos;
                         bean.setName(rs.getString(pos));
                         break;
-                    case ID_PAPERS_TYPE:
+                    case FL_LOG_LIGHT_ID_PAPERS_TYPE:
                         ++pos;
                         bean.setPapersType(Manager.getInteger(rs, pos));
                         break;
-                    case ID_PAPERS_NUM:
+                    case FL_LOG_LIGHT_ID_PAPERS_NUM:
                         ++pos;
                         bean.setPapersNum(rs.getString(pos));
                         break;
-                    case ID_VERIFY_TIME:
+                    case FL_LOG_LIGHT_ID_VERIFY_TIME:
                         ++pos;
                         bean.setVerifyTime(rs.getTimestamp(pos));
                         break;

@@ -44,12 +44,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     /**
     * @return field names of table
     */
-    public String[] getFieldNames() {
+    public String getFieldNames() {
         return this.nativeManager.getFieldNames();
-    }
-
-    public String getFieldNamesAsString() {
-        return this.nativeManager.getFieldNamesAsString();
     }
     
     public String[] getFullFieldNames() {

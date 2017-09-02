@@ -39,80 +39,11 @@ import net.gdface.facelog.dborm.image.FlStoreManager;
  */
 public class FlImageManager extends TableManager.Adapter<FlImageBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the format field.
-     */
-    public static final int ID_FORMAT = 1;
-
-    /**
-     * Identify the width field.
-     */
-    public static final int ID_WIDTH = 2;
-
-    /**
-     * Identify the height field.
-     */
-    public static final int ID_HEIGHT = 3;
-
-    /**
-     * Identify the depth field.
-     */
-    public static final int ID_DEPTH = 4;
-
-    /**
-     * Identify the face_num field.
-     */
-    public static final int ID_FACE_NUM = 5;
-
-    /**
-     * Identify the thumb_md5 field.
-     */
-    public static final int ID_THUMB_MD5 = 6;
-
-    /**
-     * Identify the device_id field.
-     */
-    public static final int ID_DEVICE_ID = 7;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_image";
-    /**
-     * Contains all the full fields of the fl_image table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_image.md5"
-        ,"fl_image.format"
-        ,"fl_image.width"
-        ,"fl_image.height"
-        ,"fl_image.depth"
-        ,"fl_image.face_num"
-        ,"fl_image.thumb_md5"
-        ,"fl_image.device_id"
-    };
 
-    /**
-     * Contains all the fields of the fl_image table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"format"
-        ,"width"
-        ,"height"
-        ,"depth"
-        ,"face_num"
-        ,"thumb_md5"
-        ,"device_id"
-    };
    /**
      * Contains all the primarykey fields of the fl_image table.
      */
@@ -120,29 +51,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     {
         "md5"
     };
-    /**
-     * Field that contains the comma separated fields of the fl_image table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_image.md5"
-                            + ",fl_image.format"
-                            + ",fl_image.width"
-                            + ",fl_image.height"
-                            + ",fl_image.depth"
-                            + ",fl_image.face_num"
-                            + ",fl_image.thumb_md5"
-                            + ",fl_image.device_id";
 
-    /**
-     * Field that contains the comma separated fields of the fl_image table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",format"
-                            + ",width"
-                            + ",height"
-                            + ",depth"
-                            + ",face_num"
-                            + ",thumb_md5"
-                            + ",device_id";
     /**
     * @return tableName
     */
@@ -150,19 +59,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_IMAGE_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_IMAGE_FULL_FIELD_NAMES;
     }
     
     /**
@@ -218,7 +120,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + ALL_FIELDS + " FROM fl_image WHERE md5=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_IMAGE_ALL_FIELDS + " FROM fl_image WHERE md5=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1864,35 +1766,35 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_MD5:
+                    case FL_IMAGE_ID_MD5:
                         ++pos;
                         bean.setMd5(rs.getString(pos));
                         break;
-                    case ID_FORMAT:
+                    case FL_IMAGE_ID_FORMAT:
                         ++pos;
                         bean.setFormat(rs.getString(pos));
                         break;
-                    case ID_WIDTH:
+                    case FL_IMAGE_ID_WIDTH:
                         ++pos;
                         bean.setWidth(Manager.getInteger(rs, pos));
                         break;
-                    case ID_HEIGHT:
+                    case FL_IMAGE_ID_HEIGHT:
                         ++pos;
                         bean.setHeight(Manager.getInteger(rs, pos));
                         break;
-                    case ID_DEPTH:
+                    case FL_IMAGE_ID_DEPTH:
                         ++pos;
                         bean.setDepth(Manager.getInteger(rs, pos));
                         break;
-                    case ID_FACE_NUM:
+                    case FL_IMAGE_ID_FACE_NUM:
                         ++pos;
                         bean.setFaceNum(Manager.getInteger(rs, pos));
                         break;
-                    case ID_THUMB_MD5:
+                    case FL_IMAGE_ID_THUMB_MD5:
                         ++pos;
                         bean.setThumbMd5(rs.getString(pos));
                         break;
-                    case ID_DEVICE_ID:
+                    case FL_IMAGE_ID_DEVICE_ID:
                         ++pos;
                         bean.setDeviceId(Manager.getInteger(rs, pos));
                         break;

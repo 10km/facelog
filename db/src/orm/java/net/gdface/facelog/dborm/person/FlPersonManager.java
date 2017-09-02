@@ -37,108 +37,11 @@ import net.gdface.facelog.dborm.image.FlImageManager;
  */
 public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 {
-
-    /**
-     * Identify the id field.
-     */
-    public static final int ID_ID = 0;
-
-    /**
-     * Identify the group_id field.
-     */
-    public static final int ID_GROUP_ID = 1;
-
-    /**
-     * Identify the name field.
-     */
-    public static final int ID_NAME = 2;
-
-    /**
-     * Identify the sex field.
-     */
-    public static final int ID_SEX = 3;
-
-    /**
-     * Identify the birthdate field.
-     */
-    public static final int ID_BIRTHDATE = 4;
-
-    /**
-     * Identify the papers_type field.
-     */
-    public static final int ID_PAPERS_TYPE = 5;
-
-    /**
-     * Identify the papers_num field.
-     */
-    public static final int ID_PAPERS_NUM = 6;
-
-    /**
-     * Identify the photo_id field.
-     */
-    public static final int ID_PHOTO_ID = 7;
-
-    /**
-     * Identify the face_md5 field.
-     */
-    public static final int ID_FACE_MD5 = 8;
-
-    /**
-     * Identify the expiry_date field.
-     */
-    public static final int ID_EXPIRY_DATE = 9;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 10;
-
-    /**
-     * Identify the update_time field.
-     */
-    public static final int ID_UPDATE_TIME = 11;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_person";
-    /**
-     * Contains all the full fields of the fl_person table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_person.id"
-        ,"fl_person.group_id"
-        ,"fl_person.name"
-        ,"fl_person.sex"
-        ,"fl_person.birthdate"
-        ,"fl_person.papers_type"
-        ,"fl_person.papers_num"
-        ,"fl_person.photo_id"
-        ,"fl_person.face_md5"
-        ,"fl_person.expiry_date"
-        ,"fl_person.create_time"
-        ,"fl_person.update_time"
-    };
 
-    /**
-     * Contains all the fields of the fl_person table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "id"
-        ,"group_id"
-        ,"name"
-        ,"sex"
-        ,"birthdate"
-        ,"papers_type"
-        ,"papers_num"
-        ,"photo_id"
-        ,"face_md5"
-        ,"expiry_date"
-        ,"create_time"
-        ,"update_time"
-    };
    /**
      * Contains all the primarykey fields of the fl_person table.
      */
@@ -146,37 +49,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         "id"
     };
-    /**
-     * Field that contains the comma separated fields of the fl_person table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_person.id"
-                            + ",fl_person.group_id"
-                            + ",fl_person.name"
-                            + ",fl_person.sex"
-                            + ",fl_person.birthdate"
-                            + ",fl_person.papers_type"
-                            + ",fl_person.papers_num"
-                            + ",fl_person.photo_id"
-                            + ",fl_person.face_md5"
-                            + ",fl_person.expiry_date"
-                            + ",fl_person.create_time"
-                            + ",fl_person.update_time";
 
-    /**
-     * Field that contains the comma separated fields of the fl_person table.
-     */
-    public static final String ALL_FIELDS = "id"
-                            + ",group_id"
-                            + ",name"
-                            + ",sex"
-                            + ",birthdate"
-                            + ",papers_type"
-                            + ",papers_num"
-                            + ",photo_id"
-                            + ",face_md5"
-                            + ",expiry_date"
-                            + ",create_time"
-                            + ",update_time";
     /**
     * @return tableName
     */
@@ -184,19 +57,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_PERSON_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_PERSON_FULL_FIELD_NAMES;
     }
     
     /**
@@ -252,7 +118,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + ALL_FIELDS + " FROM fl_person WHERE id=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_PERSON_ALL_FIELDS + " FROM fl_person WHERE id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -2035,51 +1901,51 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_ID:
+                    case FL_PERSON_ID_ID:
                         ++pos;
                         bean.setId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_GROUP_ID:
+                    case FL_PERSON_ID_GROUP_ID:
                         ++pos;
                         bean.setGroupId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_NAME:
+                    case FL_PERSON_ID_NAME:
                         ++pos;
                         bean.setName(rs.getString(pos));
                         break;
-                    case ID_SEX:
+                    case FL_PERSON_ID_SEX:
                         ++pos;
                         bean.setSex(Manager.getInteger(rs, pos));
                         break;
-                    case ID_BIRTHDATE:
+                    case FL_PERSON_ID_BIRTHDATE:
                         ++pos;
                         bean.setBirthdate(rs.getDate(pos));
                         break;
-                    case ID_PAPERS_TYPE:
+                    case FL_PERSON_ID_PAPERS_TYPE:
                         ++pos;
                         bean.setPapersType(Manager.getInteger(rs, pos));
                         break;
-                    case ID_PAPERS_NUM:
+                    case FL_PERSON_ID_PAPERS_NUM:
                         ++pos;
                         bean.setPapersNum(rs.getString(pos));
                         break;
-                    case ID_PHOTO_ID:
+                    case FL_PERSON_ID_PHOTO_ID:
                         ++pos;
                         bean.setPhotoId(rs.getString(pos));
                         break;
-                    case ID_FACE_MD5:
+                    case FL_PERSON_ID_FACE_MD5:
                         ++pos;
                         bean.setFaceMd5(rs.getString(pos));
                         break;
-                    case ID_EXPIRY_DATE:
+                    case FL_PERSON_ID_EXPIRY_DATE:
                         ++pos;
                         bean.setExpiryDate(rs.getDate(pos));
                         break;
-                    case ID_CREATE_TIME:
+                    case FL_PERSON_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;
-                    case ID_UPDATE_TIME:
+                    case FL_PERSON_ID_UPDATE_TIME:
                         ++pos;
                         bean.setUpdateTime(rs.getTimestamp(pos));
                         break;

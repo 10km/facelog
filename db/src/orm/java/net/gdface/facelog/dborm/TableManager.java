@@ -288,7 +288,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         public String createSelectSql(int[] fieldList,String where){
             StringBuffer sql = new StringBuffer(128);
             if(fieldList == null) {
-                sql.append("SELECT ").append(this.getFieldNamesAsString());
+                sql.append("SELECT ").append(this.getFieldNames());
             } else{
                 sql.append("SELECT ");
                 for(int i = 0; i < fieldList.length; ++i){
@@ -373,13 +373,11 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         }
     }
 
-    public abstract String[] getFieldNames();
+    public abstract String getFieldNames();
 
     public abstract String[] getPrimarykeyNames();
 
     public abstract String getTableName();
-    
-    public abstract String getFieldNamesAsString();
     
     public abstract String[] getFullFieldNames();
     

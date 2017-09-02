@@ -46,12 +46,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     /**
     * @return field names of table
     */
-    public String[] getFieldNames() {
+    public String getFieldNames() {
         return this.nativeManager.getFieldNames();
-    }
-
-    public String getFieldNamesAsString() {
-        return this.nativeManager.getFieldNamesAsString();
     }
     
     public String[] getFullFieldNames() {

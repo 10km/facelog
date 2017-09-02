@@ -8,13 +8,14 @@
 package net.gdface.facelog.dborm.person;
 
 import java.util.Comparator;
+import net.gdface.facelog.dborm.Constant;
 
 
 /**
  * Comparator class is used to sort the FlPersonBean objects.
  * @author sql2java
  */
-public class FlPersonComparator implements Comparator<FlPersonBean>
+public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -30,24 +31,24 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlPersonComparator(FlPersonManager.ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlPersonComparator(Constant.FL_PERSON_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlPersonManager.ID_ID
-     *   <li>FlPersonManager.ID_GROUP_ID
-     *   <li>FlPersonManager.ID_NAME
-     *   <li>FlPersonManager.ID_SEX
-     *   <li>FlPersonManager.ID_BIRTHDATE
-     *   <li>FlPersonManager.ID_PAPERS_TYPE
-     *   <li>FlPersonManager.ID_PAPERS_NUM
-     *   <li>FlPersonManager.ID_PHOTO_ID
-     *   <li>FlPersonManager.ID_FACE_MD5
-     *   <li>FlPersonManager.ID_EXPIRY_DATE
-     *   <li>FlPersonManager.ID_CREATE_TIME
-     *   <li>FlPersonManager.ID_UPDATE_TIME
+     *   <li>{@link Constant#FL_PERSON_ID_ID}
+     *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID}
+     *   <li>{@link Constant#FL_PERSON_ID_NAME}
+     *   <li>{@link Constant#FL_PERSON_ID_SEX}
+     *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE}
+     *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE}
+     *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM}
+     *   <li>{@link Constant#FL_PERSON_ID_PHOTO_ID}
+     *   <li>{@link Constant#FL_PERSON_ID_FACE_MD5}
+     *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE}
+     *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME}
+     *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME}
      * </ul>
      */
     public FlPersonComparator(int iType)
@@ -60,24 +61,24 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlPersonComparator(FlPersonManager.ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlPersonComparator(Constant.FL_PERSON_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlPersonManager.ID_ID
-     *   <li>FlPersonManager.ID_GROUP_ID
-     *   <li>FlPersonManager.ID_NAME
-     *   <li>FlPersonManager.ID_SEX
-     *   <li>FlPersonManager.ID_BIRTHDATE
-     *   <li>FlPersonManager.ID_PAPERS_TYPE
-     *   <li>FlPersonManager.ID_PAPERS_NUM
-     *   <li>FlPersonManager.ID_PHOTO_ID
-     *   <li>FlPersonManager.ID_FACE_MD5
-     *   <li>FlPersonManager.ID_EXPIRY_DATE
-     *   <li>FlPersonManager.ID_CREATE_TIME
-     *   <li>FlPersonManager.ID_UPDATE_TIME
+     *   <li>{@link Constant#FL_PERSON_ID_ID})
+     *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID})
+     *   <li>{@link Constant#FL_PERSON_ID_NAME})
+     *   <li>{@link Constant#FL_PERSON_ID_SEX})
+     *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE})
+     *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE})
+     *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM})
+     *   <li>{@link Constant#FL_PERSON_ID_PHOTO_ID})
+     *   <li>{@link Constant#FL_PERSON_ID_FACE_MD5})
+     *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE})
+     *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME})
+     *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -94,7 +95,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlPersonManager.ID_ID:
+            case FL_PERSON_ID_ID:
                 if (b1.getId() == null && b2.getId() != null) {
                     iReturn = -1;
                 } else if (b1.getId() == null && b2.getId() == null) {
@@ -105,7 +106,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getId().compareTo(b2.getId());
                 }
                 break;
-            case FlPersonManager.ID_GROUP_ID:
+            case FL_PERSON_ID_GROUP_ID:
                 if (b1.getGroupId() == null && b2.getGroupId() != null) {
                     iReturn = -1;
                 } else if (b1.getGroupId() == null && b2.getGroupId() == null) {
@@ -116,7 +117,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getGroupId().compareTo(b2.getGroupId());
                 }
                 break;
-            case FlPersonManager.ID_NAME:
+            case FL_PERSON_ID_NAME:
                 if (b1.getName() == null && b2.getName() != null) {
                     iReturn = -1;
                 } else if (b1.getName() == null && b2.getName() == null) {
@@ -127,7 +128,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getName().compareTo(b2.getName());
                 }
                 break;
-            case FlPersonManager.ID_SEX:
+            case FL_PERSON_ID_SEX:
                 if (b1.getSex() == null && b2.getSex() != null) {
                     iReturn = -1;
                 } else if (b1.getSex() == null && b2.getSex() == null) {
@@ -138,7 +139,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getSex().compareTo(b2.getSex());
                 }
                 break;
-            case FlPersonManager.ID_BIRTHDATE:
+            case FL_PERSON_ID_BIRTHDATE:
                 if (b1.getBirthdate() == null && b2.getBirthdate() != null) {
                     iReturn = -1;
                 } else if (b1.getBirthdate() == null && b2.getBirthdate() == null) {
@@ -149,7 +150,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getBirthdate().compareTo(b2.getBirthdate());
                 }
                 break;
-            case FlPersonManager.ID_PAPERS_TYPE:
+            case FL_PERSON_ID_PAPERS_TYPE:
                 if (b1.getPapersType() == null && b2.getPapersType() != null) {
                     iReturn = -1;
                 } else if (b1.getPapersType() == null && b2.getPapersType() == null) {
@@ -160,7 +161,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getPapersType().compareTo(b2.getPapersType());
                 }
                 break;
-            case FlPersonManager.ID_PAPERS_NUM:
+            case FL_PERSON_ID_PAPERS_NUM:
                 if (b1.getPapersNum() == null && b2.getPapersNum() != null) {
                     iReturn = -1;
                 } else if (b1.getPapersNum() == null && b2.getPapersNum() == null) {
@@ -171,7 +172,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getPapersNum().compareTo(b2.getPapersNum());
                 }
                 break;
-            case FlPersonManager.ID_PHOTO_ID:
+            case FL_PERSON_ID_PHOTO_ID:
                 if (b1.getPhotoId() == null && b2.getPhotoId() != null) {
                     iReturn = -1;
                 } else if (b1.getPhotoId() == null && b2.getPhotoId() == null) {
@@ -182,7 +183,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getPhotoId().compareTo(b2.getPhotoId());
                 }
                 break;
-            case FlPersonManager.ID_FACE_MD5:
+            case FL_PERSON_ID_FACE_MD5:
                 if (b1.getFaceMd5() == null && b2.getFaceMd5() != null) {
                     iReturn = -1;
                 } else if (b1.getFaceMd5() == null && b2.getFaceMd5() == null) {
@@ -193,7 +194,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getFaceMd5().compareTo(b2.getFaceMd5());
                 }
                 break;
-            case FlPersonManager.ID_EXPIRY_DATE:
+            case FL_PERSON_ID_EXPIRY_DATE:
                 if (b1.getExpiryDate() == null && b2.getExpiryDate() != null) {
                     iReturn = -1;
                 } else if (b1.getExpiryDate() == null && b2.getExpiryDate() == null) {
@@ -204,7 +205,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getExpiryDate().compareTo(b2.getExpiryDate());
                 }
                 break;
-            case FlPersonManager.ID_CREATE_TIME:
+            case FL_PERSON_ID_CREATE_TIME:
                 if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
                     iReturn = -1;
                 } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
@@ -215,7 +216,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>
                     iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
                 }
                 break;
-            case FlPersonManager.ID_UPDATE_TIME:
+            case FL_PERSON_ID_UPDATE_TIME:
                 if (b1.getUpdateTime() == null && b2.getUpdateTime() != null) {
                     iReturn = -1;
                 } else if (b1.getUpdateTime() == null && b2.getUpdateTime() == null) {

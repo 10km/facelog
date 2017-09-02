@@ -8,13 +8,14 @@
 package net.gdface.facelog.dborm.log;
 
 import java.util.Comparator;
+import net.gdface.facelog.dborm.Constant;
 
 
 /**
  * Comparator class is used to sort the FlLogLightBean objects.
  * @author sql2java
  */
-public class FlLogLightComparator implements Comparator<FlLogLightBean>
+public class FlLogLightComparator implements Comparator<FlLogLightBean>,Constant
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -30,18 +31,18 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlLogLightComparator(FlLogLightManager.ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlLogLightComparator(Constant.FL_LOG_LIGHT_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlLogLightManager.ID_ID
-     *   <li>FlLogLightManager.ID_PERSON_ID
-     *   <li>FlLogLightManager.ID_NAME
-     *   <li>FlLogLightManager.ID_PAPERS_TYPE
-     *   <li>FlLogLightManager.ID_PAPERS_NUM
-     *   <li>FlLogLightManager.ID_VERIFY_TIME
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_ID}
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_PERSON_ID}
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_NAME}
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_TYPE}
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_NUM}
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_VERIFY_TIME}
      * </ul>
      */
     public FlLogLightComparator(int iType)
@@ -54,18 +55,18 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlLogLightComparator(FlLogLightManager.ID_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlLogLightComparator(Constant.FL_LOG_LIGHT_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>FlLogLightManager.ID_ID
-     *   <li>FlLogLightManager.ID_PERSON_ID
-     *   <li>FlLogLightManager.ID_NAME
-     *   <li>FlLogLightManager.ID_PAPERS_TYPE
-     *   <li>FlLogLightManager.ID_PAPERS_NUM
-     *   <li>FlLogLightManager.ID_VERIFY_TIME
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_ID})
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_PERSON_ID})
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_NAME})
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_TYPE})
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_PAPERS_NUM})
+     *   <li>{@link Constant#FL_LOG_LIGHT_ID_VERIFY_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -82,7 +83,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
         int iReturn = 0;
         switch(iType)
         {
-            case FlLogLightManager.ID_ID:
+            case FL_LOG_LIGHT_ID_ID:
                 if (b1.getId() == null && b2.getId() != null) {
                     iReturn = -1;
                 } else if (b1.getId() == null && b2.getId() == null) {
@@ -93,7 +94,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
                     iReturn = b1.getId().compareTo(b2.getId());
                 }
                 break;
-            case FlLogLightManager.ID_PERSON_ID:
+            case FL_LOG_LIGHT_ID_PERSON_ID:
                 if (b1.getPersonId() == null && b2.getPersonId() != null) {
                     iReturn = -1;
                 } else if (b1.getPersonId() == null && b2.getPersonId() == null) {
@@ -104,7 +105,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
                     iReturn = b1.getPersonId().compareTo(b2.getPersonId());
                 }
                 break;
-            case FlLogLightManager.ID_NAME:
+            case FL_LOG_LIGHT_ID_NAME:
                 if (b1.getName() == null && b2.getName() != null) {
                     iReturn = -1;
                 } else if (b1.getName() == null && b2.getName() == null) {
@@ -115,7 +116,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
                     iReturn = b1.getName().compareTo(b2.getName());
                 }
                 break;
-            case FlLogLightManager.ID_PAPERS_TYPE:
+            case FL_LOG_LIGHT_ID_PAPERS_TYPE:
                 if (b1.getPapersType() == null && b2.getPapersType() != null) {
                     iReturn = -1;
                 } else if (b1.getPapersType() == null && b2.getPapersType() == null) {
@@ -126,7 +127,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
                     iReturn = b1.getPapersType().compareTo(b2.getPapersType());
                 }
                 break;
-            case FlLogLightManager.ID_PAPERS_NUM:
+            case FL_LOG_LIGHT_ID_PAPERS_NUM:
                 if (b1.getPapersNum() == null && b2.getPapersNum() != null) {
                     iReturn = -1;
                 } else if (b1.getPapersNum() == null && b2.getPapersNum() == null) {
@@ -137,7 +138,7 @@ public class FlLogLightComparator implements Comparator<FlLogLightBean>
                     iReturn = b1.getPapersNum().compareTo(b2.getPapersNum());
                 }
                 break;
-            case FlLogLightManager.ID_VERIFY_TIME:
+            case FL_LOG_LIGHT_ID_VERIFY_TIME:
                 if (b1.getVerifyTime() == null && b2.getVerifyTime() != null) {
                     iReturn = -1;
                 } else if (b1.getVerifyTime() == null && b2.getVerifyTime() == null) {

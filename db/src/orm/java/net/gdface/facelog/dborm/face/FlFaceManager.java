@@ -37,171 +37,11 @@ import net.gdface.facelog.dborm.person.FlPersonManager;
  */
 public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the person_id field.
-     */
-    public static final int ID_PERSON_ID = 1;
-
-    /**
-     * Identify the img_md5 field.
-     */
-    public static final int ID_IMG_MD5 = 2;
-
-    /**
-     * Identify the face_left field.
-     */
-    public static final int ID_FACE_LEFT = 3;
-
-    /**
-     * Identify the face_top field.
-     */
-    public static final int ID_FACE_TOP = 4;
-
-    /**
-     * Identify the face_width field.
-     */
-    public static final int ID_FACE_WIDTH = 5;
-
-    /**
-     * Identify the face_height field.
-     */
-    public static final int ID_FACE_HEIGHT = 6;
-
-    /**
-     * Identify the eye_leftx field.
-     */
-    public static final int ID_EYE_LEFTX = 7;
-
-    /**
-     * Identify the eye_lefty field.
-     */
-    public static final int ID_EYE_LEFTY = 8;
-
-    /**
-     * Identify the eye_rightx field.
-     */
-    public static final int ID_EYE_RIGHTX = 9;
-
-    /**
-     * Identify the eye_righty field.
-     */
-    public static final int ID_EYE_RIGHTY = 10;
-
-    /**
-     * Identify the mouth_x field.
-     */
-    public static final int ID_MOUTH_X = 11;
-
-    /**
-     * Identify the mouth_y field.
-     */
-    public static final int ID_MOUTH_Y = 12;
-
-    /**
-     * Identify the nose_x field.
-     */
-    public static final int ID_NOSE_X = 13;
-
-    /**
-     * Identify the nose_y field.
-     */
-    public static final int ID_NOSE_Y = 14;
-
-    /**
-     * Identify the angle_yaw field.
-     */
-    public static final int ID_ANGLE_YAW = 15;
-
-    /**
-     * Identify the angle_pitch field.
-     */
-    public static final int ID_ANGLE_PITCH = 16;
-
-    /**
-     * Identify the angle_roll field.
-     */
-    public static final int ID_ANGLE_ROLL = 17;
-
-    /**
-     * Identify the ext_info field.
-     */
-    public static final int ID_EXT_INFO = 18;
-
-    /**
-     * Identify the feature field.
-     */
-    public static final int ID_FEATURE = 19;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 20;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_face";
-    /**
-     * Contains all the full fields of the fl_face table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_face.md5"
-        ,"fl_face.person_id"
-        ,"fl_face.img_md5"
-        ,"fl_face.face_left"
-        ,"fl_face.face_top"
-        ,"fl_face.face_width"
-        ,"fl_face.face_height"
-        ,"fl_face.eye_leftx"
-        ,"fl_face.eye_lefty"
-        ,"fl_face.eye_rightx"
-        ,"fl_face.eye_righty"
-        ,"fl_face.mouth_x"
-        ,"fl_face.mouth_y"
-        ,"fl_face.nose_x"
-        ,"fl_face.nose_y"
-        ,"fl_face.angle_yaw"
-        ,"fl_face.angle_pitch"
-        ,"fl_face.angle_roll"
-        ,"fl_face.ext_info"
-        ,"fl_face.feature"
-        ,"fl_face.create_time"
-    };
 
-    /**
-     * Contains all the fields of the fl_face table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"person_id"
-        ,"img_md5"
-        ,"face_left"
-        ,"face_top"
-        ,"face_width"
-        ,"face_height"
-        ,"eye_leftx"
-        ,"eye_lefty"
-        ,"eye_rightx"
-        ,"eye_righty"
-        ,"mouth_x"
-        ,"mouth_y"
-        ,"nose_x"
-        ,"nose_y"
-        ,"angle_yaw"
-        ,"angle_pitch"
-        ,"angle_roll"
-        ,"ext_info"
-        ,"feature"
-        ,"create_time"
-    };
    /**
      * Contains all the primarykey fields of the fl_face table.
      */
@@ -209,55 +49,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     {
         "md5"
     };
-    /**
-     * Field that contains the comma separated fields of the fl_face table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_face.md5"
-                            + ",fl_face.person_id"
-                            + ",fl_face.img_md5"
-                            + ",fl_face.face_left"
-                            + ",fl_face.face_top"
-                            + ",fl_face.face_width"
-                            + ",fl_face.face_height"
-                            + ",fl_face.eye_leftx"
-                            + ",fl_face.eye_lefty"
-                            + ",fl_face.eye_rightx"
-                            + ",fl_face.eye_righty"
-                            + ",fl_face.mouth_x"
-                            + ",fl_face.mouth_y"
-                            + ",fl_face.nose_x"
-                            + ",fl_face.nose_y"
-                            + ",fl_face.angle_yaw"
-                            + ",fl_face.angle_pitch"
-                            + ",fl_face.angle_roll"
-                            + ",fl_face.ext_info"
-                            + ",fl_face.feature"
-                            + ",fl_face.create_time";
 
-    /**
-     * Field that contains the comma separated fields of the fl_face table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",person_id"
-                            + ",img_md5"
-                            + ",face_left"
-                            + ",face_top"
-                            + ",face_width"
-                            + ",face_height"
-                            + ",eye_leftx"
-                            + ",eye_lefty"
-                            + ",eye_rightx"
-                            + ",eye_righty"
-                            + ",mouth_x"
-                            + ",mouth_y"
-                            + ",nose_x"
-                            + ",nose_y"
-                            + ",angle_yaw"
-                            + ",angle_pitch"
-                            + ",angle_roll"
-                            + ",ext_info"
-                            + ",feature"
-                            + ",create_time";
     /**
     * @return tableName
     */
@@ -265,19 +57,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_FACE_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_FACE_FULL_FIELD_NAMES;
     }
     
     /**
@@ -333,7 +118,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + ALL_FIELDS + " FROM fl_face WHERE md5=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_FACE_ALL_FIELDS + " FROM fl_face WHERE md5=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -2298,87 +2083,87 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_MD5:
+                    case FL_FACE_ID_MD5:
                         ++pos;
                         bean.setMd5(rs.getString(pos));
                         break;
-                    case ID_PERSON_ID:
+                    case FL_FACE_ID_PERSON_ID:
                         ++pos;
                         bean.setPersonId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_IMG_MD5:
+                    case FL_FACE_ID_IMG_MD5:
                         ++pos;
                         bean.setImgMd5(rs.getString(pos));
                         break;
-                    case ID_FACE_LEFT:
+                    case FL_FACE_ID_FACE_LEFT:
                         ++pos;
                         bean.setFaceLeft(Manager.getInteger(rs, pos));
                         break;
-                    case ID_FACE_TOP:
+                    case FL_FACE_ID_FACE_TOP:
                         ++pos;
                         bean.setFaceTop(Manager.getInteger(rs, pos));
                         break;
-                    case ID_FACE_WIDTH:
+                    case FL_FACE_ID_FACE_WIDTH:
                         ++pos;
                         bean.setFaceWidth(Manager.getInteger(rs, pos));
                         break;
-                    case ID_FACE_HEIGHT:
+                    case FL_FACE_ID_FACE_HEIGHT:
                         ++pos;
                         bean.setFaceHeight(Manager.getInteger(rs, pos));
                         break;
-                    case ID_EYE_LEFTX:
+                    case FL_FACE_ID_EYE_LEFTX:
                         ++pos;
                         bean.setEyeLeftx(Manager.getInteger(rs, pos));
                         break;
-                    case ID_EYE_LEFTY:
+                    case FL_FACE_ID_EYE_LEFTY:
                         ++pos;
                         bean.setEyeLefty(Manager.getInteger(rs, pos));
                         break;
-                    case ID_EYE_RIGHTX:
+                    case FL_FACE_ID_EYE_RIGHTX:
                         ++pos;
                         bean.setEyeRightx(Manager.getInteger(rs, pos));
                         break;
-                    case ID_EYE_RIGHTY:
+                    case FL_FACE_ID_EYE_RIGHTY:
                         ++pos;
                         bean.setEyeRighty(Manager.getInteger(rs, pos));
                         break;
-                    case ID_MOUTH_X:
+                    case FL_FACE_ID_MOUTH_X:
                         ++pos;
                         bean.setMouthX(Manager.getInteger(rs, pos));
                         break;
-                    case ID_MOUTH_Y:
+                    case FL_FACE_ID_MOUTH_Y:
                         ++pos;
                         bean.setMouthY(Manager.getInteger(rs, pos));
                         break;
-                    case ID_NOSE_X:
+                    case FL_FACE_ID_NOSE_X:
                         ++pos;
                         bean.setNoseX(Manager.getInteger(rs, pos));
                         break;
-                    case ID_NOSE_Y:
+                    case FL_FACE_ID_NOSE_Y:
                         ++pos;
                         bean.setNoseY(Manager.getInteger(rs, pos));
                         break;
-                    case ID_ANGLE_YAW:
+                    case FL_FACE_ID_ANGLE_YAW:
                         ++pos;
                         bean.setAngleYaw(Manager.getInteger(rs, pos));
                         break;
-                    case ID_ANGLE_PITCH:
+                    case FL_FACE_ID_ANGLE_PITCH:
                         ++pos;
                         bean.setAnglePitch(Manager.getInteger(rs, pos));
                         break;
-                    case ID_ANGLE_ROLL:
+                    case FL_FACE_ID_ANGLE_ROLL:
                         ++pos;
                         bean.setAngleRoll(Manager.getInteger(rs, pos));
                         break;
-                    case ID_EXT_INFO:
+                    case FL_FACE_ID_EXT_INFO:
                         ++pos;
                         bean.setExtInfo(rs.getBytes(pos));
                         break;
-                    case ID_FEATURE:
+                    case FL_FACE_ID_FEATURE:
                         ++pos;
                         bean.setFeature(rs.getBytes(pos));
                         break;
-                    case ID_CREATE_TIME:
+                    case FL_FACE_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;

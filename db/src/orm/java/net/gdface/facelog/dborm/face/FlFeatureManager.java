@@ -31,82 +31,18 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  */
 public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
 {
-
-    /**
-     * Identify the md5 field.
-     */
-    public static final int ID_MD5 = 0;
-
-    /**
-     * Identify the person_id field.
-     */
-    public static final int ID_PERSON_ID = 1;
-
-    /**
-     * Identify the img_md5 field.
-     */
-    public static final int ID_IMG_MD5 = 2;
-
-    /**
-     * Identify the feature field.
-     */
-    public static final int ID_FEATURE = 3;
-
-    /**
-     * Identify the create_time field.
-     */
-    public static final int ID_CREATE_TIME = 4;
-
     /**
      * Tablename.
      */
     public static final String TABLE_NAME="fl_feature";
-    /**
-     * Contains all the full fields of the fl_feature table.
-     */
-    public static final String[] FULL_FIELD_NAMES =
-    {
-        "fl_feature.md5"
-        ,"fl_feature.person_id"
-        ,"fl_feature.img_md5"
-        ,"fl_feature.feature"
-        ,"fl_feature.create_time"
-    };
 
-    /**
-     * Contains all the fields of the fl_feature table.
-     */
-    public static final String[] FIELD_NAMES =
-    {
-        "md5"
-        ,"person_id"
-        ,"img_md5"
-        ,"feature"
-        ,"create_time"
-    };
    /**
      * Contains all the primarykey fields of the fl_feature table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {
     };
-    /**
-     * Field that contains the comma separated fields of the fl_feature table.
-     */
-    public static final String ALL_FULL_FIELDS = "fl_feature.md5"
-                            + ",fl_feature.person_id"
-                            + ",fl_feature.img_md5"
-                            + ",fl_feature.feature"
-                            + ",fl_feature.create_time";
 
-    /**
-     * Field that contains the comma separated fields of the fl_feature table.
-     */
-    public static final String ALL_FIELDS = "md5"
-                            + ",person_id"
-                            + ",img_md5"
-                            + ",feature"
-                            + ",create_time";
     /**
     * @return tableName
     */
@@ -114,19 +50,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         return TABLE_NAME;
     }
 
-    /**
-    * @return fieldNames
-    */
-    public String[] getFieldNames() {
-        return FIELD_NAMES;
-    }
-
-    public String getFieldNamesAsString() {
-        return ALL_FIELDS;
+    public String getFieldNames() {
+        return FL_FEATURE_ALL_FIELDS;
     }
     
     public String[] getFullFieldNames() {
-        return FULL_FIELD_NAMES;
+        return FL_FEATURE_FULL_FIELD_NAMES;
     }
     
     /**
@@ -911,23 +840,23 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             {
                 switch(fieldList[i])
                 {
-                    case ID_MD5:
+                    case FL_FEATURE_ID_MD5:
                         ++pos;
                         bean.setMd5(rs.getString(pos));
                         break;
-                    case ID_PERSON_ID:
+                    case FL_FEATURE_ID_PERSON_ID:
                         ++pos;
                         bean.setPersonId(Manager.getInteger(rs, pos));
                         break;
-                    case ID_IMG_MD5:
+                    case FL_FEATURE_ID_IMG_MD5:
                         ++pos;
                         bean.setImgMd5(rs.getString(pos));
                         break;
-                    case ID_FEATURE:
+                    case FL_FEATURE_ID_FEATURE:
                         ++pos;
                         bean.setFeature(rs.getBytes(pos));
                         break;
-                    case ID_CREATE_TIME:
+                    case FL_FEATURE_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;
