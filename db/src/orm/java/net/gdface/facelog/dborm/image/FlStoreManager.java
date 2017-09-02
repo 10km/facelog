@@ -311,182 +311,101 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> IMPORT_METHODS=new java.util.HashMap<String,Object[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-    put("impFlImagebyMd5",new Object[]{"getFlImageBeansByMd5","setFlImageBeansByMd5",FlImageBean[].class});
-    put("impFlImagebyThumbMd5",new Object[]{"getFlImageBeansByThumbMd5","setFlImageBeansByThumbMd5",FlImageBean[].class});
-    }} ;
+
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyMd5 -> FlImageBean</li>
-     *     <li> impFlImagebyThumbMd5 -> FlImageBean</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlStoreBean bean,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null == params)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        try {
-            return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T> T[] getImportedBeans(FlStoreBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (T[])this.getFlImageBeansByMd5(bean);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (T[])this.getFlImageBeansByThumbMd5(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyMd5 -> FlImageBean</li>
-     *     <li> impFlImagebyThumbMd5 -> FlImageBean</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getImportedBeansAsList(FlStoreBean bean,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        try {
-            return (List<T>) this.getClass().getMethod((String)params[0]+"AsList",bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (List<T>)this.getFlImageBeansByMd5AsList(bean);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (List<T>)this.getFlImageBeansByThumbMd5AsList(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlImagebyMd5 -> FlImageBean</li>
-     *     <li> impFlImagebyThumbMd5 -> FlImageBean</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean} array</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean} array</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the FlImageBean array to associate to the {@link FlStoreBean}
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return importedBeans always
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==importedBeans)
-            throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)params[2];
-        if(!resultClass.isAssignableFrom(importedBeans.getClass()) ){
-            throw new IllegalArgumentException("the argument 'importedBeans' be invalid type,expect type:" + resultClass.getName());
+    public <T> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (T[])setFlImageBeansByMd5(bean,(FlImageBean[])importedBeans);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (T[])setFlImageBeansByThumbMd5(bean,(FlImageBean[])importedBeans);
         }
-        try {            
-            return (T[]) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,importedBeans);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyMd5 -> FlImageBean java.util.Collection</li>
-     *     <li> impFlImagebyThumbMd5 -> FlImageBean java.util.Collection</li>
+     *     <li> FL_STORE_IK_FL_IMAGE_MD5 -> FlImageBean java.util.Collection</li>
+     *     <li> FL_STORE_IK_FL_IMAGE_THUMB_MD5 -> FlImageBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlStoreBean}
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return importedBeans always
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==importedBeans)
-            throw new NullPointerException();
-        try {            
-            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (C)setFlImageBeansByMd5(bean,(java.util.Collection<FlImageBean>)importedBeans);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (C)setFlImageBeansByThumbMd5(bean,(java.util.Collection<FlImageBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 

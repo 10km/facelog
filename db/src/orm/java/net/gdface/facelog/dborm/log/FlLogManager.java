@@ -420,7 +420,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves the bean object referenced by fkName.<br>
+     * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link TableManager#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
@@ -429,15 +429,15 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *     <li> {@link TableManager#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlLogBean bean,int fkName)throws DAOException{
-        switch(fkName){
+    public <T> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
+        switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
         case FL_LOG_FK_VERIFY_FACE:
@@ -447,11 +447,11 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.getReferencedByPersonId(bean);
         }
-        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
-     * Associates the {@link FlLogBean} object to the bean object by fkName field.<br>
+     * Associates the {@link FlLogBean} object to the bean object by fkIndex field.<br>
      * 
      * @param <T>
      * <ul>
@@ -462,15 +462,15 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlLogBean}
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlLogBean bean,T beanToSet,int fkName)throws DAOException{
-        switch(fkName){
+    public <T> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
+        switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
         case FL_LOG_FK_VERIFY_FACE:
@@ -480,7 +480,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
         }
-        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////

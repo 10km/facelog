@@ -194,127 +194,97 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        put("impFlImagebyDeviceId",new Class<?>[]{ImageBean.class,FlImageBean.class});
-        put("impFlLogbyDeviceId",new Class<?>[]{LogBean.class,FlLogBean.class});
-    }} ;
     
+    /**
+     * Retrieves imported T objects by ikIndex.<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     * </ul>
+     * @param bean the {@link DeviceBean} object to use
+     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     */
     @SuppressWarnings("unchecked")
-    private final <T> IBeanConverter<T,Object> getBeanConverter(String fkName){
-        Class<?>[] resultClass=IMPORT_RESULT_TYPES.get(fkName);
-        if(null == resultClass)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        return (IBeanConverter<T, Object>) this.dbConverter.getBeanConverter(resultClass[0],resultClass[1]);
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(DeviceBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
+            return (T[])this.getFlImageBeansByDeviceId(bean);
+        case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
+            return (T[])this.getFlLogBeansByDeviceId(bean);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
-    
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyDeviceId -> ImageBean</li>
-     *     <li> impFlLogbyDeviceId -> LogBean</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
-     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
+     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(DeviceBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(DeviceBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
+            return (java.util.List<T>)this.getFlImageBeansByDeviceIdAsList(bean);
+        case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
+            return (java.util.List<T>)this.getFlLogBeansByDeviceIdAsList(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlImagebyDeviceId -> ImageBean</li>
-     *     <li> impFlLogbyDeviceId -> LogBean</li>
-     * </ul>
-     * @param bean the {@link DeviceBean} object to use
-     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(DeviceBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlImagebyDeviceId -> ImageBean</li>
-     *     <li> impFlLogbyDeviceId -> LogBean</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
-     * @param importedBeans the LogBean array to associate to the {@link DeviceBean}
-     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
-     * @return importedBeans always
-     */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
-                this.beanConverter.toRight(bean),
-                resultConverter.toRight(importedBeans),
-                fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlImagebyDeviceId -> ImageBean java.util.Collection</li>
-     *     <li> impFlLogbyDeviceId -> LogBean java.util.Collection</li>
-     * </ul>
-     * @param bean the {@link DeviceBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link DeviceBean}
-     * @param fkName valid values: impFlImagebyDeviceId,impFlLogbyDeviceId
+     * @param importedBeans the FlLogBean array to associate to the {@link DeviceBean}
+     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof java.util.List){
-                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
-                        this.beanConverter.toRight(bean),
-                        resultConverter.toRight(importedBeans),
-                        fkName));            	
-            }else{
-                T[] array = importedBeans.toArray((T[])new Object[importedBeans.size()]);
-                resultConverter.fromRight(array,nativeManager.setImportedBeans( 
-                    this.beanConverter.toRight(bean),
-                    resultConverter.toRight(array),
-                    fkName));                
-            }
-            return importedBeans;
+    public <T extends BaseBean> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
+            return (T[])setFlImageBeansByDeviceId(bean,(ImageBean[])importedBeans);
+        case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
+            return (T[])setFlLogBeansByDeviceId(bean,(LogBean[])importedBeans);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the importedBeans associates to the bean by ikIndex<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     * </ul>
+     * @param bean the {@link DeviceBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link DeviceBean}
+     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
+     * @return importedBeans always
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
+            return (C)setFlImageBeansByDeviceId(bean,(java.util.Collection<ImageBean>)importedBeans);
+        case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
+            return (C)setFlLogBeansByDeviceId(bean,(java.util.Collection<LogBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -577,7 +547,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     //3.8 SYNC SAVE AS TRANSACTION
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId ) throws DAOException
+        ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId )
     {
         return this.runAsTransaction(new Callable<DeviceBean>(){
             @Override

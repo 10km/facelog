@@ -192,127 +192,97 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        put("impFlImagebyMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
-        put("impFlImagebyThumbMd5",new Class<?>[]{ImageBean.class,FlImageBean.class});
-    }} ;
     
+    /**
+     * Retrieves imported T objects by ikIndex.<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     * </ul>
+     * @param bean the {@link StoreBean} object to use
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     */
     @SuppressWarnings("unchecked")
-    private final <T> IBeanConverter<T,Object> getBeanConverter(String fkName){
-        Class<?>[] resultClass=IMPORT_RESULT_TYPES.get(fkName);
-        if(null == resultClass)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        return (IBeanConverter<T, Object>) this.dbConverter.getBeanConverter(resultClass[0],resultClass[1]);
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(StoreBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (T[])this.getFlImageBeansByMd5(bean);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (T[])this.getFlImageBeansByThumbMd5(bean);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
-    
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlImagebyMd5 -> ImageBean</li>
-     *     <li> impFlImagebyThumbMd5 -> ImageBean</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(StoreBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (java.util.List<T>)this.getFlImageBeansByMd5AsList(bean);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (java.util.List<T>)this.getFlImageBeansByThumbMd5AsList(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlImagebyMd5 -> ImageBean</li>
-     *     <li> impFlImagebyThumbMd5 -> ImageBean</li>
-     * </ul>
-     * @param bean the {@link StoreBean} object to use
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlImagebyMd5 -> ImageBean</li>
-     *     <li> impFlImagebyThumbMd5 -> ImageBean</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
-     * @param importedBeans the ImageBean array to associate to the {@link StoreBean}
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
-     * @return importedBeans always
-     */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(StoreBean bean,T[] importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
-                this.beanConverter.toRight(bean),
-                resultConverter.toRight(importedBeans),
-                fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlImagebyMd5 -> ImageBean java.util.Collection</li>
-     *     <li> impFlImagebyThumbMd5 -> ImageBean java.util.Collection</li>
-     * </ul>
-     * @param bean the {@link StoreBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link StoreBean}
-     * @param fkName valid values: impFlImagebyMd5,impFlImagebyThumbMd5
+     * @param importedBeans the FlImageBean array to associate to the {@link StoreBean}
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof java.util.List){
-                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
-                        this.beanConverter.toRight(bean),
-                        resultConverter.toRight(importedBeans),
-                        fkName));            	
-            }else{
-                T[] array = importedBeans.toArray((T[])new Object[importedBeans.size()]);
-                resultConverter.fromRight(array,nativeManager.setImportedBeans( 
-                    this.beanConverter.toRight(bean),
-                    resultConverter.toRight(array),
-                    fkName));                
-            }
-            return importedBeans;
+    public <T extends BaseBean> T[] setImportedBeans(StoreBean bean,T[] importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (T[])setFlImageBeansByMd5(bean,(ImageBean[])importedBeans);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (T[])setFlImageBeansByThumbMd5(bean,(ImageBean[])importedBeans);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the importedBeans associates to the bean by ikIndex<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     * </ul>
+     * @param bean the {@link StoreBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link StoreBean}
+     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @return importedBeans always
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_STORE_IK_FL_IMAGE_MD5:
+            return (C)setFlImageBeansByMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
+        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
+            return (C)setFlImageBeansByThumbMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -575,7 +545,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     //3.8 SYNC SAVE AS TRANSACTION
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 ) throws DAOException
+        ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 )
     {
         return this.runAsTransaction(new Callable<StoreBean>(){
             @Override

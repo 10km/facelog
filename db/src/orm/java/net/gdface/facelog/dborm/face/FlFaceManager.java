@@ -477,182 +477,101 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> IMPORT_METHODS=new java.util.HashMap<String,Object[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-    put("impFlLogbyVerifyFace",new Object[]{"getFlLogBeansByVerifyFace","setFlLogBeansByVerifyFace",FlLogBean[].class});
-    put("impFlLogbyCompareFace",new Object[]{"getFlLogBeansByCompareFace","setFlLogBeansByCompareFace",FlLogBean[].class});
-    }} ;
+
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlLogbyVerifyFace -> FlLogBean</li>
-     *     <li> impFlLogbyCompareFace -> FlLogBean</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
-     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlFaceBean bean,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null == params)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        try {
-            return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T> T[] getImportedBeans(FlFaceBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
+            return (T[])this.getFlLogBeansByVerifyFace(bean);
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (T[])this.getFlLogBeansByCompareFace(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlLogbyVerifyFace -> FlLogBean</li>
-     *     <li> impFlLogbyCompareFace -> FlLogBean</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
-     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getImportedBeansAsList(FlFaceBean bean,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        try {
-            return (List<T>) this.getClass().getMethod((String)params[0]+"AsList",bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
+            return (List<T>)this.getFlLogBeansByVerifyFaceAsList(bean);
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (List<T>)this.getFlLogBeansByCompareFaceAsList(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlLogbyVerifyFace -> FlLogBean</li>
-     *     <li> impFlLogbyCompareFace -> FlLogBean</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean} array</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean} array</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlFaceBean}
-     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return importedBeans always
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==importedBeans)
-            throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)params[2];
-        if(!resultClass.isAssignableFrom(importedBeans.getClass()) ){
-            throw new IllegalArgumentException("the argument 'importedBeans' be invalid type,expect type:" + resultClass.getName());
+    public <T> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
+            return (T[])setFlLogBeansByVerifyFace(bean,(FlLogBean[])importedBeans);
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (T[])setFlLogBeansByCompareFace(bean,(FlLogBean[])importedBeans);
         }
-        try {            
-            return (T[]) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,importedBeans);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlLogbyVerifyFace -> FlLogBean java.util.Collection</li>
-     *     <li> impFlLogbyCompareFace -> FlLogBean java.util.Collection</li>
+     *     <li> FL_FACE_IK_FL_LOG_VERIFY_FACE -> FlLogBean java.util.Collection</li>
+     *     <li> FL_FACE_IK_FL_LOG_COMPARE_FACE -> FlLogBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
-     * @param fkName valid values: impFlLogbyVerifyFace,impFlLogbyCompareFace
+     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return importedBeans always
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==importedBeans)
-            throw new NullPointerException();
-        try {            
-            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
+            return (C)setFlLogBeansByVerifyFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (C)setFlLogBeansByCompareFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -910,32 +829,32 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves the bean object referenced by fkName.<br>
+     * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
      *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlFaceBean bean,int fkName)throws DAOException{
-        switch(fkName){
+    public <T> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
+        switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.getReferencedByImgMd5(bean);
         case FL_FACE_FK_PERSON_ID:
             return  (T)this.getReferencedByPersonId(bean);
         }
-        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
-     * Associates the {@link FlFaceBean} object to the bean object by fkName field.<br>
+     * Associates the {@link FlFaceBean} object to the bean object by fkIndex field.<br>
      * 
      * @param <T>
      * <ul>
@@ -944,21 +863,21 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkName)throws DAOException{
-        switch(fkName){
+    public <T> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
+        switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.setReferencedByImgMd5(bean, (FlImageBean)beanToSet);
         case FL_FACE_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
         }
-        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////

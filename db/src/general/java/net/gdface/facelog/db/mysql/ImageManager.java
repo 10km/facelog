@@ -196,127 +196,97 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        put("impFlFacebyImgMd5",new Class<?>[]{FaceBean.class,FlFaceBean.class});
-        put("impFlPersonbyPhotoId",new Class<?>[]{PersonBean.class,FlPersonBean.class});
-    }} ;
     
+    /**
+     * Retrieves imported T objects by ikIndex.<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
+     * </ul>
+     * @param bean the {@link ImageBean} object to use
+     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     */
     @SuppressWarnings("unchecked")
-    private final <T> IBeanConverter<T,Object> getBeanConverter(String fkName){
-        Class<?>[] resultClass=IMPORT_RESULT_TYPES.get(fkName);
-        if(null == resultClass)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        return (IBeanConverter<T, Object>) this.dbConverter.getBeanConverter(resultClass[0],resultClass[1]);
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(ImageBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_IMAGE_IK_FL_FACE_IMG_MD5:
+            return (T[])this.getFlFaceBeansByImgMd5(bean);
+        case FL_IMAGE_IK_FL_PERSON_PHOTO_ID:
+            return (T[])this.getFlPersonBeansByPhotoId(bean);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
-    
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyImgMd5 -> FaceBean</li>
-     *     <li> impFlPersonbyPhotoId -> PersonBean</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
-     * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
+     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(ImageBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_IMAGE_IK_FL_FACE_IMG_MD5:
+            return (java.util.List<T>)this.getFlFaceBeansByImgMd5AsList(bean);
+        case FL_IMAGE_IK_FL_PERSON_PHOTO_ID:
+            return (java.util.List<T>)this.getFlPersonBeansByPhotoIdAsList(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlFacebyImgMd5 -> FaceBean</li>
-     *     <li> impFlPersonbyPhotoId -> PersonBean</li>
-     * </ul>
-     * @param bean the {@link ImageBean} object to use
-     * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(ImageBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlFacebyImgMd5 -> FaceBean</li>
-     *     <li> impFlPersonbyPhotoId -> PersonBean</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
-     * @param importedBeans the PersonBean array to associate to the {@link ImageBean}
-     * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
-     * @return importedBeans always
-     */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(ImageBean bean,T[] importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
-                this.beanConverter.toRight(bean),
-                resultConverter.toRight(importedBeans),
-                fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlFacebyImgMd5 -> FaceBean java.util.Collection</li>
-     *     <li> impFlPersonbyPhotoId -> PersonBean java.util.Collection</li>
-     * </ul>
-     * @param bean the {@link ImageBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link ImageBean}
-     * @param fkName valid values: impFlFacebyImgMd5,impFlPersonbyPhotoId
+     * @param importedBeans the FlPersonBean array to associate to the {@link ImageBean}
+     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof java.util.List){
-                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
-                        this.beanConverter.toRight(bean),
-                        resultConverter.toRight(importedBeans),
-                        fkName));            	
-            }else{
-                T[] array = importedBeans.toArray((T[])new Object[importedBeans.size()]);
-                resultConverter.fromRight(array,nativeManager.setImportedBeans( 
-                    this.beanConverter.toRight(bean),
-                    resultConverter.toRight(array),
-                    fkName));                
-            }
-            return importedBeans;
+    public <T extends BaseBean> T[] setImportedBeans(ImageBean bean,T[] importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_IMAGE_IK_FL_FACE_IMG_MD5:
+            return (T[])setFlFaceBeansByImgMd5(bean,(FaceBean[])importedBeans);
+        case FL_IMAGE_IK_FL_PERSON_PHOTO_ID:
+            return (T[])setFlPersonBeansByPhotoId(bean,(PersonBean[])importedBeans);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the importedBeans associates to the bean by ikIndex<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
+     * </ul>
+     * @param bean the {@link ImageBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link ImageBean}
+     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @return importedBeans always
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_IMAGE_IK_FL_FACE_IMG_MD5:
+            return (C)setFlFaceBeansByImgMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
+        case FL_IMAGE_IK_FL_PERSON_PHOTO_ID:
+            return (C)setFlPersonBeansByPhotoId(bean,(java.util.Collection<PersonBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -585,7 +555,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //3.8 SYNC SAVE AS TRANSACTION
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
-        ,final  java.util.Collection<FaceBean> impFlFacebyImgMd5 ,final  java.util.Collection<PersonBean> impFlPersonbyPhotoId ) throws DAOException
+        ,final  java.util.Collection<FaceBean> impFlFacebyImgMd5 ,final  java.util.Collection<PersonBean> impFlPersonbyPhotoId )
     {
         return this.runAsTransaction(new Callable<ImageBean>(){
             @Override
@@ -596,15 +566,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.Vector<Class<?>[]> REF_METHODS=new java.util.Vector<Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        add(new Class<?>[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class});
-        add(new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
-        add(new Class<?>[]{StoreBean.class,net.gdface.facelog.dborm.image.FlStoreBean.class});
-    }} ;
+
     /**
-     * Retrieves the bean object referenced by fkName.<br>
+     * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
@@ -612,22 +576,25 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(ImageBean bean,int fkName){
-        try {
-            return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
+    public <T extends BaseBean> T getReferencedBean(ImageBean bean,int fkIndex){
+        switch(fkIndex){
+        case FL_IMAGE_FK_DEVICE_ID:
+            return  (T)this.getReferencedByDeviceId(bean);
+        case FL_IMAGE_FK_MD5:
+            return  (T)this.getReferencedByMd5(bean);
+        case FL_IMAGE_FK_THUMB_MD5:
+            return  (T)this.getReferencedByThumbMd5(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
-     * Associates the {@link ImageBean} object to the bean object by fkName field.<br>
+     * Associates the {@link ImageBean} object to the bean object by fkIndex field.<br>
      * 
      * @param <T>
      * <ul>
@@ -637,29 +604,22 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link ImageBean}
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,int fkName){
-        try {
-            if(null == beanToSet) return null;
-            if(fkName >= REF_METHODS.size() || fkName <0)
-                throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
-            Class<?>[] types=REF_METHODS.get(fkName);
-            @SuppressWarnings("rawtypes")
-            IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
-            if( null == converter )
-                throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromRight(beanToSet,
-                    this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
+    public <T extends BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,int fkIndex){
+        switch(fkIndex){
+        case FL_IMAGE_FK_DEVICE_ID:
+            return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
+        case FL_IMAGE_FK_MD5:
+            return  (T)this.setReferencedByMd5(bean, (StoreBean)beanToSet);
+        case FL_IMAGE_FK_THUMB_MD5:
+            return  (T)this.setReferencedByThumbMd5(bean, (StoreBean)beanToSet);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -695,7 +655,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet) throws DAOException
+    public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet)
     {
         try{
             return this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByDeviceId(this.beanConverter.toRight(bean),this.dbConverter.getDeviceBeanConverter().toRight(beanToSet)));
@@ -734,7 +694,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet) throws DAOException
+    public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet)
     {
         try{
             return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByMd5(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
@@ -773,7 +733,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet) throws DAOException
+    public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet)
     {
         try{
             return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByThumbMd5(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));

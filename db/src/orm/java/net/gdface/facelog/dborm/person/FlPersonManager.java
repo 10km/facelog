@@ -396,182 +396,101 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Object[]> IMPORT_METHODS=new java.util.HashMap<String,Object[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-    put("impFlFacebyPersonId",new Object[]{"getFlFaceBeansByPersonId","setFlFaceBeansByPersonId",FlFaceBean[].class});
-    put("impFlLogbyPersonId",new Object[]{"getFlLogBeansByPersonId","setFlLogBeansByPersonId",FlLogBean[].class});
-    }} ;
+
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyPersonId -> FlFaceBean</li>
-     *     <li> impFlLogbyPersonId -> FlLogBean</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlPersonBean bean,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null == params)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        try {
-            return (T[]) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T> T[] getImportedBeans(FlPersonBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (T[])this.getFlFaceBeansByPersonId(bean);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (T[])this.getFlLogBeansByPersonId(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyPersonId -> FlFaceBean</li>
-     *     <li> impFlLogbyPersonId -> FlLogBean</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getImportedBeansAsList(FlPersonBean bean,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        try {
-            return (List<T>) this.getClass().getMethod((String)params[0]+"AsList",bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (List<T>)this.getFlFaceBeansByPersonIdAsList(bean);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (List<T>)this.getFlLogBeansByPersonIdAsList(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlFacebyPersonId -> FlFaceBean</li>
-     *     <li> impFlLogbyPersonId -> FlLogBean</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean} array</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean} array</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlPersonBean}
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==importedBeans)
-            throw new NullPointerException();
-        Class<?> resultClass = (Class<?>)params[2];
-        if(!resultClass.isAssignableFrom(importedBeans.getClass()) ){
-            throw new IllegalArgumentException("the argument 'importedBeans' be invalid type,expect type:" + resultClass.getName());
+    public <T> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (T[])setFlFaceBeansByPersonId(bean,(FlFaceBean[])importedBeans);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (T[])setFlLogBeansByPersonId(bean,(FlLogBean[])importedBeans);
         }
-        try {            
-            return (T[]) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,importedBeans);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyPersonId -> FlFaceBean java.util.Collection</li>
-     *     <li> impFlLogbyPersonId -> FlLogBean java.util.Collection</li>
+     *     <li> FL_PERSON_IK_FL_FACE_PERSON_ID -> FlFaceBean java.util.Collection</li>
+     *     <li> FL_PERSON_IK_FL_LOG_PERSON_ID -> FlLogBean java.util.Collection</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlPersonBean}
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,String fkName)throws DAOException{
-        Object[] params = IMPORT_METHODS.get(fkName);
-        if(null==params)
-            throw new IllegalArgumentException("invalid fkName " + fkName);
-        if(null==bean || null==importedBeans)
-            throw new NullPointerException();
-        try {            
-            return (C) this.getClass().getMethod((String)params[1],bean.getClass(),Object.class).invoke(this,bean,importedBeans);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (C)setFlFaceBeansByPersonId(bean,(java.util.Collection<FlFaceBean>)importedBeans);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (C)setFlLogBeansByPersonId(bean,(java.util.Collection<FlLogBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -821,29 +740,29 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves the bean object referenced by fkName.<br>
+     * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlPersonBean bean,int fkName)throws DAOException{
-        switch(fkName){
+    public <T> T getReferencedBean(FlPersonBean bean,int fkIndex)throws DAOException{
+        switch(fkIndex){
         case FL_PERSON_FK_PHOTO_ID:
             return  (T)this.getReferencedByPhotoId(bean);
         }
-        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
-     * Associates the {@link FlPersonBean} object to the bean object by fkName field.<br>
+     * Associates the {@link FlPersonBean} object to the bean object by fkIndex field.<br>
      * 
      * @param <T>
      * <ul>
@@ -851,19 +770,19 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlPersonBean}
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkName)throws DAOException{
-        switch(fkName){
+    public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkIndex)throws DAOException{
+        switch(fkIndex){
         case FL_PERSON_FK_PHOTO_ID:
             return  (T)this.setReferencedByPhotoId(bean, (FlImageBean)beanToSet);
         }
-        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
      
     //////////////////////////////////////
@@ -1425,6 +1344,18 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return deleteUsingTemplate(bean);
     }
     
+    /**
+     * Deletes rows using key.
+     * @param keyIndex
+     * @param keys
+     * @return
+     * @throws DAOException
+     */
+    public int deleteByKey(int keyIndex,Object ...keys)throws DAOException
+    {
+    	
+		return keyIndex;    	
+    }
     /**
      * Retrieves an unique FlPersonBean using the papers_num index.
      *

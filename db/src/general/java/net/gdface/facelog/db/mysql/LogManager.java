@@ -235,16 +235,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.Vector<Class<?>[]> REF_METHODS=new java.util.Vector<Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        add(new Class<?>[]{DeviceBean.class,net.gdface.facelog.dborm.device.FlDeviceBean.class});
-        add(new Class<?>[]{FaceBean.class,net.gdface.facelog.dborm.face.FlFaceBean.class});
-        add(new Class<?>[]{FaceBean.class,net.gdface.facelog.dborm.face.FlFaceBean.class});
-        add(new Class<?>[]{PersonBean.class,net.gdface.facelog.dborm.person.FlPersonBean.class});
-    }} ;
+
     /**
-     * Retrieves the bean object referenced by fkName.<br>
+     * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link TableManager#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
@@ -253,22 +246,27 @@ public class LogManager extends TableManager.Adapter<LogBean>
      *     <li> {@link TableManager#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link LogBean} object to use
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(LogBean bean,int fkName){
-        try {
-            return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
+    public <T extends BaseBean> T getReferencedBean(LogBean bean,int fkIndex){
+        switch(fkIndex){
+        case FL_LOG_FK_DEVICE_ID:
+            return  (T)this.getReferencedByDeviceId(bean);
+        case FL_LOG_FK_VERIFY_FACE:
+            return  (T)this.getReferencedByVerifyFace(bean);
+        case FL_LOG_FK_COMPARE_FACE:
+            return  (T)this.getReferencedByCompareFace(bean);
+        case FL_LOG_FK_PERSON_ID:
+            return  (T)this.getReferencedByPersonId(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
-     * Associates the {@link LogBean} object to the bean object by fkName field.<br>
+     * Associates the {@link LogBean} object to the bean object by fkIndex field.<br>
      * 
      * @param <T>
      * <ul>
@@ -279,29 +277,24 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * </ul>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link LogBean}
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(LogBean bean,T beanToSet,int fkName){
-        try {
-            if(null == beanToSet) return null;
-            if(fkName >= REF_METHODS.size() || fkName <0)
-                throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
-            Class<?>[] types=REF_METHODS.get(fkName);
-            @SuppressWarnings("rawtypes")
-            IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
-            if( null == converter )
-                throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromRight(beanToSet,
-                    this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
+    public <T extends BaseBean> T setReferencedBean(LogBean bean,T beanToSet,int fkIndex){
+        switch(fkIndex){
+        case FL_LOG_FK_DEVICE_ID:
+            return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
+        case FL_LOG_FK_VERIFY_FACE:
+            return  (T)this.setReferencedByVerifyFace(bean, (FaceBean)beanToSet);
+        case FL_LOG_FK_COMPARE_FACE:
+            return  (T)this.setReferencedByCompareFace(bean, (FaceBean)beanToSet);
+        case FL_LOG_FK_PERSON_ID:
+            return  (T)this.setReferencedByPersonId(bean, (PersonBean)beanToSet);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -337,7 +330,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet) throws DAOException
+    public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet)
     {
         try{
             return this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByDeviceId(this.beanConverter.toRight(bean),this.dbConverter.getDeviceBeanConverter().toRight(beanToSet)));
@@ -376,7 +369,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FaceBean setReferencedByVerifyFace(LogBean bean, FaceBean beanToSet) throws DAOException
+    public FaceBean setReferencedByVerifyFace(LogBean bean, FaceBean beanToSet)
     {
         try{
             return this.dbConverter.getFaceBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByVerifyFace(this.beanConverter.toRight(bean),this.dbConverter.getFaceBeanConverter().toRight(beanToSet)));
@@ -415,7 +408,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet) throws DAOException
+    public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet)
     {
         try{
             return this.dbConverter.getFaceBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByCompareFace(this.beanConverter.toRight(bean),this.dbConverter.getFaceBeanConverter().toRight(beanToSet)));
@@ -454,7 +447,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet) throws DAOException
+    public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet)
     {
         try{
             return this.dbConverter.getPersonBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByPersonId(this.beanConverter.toRight(bean),this.dbConverter.getPersonBeanConverter().toRight(beanToSet)));

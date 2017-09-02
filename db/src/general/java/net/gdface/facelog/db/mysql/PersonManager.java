@@ -195,127 +195,97 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.HashMap<String, Class<?>[]> IMPORT_RESULT_TYPES=new java.util.HashMap<String,Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        put("impFlFacebyPersonId",new Class<?>[]{FaceBean.class,FlFaceBean.class});
-        put("impFlLogbyPersonId",new Class<?>[]{LogBean.class,FlLogBean.class});
-    }} ;
     
+    /**
+     * Retrieves imported T objects by ikIndex.<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
+     * </ul>
+     * @param bean the {@link PersonBean} object to use
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     */
     @SuppressWarnings("unchecked")
-    private final <T> IBeanConverter<T,Object> getBeanConverter(String fkName){
-        Class<?>[] resultClass=IMPORT_RESULT_TYPES.get(fkName);
-        if(null == resultClass)
-            throw new IllegalArgumentException("invalid fkName: " + fkName);
-        return (IBeanConverter<T, Object>) this.dbConverter.getBeanConverter(resultClass[0],resultClass[1]);
+    @Override
+    public <T extends BaseBean> T[] getImportedBeans(PersonBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (T[])this.getFlFaceBeansByPersonId(bean);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (T[])this.getFlLogBeansByPersonId(bean);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
-    
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> impFlFacebyPersonId -> FaceBean</li>
-     *     <li> impFlLogbyPersonId -> LogBean</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(PersonBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeans( this.beanConverter.toRight(bean),fkName));
+    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (java.util.List<T>)this.getFlFaceBeansByPersonIdAsList(bean);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (java.util.List<T>)this.getFlLogBeansByPersonIdAsList(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlFacebyPersonId -> FaceBean</li>
-     *     <li> impFlLogbyPersonId -> LogBean</li>
-     * </ul>
-     * @param bean the {@link PersonBean} object to use
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(PersonBean bean,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(nativeManager.getImportedBeansAsList( this.beanConverter.toRight(bean),fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T>
      * 
      * <ul>
-     *     <li> impFlFacebyPersonId -> FaceBean</li>
-     *     <li> impFlLogbyPersonId -> LogBean</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param importedBeans the LogBean array to associate to the {@link PersonBean}
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
-     * @return importedBeans always
-     */
-    @Override
-    public <T extends BaseBean> T[] setImportedBeans(PersonBean bean,T[] importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            return resultConverter.fromRight(importedBeans,nativeManager.setImportedBeans( 
-                this.beanConverter.toRight(bean),
-                resultConverter.toRight(importedBeans),
-                fkName));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    /**
-     * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> impFlFacebyPersonId -> FaceBean java.util.Collection</li>
-     *     <li> impFlLogbyPersonId -> LogBean java.util.Collection</li>
-     * </ul>
-     * @param bean the {@link PersonBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link PersonBean}
-     * @param fkName valid values: impFlFacebyPersonId,impFlLogbyPersonId
+     * @param importedBeans the FlLogBean array to associate to the {@link PersonBean}
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,String fkName){
-        try {
-            IBeanConverter<T,Object> resultConverter = getBeanConverter(fkName);
-            if(importedBeans instanceof java.util.List){
-                resultConverter.fromRight((java.util.List<T>)importedBeans,nativeManager.setImportedBeans( 
-                        this.beanConverter.toRight(bean),
-                        resultConverter.toRight(importedBeans),
-                        fkName));            	
-            }else{
-                T[] array = importedBeans.toArray((T[])new Object[importedBeans.size()]);
-                resultConverter.fromRight(array,nativeManager.setImportedBeans( 
-                    this.beanConverter.toRight(bean),
-                    resultConverter.toRight(array),
-                    fkName));                
-            }
-            return importedBeans;
+    public <T extends BaseBean> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (T[])setFlFaceBeansByPersonId(bean,(FaceBean[])importedBeans);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (T[])setFlLogBeansByPersonId(bean,(LogBean[])importedBeans);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the importedBeans associates to the bean by ikIndex<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
+     * </ul>
+     * @param bean the {@link PersonBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link PersonBean}
+     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @return importedBeans always
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_PERSON_IK_FL_FACE_PERSON_ID:
+            return (C)setFlFaceBeansByPersonId(bean,(java.util.Collection<FaceBean>)importedBeans);
+        case FL_PERSON_IK_FL_LOG_PERSON_ID:
+            return (C)setFlLogBeansByPersonId(bean,(java.util.Collection<LogBean>)importedBeans);
         }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
 
@@ -580,7 +550,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //3.8 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refFlImagebyPhotoId 
-        ,final  java.util.Collection<FaceBean> impFlFacebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId ) throws DAOException
+        ,final  java.util.Collection<FaceBean> impFlFacebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId )
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
@@ -591,34 +561,29 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
       //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
-    private static final  java.util.Vector<Class<?>[]> REF_METHODS=new java.util.Vector<Class<?>[]>(){
-        private static final long serialVersionUID = 1L;
-    {        
-        add(new Class<?>[]{ImageBean.class,net.gdface.facelog.dborm.image.FlImageBean.class});
-    }} ;
+
     /**
-     * Retrieves the bean object referenced by fkName.<br>
+     * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(PersonBean bean,int fkName){
-        try {
-            return this.nativeManager.getReferencedBean( this.beanConverter.toRight(bean), fkName);
+    public <T extends BaseBean> T getReferencedBean(PersonBean bean,int fkIndex){
+        switch(fkIndex){
+        case FL_PERSON_FK_PHOTO_ID:
+            return  (T)this.getReferencedByPhotoId(bean);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     /**
-     * Associates the {@link PersonBean} object to the bean object by fkName field.<br>
+     * Associates the {@link PersonBean} object to the bean object by fkIndex field.<br>
      * 
      * @param <T>
      * <ul>
@@ -626,29 +591,18 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link PersonBean}
-     * @param fkName valid values: <br>
+     * @param fkIndex valid values: <br>
      *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,int fkName){
-        try {
-            if(null == beanToSet) return null;
-            if(fkName >= REF_METHODS.size() || fkName <0)
-                throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
-            Class<?>[] types=REF_METHODS.get(fkName);
-            @SuppressWarnings("rawtypes")
-            IBeanConverter converter=this.dbConverter.getBeanConverter(beanToSet.getClass(),types[1]);
-            if( null == converter )
-                throw new IllegalArgumentException(String.format("invalid type of 'beanToSet' :%s",beanToSet.getClass().getName()));
-            return (T) converter.fromRight(beanToSet,
-                    this.nativeManager.setReferencedBean( this.beanConverter.toRight(bean), converter.toRight(beanToSet), fkName));
+    public <T extends BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,int fkIndex){
+        switch(fkIndex){
+        case FL_PERSON_FK_PHOTO_ID:
+            return  (T)this.setReferencedByPhotoId(bean, (ImageBean)beanToSet);
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     //////////////////////////////////////
@@ -684,7 +638,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet) throws DAOException
+    public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet)
     {
         try{
             return this.dbConverter.getImageBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByPhotoId(this.beanConverter.toRight(bean),this.dbConverter.getImageBeanConverter().toRight(beanToSet)));
