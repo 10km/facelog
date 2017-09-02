@@ -492,23 +492,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlFaceBean bean,int ikIndex)throws DAOException{
-        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
-    }
-    /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link FlFaceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
@@ -1652,19 +1635,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
-     * Retrieves a array of FlFaceBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
-     * @param keys key values of index
-     * @return
-     * @throws DAOException
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    public FlFaceBean[] loadByIndex(int keyIndex,Object ...keys)throws DAOException
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new FlFaceBean[0]);
-    }
     
     /**
      * Retrieves a list of FlFaceBean using the index specified by keyIndex.

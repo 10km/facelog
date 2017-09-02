@@ -208,28 +208,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(DeviceBean bean,int ikIndex){
-        switch(ikIndex){
-        case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
-            return (T[])this.getFlImageBeansByDeviceId(bean);
-        case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
-            return (T[])this.getFlLogBeansByDeviceId(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    /**
-     * Retrieves imported T objects by ikIndex.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link DeviceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(DeviceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
@@ -300,13 +278,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean)
     {
-        try {
-            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByDeviceId( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlImageBeansByDeviceIdAsList(bean).toArray(new ImageBean[0]);
     }
 
     /**
@@ -394,13 +366,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean)
     {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByDeviceId( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlLogBeansByDeviceIdAsList(bean).toArray(new LogBean[0]);
     }
 
     /**

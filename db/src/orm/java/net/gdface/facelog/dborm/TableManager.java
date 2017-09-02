@@ -404,7 +404,7 @@ public interface TableManager<B extends FullBean<?>> {
 
         @Override
         public <T> T[] getImportedBeans(B bean, int ikIndex)throws DAOException{
-            throw new UnsupportedOperationException();
+            return this.getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
         }
 
         @Override
@@ -440,7 +440,7 @@ public interface TableManager<B extends FullBean<?>> {
         
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys)throws DAOException{
-            throw new UnsupportedOperationException();
+            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])new Object[0]);
         }
         
         @Override
@@ -949,15 +949,7 @@ public interface TableManager<B extends FullBean<?>> {
     //_____________________________________________________________________    
     /**
      * Retrieves a array of B bean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        for fl_face table<br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}     
-     *        for fl_image table<br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}     
-     *        for fl_log table<br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}     
-     *        for fl_person table<br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}     
+     * @param keyIndex valid values:see {@link #loadByIndexAsList(int,Object ...)}
      * @param keys key values of index
      * @return
      * @throws DAOException
@@ -969,13 +961,13 @@ public interface TableManager<B extends FullBean<?>> {
      * Retrieves a list of B bean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
      *        for fl_face table<br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}     
+     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}<br>     
      *        for fl_image table<br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}     
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}<br>     
      *        for fl_log table<br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}     
+     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}<br>     
      *        for fl_person table<br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}     
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
      * @param keys key values of index
      * @return a list of B bean
      * @throws DAOException
@@ -984,15 +976,7 @@ public interface TableManager<B extends FullBean<?>> {
     
     /**
      * Deletes rows using key.
-     * @param keyIndex valid values: <br>
-     *        for fl_face table<br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}     
-     *        for fl_image table<br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}     
-     *        for fl_log table<br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}     
-     *        for fl_person table<br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}     
+     * @param keyIndex valid values: see {@link #loadByIndexAsList(int,Object ...)}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1148,13 +1132,13 @@ public interface TableManager<B extends FullBean<?>> {
      * </ul>
      * @param bean the B object to use
      * @param fkIndex foreign key name.<br>
-     *        for for fl_face:<br>
+     *        for for fl_face table:<br>
      *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_FACE_FK_PERSON_ID}<br>
-     *        for for fl_image:<br>
+     *        for for fl_image table:<br>
      *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
-     *        for for fl_log:<br>
+     *        for for fl_log table:<br>
      *        {@link #FL_LOG_FK_DEVICE_ID},{@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE},{@link #FL_LOG_FK_PERSON_ID}<br>
-     *        for for fl_person:<br>
+     *        for for fl_person table:<br>
      *        {@link #FL_PERSON_FK_PHOTO_ID}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      * @throws DAOException
@@ -1202,15 +1186,15 @@ public interface TableManager<B extends FullBean<?>> {
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
-     *        for for fl_device:<br>
+     *        for for fl_device table:<br>
      *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_LOG_FK_DEVICE_ID}<br>
-     *        for for fl_face:<br>
+     *        for for fl_face table:<br>
      *        {@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE}<br>
-     *        for for fl_image:<br>
+     *        for for fl_image table:<br>
      *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_PERSON_FK_PHOTO_ID}<br>
-     *        for for fl_person:<br>
+     *        for for fl_person table:<br>
      *        {@link #FL_FACE_FK_PERSON_ID},{@link #FL_LOG_FK_PERSON_ID}<br>
-     *        for for fl_store:<br>
+     *        for for fl_store table:<br>
      *        {@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException

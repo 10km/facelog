@@ -403,7 +403,7 @@ public interface TableManager<B extends BaseBean> {
 
         @Override
         public <T extends BaseBean> T[] getImportedBeans(B bean, int ikIndex){
-            throw new UnsupportedOperationException();
+            return this.getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
         }
 
         @Override
@@ -439,7 +439,7 @@ public interface TableManager<B extends BaseBean> {
         
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys){
-            throw new UnsupportedOperationException();
+            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])new Object[0]);
         }
         
         @Override

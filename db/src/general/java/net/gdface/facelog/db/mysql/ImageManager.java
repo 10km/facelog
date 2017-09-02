@@ -210,28 +210,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(ImageBean bean,int ikIndex){
-        switch(ikIndex){
-        case FL_IMAGE_IK_FL_FACE_IMG_MD5:
-            return (T[])this.getFlFaceBeansByImgMd5(bean);
-        case FL_IMAGE_IK_FL_PERSON_PHOTO_ID:
-            return (T[])this.getFlPersonBeansByPhotoId(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    /**
-     * Retrieves imported T objects by ikIndex.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
-     * </ul>
-     * @param bean the {@link ImageBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
@@ -302,13 +280,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //3.1 GET IMPORTED
     public FaceBean[] getFlFaceBeansByImgMd5(ImageBean bean)
     {
-        try {
-            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByImgMd5( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlFaceBeansByImgMd5AsList(bean).toArray(new FaceBean[0]);
     }
 
     /**
@@ -396,13 +368,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //3.1 GET IMPORTED
     public PersonBean[] getFlPersonBeansByPhotoId(ImageBean bean)
     {
-        try {
-            return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getFlPersonBeansByPhotoId( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlPersonBeansByPhotoIdAsList(bean).toArray(new PersonBean[0]);
     }
 
     /**
@@ -931,19 +897,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
     
-    /**
-     * Retrieves a array of ImageBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
-     * @param keys key values of index
-     * @return
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    @Override
-    public ImageBean[] loadByIndex(int keyIndex,Object ...keys)
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new ImageBean[0]);
-    }
     
     /**
      * Retrieves a list of ImageBean using the index specified by keyIndex.

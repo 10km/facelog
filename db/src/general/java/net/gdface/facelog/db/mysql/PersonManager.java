@@ -209,28 +209,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(PersonBean bean,int ikIndex){
-        switch(ikIndex){
-        case FL_PERSON_IK_FL_FACE_PERSON_ID:
-            return (T[])this.getFlFaceBeansByPersonId(bean);
-        case FL_PERSON_IK_FL_LOG_PERSON_ID:
-            return (T[])this.getFlLogBeansByPersonId(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    /**
-     * Retrieves imported T objects by ikIndex.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link PersonBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
@@ -301,13 +279,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //3.1 GET IMPORTED
     public FaceBean[] getFlFaceBeansByPersonId(PersonBean bean)
     {
-        try {
-            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByPersonId( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlFaceBeansByPersonIdAsList(bean).toArray(new FaceBean[0]);
     }
 
     /**
@@ -395,13 +367,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByPersonId(PersonBean bean)
     {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByPersonId( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlLogBeansByPersonIdAsList(bean).toArray(new LogBean[0]);
     }
 
     /**
@@ -896,19 +862,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
-    /**
-     * Retrieves a array of PersonBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
-     * @param keys key values of index
-     * @return
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    @Override
-    public PersonBean[] loadByIndex(int keyIndex,Object ...keys)
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new PersonBean[0]);
-    }
     
     /**
      * Retrieves a list of PersonBean using the index specified by keyIndex.

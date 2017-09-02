@@ -206,28 +206,6 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(StoreBean bean,int ikIndex){
-        switch(ikIndex){
-        case FL_STORE_IK_FL_IMAGE_MD5:
-            return (T[])this.getFlImageBeansByMd5(bean);
-        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
-            return (T[])this.getFlImageBeansByThumbMd5(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    /**
-     * Retrieves imported T objects by ikIndex.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
-     * </ul>
-     * @param bean the {@link StoreBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
@@ -298,13 +276,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByMd5(StoreBean bean)
     {
-        try {
-            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByMd5( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlImageBeansByMd5AsList(bean).toArray(new ImageBean[0]);
     }
 
     /**
@@ -392,13 +364,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean)
     {
-        try {
-            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByThumbMd5( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlImageBeansByThumbMd5AsList(bean).toArray(new ImageBean[0]);
     }
 
     /**

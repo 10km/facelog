@@ -377,23 +377,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlImageBean bean,int ikIndex)throws DAOException{
-        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
-    }
-    /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
-     * </ul>
-     * @param bean the {@link FlImageBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T> List<T> getImportedBeansAsList(FlImageBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
@@ -1370,19 +1353,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
-     * Retrieves a array of FlImageBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
-     * @param keys key values of index
-     * @return
-     * @throws DAOException
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    public FlImageBean[] loadByIndex(int keyIndex,Object ...keys)throws DAOException
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new FlImageBean[0]);
-    }
     
     /**
      * Retrieves a list of FlImageBean using the index specified by keyIndex.

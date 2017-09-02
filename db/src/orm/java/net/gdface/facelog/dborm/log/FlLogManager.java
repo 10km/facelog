@@ -1221,19 +1221,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
-     * Retrieves a array of FlLogBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}
-     * @param keys key values of index
-     * @return
-     * @throws DAOException
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    public FlLogBean[] loadByIndex(int keyIndex,Object ...keys)throws DAOException
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new FlLogBean[0]);
-    }
     
     /**
      * Retrieves a list of FlLogBean using the index specified by keyIndex.

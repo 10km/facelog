@@ -364,23 +364,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlDeviceBean bean,int ikIndex)throws DAOException{
-        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
-    }
-    /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link FlDeviceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:

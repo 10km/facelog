@@ -735,19 +735,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
     
-    /**
-     * Retrieves a array of LogBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}
-     * @param keys key values of index
-     * @return
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    @Override
-    public LogBean[] loadByIndex(int keyIndex,Object ...keys)
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new LogBean[0]);
-    }
     
     /**
      * Retrieves a list of LogBean using the index specified by keyIndex.

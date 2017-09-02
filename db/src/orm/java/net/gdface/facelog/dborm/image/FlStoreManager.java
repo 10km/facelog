@@ -326,23 +326,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlStoreBean bean,int ikIndex)throws DAOException{
-        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
-    }
-    /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
-     * </ul>
-     * @param bean the {@link FlStoreBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:

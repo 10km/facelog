@@ -208,28 +208,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] getImportedBeans(FaceBean bean,int ikIndex){
-        switch(ikIndex){
-        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
-            return (T[])this.getFlLogBeansByVerifyFace(bean);
-        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
-            return (T[])this.getFlLogBeansByCompareFace(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    /**
-     * Retrieves imported T objects by ikIndex.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link FaceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
@@ -300,13 +278,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByVerifyFace(FaceBean bean)
     {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByVerifyFace( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlLogBeansByVerifyFaceAsList(bean).toArray(new LogBean[0]);
     }
 
     /**
@@ -394,13 +366,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByCompareFace(FaceBean bean)
     {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByCompareFace( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.getFlLogBeansByCompareFaceAsList(bean).toArray(new LogBean[0]);
     }
 
     /**
@@ -882,19 +848,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
     
-    /**
-     * Retrieves a array of FaceBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
-     * @param keys key values of index
-     * @return
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    @Override
-    public FaceBean[] loadByIndex(int keyIndex,Object ...keys)
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new FaceBean[0]);
-    }
     
     /**
      * Retrieves a list of FaceBean using the index specified by keyIndex.

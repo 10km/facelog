@@ -411,23 +411,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] getImportedBeans(FlPersonBean bean,int ikIndex)throws DAOException{
-        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
-    }
-    /**
-     * Retrieves imported T objects by fkName.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link FlPersonBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
     public <T> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
@@ -1429,19 +1412,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
-     * Retrieves a array of FlPersonBean using the index specified by keyIndex.
-     * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
-     * @param keys key values of index
-     * @return
-     * @throws DAOException
-     * @see #loadByIndexAsList(int ,Object ...)
-     */
-    public FlPersonBean[] loadByIndex(int keyIndex,Object ...keys)throws DAOException
-    {
-        return this.loadByIndexAsList(keyIndex,keys).toArray(new FlPersonBean[0]);
-    }
     
     /**
      * Retrieves a list of FlPersonBean using the index specified by keyIndex.
