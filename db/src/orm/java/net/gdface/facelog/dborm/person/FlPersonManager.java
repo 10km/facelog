@@ -820,11 +820,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
 
-    private static final  java.util.Vector<Object[]> REF_METHODS=new java.util.Vector<Object[]>(){
-        private static final long serialVersionUID = 1L;
-    {
-        add(new Object[]{"getReferencedByPhotoId","setReferencedByPhotoId",FlImageBean.class});
-    }} ;
     /**
      * Retrieves the bean object referenced by fkName.<br>
      * @param <T>
@@ -840,31 +835,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getReferencedBean(FlPersonBean bean,int fkName)throws DAOException{
-        if(fkName >= REF_METHODS.size() || fkName <0)
-            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
-        Object[] params = REF_METHODS.get(fkName);
-        try {
-            return (T) this.getClass().getMethod((String)params[0],bean.getClass()).invoke(this,bean);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
+        switch(fkName){
+        case FL_PERSON_FK_PHOTO_ID:
+            return  (T)this.getReferencedByPhotoId(bean);
         }
+        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
     }
+    
     /**
      * Associates the {@link FlPersonBean} object to the bean object by fkName field.<br>
      * 
@@ -882,34 +859,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkName)throws DAOException{
-        if(fkName >= REF_METHODS.size() || fkName <0)
-            throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
-        Object[] params = REF_METHODS.get(fkName);
-        Class<?> resultClass = (Class<?>)params[2];
-        if(null != beanToSet && !resultClass.isAssignableFrom(beanToSet.getClass()) ){
-            throw new IllegalArgumentException("the argument 'beanToSet' be invalid type,expect type:" + resultClass.getName());
+        switch(fkName){
+        case FL_PERSON_FK_PHOTO_ID:
+            return  (T)this.setReferencedByPhotoId(bean, (FlImageBean)beanToSet);
         }
-        try {            
-            return (T) this.getClass().getMethod((String)params[1],bean.getClass(),resultClass).invoke(this,bean,beanToSet);
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {    
-            throw new RuntimeException(e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
-            try{
-                throw e.getCause();
-            }catch(DAOException e1){
-                throw e1;
-            }catch(RuntimeException e1){
-                throw e1;
-            }catch (Throwable e1) {
-                throw new RuntimeException(e1);
-            } 
-        }
+        throw new IllegalArgumentException(String.format("invalid fkName %d", fkName));
     }
      
     //////////////////////////////////////
