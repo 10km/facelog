@@ -752,10 +752,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param faceMd5 the face_md5 column's value filter. must not be null
      * @return an array of PersonBean
      */
-    public PersonBean loadByface_md5(String faceMd5)
+    public PersonBean loadByindexFaceMd5(String faceMd5)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByface_md5(faceMd5));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexFaceMd5(faceMd5));
         }
         catch(DAOException e)
         {
@@ -763,17 +763,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
- 
+
     /**
      * Deletes rows using the face_md5 index.
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByface_md5(String faceMd5)
+    public int deleteByindexFaceMd5(String faceMd5)
     {
         try{
-            return this.nativeManager.deleteByface_md5(faceMd5);
+            return this.nativeManager.deleteByindexFaceMd5(faceMd5);
         }
         catch(DAOException e)
         {
@@ -787,10 +787,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param papersNum the papers_num column's value filter. must not be null
      * @return an array of PersonBean
      */
-    public PersonBean loadBypapers_num(String papersNum)
+    public PersonBean loadByindexPapersNum(String papersNum)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBypapers_num(papersNum));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexPapersNum(papersNum));
         }
         catch(DAOException e)
         {
@@ -798,17 +798,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
- 
+
     /**
      * Deletes rows using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteBypapers_num(String papersNum)
+    public int deleteByindexPapersNum(String papersNum)
     {
         try{
-            return this.nativeManager.deleteBypapers_num(papersNum);
+            return this.nativeManager.deleteByindexPapersNum(papersNum);
         }
         catch(DAOException e)
         {
@@ -822,10 +822,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param photoId the photo_id column's value filter. must not be null
      * @return an array of PersonBean
      */
-    public PersonBean loadByphoto_id(String photoId)
+    public PersonBean loadByindexPhotoId(String photoId)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByphoto_id(photoId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexPhotoId(photoId));
         }
         catch(DAOException e)
         {
@@ -833,17 +833,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
- 
+
     /**
      * Deletes rows using the photo_id index.
      *
      * @param photoId the photo_id column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByphoto_id(String photoId)
+    public int deleteByindexPhotoId(String photoId)
     {
         try{
-            return this.nativeManager.deleteByphoto_id(photoId);
+            return this.nativeManager.deleteByindexPhotoId(photoId);
         }
         catch(DAOException e)
         {
@@ -857,15 +857,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param expiryDate the expiry_date column's value filter.
      * @return an array of PersonBean
      */
-    public PersonBean[] loadByexpiry_date(java.util.Date expiryDate)
+    public PersonBean[] loadByindexExpiryDate(java.util.Date expiryDate)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByexpiry_date(expiryDate));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.loadByindexExpiryDateAsList(expiryDate).toArray(new PersonBean[0]);
     }
     
     /**
@@ -874,27 +868,27 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param expiryDate the expiry_date column's value filter.
      * @return a list of PersonBean
      */
-    public java.util.List<PersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate)
+    public java.util.List<PersonBean> loadByindexExpiryDateAsList(java.util.Date expiryDate)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByexpiry_dateAsList(expiryDate));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexExpiryDateAsList(expiryDate));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
- 
+
     /**
      * Deletes rows using the expiry_date index.
      *
      * @param expiryDate the expiry_date column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByexpiry_date(java.util.Date expiryDate)
+    public int deleteByindexExpiryDate(java.util.Date expiryDate)
     {
         try{
-            return this.nativeManager.deleteByexpiry_date(expiryDate);
+            return this.nativeManager.deleteByindexExpiryDate(expiryDate);
         }
         catch(DAOException e)
         {
@@ -902,6 +896,53 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
+    /**
+     * Retrieves a array of PersonBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     * @param keys key values of index
+     * @return
+     * @see #loadByIndexAsList(int ,Object ...)
+     */
+    @Override
+    public PersonBean[] loadByIndex(int keyIndex,Object ...keys)
+    {
+        return this.loadByIndexAsList(keyIndex,keys).toArray(new PersonBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of PersonBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     * @param keys key values of index
+     * @return a list of PersonBean
+     */
+    @Override
+    public java.util.List<PersonBean> loadByIndexAsList(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     */
+    @Override
+    public int deleteByIndex(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.nativeManager.deleteByIndex(keyIndex,keys);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
 
     //_____________________________________________________________________
     //

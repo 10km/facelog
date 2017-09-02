@@ -31,75 +31,75 @@ public interface TableManager<B extends BaseBean> {
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
     /** foreign key fl_face(img_md5) -> fl_image */
-    public static final int FL_FACE_FK_IMG_MD5=0;
+    public static final int FL_FACE_FK_IMG_MD5 = 0;
     /** foreign key fl_face(person_id) -> fl_person */
-    public static final int FL_FACE_FK_PERSON_ID=1;
+    public static final int FL_FACE_FK_PERSON_ID = 1;
     /** foreign key fl_image(device_id) -> fl_device */
-    public static final int FL_IMAGE_FK_DEVICE_ID=0;
+    public static final int FL_IMAGE_FK_DEVICE_ID = 0;
     /** foreign key fl_image(md5) -> fl_store */
-    public static final int FL_IMAGE_FK_MD5=1;
+    public static final int FL_IMAGE_FK_MD5 = 1;
     /** foreign key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_IMAGE_FK_THUMB_MD5=2;
+    public static final int FL_IMAGE_FK_THUMB_MD5 = 2;
     /** foreign key fl_log(device_id) -> fl_device */
-    public static final int FL_LOG_FK_DEVICE_ID=0;
+    public static final int FL_LOG_FK_DEVICE_ID = 0;
     /** foreign key fl_log(verify_face) -> fl_face */
-    public static final int FL_LOG_FK_VERIFY_FACE=1;
+    public static final int FL_LOG_FK_VERIFY_FACE = 1;
     /** foreign key fl_log(compare_face) -> fl_face */
-    public static final int FL_LOG_FK_COMPARE_FACE=2;
+    public static final int FL_LOG_FK_COMPARE_FACE = 2;
     /** foreign key fl_log(person_id) -> fl_person */
-    public static final int FL_LOG_FK_PERSON_ID=3;
+    public static final int FL_LOG_FK_PERSON_ID = 3;
     /** foreign key fl_person(photo_id) -> fl_image */
-    public static final int FL_PERSON_FK_PHOTO_ID=0;
+    public static final int FL_PERSON_FK_PHOTO_ID = 0;
     //////////////////////////////////////
     // IMPORTED KEY INDEX DECLARE
     //////////////////////////////////////    
     /** imported key fl_image(device_id) -> fl_device */
-    public static final int FL_DEVICE_IK_FL_IMAGE_DEVICE_ID=0;
+    public static final int FL_DEVICE_IK_FL_IMAGE_DEVICE_ID = 0;
     /** imported key fl_log(device_id) -> fl_device */
-    public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID=1;
+    public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID = 1;
     /** imported key fl_log(verify_face) -> fl_face */
-    public static final int FL_FACE_IK_FL_LOG_VERIFY_FACE=0;
+    public static final int FL_FACE_IK_FL_LOG_VERIFY_FACE = 0;
     /** imported key fl_log(compare_face) -> fl_face */
-    public static final int FL_FACE_IK_FL_LOG_COMPARE_FACE=1;
+    public static final int FL_FACE_IK_FL_LOG_COMPARE_FACE = 1;
     /** imported key fl_face(img_md5) -> fl_image */
-    public static final int FL_IMAGE_IK_FL_FACE_IMG_MD5=0;
+    public static final int FL_IMAGE_IK_FL_FACE_IMG_MD5 = 0;
     /** imported key fl_person(photo_id) -> fl_image */
-    public static final int FL_IMAGE_IK_FL_PERSON_PHOTO_ID=1;
+    public static final int FL_IMAGE_IK_FL_PERSON_PHOTO_ID = 1;
     /** imported key fl_face(person_id) -> fl_person */
-    public static final int FL_PERSON_IK_FL_FACE_PERSON_ID=0;
+    public static final int FL_PERSON_IK_FL_FACE_PERSON_ID = 0;
     /** imported key fl_log(person_id) -> fl_person */
-    public static final int FL_PERSON_IK_FL_LOG_PERSON_ID=1;
+    public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 1;
     /** imported key fl_image(md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_MD5=0;
+    public static final int FL_STORE_IK_FL_IMAGE_MD5 = 0;
     /** imported key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_THUMB_MD5=1;
+    public static final int FL_STORE_IK_FL_IMAGE_THUMB_MD5 = 1;
     //////////////////////////////////////
     // INDEX INDEX DECLARE
     //////////////////////////////////////    
     /** fl_face index (img_md5) */
-    public static final int FL_FACE_INDEX_IMG_MD5=0;
+    public static final int FL_FACE_INDEX_IMG_MD5 = 0;
     /** fl_face index (person_id) */
-    public static final int FL_FACE_INDEX_PERSON_ID=1;
+    public static final int FL_FACE_INDEX_PERSON_ID = 1;
     /** fl_image index (device_id) */
-    public static final int FL_IMAGE_INDEX_DEVICE_ID=0;
+    public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
     /** fl_image index (thumb_md5) */
-    public static final int FL_IMAGE_INDEX_THUMB_MD5=1;
+    public static final int FL_IMAGE_INDEX_THUMB_MD5 = 1;
     /** fl_log index (compare_face) */
-    public static final int FL_LOG_INDEX_COMPARE_FACE=0;
+    public static final int FL_LOG_INDEX_COMPARE_FACE = 0;
     /** fl_log index (device_id) */
-    public static final int FL_LOG_INDEX_DEVICE_ID=1;
+    public static final int FL_LOG_INDEX_DEVICE_ID = 1;
     /** fl_log index (person_id) */
-    public static final int FL_LOG_INDEX_PERSON_ID=2;
+    public static final int FL_LOG_INDEX_PERSON_ID = 2;
     /** fl_log index (verify_face) */
-    public static final int FL_LOG_INDEX_VERIFY_FACE=3;
+    public static final int FL_LOG_INDEX_VERIFY_FACE = 3;
     /** fl_person index (face_md5) */
-    public static final int FL_PERSON_INDEX_FACE_MD5=0;
+    public static final int FL_PERSON_INDEX_FACE_MD5 = 0;
     /** fl_person index (papers_num) */
-    public static final int FL_PERSON_INDEX_PAPERS_NUM=1;
+    public static final int FL_PERSON_INDEX_PAPERS_NUM = 1;
     /** fl_person index (photo_id) */
-    public static final int FL_PERSON_INDEX_PHOTO_ID=2;
+    public static final int FL_PERSON_INDEX_PHOTO_ID = 2;
     /** fl_person index (expiry_date) */
-    public static final int FL_PERSON_INDEX_EXPIRY_DATE=3;
+    public static final int FL_PERSON_INDEX_EXPIRY_DATE = 3;
 
     public interface Action<B>{
         public abstract class Adapter<B> implements Action<B>{
@@ -302,7 +302,7 @@ public interface TableManager<B extends BaseBean> {
             loadUsingTemplate(bean,null,startRow,numRows,searchType, action);
             return action.getList();
         }
-
+        
         @Override
         public B save(B bean){
             if(null == bean)return null;
@@ -436,7 +436,21 @@ public interface TableManager<B extends BaseBean> {
         public int deleteByPrimaryKey(Object ...keys){
             throw new UnsupportedOperationException();
         }
-
+        
+        @Override
+        public B[] loadByIndex(int keyIndex,Object ...keys){
+            throw new UnsupportedOperationException();
+        }
+        
+        @Override
+        public List<B> loadByIndexAsList(int keyIndex,Object ...keys){
+            throw new UnsupportedOperationException();
+        }
+        
+        @Override
+        public int deleteByIndex(int keyIndex,Object ...keys){
+            throw new UnsupportedOperationException();
+        }
     }
 
     public abstract String[] getFieldNames();
@@ -888,7 +902,43 @@ public interface TableManager<B extends BaseBean> {
      */
     //20-3
     public abstract List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType);
+
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________    
+    /**
+     * Retrieves a array of B bean using the index specified by keyIndex.
+     * @param keyIndex valid values:see {@link #loadByIndexAsList(int,Object ...)}
+     * @param keys key values of index
+     * @return
+     * @see #loadByIndexAsList(int ,Object ...)
+     */
+    public abstract B[] loadByIndex(int keyIndex,Object ...keys);
     
+    /**
+     * Retrieves a list of B bean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        for fl_face table<br>
+     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}<br>     
+     *        for fl_image table<br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}<br>     
+     *        for fl_log table<br>
+     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}<br>     
+     *        for fl_person table<br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
+     * @param keys key values of index
+     * @return a list of B bean
+     */
+    public abstract java.util.List<B> loadByIndexAsList(int keyIndex,Object ...keys);
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: see {@link #loadByIndexAsList(int,Object ...)}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     */
+    public abstract int deleteByIndex(int keyIndex,Object ...keys);
     //_____________________________________________________________________
     //
     // LISTENER
@@ -1029,13 +1079,13 @@ public interface TableManager<B extends BaseBean> {
      * </ul>
      * @param bean the B object to use
      * @param fkIndex foreign key name.<br>
-     *        for for fl_face:<br>
+     *        for for fl_face table:<br>
      *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_FACE_FK_PERSON_ID}<br>
-     *        for for fl_image:<br>
+     *        for for fl_image table:<br>
      *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
-     *        for for fl_log:<br>
+     *        for for fl_log table:<br>
      *        {@link #FL_LOG_FK_DEVICE_ID},{@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE},{@link #FL_LOG_FK_PERSON_ID}<br>
-     *        for for fl_person:<br>
+     *        for for fl_person table:<br>
      *        {@link #FL_PERSON_FK_PHOTO_ID}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      */
@@ -1081,15 +1131,15 @@ public interface TableManager<B extends BaseBean> {
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
-     *        for for fl_device:<br>
+     *        for for fl_device table:<br>
      *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_LOG_FK_DEVICE_ID}<br>
-     *        for for fl_face:<br>
+     *        for for fl_face table:<br>
      *        {@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE}<br>
-     *        for for fl_image:<br>
+     *        for for fl_image table:<br>
      *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_PERSON_FK_PHOTO_ID}<br>
-     *        for for fl_person:<br>
+     *        for for fl_person table:<br>
      *        {@link #FL_FACE_FK_PERSON_ID},{@link #FL_LOG_FK_PERSON_ID}<br>
-     *        for for fl_store:<br>
+     *        for for fl_store table:<br>
      *        {@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */

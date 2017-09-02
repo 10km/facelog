@@ -378,13 +378,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] getImportedBeans(FlImageBean bean,int ikIndex)throws DAOException{
-        switch(ikIndex){
-        case FL_IMAGE_IK_FL_FACE_IMG_MD5:
-            return (T[])this.getFlFaceBeansByImgMd5(bean);
-        case FL_IMAGE_IK_FL_PERSON_PHOTO_ID:
-            return (T[])this.getFlPersonBeansByPhotoId(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
     }
     /**
      * Retrieves imported T objects by fkName.<br>
@@ -414,8 +408,8 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean} array</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean} array</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param importedBeans the FlPersonBean array to associate to the {@link FlImageBean}
@@ -438,8 +432,8 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> FL_IMAGE_IK_FL_FACE_IMG_MD5 -> FlFaceBean java.util.Collection</li>
-     *     <li> FL_IMAGE_IK_FL_PERSON_PHOTO_ID -> FlPersonBean java.util.Collection</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlImageBean}
@@ -473,23 +467,20 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //3.1 GET IMPORTED
     public FlFaceBean[] getFlFaceBeansByImgMd5(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return null;
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setImgMd5(bean.getMd5());
-        return FlFaceManager.getInstance().loadUsingTemplate(other);
+        return getFlFaceBeansByImgMd5AsList(bean).toArray(new FlFaceBean[0]);
     }
 
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.img_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
      * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlFaceBean} beans 
      * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FlFaceBean> getFlFaceBeansByImgMd5AsList(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean)return new java.util.ArrayList<FlFaceBean>();
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setImgMd5(bean.getMd5());
         return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
@@ -545,23 +536,20 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //3.1 GET IMPORTED
     public FlPersonBean[] getFlPersonBeansByPhotoId(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return null;
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setPhotoId(bean.getMd5());
-        return FlPersonManager.getInstance().loadUsingTemplate(other);
+        return getFlPersonBeansByPhotoIdAsList(bean).toArray(new FlPersonBean[0]);
     }
 
     /**
      * Retrieves the {@link FlPersonBean} object from fl_person.photo_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
      * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlPersonBean} beans 
      * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FlPersonBean> getFlPersonBeansByPhotoIdAsList(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean)return new java.util.ArrayList<FlPersonBean>();
         FlPersonBean other = FlPersonManager.getInstance().createBean();
         other.setPhotoId(bean.getMd5());
         return FlPersonManager.getInstance().loadUsingTemplateAsList(other);
@@ -1304,16 +1292,16 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     // USING INDICES
     //_____________________________________________________________________
 
-     /**
+    /**
      * Retrieves an array of FlImageBean using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
      * @return an array of FlImageBean
      * @throws DAOException
      */
-    public FlImageBean[] loadBydevice_id(Integer deviceId) throws DAOException
+    public FlImageBean[] loadByindexDeviceId(Integer deviceId) throws DAOException
     {
-        return (FlImageBean[])this.loadBydevice_idAsList(deviceId).toArray(new FlImageBean[0]);
+        return (FlImageBean[])this.loadByindexDeviceIdAsList(deviceId).toArray(new FlImageBean[0]);
     }
     
     /**
@@ -1323,36 +1311,36 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return a list of FlImageBean
      * @throws DAOException
      */
-    public List<FlImageBean> loadBydevice_idAsList(Integer deviceId) throws DAOException
+    public List<FlImageBean> loadByindexDeviceIdAsList(Integer deviceId) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setDeviceId(deviceId);
         return loadUsingTemplateAsList(bean);
     }
-     /**
+    /**
      * Deletes rows using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteBydevice_id(Integer deviceId) throws DAOException
+    public int deleteByindexDeviceId(Integer deviceId) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setDeviceId(deviceId);
         return deleteUsingTemplate(bean);
     }
     
-     /**
+    /**
      * Retrieves an array of FlImageBean using the thumb_md5 index.
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return an array of FlImageBean
      * @throws DAOException
      */
-    public FlImageBean[] loadBythumb_md5(String thumbMd5) throws DAOException
+    public FlImageBean[] loadByindexThumbMd5(String thumbMd5) throws DAOException
     {
-        return (FlImageBean[])this.loadBythumb_md5AsList(thumbMd5).toArray(new FlImageBean[0]);
+        return (FlImageBean[])this.loadByindexThumbMd5AsList(thumbMd5).toArray(new FlImageBean[0]);
     }
     
     /**
@@ -1362,26 +1350,99 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return a list of FlImageBean
      * @throws DAOException
      */
-    public List<FlImageBean> loadBythumb_md5AsList(String thumbMd5) throws DAOException
+    public List<FlImageBean> loadByindexThumbMd5AsList(String thumbMd5) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setThumbMd5(thumbMd5);
         return loadUsingTemplateAsList(bean);
     }
-     /**
+    /**
      * Deletes rows using the thumb_md5 index.
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteBythumb_md5(String thumbMd5) throws DAOException
+    public int deleteByindexThumbMd5(String thumbMd5) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setThumbMd5(thumbMd5);
         return deleteUsingTemplate(bean);
     }
     
+    /**
+     * Retrieves a array of FlImageBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     * @param keys key values of index
+     * @return
+     * @throws DAOException
+     * @see #loadByIndexAsList(int ,Object ...)
+     */
+    public FlImageBean[] loadByIndex(int keyIndex,Object ...keys)throws DAOException
+    {
+        return this.loadByIndexAsList(keyIndex,keys).toArray(new FlImageBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of FlImageBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     * @param keys key values of index
+     * @return a list of FlImageBean
+     * @throws DAOException
+     */
+    public List<FlImageBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
+    {
+        switch(keyIndex){
+        case FL_IMAGE_INDEX_DEVICE_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
+            if(null != keys[0] && !(keys[0] instanceof Integer))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            return this.loadByindexDeviceIdAsList((Integer)keys[0]);        
+        }
+        case FL_IMAGE_INDEX_THUMB_MD5:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'thumb_md5' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.loadByindexThumbMd5AsList((String)keys[0]);        
+        }
+        default:
+            throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
+    {
+        switch(keyIndex){
+        case FL_IMAGE_INDEX_DEVICE_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
+            if(null != keys[0] && !(keys[0] instanceof Integer))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            return this.deleteByindexDeviceId((Integer)keys[0]);
+        }
+        case FL_IMAGE_INDEX_THUMB_MD5:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'thumb_md5' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByindexThumbMd5((String)keys[0]);
+        }
+        default:
+            throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
+        }        
+    }
 
 
     //_____________________________________________________________________

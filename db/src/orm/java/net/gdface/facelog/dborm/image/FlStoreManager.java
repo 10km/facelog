@@ -327,13 +327,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] getImportedBeans(FlStoreBean bean,int ikIndex)throws DAOException{
-        switch(ikIndex){
-        case FL_STORE_IK_FL_IMAGE_MD5:
-            return (T[])this.getFlImageBeansByMd5(bean);
-        case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
-            return (T[])this.getFlImageBeansByThumbMd5(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
     }
     /**
      * Retrieves imported T objects by fkName.<br>
@@ -363,8 +357,8 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean} array</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean} array</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the FlImageBean array to associate to the {@link FlStoreBean}
@@ -387,8 +381,8 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> FL_STORE_IK_FL_IMAGE_MD5 -> FlImageBean java.util.Collection</li>
-     *     <li> FL_STORE_IK_FL_IMAGE_THUMB_MD5 -> FlImageBean java.util.Collection</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlStoreBean}
@@ -422,23 +416,20 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //3.1 GET IMPORTED
     public FlImageBean[] getFlImageBeansByMd5(FlStoreBean bean) throws DAOException
     {
-        if(null == bean)return null;
-        FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setMd5(bean.getMd5());
-        return FlImageManager.getInstance().loadUsingTemplate(other);
+        return getFlImageBeansByMd5AsList(bean).toArray(new FlImageBean[0]);
     }
 
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.md5 field.<BR>
      * FK_NAME:fl_image_ibfk_1
      * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans 
      * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FlImageBean> getFlImageBeansByMd5AsList(FlStoreBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean)return new java.util.ArrayList<FlImageBean>();
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setMd5(bean.getMd5());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
@@ -494,23 +485,20 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //3.1 GET IMPORTED
     public FlImageBean[] getFlImageBeansByThumbMd5(FlStoreBean bean) throws DAOException
     {
-        if(null == bean)return null;
-        FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setThumbMd5(bean.getMd5());
-        return FlImageManager.getInstance().loadUsingTemplate(other);
+        return getFlImageBeansByThumbMd5AsList(bean).toArray(new FlImageBean[0]);
     }
 
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.thumb_md5 field.<BR>
      * FK_NAME:fl_image_ibfk_2
      * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlImageBean} beans 
      * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FlImageBean> getFlImageBeansByThumbMd5AsList(FlStoreBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean)return new java.util.ArrayList<FlImageBean>();
         FlImageBean other = FlImageManager.getInstance().createBean();
         other.setThumbMd5(bean.getMd5());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);

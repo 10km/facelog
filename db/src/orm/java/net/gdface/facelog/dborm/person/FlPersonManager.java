@@ -412,13 +412,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] getImportedBeans(FlPersonBean bean,int ikIndex)throws DAOException{
-        switch(ikIndex){
-        case FL_PERSON_IK_FL_FACE_PERSON_ID:
-            return (T[])this.getFlFaceBeansByPersonId(bean);
-        case FL_PERSON_IK_FL_LOG_PERSON_ID:
-            return (T[])this.getFlLogBeansByPersonId(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+        return getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
     }
     /**
      * Retrieves imported T objects by fkName.<br>
@@ -448,8 +442,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean} array</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean} array</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlPersonBean}
@@ -472,8 +466,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * Set the importedBeans associates to the bean by fkName<br>
      * @param <T>
      * <ul>
-     *     <li> FL_PERSON_IK_FL_FACE_PERSON_ID -> FlFaceBean java.util.Collection</li>
-     *     <li> FL_PERSON_IK_FL_LOG_PERSON_ID -> FlLogBean java.util.Collection</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlPersonBean}
@@ -507,23 +501,20 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //3.1 GET IMPORTED
     public FlFaceBean[] getFlFaceBeansByPersonId(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)return null;
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setPersonId(bean.getId());
-        return FlFaceManager.getInstance().loadUsingTemplate(other);
+        return getFlFaceBeansByPersonIdAsList(bean).toArray(new FlFaceBean[0]);
     }
 
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.person_id field.<BR>
      * FK_NAME:fl_face_ibfk_2
      * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlFaceBean} beans 
      * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FlFaceBean> getFlFaceBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean)return new java.util.ArrayList<FlFaceBean>();
         FlFaceBean other = FlFaceManager.getInstance().createBean();
         other.setPersonId(bean.getId());
         return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
@@ -579,23 +570,20 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //3.1 GET IMPORTED
     public FlLogBean[] getFlLogBeansByPersonId(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)return null;
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setPersonId(bean.getId());
-        return FlLogManager.getInstance().loadUsingTemplate(other);
+        return getFlLogBeansByPersonIdAsList(bean).toArray(new FlLogBean[0]);
     }
 
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
      * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlLogBean} beans 
      * @throws DAOException
      */
     //3.2 GET IMPORTED
     public List<FlLogBean> getFlLogBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
     {
-        if(null == bean)return null;
+        if(null == bean)return new java.util.ArrayList<FlLogBean>();
         FlLogBean other = FlLogManager.getInstance().createBean();
         other.setPersonId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
@@ -1322,7 +1310,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean loadByface_md5(String faceMd5) throws DAOException
+    public FlPersonBean loadByindexFaceMd5(String faceMd5) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         if( null == faceMd5)
@@ -1330,14 +1318,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         bean.setFaceMd5(faceMd5);
         return loadUniqueUsingTemplate(bean);
     }
-     /**
+    /**
      * Deletes rows using the face_md5 index.
      *
      * @param faceMd5 the face_md5 column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByface_md5(String faceMd5) throws DAOException
+    public int deleteByindexFaceMd5(String faceMd5) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setFaceMd5(faceMd5);
@@ -1345,25 +1333,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
     
     /**
-     * Deletes rows using key.
-     * @param keyIndex
-     * @param keys
-     * @return
-     * @throws DAOException
-     */
-    public int deleteByKey(int keyIndex,Object ...keys)throws DAOException
-    {
-    	
-		return keyIndex;    	
-    }
-    /**
      * Retrieves an unique FlPersonBean using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter. must not be null
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean loadBypapers_num(String papersNum) throws DAOException
+    public FlPersonBean loadByindexPapersNum(String papersNum) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         if( null == papersNum)
@@ -1371,14 +1347,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         bean.setPapersNum(papersNum);
         return loadUniqueUsingTemplate(bean);
     }
-     /**
+    /**
      * Deletes rows using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteBypapers_num(String papersNum) throws DAOException
+    public int deleteByindexPapersNum(String papersNum) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setPapersNum(papersNum);
@@ -1392,7 +1368,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean loadByphoto_id(String photoId) throws DAOException
+    public FlPersonBean loadByindexPhotoId(String photoId) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         if( null == photoId)
@@ -1400,30 +1376,30 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         bean.setPhotoId(photoId);
         return loadUniqueUsingTemplate(bean);
     }
-     /**
+    /**
      * Deletes rows using the photo_id index.
      *
      * @param photoId the photo_id column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByphoto_id(String photoId) throws DAOException
+    public int deleteByindexPhotoId(String photoId) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setPhotoId(photoId);
         return deleteUsingTemplate(bean);
     }
     
-     /**
+    /**
      * Retrieves an array of FlPersonBean using the expiry_date index.
      *
      * @param expiryDate the expiry_date column's value filter.
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean[] loadByexpiry_date(java.util.Date expiryDate) throws DAOException
+    public FlPersonBean[] loadByindexExpiryDate(java.util.Date expiryDate) throws DAOException
     {
-        return (FlPersonBean[])this.loadByexpiry_dateAsList(expiryDate).toArray(new FlPersonBean[0]);
+        return (FlPersonBean[])this.loadByindexExpiryDateAsList(expiryDate).toArray(new FlPersonBean[0]);
     }
     
     /**
@@ -1433,26 +1409,139 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public List<FlPersonBean> loadByexpiry_dateAsList(java.util.Date expiryDate) throws DAOException
+    public List<FlPersonBean> loadByindexExpiryDateAsList(java.util.Date expiryDate) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setExpiryDate(expiryDate);
         return loadUsingTemplateAsList(bean);
     }
-     /**
+    /**
      * Deletes rows using the expiry_date index.
      *
      * @param expiryDate the expiry_date column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByexpiry_date(java.util.Date expiryDate) throws DAOException
+    public int deleteByindexExpiryDate(java.util.Date expiryDate) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setExpiryDate(expiryDate);
         return deleteUsingTemplate(bean);
     }
     
+    /**
+     * Retrieves a array of FlPersonBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     * @param keys key values of index
+     * @return
+     * @throws DAOException
+     * @see #loadByIndexAsList(int ,Object ...)
+     */
+    public FlPersonBean[] loadByIndex(int keyIndex,Object ...keys)throws DAOException
+    {
+        return this.loadByIndexAsList(keyIndex,keys).toArray(new FlPersonBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of FlPersonBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     * @param keys key values of index
+     * @return a list of FlPersonBean
+     * @throws DAOException
+     */
+    public List<FlPersonBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
+    {
+        switch(keyIndex){
+        case FL_PERSON_INDEX_FACE_MD5:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'face_md5' column number");
+            if(null != keys[0] && !(keys[0] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            FlPersonBean bean= this.loadByindexFaceMd5((String)keys[0]);
+            List<FlPersonBean> result = new java.util.ArrayList<FlPersonBean>();
+            if(null != bean)
+                result.add(bean);
+            return result;
+        }
+        case FL_PERSON_INDEX_PAPERS_NUM:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            FlPersonBean bean= this.loadByindexPapersNum((String)keys[0]);
+            List<FlPersonBean> result = new java.util.ArrayList<FlPersonBean>();
+            if(null != bean)
+                result.add(bean);
+            return result;
+        }
+        case FL_PERSON_INDEX_PHOTO_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'photo_id' column number");
+            if(null != keys[2] && !(keys[2] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            FlPersonBean bean= this.loadByindexPhotoId((String)keys[0]);
+            List<FlPersonBean> result = new java.util.ArrayList<FlPersonBean>();
+            if(null != bean)
+                result.add(bean);
+            return result;
+        }
+        case FL_PERSON_INDEX_EXPIRY_DATE:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
+            if(null != keys[3] && !(keys[3] instanceof java.util.Date))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
+            return this.loadByindexExpiryDateAsList((java.util.Date)keys[0]);        
+        }
+        default:
+            throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
+    {
+        switch(keyIndex){
+        case FL_PERSON_INDEX_FACE_MD5:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'face_md5' column number");
+            if(null != keys[0] && !(keys[0] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByindexFaceMd5((String)keys[0]);
+        }
+        case FL_PERSON_INDEX_PAPERS_NUM:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByindexPapersNum((String)keys[0]);
+        }
+        case FL_PERSON_INDEX_PHOTO_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'photo_id' column number");
+            if(null != keys[2] && !(keys[2] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByindexPhotoId((String)keys[0]);
+        }
+        case FL_PERSON_INDEX_EXPIRY_DATE:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
+            if(null != keys[3] && !(keys[3] instanceof java.util.Date))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
+            return this.deleteByindexExpiryDate((java.util.Date)keys[0]);
+        }
+        default:
+            throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
+        }        
+    }
 
 
     //_____________________________________________________________________

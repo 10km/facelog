@@ -798,15 +798,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param imgMd5 the img_md5 column's value filter.
      * @return an array of FaceBean
      */
-    public FaceBean[] loadByimg_md5(String imgMd5)
+    public FaceBean[] loadByindexImgMd5(String imgMd5)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByimg_md5(imgMd5));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.loadByindexImgMd5AsList(imgMd5).toArray(new FaceBean[0]);
     }
     
     /**
@@ -815,27 +809,27 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param imgMd5 the img_md5 column's value filter.
      * @return a list of FaceBean
      */
-    public java.util.List<FaceBean> loadByimg_md5AsList(String imgMd5)
+    public java.util.List<FaceBean> loadByindexImgMd5AsList(String imgMd5)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByimg_md5AsList(imgMd5));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexImgMd5AsList(imgMd5));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
- 
+
     /**
      * Deletes rows using the img_md5 index.
      *
      * @param imgMd5 the img_md5 column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByimg_md5(String imgMd5)
+    public int deleteByindexImgMd5(String imgMd5)
     {
         try{
-            return this.nativeManager.deleteByimg_md5(imgMd5);
+            return this.nativeManager.deleteByindexImgMd5(imgMd5);
         }
         catch(DAOException e)
         {
@@ -849,15 +843,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param personId the person_id column's value filter.
      * @return an array of FaceBean
      */
-    public FaceBean[] loadByperson_id(Integer personId)
+    public FaceBean[] loadByindexPersonId(Integer personId)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByperson_id(personId));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.loadByindexPersonIdAsList(personId).toArray(new FaceBean[0]);
     }
     
     /**
@@ -866,27 +854,27 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param personId the person_id column's value filter.
      * @return a list of FaceBean
      */
-    public java.util.List<FaceBean> loadByperson_idAsList(Integer personId)
+    public java.util.List<FaceBean> loadByindexPersonIdAsList(Integer personId)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByperson_idAsList(personId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexPersonIdAsList(personId));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
- 
+
     /**
      * Deletes rows using the person_id index.
      *
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByperson_id(Integer personId)
+    public int deleteByindexPersonId(Integer personId)
     {
         try{
-            return this.nativeManager.deleteByperson_id(personId);
+            return this.nativeManager.deleteByindexPersonId(personId);
         }
         catch(DAOException e)
         {
@@ -894,6 +882,53 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
     
+    /**
+     * Retrieves a array of FaceBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     * @param keys key values of index
+     * @return
+     * @see #loadByIndexAsList(int ,Object ...)
+     */
+    @Override
+    public FaceBean[] loadByIndex(int keyIndex,Object ...keys)
+    {
+        return this.loadByIndexAsList(keyIndex,keys).toArray(new FaceBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of FaceBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     * @param keys key values of index
+     * @return a list of FaceBean
+     */
+    @Override
+    public java.util.List<FaceBean> loadByIndexAsList(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     */
+    @Override
+    public int deleteByIndex(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.nativeManager.deleteByIndex(keyIndex,keys);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
 
     //_____________________________________________________________________
     //

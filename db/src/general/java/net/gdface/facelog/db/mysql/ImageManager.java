@@ -847,15 +847,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param deviceId the device_id column's value filter.
      * @return an array of ImageBean
      */
-    public ImageBean[] loadBydevice_id(Integer deviceId)
+    public ImageBean[] loadByindexDeviceId(Integer deviceId)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBydevice_id(deviceId));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.loadByindexDeviceIdAsList(deviceId).toArray(new ImageBean[0]);
     }
     
     /**
@@ -864,27 +858,27 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param deviceId the device_id column's value filter.
      * @return a list of ImageBean
      */
-    public java.util.List<ImageBean> loadBydevice_idAsList(Integer deviceId)
+    public java.util.List<ImageBean> loadByindexDeviceIdAsList(Integer deviceId)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBydevice_idAsList(deviceId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexDeviceIdAsList(deviceId));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
- 
+
     /**
      * Deletes rows using the device_id index.
      *
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteBydevice_id(Integer deviceId)
+    public int deleteByindexDeviceId(Integer deviceId)
     {
         try{
-            return this.nativeManager.deleteBydevice_id(deviceId);
+            return this.nativeManager.deleteByindexDeviceId(deviceId);
         }
         catch(DAOException e)
         {
@@ -898,15 +892,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return an array of ImageBean
      */
-    public ImageBean[] loadBythumb_md5(String thumbMd5)
+    public ImageBean[] loadByindexThumbMd5(String thumbMd5)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBythumb_md5(thumbMd5));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return this.loadByindexThumbMd5AsList(thumbMd5).toArray(new ImageBean[0]);
     }
     
     /**
@@ -915,27 +903,27 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return a list of ImageBean
      */
-    public java.util.List<ImageBean> loadBythumb_md5AsList(String thumbMd5)
+    public java.util.List<ImageBean> loadByindexThumbMd5AsList(String thumbMd5)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadBythumb_md5AsList(thumbMd5));
+            return this.beanConverter.fromRight(this.nativeManager.loadByindexThumbMd5AsList(thumbMd5));
         }
         catch(DAOException e)
         {
             throw new WrapDAOException(e);
         }
     }
- 
+
     /**
      * Deletes rows using the thumb_md5 index.
      *
      * @param thumbMd5 the thumb_md5 column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteBythumb_md5(String thumbMd5)
+    public int deleteByindexThumbMd5(String thumbMd5)
     {
         try{
-            return this.nativeManager.deleteBythumb_md5(thumbMd5);
+            return this.nativeManager.deleteByindexThumbMd5(thumbMd5);
         }
         catch(DAOException e)
         {
@@ -943,6 +931,53 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
     
+    /**
+     * Retrieves a array of ImageBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     * @param keys key values of index
+     * @return
+     * @see #loadByIndexAsList(int ,Object ...)
+     */
+    @Override
+    public ImageBean[] loadByIndex(int keyIndex,Object ...keys)
+    {
+        return this.loadByIndexAsList(keyIndex,keys).toArray(new ImageBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of ImageBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     * @param keys key values of index
+     * @return a list of ImageBean
+     */
+    @Override
+    public java.util.List<ImageBean> loadByIndexAsList(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     */
+    @Override
+    public int deleteByIndex(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.nativeManager.deleteByIndex(keyIndex,keys);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
 
     //_____________________________________________________________________
     //
