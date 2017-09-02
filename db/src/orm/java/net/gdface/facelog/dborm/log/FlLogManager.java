@@ -359,7 +359,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
  
  
 
-
     /**
      * Save the FlLogBean bean and referenced beans and imported beans into the database.
      *
@@ -453,17 +452,10 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     /**
      * Associates the {@link FlLogBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_VERIFY_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(FlLogBean,int)}
      * @param bean the {@link FlLogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlLogBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(FlLogBean,int)}
      * @return always beanToSet saved
      * @throws DAOException
      */

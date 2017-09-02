@@ -268,17 +268,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
     /**
      * Associates the {@link LogBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_VERIFY_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(LogBean,int)}
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the <T> object to associate to the {@link LogBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(LogBean,int)}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")

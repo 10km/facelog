@@ -171,7 +171,6 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
  
  
 
-
       
 
     //////////////////////////////////////

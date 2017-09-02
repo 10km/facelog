@@ -562,16 +562,10 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     /**
      * Associates the {@link ImageBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(ImageBean,int)}
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link ImageBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(ImageBean,int)}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")

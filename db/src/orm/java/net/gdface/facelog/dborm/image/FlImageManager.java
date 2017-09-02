@@ -386,17 +386,13 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
+
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
-     * @param <T>
-     * 
-     * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
      * @param importedBeans the FlPersonBean array to associate to the {@link FlImageBean}
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @return importedBeans always
      * @throws DAOException
      */
@@ -413,14 +409,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlImageBean}
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlImageBean,int)}
+
      * @return importedBeans always
      * @throws DAOException
      */
@@ -436,7 +429,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
-
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
@@ -723,16 +715,10 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     /**
      * Associates the {@link FlImageBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link FlStoreBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link FlStoreBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlImageBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(FlImageBean,int)}
      * @return always beanToSet saved
      * @throws DAOException
      */

@@ -373,17 +373,13 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
+
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
-     * @param <T>
-     * 
-     * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
      * @param bean the {@link FlDeviceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlDeviceBean}
-     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
      * @return importedBeans always
      * @throws DAOException
      */
@@ -400,14 +396,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
      * @param bean the {@link FlDeviceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlDeviceBean}
-     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
+
      * @return importedBeans always
      * @throws DAOException
      */
@@ -423,7 +416,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
-
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////

@@ -555,15 +555,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     /**
      * Associates the {@link FaceBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link PersonBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(FaceBean,int)}
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FaceBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(FaceBean,int)}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")

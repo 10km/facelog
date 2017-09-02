@@ -501,17 +501,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
+
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
-     * @param <T>
-     * 
-     * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlFaceBean}
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
      * @return importedBeans always
      * @throws DAOException
      */
@@ -528,14 +524,11 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
+
      * @return importedBeans always
      * @throws DAOException
      */
@@ -551,7 +544,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
-
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
@@ -827,15 +819,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     /**
      * Associates the {@link FlFaceBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlFaceBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(FlFaceBean,int)}
      * @return always beanToSet saved
      * @throws DAOException
      */

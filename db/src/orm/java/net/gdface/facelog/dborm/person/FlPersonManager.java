@@ -420,17 +420,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
+
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
-     * @param <T>
-     * 
-     * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlPersonBean}
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlPersonBean,int)}
      * @return importedBeans always
      * @throws DAOException
      */
@@ -447,14 +443,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlPersonBean}
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlPersonBean,int)}
+
      * @return importedBeans always
      * @throws DAOException
      */
@@ -470,7 +463,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
-
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
@@ -735,14 +727,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     /**
      * Associates the {@link FlPersonBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link FlImageBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link FlPersonBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(FlPersonBean,int)}
      * @return always beanToSet saved
      * @throws DAOException
      */

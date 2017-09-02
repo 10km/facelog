@@ -16,90 +16,7 @@ import java.util.concurrent.Callable;
  * Interface to handle database calls (save, load, count, etc...) for table.
  * @author guyadong
  */
-public interface TableManager<B extends BaseBean> {    
-
-    /** set =QUERY for loadUsingTemplate */
-    public static final int SEARCH_EXACT = 0;
-    /** set %QUERY% for loadLikeTemplate */
-    public static final int SEARCH_LIKE = 1;
-    /** set %QUERY for loadLikeTemplate */
-    public static final int SEARCH_STARTING_LIKE = 2;
-    /** set QUERY% for loadLikeTemplate */
-    public static final int SEARCH_ENDING_LIKE = 3;
-    
-    //////////////////////////////////////
-    // FOREIGN KEY INDEX DECLARE
-    //////////////////////////////////////    
-    /** foreign key fl_face(img_md5) -> fl_image */
-    public static final int FL_FACE_FK_IMG_MD5 = 0;
-    /** foreign key fl_face(person_id) -> fl_person */
-    public static final int FL_FACE_FK_PERSON_ID = 1;
-    /** foreign key fl_image(device_id) -> fl_device */
-    public static final int FL_IMAGE_FK_DEVICE_ID = 0;
-    /** foreign key fl_image(md5) -> fl_store */
-    public static final int FL_IMAGE_FK_MD5 = 1;
-    /** foreign key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_IMAGE_FK_THUMB_MD5 = 2;
-    /** foreign key fl_log(device_id) -> fl_device */
-    public static final int FL_LOG_FK_DEVICE_ID = 0;
-    /** foreign key fl_log(verify_face) -> fl_face */
-    public static final int FL_LOG_FK_VERIFY_FACE = 1;
-    /** foreign key fl_log(compare_face) -> fl_face */
-    public static final int FL_LOG_FK_COMPARE_FACE = 2;
-    /** foreign key fl_log(person_id) -> fl_person */
-    public static final int FL_LOG_FK_PERSON_ID = 3;
-    /** foreign key fl_person(photo_id) -> fl_image */
-    public static final int FL_PERSON_FK_PHOTO_ID = 0;
-    //////////////////////////////////////
-    // IMPORTED KEY INDEX DECLARE
-    //////////////////////////////////////    
-    /** imported key fl_image(device_id) -> fl_device */
-    public static final int FL_DEVICE_IK_FL_IMAGE_DEVICE_ID = 0;
-    /** imported key fl_log(device_id) -> fl_device */
-    public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID = 1;
-    /** imported key fl_log(verify_face) -> fl_face */
-    public static final int FL_FACE_IK_FL_LOG_VERIFY_FACE = 0;
-    /** imported key fl_log(compare_face) -> fl_face */
-    public static final int FL_FACE_IK_FL_LOG_COMPARE_FACE = 1;
-    /** imported key fl_face(img_md5) -> fl_image */
-    public static final int FL_IMAGE_IK_FL_FACE_IMG_MD5 = 0;
-    /** imported key fl_person(photo_id) -> fl_image */
-    public static final int FL_IMAGE_IK_FL_PERSON_PHOTO_ID = 1;
-    /** imported key fl_face(person_id) -> fl_person */
-    public static final int FL_PERSON_IK_FL_FACE_PERSON_ID = 0;
-    /** imported key fl_log(person_id) -> fl_person */
-    public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 1;
-    /** imported key fl_image(md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_MD5 = 0;
-    /** imported key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_THUMB_MD5 = 1;
-    //////////////////////////////////////
-    // INDEX INDEX DECLARE
-    //////////////////////////////////////    
-    /** fl_face index (img_md5) */
-    public static final int FL_FACE_INDEX_IMG_MD5 = 0;
-    /** fl_face index (person_id) */
-    public static final int FL_FACE_INDEX_PERSON_ID = 1;
-    /** fl_image index (device_id) */
-    public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
-    /** fl_image index (thumb_md5) */
-    public static final int FL_IMAGE_INDEX_THUMB_MD5 = 1;
-    /** fl_log index (compare_face) */
-    public static final int FL_LOG_INDEX_COMPARE_FACE = 0;
-    /** fl_log index (device_id) */
-    public static final int FL_LOG_INDEX_DEVICE_ID = 1;
-    /** fl_log index (person_id) */
-    public static final int FL_LOG_INDEX_PERSON_ID = 2;
-    /** fl_log index (verify_face) */
-    public static final int FL_LOG_INDEX_VERIFY_FACE = 3;
-    /** fl_person index (face_md5) */
-    public static final int FL_PERSON_INDEX_FACE_MD5 = 0;
-    /** fl_person index (papers_num) */
-    public static final int FL_PERSON_INDEX_PAPERS_NUM = 1;
-    /** fl_person index (photo_id) */
-    public static final int FL_PERSON_INDEX_PHOTO_ID = 2;
-    /** fl_person index (expiry_date) */
-    public static final int FL_PERSON_INDEX_EXPIRY_DATE = 3;
+public interface TableManager<B extends BaseBean> extends Constant {
 
     public interface Action<B>{
         public abstract class Adapter<B> implements Action<B>{
@@ -401,6 +318,7 @@ public interface TableManager<B extends BaseBean> {
             throw new UnsupportedOperationException();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public <T extends BaseBean> T[] getImportedBeans(B bean, int ikIndex){
             return this.getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
@@ -437,6 +355,7 @@ public interface TableManager<B extends BaseBean> {
             throw new UnsupportedOperationException();
         }
         
+        @SuppressWarnings("unchecked")
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys){
             return this.loadByIndexAsList(keyIndex,keys).toArray((B[])new Object[0]);
@@ -909,7 +828,7 @@ public interface TableManager<B extends BaseBean> {
     //_____________________________________________________________________    
     /**
      * Retrieves a array of B bean using the index specified by keyIndex.
-     * @param keyIndex valid values:see {@link #loadByIndexAsList(int,Object ...)}
+     * @param keyIndex valid values:see also {@link #loadByIndexAsList(int,Object ...)}
      * @param keys key values of index
      * @return
      * @see #loadByIndexAsList(int ,Object ...)
@@ -934,7 +853,7 @@ public interface TableManager<B extends BaseBean> {
     
     /**
      * Deletes rows using key.
-     * @param keyIndex valid values: see {@link #loadByIndexAsList(int,Object ...)}
+     * @param keyIndex valid values: see also {@link #loadByIndexAsList(int,Object ...)}
      * @param keys key values of index
      * @return the number of deleted objects
      */
@@ -1093,10 +1012,10 @@ public interface TableManager<B extends BaseBean> {
     
     /**
      * Associates the B object to the T object by fkName field.<br>
-     * @param <T> see {@link #getReferencedBean(B, int)}
+     * @param <T> see also {@link #getReferencedBean(B, int)}
      * @param bean the B object to use
      * @param beanToSet the T object to associate to the B bean
-     * @param fkIndex see {@link #getReferencedBean(B, int)}
+     * @param fkIndex see also {@link #getReferencedBean(B, int)}
      * @return always beanToSet saved
      */
     public abstract <T extends BaseBean> T setReferencedBean(B bean,T beanToSet,int fkIndex);
@@ -1105,41 +1024,41 @@ public interface TableManager<B extends BaseBean> {
      * Retrieves imported T objects by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> for fl_device:
+     *     <li> for fl_device table:
      *     <li> {@link #FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
      *     <li> {@link #FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
-     *     <li> for fl_face:
+     *     <li> for fl_face table:
      *     <li> {@link #FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link ImageBean}</li>
      *     <li> {@link #FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
-     *     <li> for fl_image:
+     *     <li> for fl_image table:
      *     <li> {@link #FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link ImageBean}</li>
      *     <li> {@link #FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
-     *     <li> for fl_person:
+     *     <li> for fl_person table:
      *     <li> {@link #FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link ImageBean}</li>
      *     <li> {@link #FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
-     *     <li> for fl_store:
+     *     <li> for fl_store table:
      *     <li> {@link #FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
      *     <li> {@link #FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
-     *        for for fl_device table:<br>
+     *        for fl_device table:<br>
      *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_LOG_FK_DEVICE_ID}<br>
-     *        for for fl_face table:<br>
+     *        for fl_face table:<br>
      *        {@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE}<br>
-     *        for for fl_image table:<br>
+     *        for fl_image table:<br>
      *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_PERSON_FK_PHOTO_ID}<br>
-     *        for for fl_person table:<br>
+     *        for fl_person table:<br>
      *        {@link #FL_FACE_FK_PERSON_ID},{@link #FL_LOG_FK_PERSON_ID}<br>
-     *        for for fl_store table:<br>
+     *        for fl_store table:<br>
      *        {@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
@@ -1147,9 +1066,9 @@ public interface TableManager<B extends BaseBean> {
     
     /**
      * Retrieves imported T objects by ikIndex.<br>
-     * @param <T> see {@link #getImportedBeans(B, int)}
+     * @param <T> see also {@link #getImportedBeans(B, int)}
      * @param bean the B object to use
-     * @param ikIndex foreign key name.see {@link #getImportedBeans(B, int)}
+     * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     public <T extends BaseBean> List<T> getImportedBeansAsList(B bean,int ikIndex);
@@ -1157,10 +1076,10 @@ public interface TableManager<B extends BaseBean> {
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
      * 
-     * @param <T> see {@link #getImportedBeans(B, int)}
+     * @param <T> see also {@link #getImportedBeans(B, int)}
      * @param bean the bean object to use
      * @param importedBeans the T object to associate to bean
-     * @param fkIndex foreign key name.see {@link #getImportedBeans(B, int)}
+     * @param fkIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
      */
     public <T extends BaseBean> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex);
@@ -1168,10 +1087,10 @@ public interface TableManager<B extends BaseBean> {
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
      * 
-     * @param <T> see {@link #getImportedBeans(B, int)}
+     * @param <T> see also {@link #getImportedBeans(B, int)}
      * @param bean the bean object to use
      * @param importedBeans the T object to associate to bean
-     * @param fkIndex foreign key name. see {@link #getImportedBeans(B, int)}
+     * @param fkIndex foreign key name. see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
      */
     public <T extends BaseBean,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex);

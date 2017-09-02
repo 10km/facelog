@@ -551,14 +551,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     /**
      * Associates the {@link PersonBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getReferencedBean(PersonBean,int)}
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the <T> object to associate to the {@link PersonBean}
-     * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(PersonBean,int)}
      * @return always beanToSet saved
      */
     @SuppressWarnings("unchecked")

@@ -335,17 +335,13 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
+
     /**
      * Set the T objects as imported beans of bean object by fkName.<br>
-     * @param <T>
-     * 
-     * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the FlImageBean array to associate to the {@link FlStoreBean}
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @return importedBeans always
      * @throws DAOException
      */
@@ -362,14 +358,11 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     }
     /**
      * Set the importedBeans associates to the bean by fkName<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
-     * </ul>
+     * @param <T> see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlStoreBean}
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlStoreBean,int)}
+
      * @return importedBeans always
      * @throws DAOException
      */
@@ -385,7 +378,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
  
-
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
