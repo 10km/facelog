@@ -401,13 +401,13 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         }
     }    
     
-    public abstract String getFieldNames();
+    public String getFieldNames();
     
-    public abstract String[] getPrimarykeyNames();
+    public String[] getPrimarykeyNames();
     
-    public abstract String getTableName();
+    public String getTableName();
         
-    public abstract String[] getFullFieldNames();
+    public String[] getFullFieldNames();
     
     /**
      * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
@@ -416,7 +416,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return
      */
     //43
-    public abstract boolean isPrimaryKey(String column);
+    public boolean isPrimaryKey(String column);
     
     //_____________________________________________________________________
     //
@@ -429,7 +429,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //24
-    public abstract int countAll()throws DAOException;
+    public int countAll()throws DAOException;
     
     /**
      * count the number of elements of a specific bean
@@ -439,7 +439,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //27
-    public abstract int countUsingTemplate( B bean)throws DAOException;
+    public int countUsingTemplate( B bean)throws DAOException;
   
     /**
      * count the number of elements of a specific bean given the search type
@@ -456,7 +456,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20
-    public abstract int countUsingTemplate(B bean, int searchType)throws DAOException;
+    public int countUsingTemplate(B bean, int searchType)throws DAOException;
 
     /**
      * Retrieves the number of rows of the table with a 'where' clause.
@@ -467,7 +467,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //25
-    public abstract int countWhere(String where)throws DAOException;
+    public int countWhere(String where)throws DAOException;
 
     /**
      * Deletes all rows from table.
@@ -475,7 +475,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //10
-    public abstract int deleteAll()throws DAOException;
+    public int deleteAll()throws DAOException;
 
     /**
      * Deletes rows from the table using a 'where' clause.
@@ -487,7 +487,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //11
-    public abstract int deleteByWhere(String where)throws DAOException;
+    public int deleteByWhere(String where)throws DAOException;
 
     /**
      * Deletes rows using a template.
@@ -497,7 +497,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //21
-    public abstract int deleteUsingTemplate(B bean)throws DAOException;
+    public int deleteUsingTemplate(B bean)throws DAOException;
 
     /**
      * Delete row according to its primary keys.
@@ -508,7 +508,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */   
     //2.1
-    public abstract int deleteByPrimaryKey(Object ...keys)throws DAOException;
+    public int deleteByPrimaryKey(Object ...keys)throws DAOException;
 
     /**
      * Delete row according to primary keys of bean.<br>
@@ -518,7 +518,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //2.2
-    public abstract int delete(B bean)throws DAOException;
+    public int delete(B bean)throws DAOException;
 
 
     //////////////////////////////////////
@@ -532,7 +532,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //5
-    public abstract B[] loadAll()throws DAOException;
+    public B[] loadAll()throws DAOException;
 
     /**
      * Loads each row from table and dealt with action.
@@ -541,7 +541,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //5-1    
-    public abstract int loadAll(Action<B> action)throws DAOException;
+    public int loadAll(Action<B> action)throws DAOException;
 
     /**
      * Loads the given number of rows from table, given the start row.
@@ -552,7 +552,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //6
-    public abstract B[] loadAll(int startRow, int numRows)throws DAOException;
+    public B[] loadAll(int startRow, int numRows)throws DAOException;
 
     /**
      *  Loads the given number of rows from table, given the start row and dealt with action.
@@ -563,7 +563,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //6-1    
-    public abstract int loadAll(int startRow, int numRows,Action<B> action)throws DAOException;
+    public int loadAll(int startRow, int numRows,Action<B> action)throws DAOException;
 
     /**
      * Loads all the rows from table.
@@ -572,7 +572,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //5-2
-    public abstract List<B> loadAllAsList()throws DAOException;
+    public List<B> loadAllAsList()throws DAOException;
 
     /**
      * Loads the given number of rows from table, given the start row.
@@ -583,7 +583,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //6-2
-    public abstract List<B> loadAllAsList(int startRow, int numRows)throws DAOException;
+    public List<B> loadAllAsList(int startRow, int numRows)throws DAOException;
 
     /**
      * Loads a B bean from the table using primary key fields of {@code bean}.
@@ -593,7 +593,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //1.2
-    public abstract B loadByPrimaryKey(B bean)throws DAOException;
+    public B loadByPrimaryKey(B bean)throws DAOException;
     
     /**
      * Loads a B bean from the table using primary key fields.
@@ -603,7 +603,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //1.3
-    public abstract B loadByPrimaryKey(Object ...keys)throws DAOException;
+    public B loadByPrimaryKey(Object ...keys)throws DAOException;
     
     /**
      * Returns true if this table contains row with primary key fields.
@@ -612,7 +612,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //1.5
-    public abstract boolean existsPrimaryKey(Object ...keys)throws DAOException;
+    public boolean existsPrimaryKey(Object ...keys)throws DAOException;
     
     /**
      * Returns true if this table contains row specified by primary key fields of B.<br>
@@ -623,7 +623,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //1.6
-    public abstract boolean existsPrimaryKey(B bean)throws DAOException;
+    public boolean existsPrimaryKey(B bean)throws DAOException;
    
     //////////////////////////////////////
     // SQL 'WHERE' METHOD
@@ -636,7 +636,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //7 
-    public abstract B[] loadByWhere(String where)throws DAOException;
+    public B[] loadByWhere(String where)throws DAOException;
     
     /**
      * Retrieves each row of B bean given a sql 'where' clause and dealt with action.
@@ -646,7 +646,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //7-1
-    public abstract int loadByWhere(String where,Action<B> action)throws DAOException;
+    public int loadByWhere(String where,Action<B> action)throws DAOException;
 
     /**
      * Retrieves an array of B bean given a sql where clause, and a list of fields.
@@ -658,7 +658,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //8
-    public abstract B[] loadByWhere(String where, int[] fieldList)throws DAOException;
+    public B[] loadByWhere(String where, int[] fieldList)throws DAOException;
    
     /**
      * Retrieves each row of B bean given a sql where clause, and a list of fields,
@@ -671,7 +671,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //8-1 
-    public abstract int loadByWhere(String where, int[] fieldList,Action<B> action)throws DAOException;
+    public int loadByWhere(String where, int[] fieldList,Action<B> action)throws DAOException;
 
     /**
      * Retrieves an array of B bean given a sql where clause and a list of fields, and startRow and numRows.
@@ -685,7 +685,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //9
-    public abstract B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws DAOException;
+    public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws DAOException;
 
     /**
      * Retrieves each row of B bean given a sql where clause and a list of fields, and startRow and numRows,
@@ -701,7 +701,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //9-1    
-    public abstract int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws DAOException;
+    public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws DAOException;
     /**
      * Retrieves a list of B bean given a sql 'where' clause.
      *
@@ -710,7 +710,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //7
-    public abstract List<B> loadByWhereAsList(String where)throws DAOException;
+    public List<B> loadByWhereAsList(String where)throws DAOException;
 
     /**
      * Retrieves a list of B bean given a sql where clause, and a list of fields.
@@ -722,7 +722,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //8
-    public abstract List<B> loadByWhereAsList(String where, int[] fieldList)throws DAOException;
+    public List<B> loadByWhereAsList(String where, int[] fieldList)throws DAOException;
     
     /**
      * Retrieves a list of B bean given a sql where clause and a list of fields, and startRow and numRows.
@@ -736,7 +736,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //9-2
-    public abstract List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)throws DAOException;
+    public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)throws DAOException;
 
     /**
      * Retrieves each row of B bean given a sql where clause and a list of fields, and startRow and numRows,
@@ -752,7 +752,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //9-3
-    public abstract int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws DAOException;
+    public int loadByWhereForAction(String where, int[] fieldList, int startRow, int numRows,Action<B> action)throws DAOException;
 
     //_____________________________________________________________________
     //
@@ -766,7 +766,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //18   
-    public abstract B loadUniqueUsingTemplate(B bean)throws DAOException;
+    public B loadUniqueUsingTemplate(B bean)throws DAOException;
 
     /**
      * Loads an array of B from a template one.
@@ -776,7 +776,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //19
-    public abstract B[] loadUsingTemplate(B bean)throws DAOException;
+    public B[] loadUsingTemplate(B bean)throws DAOException;
     
     /**
      * Loads each row from a template one and dealt with action.
@@ -787,7 +787,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //19-1
-    public abstract int loadUsingTemplate(B bean,Action<B> action)throws DAOException;
+    public int loadUsingTemplate(B bean,Action<B> action)throws DAOException;
 
     /**
      * Loads an array of B bean from a template one, given the start row and number of rows.
@@ -799,7 +799,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20
-    public abstract B[] loadUsingTemplate(B bean, int startRow, int numRows)throws DAOException;
+    public B[] loadUsingTemplate(B bean, int startRow, int numRows)throws DAOException;
     
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -812,7 +812,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20-1
-    public abstract int loadUsingTemplate(B bean, int startRow, int numRows,Action<B> action)throws DAOException;
+    public int loadUsingTemplate(B bean, int startRow, int numRows,Action<B> action)throws DAOException;
 
     /**
      * Loads each row from a template one, given the start row and number of rows and dealt with action.
@@ -831,7 +831,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20-5
-    public abstract int loadUsingTemplate(B bean, int[] fieldList, int startRow, int numRows,int searchType, Action<B> action)throws DAOException;
+    public int loadUsingTemplate(B bean, int[] fieldList, int startRow, int numRows,int searchType, Action<B> action)throws DAOException;
     /**
      * Loads a list of B bean from a template one, given the start row and number of rows.
      *
@@ -847,7 +847,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20-4
-    public abstract B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws DAOException;
+    public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws DAOException;
 
     /**
      * Loads a list of B bean from a template one.
@@ -857,7 +857,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //19-2
-    public abstract List<B> loadUsingTemplateAsList(B bean)throws DAOException;
+    public List<B> loadUsingTemplateAsList(B bean)throws DAOException;
 
     /**
      * Loads a list of B bean from a template one, given the start row and number of rows.
@@ -869,7 +869,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20-2
-    public abstract List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows)throws DAOException;
+    public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows)throws DAOException;
 
     /**
      * Loads an array of B bean from a template one, given the start row and number of rows.
@@ -886,7 +886,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //20-3
-    public abstract List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType)throws DAOException;
+    public List<B> loadUsingTemplateAsList(B bean, int startRow, int numRows, int searchType)throws DAOException;
 
     //_____________________________________________________________________
     //
@@ -900,7 +900,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      * @see #loadByIndexAsList(int ,Object ...)
      */
-    public abstract B[] loadByIndex(int keyIndex,Object ...keys)throws DAOException;
+    public B[] loadByIndex(int keyIndex,Object ...keys)throws DAOException;
     
     /**
      * Retrieves a list of B bean using the index specified by keyIndex.
@@ -917,7 +917,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return a list of B bean
      * @throws DAOException
      */
-    public abstract java.util.List<B> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException;
+    public java.util.List<B> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException;
     
     /**
      * Deletes rows using key.
@@ -926,7 +926,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public abstract int deleteByIndex(int keyIndex,Object ...keys)throws DAOException;
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException;
     //_____________________________________________________________________
     //
     // LISTENER
@@ -936,13 +936,13 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * Registers a unique {@link TableListener} listener.
      */
     //35
-    public abstract void registerListener(TableListener<B> listener);
+    public void registerListener(TableListener<B> listener);
 
     /**
      * remove listener.
      */
     //36
-    public abstract void unregisterListener(TableListener<B> listener);
+    public void unregisterListener(TableListener<B> listener);
 
     //_____________________________________________________________________
     //
@@ -956,7 +956,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //12
-    public abstract B save(B bean)throws DAOException;
+    public B save(B bean)throws DAOException;
 
     /**
      * Saves an array of B bean into the database.
@@ -966,7 +966,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //15
-    public abstract B[] save(B[] beans)throws DAOException;
+    public B[] save(B[] beans)throws DAOException;
     
     /**
      * Saves a collection of B bean into the database.
@@ -976,7 +976,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //15-2
-    public abstract <C extends Collection<B>> C saveAsTransaction(C beans)throws DAOException;
+    public <C extends Collection<B>> C saveAsTransaction(C beans)throws DAOException;
     
     /**
      * Saves an array of B bean into the database as transaction.
@@ -987,7 +987,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //15-3
-    public abstract B[] saveAsTransaction(B[] beans)throws DAOException;
+    public B[] saveAsTransaction(B[] beans)throws DAOException;
 
     /**
      * Saves a collection of B bean into the database as transaction.
@@ -997,7 +997,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //15-4
-    public abstract <C extends Collection<B>> C save(C beans)throws DAOException;
+    public <C extends Collection<B>> C save(C beans)throws DAOException;
 
     /**
      * Save the B bean and referenced beans and imported beans into the database.
@@ -1008,7 +1008,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
       * @throws DAOException
      */
     //3.9 SYNC SAVE 
-    public abstract B save(B bean,Object ...args)throws DAOException;
+    public B save(B bean,Object ...args)throws DAOException;
     
 
     /**
@@ -1020,7 +1020,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //3.10 SYNC SAVE 
-    public abstract B saveCollection(B bean,Object ...args)throws DAOException;
+    public B saveCollection(B bean,Object ...args)throws DAOException;
     
     /**
      *  Transaction version for sync save
@@ -1031,7 +1031,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //3.11 SYNC SAVE 
-    public abstract B saveAsTransaction(B bean,Object ...args)throws DAOException;
+    public B saveAsTransaction(B bean,Object ...args)throws DAOException;
     
     /**
      *  Transaction version for sync save
@@ -1042,7 +1042,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @throws DAOException
      */
     //3.12 SYNC SAVE 
-    public abstract B saveCollectionAsTransaction(B bean,Object ...args)throws DAOException;
+    public B saveCollectionAsTransaction(B bean,Object ...args)throws DAOException;
         
     /**
      * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
@@ -1052,7 +1052,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return an array of B bean
      * @throws DAOException
      */
-    public abstract B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws DAOException;
+    public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws DAOException;
     
     /**
      * Load all elements using a SQL statement specifying a list of fields to be retrieved.
@@ -1062,7 +1062,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return an list of B bean
      * @throws DAOException
      */
-    public abstract List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList)throws DAOException;
+    public List<B> loadBySqlAsList(String sql, Object[] argList, int[] fieldList)throws DAOException;
     
     /**
      * Load each the elements using a SQL statement specifying a list of fields to be retrieved and dealt by action.
@@ -1085,7 +1085,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return
      * @throws DAOException
      */
-    public abstract<T> T runAsTransaction(Callable<T> fun)throws DAOException;
+    public<T> T runAsTransaction(Callable<T> fun)throws DAOException;
     /**
      * Run {@code Runnable} as a transaction.no return
      * @param fun
@@ -1093,7 +1093,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @see #runAsTransaction(Runnable)
      * @throws DAOException
      */
-    public abstract void runAsTransaction(final Runnable fun)throws DAOException;
+    public void runAsTransaction(final Runnable fun)throws DAOException;
     
     /**
      * Retrieves the T object referenced by fkName.<br>
@@ -1133,7 +1133,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      * @throws DAOException
      */
-    public abstract <T> T getReferencedBean(B bean,int fkIndex)throws DAOException;
+    public <T> T getReferencedBean(B bean,int fkIndex)throws DAOException;
     
     /**
      * Associates the B object to the T object by fkName field.<br>
@@ -1144,7 +1144,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @return always beanToSet saved
      * @throws DAOException
      */
-    public abstract <T> T setReferencedBean(B bean,T beanToSet,int fkIndex)throws DAOException;
+    public <T> T setReferencedBean(B bean,T beanToSet,int fkIndex)throws DAOException;
     
     /**
      * Retrieves imported T objects by fkIndex.<br>
