@@ -302,23 +302,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param bean the referenced {@link PersonBean}
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
-     * @see {@link FlFaceManager#setReferencedByPersonId(FaceBean, PersonBean)
+     * @see {@link FaceManager#setReferencedByPersonId(FaceBean, PersonBean)
      */
     //3.3 SET IMPORTED
     public FaceBean[] setFlFaceBeansByPersonId(PersonBean bean , FaceBean[] importedBeans)
     {
-        try {
-            IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlFaceBeansByPersonId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( FaceBean importBean : importedBeans ){
+                FaceManager.getInstance().setReferencedByPersonId(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -327,31 +321,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param bean the referenced {@link PersonBean} 
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
-     * @see {@link FlFaceManager#setReferencedByPersonId(FaceBean, PersonBean)
+     * @see {@link FaceManager#setReferencedByPersonId(FaceBean, PersonBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByPersonId(PersonBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<FaceBean>)importedBeans,nativeManager.setFlFaceBeansByPersonId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                FaceBean[] array = importedBeans.toArray(new FaceBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlFaceBeansByPersonId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( FaceBean importBean : importedBeans ){
+                FaceManager.getInstance().setReferencedByPersonId(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -390,23 +370,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param bean the referenced {@link PersonBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByPersonId(LogBean, PersonBean)
+     * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
     //3.3 SET IMPORTED
     public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlLogBeansByPersonId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByPersonId(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -415,31 +389,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param bean the referenced {@link PersonBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByPersonId(LogBean, PersonBean)
+     * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByPersonId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                LogBean[] array = importedBeans.toArray(new LogBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlLogBeansByPersonId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByPersonId(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
 
@@ -533,9 +493,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     public PersonBean save(PersonBean bean,Object ...args) 
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FaceBean[]");
@@ -560,9 +520,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     public PersonBean saveCollection(PersonBean bean,Object ...args)
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FaceBean>");

@@ -558,12 +558,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public FlDeviceBean save(FlDeviceBean bean,Object ...args) throws DAOException
     {
         if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean[]");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean[]");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlLogBean[]");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlLogBean[]");
         }
         return save(bean,(FlImageBean[])args[0],(FlLogBean[])args[1]);
     } 
@@ -583,7 +583,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public FlDeviceBean saveCollection(FlDeviceBean bean,Object ...args) throws DAOException
     {
         if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlImageBean>");
         }

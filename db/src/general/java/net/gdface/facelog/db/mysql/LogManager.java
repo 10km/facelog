@@ -241,18 +241,18 @@ public class LogManager extends TableManager.Adapter<LogBean>
     public LogBean save(LogBean bean,Object ...args) 
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:DeviceBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FaceBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FaceBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof FaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FaceBean");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FaceBean");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:PersonBean");
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
         return save(bean,(DeviceBean)args[0],(FaceBean)args[1],(FaceBean)args[2],(PersonBean)args[3]);
     } 
@@ -271,18 +271,18 @@ public class LogManager extends TableManager.Adapter<LogBean>
     public LogBean saveCollection(LogBean bean,Object ...args)
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:DeviceBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FaceBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FaceBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof FaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FaceBean");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FaceBean");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:PersonBean");
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
         return save(bean,(DeviceBean)args[0],(FaceBean)args[1],(FaceBean)args[2],(PersonBean)args[3]);
     } 

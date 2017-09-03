@@ -301,23 +301,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param bean the referenced {@link FaceBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByVerifyFace(LogBean, FaceBean)
+     * @see {@link LogManager#setReferencedByVerifyFace(LogBean, FaceBean)
      */
     //3.3 SET IMPORTED
     public LogBean[] setFlLogBeansByVerifyFace(FaceBean bean , LogBean[] importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlLogBeansByVerifyFace(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -326,31 +320,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param bean the referenced {@link FaceBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByVerifyFace(LogBean, FaceBean)
+     * @see {@link LogManager#setReferencedByVerifyFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByVerifyFace(FaceBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByVerifyFace(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                LogBean[] array = importedBeans.toArray(new LogBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlLogBeansByVerifyFace(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -389,23 +369,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param bean the referenced {@link FaceBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
     //3.3 SET IMPORTED
     public LogBean[] setFlLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlLogBeansByCompareFace(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -414,31 +388,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param bean the referenced {@link FaceBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByCompareFace(FaceBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByCompareFace(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                LogBean[] array = importedBeans.toArray(new LogBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlLogBeansByCompareFace(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByCompareFace(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
 
@@ -534,12 +494,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     public FaceBean save(FaceBean bean,Object ...args) 
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:PersonBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:PersonBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
@@ -564,12 +524,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     public FaceBean saveCollection(FaceBean bean,Object ...args)
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:PersonBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:PersonBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");

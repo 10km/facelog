@@ -299,23 +299,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * @param bean the referenced {@link StoreBean}
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
-     * @see {@link FlImageManager#setReferencedByMd5(ImageBean, StoreBean)
+     * @see {@link ImageManager#setReferencedByMd5(ImageBean, StoreBean)
      */
     //3.3 SET IMPORTED
     public ImageBean[] setFlImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans)
     {
-        try {
-            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlImageBeansByMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( ImageBean importBean : importedBeans ){
+                ImageManager.getInstance().setReferencedByMd5(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -324,31 +318,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * @param bean the referenced {@link StoreBean} 
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
-     * @see {@link FlImageManager#setReferencedByMd5(ImageBean, StoreBean)
+     * @see {@link ImageManager#setReferencedByMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                ImageBean[] array = importedBeans.toArray(new ImageBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlImageBeansByMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( ImageBean importBean : importedBeans ){
+                ImageManager.getInstance().setReferencedByMd5(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -387,23 +367,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * @param bean the referenced {@link StoreBean}
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
-     * @see {@link FlImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
+     * @see {@link ImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
      */
     //3.3 SET IMPORTED
     public ImageBean[] setFlImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans)
     {
-        try {
-            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlImageBeansByThumbMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( ImageBean importBean : importedBeans ){
+                ImageManager.getInstance().setReferencedByThumbMd5(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -412,31 +386,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * @param bean the referenced {@link StoreBean} 
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
-     * @see {@link FlImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
+     * @see {@link ImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByThumbMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                ImageBean[] array = importedBeans.toArray(new ImageBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlImageBeansByThumbMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( ImageBean importBean : importedBeans ){
+                ImageManager.getInstance().setReferencedByThumbMd5(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
 
@@ -528,7 +488,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     public StoreBean save(StoreBean bean,Object ...args) 
     {
         if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean[]");
         }
@@ -552,7 +512,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     public StoreBean saveCollection(StoreBean bean,Object ...args)
     {
         if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<ImageBean>");
         }

@@ -556,12 +556,12 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     public FlStoreBean save(FlStoreBean bean,Object ...args) throws DAOException
     {
         if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean[]");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean[]");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean[])){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlImageBean[]");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlImageBean[]");
         }
         return save(bean,(FlImageBean[])args[0],(FlImageBean[])args[1]);
     } 
@@ -581,7 +581,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     public FlStoreBean saveCollection(FlStoreBean bean,Object ...args) throws DAOException
     {
         if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlImageBean>");
         }

@@ -301,23 +301,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param bean the referenced {@link DeviceBean}
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
-     * @see {@link FlImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
+     * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.3 SET IMPORTED
     public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
     {
-        try {
-            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlImageBeansByDeviceId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( ImageBean importBean : importedBeans ){
+                ImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -326,31 +320,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
-     * @see {@link FlImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
+     * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<ImageBean,FlImageBean> importedConverter = this.dbConverter.getImageBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<ImageBean>)importedBeans,nativeManager.setFlImageBeansByDeviceId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                ImageBean[] array = importedBeans.toArray(new ImageBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlImageBeansByDeviceId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( ImageBean importBean : importedBeans ){
+                ImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -389,23 +369,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param bean the referenced {@link DeviceBean}
      * @param importedBeans imported beans from fl_log
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByDeviceId(LogBean, DeviceBean)
+     * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.3 SET IMPORTED
     public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlLogBeansByDeviceId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByDeviceId(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -414,31 +388,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_log 
      * @return importedBeans always
-     * @see {@link FlLogManager#setReferencedByDeviceId(LogBean, DeviceBean)
+     * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<LogBean,FlLogBean> importedConverter = this.dbConverter.getLogBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<LogBean>)importedBeans,nativeManager.setFlLogBeansByDeviceId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                LogBean[] array = importedBeans.toArray(new LogBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlLogBeansByDeviceId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByDeviceId(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
 
@@ -530,7 +490,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     public DeviceBean save(DeviceBean bean,Object ...args) 
     {
         if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean[]");
         }
@@ -554,7 +514,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     public DeviceBean saveCollection(DeviceBean bean,Object ...args)
     {
         if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<ImageBean>");
         }

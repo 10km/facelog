@@ -83,32 +83,32 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
 
         @Override
         public B[] loadAll()throws DAOException{
-            return this.loadUsingTemplate(null);
+            return this.loadUsingTemplate(null, 1, -1, SEARCH_EXACT);
         }
 
         @Override
         public int loadAll(Action<B> action)throws DAOException{
-            return this.loadUsingTemplate(null,action);
+            return this.loadUsingTemplate(null,null,1,-1, SEARCH_EXACT, action);
         }
 
         @Override
         public B[] loadAll(int startRow, int numRows)throws DAOException{
-            return this.loadUsingTemplate(null, startRow, numRows);
+            return this.loadUsingTemplate(null, startRow, numRows, SEARCH_EXACT);
         }
 
         @Override
         public int loadAll(int startRow, int numRows, Action<B> action)throws DAOException{
-            return this.loadUsingTemplate(null, startRow, numRows,action);
+            return this.loadUsingTemplate(null, null, startRow, numRows, SEARCH_EXACT, action);
         }
 
         @Override
         public List<B> loadAllAsList()throws DAOException{
-            return this.loadUsingTemplateAsList(null);
+            return this.loadUsingTemplateAsList(null,1, -1, SEARCH_EXACT);
         }
 
         @Override
         public List<B> loadAllAsList(int startRow, int numRows)throws DAOException{
-            return this.loadUsingTemplateAsList(null, startRow, numRows);
+            return this.loadUsingTemplateAsList(null, startRow, numRows, SEARCH_EXACT);
         }
 
         @Override
@@ -128,7 +128,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
 
         @Override
         public int loadByWhere(String where, Action<B> action)throws DAOException{
-            return this.loadByWhere(where, null,action);
+            return this.loadByWhere(where, null, action);
         }
 
         @Override
@@ -138,7 +138,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
 
         @Override
         public int loadByWhere(String where, int[] fieldList, Action<B> action)throws DAOException{
-            return this.loadByWhere(where, fieldList, 1, -1,action);
+            return this.loadByWhere(where, fieldList, 1, -1, action);
         }
 
         @SuppressWarnings("unchecked")
@@ -150,12 +150,12 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         @Override
         public int loadByWhere(String where, int[] fieldList, int startRow, int numRows,
                 Action<B> action)throws DAOException{
-            return this.loadByWhereForAction(where, fieldList, startRow, numRows,action);
+            return this.loadByWhereForAction(where, fieldList, startRow, numRows, action);
         }
 
         @Override
         public List<B> loadByWhereAsList(String where)throws DAOException{
-            return this.loadByWhereAsList(where, null);
+            return this.loadByWhereAsList(where, null, 1, -1);
         }
 
         @Override
@@ -166,7 +166,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         @Override
         public List<B> loadByWhereAsList(String where, int[] fieldList, int startRow, int numRows)throws DAOException{
             ListAction action = new ListAction();
-            loadByWhereForAction(where,fieldList,startRow,numRows,action);              
+            loadByWhereForAction(where, fieldList, startRow, numRows, action);              
             return action.getList();
         }
     
@@ -179,12 +179,12 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
     
         @Override
         public B[] loadUsingTemplate(B bean)throws DAOException{
-            return this.loadUsingTemplate(bean, 1, -1);
+            return this.loadUsingTemplate(bean, 1, -1, SEARCH_EXACT);
         }
 
         @Override
         public int loadUsingTemplate(B bean, Action<B> action)throws DAOException{
-            return this.loadUsingTemplate(bean, 1, -1,action);
+            return this.loadUsingTemplate(bean, null, 1, -1, SEARCH_EXACT, action);
         }
 
         @Override
@@ -206,7 +206,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
 
         @Override
         public List<B> loadUsingTemplateAsList(B bean)throws DAOException{
-            return this.loadUsingTemplateAsList(bean, 1, -1);
+            return this.loadUsingTemplateAsList(bean, 1, -1, SEARCH_EXACT);
         }
 
         @Override

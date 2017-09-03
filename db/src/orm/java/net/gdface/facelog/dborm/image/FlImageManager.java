@@ -574,21 +574,21 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public FlImageBean save(FlImageBean bean,Object ...args) throws DAOException
     {
         if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 4");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlStoreBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlStoreBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlStoreBean");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlStoreBean");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FlFaceBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlFaceBean[]");
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlFaceBean[]");
         }
         if( args.length > 4 && null != args[4] && !(args[4] instanceof FlPersonBean[])){
-            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:FlPersonBean[]");
+            throw new IllegalArgumentException("invalid type for the No.5 dynamic argument,expected type:FlPersonBean[]");
         }
         return save(bean,(FlDeviceBean)args[0],(FlStoreBean)args[1],(FlStoreBean)args[2],(FlFaceBean[])args[3],(FlPersonBean[])args[4]);
     } 
@@ -608,7 +608,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public FlImageBean saveCollection(FlImageBean bean,Object ...args) throws DAOException
     {
         if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 4");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
         }

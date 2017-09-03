@@ -303,23 +303,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param bean the referenced {@link ImageBean}
      * @param importedBeans imported beans from fl_face
      * @return importedBeans always
-     * @see {@link FlFaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
+     * @see {@link FaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
      */
     //3.3 SET IMPORTED
     public FaceBean[] setFlFaceBeansByImgMd5(ImageBean bean , FaceBean[] importedBeans)
     {
-        try {
-            IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlFaceBeansByImgMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( FaceBean importBean : importedBeans ){
+                FaceManager.getInstance().setReferencedByImgMd5(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -328,31 +322,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_face 
      * @return importedBeans always
-     * @see {@link FlFaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
+     * @see {@link FaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByImgMd5(ImageBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<FaceBean,FlFaceBean> importedConverter = this.dbConverter.getFaceBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<FaceBean>)importedBeans,nativeManager.setFlFaceBeansByImgMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                FaceBean[] array = importedBeans.toArray(new FaceBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlFaceBeansByImgMd5(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( FaceBean importBean : importedBeans ){
+                FaceManager.getInstance().setReferencedByImgMd5(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -391,23 +371,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param bean the referenced {@link ImageBean}
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
-     * @see {@link FlPersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
+     * @see {@link PersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
      */
     //3.3 SET IMPORTED
     public PersonBean[] setFlPersonBeansByPhotoId(ImageBean bean , PersonBean[] importedBeans)
     {
-        try {
-            IBeanConverter<PersonBean,FlPersonBean> importedConverter = this.dbConverter.getPersonBeanConverter();
-            return importedConverter.fromRight(importedBeans,
-                this.nativeManager.setFlPersonBeansByPhotoId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                ));
+        if(null != importedBeans){
+            for( PersonBean importBean : importedBeans ){
+                PersonManager.getInstance().setReferencedByPhotoId(importBean , bean);
+            }
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
     /**
@@ -416,31 +390,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always
-     * @see {@link FlPersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
+     * @see {@link PersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
      */
     //3.4 SET IMPORTED
     public <C extends java.util.Collection<PersonBean>> C setFlPersonBeansByPhotoId(ImageBean bean , C importedBeans)
     {
-        try {
-            IBeanConverter<PersonBean,FlPersonBean> importedConverter = this.dbConverter.getPersonBeanConverter();
-            if(importedBeans instanceof java.util.List){
-                importedConverter.fromRight((java.util.List<PersonBean>)importedBeans,nativeManager.setFlPersonBeansByPhotoId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(importedBeans)
-                    ));
-            }else{
-                PersonBean[] array = importedBeans.toArray(new PersonBean[0]);
-                importedConverter.fromRight(array,nativeManager.setFlPersonBeansByPhotoId(
-                    this.beanConverter.toRight(bean),
-                    importedConverter.toRight(array)
-                    ));
+        if(null != importedBeans){
+            for( PersonBean importBean : importedBeans ){
+                PersonManager.getInstance().setReferencedByPhotoId(importBean , bean);
             }
-            return importedBeans;
         }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return importedBeans;
     }
 
 
@@ -538,15 +498,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     public ImageBean save(ImageBean bean,Object ...args) 
     {
         if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 4");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:DeviceBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:StoreBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:StoreBean");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:StoreBean");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FaceBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FaceBean[]");
@@ -571,15 +531,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     public ImageBean saveCollection(ImageBean bean,Object ...args)
     {
         if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 4");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:DeviceBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:StoreBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:StoreBean");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:StoreBean");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FaceBean>");

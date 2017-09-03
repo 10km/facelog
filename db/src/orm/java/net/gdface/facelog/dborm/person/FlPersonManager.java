@@ -564,15 +564,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonBean save(FlPersonBean bean,Object ...args) throws DAOException
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFaceBean[])){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlFaceBean[]");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlFaceBean[]");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlLogBean[]");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlLogBean[]");
         }
         return save(bean,(FlImageBean)args[0],(FlFaceBean[])args[1],(FlLogBean[])args[2]);
     } 
@@ -592,7 +592,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonBean saveCollection(FlPersonBean bean,Object ...args) throws DAOException
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }

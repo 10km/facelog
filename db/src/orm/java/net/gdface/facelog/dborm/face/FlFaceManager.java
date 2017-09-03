@@ -568,18 +568,18 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonBean");
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlLogBean[]");
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlLogBean[]");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlLogBean[]");
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlLogBean[]");
         }
         return save(bean,(FlImageBean)args[0],(FlPersonBean)args[1],(FlLogBean[])args[2],(FlLogBean[])args[3]);
     } 
@@ -599,7 +599,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
         if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
