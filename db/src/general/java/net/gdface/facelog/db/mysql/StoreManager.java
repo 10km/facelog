@@ -193,8 +193,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
      * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
@@ -216,8 +216,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
      * @param importedBeans the FlImageBean array to associate to the {@link StoreBean}
@@ -239,8 +239,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link StoreBean}
@@ -515,7 +515,53 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
                 return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
             }});
     }
-      
+     /**
+     * Save the StoreBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link StoreBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(StoreBean , ImageBean[] , ImageBean[] )}
+     * @return the inserted or updated {@link StoreBean} bean
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public StoreBean save(StoreBean bean,Object ...args) 
+    {
+        if(args.length > 1)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean[]");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof ImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:ImageBean[]");
+        }
+        return save(bean,(ImageBean[])args[0],(ImageBean[])args[1]);
+    } 
+
+    /**
+     * Save the StoreBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link StoreBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(StoreBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link StoreBean} bean
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public StoreBean saveCollection(StoreBean bean,Object ...args)
+    {
+        if(args.length > 1)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<ImageBean>");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<ImageBean>");
+        }
+        return save(bean,(java.util.Collection<ImageBean>)args[0],(java.util.Collection<ImageBean>)args[1]);
+    } 
+     
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

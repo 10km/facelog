@@ -470,8 +470,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return importedBeans;
     }
 
-
-
     /**
      * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
@@ -489,33 +487,16 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         , FlLogBean[] impFlLogbyVerifyFace , FlLogBean[] impFlLogbyCompareFace ) throws DAOException
     {
         if(null == bean) return null;
-        if( null != refFlImagebyImgMd5) {
-            refFlImagebyImgMd5 = FlImageManager.getInstance().save( refFlImagebyImgMd5 );
-            bean.setImgMd5(refFlImagebyImgMd5.getMd5()); 
-            bean.setReferencedByImgMd5(refFlImagebyImgMd5);
-        }
-        if( null != refFlPersonbyPersonId) {
-            refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
-            bean.setPersonId(refFlPersonbyPersonId.getId()); 
-            bean.setReferencedByPersonId(refFlPersonbyPersonId);
-        }
+        this.setReferencedByImgMd5(bean,refFlImagebyImgMd5);
+        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
         bean = this.save( bean );
-        if( null != impFlLogbyVerifyFace) {
-            for ( FlLogBean imp : impFlLogbyVerifyFace ){
-                imp.setVerifyFace(bean.getMd5()); 
-                imp.setReferencedByVerifyFace(bean);
-                FlLogManager.getInstance().save( imp );
-            }
-        }
-        if( null != impFlLogbyCompareFace) {
-            for ( FlLogBean imp : impFlLogbyCompareFace ){
-                imp.setCompareFace(bean.getMd5()); 
-                imp.setReferencedByCompareFace(bean);
-                FlLogManager.getInstance().save( imp );
-            }
-        }
+        this.setFlLogBeansByVerifyFace(bean,impFlLogbyVerifyFace);
+        FlLogManager.getInstance().save( impFlLogbyVerifyFace );
+        this.setFlLogBeansByCompareFace(bean,impFlLogbyCompareFace);
+        FlLogManager.getInstance().save( impFlLogbyCompareFace );
         return bean;
     } 
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , FlLogBean[] , FlLogBean[] )}
@@ -556,7 +537,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         this.setFlLogBeansByCompareFace(bean,impFlLogbyCompareFace);
         FlLogManager.getInstance().save( impFlLogbyCompareFace );
         return bean;
-    }   
+    }
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , java.util.Collection , java.util.Collection )}
@@ -572,7 +554,67 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
             }});
     }
-      //////////////////////////////////////
+    /**
+     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlFaceBean , FlImageBean , FlPersonBean , FlLogBean[] , FlLogBean[] )}
+     * @return the inserted or updated {@link FlFaceBean} bean
+     * @throws DAOException
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlLogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlLogBean[]");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlLogBean[]");
+        }
+        return save(bean,(FlImageBean)args[0],(FlPersonBean)args[1],(FlLogBean[])args[2],(FlLogBean[])args[3]);
+    } 
+
+    /**
+     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlFaceBean , FlImageBean , FlPersonBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link FlFaceBean} bean
+     * @throws DAOException
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlLogBean>");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlLogBean>");
+        }
+        return save(bean,(FlImageBean)args[0],(FlPersonBean)args[1],(java.util.Collection<FlLogBean>)args[2],(java.util.Collection<FlLogBean>)args[3]);
+    } 
+    //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
 

@@ -89,8 +89,6 @@ public class FlFaceLightManager extends TableManager.Adapter<FlFaceLightBean>
     }
 
  
- 
-
       
 
     //////////////////////////////////////

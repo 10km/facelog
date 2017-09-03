@@ -195,8 +195,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
@@ -218,8 +218,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FaceBean}
@@ -241,8 +241,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
+     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FaceBean}
@@ -521,7 +521,65 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
                 return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
             }});
     }
-      //////////////////////////////////////
+     /**
+     * Save the FaceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FaceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FaceBean , ImageBean , PersonBean , LogBean[] , LogBean[] )}
+     * @return the inserted or updated {@link FaceBean} bean
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public FaceBean save(FaceBean bean,Object ...args) 
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:PersonBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof LogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:LogBean[]");
+        }
+        return save(bean,(ImageBean)args[0],(PersonBean)args[1],(LogBean[])args[2],(LogBean[])args[3]);
+    } 
+
+    /**
+     * Save the FaceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FaceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FaceBean , ImageBean , PersonBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link FaceBean} bean
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public FaceBean saveCollection(FaceBean bean,Object ...args)
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:PersonBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<LogBean>");
+        }
+        return save(bean,(ImageBean)args[0],(PersonBean)args[1],(java.util.Collection<LogBean>)args[2],(java.util.Collection<LogBean>)args[3]);
+    } 
+     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
 

@@ -195,8 +195,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
@@ -218,8 +218,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link DeviceBean}
@@ -241,8 +241,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
+     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link DeviceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link DeviceBean}
@@ -517,7 +517,53 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
                 return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
             }});
     }
-      
+     /**
+     * Save the DeviceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link DeviceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(DeviceBean , ImageBean[] , LogBean[] )}
+     * @return the inserted or updated {@link DeviceBean} bean
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public DeviceBean save(DeviceBean bean,Object ...args) 
+    {
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean[]");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof LogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:LogBean[]");
+        }
+        return save(bean,(ImageBean[])args[0],(LogBean[])args[1]);
+    } 
+
+    /**
+     * Save the DeviceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link DeviceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(DeviceBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link DeviceBean} bean
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public DeviceBean saveCollection(DeviceBean bean,Object ...args)
+    {
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<ImageBean>");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<LogBean>");
+        }
+        return save(bean,(java.util.Collection<ImageBean>)args[0],(java.util.Collection<LogBean>)args[1]);
+    } 
+     
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

@@ -466,8 +466,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         return importedBeans;
     }
 
-
-
     /**
      * Save the FlStoreBean bean and referenced beans and imported beans into the database.
      *
@@ -484,22 +482,13 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        if( null != impFlImagebyMd5) {
-            for ( FlImageBean imp : impFlImagebyMd5 ){
-                imp.setMd5(bean.getMd5()); 
-                imp.setReferencedByMd5(bean);
-                FlImageManager.getInstance().save( imp );
-            }
-        }
-        if( null != impFlImagebyThumbMd5) {
-            for ( FlImageBean imp : impFlImagebyThumbMd5 ){
-                imp.setThumbMd5(bean.getMd5()); 
-                imp.setReferencedByThumbMd5(bean);
-                FlImageManager.getInstance().save( imp );
-            }
-        }
+        this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
+        FlImageManager.getInstance().save( impFlImagebyMd5 );
+        this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
+        FlImageManager.getInstance().save( impFlImagebyThumbMd5 );
         return bean;
     } 
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlStoreBean , FlImageBean[] , FlImageBean[] )}
@@ -536,7 +525,8 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
         FlImageManager.getInstance().save( impFlImagebyThumbMd5 );
         return bean;
-    }   
+    }
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlStoreBean , java.util.Collection , java.util.Collection )}
@@ -552,7 +542,55 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
             }});
     }
-       
+    /**
+     * Save the FlStoreBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlStoreBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlStoreBean , FlImageBean[] , FlImageBean[] )}
+     * @return the inserted or updated {@link FlStoreBean} bean
+     * @throws DAOException
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public FlStoreBean save(FlStoreBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 1)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean[]");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlImageBean[]");
+        }
+        return save(bean,(FlImageBean[])args[0],(FlImageBean[])args[1]);
+    } 
+
+    /**
+     * Save the FlStoreBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlStoreBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlStoreBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link FlStoreBean} bean
+     * @throws DAOException
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public FlStoreBean saveCollection(FlStoreBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 1)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 1");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlImageBean>");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlImageBean>");
+        }
+        return save(bean,(java.util.Collection<FlImageBean>)args[0],(java.util.Collection<FlImageBean>)args[1]);
+    } 
+     
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

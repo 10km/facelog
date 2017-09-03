@@ -196,8 +196,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
@@ -219,8 +219,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link PersonBean}
@@ -242,8 +242,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
+     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link PersonBean}
@@ -520,7 +520,59 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
                 return save(bean , refFlImagebyPhotoId , impFlFacebyPersonId , impFlLogbyPersonId );
             }});
     }
-      //////////////////////////////////////
+     /**
+     * Save the PersonBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link PersonBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(PersonBean , ImageBean , FaceBean[] , LogBean[] )}
+     * @return the inserted or updated {@link PersonBean} bean
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public PersonBean save(PersonBean bean,Object ...args) 
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FaceBean[]");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
+        }
+        return save(bean,(ImageBean)args[0],(FaceBean[])args[1],(LogBean[])args[2]);
+    } 
+
+    /**
+     * Save the PersonBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link PersonBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link PersonBean} bean
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public PersonBean saveCollection(PersonBean bean,Object ...args)
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FaceBean>");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");
+        }
+        return save(bean,(ImageBean)args[0],(java.util.Collection<FaceBean>)args[1],(java.util.Collection<LogBean>)args[2]);
+    } 
+     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
 

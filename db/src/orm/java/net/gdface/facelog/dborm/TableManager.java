@@ -371,14 +371,42 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException{
             throw new UnsupportedOperationException();
         }
-    }
-
-    public abstract String getFieldNames();
-
-    public abstract String[] getPrimarykeyNames();
-
-    public abstract String getTableName();
+        
+        @Override
+        public B save(B bean,Object ...args)throws DAOException{
+            throw new UnsupportedOperationException();
+        }
+        
+        @Override
+        public B saveCollection(B bean,Object ...args)throws DAOException{
+            throw new UnsupportedOperationException();
+        }
+        
+        @Override
+        public B saveAsTransaction(final B bean,final Object ...args)throws DAOException{
+            return this.runAsTransaction(new Callable<B>(){
+                @Override
+                public B call() throws Exception {
+                    return save(bean , args );
+                }});
+        }
+        
+        @Override
+        public B saveCollectionAsTransaction(final B bean,final Object ...args)throws DAOException{
+            return this.runAsTransaction(new Callable<B>(){
+                @Override
+                public B call() throws Exception {
+                    return saveCollection(bean , args );
+                }});
+        }
+    }    
     
+    public abstract String getFieldNames();
+    
+    public abstract String[] getPrimarykeyNames();
+    
+    public abstract String getTableName();
+        
     public abstract String[] getFullFieldNames();
     
     /**
@@ -971,6 +999,51 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
     //15-4
     public abstract <C extends Collection<B>> C save(C beans)throws DAOException;
 
+    /**
+     * Save the B bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the B bean to be saved
+     * @param args referenced beans or imported beans<br>
+     * @return the inserted or updated B bean
+      * @throws DAOException
+     */
+    //3.9 SYNC SAVE 
+    public abstract B save(B bean,Object ...args)throws DAOException;
+    
+
+    /**
+     * Save the B bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the B bean to be saved
+     * @param args referenced beans or imported beans<br>
+     * @return the inserted or updated B bean
+     * @throws DAOException
+     */
+    //3.10 SYNC SAVE 
+    public abstract B saveCollection(B bean,Object ...args)throws DAOException;
+    
+    /**
+     *  Transaction version for sync save
+     * @see #save(B ,Object ...)
+     * @param bean the B bean to be saved
+     * @param args referenced beans or imported beans<br>
+     * @return the inserted or updated B bean
+     * @throws DAOException
+     */
+    //3.11 SYNC SAVE 
+    public abstract B saveAsTransaction(B bean,Object ...args)throws DAOException;
+    
+    /**
+     *  Transaction version for sync save
+     * @see #saveCollection(B ,Object ...)
+     * @param bean the B bean to be saved
+     * @param args referenced beans or imported beans<br>
+     * @return the inserted or updated B bean
+     * @throws DAOException
+     */
+    //3.12 SYNC SAVE 
+    public abstract B saveCollectionAsTransaction(B bean,Object ...args)throws DAOException;
+        
     /**
      * Load all the elements using a SQL statement specifying a list of fields to be retrieved.
      * @param sql the SQL statement for retrieving

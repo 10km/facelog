@@ -259,9 +259,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
     
  
- 
-
-    /**
+     /**
      * Save the FlLogBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
@@ -278,29 +276,14 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         ) throws DAOException
     {
         if(null == bean) return null;
-        if( null != refFlDevicebyDeviceId) {
-            refFlDevicebyDeviceId = FlDeviceManager.getInstance().save( refFlDevicebyDeviceId );
-            bean.setDeviceId(refFlDevicebyDeviceId.getId()); 
-            bean.setReferencedByDeviceId(refFlDevicebyDeviceId);
-        }
-        if( null != refFlFacebyVerifyFace) {
-            refFlFacebyVerifyFace = FlFaceManager.getInstance().save( refFlFacebyVerifyFace );
-            bean.setVerifyFace(refFlFacebyVerifyFace.getMd5()); 
-            bean.setReferencedByVerifyFace(refFlFacebyVerifyFace);
-        }
-        if( null != refFlFacebyCompareFace) {
-            refFlFacebyCompareFace = FlFaceManager.getInstance().save( refFlFacebyCompareFace );
-            bean.setCompareFace(refFlFacebyCompareFace.getMd5()); 
-            bean.setReferencedByCompareFace(refFlFacebyCompareFace);
-        }
-        if( null != refFlPersonbyPersonId) {
-            refFlPersonbyPersonId = FlPersonManager.getInstance().save( refFlPersonbyPersonId );
-            bean.setPersonId(refFlPersonbyPersonId.getId()); 
-            bean.setReferencedByPersonId(refFlPersonbyPersonId);
-        }
+        this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
+        this.setReferencedByVerifyFace(bean,refFlFacebyVerifyFace);
+        this.setReferencedByCompareFace(bean,refFlFacebyCompareFace);
+        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
         bean = this.save( bean );
         return bean;
     } 
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
@@ -316,7 +299,67 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 return save(bean , refFlDevicebyDeviceId , refFlFacebyVerifyFace , refFlFacebyCompareFace , refFlPersonbyPersonId );
             }});
     }
-      //////////////////////////////////////
+    /**
+     * Save the FlLogBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlLogBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
+     * @return the inserted or updated {@link FlLogBean} bean
+     * @throws DAOException
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public FlLogBean save(FlLogBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFaceBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlFaceBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFaceBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlFaceBean");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlPersonBean");
+        }
+        return save(bean,(FlDeviceBean)args[0],(FlFaceBean)args[1],(FlFaceBean)args[2],(FlPersonBean)args[3]);
+    } 
+
+    /**
+     * Save the FlLogBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlLogBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
+     * @return the inserted or updated {@link FlLogBean} bean
+     * @throws DAOException
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public FlLogBean saveCollection(FlLogBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 3");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFaceBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlFaceBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFaceBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlFaceBean");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlPersonBean");
+        }
+        return save(bean,(FlDeviceBean)args[0],(FlFaceBean)args[1],(FlFaceBean)args[2],(FlPersonBean)args[3]);
+    } 
+    //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
 

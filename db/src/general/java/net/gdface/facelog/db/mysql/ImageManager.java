@@ -197,8 +197,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
@@ -220,8 +220,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param importedBeans the FlPersonBean array to associate to the {@link ImageBean}
@@ -243,8 +243,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
+     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param importedBeans the <T> object to associate to the {@link ImageBean}
@@ -525,7 +525,71 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
                 return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImgMd5 , impFlPersonbyPhotoId );
             }});
     }
-      //////////////////////////////////////
+     /**
+     * Save the ImageBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link ImageBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , FaceBean[] , PersonBean[] )}
+     * @return the inserted or updated {@link ImageBean} bean
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public ImageBean save(ImageBean bean,Object ...args) 
+    {
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 4");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:DeviceBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:StoreBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:StoreBean");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FaceBean[])){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FaceBean[]");
+        }
+        if( args.length > 4 && null != args[4] && !(args[4] instanceof PersonBean[])){
+            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:PersonBean[]");
+        }
+        return save(bean,(DeviceBean)args[0],(StoreBean)args[1],(StoreBean)args[2],(FaceBean[])args[3],(PersonBean[])args[4]);
+    } 
+
+    /**
+     * Save the ImageBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link ImageBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link ImageBean} bean
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public ImageBean saveCollection(ImageBean bean,Object ...args)
+    {
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 4");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:DeviceBean");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:StoreBean");
+        }
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:StoreBean");
+        }
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FaceBean>");
+        }
+        if( args.length > 4 && null != args[4] && !(args[4] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:java.util.Collection<PersonBean>");
+        }
+        return save(bean,(DeviceBean)args[0],(StoreBean)args[1],(StoreBean)args[2],(java.util.Collection<FaceBean>)args[3],(java.util.Collection<PersonBean>)args[4]);
+    } 
+     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
 

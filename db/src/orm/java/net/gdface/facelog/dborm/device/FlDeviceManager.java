@@ -468,8 +468,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return importedBeans;
     }
 
-
-
     /**
      * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
      *
@@ -486,22 +484,13 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        if( null != impFlImagebyDeviceId) {
-            for ( FlImageBean imp : impFlImagebyDeviceId ){
-                imp.setDeviceId(bean.getId()); 
-                imp.setReferencedByDeviceId(bean);
-                FlImageManager.getInstance().save( imp );
-            }
-        }
-        if( null != impFlLogbyDeviceId) {
-            for ( FlLogBean imp : impFlLogbyDeviceId ){
-                imp.setDeviceId(bean.getId()); 
-                imp.setReferencedByDeviceId(bean);
-                FlLogManager.getInstance().save( imp );
-            }
-        }
+        this.setFlImageBeansByDeviceId(bean,impFlImagebyDeviceId);
+        FlImageManager.getInstance().save( impFlImagebyDeviceId );
+        this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
+        FlLogManager.getInstance().save( impFlLogbyDeviceId );
         return bean;
     } 
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlDeviceBean , FlImageBean[] , FlLogBean[] )}
@@ -538,7 +527,8 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
         FlLogManager.getInstance().save( impFlLogbyDeviceId );
         return bean;
-    }   
+    }
+
     /**
      * Transaction version for sync save
      * @see {@link #save(FlDeviceBean , java.util.Collection , java.util.Collection )}
@@ -554,7 +544,55 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
             }});
     }
-       
+    /**
+     * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlDeviceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlDeviceBean , FlImageBean[] , FlLogBean[] )}
+     * @return the inserted or updated {@link FlDeviceBean} bean
+     * @throws DAOException
+     */
+    //3.9 SYNC SAVE 
+    @Override
+    public FlDeviceBean save(FlDeviceBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean[]");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlLogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlLogBean[]");
+        }
+        return save(bean,(FlImageBean[])args[0],(FlLogBean[])args[1]);
+    } 
+
+    /**
+     * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlDeviceBean} bean to be saved
+     * @param args referenced beans or imported beans<br>
+     *      see also {@link #save(FlDeviceBean , java.util.Collection , java.util.Collection )}
+     * @return the inserted or updated {@link FlDeviceBean} bean
+     * @throws DAOException
+     */
+    //3.10 SYNC SAVE 
+    @SuppressWarnings("unchecked")
+    @Override
+    public FlDeviceBean saveCollection(FlDeviceBean bean,Object ...args) throws DAOException
+    {
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number 2");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlImageBean>");
+        }
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlLogBean>");
+        }
+        return save(bean,(java.util.Collection<FlImageBean>)args[0],(java.util.Collection<FlLogBean>)args[1]);
+    } 
+     
 
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

@@ -89,8 +89,6 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     }
 
  
- 
-
       
 
     //////////////////////////////////////
