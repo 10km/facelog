@@ -561,7 +561,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             }});
     }
     /**
-     * Save the FlImageBean bean and referenced beans and imported beans into the database.
+     * Save the FlImageBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -594,7 +594,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     } 
 
     /**
-     * Save the FlImageBean bean and referenced beans and imported beans into the database.
+     * Save the FlImageBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>

@@ -300,7 +300,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             }});
     }
     /**
-     * Save the FlLogBean bean and referenced beans and imported beans into the database.
+     * Save the FlLogBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -330,7 +330,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     } 
 
     /**
-     * Save the FlLogBean bean and referenced beans and imported beans into the database.
+     * Save the FlLogBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param args referenced beans or imported beans<br>

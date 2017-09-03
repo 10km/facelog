@@ -555,7 +555,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             }});
     }
     /**
-     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
+     * Save the FlFaceBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -585,7 +585,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     } 
 
     /**
-     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
+     * Save the FlFaceBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>

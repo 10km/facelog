@@ -543,7 +543,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             }});
     }
     /**
-     * Save the FlStoreBean bean and referenced beans and imported beans into the database.
+     * Save the FlStoreBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -567,7 +567,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     } 
 
     /**
-     * Save the FlStoreBean bean and referenced beans and imported beans into the database.
+     * Save the FlStoreBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
      * @param args referenced beans or imported beans<br>

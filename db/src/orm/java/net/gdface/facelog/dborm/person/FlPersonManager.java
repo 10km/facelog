@@ -551,7 +551,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             }});
     }
     /**
-     * Save the FlPersonBean bean and referenced beans and imported beans into the database.
+     * Save the FlPersonBean bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -578,7 +578,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     } 
 
     /**
-     * Save the FlPersonBean bean and referenced beans and imported beans into the database.
+     * Save the FlPersonBean bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>

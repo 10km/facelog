@@ -952,10 +952,22 @@ public interface TableManager<B extends BaseBean> extends Constant {
     public <C extends Collection<B>> C save(C beans);
 
     /**
-     * Save the B bean and referenced beans and imported beans into the database.
+     * Save the B bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the B bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
+            for fl_device table:<br>
+                {@code ,ImageBean[],LogBean[]}<br>
+            for fl_face table:<br>
+                {@code ImageBean,PersonBean,LogBean[],LogBean[]}<br>
+            for fl_image table:<br>
+                {@code DeviceBean,StoreBean,StoreBean,FaceBean[],PersonBean[]}<br>
+            for fl_log table:<br>
+                {@code DeviceBean,FaceBean,FaceBean,PersonBean}<br>
+            for fl_person table:<br>
+                {@code ImageBean,FaceBean[],LogBean[]}<br>
+            for fl_store table:<br>
+                {@code ,ImageBean[],ImageBean[]}<br>
      * @return the inserted or updated B bean
       */
     //3.9 SYNC SAVE 
@@ -963,10 +975,22 @@ public interface TableManager<B extends BaseBean> extends Constant {
     
 
     /**
-     * Save the B bean and referenced beans and imported beans into the database.
+     * Save the B bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the B bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
+            for fl_device table:<br>
+                {@code ,Collection<ImageBean>,Collection<LogBean>}<br>
+            for fl_face table:<br>
+                {@code ImageBean,PersonBean,Collection<LogBean>,Collection<LogBean>}<br>
+            for fl_image table:<br>
+                {@code DeviceBean,StoreBean,StoreBean,Collection<FaceBean>,Collection<PersonBean>}<br>
+            for fl_log table:<br>
+                {@code DeviceBean,FaceBean,FaceBean,PersonBean}<br>
+            for fl_person table:<br>
+                {@code ImageBean,Collection<FaceBean>,Collection<LogBean>}<br>
+            for fl_store table:<br>
+                {@code ,Collection<ImageBean>,Collection<ImageBean>}<br>
      * @return the inserted or updated B bean
      */
     //3.10 SYNC SAVE 

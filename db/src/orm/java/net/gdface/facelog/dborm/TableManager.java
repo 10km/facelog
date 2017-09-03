@@ -1000,10 +1000,22 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
     public <C extends Collection<B>> C save(C beans)throws DAOException;
 
     /**
-     * Save the B bean and referenced beans and imported beans into the database.
+     * Save the B bean and referenced beans and imported beans (array) into the database.
      *
      * @param bean the B bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
+            for fl_device table:<br>
+                {@code ,FlImageBean[],FlLogBean[]}<br>
+            for fl_face table:<br>
+                {@code FlImageBean,FlPersonBean,FlLogBean[],FlLogBean[]}<br>
+            for fl_image table:<br>
+                {@code FlDeviceBean,FlStoreBean,FlStoreBean,FlFaceBean[],FlPersonBean[]}<br>
+            for fl_log table:<br>
+                {@code FlDeviceBean,FlFaceBean,FlFaceBean,FlPersonBean}<br>
+            for fl_person table:<br>
+                {@code FlImageBean,FlFaceBean[],FlLogBean[]}<br>
+            for fl_store table:<br>
+                {@code ,FlImageBean[],FlImageBean[]}<br>
      * @return the inserted or updated B bean
       * @throws DAOException
      */
@@ -1012,10 +1024,22 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
     
 
     /**
-     * Save the B bean and referenced beans and imported beans into the database.
+     * Save the B bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the B bean to be saved
-     * @param args referenced beans or imported beans<br>
+     * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
+            for fl_device table:<br>
+                {@code ,Collection<FlImageBean>,Collection<FlLogBean>}<br>
+            for fl_face table:<br>
+                {@code FlImageBean,FlPersonBean,Collection<FlLogBean>,Collection<FlLogBean>}<br>
+            for fl_image table:<br>
+                {@code FlDeviceBean,FlStoreBean,FlStoreBean,Collection<FlFaceBean>,Collection<FlPersonBean>}<br>
+            for fl_log table:<br>
+                {@code FlDeviceBean,FlFaceBean,FlFaceBean,FlPersonBean}<br>
+            for fl_person table:<br>
+                {@code FlImageBean,Collection<FlFaceBean>,Collection<FlLogBean>}<br>
+            for fl_store table:<br>
+                {@code ,Collection<FlImageBean>,Collection<FlImageBean>}<br>
      * @return the inserted or updated B bean
      * @throws DAOException
      */
