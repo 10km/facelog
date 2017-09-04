@@ -775,9 +775,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param imgMd5 the img_md5 column's value filter.
      * @return an array of FaceBean
      */
-    public FaceBean[] loadByindexImgMd5(String imgMd5)
+    public FaceBean[] loadByIndexImgMd5(String imgMd5)
     {
-        return this.loadByindexImgMd5AsList(imgMd5).toArray(new FaceBean[0]);
+        return this.loadByIndexImgMd5AsList(imgMd5).toArray(new FaceBean[0]);
     }
     
     /**
@@ -786,10 +786,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param imgMd5 the img_md5 column's value filter.
      * @return a list of FaceBean
      */
-    public java.util.List<FaceBean> loadByindexImgMd5AsList(String imgMd5)
+    public java.util.List<FaceBean> loadByIndexImgMd5AsList(String imgMd5)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByindexImgMd5AsList(imgMd5));
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexImgMd5AsList(imgMd5));
         }
         catch(DAOException e)
         {
@@ -803,10 +803,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param imgMd5 the img_md5 column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByindexImgMd5(String imgMd5)
+    public int deleteByIndexImgMd5(String imgMd5)
     {
         try{
-            return this.nativeManager.deleteByindexImgMd5(imgMd5);
+            return this.nativeManager.deleteByIndexImgMd5(imgMd5);
         }
         catch(DAOException e)
         {
@@ -820,9 +820,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param personId the person_id column's value filter.
      * @return an array of FaceBean
      */
-    public FaceBean[] loadByindexPersonId(Integer personId)
+    public FaceBean[] loadByIndexPersonId(Integer personId)
     {
-        return this.loadByindexPersonIdAsList(personId).toArray(new FaceBean[0]);
+        return this.loadByIndexPersonIdAsList(personId).toArray(new FaceBean[0]);
     }
     
     /**
@@ -831,10 +831,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param personId the person_id column's value filter.
      * @return a list of FaceBean
      */
-    public java.util.List<FaceBean> loadByindexPersonIdAsList(Integer personId)
+    public java.util.List<FaceBean> loadByIndexPersonIdAsList(Integer personId)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByindexPersonIdAsList(personId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexPersonIdAsList(personId));
         }
         catch(DAOException e)
         {
@@ -848,10 +848,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByindexPersonId(Integer personId)
+    public int deleteByIndexPersonId(Integer personId)
     {
         try{
-            return this.nativeManager.deleteByindexPersonId(personId);
+            return this.nativeManager.deleteByIndexPersonId(personId);
         }
         catch(DAOException e)
         {

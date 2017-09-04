@@ -1213,9 +1213,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return an array of FlImageBean
      * @throws DAOException
      */
-    public FlImageBean[] loadByindexDeviceId(Integer deviceId) throws DAOException
+    public FlImageBean[] loadByIndexDeviceId(Integer deviceId) throws DAOException
     {
-        return (FlImageBean[])this.loadByindexDeviceIdAsList(deviceId).toArray(new FlImageBean[0]);
+        return (FlImageBean[])this.loadByIndexDeviceIdAsList(deviceId).toArray(new FlImageBean[0]);
     }
     
     /**
@@ -1225,7 +1225,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return a list of FlImageBean
      * @throws DAOException
      */
-    public List<FlImageBean> loadByindexDeviceIdAsList(Integer deviceId) throws DAOException
+    public List<FlImageBean> loadByIndexDeviceIdAsList(Integer deviceId) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1238,7 +1238,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexDeviceId(Integer deviceId) throws DAOException
+    public int deleteByIndexDeviceId(Integer deviceId) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1252,9 +1252,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return an array of FlImageBean
      * @throws DAOException
      */
-    public FlImageBean[] loadByindexThumbMd5(String thumbMd5) throws DAOException
+    public FlImageBean[] loadByIndexThumbMd5(String thumbMd5) throws DAOException
     {
-        return (FlImageBean[])this.loadByindexThumbMd5AsList(thumbMd5).toArray(new FlImageBean[0]);
+        return (FlImageBean[])this.loadByIndexThumbMd5AsList(thumbMd5).toArray(new FlImageBean[0]);
     }
     
     /**
@@ -1264,7 +1264,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return a list of FlImageBean
      * @throws DAOException
      */
-    public List<FlImageBean> loadByindexThumbMd5AsList(String thumbMd5) throws DAOException
+    public List<FlImageBean> loadByIndexThumbMd5AsList(String thumbMd5) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setThumbMd5(thumbMd5);
@@ -1277,7 +1277,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexThumbMd5(String thumbMd5) throws DAOException
+    public int deleteByIndexThumbMd5(String thumbMd5) throws DAOException
     {
         FlImageBean bean = this.createBean();
         bean.setThumbMd5(thumbMd5);
@@ -1301,14 +1301,14 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.loadByindexDeviceIdAsList((Integer)keys[0]);        
+            return this.loadByIndexDeviceIdAsList((Integer)keys[0]);        
         }
         case FL_IMAGE_INDEX_THUMB_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'thumb_md5' column number");
             if(null != keys[1] && !(keys[1] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByindexThumbMd5AsList((String)keys[0]);        
+            return this.loadByIndexThumbMd5AsList((String)keys[0]);        
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1331,14 +1331,14 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.deleteByindexDeviceId((Integer)keys[0]);
+            return this.deleteByIndexDeviceId((Integer)keys[0]);
         }
         case FL_IMAGE_INDEX_THUMB_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'thumb_md5' column number");
             if(null != keys[1] && !(keys[1] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexThumbMd5((String)keys[0]);
+            return this.deleteByIndexThumbMd5((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));

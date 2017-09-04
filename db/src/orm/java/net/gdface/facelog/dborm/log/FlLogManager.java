@@ -1008,9 +1008,9 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return an array of FlLogBean
      * @throws DAOException
      */
-    public FlLogBean[] loadByindexCompareFace(String compareFace) throws DAOException
+    public FlLogBean[] loadByIndexCompareFace(String compareFace) throws DAOException
     {
-        return (FlLogBean[])this.loadByindexCompareFaceAsList(compareFace).toArray(new FlLogBean[0]);
+        return (FlLogBean[])this.loadByIndexCompareFaceAsList(compareFace).toArray(new FlLogBean[0]);
     }
     
     /**
@@ -1020,7 +1020,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return a list of FlLogBean
      * @throws DAOException
      */
-    public List<FlLogBean> loadByindexCompareFaceAsList(String compareFace) throws DAOException
+    public List<FlLogBean> loadByIndexCompareFaceAsList(String compareFace) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setCompareFace(compareFace);
@@ -1033,7 +1033,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexCompareFace(String compareFace) throws DAOException
+    public int deleteByIndexCompareFace(String compareFace) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setCompareFace(compareFace);
@@ -1047,9 +1047,9 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return an array of FlLogBean
      * @throws DAOException
      */
-    public FlLogBean[] loadByindexDeviceId(Integer deviceId) throws DAOException
+    public FlLogBean[] loadByIndexDeviceId(Integer deviceId) throws DAOException
     {
-        return (FlLogBean[])this.loadByindexDeviceIdAsList(deviceId).toArray(new FlLogBean[0]);
+        return (FlLogBean[])this.loadByIndexDeviceIdAsList(deviceId).toArray(new FlLogBean[0]);
     }
     
     /**
@@ -1059,7 +1059,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return a list of FlLogBean
      * @throws DAOException
      */
-    public List<FlLogBean> loadByindexDeviceIdAsList(Integer deviceId) throws DAOException
+    public List<FlLogBean> loadByIndexDeviceIdAsList(Integer deviceId) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1072,7 +1072,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexDeviceId(Integer deviceId) throws DAOException
+    public int deleteByIndexDeviceId(Integer deviceId) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setDeviceId(deviceId);
@@ -1086,9 +1086,9 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return an array of FlLogBean
      * @throws DAOException
      */
-    public FlLogBean[] loadByindexPersonId(Integer personId) throws DAOException
+    public FlLogBean[] loadByIndexPersonId(Integer personId) throws DAOException
     {
-        return (FlLogBean[])this.loadByindexPersonIdAsList(personId).toArray(new FlLogBean[0]);
+        return (FlLogBean[])this.loadByIndexPersonIdAsList(personId).toArray(new FlLogBean[0]);
     }
     
     /**
@@ -1098,7 +1098,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return a list of FlLogBean
      * @throws DAOException
      */
-    public List<FlLogBean> loadByindexPersonIdAsList(Integer personId) throws DAOException
+    public List<FlLogBean> loadByIndexPersonIdAsList(Integer personId) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setPersonId(personId);
@@ -1111,7 +1111,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexPersonId(Integer personId) throws DAOException
+    public int deleteByIndexPersonId(Integer personId) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setPersonId(personId);
@@ -1125,9 +1125,9 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return an array of FlLogBean
      * @throws DAOException
      */
-    public FlLogBean[] loadByindexVerifyFace(String verifyFace) throws DAOException
+    public FlLogBean[] loadByIndexVerifyFace(String verifyFace) throws DAOException
     {
-        return (FlLogBean[])this.loadByindexVerifyFaceAsList(verifyFace).toArray(new FlLogBean[0]);
+        return (FlLogBean[])this.loadByIndexVerifyFaceAsList(verifyFace).toArray(new FlLogBean[0]);
     }
     
     /**
@@ -1137,7 +1137,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return a list of FlLogBean
      * @throws DAOException
      */
-    public List<FlLogBean> loadByindexVerifyFaceAsList(String verifyFace) throws DAOException
+    public List<FlLogBean> loadByIndexVerifyFaceAsList(String verifyFace) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setVerifyFace(verifyFace);
@@ -1150,7 +1150,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexVerifyFace(String verifyFace) throws DAOException
+    public int deleteByIndexVerifyFace(String verifyFace) throws DAOException
     {
         FlLogBean bean = this.createBean();
         bean.setVerifyFace(verifyFace);
@@ -1174,28 +1174,28 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'compare_face' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByindexCompareFaceAsList((String)keys[0]);        
+            return this.loadByIndexCompareFaceAsList((String)keys[0]);        
         }
         case FL_LOG_INDEX_DEVICE_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
             if(null != keys[1] && !(keys[1] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.loadByindexDeviceIdAsList((Integer)keys[0]);        
+            return this.loadByIndexDeviceIdAsList((Integer)keys[0]);        
         }
         case FL_LOG_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
             if(null != keys[2] && !(keys[2] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.loadByindexPersonIdAsList((Integer)keys[0]);        
+            return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
         case FL_LOG_INDEX_VERIFY_FACE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'verify_face' column number");
             if(null != keys[3] && !(keys[3] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByindexVerifyFaceAsList((String)keys[0]);        
+            return this.loadByIndexVerifyFaceAsList((String)keys[0]);        
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1218,28 +1218,28 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'compare_face' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexCompareFace((String)keys[0]);
+            return this.deleteByIndexCompareFace((String)keys[0]);
         }
         case FL_LOG_INDEX_DEVICE_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
             if(null != keys[1] && !(keys[1] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.deleteByindexDeviceId((Integer)keys[0]);
+            return this.deleteByIndexDeviceId((Integer)keys[0]);
         }
         case FL_LOG_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
             if(null != keys[2] && !(keys[2] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.deleteByindexPersonId((Integer)keys[0]);
+            return this.deleteByIndexPersonId((Integer)keys[0]);
         }
         case FL_LOG_INDEX_VERIFY_FACE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'verify_face' column number");
             if(null != keys[3] && !(keys[3] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexVerifyFace((String)keys[0]);
+            return this.deleteByIndexVerifyFace((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));

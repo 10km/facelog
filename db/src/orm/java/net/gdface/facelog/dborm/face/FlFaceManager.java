@@ -1377,9 +1377,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return an array of FlFaceBean
      * @throws DAOException
      */
-    public FlFaceBean[] loadByindexImgMd5(String imgMd5) throws DAOException
+    public FlFaceBean[] loadByIndexImgMd5(String imgMd5) throws DAOException
     {
-        return (FlFaceBean[])this.loadByindexImgMd5AsList(imgMd5).toArray(new FlFaceBean[0]);
+        return (FlFaceBean[])this.loadByIndexImgMd5AsList(imgMd5).toArray(new FlFaceBean[0]);
     }
     
     /**
@@ -1389,7 +1389,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return a list of FlFaceBean
      * @throws DAOException
      */
-    public List<FlFaceBean> loadByindexImgMd5AsList(String imgMd5) throws DAOException
+    public List<FlFaceBean> loadByIndexImgMd5AsList(String imgMd5) throws DAOException
     {
         FlFaceBean bean = this.createBean();
         bean.setImgMd5(imgMd5);
@@ -1402,7 +1402,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexImgMd5(String imgMd5) throws DAOException
+    public int deleteByIndexImgMd5(String imgMd5) throws DAOException
     {
         FlFaceBean bean = this.createBean();
         bean.setImgMd5(imgMd5);
@@ -1416,9 +1416,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return an array of FlFaceBean
      * @throws DAOException
      */
-    public FlFaceBean[] loadByindexPersonId(Integer personId) throws DAOException
+    public FlFaceBean[] loadByIndexPersonId(Integer personId) throws DAOException
     {
-        return (FlFaceBean[])this.loadByindexPersonIdAsList(personId).toArray(new FlFaceBean[0]);
+        return (FlFaceBean[])this.loadByIndexPersonIdAsList(personId).toArray(new FlFaceBean[0]);
     }
     
     /**
@@ -1428,7 +1428,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return a list of FlFaceBean
      * @throws DAOException
      */
-    public List<FlFaceBean> loadByindexPersonIdAsList(Integer personId) throws DAOException
+    public List<FlFaceBean> loadByIndexPersonIdAsList(Integer personId) throws DAOException
     {
         FlFaceBean bean = this.createBean();
         bean.setPersonId(personId);
@@ -1441,7 +1441,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexPersonId(Integer personId) throws DAOException
+    public int deleteByIndexPersonId(Integer personId) throws DAOException
     {
         FlFaceBean bean = this.createBean();
         bean.setPersonId(personId);
@@ -1465,14 +1465,14 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'img_md5' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByindexImgMd5AsList((String)keys[0]);        
+            return this.loadByIndexImgMd5AsList((String)keys[0]);        
         }
         case FL_FACE_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
             if(null != keys[1] && !(keys[1] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.loadByindexPersonIdAsList((Integer)keys[0]);        
+            return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1495,14 +1495,14 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'img_md5' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexImgMd5((String)keys[0]);
+            return this.deleteByIndexImgMd5((String)keys[0]);
         }
         case FL_FACE_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
             if(null != keys[1] && !(keys[1] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.deleteByindexPersonId((Integer)keys[0]);
+            return this.deleteByIndexPersonId((Integer)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));

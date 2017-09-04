@@ -1186,7 +1186,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean loadByindexFaceMd5(String faceMd5) throws DAOException
+    public FlPersonBean loadByIndexFaceMd5(String faceMd5) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         if( null == faceMd5)
@@ -1201,7 +1201,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexFaceMd5(String faceMd5) throws DAOException
+    public int deleteByIndexFaceMd5(String faceMd5) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setFaceMd5(faceMd5);
@@ -1215,7 +1215,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean loadByindexPapersNum(String papersNum) throws DAOException
+    public FlPersonBean loadByIndexPapersNum(String papersNum) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         if( null == papersNum)
@@ -1230,7 +1230,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexPapersNum(String papersNum) throws DAOException
+    public int deleteByIndexPapersNum(String papersNum) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setPapersNum(papersNum);
@@ -1244,7 +1244,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean loadByindexPhotoId(String photoId) throws DAOException
+    public FlPersonBean loadByIndexPhotoId(String photoId) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         if( null == photoId)
@@ -1259,7 +1259,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexPhotoId(String photoId) throws DAOException
+    public int deleteByIndexPhotoId(String photoId) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setPhotoId(photoId);
@@ -1273,9 +1273,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return an array of FlPersonBean
      * @throws DAOException
      */
-    public FlPersonBean[] loadByindexExpiryDate(java.util.Date expiryDate) throws DAOException
+    public FlPersonBean[] loadByIndexExpiryDate(java.util.Date expiryDate) throws DAOException
     {
-        return (FlPersonBean[])this.loadByindexExpiryDateAsList(expiryDate).toArray(new FlPersonBean[0]);
+        return (FlPersonBean[])this.loadByIndexExpiryDateAsList(expiryDate).toArray(new FlPersonBean[0]);
     }
     
     /**
@@ -1285,7 +1285,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return a list of FlPersonBean
      * @throws DAOException
      */
-    public List<FlPersonBean> loadByindexExpiryDateAsList(java.util.Date expiryDate) throws DAOException
+    public List<FlPersonBean> loadByIndexExpiryDateAsList(java.util.Date expiryDate) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setExpiryDate(expiryDate);
@@ -1298,7 +1298,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByindexExpiryDate(java.util.Date expiryDate) throws DAOException
+    public int deleteByIndexExpiryDate(java.util.Date expiryDate) throws DAOException
     {
         FlPersonBean bean = this.createBean();
         bean.setExpiryDate(expiryDate);
@@ -1322,40 +1322,31 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'face_md5' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            FlPersonBean bean= this.loadByindexFaceMd5((String)keys[0]);
-            List<FlPersonBean> result = new java.util.ArrayList<FlPersonBean>();
-            if(null != bean)
-                result.add(bean);
-            return result;
+            FlPersonBean bean= this.loadByIndexFaceMd5((String)keys[0]);
+            return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
             if(null != keys[1] && !(keys[1] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            FlPersonBean bean= this.loadByindexPapersNum((String)keys[0]);
-            List<FlPersonBean> result = new java.util.ArrayList<FlPersonBean>();
-            if(null != bean)
-                result.add(bean);
-            return result;
+            FlPersonBean bean= this.loadByIndexPapersNum((String)keys[0]);
+            return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_PHOTO_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'photo_id' column number");
             if(null != keys[2] && !(keys[2] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            FlPersonBean bean= this.loadByindexPhotoId((String)keys[0]);
-            List<FlPersonBean> result = new java.util.ArrayList<FlPersonBean>();
-            if(null != bean)
-                result.add(bean);
-            return result;
+            FlPersonBean bean= this.loadByIndexPhotoId((String)keys[0]);
+            return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
             if(null != keys[3] && !(keys[3] instanceof java.util.Date))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
-            return this.loadByindexExpiryDateAsList((java.util.Date)keys[0]);        
+            return this.loadByIndexExpiryDateAsList((java.util.Date)keys[0]);        
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1378,28 +1369,28 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 throw new IllegalArgumentException("argument number mismatch with index 'face_md5' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexFaceMd5((String)keys[0]);
+            return this.deleteByIndexFaceMd5((String)keys[0]);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
             if(null != keys[1] && !(keys[1] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexPapersNum((String)keys[0]);
+            return this.deleteByIndexPapersNum((String)keys[0]);
         }
         case FL_PERSON_INDEX_PHOTO_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'photo_id' column number");
             if(null != keys[2] && !(keys[2] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByindexPhotoId((String)keys[0]);
+            return this.deleteByIndexPhotoId((String)keys[0]);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
             if(null != keys[3] && !(keys[3] instanceof java.util.Date))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
-            return this.deleteByindexExpiryDate((java.util.Date)keys[0]);
+            return this.deleteByIndexExpiryDate((java.util.Date)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));

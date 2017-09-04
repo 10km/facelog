@@ -611,9 +611,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param compareFace the compare_face column's value filter.
      * @return an array of LogBean
      */
-    public LogBean[] loadByindexCompareFace(String compareFace)
+    public LogBean[] loadByIndexCompareFace(String compareFace)
     {
-        return this.loadByindexCompareFaceAsList(compareFace).toArray(new LogBean[0]);
+        return this.loadByIndexCompareFaceAsList(compareFace).toArray(new LogBean[0]);
     }
     
     /**
@@ -622,10 +622,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param compareFace the compare_face column's value filter.
      * @return a list of LogBean
      */
-    public java.util.List<LogBean> loadByindexCompareFaceAsList(String compareFace)
+    public java.util.List<LogBean> loadByIndexCompareFaceAsList(String compareFace)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByindexCompareFaceAsList(compareFace));
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexCompareFaceAsList(compareFace));
         }
         catch(DAOException e)
         {
@@ -639,10 +639,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param compareFace the compare_face column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByindexCompareFace(String compareFace)
+    public int deleteByIndexCompareFace(String compareFace)
     {
         try{
-            return this.nativeManager.deleteByindexCompareFace(compareFace);
+            return this.nativeManager.deleteByIndexCompareFace(compareFace);
         }
         catch(DAOException e)
         {
@@ -656,9 +656,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param deviceId the device_id column's value filter.
      * @return an array of LogBean
      */
-    public LogBean[] loadByindexDeviceId(Integer deviceId)
+    public LogBean[] loadByIndexDeviceId(Integer deviceId)
     {
-        return this.loadByindexDeviceIdAsList(deviceId).toArray(new LogBean[0]);
+        return this.loadByIndexDeviceIdAsList(deviceId).toArray(new LogBean[0]);
     }
     
     /**
@@ -667,10 +667,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param deviceId the device_id column's value filter.
      * @return a list of LogBean
      */
-    public java.util.List<LogBean> loadByindexDeviceIdAsList(Integer deviceId)
+    public java.util.List<LogBean> loadByIndexDeviceIdAsList(Integer deviceId)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByindexDeviceIdAsList(deviceId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexDeviceIdAsList(deviceId));
         }
         catch(DAOException e)
         {
@@ -684,10 +684,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param deviceId the device_id column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByindexDeviceId(Integer deviceId)
+    public int deleteByIndexDeviceId(Integer deviceId)
     {
         try{
-            return this.nativeManager.deleteByindexDeviceId(deviceId);
+            return this.nativeManager.deleteByIndexDeviceId(deviceId);
         }
         catch(DAOException e)
         {
@@ -701,9 +701,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param personId the person_id column's value filter.
      * @return an array of LogBean
      */
-    public LogBean[] loadByindexPersonId(Integer personId)
+    public LogBean[] loadByIndexPersonId(Integer personId)
     {
-        return this.loadByindexPersonIdAsList(personId).toArray(new LogBean[0]);
+        return this.loadByIndexPersonIdAsList(personId).toArray(new LogBean[0]);
     }
     
     /**
@@ -712,10 +712,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param personId the person_id column's value filter.
      * @return a list of LogBean
      */
-    public java.util.List<LogBean> loadByindexPersonIdAsList(Integer personId)
+    public java.util.List<LogBean> loadByIndexPersonIdAsList(Integer personId)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByindexPersonIdAsList(personId));
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexPersonIdAsList(personId));
         }
         catch(DAOException e)
         {
@@ -729,10 +729,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param personId the person_id column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByindexPersonId(Integer personId)
+    public int deleteByIndexPersonId(Integer personId)
     {
         try{
-            return this.nativeManager.deleteByindexPersonId(personId);
+            return this.nativeManager.deleteByIndexPersonId(personId);
         }
         catch(DAOException e)
         {
@@ -746,9 +746,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param verifyFace the verify_face column's value filter.
      * @return an array of LogBean
      */
-    public LogBean[] loadByindexVerifyFace(String verifyFace)
+    public LogBean[] loadByIndexVerifyFace(String verifyFace)
     {
-        return this.loadByindexVerifyFaceAsList(verifyFace).toArray(new LogBean[0]);
+        return this.loadByIndexVerifyFaceAsList(verifyFace).toArray(new LogBean[0]);
     }
     
     /**
@@ -757,10 +757,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param verifyFace the verify_face column's value filter.
      * @return a list of LogBean
      */
-    public java.util.List<LogBean> loadByindexVerifyFaceAsList(String verifyFace)
+    public java.util.List<LogBean> loadByIndexVerifyFaceAsList(String verifyFace)
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByindexVerifyFaceAsList(verifyFace));
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexVerifyFaceAsList(verifyFace));
         }
         catch(DAOException e)
         {
@@ -774,10 +774,10 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * @param verifyFace the verify_face column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByindexVerifyFace(String verifyFace)
+    public int deleteByIndexVerifyFace(String verifyFace)
     {
         try{
-            return this.nativeManager.deleteByindexVerifyFace(verifyFace);
+            return this.nativeManager.deleteByIndexVerifyFace(verifyFace);
         }
         catch(DAOException e)
         {
