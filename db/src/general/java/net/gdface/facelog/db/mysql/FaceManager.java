@@ -9,10 +9,10 @@ package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
@@ -23,7 +23,7 @@ import net.gdface.facelog.db.WrapDAOException;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.log.FlLogBean;
+
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -46,12 +46,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     /**
     * @return field names of table
     */
-    public String getFieldNames() {
-        return this.nativeManager.getFieldNames();
+    public String getFields() {
+        return this.nativeManager.getFields();
     }
     
-    public String[] getFullFieldNames() {
-        return this.nativeManager.getFullFieldNames();
+    public String getFullFields() {
+        return this.nativeManager.getFullFields();
     }
     
     /**
@@ -123,13 +123,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
     /**
      * Loads a {@link FaceBean} from the fl_face using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return a unique {@link FaceBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.3
+    @Override
     public FaceBean loadByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -173,11 +172,11 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(String md5)}
      */   
     //2.1
+    @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -195,16 +194,16 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (java.util.List<T>)this.getFlLogBeansByVerifyFaceAsList(bean);
@@ -218,17 +217,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FaceBean}
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (T[])setFlLogBeansByVerifyFace(bean,(LogBean[])importedBeans);
@@ -241,17 +240,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FaceBean}
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (C)setFlLogBeansByVerifyFace(bean,(java.util.Collection<LogBean>)importedBeans);
@@ -482,7 +481,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
             }});
     }
      /**
-     * Save the FaceBean bean and referenced beans and imported beans into the database.
+     * Save the {@link FaceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -493,8 +492,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     @Override
     public FaceBean save(FaceBean bean,Object ...args) 
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
@@ -507,11 +506,11 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof LogBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:LogBean[]");
         }
-        return save(bean,(ImageBean)args[0],(PersonBean)args[1],(LogBean[])args[2],(LogBean[])args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean)args[0],(args.length < 2 || null == args[1])?null:(PersonBean)args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2],(args.length < 4 || null == args[3])?null:(LogBean[])args[3]);
     } 
 
     /**
-     * Save the FaceBean bean and referenced beans and imported beans into the database.
+     * Save the {@link FaceBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -521,10 +520,12 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
-    public FaceBean saveCollection(FaceBean bean,Object ...args)
+    public FaceBean saveCollection(FaceBean bean,Object ...inputs)
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(inputs.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        Object[] args = new Object[4];
+        System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
@@ -537,8 +538,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<LogBean>");
         }
-        return save(bean,(ImageBean)args[0],(PersonBean)args[1],(java.util.Collection<LogBean>)args[2],(java.util.Collection<LogBean>)args[3]);
-    } 
+        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(PersonBean)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2],null == args[3]?null:(java.util.Collection<LogBean>)args[3]);
+    }
+
      //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
@@ -547,17 +549,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMG_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
+     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_FACE_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(FaceBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T getReferencedBean(FaceBean bean,int fkIndex){
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.getReferencedByImgMd5(bean);
@@ -577,7 +579,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.setReferencedByImgMd5(bean, (ImageBean)beanToSet);
@@ -861,7 +863,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     /**
      * Retrieves a list of FaceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return a list of FaceBean
      */
@@ -878,7 +880,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */

@@ -9,10 +9,10 @@ package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
@@ -23,6 +23,7 @@ import net.gdface.facelog.db.WrapDAOException;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
+
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -45,12 +46,12 @@ public class LogManager extends TableManager.Adapter<LogBean>
     /**
     * @return field names of table
     */
-    public String getFieldNames() {
-        return this.nativeManager.getFieldNames();
+    public String getFields() {
+        return this.nativeManager.getFields();
     }
     
-    public String[] getFullFieldNames() {
-        return this.nativeManager.getFullFieldNames();
+    public String getFullFields() {
+        return this.nativeManager.getFullFields();
     }
     
     /**
@@ -122,13 +123,12 @@ public class LogManager extends TableManager.Adapter<LogBean>
     }
     /**
      * Loads a {@link LogBean} from the fl_log using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return a unique {@link LogBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.3
+    @Override
     public LogBean loadByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -172,11 +172,11 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */   
     //2.1
+    @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -229,7 +229,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
             }});
     }
      /**
-     * Save the LogBean bean and referenced beans and imported beans into the database.
+     * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link LogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -240,8 +240,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
     @Override
     public LogBean save(LogBean bean,Object ...args) 
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
@@ -254,11 +254,11 @@ public class LogManager extends TableManager.Adapter<LogBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
-        return save(bean,(DeviceBean)args[0],(FaceBean)args[1],(FaceBean)args[2],(PersonBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean)args[1],(args.length < 3 || null == args[2])?null:(FaceBean)args[2],(args.length < 4 || null == args[3])?null:(PersonBean)args[3]);
     } 
 
     /**
-     * Save the LogBean bean and referenced beans and imported beans into the database.
+     * Save the {@link LogBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link LogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -268,10 +268,12 @@ public class LogManager extends TableManager.Adapter<LogBean>
     //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
-    public LogBean saveCollection(LogBean bean,Object ...args)
+    public LogBean saveCollection(LogBean bean,Object ...inputs)
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(inputs.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        Object[] args = new Object[4];
+        System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
@@ -284,8 +286,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
-        return save(bean,(DeviceBean)args[0],(FaceBean)args[1],(FaceBean)args[2],(PersonBean)args[3]);
-    } 
+        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(FaceBean)args[1],null == args[2]?null:(FaceBean)args[2],null == args[3]?null:(PersonBean)args[3]);
+    }
+
      //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
@@ -294,19 +297,19 @@ public class LogManager extends TableManager.Adapter<LogBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_VERIFY_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FACE} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link LogBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(LogBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T getReferencedBean(LogBean bean,int fkIndex){
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -330,7 +333,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(LogBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T setReferencedBean(LogBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
@@ -786,7 +789,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
     /**
      * Retrieves a list of LogBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}
      * @param keys key values of index
      * @return a list of LogBean
      */
@@ -803,7 +806,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}
      * @param keys key values of index
      * @return the number of deleted objects
      */

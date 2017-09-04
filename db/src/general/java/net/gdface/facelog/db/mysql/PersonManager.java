@@ -9,10 +9,10 @@ package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.LogBean;
@@ -23,8 +23,7 @@ import net.gdface.facelog.db.WrapDAOException;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.log.FlLogBean;
+
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -47,12 +46,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     /**
     * @return field names of table
     */
-    public String getFieldNames() {
-        return this.nativeManager.getFieldNames();
+    public String getFields() {
+        return this.nativeManager.getFields();
     }
     
-    public String[] getFullFieldNames() {
-        return this.nativeManager.getFullFieldNames();
+    public String getFullFields() {
+        return this.nativeManager.getFullFields();
     }
     
     /**
@@ -124,13 +123,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
     /**
      * Loads a {@link PersonBean} from the fl_person using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return a unique {@link PersonBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.3
+    @Override
     public PersonBean loadByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -174,11 +172,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(Integer id)}
      */   
     //2.1
+    @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -196,16 +194,16 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
             return (java.util.List<T>)this.getFlFaceBeansByPersonIdAsList(bean);
@@ -219,17 +217,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link PersonBean}
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
             return (T[])setFlFaceBeansByPersonId(bean,(FaceBean[])importedBeans);
@@ -242,17 +240,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link PersonBean}
-     * @param ikIndex valid values: {@link TableManager#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link TableManager#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
             return (C)setFlFaceBeansByPersonId(bean,(java.util.Collection<FaceBean>)importedBeans);
@@ -481,7 +479,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
             }});
     }
      /**
-     * Save the PersonBean bean and referenced beans and imported beans into the database.
+     * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -503,11 +501,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
         }
-        return save(bean,(ImageBean)args[0],(FaceBean[])args[1],(LogBean[])args[2]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean[])args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
     /**
-     * Save the PersonBean bean and referenced beans and imported beans into the database.
+     * Save the {@link PersonBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -517,10 +515,12 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
-    public PersonBean saveCollection(PersonBean bean,Object ...args)
+    public PersonBean saveCollection(PersonBean bean,Object ...inputs)
     {
-        if(args.length > 3)
+        if(inputs.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        Object[] args = new Object[3];
+        System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
@@ -530,8 +530,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");
         }
-        return save(bean,(ImageBean)args[0],(java.util.Collection<FaceBean>)args[1],(java.util.Collection<LogBean>)args[2]);
-    } 
+        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(java.util.Collection<FaceBean>)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2]);
+    }
+
      //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
@@ -540,16 +541,16 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_FK_PHOTO_ID}
+     *        {@link Constant#FL_PERSON_FK_PHOTO_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(PersonBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T getReferencedBean(PersonBean bean,int fkIndex){
         switch(fkIndex){
         case FL_PERSON_FK_PHOTO_ID:
             return  (T)this.getReferencedByPhotoId(bean);
@@ -567,7 +568,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T setReferencedBean(PersonBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_PERSON_FK_PHOTO_ID:
             return  (T)this.setReferencedByPhotoId(bean, (ImageBean)beanToSet);
@@ -870,7 +871,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     /**
      * Retrieves a list of PersonBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     *        {@link Constant#FL_PERSON_INDEX_FACE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_PHOTO_ID},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}
      * @param keys key values of index
      * @return a list of PersonBean
      */
@@ -887,7 +888,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}
+     *        {@link Constant#FL_PERSON_INDEX_FACE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_PHOTO_ID},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}
      * @param keys key values of index
      * @return the number of deleted objects
      */

@@ -9,10 +9,10 @@ package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
@@ -21,7 +21,7 @@ import net.gdface.facelog.db.WrapDAOException;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.image.FlStoreManager;
 import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlImageBean;
+
 /**
  * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -44,12 +44,12 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     /**
     * @return field names of table
     */
-    public String getFieldNames() {
-        return this.nativeManager.getFieldNames();
+    public String getFields() {
+        return this.nativeManager.getFields();
     }
     
-    public String[] getFullFieldNames() {
-        return this.nativeManager.getFullFieldNames();
+    public String getFullFields() {
+        return this.nativeManager.getFullFields();
     }
     
     /**
@@ -121,13 +121,12 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     }
     /**
      * Loads a {@link StoreBean} from the fl_store using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return a unique {@link StoreBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.3
+    @Override
     public StoreBean loadByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -171,11 +170,11 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(String md5)}
      */   
     //2.1
+    @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -193,16 +192,16 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @param ikIndex valid values: {@link Constant#FL_STORE_IK_FL_IMAGE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (java.util.List<T>)this.getFlImageBeansByMd5AsList(bean);
@@ -216,17 +215,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
      * @param importedBeans the FlImageBean array to associate to the {@link StoreBean}
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @param ikIndex valid values: {@link Constant#FL_STORE_IK_FL_IMAGE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] setImportedBeans(StoreBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(StoreBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (T[])setFlImageBeansByMd5(bean,(ImageBean[])importedBeans);
@@ -239,17 +238,17 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the {@link StoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link StoreBean}
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @param ikIndex valid values: {@link Constant#FL_STORE_IK_FL_IMAGE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (C)setFlImageBeansByMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
@@ -476,7 +475,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
             }});
     }
      /**
-     * Save the StoreBean bean and referenced beans and imported beans into the database.
+     * Save the {@link StoreBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link StoreBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -487,19 +486,19 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     @Override
     public StoreBean save(StoreBean bean,Object ...args) 
     {
-        if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:ImageBean[]");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof ImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:ImageBean[]");
         }
-        return save(bean,(ImageBean[])args[0],(ImageBean[])args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean[])args[0],(args.length < 2 || null == args[1])?null:(ImageBean[])args[1]);
     } 
 
     /**
-     * Save the StoreBean bean and referenced beans and imported beans into the database.
+     * Save the {@link StoreBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link StoreBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -509,18 +508,21 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
-    public StoreBean saveCollection(StoreBean bean,Object ...args)
+    public StoreBean saveCollection(StoreBean bean,Object ...inputs)
     {
-        if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
+        if(inputs.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        Object[] args = new Object[2];
+        System.arraycopy(inputs,0,args,0,2);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<ImageBean>");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<ImageBean>");
         }
-        return save(bean,(java.util.Collection<ImageBean>)args[0],(java.util.Collection<ImageBean>)args[1]);
-    } 
+        return save(bean,null == args[0]?null:(java.util.Collection<ImageBean>)args[0],null == args[1]?null:(java.util.Collection<ImageBean>)args[1]);
+    }
+
      
 
     //////////////////////////////////////

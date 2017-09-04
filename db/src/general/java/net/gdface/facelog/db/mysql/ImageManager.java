@@ -9,10 +9,10 @@ package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
 
+import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
-import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
@@ -24,8 +24,7 @@ import net.gdface.facelog.db.WrapDAOException;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.image.FlImageManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.person.FlPersonBean;
+
 /**
  * Handles database calls (save, load, count, etc...) for the fl_image table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
@@ -48,12 +47,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     /**
     * @return field names of table
     */
-    public String getFieldNames() {
-        return this.nativeManager.getFieldNames();
+    public String getFields() {
+        return this.nativeManager.getFields();
     }
     
-    public String[] getFullFieldNames() {
-        return this.nativeManager.getFullFieldNames();
+    public String getFullFields() {
+        return this.nativeManager.getFullFields();
     }
     
     /**
@@ -125,13 +124,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     }
     /**
      * Loads a {@link ImageBean} from the fl_image using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return a unique {@link ImageBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.3
+    @Override
     public ImageBean loadByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -175,11 +173,11 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return the number of deleted rows
      * @see {@link #deleteByPrimaryKey(String md5)}
      */   
     //2.1
+    @Override
     public int deleteByPrimaryKey(Object ...keys){
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -197,16 +195,16 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
             return (java.util.List<T>)this.getFlFaceBeansByImgMd5AsList(bean);
@@ -220,17 +218,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param importedBeans the FlPersonBean array to associate to the {@link ImageBean}
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T[] setImportedBeans(ImageBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(ImageBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
             return (T[])setFlFaceBeansByImgMd5(bean,(FaceBean[])importedBeans);
@@ -243,17 +241,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link PersonBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param importedBeans the <T> object to associate to the {@link ImageBean}
-     * @param ikIndex valid values: {@link TableManager#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link TableManager#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
+     * @param ikIndex valid values: {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5},{@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
             return (C)setFlFaceBeansByImgMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
@@ -486,7 +484,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
             }});
     }
      /**
-     * Save the ImageBean bean and referenced beans and imported beans into the database.
+     * Save the {@link ImageBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -497,8 +495,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     @Override
     public ImageBean save(ImageBean bean,Object ...args) 
     {
-        if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > 5)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 5");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
@@ -514,11 +512,11 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         if( args.length > 4 && null != args[4] && !(args[4] instanceof PersonBean[])){
             throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:PersonBean[]");
         }
-        return save(bean,(DeviceBean)args[0],(StoreBean)args[1],(StoreBean)args[2],(FaceBean[])args[3],(PersonBean[])args[4]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(StoreBean)args[1],(args.length < 3 || null == args[2])?null:(StoreBean)args[2],(args.length < 4 || null == args[3])?null:(FaceBean[])args[3],(args.length < 5 || null == args[4])?null:(PersonBean[])args[4]);
     } 
 
     /**
-     * Save the ImageBean bean and referenced beans and imported beans into the database.
+     * Save the {@link ImageBean} bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
@@ -528,10 +526,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
-    public ImageBean saveCollection(ImageBean bean,Object ...args)
+    public ImageBean saveCollection(ImageBean bean,Object ...inputs)
     {
-        if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(inputs.length > 5)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 5");
+        Object[] args = new Object[5];
+        System.arraycopy(inputs,0,args,0,5);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
@@ -547,8 +547,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         if( args.length > 4 && null != args[4] && !(args[4] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:java.util.Collection<PersonBean>");
         }
-        return save(bean,(DeviceBean)args[0],(StoreBean)args[1],(StoreBean)args[2],(java.util.Collection<FaceBean>)args[3],(java.util.Collection<PersonBean>)args[4]);
-    } 
+        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(StoreBean)args[1],null == args[2]?null:(StoreBean)args[2],null == args[3]?null:(java.util.Collection<FaceBean>)args[3],null == args[4]?null:(java.util.Collection<PersonBean>)args[4]);
+    }
+
      //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
     //////////////////////////////////////
@@ -557,18 +558,18 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
-     *     <li> {@link TableManager#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_FK_DEVICE_ID},{@link TableManager#FL_IMAGE_FK_MD5},{@link TableManager#FL_IMAGE_FK_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T getReferencedBean(ImageBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T getReferencedBean(ImageBean bean,int fkIndex){
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -590,7 +591,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean> T setReferencedBean(ImageBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
@@ -915,7 +916,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     /**
      * Retrieves a list of ImageBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}
      * @param keys key values of index
      * @return a list of ImageBean
      */
@@ -932,7 +933,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}
      * @param keys key values of index
      * @return the number of deleted objects
      */

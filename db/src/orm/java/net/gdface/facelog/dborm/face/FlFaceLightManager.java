@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -50,12 +51,12 @@ public class FlFaceLightManager extends TableManager.Adapter<FlFaceLightBean>
         return TABLE_NAME;
     }
 
-    public String getFieldNames() {
-        return FL_FACE_LIGHT_ALL_FIELDS;
+    public String getFields() {
+        return FL_FACE_LIGHT_FIELDS;
     }
     
-    public String[] getFullFieldNames() {
-        return FL_FACE_LIGHT_FULL_FIELD_NAMES;
+    public String getFullFields() {
+        return FL_FACE_LIGHT_FULL_FIELDS;
     }
     
     /**

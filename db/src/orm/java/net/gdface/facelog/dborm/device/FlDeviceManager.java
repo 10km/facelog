@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -55,12 +56,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return TABLE_NAME;
     }
 
-    public String getFieldNames() {
-        return FL_DEVICE_ALL_FIELDS;
+    public String getFields() {
+        return FL_DEVICE_FIELDS;
     }
     
-    public String[] getFullFieldNames() {
-        return FL_DEVICE_FULL_FIELD_NAMES;
+    public String getFullFields() {
+        return FL_DEVICE_FULL_FIELDS;
     }
     
     /**
@@ -116,7 +117,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + FL_DEVICE_ALL_FIELDS + " FROM fl_device WHERE id=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_DEVICE_FIELDS + " FROM fl_device WHERE id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -149,13 +150,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     
     /**
      * Loads a {@link FlDeviceBean} from the fl_device using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return a unique {@link FlDeviceBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.3
+    @Override
     public FlDeviceBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -240,7 +240,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return the number of deleted rows
      * @see {@link #delete(FlDeviceBean)}
      */   
@@ -265,17 +264,17 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlDeviceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link TableManager#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
+     * @param ikIndex valid values: {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID},{@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (List<T>)this.getFlImageBeansByDeviceIdAsList(bean);
@@ -296,7 +295,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (T[])setFlImageBeansByDeviceId(bean,(FlImageBean[])importedBeans);
@@ -317,7 +316,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (C)setFlImageBeansByDeviceId(bean,(java.util.Collection<FlImageBean>)importedBeans);
@@ -472,8 +471,8 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * Save the FlDeviceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlDeviceBean} bean to be saved
-         * @param impFlImagebyDeviceId the {@link FlImageBean} bean refer to {@link FlDeviceBean} 
-     * @param impFlLogbyDeviceId the {@link FlLogBean} bean refer to {@link FlDeviceBean} 
+         * @param impFlImagebyDeviceId the {@link FlImageBean} beans refer to {@link FlDeviceBean} 
+     * @param impFlLogbyDeviceId the {@link FlLogBean} beans refer to {@link FlDeviceBean} 
      * @return the inserted or updated {@link FlDeviceBean} bean
      * @throws DAOException
      */
@@ -565,7 +564,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlLogBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlLogBean[]");
         }
-        return save(bean,(FlImageBean[])args[0],(FlLogBean[])args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean[])args[0],(args.length < 2 || null == args[1])?null:(FlLogBean[])args[1]);
     } 
 
     /**
@@ -590,7 +589,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlLogBean>");
         }
-        return save(bean,(java.util.Collection<FlImageBean>)args[0],(java.util.Collection<FlLogBean>)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(java.util.Collection<FlImageBean>)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlLogBean>)args[1]);
     } 
      
 

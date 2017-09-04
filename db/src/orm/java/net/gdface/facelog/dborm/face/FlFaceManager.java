@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -57,12 +58,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return TABLE_NAME;
     }
 
-    public String getFieldNames() {
-        return FL_FACE_ALL_FIELDS;
+    public String getFields() {
+        return FL_FACE_FIELDS;
     }
     
-    public String[] getFullFieldNames() {
-        return FL_FACE_FULL_FIELD_NAMES;
+    public String getFullFields() {
+        return FL_FACE_FULL_FIELDS;
     }
     
     /**
@@ -118,7 +119,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + FL_FACE_ALL_FIELDS + " FROM fl_face WHERE md5=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_FACE_FIELDS + " FROM fl_face WHERE md5=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -151,13 +152,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     
     /**
      * Loads a {@link FlFaceBean} from the fl_face using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return a unique {@link FlFaceBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.3
+    @Override
     public FlFaceBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -242,7 +242,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return the number of deleted rows
      * @see {@link #delete(FlFaceBean)}
      */   
@@ -267,17 +266,17 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link TableManager#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (List<T>)this.getFlLogBeansByVerifyFaceAsList(bean);
@@ -298,7 +297,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (T[])setFlLogBeansByVerifyFace(bean,(FlLogBean[])importedBeans);
@@ -319,7 +318,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (C)setFlLogBeansByVerifyFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
@@ -476,8 +475,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
      * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFaceBean} 
-     * @param impFlLogbyVerifyFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
-     * @param impFlLogbyCompareFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
+     * @param impFlLogbyVerifyFace the {@link FlLogBean} beans refer to {@link FlFaceBean} 
+     * @param impFlLogbyCompareFace the {@link FlLogBean} beans refer to {@link FlFaceBean} 
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -567,8 +566,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
@@ -581,7 +580,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlLogBean[]");
         }
-        return save(bean,(FlImageBean)args[0],(FlPersonBean)args[1],(FlLogBean[])args[2],(FlLogBean[])args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(FlLogBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3]);
     } 
 
     /**
@@ -598,8 +597,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
@@ -612,7 +611,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlLogBean>");
         }
-        return save(bean,(FlImageBean)args[0],(FlPersonBean)args[1],(java.util.Collection<FlLogBean>)args[2],(java.util.Collection<FlLogBean>)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlLogBean>)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlLogBean>)args[3]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -622,18 +621,18 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_FK_IMG_MD5},{@link TableManager#FL_FACE_FK_PERSON_ID}
+     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_FACE_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.getReferencedByImgMd5(bean);
@@ -655,7 +654,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.setReferencedByImgMd5(bean, (FlImageBean)beanToSet);
@@ -1453,7 +1452,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     /**
      * Retrieves a list of FlFaceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return a list of FlFaceBean
      * @throws DAOException
@@ -1483,7 +1482,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}
+     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException

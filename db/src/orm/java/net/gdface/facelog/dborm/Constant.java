@@ -281,134 +281,106 @@ public interface Constant {
     // COLUMN NAME DECLARE
     //////////////////////////////////////    
     /** Contains all the full fields of the fl_device table.*/
-    public static final String[] FL_DEVICE_FULL_FIELD_NAMES =
-    {
-        "fl_device.id"
-        ,"fl_device.name"
-        ,"fl_device.online"
-        ,"fl_device.group_id"
-        ,"fl_device.version"
-        ,"fl_device.create_time"
-        ,"fl_device.update_time"
-    };
+    public static final String FL_DEVICE_FULL_FIELDS ="fl_device.id"
+                            + ",fl_device.name"
+                            + ",fl_device.online"
+                            + ",fl_device.group_id"
+                            + ",fl_device.version"
+                            + ",fl_device.create_time"
+                            + ",fl_device.update_time";
     /** Contains all the full fields of the fl_face table.*/
-    public static final String[] FL_FACE_FULL_FIELD_NAMES =
-    {
-        "fl_face.md5"
-        ,"fl_face.person_id"
-        ,"fl_face.img_md5"
-        ,"fl_face.face_left"
-        ,"fl_face.face_top"
-        ,"fl_face.face_width"
-        ,"fl_face.face_height"
-        ,"fl_face.eye_leftx"
-        ,"fl_face.eye_lefty"
-        ,"fl_face.eye_rightx"
-        ,"fl_face.eye_righty"
-        ,"fl_face.mouth_x"
-        ,"fl_face.mouth_y"
-        ,"fl_face.nose_x"
-        ,"fl_face.nose_y"
-        ,"fl_face.angle_yaw"
-        ,"fl_face.angle_pitch"
-        ,"fl_face.angle_roll"
-        ,"fl_face.ext_info"
-        ,"fl_face.feature"
-        ,"fl_face.create_time"
-    };
+    public static final String FL_FACE_FULL_FIELDS ="fl_face.md5"
+                            + ",fl_face.person_id"
+                            + ",fl_face.img_md5"
+                            + ",fl_face.face_left"
+                            + ",fl_face.face_top"
+                            + ",fl_face.face_width"
+                            + ",fl_face.face_height"
+                            + ",fl_face.eye_leftx"
+                            + ",fl_face.eye_lefty"
+                            + ",fl_face.eye_rightx"
+                            + ",fl_face.eye_righty"
+                            + ",fl_face.mouth_x"
+                            + ",fl_face.mouth_y"
+                            + ",fl_face.nose_x"
+                            + ",fl_face.nose_y"
+                            + ",fl_face.angle_yaw"
+                            + ",fl_face.angle_pitch"
+                            + ",fl_face.angle_roll"
+                            + ",fl_face.ext_info"
+                            + ",fl_face.feature"
+                            + ",fl_face.create_time";
     /** Contains all the full fields of the fl_image table.*/
-    public static final String[] FL_IMAGE_FULL_FIELD_NAMES =
-    {
-        "fl_image.md5"
-        ,"fl_image.format"
-        ,"fl_image.width"
-        ,"fl_image.height"
-        ,"fl_image.depth"
-        ,"fl_image.face_num"
-        ,"fl_image.thumb_md5"
-        ,"fl_image.device_id"
-    };
+    public static final String FL_IMAGE_FULL_FIELDS ="fl_image.md5"
+                            + ",fl_image.format"
+                            + ",fl_image.width"
+                            + ",fl_image.height"
+                            + ",fl_image.depth"
+                            + ",fl_image.face_num"
+                            + ",fl_image.thumb_md5"
+                            + ",fl_image.device_id";
     /** Contains all the full fields of the fl_log table.*/
-    public static final String[] FL_LOG_FULL_FIELD_NAMES =
-    {
-        "fl_log.id"
-        ,"fl_log.person_id"
-        ,"fl_log.device_id"
-        ,"fl_log.verify_face"
-        ,"fl_log.compare_face"
-        ,"fl_log.similarty"
-        ,"fl_log.verify_time"
-        ,"fl_log.create_time"
-    };
+    public static final String FL_LOG_FULL_FIELDS ="fl_log.id"
+                            + ",fl_log.person_id"
+                            + ",fl_log.device_id"
+                            + ",fl_log.verify_face"
+                            + ",fl_log.compare_face"
+                            + ",fl_log.similarty"
+                            + ",fl_log.verify_time"
+                            + ",fl_log.create_time";
     /** Contains all the full fields of the fl_person table.*/
-    public static final String[] FL_PERSON_FULL_FIELD_NAMES =
-    {
-        "fl_person.id"
-        ,"fl_person.group_id"
-        ,"fl_person.name"
-        ,"fl_person.sex"
-        ,"fl_person.birthdate"
-        ,"fl_person.papers_type"
-        ,"fl_person.papers_num"
-        ,"fl_person.photo_id"
-        ,"fl_person.face_md5"
-        ,"fl_person.expiry_date"
-        ,"fl_person.create_time"
-        ,"fl_person.update_time"
-    };
+    public static final String FL_PERSON_FULL_FIELDS ="fl_person.id"
+                            + ",fl_person.group_id"
+                            + ",fl_person.name"
+                            + ",fl_person.sex"
+                            + ",fl_person.birthdate"
+                            + ",fl_person.papers_type"
+                            + ",fl_person.papers_num"
+                            + ",fl_person.photo_id"
+                            + ",fl_person.face_md5"
+                            + ",fl_person.expiry_date"
+                            + ",fl_person.create_time"
+                            + ",fl_person.update_time";
     /** Contains all the full fields of the fl_store table.*/
-    public static final String[] FL_STORE_FULL_FIELD_NAMES =
-    {
-        "fl_store.md5"
-        ,"fl_store.encoding"
-        ,"fl_store.data"
-    };
+    public static final String FL_STORE_FULL_FIELDS ="fl_store.md5"
+                            + ",fl_store.encoding"
+                            + ",fl_store.data";
     /** Contains all the full fields of the fl_face_light table.*/
-    public static final String[] FL_FACE_LIGHT_FULL_FIELD_NAMES =
-    {
-        "fl_face_light.md5"
-        ,"fl_face_light.person_id"
-        ,"fl_face_light.img_md5"
-        ,"fl_face_light.face_left"
-        ,"fl_face_light.face_top"
-        ,"fl_face_light.face_width"
-        ,"fl_face_light.face_height"
-        ,"fl_face_light.eye_leftx"
-        ,"fl_face_light.eye_lefty"
-        ,"fl_face_light.eye_rightx"
-        ,"fl_face_light.eye_righty"
-        ,"fl_face_light.mouth_x"
-        ,"fl_face_light.mouth_y"
-        ,"fl_face_light.nose_x"
-        ,"fl_face_light.nose_y"
-        ,"fl_face_light.angle_yaw"
-        ,"fl_face_light.angle_pitch"
-        ,"fl_face_light.angle_roll"
-        ,"fl_face_light.ext_info"
-        ,"fl_face_light.create_time"
-    };
+    public static final String FL_FACE_LIGHT_FULL_FIELDS ="fl_face_light.md5"
+                            + ",fl_face_light.person_id"
+                            + ",fl_face_light.img_md5"
+                            + ",fl_face_light.face_left"
+                            + ",fl_face_light.face_top"
+                            + ",fl_face_light.face_width"
+                            + ",fl_face_light.face_height"
+                            + ",fl_face_light.eye_leftx"
+                            + ",fl_face_light.eye_lefty"
+                            + ",fl_face_light.eye_rightx"
+                            + ",fl_face_light.eye_righty"
+                            + ",fl_face_light.mouth_x"
+                            + ",fl_face_light.mouth_y"
+                            + ",fl_face_light.nose_x"
+                            + ",fl_face_light.nose_y"
+                            + ",fl_face_light.angle_yaw"
+                            + ",fl_face_light.angle_pitch"
+                            + ",fl_face_light.angle_roll"
+                            + ",fl_face_light.ext_info"
+                            + ",fl_face_light.create_time";
     /** Contains all the full fields of the fl_feature table.*/
-    public static final String[] FL_FEATURE_FULL_FIELD_NAMES =
-    {
-        "fl_feature.md5"
-        ,"fl_feature.person_id"
-        ,"fl_feature.img_md5"
-        ,"fl_feature.feature"
-        ,"fl_feature.create_time"
-    };
+    public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
+                            + ",fl_feature.person_id"
+                            + ",fl_feature.img_md5"
+                            + ",fl_feature.feature"
+                            + ",fl_feature.create_time";
     /** Contains all the full fields of the fl_log_light table.*/
-    public static final String[] FL_LOG_LIGHT_FULL_FIELD_NAMES =
-    {
-        "fl_log_light.id"
-        ,"fl_log_light.person_id"
-        ,"fl_log_light.name"
-        ,"fl_log_light.papers_type"
-        ,"fl_log_light.papers_num"
-        ,"fl_log_light.verify_time"
-    };
-
+    public static final String FL_LOG_LIGHT_FULL_FIELDS ="fl_log_light.id"
+                            + ",fl_log_light.person_id"
+                            + ",fl_log_light.name"
+                            + ",fl_log_light.papers_type"
+                            + ",fl_log_light.papers_num"
+                            + ",fl_log_light.verify_time";
     /** Field that contains the comma separated fields of the fl_device table. */
-    public static final String FL_DEVICE_ALL_FIELDS = "id"
+    public static final String FL_DEVICE_FIELDS = "id"
                             + ",name"
                             + ",online"
                             + ",group_id"
@@ -416,7 +388,7 @@ public interface Constant {
                             + ",create_time"
                             + ",update_time";
     /** Field that contains the comma separated fields of the fl_face table. */
-    public static final String FL_FACE_ALL_FIELDS = "md5"
+    public static final String FL_FACE_FIELDS = "md5"
                             + ",person_id"
                             + ",img_md5"
                             + ",face_left"
@@ -438,7 +410,7 @@ public interface Constant {
                             + ",feature"
                             + ",create_time";
     /** Field that contains the comma separated fields of the fl_image table. */
-    public static final String FL_IMAGE_ALL_FIELDS = "md5"
+    public static final String FL_IMAGE_FIELDS = "md5"
                             + ",format"
                             + ",width"
                             + ",height"
@@ -447,7 +419,7 @@ public interface Constant {
                             + ",thumb_md5"
                             + ",device_id";
     /** Field that contains the comma separated fields of the fl_log table. */
-    public static final String FL_LOG_ALL_FIELDS = "id"
+    public static final String FL_LOG_FIELDS = "id"
                             + ",person_id"
                             + ",device_id"
                             + ",verify_face"
@@ -456,7 +428,7 @@ public interface Constant {
                             + ",verify_time"
                             + ",create_time";
     /** Field that contains the comma separated fields of the fl_person table. */
-    public static final String FL_PERSON_ALL_FIELDS = "id"
+    public static final String FL_PERSON_FIELDS = "id"
                             + ",group_id"
                             + ",name"
                             + ",sex"
@@ -469,11 +441,11 @@ public interface Constant {
                             + ",create_time"
                             + ",update_time";
     /** Field that contains the comma separated fields of the fl_store table. */
-    public static final String FL_STORE_ALL_FIELDS = "md5"
+    public static final String FL_STORE_FIELDS = "md5"
                             + ",encoding"
                             + ",data";
     /** Field that contains the comma separated fields of the fl_face_light table. */
-    public static final String FL_FACE_LIGHT_ALL_FIELDS = "md5"
+    public static final String FL_FACE_LIGHT_FIELDS = "md5"
                             + ",person_id"
                             + ",img_md5"
                             + ",face_left"
@@ -494,13 +466,13 @@ public interface Constant {
                             + ",ext_info"
                             + ",create_time";
     /** Field that contains the comma separated fields of the fl_feature table. */
-    public static final String FL_FEATURE_ALL_FIELDS = "md5"
+    public static final String FL_FEATURE_FIELDS = "md5"
                             + ",person_id"
                             + ",img_md5"
                             + ",feature"
                             + ",create_time";
     /** Field that contains the comma separated fields of the fl_log_light table. */
-    public static final String FL_LOG_LIGHT_ALL_FIELDS = "id"
+    public static final String FL_LOG_LIGHT_FIELDS = "id"
                             + ",person_id"
                             + ",name"
                             + ",papers_type"

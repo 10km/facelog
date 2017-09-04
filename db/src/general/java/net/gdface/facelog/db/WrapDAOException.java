@@ -8,7 +8,7 @@
 package net.gdface.facelog.db;
 
 /**
- * wrap all DAOException threw bye native code
+ * wrap all DAOException threw by native code
  *
  * @author guyadong
  */

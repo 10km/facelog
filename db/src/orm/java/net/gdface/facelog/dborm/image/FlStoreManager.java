@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -53,12 +54,12 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         return TABLE_NAME;
     }
 
-    public String getFieldNames() {
-        return FL_STORE_ALL_FIELDS;
+    public String getFields() {
+        return FL_STORE_FIELDS;
     }
     
-    public String[] getFullFieldNames() {
-        return FL_STORE_FULL_FIELD_NAMES;
+    public String getFullFields() {
+        return FL_STORE_FULL_FIELDS;
     }
     
     /**
@@ -114,7 +115,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + FL_STORE_ALL_FIELDS + " FROM fl_store WHERE md5=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_STORE_FIELDS + " FROM fl_store WHERE md5=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -147,13 +148,12 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     
     /**
      * Loads a {@link FlStoreBean} from the fl_store using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return a unique {@link FlStoreBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(String md5)}
      */
     //1.3
+    @Override
     public FlStoreBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -238,7 +238,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:String     
      * @return the number of deleted rows
      * @see {@link #delete(FlStoreBean)}
      */   
@@ -263,17 +262,17 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * Retrieves imported T objects by fkName.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
-     * @param ikIndex valid values: {@link TableManager#FL_STORE_IK_FL_IMAGE_MD5},{@link TableManager#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
+     * @param ikIndex valid values: {@link Constant#FL_STORE_IK_FL_IMAGE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (List<T>)this.getFlImageBeansByMd5AsList(bean);
@@ -294,7 +293,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (T[])setFlImageBeansByMd5(bean,(FlImageBean[])importedBeans);
@@ -315,7 +314,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (C)setFlImageBeansByMd5(bean,(java.util.Collection<FlImageBean>)importedBeans);
@@ -470,8 +469,8 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * Save the FlStoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
-         * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
-     * @param impFlImagebyThumbMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
+         * @param impFlImagebyMd5 the {@link FlImageBean} beans refer to {@link FlStoreBean} 
+     * @param impFlImagebyThumbMd5 the {@link FlImageBean} beans refer to {@link FlStoreBean} 
      * @return the inserted or updated {@link FlStoreBean} bean
      * @throws DAOException
      */
@@ -555,15 +554,15 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean save(FlStoreBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean[]");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlImageBean[]");
         }
-        return save(bean,(FlImageBean[])args[0],(FlImageBean[])args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean[])args[0],(args.length < 2 || null == args[1])?null:(FlImageBean[])args[1]);
     } 
 
     /**
@@ -580,15 +579,15 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean saveCollection(FlStoreBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 1)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 1");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlImageBean>");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlImageBean>");
         }
-        return save(bean,(java.util.Collection<FlImageBean>)args[0],(java.util.Collection<FlImageBean>)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(java.util.Collection<FlImageBean>)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlImageBean>)args[1]);
     } 
      
 

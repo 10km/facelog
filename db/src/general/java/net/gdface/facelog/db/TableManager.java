@@ -284,18 +284,20 @@ public interface TableManager<B extends BaseBean> extends Constant {
         }
         
         @Override
-        public String createSelectSql(int[] fieldList,String where){
+        public String createSelectSql(int[] fieldList, String where){
             StringBuffer sql = new StringBuffer(128);
-            if(fieldList == null) {
-                sql.append("SELECT ").append(this.getFieldNames());
+            String fullFields = this.getFullFields();
+            if(null == fieldList || 0 == fieldList.length) {
+                sql.append("SELECT ").append(fullFields);
             } else{
                 sql.append("SELECT ");
+                String[] names=fullFields.split(",");
                 for(int i = 0; i < fieldList.length; ++i){
-                    if(i != 0) {
+                    if(i > 0) {
                         sql.append(",");
                     }
-                    sql.append(this.getFullFieldNames()[fieldList[i]]);
-                }            
+                    sql.append(names[fieldList[i]]);
+                }      
             }
             sql.append(" FROM " + this.getTableName() + " ");
             if(null!=where)
@@ -400,13 +402,13 @@ public interface TableManager<B extends BaseBean> extends Constant {
         }
     }    
     
-    public String getFieldNames();
+    public String getFields();
     
     public String[] getPrimarykeyNames();
     
     public String getTableName();
         
-    public String[] getFullFieldNames();
+    public String getFullFields();
     
     /**
      * return true if @{code column}(case insensitive)is primary key,otherwise return false <br>
@@ -445,10 +447,10 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ? ending link ? <br>
-     *                {@value #SEARCH_EXACT}   {@link #SEARCH_EXACT} <br>
-     *                {@value #SEARCH_LIKE}   {@link #SEARCH_LIKE} <br>
-     *                {@value #SEARCH_STARTING_LIKE}   {@link #SEARCH_STARTING_LIKE} <br>
-     *                {@value #SEARCH_ENDING_LIKE}   {@link #SEARCH_ENDING_LIKE} <br>  
+     *                {@value Constant#SEARCH_EXACT}   {@link Constant#SEARCH_EXACT} <br>
+     *                {@value Constant#SEARCH_LIKE}   {@link Constant#SEARCH_LIKE} <br>
+     *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
+     *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return the number of rows returned
      */
     //20
@@ -494,7 +496,19 @@ public interface TableManager<B extends BaseBean> extends Constant {
     /**
      * Delete row according to its primary keys.
      *
-     * @param keys primary keys value
+     * @param keys primary keys value<br>
+     *      for fl_device table<br>
+     *          PK# 1 fl_device.id type Integer<br>
+     *      for fl_face table<br>
+     *          PK# 1 fl_face.md5 type String<br>
+     *      for fl_image table<br>
+     *          PK# 1 fl_image.md5 type String<br>
+     *      for fl_log table<br>
+     *          PK# 1 fl_log.id type Integer<br>
+     *      for fl_person table<br>
+     *          PK# 1 fl_person.id type Integer<br>
+     *      for fl_store table<br>
+     *          PK# 1 fl_store.md5 type String<br>
      * @return the number of deleted rows
      * @see #delete(B)
      */   
@@ -582,6 +596,18 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * Loads a B bean from the table using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
+     *      for fl_device table<br>
+     *          PK# 1 fl_device.id type Integer<br>
+     *      for fl_face table<br>
+     *          PK# 1 fl_face.md5 type String<br>
+     *      for fl_image table<br>
+     *          PK# 1 fl_image.md5 type String<br>
+     *      for fl_log table<br>
+     *          PK# 1 fl_log.id type Integer<br>
+     *      for fl_person table<br>
+     *          PK# 1 fl_person.id type Integer<br>
+     *      for fl_store table<br>
+     *          PK# 1 fl_store.md5 type String<br>
      * @return a unique B or {@code null} if not found
      */
     //1.3
@@ -787,10 +813,10 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ? ending link ? <br>
-     *                {@value #SEARCH_EXACT}   {@link #SEARCH_EXACT} <br>
-     *                {@value #SEARCH_LIKE}   {@link #SEARCH_LIKE} <br>
-     *                {@value #SEARCH_STARTING_LIKE}   {@link #SEARCH_STARTING_LIKE} <br>
-     *                {@value #SEARCH_ENDING_LIKE}   {@link #SEARCH_ENDING_LIKE} <br>  
+     *                {@value Constant#SEARCH_EXACT}   {@link Constant#SEARCH_EXACT} <br>
+     *                {@value Constant#SEARCH_LIKE}   {@link Constant#SEARCH_LIKE} <br>
+     *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
+     *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @param action Action object for do something(not null)
      * @return the count dealt by action
      */
@@ -803,10 +829,10 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ? ending link ? <br>
-     *                {@value #SEARCH_EXACT}   {@link #SEARCH_EXACT} <br>
-     *                {@value #SEARCH_LIKE}   {@link #SEARCH_LIKE} <br>
-     *                {@value #SEARCH_STARTING_LIKE}   {@link #SEARCH_STARTING_LIKE} <br>
-     *                {@value #SEARCH_ENDING_LIKE}   {@link #SEARCH_ENDING_LIKE} <br>  
+     *                {@value Constant#SEARCH_EXACT}   {@link Constant#SEARCH_EXACT} <br>
+     *                {@value Constant#SEARCH_LIKE}   {@link Constant#SEARCH_LIKE} <br>
+     *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
+     *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return all the B bean matching the template
      */
     //20-4
@@ -839,10 +865,10 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param searchType exact ?  like ? starting like ? ending link? <br>
-     *                {@value #SEARCH_EXACT}   {@link #SEARCH_EXACT} <br>
-     *                {@value #SEARCH_LIKE}   {@link #SEARCH_LIKE} <br>
-     *                {@value #SEARCH_STARTING_LIKE}   {@link #SEARCH_STARTING_LIKE} <br>
-     *                {@value #SEARCH_ENDING_LIKE}   {@link #SEARCH_ENDING_LIKE} <br>  
+     *                {@value Constant#SEARCH_EXACT}   {@link Constant#SEARCH_EXACT} <br>
+     *                {@value Constant#SEARCH_LIKE}   {@link Constant#SEARCH_LIKE} <br>
+     *                {@value Constant#SEARCH_STARTING_LIKE}   {@link Constant#SEARCH_STARTING_LIKE} <br>
+     *                {@value Constant#SEARCH_ENDING_LIKE}   {@link Constant#SEARCH_ENDING_LIKE} <br>  
      * @return all the B beans matching the template
      */
     //20-3
@@ -865,13 +891,13 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * Retrieves a list of B bean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
      *        for fl_face table<br>
-     *        {@link TableManager#FL_FACE_INDEX_IMG_MD5},{@link TableManager#FL_FACE_INDEX_PERSON_ID}<br>     
+     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}<br>     
      *        for fl_image table<br>
-     *        {@link TableManager#FL_IMAGE_INDEX_DEVICE_ID},{@link TableManager#FL_IMAGE_INDEX_THUMB_MD5}<br>     
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}<br>     
      *        for fl_log table<br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}<br>     
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}<br>     
      *        for fl_person table<br>
-     *        {@link TableManager#FL_PERSON_INDEX_FACE_MD5},{@link TableManager#FL_PERSON_INDEX_PAPERS_NUM},{@link TableManager#FL_PERSON_INDEX_PHOTO_ID},{@link TableManager#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
+     *        {@link Constant#FL_PERSON_INDEX_FACE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_PHOTO_ID},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
      * @param keys key values of index
      * @return a list of B bean
      */
@@ -957,40 +983,39 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
             for fl_device table:<br>
-                {@code ,ImageBean[],LogBean[]}<br>
+                {@code  ImageBean[] LogBean[]}<br>
             for fl_face table:<br>
-                {@code ImageBean,PersonBean,LogBean[],LogBean[]}<br>
+                {@code  ImageBean PersonBean LogBean[] LogBean[]}<br>
             for fl_image table:<br>
-                {@code DeviceBean,StoreBean,StoreBean,FaceBean[],PersonBean[]}<br>
+                {@code  DeviceBean StoreBean StoreBean FaceBean[] PersonBean[]}<br>
             for fl_log table:<br>
-                {@code DeviceBean,FaceBean,FaceBean,PersonBean}<br>
+                {@code  DeviceBean FaceBean FaceBean PersonBean}<br>
             for fl_person table:<br>
-                {@code ImageBean,FaceBean[],LogBean[]}<br>
+                {@code  ImageBean FaceBean[] LogBean[]}<br>
             for fl_store table:<br>
-                {@code ,ImageBean[],ImageBean[]}<br>
+                {@code  ImageBean[] ImageBean[]}<br>
      * @return the inserted or updated B bean
       */
     //3.9 SYNC SAVE 
     public B save(B bean,Object ...args);
     
-
     /**
      * Save the B bean and referenced beans and imported beans (collection) into the database.
      *
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
             for fl_device table:<br>
-                {@code ,Collection<ImageBean>,Collection<LogBean>}<br>
+                {@code  Collection<ImageBean> Collection<LogBean>}<br>
             for fl_face table:<br>
-                {@code ImageBean,PersonBean,Collection<LogBean>,Collection<LogBean>}<br>
+                {@code  ImageBean PersonBean Collection<LogBean> Collection<LogBean>}<br>
             for fl_image table:<br>
-                {@code DeviceBean,StoreBean,StoreBean,Collection<FaceBean>,Collection<PersonBean>}<br>
+                {@code  DeviceBean StoreBean StoreBean Collection<FaceBean> Collection<PersonBean>}<br>
             for fl_log table:<br>
-                {@code DeviceBean,FaceBean,FaceBean,PersonBean}<br>
+                {@code  DeviceBean FaceBean FaceBean PersonBean}<br>
             for fl_person table:<br>
-                {@code ImageBean,Collection<FaceBean>,Collection<LogBean>}<br>
+                {@code  ImageBean Collection<FaceBean> Collection<LogBean>}<br>
             for fl_store table:<br>
-                {@code ,Collection<ImageBean>,Collection<ImageBean>}<br>
+                {@code  Collection<ImageBean> Collection<ImageBean>}<br>
      * @return the inserted or updated B bean
      */
     //3.10 SYNC SAVE 
@@ -1054,6 +1079,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @return
      */
     public<T> T runAsTransaction(Callable<T> fun);
+
     /**
      * Run {@code Runnable} as a transaction.no return
      * @param fun
@@ -1067,36 +1093,36 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param <T>
      * <ul>
      *     <li> for fl_face:
-     *     <li> {@link #FL_FACE_FK_IMG_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link #FL_FACE_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMG_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_image:
-     *     <li> {@link #FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link #FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
-     *     <li> {@link #FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_log:
-     *     <li> {@link #FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link #FL_LOG_FK_VERIFY_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link #FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
-     *     <li> {@link #FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FACE} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_person:
-     *     <li> {@link #FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param fkIndex foreign key name.<br>
      *        for for fl_face table:<br>
-     *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_FACE_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_FACE_FK_PERSON_ID}<br>
      *        for for fl_image table:<br>
-     *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}<br>
      *        for for fl_log table:<br>
-     *        {@link #FL_LOG_FK_DEVICE_ID},{@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE},{@link #FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
      *        for for fl_person table:<br>
-     *        {@link #FL_PERSON_FK_PHOTO_ID}<br>
+     *        {@link Constant#FL_PERSON_FK_PHOTO_ID}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      */
     public <T extends BaseBean> T getReferencedBean(B bean,int fkIndex);
@@ -1116,41 +1142,41 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @param <T>
      * <ul>
      *     <li> for fl_device table:
-     *     <li> {@link #FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
-     *     <li> {@link #FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_face table:
-     *     <li> {@link #FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link ImageBean}</li>
-     *     <li> {@link #FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_image table:
-     *     <li> {@link #FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link #FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_person table:
-     *     <li> {@link #FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link ImageBean}</li>
-     *     <li> {@link #FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_store table:
-     *     <li> {@link #FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link #FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link ImageBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
      *        for fl_device table:<br>
-     *        {@link #FL_IMAGE_FK_DEVICE_ID},{@link #FL_LOG_FK_DEVICE_ID}<br>
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
      *        for fl_face table:<br>
-     *        {@link #FL_LOG_FK_VERIFY_FACE},{@link #FL_LOG_FK_COMPARE_FACE}<br>
+     *        {@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE}<br>
      *        for fl_image table:<br>
-     *        {@link #FL_FACE_FK_IMG_MD5},{@link #FL_PERSON_FK_PHOTO_ID}<br>
+     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_PERSON_FK_PHOTO_ID}<br>
      *        for fl_person table:<br>
-     *        {@link #FL_FACE_FK_PERSON_ID},{@link #FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_FACE_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
      *        for fl_store table:<br>
-     *        {@link #FL_IMAGE_FK_MD5},{@link #FL_IMAGE_FK_THUMB_MD5}<br>
+     *        {@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     public <T extends BaseBean> T[] getImportedBeans(B bean,int ikIndex);

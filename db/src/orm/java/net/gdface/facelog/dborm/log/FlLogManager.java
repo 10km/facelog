@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.Manager;
 import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
@@ -57,12 +58,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return TABLE_NAME;
     }
 
-    public String getFieldNames() {
-        return FL_LOG_ALL_FIELDS;
+    public String getFields() {
+        return FL_LOG_FIELDS;
     }
     
-    public String[] getFullFieldNames() {
-        return FL_LOG_FULL_FIELD_NAMES;
+    public String getFullFields() {
+        return FL_LOG_FULL_FIELDS;
     }
     
     /**
@@ -118,7 +119,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + FL_LOG_ALL_FIELDS + " FROM fl_log WHERE id=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_LOG_FIELDS + " FROM fl_log WHERE id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -151,13 +152,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     
     /**
      * Loads a {@link FlLogBean} from the fl_log using primary key fields.
-     * when you don't know which is primary key of table,you can use the method.
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return a unique {@link FlLogBean} or {@code null} if not found
      * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.3
+    @Override
     public FlLogBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
@@ -242,7 +242,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Delete row according to its primary keys.
      *
      * @param keys primary keys value:<br> 
-     *             PK# 1:Integer     
      * @return the number of deleted rows
      * @see {@link #delete(FlLogBean)}
      */   
@@ -312,8 +311,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public FlLogBean save(FlLogBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceBean");
         }
@@ -326,7 +325,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlPersonBean");
         }
-        return save(bean,(FlDeviceBean)args[0],(FlFaceBean)args[1],(FlFaceBean)args[2],(FlPersonBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFaceBean)args[1],(args.length < 3 || null == args[2])?null:(FlFaceBean)args[2],(args.length < 4 || null == args[3])?null:(FlPersonBean)args[3]);
     } 
 
     /**
@@ -343,8 +342,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public FlLogBean saveCollection(FlLogBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
         }
@@ -357,7 +356,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlPersonBean");
         }
-        return save(bean,(FlDeviceBean)args[0],(FlFaceBean)args[1],(FlFaceBean)args[2],(FlPersonBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFaceBean)args[1],(args.length < 3 || null == args[2])?null:(FlFaceBean)args[2],(args.length < 4 || null == args[3])?null:(FlPersonBean)args[3]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -367,20 +366,20 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link TableManager#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_VERIFY_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link TableManager#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FACE} -> {@link FlFaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_FK_DEVICE_ID},{@link TableManager#FL_LOG_FK_VERIFY_FACE},{@link TableManager#FL_LOG_FK_COMPARE_FACE},{@link TableManager#FL_LOG_FK_PERSON_ID}
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -406,7 +405,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
@@ -1162,7 +1161,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     /**
      * Retrieves a list of FlLogBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}
      * @param keys key values of index
      * @return a list of FlLogBean
      * @throws DAOException
@@ -1206,7 +1205,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link TableManager#FL_LOG_INDEX_COMPARE_FACE},{@link TableManager#FL_LOG_INDEX_DEVICE_ID},{@link TableManager#FL_LOG_INDEX_PERSON_ID},{@link TableManager#FL_LOG_INDEX_VERIFY_FACE}
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
