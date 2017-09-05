@@ -259,7 +259,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
@@ -283,7 +283,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     }
 
     /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the FlImageBean array to associate to the {@link FlStoreBean}
@@ -303,7 +303,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Set the importedBeans associates to the bean by fkName<br>
+     * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @param bean the {@link FlStoreBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlStoreBean}

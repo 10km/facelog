@@ -265,7 +265,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlFaceBean}</li>
@@ -289,7 +289,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     }
 
     /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
      * @param importedBeans the FlPersonBean array to associate to the {@link FlImageBean}
@@ -309,7 +309,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Set the importedBeans associates to the bean by fkName<br>
+     * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlImageBean,int)}
      * @param bean the {@link FlImageBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlImageBean}

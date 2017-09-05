@@ -261,7 +261,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
@@ -285,7 +285,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
 
     /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
      * @param bean the {@link FlDeviceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlDeviceBean}
@@ -305,7 +305,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Set the importedBeans associates to the bean by fkName<br>
+     * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlDeviceBean,int)}
      * @param bean the {@link FlDeviceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlDeviceBean}

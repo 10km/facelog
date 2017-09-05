@@ -263,7 +263,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlFaceBean}</li>
@@ -287,7 +287,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
 
     /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlPersonBean}
@@ -307,7 +307,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Set the importedBeans associates to the bean by fkName<br>
+     * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlPersonBean,int)}
      * @param bean the {@link FlPersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlPersonBean}

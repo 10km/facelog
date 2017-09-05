@@ -458,7 +458,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
 
     /**
      * Retrieves the number of rows of the table with a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the restriction clause
      * @return the number of rows returned
@@ -475,7 +475,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
 
     /**
      * Deletes rows from the table using a 'where' clause.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
      *
      * @param where the sql 'where' clause
@@ -654,7 +654,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
 
     /**
      * Retrieves an array of B bean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
@@ -666,7 +666,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
     /**
      * Retrieves each row of B bean given a sql where clause, and a list of fields,
      * and dealt with action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
      * @param action Action object for do something(not null)
@@ -677,7 +677,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
 
     /**
      * Retrieves an array of B bean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'where' clause
      * @param fieldList table of the field's associated constants
@@ -691,7 +691,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
     /**
      * Retrieves each row of B bean given a sql where clause and a list of fields, and startRow and numRows,
      * and dealt wity action.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'where' clause
      * @param fieldList table of the field's associated constants
@@ -713,7 +713,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
 
     /**
      * Retrieves a list of B bean given a sql where clause, and a list of fields.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'WHERE' clause
      * @param fieldList array of field's ID
@@ -724,7 +724,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
     
     /**
      * Retrieves a list of B bean given a sql where clause and a list of fields, and startRow and numRows.
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'where' clause
      * @param fieldList table of the field's associated constants
@@ -738,7 +738,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
     /**
      * Retrieves each row of B bean given a sql where clause and a list of fields, and startRow and numRows,
      * and dealt wity action
-     * It is up to you to pass the 'WHERE' in your where clausis.
+     * It is up to you to pass the 'WHERE' in your where clauses.
      *
      * @param where the sql 'where' clause
      * @param fieldList table of the field's associated constants

@@ -263,7 +263,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //////////////////////////////////////
 
     /**
-     * Retrieves imported T objects by fkName.<br>
+     * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
@@ -287,7 +287,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     }
 
     /**
-     * Set the T objects as imported beans of bean object by fkName.<br>
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FlFaceBean}
@@ -307,7 +307,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
     /**
-     * Set the importedBeans associates to the bean by fkName<br>
+     * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
      * @param bean the {@link FlFaceBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
