@@ -1,6 +1,7 @@
 package net.gdface.facelog;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,16 +25,18 @@ public class TestRedis {
 	    pool = new JedisPool(jedisPoolConfig, "localhost");
         System.out.println("连接池初始化成功");
 	}
+	
     @Test
-    public void testPing(){
+    public void test1Ping(){
     	// Jedis 实现了Closeable接口,所以这里可以用java 1.7 try-with-resources语法自动完成close
     	try(Jedis jedis = pool.getResource()){
             //查看服务是否运行 PING
             System.out.println("服务正在运行: "+jedis.ping());
     	}
     }
+    
     @Test
-    public void testString(){
+    public void test2String(){
     	try(Jedis jedis = pool.getResource()){
             //设置 redis 字符串数据 SET 10km blog.csdn.net/10km
             jedis.set("10km", "blog.csdn.net/10km");
@@ -41,8 +44,21 @@ public class TestRedis {
             System.out.println("redis 存储的字符串为: "+ jedis.get("10km"));    		
     	}
     }
+
     @Test
-	public void testList() {
+    public void test3Key(){
+    	try(Jedis jedis = pool.getResource()){
+            //设置 redis 字符串数据 SET 10km blog.csdn.net/10km
+            Set<String> keys = jedis.keys("*");
+            // 获取存储的数据并输出
+            int count=0;
+            for(String key:keys)
+            	System.out.println(++count + ":"+ key);
+    	}
+    }
+    
+    @Test
+	public void test3List() {
 		try (Jedis jedis = pool.getResource()) {
 			// 选择数据库:  SELECT 2
 			jedis.select(2);
