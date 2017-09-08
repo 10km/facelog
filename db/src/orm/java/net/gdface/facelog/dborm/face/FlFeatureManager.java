@@ -1216,11 +1216,6 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun) throws DAOException{
-        Manager.getInstance().runAsTransaction(fun);
-    }
-    
     class DeleteBeanAction extends Action.Adapter<FlFeatureBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override

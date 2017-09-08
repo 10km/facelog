@@ -2201,11 +2201,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun) throws DAOException{
-        Manager.getInstance().runAsTransaction(fun);
-    }
-    
     class DeleteBeanAction extends Action.Adapter<FlImageBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override

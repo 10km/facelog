@@ -401,6 +401,17 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
                     return saveCollection(bean , args );
                 }});
         }
+        
+        @Override
+        public void runAsTransaction(final Runnable fun)throws DAOException{
+            this.runAsTransaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    fun.run();
+                    return null;
+                }
+            });
+        }
     }    
     
     public String getFields();
@@ -1143,7 +1154,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
      * @see #runAsTransaction(Runnable)
      * @throws DAOException
      */
-    public void runAsTransaction(final Runnable fun)throws DAOException;
+    public void runAsTransaction(Runnable fun)throws DAOException;
     
     /**
      * Retrieves the T object referenced by fkName.<br>

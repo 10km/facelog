@@ -1649,11 +1649,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun) throws DAOException{
-        Manager.getInstance().runAsTransaction(fun);
-    }
-    
     class DeleteBeanAction extends Action.Adapter<FlStoreBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override

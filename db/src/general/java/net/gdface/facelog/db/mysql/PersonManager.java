@@ -1021,16 +1021,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun){
-        try{
-            this.nativeManager.runAsTransaction(fun);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
     private net.gdface.facelog.dborm.TableManager.Action<FlPersonBean> toNative(final Action<PersonBean> action){
         if(null == action)
             throw new NullPointerException();

@@ -301,16 +301,6 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
         }
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun){
-        try{
-            this.nativeManager.runAsTransaction(fun);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
     private net.gdface.facelog.dborm.TableManager.Action<FlFaceLightBean> toNative(final Action<FaceLightBean> action){
         if(null == action)
             throw new NullPointerException();

@@ -400,6 +400,17 @@ public interface TableManager<B extends BaseBean> extends Constant {
                     return saveCollection(bean , args );
                 }});
         }
+        
+        @Override
+        public void runAsTransaction(final Runnable fun){
+            this.runAsTransaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    fun.run();
+                    return null;
+                }
+            });
+        }
     }    
     
     public String getFields();
@@ -1086,7 +1097,7 @@ public interface TableManager<B extends BaseBean> extends Constant {
      * @
      * @see #runAsTransaction(Runnable)
      */
-    public void runAsTransaction(final Runnable fun);
+    public void runAsTransaction(Runnable fun);
     
     /**
      * Retrieves the T object referenced by fkName.<br>

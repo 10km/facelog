@@ -939,16 +939,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun){
-        try{
-            this.nativeManager.runAsTransaction(fun);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
     private net.gdface.facelog.dborm.TableManager.Action<FlLogBean> toNative(final Action<LogBean> action){
         if(null == action)
             throw new NullPointerException();

@@ -736,16 +736,6 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         }
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun){
-        try{
-            this.nativeManager.runAsTransaction(fun);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
     private net.gdface.facelog.dborm.TableManager.Action<FlStoreBean> toNative(final Action<StoreBean> action){
         if(null == action)
             throw new NullPointerException();

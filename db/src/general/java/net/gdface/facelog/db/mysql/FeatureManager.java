@@ -301,16 +301,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean>
         }
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun){
-        try{
-            this.nativeManager.runAsTransaction(fun);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
     private net.gdface.facelog.dborm.TableManager.Action<FlFeatureBean> toNative(final Action<FeatureBean> action){
         if(null == action)
             throw new NullPointerException();

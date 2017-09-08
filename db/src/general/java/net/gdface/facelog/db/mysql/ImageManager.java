@@ -1066,16 +1066,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
     
-    @Override
-    public void runAsTransaction(final Runnable fun){
-        try{
-            this.nativeManager.runAsTransaction(fun);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
     private net.gdface.facelog.dborm.TableManager.Action<FlImageBean> toNative(final Action<ImageBean> action){
         if(null == action)
             throw new NullPointerException();
