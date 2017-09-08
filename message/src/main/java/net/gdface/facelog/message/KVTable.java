@@ -3,7 +3,6 @@ package net.gdface.facelog.message;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -60,21 +59,14 @@ public abstract class KVTable<V>{
 
 	public abstract boolean set(String key, V value);
 
+	public abstract <T>void modify(String key, String field, T value,Type type);
+
 	public abstract int remove(String key);
 	
 	public abstract Set<String> keys(String pattern) ;
 	
-    public abstract <T> T runAsTransaction(Callable<T> fun) throws CallException;
-
-    public void runAsTransaction(final Runnable fun) throws CallException{
-        this.runAsTransaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                fun.run();
-                return null;
-            }
-        });
-    }    
+	public abstract void set(Map<String, ? extends V> m) ;
+	
 	public int size(String pattern) {
 		return keys(pattern).size();
 	}
@@ -130,17 +122,6 @@ public abstract class KVTable<V>{
 		return count;
 	}
 	
-	public void set(Map<String, ? extends V> m) {
-		if(null == m) return ;
-		for(Entry<String, ? extends V> entry:m.entrySet())	{
-			V value = entry.getValue();
-			if(null != value)
-				set(entry.getKey(),value);
-			else
-				remove(entry.getKey());
-		}
-	}
-
 	public int removeKeys(String pattern, final Filter<V> filter) {
 		final AtomicInteger count=new AtomicInteger(0); 
 		foreach(pattern,new Filter<V>(){

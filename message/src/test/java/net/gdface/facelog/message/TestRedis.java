@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.facelog.message;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +12,7 @@ import org.junit.runners.MethodSorters;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Transaction;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestRedis {
 	private JedisPool pool;
@@ -58,7 +59,7 @@ public class TestRedis {
     }
     
     @Test
-	public void test3List() {
+	public void test4List() {
 		try (Jedis jedis = pool.getResource()) {
 			// 选择数据库:  SELECT 2
 			jedis.select(2);
@@ -75,6 +76,24 @@ public class TestRedis {
 			}
 		}
 	}
+    
+    @Test
+    public void test5Transaction(){
+    	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+    	try(Jedis jedis = pool.getResource()){
+    		Transaction ctx = jedis.multi();
+            System.out.println("resp:"+ctx.set("10km", "blog.csdn.net/10km"));
+            System.out.println("resp:"+ctx.set("hello", "world"));
+            List<Object> list = ctx.exec();
+            if(list.isEmpty()){
+            	System.out.println("Transaction fail...");
+            }else{
+            	for(Object e:list){
+            		System.out.println("exec: " + e);
+            	}
+            }
+    	}
+    }
     /**
      * 程序关闭时，需要调用关闭方法
      */

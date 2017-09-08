@@ -1,9 +1,10 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
 
-public abstract class KOTable<T extends IIncludeKey> extends KVTable< T> {
+public abstract class KOTable<KO extends IIncludeKey> extends KVTable< KO> {
 	public KOTable() {
 		super();
 	}
@@ -12,17 +13,10 @@ public abstract class KOTable<T extends IIncludeKey> extends KVTable< T> {
 		super(type);
 	}
 
-	public void set(Collection<T> collection){
-		if(null == collection) return ;
-		for(T element:collection){
-			set(element.returnKey(), element);
-		}
-	}
+	public abstract void set(Collection<KO> collection);
 
-	public void set(@SuppressWarnings("unchecked") T ...array){
+	public void set(@SuppressWarnings("unchecked") KO ...array){
 		if(null == array)return ;
-		for(T element:array){
-			set(element.returnKey(), element);
-		}
+		set(Arrays.asList(array));
 	}
 }

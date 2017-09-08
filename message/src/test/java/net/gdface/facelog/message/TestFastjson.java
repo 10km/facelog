@@ -1,4 +1,4 @@
-package net.gdface.facelog;
+package net.gdface.facelog.message;
 
 import java.util.ArrayList;
 import java.util.Date;
