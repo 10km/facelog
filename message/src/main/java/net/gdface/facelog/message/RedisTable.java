@@ -3,8 +3,8 @@ package net.gdface.facelog.message;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -17,24 +17,14 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
 
-public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
+public class RedisTable<V> extends KVTable<V> {
 	private static final Logger logger = LoggerFactory.getLogger(RedisTable.class);
 	private JedisPool pool;
-	private JsonEncoder<KO> encoder;
-    private static InheritableThreadLocal<Jedis> threadJedis = new InheritableThreadLocal<Jedis>();
-    private Jedis getJedis(){
-        Jedis jedis = threadJedis.get();
-        if (jedis != null) {
-            return jedis;
-        }
+	private Jedis getJedis(){
         return pool.getResource();
     }
     
     private void releaseJedis(Jedis jedis) {
-        Jedis tj = threadJedis.get();
-        if (tj != null){
-            return;
-        }
         if (jedis != null){
             jedis.close();
         }
@@ -57,49 +47,49 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
 		super(type);
 		pool = new JedisPool(jedisPoolConfig, uri, timeout);
-		logger.info("连接池初始化成功");
+		logger.info("连接池初始化");
 	}
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
 			int database, int timeout) {
 		super(type);
 		pool = new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
+		logger.info("连接池初始化");
 	}
 
 	@Override
-	public KO get(String key) {
+	protected V _get(String key) {
 		Jedis jedis = getJedis();
 		try {
-			jedis.type(key);
-			return this.getType() instanceof Class 
-					? this.encoder.fromJson(jedis.get(key))
-					: this.encoder.fromJson(jedis.get(key));
-		} finally {
-			releaseJedis(jedis);
-		}
-	}
-
-	@Override
-	public boolean set(String key, KO value) {
-		Jedis jedis = getJedis();
-		try {
-			return "OK".equals(jedis.set(key, this.encoder.toJsonString(value)));
-		} finally {
-			releaseJedis(jedis);
-		}
-	}
-
-	@Override
-	public boolean setIfAbsent(String key, KO value) {
-		Jedis jedis = getJedis();
-		try {			
-			return "OK".equals(jedis.setnx(key, this.encoder.toJsonString(value)));
+			return this.encoder.fromJson(jedis.get(key), this.getType());
 		} finally {
 			releaseJedis(jedis);
 		}
 	}
 	
-	public void setField(String key, Map<String,Object>fieldsValues) {
+	protected void redisSet(String key, V value, boolean nx) {
+		Jedis jedis = getJedis();
+		try {
+			if(nx)
+				jedis.setnx(key, this.encoder.toJsonString(value));
+			else
+				jedis.set(key, this.encoder.toJsonString(value));
+		} finally {
+			releaseJedis(jedis);
+		}
+	}
+	
+	@Override
+	protected void _set(String key, V value, boolean nx) {
+		if (isJavaBean){
+			setFields(nx, key, value);			
+		}else {
+			redisSet(key, value, nx);
+		}
+	}
+	
+	@Override
+	protected void _setFields(String key, Map<String,Object>fieldsValues, boolean nx) {
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
 		Jedis jedis = getJedis();
 		try {
@@ -109,59 +99,59 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 				Object value = entry.getValue();
 				String field = entry.getKey();
 				if(null != value)
-					hash.put(field, this.encoder.toJsonString(value));
+					hash.put(field, (value instanceof String) ?(String)value:this.encoder.toJsonString(value));
 				else
 					nullFields.add(field);
 			}
-			if(!hash.isEmpty())
-				jedis.hmset(key, hash);
-			if(!nullFields.isEmpty())
-				jedis.hdel(key, nullFields.toArray(new String[0]));
+			Transaction ctx = jedis.multi();
+			if(!hash.isEmpty()){
+				if(nx){
+					for(Entry<String, String> entry:hash.entrySet()){
+						ctx.hsetnx(key, entry.getKey(), entry.getValue());
+					}
+				}					
+				else
+					ctx.hmset(key, hash);
+			}
+				
+			if(!nullFields.isEmpty() && !nx)
+				ctx.hdel(key, nullFields.toArray(new String[0]));
+			List<Object> response = ctx.exec();
+			if(response.isEmpty())
+				throw new TableException("Transaction error");
 		} finally {
 			releaseJedis(jedis);
 		}
 	}	
 	
-	public void setField(String key, String field, Object value) {
-		Jedis jedis = getJedis();
-		try {			
-			if(null != value)
-				jedis.hset(key, field, this.encoder.toJsonString(value));
-			else
-				jedis.hdel(key, field);
-		} finally {
-			releaseJedis(jedis);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void setField(String key,KO obj,String ...fields){
-		if(null == obj || null == fields)
-			throw new NullPointerException();
-		@SuppressWarnings("rawtypes")
-		Map json = this.encoder.toJsonMap(obj);
-		for(String field:fields){
-			if(null == field || field.isEmpty())continue;
-			if(!json.containsKey(field))
-				json.remove(field);
-		}
-		setField(key,json);
-	}
-	
 	@Override
-	public int remove(String key) {
+	protected void _setField(String key, String field,Object value,boolean nx) {
 		Jedis jedis = getJedis();
 		try {
-			return jedis.del(key).intValue();			
+			if(null != value){
+				if(nx)
+					jedis.hsetnx(key, field, this.encoder.toJsonString(value));
+				else
+					jedis.hset(key, field, this.encoder.toJsonString(value));
+			}else if(!nx)
+				jedis.hdel(key, field);
 		} finally {
 			releaseJedis(jedis);
 		}
 	}
 
 	@Override
-	public Set<String> keys(String pattern) {
-		if(null == pattern || pattern.isEmpty())
-			pattern="*";
+	protected int _remove(String key) {
+		Jedis jedis = getJedis();
+		try {
+			return jedis.del(key).intValue(); 
+		} finally {
+			releaseJedis(jedis);
+		}
+	}
+
+	@Override
+	protected Set<String> _keys(String pattern) {
 		Jedis jedis = getJedis();
 		try {
 			return jedis.keys(pattern);
@@ -170,66 +160,78 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 		}
 	}
 
-	public JsonEncoder<KO> getEncoder() {
-		return encoder;
-	}
-
-	public void setEncoder(JsonEncoder<KO> encoder) {
-		this.encoder = encoder;
-	}
-
-	@Override
-	public <T> void modify(String key, String field, T value, Type type) {
-		Jedis jedis = getJedis();
-		try {
-			jedis.watch(key);
-			Transaction ctx = jedis.multi();
-			ctx.get(key);
-			//return jedis.keys(pattern);
-		} finally {
-			releaseJedis(jedis);
-		}
-	}
-
-	@Override
-	public void set(Map<String, ? extends KO> m) {
-		if(null == m || m.isEmpty()) return ;
+	protected void _setString(Map<String, V> m, boolean nx) {
 		Jedis jedis = getJedis();
 		try {
 			ArrayList<String> keysValues = new ArrayList<String>();
 			ArrayList<String> keysNull = new ArrayList<String>();
-			for(Entry<String, ? extends KO> entry:m.entrySet())	{
-				KO value = entry.getValue();
+			for(Entry<String, ? extends V> entry:m.entrySet())	{
+				V value = entry.getValue();
 				if(null != value){
-					keysValues.add(String.format("\"%s\" \"%s\"", entry.getKey(),this.encoder.toJsonString(value)));
+					keysValues.add(entry.getKey());
+					keysValues.add(this.encoder.toJsonString(value));
 				}else
 					keysNull.add(entry.getKey());
 			}
-			if(!keysValues.isEmpty())
-				jedis.msetnx(keysValues.toArray(new String[0]));
-			if(!keysNull.isEmpty())
+			Transaction ctx = jedis.multi();
+			if(!keysValues.isEmpty()){
+				if(nx)
+					ctx.msetnx(keysValues.toArray(new String[0]));
+				else
+					ctx.mset(keysValues.toArray(new String[0]));
+			}				
+			if(!keysNull.isEmpty() && !nx)
 				jedis.del(keysNull.toArray(new String[0]));
+			List<Object> response = ctx.exec();
+			if(response.isEmpty())
+				throw new TableException("Transaction error");
 		} finally {
 			releaseJedis(jedis);
 		}
 	}
 	
-	@Override
-	public void set(Collection<KO> c){
-		if(null == c || c.isEmpty()) return ;
+	protected void _setHash(Map<String,? extends V> m, boolean nx) {
 		Jedis jedis = getJedis();
 		try {
-			ArrayList<String> keysValues = new ArrayList<String>();
-			for(KO value:c)	{
+			Map<String, Map<String,String>> keysValues = new HashMap<String, Map<String,String>>();
+			ArrayList<String> keysNull = new ArrayList<String>();
+			for(Entry<String, ? extends V> entry:m.entrySet())	{
+				V value = entry.getValue();
 				if(null != value){
-					keysValues.add(String.format("\"%s\" \"%s\"", value.returnKey(),this.encoder.toJsonString(value)));
-				}
+					keysValues.put(entry.getKey(), this.encoder.toJsonMap(value));
+				}else
+					keysNull.add(entry.getKey());
 			}
-			if(!keysValues.isEmpty())
-				jedis.msetnx(keysValues.toArray(new String[0]));
+			Transaction ctx = jedis.multi();
+			if(!keysValues.isEmpty()){
+				if(nx){
+					for(Entry<String, Map<String, String>> entry:keysValues.entrySet()){
+						for(Entry<String, String> props:entry.getValue().entrySet()){
+							ctx.hsetnx(entry.getKey(), props.getValue(), props.getValue());
+						}
+					}
+				}
+				else{
+					for(Entry<String, Map<String, String>> entry:keysValues.entrySet()){
+						ctx.hmset(entry.getKey(), entry.getValue());
+					}
+				}					
+			}				
+			if(!keysNull.isEmpty() && !nx)
+				jedis.del(keysNull.toArray(new String[0]));
+			List<Object> response = ctx.exec();
+			if(response.isEmpty())
+				throw new TableException("Transaction error");
 		} finally {
 			releaseJedis(jedis);
 		}
 	}
-
+		
+	@Override
+	protected void _set(Map<String, V> m, boolean nx) {
+		if(isJavaBean)
+			_setHash(m,nx);
+		else
+			_setString(m,nx);
+	}
 }

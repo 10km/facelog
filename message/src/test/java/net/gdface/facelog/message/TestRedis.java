@@ -95,13 +95,24 @@ public class TestRedis {
     	}
     }
     
+    @Test
+    public void test6MSet(){
+    	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+    	try(Jedis jedis = pool.getResource()){
+    		String res = jedis.mset("k1", "v1","k2", "v2","k3", "v3");
+    		for(String element:jedis.keys("k*")){
+    			System.out.println(element);
+    		}
+    	}
+    }    
     //@Test
-    public void test6Hash(){
+    public void test7Hash(){
     	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
     	try(Jedis jedis = pool.getResource()){
     		//jedis.hmset(key, hash)
     	}
-    }
+    }    
+    
     /**
      * 程序关闭时，需要调用关闭方法
      */

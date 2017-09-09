@@ -138,9 +138,9 @@ public class TestFastjson {
     	//System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
     	Type type = new TypeReference<GenBean<String>>() {}.getType();
     	if(type instanceof ParameterizedType)
-    		System.out.println(((ParameterizedType)type).getActualTypeArguments()[0].getTypeName());
+    		System.out.println(((ParameterizedType)type).getActualTypeArguments()[0]);
     	else
-    		System.out.println(type.getTypeName());
+    		System.out.println(type);
 	}
 	@Test
 	public void testisJavaBean(){

@@ -1,6 +1,8 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -11,26 +13,22 @@ public abstract class KVTable<V>{
 	protected static  class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		
 	}
-	public static class CallException extends RuntimeException{
+	public static class TableException extends RuntimeException{
 		private static final long serialVersionUID = 1L;
 
-		public CallException() {
-			super();
-		}
-
-		public CallException(String message, Throwable cause) {
+		public TableException(String message, Throwable cause) {
 			super(message, cause);
 		}
 
-		public CallException(String message) {
+		public TableException(String message) {
 			super(message);
 		}
 
-		public CallException(Throwable cause) {
+		public TableException(Throwable cause) {
 			super(cause);
 		}
-		
 	}
+	
 	public static interface Filter<V>{
 		boolean run(String key, V value) throws BreakException;
 	}
@@ -41,30 +39,98 @@ public abstract class KVTable<V>{
 		}};
 	private final Type type;
 
-//	protected final boolean isJavaBean = TypeUtils.<V>isJavaBean();
+	protected final boolean isJavaBean ;
+	protected JsonEncoder encoder;
+	protected IKeyHelper<V> keyHelper;
 
 	public KVTable(Type type) {
 		super();
 		this.type = type;
+		this.isJavaBean = TypeUtils.isJavaBean(type);
 	}
 
 	public Type getType() {
 		return type;
 	}
 
-	public abstract V get(String key);
+	protected abstract V _get(String key);
 
-	public abstract boolean set(String key, V value);
+	public V get(String key){
+		if(null == key || key.isEmpty())
+			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
+		return _get(key);
+	}
 	
-	public abstract boolean setIfAbsent(String key, V value);
-
-	public abstract <T>void modify(String key, String field, T value,Type type);
-
-	public abstract int remove(String key);
+	protected abstract void _set(String key, V value, boolean nx);
 	
-	public abstract Set<String> keys(String pattern) ;
+	public void set(String key, V value, boolean nx){
+		if(null == key || key.isEmpty())
+			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
+		_set(key,value,nx);
+	}
 	
-	public abstract void set(Map<String, ? extends V> m) ;
+	protected abstract <T>void _setField(String key, String field, T value, boolean nx);
+	
+	public <T>void setField(String key, String field, T value, boolean nx){
+		if(!isJavaBean)
+			throw new UnsupportedOperationException("because of not javabean,");
+		if(null == field || field.isEmpty())
+			throw new IllegalArgumentException("the argument 'field' must not be null or empty");
+		_setField(key,field,value, nx);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setFields(boolean nx,String key,V obj, String ...fields){
+		if(!isJavaBean)
+			throw new UnsupportedOperationException("because of not javabean,");
+		if(null == obj)
+			throw new NullPointerException();
+		Map json = this.encoder.toJsonMap(obj);
+		if(null == fields || 0== fields.length)
+			fields = (String[]) json.keySet().toArray(new String[0]);
+		if(1 == fields.length)
+			_setField(key,fields[0],json.get(fields[0]), nx);
+		else{
+			for (String field : fields) {
+				if (null == field || field.isEmpty())
+					continue;
+				if (!json.containsKey(field))
+					json.remove(field);
+			}
+			setFields(key,json, nx);
+		}
+	}
+	
+	protected abstract void _setFields(String key, Map<String,Object>fieldsValues, boolean nx) ;
+	
+	protected void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
+		if(!isJavaBean)
+			throw new UnsupportedOperationException("because of not javabean,");
+		if(null == fieldsValues || fieldsValues.isEmpty())return;
+		_setFields(key,fieldsValues,nx);
+	}
+	protected abstract int _remove(String key);
+	
+	public int remove(String key){
+		if(null == key || key.isEmpty())
+			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
+		return _remove(key);
+	}
+	
+	protected abstract Set<String> _keys(String pattern) ;
+	
+	public Set<String> keys(String pattern) {
+		if(null == pattern || pattern.isEmpty())
+			pattern="*";
+		return _keys(pattern);
+	}
+	
+	protected abstract void _set(Map<String, V> m, boolean nx) ;
+	
+	public void set(Map<String, V> m, boolean nx){
+		if(null == m || m.isEmpty()) return ;
+		_set(m,nx);
+	}
 	
 	public int size(String pattern) {
 		return keys(pattern).size();
@@ -132,5 +198,34 @@ public abstract class KVTable<V>{
 				return false;
 			}});
 		return count.get();
+	}
+	public void set(Collection<V> c){
+		if(null == c || c.isEmpty()) return ;
+		if(null == this.keyHelper)
+			throw new UnsupportedOperationException("because of null keyHelper");
+		HashMap<String, V> keysValues = new HashMap<String,V>();
+		for(V value:c)	{
+			keysValues.put(this.keyHelper.returnKey(value), value);
+		}
+		set(keysValues,false);
+	}
+	public void set(@SuppressWarnings("unchecked") V ...array){
+		if(null == array)return ;
+		set(Arrays.asList(array));
+	}
+	public JsonEncoder getEncoder() {
+		return encoder;
+	}
+
+	public void setEncoder(JsonEncoder encoder) {
+		this.encoder = encoder;
+	}
+
+	public IKeyHelper<V> getKeyHelper() {
+		return keyHelper;
+	}
+
+	public void setKeyHelper(IKeyHelper<V> keyHelper) {
+		this.keyHelper = keyHelper;
 	}
 }
