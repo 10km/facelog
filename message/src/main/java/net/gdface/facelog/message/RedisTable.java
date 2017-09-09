@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -46,11 +47,10 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 	};
 
 	public RedisTable() {
-		this(null, DEFAULT_CONFIG, Protocol.DEFAULT_HOST, Protocol.DEFAULT_PORT, null, Protocol.DEFAULT_DATABASE,
-				Protocol.DEFAULT_TIMEOUT);
+		this(null, DEFAULT_CONFIG, Protocol.DEFAULT_HOST, Protocol.DEFAULT_PORT, null, Protocol.DEFAULT_DATABASE, Protocol.DEFAULT_TIMEOUT);
 	}
 
-	public RedisTable(Type type, String host, int port, final String password, int database) {
+	public RedisTable(String host, int port, final String password, int database) {
 		this(null, DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
 	}
 
@@ -64,17 +64,16 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 			int database, int timeout) {
 		super(type);
 		pool = new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
-
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public KO get(String key) {
 		Jedis jedis = getJedis();
 		try {
+			jedis.type(key);
 			return this.getType() instanceof Class 
-					? this.encoder.fromJson(jedis.get(key), (Class<KO>) this.getType())
-					: this.encoder.fromJson(jedis.get(key), this.getType());
+					? this.encoder.fromJson(jedis.get(key))
+					: this.encoder.fromJson(jedis.get(key));
 		} finally {
 			releaseJedis(jedis);
 		}
@@ -84,12 +83,71 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 	public boolean set(String key, KO value) {
 		Jedis jedis = getJedis();
 		try {
-			return "OK".equals(jedis.set(key, this.encoder.toJson(value)));
+			return "OK".equals(jedis.set(key, this.encoder.toJsonString(value)));
 		} finally {
 			releaseJedis(jedis);
 		}
 	}
 
+	@Override
+	public boolean setIfAbsent(String key, KO value) {
+		Jedis jedis = getJedis();
+		try {			
+			return "OK".equals(jedis.setnx(key, this.encoder.toJsonString(value)));
+		} finally {
+			releaseJedis(jedis);
+		}
+	}
+	
+	public void setField(String key, Map<String,Object>fieldsValues) {
+		if(null == fieldsValues || fieldsValues.isEmpty())return;
+		Jedis jedis = getJedis();
+		try {
+			HashMap<String, String> hash = new HashMap<String,String>();
+			ArrayList<String> nullFields = new ArrayList<String>();
+			for(Entry<String, Object> entry:fieldsValues.entrySet()){
+				Object value = entry.getValue();
+				String field = entry.getKey();
+				if(null != value)
+					hash.put(field, this.encoder.toJsonString(value));
+				else
+					nullFields.add(field);
+			}
+			if(!hash.isEmpty())
+				jedis.hmset(key, hash);
+			if(!nullFields.isEmpty())
+				jedis.hdel(key, nullFields.toArray(new String[0]));
+		} finally {
+			releaseJedis(jedis);
+		}
+	}	
+	
+	public void setField(String key, String field, Object value) {
+		Jedis jedis = getJedis();
+		try {			
+			if(null != value)
+				jedis.hset(key, field, this.encoder.toJsonString(value));
+			else
+				jedis.hdel(key, field);
+		} finally {
+			releaseJedis(jedis);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setField(String key,KO obj,String ...fields){
+		if(null == obj || null == fields)
+			throw new NullPointerException();
+		@SuppressWarnings("rawtypes")
+		Map json = this.encoder.toJsonMap(obj);
+		for(String field:fields){
+			if(null == field || field.isEmpty())continue;
+			if(!json.containsKey(field))
+				json.remove(field);
+		}
+		setField(key,json);
+	}
+	
 	@Override
 	public int remove(String key) {
 		Jedis jedis = getJedis();
@@ -143,7 +201,7 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 			for(Entry<String, ? extends KO> entry:m.entrySet())	{
 				KO value = entry.getValue();
 				if(null != value){
-					keysValues.add(String.format("\"%s\" \"%s\"", entry.getKey(),this.encoder.toJson(value)));
+					keysValues.add(String.format("\"%s\" \"%s\"", entry.getKey(),this.encoder.toJsonString(value)));
 				}else
 					keysNull.add(entry.getKey());
 			}
@@ -164,7 +222,7 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 			ArrayList<String> keysValues = new ArrayList<String>();
 			for(KO value:c)	{
 				if(null != value){
-					keysValues.add(String.format("\"%s\" \"%s\"", value.returnKey(),this.encoder.toJson(value)));
+					keysValues.add(String.format("\"%s\" \"%s\"", value.returnKey(),this.encoder.toJsonString(value)));
 				}
 			}
 			if(!keysValues.isEmpty())
@@ -173,4 +231,5 @@ public class RedisTable<KO extends IIncludeKey> extends KOTable<KO> {
 			releaseJedis(jedis);
 		}
 	}
+
 }

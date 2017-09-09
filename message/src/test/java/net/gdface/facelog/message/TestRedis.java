@@ -94,6 +94,14 @@ public class TestRedis {
             }
     	}
     }
+    
+    //@Test
+    public void test6Hash(){
+    	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+    	try(Jedis jedis = pool.getResource()){
+    		//jedis.hmset(key, hash)
+    	}
+    }
     /**
      * 程序关闭时，需要调用关闭方法
      */

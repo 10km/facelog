@@ -1,10 +1,9 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,9 +41,7 @@ public abstract class KVTable<V>{
 		}};
 	private final Type type;
 
-	public KVTable() {
-		this(null);
-	}
+//	protected final boolean isJavaBean = TypeUtils.<V>isJavaBean();
 
 	public KVTable(Type type) {
 		super();
@@ -58,6 +55,8 @@ public abstract class KVTable<V>{
 	public abstract V get(String key);
 
 	public abstract boolean set(String key, V value);
+	
+	public abstract boolean setIfAbsent(String key, V value);
 
 	public abstract <T>void modify(String key, String field, T value,Type type);
 
@@ -97,7 +96,7 @@ public abstract class KVTable<V>{
 	}
 	
 	public Map<String, V> values(final String pattern, Filter<V> filter) {
-			final Hashtable<String, V> map = new Hashtable<String,V>(); 
+			final HashMap<String, V> map = new HashMap<String,V>(); 
 			final Filter<V> f = null == filter ?alwaysTrue : filter;
 			foreach(pattern,new Filter<V>(){
 				@Override
