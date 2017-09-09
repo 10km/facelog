@@ -154,6 +154,14 @@ public class TestFastjson {
 		System.out.println(TypeUtils.isJavaBean(gb.getClass()));
 //		Assert.assertTrue(TypeUtils.<Group>isJavaBean());
 //		Assert.assertTrue(TypeUtils.<GenBean<Date>>isJavaBean());
-
+	}
+	@Test 
+	public void testSimpleObject(){
+		Date date=new Date();
+		Object jsonDate = JSON.toJSON(date);
+		System.out.println(jsonDate.getClass().getName());
+		int _int= 32;
+		Object jsonInt = JSON.toJSON(_int);
+		System.out.println(jsonInt.getClass().getName());
 	}
 }

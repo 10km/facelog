@@ -8,11 +8,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public class FastjsonEncoder extends JsonEncoder {
-	public FastjsonEncoder() {
+	private FastjsonEncoder() {
 	}
-	
-	public static FastjsonEncoder createInstance(){
-		return new FastjsonEncoder();		
+	private static final FastjsonEncoder instance = new FastjsonEncoder();
+	public static FastjsonEncoder getInstance(){
+		return instance;		
 	}
 	
 	@Override
@@ -42,5 +42,10 @@ public class FastjsonEncoder extends JsonEncoder {
 			return JSON.parseObject(json, (Class<T>)type);		
 		else
 			return JSON.parseObject(json, type);
+	}
+
+	@Override
+	public <T> T fromJson(Map<String, String> json, Type type) {
+		return fromJson(JSON.toJSON(json).toString(),type);
 	}
 }

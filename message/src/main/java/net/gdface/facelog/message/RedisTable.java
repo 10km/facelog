@@ -36,12 +36,12 @@ public class RedisTable<V> extends KVTable<V> {
 		}
 	};
 
-	public RedisTable() {
-		this(null, DEFAULT_CONFIG, Protocol.DEFAULT_HOST, Protocol.DEFAULT_PORT, null, Protocol.DEFAULT_DATABASE, Protocol.DEFAULT_TIMEOUT);
+	public RedisTable(Type type) {
+		this(type, DEFAULT_CONFIG, Protocol.DEFAULT_HOST, Protocol.DEFAULT_PORT, null, Protocol.DEFAULT_DATABASE, Protocol.DEFAULT_TIMEOUT);
 	}
 
-	public RedisTable(String host, int port, final String password, int database) {
-		this(null, DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
+	public RedisTable(Type type,String host, int port, final String password, int database) {
+		this(type, DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
 	}
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
@@ -61,7 +61,11 @@ public class RedisTable<V> extends KVTable<V> {
 	protected V _get(String key) {
 		Jedis jedis = getJedis();
 		try {
-			return this.encoder.fromJson(jedis.get(key), this.getType());
+			if(isJavaBean){
+				return this.encoder.fromJson(jedis.hgetAll(key), this.getType());
+			}else			
+				return this.encoder.fromJson(jedis.get(key), this.getType());
+			
 		} finally {
 			releaseJedis(jedis);
 		}
@@ -141,7 +145,7 @@ public class RedisTable<V> extends KVTable<V> {
 	}
 
 	@Override
-	protected int _remove(String key) {
+	protected int _remove(String... key) {
 		Jedis jedis = getJedis();
 		try {
 			return jedis.del(key).intValue(); 

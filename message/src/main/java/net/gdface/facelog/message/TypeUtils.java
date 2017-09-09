@@ -11,9 +11,9 @@ public class TypeUtils<T>extends TypeReference<T> {
 	public  boolean isJavaBean(){
 		return isJavaBean(getType());
 	}
-	public  static boolean isJavaBean(Type type){
+	public static final boolean isJavaBean(Type type){
 		if(null == type )
 			throw new NullPointerException();
-		 return ParserConfig.global.getDeserializer(type) instanceof JavaBeanDeserializer;
+		return ParserConfig.global.getDeserializer(type) instanceof JavaBeanDeserializer;
 	}
 }

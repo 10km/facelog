@@ -1,6 +1,7 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,21 +39,32 @@ public abstract class KVTable<V>{
 			return true;
 		}};
 	private final Type type;
-
 	protected final boolean isJavaBean ;
-	protected JsonEncoder encoder;
+	protected JsonEncoder encoder = JsonEncoder.getEncoder();
 	protected IKeyHelper<V> keyHelper;
+	private final String prefix;
 
 	public KVTable(Type type) {
 		super();
 		this.type = type;
+		this.prefix = type.toString();
 		this.isJavaBean = TypeUtils.isJavaBean(type);
 	}
 
 	public Type getType() {
 		return type;
 	}
-
+	
+	private String wrapKey(String key){
+		return this.prefix + key;
+	}
+	
+	private String keyHelper(V v){
+		if(null == this.keyHelper)
+			throw new UnsupportedOperationException("because of null keyHelper");
+		return this.keyHelper.returnKey(v);
+	}
+	
 	protected abstract V _get(String key);
 
 	public V get(String key){
@@ -67,6 +79,11 @@ public abstract class KVTable<V>{
 		if(null == key || key.isEmpty())
 			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
 		_set(key,value,nx);
+	}
+	
+	public void set(V value,boolean nx){
+		if(null ==value)return;
+		set(keyHelper(value),value,nx);
 	}
 	
 	protected abstract <T>void _setField(String key, String field, T value, boolean nx);
@@ -109,12 +126,29 @@ public abstract class KVTable<V>{
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
 		_setFields(key,fieldsValues,nx);
 	}
-	protected abstract int _remove(String key);
 	
-	public int remove(String key){
-		if(null == key || key.isEmpty())
-			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
-		return _remove(key);
+	protected abstract int _remove(String... keys);
+	
+	public int remove(String... keys){
+		if(null == keys)
+			return 0;
+		ArrayList<String> list = new ArrayList<String>(keys.length);
+		for(String key:keys){
+			if(null == key || 0 == key.length())continue;
+			list.add(key);
+		}
+		return list.isEmpty()?0:_remove(list.toArray(new String[list.size()]));
+	}
+	
+	public int remove(@SuppressWarnings("unchecked") V... values){
+		if(null == values)
+			return 0;
+		ArrayList<String> list = new ArrayList<String>(values.length);
+		for(V value:values){
+			if(null == value)continue;
+			list.add(this.keyHelper(value));
+		}	
+		return remove(list.toArray(new String[list.size()]));
 	}
 	
 	protected abstract Set<String> _keys(String pattern) ;
@@ -199,19 +233,19 @@ public abstract class KVTable<V>{
 			}});
 		return count.get();
 	}
-	public void set(Collection<V> c){
+	public void set(Collection<V> c, boolean nx){
 		if(null == c || c.isEmpty()) return ;
 		if(null == this.keyHelper)
 			throw new UnsupportedOperationException("because of null keyHelper");
 		HashMap<String, V> keysValues = new HashMap<String,V>();
 		for(V value:c)	{
-			keysValues.put(this.keyHelper.returnKey(value), value);
+			keysValues.put(this.keyHelper(value), value);
 		}
 		set(keysValues,false);
 	}
-	public void set(@SuppressWarnings("unchecked") V ...array){
+	public void set(boolean nx,@SuppressWarnings("unchecked") V ...array){
 		if(null == array)return ;
-		set(Arrays.asList(array));
+		set(Arrays.asList(array), nx);
 	}
 	public JsonEncoder getEncoder() {
 		return encoder;

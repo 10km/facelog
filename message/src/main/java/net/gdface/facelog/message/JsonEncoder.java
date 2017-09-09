@@ -33,6 +33,8 @@ public abstract class JsonEncoder {
 	 */
 	public abstract <T> T fromJson(String json, Type type);
 	
+	public abstract <T> T fromJson(Map<String,String> json, Type type);
+	
 	public <T>List<Object> toJsonArray(@SuppressWarnings("unchecked") T...array){
 		if(null == array)return null;		
 		try{
@@ -55,5 +57,9 @@ public abstract class JsonEncoder {
 		return null == c 
 				? null
 				: toJsonArray(c.toArray((T[])new Object[0]));
+	}
+	
+	public static final JsonEncoder getEncoder(){
+		return FastjsonEncoder.getInstance(); 
 	}
 }
