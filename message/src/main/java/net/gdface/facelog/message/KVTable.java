@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -128,17 +129,22 @@ public abstract class KVTable<V>{
 				if (!json.containsKey(field))
 					json.remove(field);
 			}
-			setFields(key,json, nx);
+			_setFields(key,json, nx);
 		}
 	}
 	
-	protected abstract void _setFields(String key, Map<String,Object>fieldsValues, boolean nx) ;
+	protected abstract void _setFields(String key, Map<String, String> fieldsValues, boolean nx) ;
 	
-	protected void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
+	public void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
 		assertJavaBean();
 		assertNotEmpty(key,"key");
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
-		_setFields(key,fieldsValues,nx);
+		HashMap<String, String> fields = new HashMap<String,String>();
+		for(Entry<String, Object> entry:fieldsValues.entrySet()){
+			Object value = entry.getValue();
+			fields.put(key, null == value ? null : this.encoder.toJsonString(value));
+		}
+		_setFields(key,fields,nx);
 	}
 	
 	protected abstract int _remove(String... keys);

@@ -12,7 +12,9 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public class TestFastjson {
@@ -143,7 +145,33 @@ public class TestFastjson {
 			Group dgroup = JSON.parseObject(JSON.toJSONString(deJsonObj), Group.class);
 			System.out.println(JSON.toJSONString(dgroup));
 		}
+		{
+			JSONObject jsonObject = (JSONObject) JSON.toJSON(group);
+			Map<String, String> jsonObj = new HashMap<String, String>();
+			for (Entry<String, Object> entry : jsonObject.entrySet()) {
+				Object value = entry.getValue();
+//				System.out.println(
+//						entry.getKey() + "  " +(null == value? "null":value) + " " + (null == value? "":value.getClass().getName()));
+				if(null !=value){
+					String jsonValue=JSON.toJSONString(value);
+					//System.out.printf("json value %s\n", jsonValue);
+					jsonObj.put(entry.getKey(), jsonValue);
+				}
+			}
 
+			Map<String, Object> deJsonMap = new HashMap<String, Object>();
+			for (Entry<String, String> entry : jsonObj.entrySet()) {
+				String json = (String) entry.getValue();
+				String key = entry.getKey();
+				System.out.printf("field %s json %s\n" ,key,json);
+				Object field = JSON.parse( json);
+//				System.out.printf("field %s parse type %s\n" ,key,field.getClass().getSimpleName());
+				deJsonMap.put(entry.getKey(), field);
+			}
+			//System.out.println(JSON.toJSONString(deJsonMap));
+			Group dgroup = com.alibaba.fastjson.util.TypeUtils.cast(deJsonMap, Group.class, ParserConfig.global);
+			System.out.println(JSON.toJSONString(dgroup));
+		}
 	}
 	class GenBean<T>{
 		public T b;

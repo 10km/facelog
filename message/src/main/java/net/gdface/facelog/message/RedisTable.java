@@ -93,17 +93,17 @@ public class RedisTable<V> extends KVTable<V> {
 	}
 	
 	@Override
-	protected void _setFields(String key, Map<String,Object>fieldsValues, boolean nx) {
+	protected void _setFields(String key, Map<String, String> fieldsValues, boolean nx) {
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
 		Jedis jedis = getJedis();
 		try {
 			HashMap<String, String> hash = new HashMap<String,String>();
 			ArrayList<String> nullFields = new ArrayList<String>();
-			for(Entry<String, Object> entry:fieldsValues.entrySet()){
-				Object value = entry.getValue();
+			for(Entry<String, String> entry:fieldsValues.entrySet()){
+				String value = entry.getValue();
 				String field = entry.getKey();
 				if(null != value)
-					hash.put(field, (value instanceof String) ?(String)value:this.encoder.toJsonString(value));
+					hash.put(field, value);
 				else
 					nullFields.add(field);
 			}
