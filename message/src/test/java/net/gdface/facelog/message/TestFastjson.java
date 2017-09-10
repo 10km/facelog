@@ -124,11 +124,15 @@ public class TestFastjson {
 
 		group.addUser(guestUser);
 		group.addUser(rootUser);
-		@SuppressWarnings("unchecked")
-		Map<String, String> jsonObj = (Map<String, String>)  JSON.toJSON(group);
-		for( Entry<String, String> entry:jsonObj.entrySet()){
-			System.out.println(entry.getKey() +"  "+ JSON.toJSONString(entry.getValue()));
+		String jsonstr = JSON.toJSONString(group);
+		System.out.println(jsonstr);
+		Map<String, Object> jsonObj = JSON.parseObject(jsonstr);
+		for( Entry<String, Object> entry:jsonObj.entrySet()){
+			System.out.println(entry.getKey() +"  "+ entry.getValue());
+			//entry.setValue(JSON.toJSONString(entry.getValue()));
 		}
+		//System.out.println(JSON.toJSONString(jsonObj));
+		
 	}
 	class GenBean<T>{
 		public T b;
@@ -144,16 +148,9 @@ public class TestFastjson {
 	}
 	@Test
 	public void testisJavaBean(){
-		GenBean<Date> gb = new GenBean<Date>();
-		gb.b=new Date();
-		Object json = JSON.toJSON(gb);
-		System.out.println(JSON.toJSON(gb));
-		Type type = new TypeUtils<GenBean<Date>>(){}.getType();
-		boolean b = new TypeUtils<GenBean<Date>>(){}.isJavaBean();
-		System.out.println(b);
-		System.out.println(TypeUtils.isJavaBean(gb.getClass()));
-//		Assert.assertTrue(TypeUtils.<Group>isJavaBean());
-//		Assert.assertTrue(TypeUtils.<GenBean<Date>>isJavaBean());
+		byte[] bytes= new byte[]{32,44,125,2};
+		System.out.println(JSON.toJSON(bytes).toString());
+		System.out.println(JSON.toJSONString(bytes));
 	}
 	@Test 
 	public void testSimpleObject(){
