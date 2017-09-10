@@ -163,7 +163,7 @@ public class TestFastjson {
 			for (Entry<String, String> entry : jsonObj.entrySet()) {
 				String json = (String) entry.getValue();
 				String key = entry.getKey();
-				System.out.printf("field %s json %s\n" ,key,json);
+				//System.out.printf("field %s json %s\n" ,key,json);
 				Object field = JSON.parse( json);
 //				System.out.printf("field %s parse type %s\n" ,key,field.getClass().getSimpleName());
 				deJsonMap.put(entry.getKey(), field);
@@ -171,6 +171,15 @@ public class TestFastjson {
 			//System.out.println(JSON.toJSONString(deJsonMap));
 			Group dgroup = com.alibaba.fastjson.util.TypeUtils.cast(deJsonMap, Group.class, ParserConfig.global);
 			System.out.println(JSON.toJSONString(dgroup));
+		}
+		{
+			//String jsonString = JSON.toJSONString(group,SerializerFeature.WriteMapNullValue);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> json = (Map<String,Object>)JSON.toJSON(group);
+			for(Entry<String, Object> entry:json.entrySet()){
+				System.out.printf("%s %s\n",entry.getKey(),entry.getValue());
+			}
+			
 		}
 	}
 	class GenBean<T>{
@@ -188,8 +197,10 @@ public class TestFastjson {
 	@Test
 	public void testisJavaBean(){
 		byte[] bytes= new byte[]{32,44,125,2};
+		Object obj = JSON.parse("null");
 		System.out.println(JSON.toJSON(bytes).toString());
 		System.out.println(JSON.toJSONString(bytes));
+		System.out.println(JSON.toJSONString(null));
 	}
 	@Test 
 	public void testSimpleObject(){

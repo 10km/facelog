@@ -3,6 +3,7 @@ package net.gdface.facelog.message;
 import java.lang.reflect.Type;
 import java.util.Map;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 public abstract class FastjsonEncoder extends JsonEncoder {
 	protected FastjsonEncoder() {}
@@ -13,7 +14,7 @@ public abstract class FastjsonEncoder extends JsonEncoder {
 	
 	@Override
 	public String toJsonString(Object obj) {
-		return JSON.toJSONString(obj);
+		return JSON.toJSONString(obj,SerializerFeature.WriteMapNullValue);
 	}
 
 	@Override

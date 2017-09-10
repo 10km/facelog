@@ -101,9 +101,9 @@ public class TestKVTable {
 				return v.getId().toString();
 			}});
 		table.set(group, false);
-		System.out.println(JSON.toJSONString(group));
+		System.out.println(JSON.toJSONString(group,SerializerFeature.WriteMapNullValue));
 		Group deserialized = table.get(group.getId().toString());
-		System.out.println(JSON.toJSONString(deserialized));
+		System.out.println(JSON.toJSONString(deserialized,SerializerFeature.WriteMapNullValue));
 	}
 	//@Test
 	public void testJSONObject() {

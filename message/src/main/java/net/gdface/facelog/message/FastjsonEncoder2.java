@@ -1,12 +1,12 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.JSONObject;
 
 public class FastjsonEncoder2 extends FastjsonEncoder {
 	private static final FastjsonEncoder2 instance = new FastjsonEncoder2();
@@ -18,21 +18,22 @@ public class FastjsonEncoder2 extends FastjsonEncoder {
 
 	@Override
 	protected Map<String, String> _toJsonMap(Object bean) {
-		@SuppressWarnings("unchecked")
-		Map<String, String> jsonObject=(Map<String, String>) JSON.toJSON(bean);
-		for(Entry<String, String> entry:jsonObject.entrySet()){
-			entry.setValue(JSON.toJSONString(entry.getValue()));
+		JSONObject jsonObject=(JSONObject) JSON.toJSON(bean);
+		Map<String, String> fields = new LinkedHashMap<String, String>();
+		for(Entry<String, Object> entry:jsonObject.entrySet()){
+			Object value = entry.getValue();
+			fields.put(entry.getKey(),null == value ? null : JSON.toJSONString(value));
 		}
-		return jsonObject;
+		return fields;
 	}
 
 	@Override
 	protected <T> T _fromJson(Map<String, String> json, Type type) {
-		HashMap<String, Object> fields = new HashMap<String,Object>(); 
+		Map<String, Object> fields = new LinkedHashMap<String,Object>(); 
 		for(Entry<String, String> entry:json.entrySet()){
 			fields.put(entry.getKey(), JSON.parse(entry.getValue()));
 		}
-		return com.alibaba.fastjson.util.TypeUtils.cast(fields, type, ParserConfig.global);
+		return com.alibaba.fastjson.util.TypeUtils.cast(fields, type, null);
 	}
 
 }

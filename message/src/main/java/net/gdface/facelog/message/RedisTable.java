@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -102,10 +103,10 @@ public class RedisTable<V> extends KVTable<V> {
 			for(Entry<String, String> entry:fieldsValues.entrySet()){
 				String value = entry.getValue();
 				String field = entry.getKey();
-				if(null != value)
-					hash.put(field, value);
-				else
+				if(null == value)
 					nullFields.add(field);
+				else
+					hash.put(field, value);
 			}
 			Transaction ctx = jedis.multi();
 			if(!hash.isEmpty()){
@@ -237,5 +238,26 @@ public class RedisTable<V> extends KVTable<V> {
 			_setHash(m,nx);
 		else
 			_setString(m,nx);
+	}
+
+	@Override
+	protected Map<String, Object> _getFields(String key, Map<String, Type> types) {
+		Jedis jedis = getJedis();
+		try {
+			Set<String> hkeys = jedis.hkeys(key);
+			// 取交集
+			if(null != types && !types.isEmpty()){
+				 hkeys.retainAll(types.keySet());
+			}
+			String[] fields = hkeys.toArray(new String[0]);
+			List<String> values = jedis.hmget(key, fields);
+			LinkedHashMap<String, Object> fieldsMap = new LinkedHashMap<String,Object>();
+			for(int i = 0; i < fields.length ; ++i){
+				fieldsMap.put(fields[i], this.encoder.fromJson(values.get(i), types.get(fields[i])));
+			}
+			return fieldsMap;
+		} finally {
+			releaseJedis(jedis);
+		}
 	}
 }

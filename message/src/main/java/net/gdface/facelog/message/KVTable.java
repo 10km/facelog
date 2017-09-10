@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -147,6 +148,27 @@ public abstract class KVTable<V>{
 		_setFields(key,fields,nx);
 	}
 	
+	protected abstract  Map<String,Object> _getFields(String key,Map<String,Type> types);
+	
+	public Map<String,Object> getFields(String key,Map<String,Type> types){
+		assertJavaBean();
+		assertNotEmpty(key,"key");
+		if(null != types ){
+			for(Entry<String, Type> entry:types.entrySet()){
+				if(null == entry.getValue())
+					throw new IllegalArgumentException("the type of field '"+entry.getKey()+"' must not be null");
+			}
+		}
+		return _getFields(key,types);		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T>T getField(String key,String field,Type type){
+		assertNotEmpty(field,"field");
+		HashMap<String, Type> types = new HashMap<String,Type>();
+		types.put(field, type);
+		return (T) getFields(key,types).get(field);
+	}
 	protected abstract int _remove(String... keys);
 	
 	public int remove(String... keys){
