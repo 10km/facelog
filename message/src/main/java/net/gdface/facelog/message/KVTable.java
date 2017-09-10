@@ -64,21 +64,31 @@ public abstract class KVTable<V>{
 			throw new UnsupportedOperationException("because of null keyHelper");
 		return this.keyHelper.returnKey(v);
 	}
+	private void assertNotEmpty(String str,String name){
+		if(null == str || str.isEmpty())
+			throw new IllegalArgumentException(" '"+name+"' must not be null or empty");
+	}
 	
+	private void assertJavaBean(){
+		if(!isJavaBean)
+			throw new UnsupportedOperationException("because of not javabean,");
+	}
 	protected abstract V _get(String key);
 
 	public V get(String key){
-		if(null == key || key.isEmpty())
-			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
+		assertNotEmpty(key,"key");
 		return _get(key);
 	}
 	
 	protected abstract void _set(String key, V value, boolean nx);
 	
 	public void set(String key, V value, boolean nx){
-		if(null == key || key.isEmpty())
-			throw new IllegalArgumentException("the argument 'key' must not be null or empty");
-		_set(key,value,nx);
+		assertNotEmpty(key,"key");
+		if(null == value ){
+			if(!nx)
+				remove(key);
+		}else
+			_set(key,value,nx);
 	}
 	
 	public void set(V value,boolean nx){
@@ -89,24 +99,28 @@ public abstract class KVTable<V>{
 	protected abstract <T>void _setField(String key, String field, T value, boolean nx);
 	
 	public <T>void setField(String key, String field, T value, boolean nx){
-		if(!isJavaBean)
-			throw new UnsupportedOperationException("because of not javabean,");
-		if(null == field || field.isEmpty())
-			throw new IllegalArgumentException("the argument 'field' must not be null or empty");
+		assertJavaBean();
+		assertNotEmpty(key,"key");
+		assertNotEmpty(field,"field");
 		_setField(key,field,value, nx);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setFields(boolean nx,String key,V obj, String ...fields){
-		if(!isJavaBean)
-			throw new UnsupportedOperationException("because of not javabean,");
-		if(null == obj)
-			throw new NullPointerException();
+		assertJavaBean();
+		assertNotEmpty(key,"key");
+		if(null == obj){
+			if(!nx)
+				this.remove(key);
+			return ;
+		}
 		Map json = this.encoder.toJsonMap(obj);
 		if(null == fields || 0== fields.length)
 			fields = (String[]) json.keySet().toArray(new String[0]);
-		if(1 == fields.length)
+		if(1 == fields.length){
+			assertNotEmpty(fields[0],"fields[0]");
 			_setField(key,fields[0],json.get(fields[0]), nx);
+		}
 		else{
 			for (String field : fields) {
 				if (null == field || field.isEmpty())
@@ -121,8 +135,8 @@ public abstract class KVTable<V>{
 	protected abstract void _setFields(String key, Map<String,Object>fieldsValues, boolean nx) ;
 	
 	protected void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
-		if(!isJavaBean)
-			throw new UnsupportedOperationException("because of not javabean,");
+		assertJavaBean();
+		assertNotEmpty(key,"key");
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
 		_setFields(key,fieldsValues,nx);
 	}
@@ -130,7 +144,7 @@ public abstract class KVTable<V>{
 	protected abstract int _remove(String... keys);
 	
 	public int remove(String... keys){
-		if(null == keys)
+		if(null == keys || 0 == keys.length)
 			return 0;
 		ArrayList<String> list = new ArrayList<String>(keys.length);
 		for(String key:keys){

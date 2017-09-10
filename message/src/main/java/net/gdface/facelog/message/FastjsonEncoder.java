@@ -1,6 +1,7 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,11 +23,11 @@ public class FastjsonEncoder extends JsonEncoder {
 
 	@Override
 	public Map<String, String> toJsonMap(Object bean) {
-		Object json = JSON.toJSON(bean);
-		if(! (json instanceof JSONObject))
-			throw new NotBeanException("invalid type,not a java bean object");
+		if(null ==bean )return null;
+		if(!TypeUtils.isJavaBean(bean.getClass()))
+			throw new NotBeanException("invalid type,not a java bean object");		
 		@SuppressWarnings("unchecked")
-		Map<String, String> jsonObject=(Map<String, String>) json;
+		Map<String, String> jsonObject=(Map<String, String>) JSON.parse(JSON.toJSONString(bean));
 		for(Entry<String, String> entry:jsonObject.entrySet()){
 			entry.setValue(JSON.toJSONString(entry.getValue()));
 		}
@@ -35,7 +36,7 @@ public class FastjsonEncoder extends JsonEncoder {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T>T fromJson(String json, Type type) {
+	public <T>T fromJson(String json, Type type) {		
 		if(null == type)
 			throw new NullPointerException();
 		if(type instanceof Class<?>)
@@ -46,6 +47,10 @@ public class FastjsonEncoder extends JsonEncoder {
 
 	@Override
 	public <T> T fromJson(Map<String, String> json, Type type) {
-		return fromJson(JSON.toJSON(json).toString(),type);
+		HashMap<String, Object> fieldsMap = new HashMap<String,Object>(); 
+		for(Entry<String, String> entry:json.entrySet()){
+			fieldsMap.put(entry.getKey(), JSON.parse(entry.getValue()));
+		}
+		return fromJson(JSON.toJSONString(fieldsMap),type);
 	}
 }

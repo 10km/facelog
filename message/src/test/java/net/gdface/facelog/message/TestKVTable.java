@@ -92,8 +92,8 @@ public class TestKVTable {
 		rootUser.setId(3L);
 		rootUser.setName("root");
 
-//		group.addUser(guestUser);
-//		group.addUser(rootUser);
+		group.addUser(guestUser);
+		group.addUser(rootUser);
 		RedisTable<Group> table = new RedisTable<Group>(Group.class);
 		table.setKeyHelper(new IKeyHelper<Group>(){
 			@Override

@@ -2,9 +2,9 @@ package net.gdface.facelog.message;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,12 +12,8 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-
-import org.junit.Assert;
 
 public class TestFastjson {
 	public interface Person<T>{
@@ -124,15 +120,30 @@ public class TestFastjson {
 
 		group.addUser(guestUser);
 		group.addUser(rootUser);
-		String jsonstr = JSON.toJSONString(group);
-		System.out.println(jsonstr);
-		Map<String, Object> jsonObj = JSON.parseObject(jsonstr);
-		for( Entry<String, Object> entry:jsonObj.entrySet()){
-			System.out.println(entry.getKey() +"  "+ entry.getValue());
-			//entry.setValue(JSON.toJSONString(entry.getValue()));
+		{
+			String jsonstr = JSON.toJSONString(group);
+			System.out.println(jsonstr);
+			Map<String, Object> jsonObj = JSON.parseObject(jsonstr);
+			for (Entry<String, Object> entry : jsonObj.entrySet()) {
+				//System.out.println(
+				//		entry.getKey() + "  " + entry.getValue() + " " + entry.getValue().getClass().getName());
+				entry.setValue(JSON.toJSONString(entry.getValue()));
+			}
+
+			Map<String, Object> deJsonObj = new HashMap<String, Object>();
+			for (Entry<String, Object> entry : jsonObj.entrySet()) {
+				String json = (String) entry.getValue();
+				String key = entry.getKey();
+				//System.out.printf("field %s json %s\n" ,key,json);
+				Object field = JSON.parse( json);
+				//System.out.printf("field %s parse type %s\n" ,key,field.getClass().getSimpleName());
+				deJsonObj.put(entry.getKey(), field);
+			}
+			//System.out.println(JSON.toJSONString(deJsonObj));
+			Group dgroup = JSON.parseObject(JSON.toJSONString(deJsonObj), Group.class);
+			System.out.println(JSON.toJSONString(dgroup));
 		}
-		//System.out.println(JSON.toJSONString(jsonObj));
-		
+
 	}
 	class GenBean<T>{
 		public T b;
@@ -154,6 +165,7 @@ public class TestFastjson {
 	}
 	@Test 
 	public void testSimpleObject(){
+		System.out.println(JSON.toJSONString("hello word"));
 		Date date=new Date();
 		Object jsonDate = JSON.toJSON(date);
 		System.out.println(jsonDate.getClass().getName());
