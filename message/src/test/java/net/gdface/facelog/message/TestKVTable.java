@@ -105,26 +105,10 @@ public class TestKVTable {
 		Group deserialized = table.get(group.getId().toString());
 		System.out.println(JSON.toJSONString(deserialized,SerializerFeature.WriteMapNullValue));
 	}
-	//@Test
-	public void testJSONObject() {
-		Group group = new Group();
-		group.setId(0L);
-		group.setName("admin");
-
-		User guestUser = new User();
-		guestUser.setId(2L);
-		guestUser.setName("guest");
-
-		User rootUser = new User();
-		rootUser.setId(3L);
-		rootUser.setName("root");
-
-		group.addUser(guestUser);
-		group.addUser(rootUser);
-		@SuppressWarnings("unchecked")
-		Map<String, String> jsonObj = (Map<String, String>)  JSON.toJSON(group);
-		for( Entry<String, String> entry:jsonObj.entrySet()){
-			System.out.println(entry.getKey() +"  "+ JSON.toJSONString(entry.getValue()));
-		}
+	@Test
+	public void testGetSetField() {
+		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		table.setField("100", "nullStr", "haha not null1111", true);
+		System.out.println(table.getField("100", "nullStr"));
 	}
 }

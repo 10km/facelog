@@ -153,22 +153,23 @@ public abstract class KVTable<V>{
 	public Map<String,Object> getFields(String key,Map<String,Type> types){
 		assertJavaBean();
 		assertNotEmpty(key,"key");
-		if(null != types ){
-			for(Entry<String, Type> entry:types.entrySet()){
-				if(null == entry.getValue())
-					throw new IllegalArgumentException("the type of field '"+entry.getKey()+"' must not be null");
-			}
-		}
 		return _getFields(key,types);		
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T>T getField(String key,String field,Type type){
+		assertJavaBean();
+		assertNotEmpty(key,"key");
 		assertNotEmpty(field,"field");
-		HashMap<String, Type> types = new HashMap<String,Type>();
+		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
 		types.put(field, type);
-		return (T) getFields(key,types).get(field);
+		return (T) _getFields(key,types).get(field);
 	}
+	
+	public <T>T getField(String key,String field){
+		return getField(key,field,null);
+	}
+	
 	protected abstract int _remove(String... keys);
 	
 	public int remove(String... keys){

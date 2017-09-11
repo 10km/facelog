@@ -47,8 +47,6 @@ class FastjsonEncoder extends JsonEncoder {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T>T fromJson(String json, Type type) {		
-		if(null == type)
-			throw new NullPointerException();
 		if(type instanceof Class<?>)
 			return JSON.parseObject(json, (Class<T>)type);		
 		else
