@@ -22,7 +22,6 @@ public abstract class JsonEncoder {
 	 */
 	public abstract String toJsonString(Object obj);
 	
-	
 	public abstract Map<String,String> toJsonMap(Object obj)throws NotBeanException;
 
 	/**
@@ -33,23 +32,19 @@ public abstract class JsonEncoder {
 	 */
 	public abstract <T> T fromJson(String json, Type type);
 	
-	public abstract <T> T fromJson(Map<String,String> json, Type type);
+	public abstract <T> T fromJson(Map<String,String> json, Type type)throws NotBeanException ;
 	
 	public <T>List<Object> toJsonArray(@SuppressWarnings("unchecked") T...array){
-		if(null == array)return null;		
-		try{
-			ArrayList<Object> list = new ArrayList<Object>();
-			for( Object element:array){
+		if(null == array)return null;
+		ArrayList<Object> list = new ArrayList<Object>();
+		for( Object element:array){
+			try{
 				list.add(this.toJsonMap(element));
-			}
-			return list;
-		}catch(NotBeanException e){
-			ArrayList<Object> list = new ArrayList<Object>();
-			for( Object element:array){
+			}catch(NotBeanException e){
 				list.add(this.toJsonString(element));
 			}
-			return list;
 		}
+		return list;
 	}
 	
 	@SuppressWarnings("unchecked")

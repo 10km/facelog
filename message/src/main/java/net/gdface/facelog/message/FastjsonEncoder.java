@@ -19,16 +19,18 @@ class FastjsonEncoder extends JsonEncoder {
 	protected FastjsonEncoder() {}
 	
 	protected JSONObject _toJSONObject(Object bean){
-		return (JSONObject) JSON.parse(this.toJsonString(bean));// java bean to JSONObject
+		// 先序列化再解析成JSONObject对象
+		return (JSONObject) JSON.parse(this.toJsonString(bean));//
 	}
 	
 	@Override
 	public String toJsonString(Object obj) {
+		// java对象序列化(输出 null 字段)
 		return JSON.toJSONString(obj,SerializerFeature.WriteMapNullValue);
 	}
 
 	@Override
-	public Map<String, String> toJsonMap(Object bean) {
+	public Map<String, String> toJsonMap(Object bean)throws NotBeanException {
 		if(null ==bean )return null;
 		if(!TypeUtils.isJavaBean(bean.getClass()))
 			throw new NotBeanException("invalid type,not a java bean object");		
@@ -40,7 +42,6 @@ class FastjsonEncoder extends JsonEncoder {
 			fields.put(entry.getKey(), null == value ? null : this.toJsonString(value));
 		}
 		return fields;
-	
 	}	
 
 	@SuppressWarnings("unchecked")
@@ -55,7 +56,7 @@ class FastjsonEncoder extends JsonEncoder {
 	}
 	
 	@Override
-	public <T> T fromJson(Map<String, String> json, Type type) {
+	public <T> T fromJson(Map<String, String> json, Type type)throws NotBeanException {
 		if(!TypeUtils.isJavaBean(type))
 			throw new NotBeanException("invalid type,not a java bean");
 		if(null == json || json.isEmpty())
@@ -64,6 +65,6 @@ class FastjsonEncoder extends JsonEncoder {
 		for(Entry<String, String> entry:json.entrySet()){
 			fields.put(entry.getKey(), JSON.parse(entry.getValue()));
 		}
-		return com.alibaba.fastjson.util.TypeUtils.cast(fields, type, null);	
+		return com.alibaba.fastjson.util.TypeUtils.cast(fields, type, null);
 	}
 }

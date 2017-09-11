@@ -13,6 +13,7 @@ class FastjsonEncoder2 extends FastjsonEncoder {
 
 	@Override
 	protected JSONObject _toJSONObject(Object bean) {
+		// 直接解析成JSONObject 对象
 		return  (JSONObject) JSON.toJSON(bean);
 	}
 }
