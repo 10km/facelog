@@ -244,13 +244,19 @@ public class RedisTable<V> extends KVTable<V> {
 	protected Map<String, Object> _getFields(String key, Map<String, Type> types) {
 		Jedis jedis = getJedis();
 		try {
-			String[] fields = types.keySet().toArray(new String[0]);
-			List<String> values = jedis.hmget(key, fields);
-			LinkedHashMap<String, Object> fieldsMap = new LinkedHashMap<String,Object>();
-			for(int i = 0; i < fields.length ; ++i){
-				fieldsMap.put(fields[i], this.encoder.fromJson(values.get(i), types.get(fields[i])));
+			Map<String, String> fieldHash;
+			if(null == types || types.isEmpty()){
+				// types 为 空或 null时,返回所有 field
+				fieldHash = jedis.hgetAll(key);
+			}else{
+				String[] fields = types.keySet().toArray(new String[0]);
+				List<String> values = jedis.hmget(key, fields);
+				fieldHash = new LinkedHashMap<String,String>();
+				for(int i = 0; i < fields.length ; ++i){
+					fieldHash.put(fields[i], values.get(i));
+				}				
 			}
-			return fieldsMap;
+			return this.encoder.fromJson(fieldHash, types);
 		} finally {
 			releaseJedis(jedis);
 		}

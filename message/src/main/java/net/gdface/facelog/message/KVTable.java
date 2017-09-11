@@ -156,6 +156,20 @@ public abstract class KVTable<V>{
 		return _getFields(key,types);		
 	}
 	
+	public Map<String, Object> getFields(String key,String ...fields){
+		assertJavaBean();
+		assertNotEmpty(key,"key");
+		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
+		if(null != fields){
+			// 去除为空或 null 的字段名
+			for(String field : fields){
+				if(null == field || 0 == field.length())continue;
+				types.put(field, null);
+			}
+		}
+		return _getFields(key,types);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T>T getField(String key,String field,Type type){
 		assertJavaBean();
@@ -166,8 +180,12 @@ public abstract class KVTable<V>{
 		return (T) _getFields(key,types).get(field);
 	}
 	
+	public <T>T getField(String key,String field,Class<T> clazz){
+		return getField(key,field,(Type)clazz);
+	}
+	
 	public <T>T getField(String key,String field){
-		return getField(key,field,null);
+		return getField(key,field,(Type)null);
 	}
 	
 	protected abstract int _remove(String... keys);
@@ -276,6 +294,7 @@ public abstract class KVTable<V>{
 			}});
 		return count.get();
 	}
+	
 	public void set(Collection<V> c, boolean nx){
 		if(null == c || c.isEmpty()) return ;
 		if(null == this.keyHelper)
@@ -286,6 +305,7 @@ public abstract class KVTable<V>{
 		}
 		set(keysValues,false);
 	}
+	
 	public void set(boolean nx,@SuppressWarnings("unchecked") V ...array){
 		if(null == array)return ;
 		set(Arrays.asList(array), nx);

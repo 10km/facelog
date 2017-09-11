@@ -108,7 +108,15 @@ public class TestKVTable {
 	@Test
 	public void testGetSetField() {
 		RedisTable<Group> table = new RedisTable<Group>(Group.class);
-		table.setField("100", "nullStr", "haha not null1111", true);
+		table.setField("100", "nullStr", null, true);
 		System.out.println(table.getField("100", "nullStr"));
+	}
+	@Test
+	public void testgetFields(){
+		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		Map<String, Object> values = table.getFields("100", (String[])null);
+		for(Entry<String, Object> entry:values.entrySet()){
+			System.out.printf("%s %s\n",entry.getKey(),entry.getValue());
+		}
 	}
 }

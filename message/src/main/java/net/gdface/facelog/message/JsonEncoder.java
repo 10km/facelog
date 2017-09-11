@@ -3,8 +3,10 @@ package net.gdface.facelog.message;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public abstract class JsonEncoder {
 	public static  class NotBeanException extends RuntimeException{
@@ -32,7 +34,21 @@ public abstract class JsonEncoder {
 	 */
 	public abstract <T> T fromJson(String json, Type type);
 	
-	public abstract <T> T fromJson(Map<String,String> json, Type type)throws NotBeanException ;
+	public abstract <T> T fromJson(Map<String,String> fieldHash, Type type)throws NotBeanException ;
+	
+	public Map<String,Object> fromJson(Map<String,String> fieldHash,Map<String,Type> types){
+		if(null == fieldHash) return null;
+		LinkedHashMap<String, Object> fields = new LinkedHashMap<String,Object>();
+		for(Entry<String, String> entry:fieldHash.entrySet()){
+			String field = entry.getKey();
+			fields.put(field, this.fromJson(entry.getValue(), null == types ? null : types.get(field)));
+		}
+		return fields;
+	}
+	
+	public <T>T fromJson(String json, Class<T> clazz) {		
+		return fromJson(json,(Type)clazz);
+	}	
 	
 	public <T>List<Object> toJsonArray(@SuppressWarnings("unchecked") T...array){
 		if(null == array)return null;

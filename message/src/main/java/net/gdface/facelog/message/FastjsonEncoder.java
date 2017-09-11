@@ -43,7 +43,7 @@ class FastjsonEncoder extends JsonEncoder {
 		}
 		return fields;
 	}	
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T>T fromJson(String json, Type type) {		
@@ -54,13 +54,13 @@ class FastjsonEncoder extends JsonEncoder {
 	}
 	
 	@Override
-	public <T> T fromJson(Map<String, String> json, Type type)throws NotBeanException {
+	public <T> T fromJson(Map<String, String> fieldHash, Type type)throws NotBeanException {
 		if(!TypeUtils.isJavaBean(type))
 			throw new NotBeanException("invalid type,not a java bean");
-		if(null == json || json.isEmpty())
+		if(null == fieldHash || fieldHash.isEmpty())
 			throw new IllegalArgumentException("the argument 'json' must not be null or empty");
 		Map<String, Object> fields = new LinkedHashMap<String,Object>(); 
-		for(Entry<String, String> entry:json.entrySet()){
+		for(Entry<String, String> entry:fieldHash.entrySet()){
 			fields.put(entry.getKey(), JSON.parse(entry.getValue()));
 		}
 		return com.alibaba.fastjson.util.TypeUtils.cast(fields, type, null);
