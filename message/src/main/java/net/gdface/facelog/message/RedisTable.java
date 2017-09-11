@@ -12,6 +12,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.util.FieldInfo;
+
+import net.gdface.facelog.message.TestFastjson.Group;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -260,5 +264,17 @@ public class RedisTable<V> extends KVTable<V> {
 		} finally {
 			releaseJedis(jedis);
 		}
+	}
+	
+	@Override
+	protected List<String> _getFieldNames(){
+		List<FieldInfo> fieldList = com.alibaba.fastjson.util.TypeUtils.computeGetters(
+				com.alibaba.fastjson.util.TypeUtils.getRawClass(this.getType()), null);
+		ArrayList<String> fields = new ArrayList<String>(fieldList.size());
+		for(FieldInfo field:fieldList){
+			fields.add(field.name);
+		}
+		return fields;
+
 	}
 }

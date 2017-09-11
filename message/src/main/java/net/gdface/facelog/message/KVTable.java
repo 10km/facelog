@@ -1,11 +1,13 @@
 package net.gdface.facelog.message;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -45,9 +47,13 @@ public abstract class KVTable<V>{
 	protected JsonEncoder encoder = JsonEncoder.getEncoder();
 	protected IKeyHelper<V> keyHelper;
 	private final String prefix;
+	private List<String>filedNames = null;
 
 	public KVTable(Type type) {
 		super();
+		if( ! (type instanceof Class<?> ||  type instanceof ParameterizedType) ){
+			throw new IllegalArgumentException("invalid type of 'type' :must be Class<?> or ParameterizedType");
+		}
 		this.type = type;
 		this.prefix = type.toString();
 		this.isJavaBean = TypeUtils.isJavaBean(type);
@@ -324,5 +330,14 @@ public abstract class KVTable<V>{
 
 	public void setKeyHelper(IKeyHelper<V> keyHelper) {
 		this.keyHelper = keyHelper;
+	}
+
+	protected abstract List<String> _getFieldNames() ;
+	
+	public List<String> getFieldNames() {
+		this.assertJavaBean();
+		if(null == filedNames)
+			filedNames= _getFieldNames();
+		return filedNames;
 	}
 }

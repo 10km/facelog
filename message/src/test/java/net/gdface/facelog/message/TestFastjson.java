@@ -15,7 +15,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializeBeanInfo;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.util.FieldInfo;
 
 public class TestFastjson {
 	public interface Person<T>{
@@ -211,5 +213,22 @@ public class TestFastjson {
 		int _int= 32;
 		Object jsonInt = JSON.toJSON(_int);
 		System.out.println(jsonInt.getClass().getName());
+	}
+	@Test
+	public void testComputeGetters(){
+		Type type = new TypeUtils<GenBean<Date>>(){}.getType();
+		Class<?> clazz = getDeclaredClass(type);
+		System.out.println(clazz.getName());
+		List<FieldInfo> fieldInfo = com.alibaba.fastjson.util.TypeUtils.computeGetters(clazz, null);
+		for(FieldInfo field:fieldInfo){
+			System.out.printf("name %s %s\n",field.name,field.fieldType.toString());
+		}
+	}
+	public Class<?> getDeclaredClass(Type type){		
+		if(type instanceof Class<?>)return (Class<?>)type;
+		else if ( type instanceof ParameterizedType){
+			return getDeclaredClass(((ParameterizedType)type).getRawType());
+		}
+		return null;
 	}
 }
