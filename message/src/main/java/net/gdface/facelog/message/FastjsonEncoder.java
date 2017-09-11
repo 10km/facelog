@@ -1,16 +1,26 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
-public abstract class FastjsonEncoder extends JsonEncoder {
+class FastjsonEncoder extends JsonEncoder {
+	private static final FastjsonEncoder instance = new FastjsonEncoder();
+	
+	public static FastjsonEncoder getInstance(){
+		return instance;		
+	}
+	
 	protected FastjsonEncoder() {}
 	
-	protected abstract Map<String, String> _toJsonMap(Object bean);
-	
-	protected abstract <T> T _fromJson(Map<String, String> json, Type type);
+	protected JSONObject _toJSONObject(Object bean){
+		return (JSONObject) JSON.parse(this.toJsonString(bean));// java bean to JSONObject
+	}
 	
 	@Override
 	public String toJsonString(Object obj) {
@@ -22,7 +32,15 @@ public abstract class FastjsonEncoder extends JsonEncoder {
 		if(null ==bean )return null;
 		if(!TypeUtils.isJavaBean(bean.getClass()))
 			throw new NotBeanException("invalid type,not a java bean object");		
-		return _toJsonMap(bean);
+
+		JSONObject jsonObject =_toJSONObject(bean);
+		Map<String, String> fields = new LinkedHashMap<String, String>();
+		for(Entry<String, Object> entry : jsonObject.entrySet()) {
+			Object value = entry.getValue();
+			fields.put(entry.getKey(), null == value ? null : this.toJsonString(value));
+		}
+		return fields;
+	
 	}	
 
 	@SuppressWarnings("unchecked")
@@ -42,6 +60,10 @@ public abstract class FastjsonEncoder extends JsonEncoder {
 			throw new NotBeanException("invalid type,not a java bean");
 		if(null == json || json.isEmpty())
 			throw new IllegalArgumentException("the argument 'json' must not be null or empty");
-		return _fromJson(json,type);
+		Map<String, Object> fields = new LinkedHashMap<String,Object>(); 
+		for(Entry<String, String> entry:json.entrySet()){
+			fields.put(entry.getKey(), JSON.parse(entry.getValue()));
+		}
+		return com.alibaba.fastjson.util.TypeUtils.cast(fields, type, null);	
 	}
 }

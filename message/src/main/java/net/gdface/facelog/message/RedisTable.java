@@ -244,12 +244,7 @@ public class RedisTable<V> extends KVTable<V> {
 	protected Map<String, Object> _getFields(String key, Map<String, Type> types) {
 		Jedis jedis = getJedis();
 		try {
-			Set<String> hkeys = jedis.hkeys(key);
-			// 取交集
-			if(null != types && !types.isEmpty()){
-				 hkeys.retainAll(types.keySet());
-			}
-			String[] fields = hkeys.toArray(new String[0]);
+			String[] fields = types.keySet().toArray(new String[0]);
 			List<String> values = jedis.hmget(key, fields);
 			LinkedHashMap<String, Object> fieldsMap = new LinkedHashMap<String,Object>();
 			for(int i = 0; i < fields.length ; ++i){

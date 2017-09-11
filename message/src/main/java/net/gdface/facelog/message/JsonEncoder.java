@@ -60,6 +60,6 @@ public abstract class JsonEncoder {
 	}
 	
 	public static final JsonEncoder getEncoder(){
-		return FastjsonEncoder1.getInstance(); 
+		return FastjsonEncoder.getInstance(); 
 	}
 }
