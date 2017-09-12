@@ -31,9 +31,12 @@ public class Consumer<T>implements AutoCloseable{
 	private boolean isOpened = false;
 	private boolean isClosed = false;
 	private boolean isFifo = true;
-	public synchronized Consumer<T> open(ExecutorService executorService){
+	private void checkState(){
 		if(isClosed || isOpened)
-			throw new IllegalStateException();
+			throw new IllegalStateException();	
+	}
+	public synchronized Consumer<T> open(ExecutorService executorService){
+		checkState();
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {
@@ -68,26 +71,27 @@ public class Consumer<T>implements AutoCloseable{
 	
 	@Override
 	public void close() throws Exception {
+		if(!isOpened)
+			throw new IllegalStateException();	
 		this.isClosed = true;
 		this.queue = null;
 	}
 
 	public Consumer<T> setAction(Action<T> action) {
+		checkState();
 		this.action = null == action?nullAction:action;
 		return this;
 	}
 	
 	public Consumer<T> setTimeoutMills(int timeoutMills) {
+		checkState();
 		if(timeoutMills>0)
 			this.timeoutMills = timeoutMills;
 		return this;
 	}
 	
-	public Consumer<T> setExecutorService(ExecutorService executorService) {
-		return this;
-	}
-
 	public Consumer<T> setFifo(boolean fifo) {
+		checkState();
 		this.isFifo = fifo;
 		return this;
 	}
