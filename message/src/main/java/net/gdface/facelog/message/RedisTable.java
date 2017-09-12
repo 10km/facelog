@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.fastjson.util.FieldInfo;
 
 import net.gdface.facelog.message.JedisPoolLazy.PropName;
@@ -21,8 +18,7 @@ import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
 
 public class RedisTable<V> extends KVTable<V> {
-	private static final Logger logger = LoggerFactory.getLogger(RedisTable.class);
-	private JedisPoolLazy poolLazy;
+	private final JedisPoolLazy poolLazy;
 	private Jedis getJedis(){
         return poolLazy.apply();
     }
@@ -38,7 +34,7 @@ public class RedisTable<V> extends KVTable<V> {
 	
 	public RedisTable(Type type,Map<PropName, Object> props) {
 		super(type);
-		poolLazy = JedisPoolLazy.getInstance(props);
+		poolLazy = JedisPoolLazy.getInstance(props, true);
 	}
 
 	public RedisTable(Type type,String host, int port, final String password, int database) {

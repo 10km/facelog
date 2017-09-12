@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -98,16 +99,27 @@ public class JedisPoolLazy {
 		return params;
 	}
 	
-	public static synchronized JedisPoolLazy getInstance(Map<PropName,Object> props) {
+	public static synchronized JedisPoolLazy getInstance(Map<PropName,Object> props, boolean fullMatch) {
 		// 初始化时复制一份缺省参数
 		HashMap<PropName,Object> params = initParameters(props);
 		// 查找在连接池对象集合中查找对应的匹配的对象,找不到就创建新实例
 		URI canonicalURI = JedisUtils.getCanonicalURI(params);
-		for(JedisPoolLazy pool : poolSet){
-			if(pool.getCanonicalURI().equals(canonicalURI)
-				&& params.get(PropName.jedisPoolConfig).equals(pool.parameters.get(PropName.jedisPoolConfig))
-				&& params.get(PropName.timeout).equals(pool.parameters.get(PropName.timeout))){
-				return pool;
+		if(fullMatch){
+			// 全匹配
+			for (JedisPoolLazy pool : poolSet) {
+				if (pool.getCanonicalURI().equals(canonicalURI)
+						&& params.get(PropName.jedisPoolConfig).equals(pool.parameters.get(PropName.jedisPoolConfig))
+						&& params.get(PropName.timeout).equals(pool.parameters.get(PropName.timeout))) {
+					return pool;
+				}
+			}
+		}else{
+			// 只匹配 host port 相同就算找到
+			HostAndPort hp1 = new HostAndPort(canonicalURI.getHost(),canonicalURI.getPort());
+			for (JedisPoolLazy pool : poolSet) {
+				URI uri2 = pool.getCanonicalURI();
+				HostAndPort hp2 = new HostAndPort(uri2.getHost(),uri2.getPort());
+				if(hp1.equals(hp2))return pool;
 			}
 		}
 		return createInstance(params);
@@ -128,7 +140,7 @@ public class JedisPoolLazy {
 		if( 0 < timeout )
 			param.put(PropName.timeout, timeout);
 		param.put(PropName.uri, uri);
-		return getInstance(param);
+		return getInstance(param, true);
 	}
 	
 	public static JedisPoolLazy getInstance(JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
