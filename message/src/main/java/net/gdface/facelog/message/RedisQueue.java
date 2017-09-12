@@ -25,12 +25,17 @@ import redis.clients.jedis.Protocol;
  *
  * @param <E> 队列中的元素类型
  */
-public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E> {
+public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E>,IRedisComponent {
 	private final Type type;
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 	/** 队列名(key) */
 	private String queueName;
 	private final JedisPoolLazy poolLazy;
+	@Override
+	public JedisPoolLazy getPoolLazy() {
+		return poolLazy;
+	}
+
 	private Jedis getJedis(){
         return poolLazy.apply();
     }

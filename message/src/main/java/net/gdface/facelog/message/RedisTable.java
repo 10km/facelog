@@ -17,8 +17,13 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
 
-public class RedisTable<V> extends KVTable<V> {
+public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
 	private final JedisPoolLazy poolLazy;
+	@Override
+	public JedisPoolLazy getPoolLazy() {
+		return poolLazy;
+	}
+
 	private Jedis getJedis(){
         return poolLazy.apply();
     }

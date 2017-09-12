@@ -118,7 +118,6 @@ public class TestRedis {
     	System.out.println(jedisUri);
     	System.out.printf("password [%s] dbindex %d \n", JedisURIHelper.getPassword(jedisUri),JedisURIHelper.getDBIndex(jedisUri));
     }    
-    
     /**
      * 程序关闭时，需要调用关闭方法
      */
