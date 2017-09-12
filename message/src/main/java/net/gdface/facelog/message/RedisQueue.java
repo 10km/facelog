@@ -17,11 +17,19 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
+/**
+ * 
+ * 封装 redis list 为阻塞式双向队列 {@link BlockingDeque}
+ * 
+ * @author guyadong
+ *
+ * @param <E> 队列中的元素类型
+ */
 public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E> {
 	private final Type type;
-	protected final boolean isJavaBean ;
-	protected JsonEncoder encoder = JsonEncoder.getEncoder();
-	protected String queueName;
+	private JsonEncoder encoder = JsonEncoder.getEncoder();
+	/** 队列名(key) */
+	private String queueName;
 	private final JedisPoolLazy poolLazy;
 	private Jedis getJedis(){
         return poolLazy.apply();
@@ -41,7 +49,6 @@ public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E> {
 		}
 		this.type = type;
 		this.queueName = type.toString();
-		this.isJavaBean = TypeUtils.isJavaBean(type);
 		this.poolLazy = poolLazy;
 	}
 
