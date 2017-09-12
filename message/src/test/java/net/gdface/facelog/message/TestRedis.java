@@ -46,7 +46,9 @@ public class TestRedis {
             //设置 redis 字符串数据 SET 10km blog.csdn.net/10km
             jedis.set("10km", "blog.csdn.net/10km");
             // 获取存储的数据并输出
-            System.out.println("redis 存储的字符串为: "+ jedis.get("10km"));    		
+            System.out.println("redis 存储的字符串为: "+ jedis.get("10km"));
+    	}catch(Exception e){
+    		e.printStackTrace();
     	}
     }
 

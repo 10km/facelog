@@ -28,13 +28,15 @@ public class RedisTable<V> extends KVTable<V> {
     }
     
 	public RedisTable(Type type) {
-		super(type);
-		poolLazy = JedisPoolLazy.getDefaultInstance();
+		this(type,JedisPoolLazy.getDefaultInstance());
 	}
 	
-	public RedisTable(Type type,Map<PropName, Object> props) {
+	public RedisTable(Type type,JedisPoolLazy pool){
 		super(type);
-		poolLazy = JedisPoolLazy.getInstance(props, true);
+		poolLazy = pool;
+	}
+	public RedisTable(Type type,Map<PropName, Object> props) {
+		this(type,JedisPoolLazy.getInstance(props, true));
 	}
 
 	public RedisTable(Type type,String host, int port, final String password, int database) {
@@ -42,14 +44,12 @@ public class RedisTable<V> extends KVTable<V> {
 	}
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
-		super(type);
-		poolLazy = JedisPoolLazy.getInstance(jedisPoolConfig, uri, timeout);
+		this(type,JedisPoolLazy.getInstance(jedisPoolConfig, uri, timeout));
 	}
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
 			int database, int timeout) {
-		super(type);
-		poolLazy = JedisPoolLazy.getInstance(jedisPoolConfig, host, port, password, database, timeout);
+		this(type,JedisPoolLazy.getInstance(jedisPoolConfig, host, port, password, database, timeout));
 	}
 
 	@Override
