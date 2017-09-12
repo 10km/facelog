@@ -99,6 +99,7 @@ public class TestKVTable {
 		group.addUser(guestUser);
 		group.addUser(rootUser);
 		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		RedisTable<Group> table2 = new RedisTable<Group>(Group.class,null);
 		table.setKeyHelper(new IKeyHelper<Group>(){
 			@Override
 			public String returnKey(Group v) {

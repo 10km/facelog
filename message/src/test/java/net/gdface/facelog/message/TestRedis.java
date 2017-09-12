@@ -1,5 +1,7 @@
 package net.gdface.facelog.message;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +14,9 @@ import org.junit.runners.MethodSorters;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
+import redis.clients.util.JedisURIHelper;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestRedis {
 	private JedisPool pool;
@@ -105,12 +109,12 @@ public class TestRedis {
     		}
     	}
     }    
-    //@Test
-    public void test7Hash(){
+    @Test
+    public void test7JedisURI() throws URISyntaxException{
     	System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
-    	try(Jedis jedis = pool.getResource()){
-    		//jedis.hmset(key, hash)
-    	}
+    	URI jedisUri = new URI("jedis",":hello",Protocol.DEFAULT_HOST,Protocol.DEFAULT_PORT,"/1",null,null);
+    	System.out.println(jedisUri);
+    	System.out.printf("password [%s] dbindex %d \n", JedisURIHelper.getPassword(jedisUri),JedisURIHelper.getDBIndex(jedisUri));
     }    
     
     /**

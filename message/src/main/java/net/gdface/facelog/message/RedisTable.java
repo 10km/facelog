@@ -12,27 +12,23 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.util.FieldInfo;
 
-import net.gdface.facelog.message.TestFastjson.Group;
+import net.gdface.facelog.message.JedisPoolLazy.PropName;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
 
 public class RedisTable<V> extends KVTable<V> {
 	private static final Logger logger = LoggerFactory.getLogger(RedisTable.class);
-	private JedisPool pool;
+	private JedisPoolLazy poolLazy;
 	private Jedis getJedis(){
-        return pool.getResource();
+        return poolLazy.apply();
     }
     
     private void releaseJedis(Jedis jedis) {
-        if (jedis != null){
-            jedis.close();
-        }
+    	poolLazy.free();
     }
     
 	private static final JedisPoolConfig DEFAULT_CONFIG = new JedisPoolConfig() {
@@ -42,7 +38,13 @@ public class RedisTable<V> extends KVTable<V> {
 	};
 
 	public RedisTable(Type type) {
-		this(type, DEFAULT_CONFIG, Protocol.DEFAULT_HOST, Protocol.DEFAULT_PORT, null, Protocol.DEFAULT_DATABASE, Protocol.DEFAULT_TIMEOUT);
+		super(type);
+		poolLazy = JedisPoolLazy.getDefaultInstance();
+	}
+	
+	public RedisTable(Type type,Map<PropName, Object> props) {
+		super(type);
+		poolLazy = JedisPoolLazy.getInstance(props);
 	}
 
 	public RedisTable(Type type,String host, int port, final String password, int database) {
@@ -51,15 +53,13 @@ public class RedisTable<V> extends KVTable<V> {
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
 		super(type);
-		pool = new JedisPool(jedisPoolConfig, uri, timeout);
-		logger.info("连接池初始化");
+		poolLazy = JedisPoolLazy.getInstance(jedisPoolConfig, uri, timeout);
 	}
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
 			int database, int timeout) {
 		super(type);
-		pool = new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
-		logger.info("连接池初始化");
+		poolLazy = JedisPoolLazy.getInstance(jedisPoolConfig, host, port, password, database, timeout);
 	}
 
 	@Override
