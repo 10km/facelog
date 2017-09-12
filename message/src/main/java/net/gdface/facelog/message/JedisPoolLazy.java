@@ -45,7 +45,7 @@ public class JedisPoolLazy {
 		jedisPoolConfig,host,port,password,database,timeout,uri
 	}
 	
-	private static final JedisPoolConfig DEFAULT_CONFIG = new JedisPoolConfig() {
+	public static final JedisPoolConfig DEFAULT_CONFIG = new JedisPoolConfig() {
 		{
 			setMaxTotal(Runtime.getRuntime().availableProcessors());
 		}
@@ -143,7 +143,7 @@ public class JedisPoolLazy {
 
 	public static JedisPoolLazy getInstance( JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
 			int database, int timeout){
-		return getInstance(DEFAULT_CONFIG,host,port,password,database,Protocol.DEFAULT_TIMEOUT, null);
+		return getInstance(jedisPoolConfig,host,port,password,database,timeout, null);
 	}
 	
 	public static JedisPoolLazy getInstance(String host, int port, final String password, int database) {

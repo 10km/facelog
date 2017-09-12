@@ -31,12 +31,6 @@ public class RedisTable<V> extends KVTable<V> {
     	poolLazy.free();
     }
     
-	private static final JedisPoolConfig DEFAULT_CONFIG = new JedisPoolConfig() {
-		{
-			setMaxTotal(10);
-		}
-	};
-
 	public RedisTable(Type type) {
 		super(type);
 		poolLazy = JedisPoolLazy.getDefaultInstance();
@@ -48,7 +42,7 @@ public class RedisTable<V> extends KVTable<V> {
 	}
 
 	public RedisTable(Type type,String host, int port, final String password, int database) {
-		this(type, DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
+		this(type, JedisPoolLazy.DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
 	}
 
 	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
