@@ -18,11 +18,11 @@ public class SubscriberHandle extends JedisPubSub {
 
 	@Override
 	public void onMessage(String channel, String message) {
-		try{
-		if(null != onMessageHandle)
-			onMessageHandle.onMessage(channel, message);
-		}catch(Exception e){
-			logger.error(e.getMessage(),e);
+		try {
+			if (null != onMessageHandle)
+				onMessageHandle.onMessage(channel, message);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 }
