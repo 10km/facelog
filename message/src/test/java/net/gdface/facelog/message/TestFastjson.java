@@ -231,4 +231,15 @@ public class TestFastjson {
 		}
 		return null;
 	}
+	@Test
+	public void testType(){
+		Type type = new TypeUtils<Map<Date,List<String>>>(){}.getType();
+		String typeString = JSON.toJSONString(type);
+		System.out.println(typeString);
+		 Object dObj = JSON.parse(typeString);
+		 System.out.println(dObj.getClass().getName());
+//		 Object dtype = com.alibaba.fastjson.util.TypeUtils.cast(dObj, com.alibaba.fastjson.util.ParameterizedTypeImpl.class, null);
+//		Type dType = JSON.parseObject(typeString, com.alibaba.fastjson.util.ParameterizedTypeImpl.class);
+	}
+	
 }
