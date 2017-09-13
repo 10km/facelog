@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.message.JedisPoolLazy.PropName;
@@ -25,7 +26,7 @@ import redis.clients.jedis.Protocol;
  *
  * @param <E> 队列中的元素类型
  */
-public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E>,IRedisComponent {
+public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	private final Type type;
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 	/** 队列名(key) */
@@ -57,6 +58,7 @@ public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E>,I
 		this.poolLazy = poolLazy;
 	}
 
+	@Override
 	public String getQueueName() {
 		return queueName;
 	}
@@ -234,6 +236,7 @@ public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E>,I
 
 	@Override
 	public boolean offerFirst(E e) {
+		if (e == null) throw new NullPointerException();
 		Jedis jedis = getJedis();
 		try{
 			jedis.lpush(this.queueName, this.encoder.toJsonString(e));
@@ -245,6 +248,7 @@ public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E>,I
 
 	@Override
 	public boolean offerLast(E e) {
+		if (e == null) throw new NullPointerException();
 		Jedis jedis = getJedis();
 		try{
 			jedis.rpush(this.queueName, this.encoder.toJsonString(e));
@@ -350,7 +354,12 @@ public class RedisQueue<E> extends AbstractQueue<E>implements BlockingDeque<E>,I
 
 	@Override
 	public void push(E e) {
-		addFirst(e);		
+		addFirst(e);
+	}
+
+	@Override
+	public BlockingQueue<E> getQueue() {
+		return this;
 	}
 
 }

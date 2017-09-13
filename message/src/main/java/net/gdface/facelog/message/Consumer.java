@@ -1,33 +1,34 @@
 package net.gdface.facelog.message;
 
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class Consumer<T>implements AutoCloseable{
+public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 	public static class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		
-	}
-	
-	public static final int TIME_OUT = 2000;
+	}	
 	
 	public static interface Action<T>{
-		void onMessage(T t)throws BreakException;
+		void consume(T t)throws BreakException;
 	}
 	
-	private BlockingDeque<T> queue;
+	protected BlockingQueue<T> queue;
 	
-	public Consumer(BlockingDeque<T> queue) {
+	public Consumer() {
+	}
+	public Consumer(BlockingQueue<T> queue) {
 		super();
 		this.queue = queue;
 	}
 
 	public final Action<T> nullAction=new Action<T>(){
 		@Override
-		public void onMessage(T t) {
+		public void consume(T t) {
 		}};
 	private Action<T> action=nullAction;
-	private int timeoutMills = TIME_OUT;
+	private int timeoutMills = DEFAULT_CONSUMER_CHECK_INTERVAL;
 	private boolean isOpened = false;
 	private boolean isClosed = false;
 	private boolean isFifo = true;
@@ -35,8 +36,15 @@ public class Consumer<T>implements AutoCloseable{
 		if(isClosed || isOpened)
 			throw new IllegalStateException();	
 	}
+	
+	/**
+	 * @param executorService 指定运行的线程池,为null则创建一个新线程
+	 * @return
+	 */
 	public synchronized Consumer<T> open(ExecutorService executorService){
 		checkState();
+		if(null == queue)
+			throw new NullPointerException("the field 'queue' not be initialized");
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {
@@ -45,10 +53,14 @@ public class Consumer<T>implements AutoCloseable{
 						T t;
 						if(isFifo)
 							t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
-						else
-							t = queue.pollLast(timeoutMills, TimeUnit.MILLISECONDS);
+						else{
+							if(queue instanceof BlockingDeque)
+								t = ((BlockingDeque<T>)queue).pollLast(timeoutMills, TimeUnit.MILLISECONDS);
+							else
+								throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
+						}
 						if(null != t)
-							action.onMessage(t);
+							action.consume(t);
 					}
 				} catch (InterruptedException e) {
 				} catch (BreakException e) {
@@ -83,6 +95,10 @@ public class Consumer<T>implements AutoCloseable{
 		return this;
 	}
 	
+	/**
+	 * @param timeoutMills (milliseconds)
+	 * @return
+	 */
 	public Consumer<T> setTimeoutMills(int timeoutMills) {
 		checkState();
 		if(timeoutMills>0)
@@ -94,6 +110,21 @@ public class Consumer<T>implements AutoCloseable{
 		checkState();
 		this.isFifo = fifo;
 		return this;
+	}
+	
+	@Override
+	public BlockingQueue<T> getQueue() {
+		return queue;
+	}
+	
+	public Consumer<T> setQueue(BlockingQueue<T> queue) {
+		this.queue = queue;
+		return this;
+	}
+	
+	@Override
+	public String getQueueName() {
+		return "unknow";
 	}
 
 }
