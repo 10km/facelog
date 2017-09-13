@@ -72,11 +72,7 @@ public abstract class KVTable<V>{
 			throw new UnsupportedOperationException("because of null keyHelper");
 		return this.keyHelper.returnKey(v);
 	}
-	private void assertNotEmpty(String str,String name){
-		if(null == str || str.isEmpty())
-			throw new IllegalArgumentException(" '"+name+"' must not be null or empty");
-	}
-	
+
 	private void assertJavaBean(){
 		if(!isJavaBean)
 			throw new UnsupportedOperationException("because of not javabean,");
@@ -84,14 +80,14 @@ public abstract class KVTable<V>{
 	protected abstract V _get(String key);
 
 	public V get(String key){
-		assertNotEmpty(key,"key");
+		Assert.notEmpty(key,"key");
 		return _get(key);
 	}
 	
 	protected abstract void _set(String key, V value, boolean nx);
 	
 	public void set(String key, V value, boolean nx){
-		assertNotEmpty(key,"key");
+		Assert.notEmpty(key,"key");
 		if(null == value ){
 			if(!nx)
 				remove(key);
@@ -108,15 +104,15 @@ public abstract class KVTable<V>{
 	
 	public <T>void setField(String key, String field, T value, boolean nx){
 		assertJavaBean();
-		assertNotEmpty(key,"key");
-		assertNotEmpty(field,"field");
+		Assert.notEmpty(key,"key");
+		Assert.notEmpty(field,"field");
 		_setField(key,field,value, nx);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setFields(boolean nx,String key,V obj, String ...fields){
 		assertJavaBean();
-		assertNotEmpty(key,"key");
+		Assert.notEmpty(key,"key");
 		if(null == obj){
 			if(!nx)
 				this.remove(key);
@@ -126,7 +122,7 @@ public abstract class KVTable<V>{
 		if(null == fields || 0== fields.length)
 			fields = (String[]) json.keySet().toArray(new String[0]);
 		if(1 == fields.length){
-			assertNotEmpty(fields[0],"fields[0]");
+			Assert.notEmpty(fields[0],"fields[0]");
 			_setField(key,fields[0],json.get(fields[0]), nx);
 		}
 		else{
@@ -144,7 +140,7 @@ public abstract class KVTable<V>{
 	
 	public void setFields(String key, Map<String,Object>fieldsValues, boolean nx){
 		assertJavaBean();
-		assertNotEmpty(key,"key");
+		Assert.notEmpty(key,"key");
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
 		HashMap<String, String> fields = new HashMap<String,String>();
 		for(Entry<String, Object> entry:fieldsValues.entrySet()){
@@ -158,13 +154,13 @@ public abstract class KVTable<V>{
 	
 	public Map<String,Object> getFields(String key,Map<String,Type> types){
 		assertJavaBean();
-		assertNotEmpty(key,"key");
+		Assert.notEmpty(key,"key");
 		return _getFields(key,types);		
 	}
 	
 	public Map<String, Object> getFields(String key,String ...fields){
 		assertJavaBean();
-		assertNotEmpty(key,"key");
+		Assert.notEmpty(key,"key");
 		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
 		if(null != fields){
 			// 去除为空或 null 的字段名
@@ -179,8 +175,8 @@ public abstract class KVTable<V>{
 	@SuppressWarnings("unchecked")
 	public <T>T getField(String key,String field,Type type){
 		assertJavaBean();
-		assertNotEmpty(key,"key");
-		assertNotEmpty(field,"field");
+		Assert.notEmpty(key,"key");
+		Assert.notEmpty(field,"field");
 		LinkedHashMap<String, Type> types = new LinkedHashMap<String,Type>();
 		types.put(field, type);
 		return (T) _getFields(key,types).get(field);

@@ -8,6 +8,7 @@ public class Channel {
 	final Type type;
 	public Channel(String name, Type type) {
 		super();
+		Assert.notEmpty(name, "name");
 		this.name = name;
 		if( null !=null && !(type instanceof ParameterizedType) &&! (type instanceof Class<?>) ){
 			throw new IllegalArgumentException("invalid type of 'type'");
