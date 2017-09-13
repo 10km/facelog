@@ -3,6 +3,7 @@ package net.gdface.facelog.message;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 
 import net.gdface.facelog.message.JedisPoolLazy.PropName;
 import redis.clients.jedis.Jedis;
@@ -44,13 +45,13 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 	}
 
 	@Override
-	protected void subscribe(String... channels) {
+	protected void _subscribe(String... channels) {
 		jedisPubSub.subscribe(channels);
 		open();
 	}
 
 	@Override
-	protected void unsubscribe(String... channels) {		
+	protected void _unsubscribe(String... channels) {		
 		if(jedisPubSub.isSubscribed()) {
 			if(null == channels || 0 == channels.length)
 				jedisPubSub.unsubscribe();
@@ -60,7 +61,7 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 	}
 	
 	private synchronized void open(){
-		if(jedisPubSub.isSubscribed())return;		
+		if(jedisPubSub.isSubscribed())return;
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {
@@ -73,10 +74,16 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 					poolLazy.free();
 				}
 			}};
-		if(null != executorService)
-			executorService.submit(run);
-		else
-			new Thread(run).start();
+			
+		if(null != executorService){
+			try{
+				executorService.submit(run);
+				return;
+			}catch(Exception e){
+				logger.warn(e.getMessage());
+			}
+		}
+		new Thread(run).start();
 	}
 
 	public RedisSubscriber setExecutorService(ExecutorService executorService) {

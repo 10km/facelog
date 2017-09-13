@@ -3,9 +3,15 @@ package net.gdface.facelog.message;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
+	protected static final Logger logger = LoggerFactory.getLogger(Subcriber.class);
+
 	public static class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		
 	}	
@@ -32,6 +38,7 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 	private boolean isOpened = false;
 	private boolean isClosed = false;
 	private boolean isFifo = true;
+	private ExecutorService executorService;
 	private void checkState(){
 		if(isClosed || isOpened)
 			throw new IllegalStateException();	
@@ -41,7 +48,7 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 	 * @param executorService 指定运行的线程池,为null则创建一个新线程
 	 * @return
 	 */
-	public synchronized Consumer<T> open(ExecutorService executorService){
+	public synchronized Consumer<T> open(){
 		checkState();
 		if(null == queue)
 			throw new NullPointerException("the field 'queue' not be initialized");
@@ -69,16 +76,17 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 				}
 			}
 		};
-		if(null != executorService)
-			executorService.submit(run);
-		else
-			new Thread(run).start();
+		if(null != executorService){
+			try{
+				executorService.submit(run);
+				return this;
+			}catch(RejectedExecutionException e){
+				logger.warn(e.getMessage());
+			}
+		}
+		new Thread(run).start();
 		isOpened = true;
 		return this;
-	}
-	
-	public Consumer<T> open(){
-		return this.open(null);
 	}
 	
 	@Override
@@ -125,6 +133,10 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 	@Override
 	public String getQueueName() {
 		return "unknow";
+	}
+	public Consumer<T> setExecutorService(ExecutorService executorService) {
+		this.executorService = executorService;
+		return this;
 	}
 
 }

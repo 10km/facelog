@@ -1,7 +1,7 @@
 package net.gdface.facelog.message;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -15,8 +15,34 @@ public abstract class Subcriber implements IOnMessage  {
 	public Subcriber() {
 	}
 	
-	protected abstract void subscribe(String... channels);
-	protected abstract void unsubscribe(String... channels);
+	private String[] registedChannels(String... channels){
+		HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
+		if(!chSet.isEmpty())
+			chSet.retainAll(channelSubs.keySet());
+		return chSet.toArray(new String[chSet.size()]);
+	}
+	
+	protected abstract void _subscribe(String... channels);
+	
+	protected abstract void _unsubscribe(String... channels);
+	
+	public void subscribe(String... channels) {
+		synchronized (this) {
+			if (null == channels || 0 == channels.length)
+				channels = channelSubs.keySet().toArray(new String[0]);
+			else {
+				channels = registedChannels(channels);
+			}
+			if (0 < channels.length)
+				this._subscribe(channels);
+		}
+	}
+	
+	public void unsubscribe(String... channels){
+		synchronized (this) {
+			_unsubscribe(registedChannels(channels));
+		}
+	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -39,11 +65,11 @@ public abstract class Subcriber implements IOnMessage  {
 	
 	@SuppressWarnings({ "rawtypes" })
 	public void register(ChannelSub... channels) {
-		channels = CommonUtils.cleanNull(channels);
-		String[] names = getChannelNames(channels);
-		if (0 < names.length) {
-			synchronized (this.channelSubs) {				
-				for(ChannelSub ch:channels){
+		synchronized (this) {
+			channels = CommonUtils.cleanNull(channels);
+			String[] names = getChannelNames(channels);
+			if (0 < names.length) {
+				for (ChannelSub ch : channels) {
 					channelSubs.put(ch.name, ch);
 				}
 				subscribe(names);
@@ -52,13 +78,13 @@ public abstract class Subcriber implements IOnMessage  {
 	}
 	
 	public void unregister(String... channels) {
-		channels = CommonUtils.cleanEmpty(channels);
-		synchronized (this.channelSubs) {
-			unsubscribe(channels);
-			if(0 == channels.length)
-				this.channelSubs.clear();
-			for(String ch:channels){
-				this.channelSubs.remove(ch);
+		synchronized (this) {
+			channels = registedChannels(channels);
+			if (0 < channels.length) {
+				_unsubscribe(channels);
+				for (String ch : channels) {
+					this.channelSubs.remove(ch);
+				}
 			}
 		}
 	}
@@ -67,14 +93,11 @@ public abstract class Subcriber implements IOnMessage  {
 		unregister(getChannelNames(channels));	
 	}
 	
-	private String[] getChannelNames(Channel...channels){
-		ArrayList<String> list = new ArrayList<String>(channels.length);
-		if (null != channels) {
-			for (Channel ch : channels) {
-				if (null != ch)
-					list.add(ch.name);
-			}
+	private static String[] getChannelNames(Channel...channels){
+		HashSet<String> names = new HashSet<String>();
+		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
+			names.add(ch.name);
 		}
-		return list.toArray(new String[list.size()]);
+		return names.toArray(new String[names.size()]);
 	}
 }
