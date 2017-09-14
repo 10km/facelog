@@ -2,6 +2,7 @@ package net.gdface.facelog.message;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class TestArrayCast {
 	public void test() {
 		
 		String[] array = null;//new String[]{"hello","word"};
-		String[] res = CommonUtils.cleanNull(array);
+		Object[] a2 = new ArrayList<String>().toArray();
+		Object[] res = CommonUtils.cleanNull(a2);
 //		testGerericArray(Arrays.asList(array));
 	}
 

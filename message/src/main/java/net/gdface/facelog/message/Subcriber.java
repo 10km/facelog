@@ -3,6 +3,7 @@ package net.gdface.facelog.message;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public abstract class Subcriber implements IOnMessage, ISubcriber  {
 		return chSet.toArray(new String[chSet.size()]);
 	}
 	
-	private static String[] getChannelNames(Channel...channels){
+	protected static String[] getChannelNames(Channel...channels){
 		HashSet<String> names = new HashSet<String>();
 		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
 			names.add(ch.name);
@@ -76,27 +77,21 @@ public abstract class Subcriber implements IOnMessage, ISubcriber  {
 		}
 	}
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.message.ISubcriber#register(net.gdface.facelog.message.ChannelSub)
-	 */
 	@Override
 	@SuppressWarnings({ "rawtypes" })
 	public void register(ChannelSub... channels) {
 		synchronized (this) {
-			channels = CommonUtils.cleanNull(channels);
-			String[] names = getChannelNames(channels);
-			if (0 < names.length) {
-				for (ChannelSub ch : channels) {
-					channelSubs.put(ch.name, ch);
-				}
-				subscribe(names);
+			HashSet<ChannelSub> chSet = new HashSet<ChannelSub>(CommonUtils.cleanNullAsList(channels));
+			if(chSet.isEmpty())return;
+			LinkedList<String> names = new LinkedList<String>();
+			for (ChannelSub ch : chSet) {
+				channelSubs.put(ch.name, ch);
+				names.add(ch.name);
 			}
+			subscribe(names.toArray(new String[names.size()]));
 		}
 	}
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.message.ISubcriber#unregister(java.lang.String)
-	 */
 	@Override
 	public void unregister(String... channels) {
 		synchronized (this) {
@@ -110,17 +105,11 @@ public abstract class Subcriber implements IOnMessage, ISubcriber  {
 		}
 	}
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.message.ISubcriber#unregister(net.gdface.facelog.message.Channel)
-	 */
 	@Override
 	public void unregister(Channel...channels){
-		unregister(getChannelNames(channels));	
+		unregister(getChannelNames(channels));
 	}
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.message.ISubcriber#getChannelSub(java.lang.String)
-	 */
 	@Override
 	@SuppressWarnings("rawtypes")
 	public ChannelSub getChannelSub(String channel) {

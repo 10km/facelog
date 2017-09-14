@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
+import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
 
 /**
  * {@link Subcriber}的redis 实现<br>
@@ -71,8 +73,9 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 	@Override
 	protected void _subscribe(String... channels) {
 		if(!jedisPubSub.isSubscribed())
-			open();
-		jedisPubSub.subscribe(channels);		
+			open(channels);
+		else
+			jedisPubSub.subscribe(channels);		
 	}
 
 	@Override
@@ -84,19 +87,20 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 				jedisPubSub.unsubscribe(channels);
 		}
 	}
-	
+
 	/**
 	 * 创建消息线程,如果指定了{@link #executorService} ，则消息线程在线程池中执行<br>
 	 * 否则创建新线程
+	 * @param channels TODO
 	 */
-	private synchronized void open(){
+	private synchronized void open(final String... channels){
 		if(jedisPubSub.isSubscribed()) return;
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {
 				Jedis jedis = poolLazy.apply();
 				try{
-					jedis.subscribe(jedisPubSub);
+					jedis.subscribe(jedisPubSub,channels);
 				} catch (Exception e) {
 	                logger.error("Subscribing failed.", e);
 	            }finally{
