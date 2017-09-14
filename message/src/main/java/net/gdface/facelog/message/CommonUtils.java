@@ -1,5 +1,7 @@
 package net.gdface.facelog.message;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,13 @@ public class CommonUtils {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static final <T>  T[] cleanNull(T... objects) {
-		return cleanNullAsList(objects).toArray((T[])new Object[0]);
+	public static final <T>  T[] cleanNull(T...objects) {
+		if(Judge.isEmpty(objects))return objects;
+		List<T> list = cleanNullAsList(objects);
+		if(list.isEmpty())
+			return list.toArray((T[])new Object[0]);
+		return list.toArray((T[]) Array.newInstance(objects.getClass().getComponentType(), list.size()));
+		//return cleanNullAsList(objects).toArray((T[])new Object[0]);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -36,4 +43,14 @@ public class CommonUtils {
 		}
 		return list;
 	}
-}
+	
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] toArray(Object...src){
+		if(null == src || 0 == src.length )return (T[]) src;
+		Object dest = Array.newInstance(src.getClass().getComponentType(), src.length);
+		System.arraycopy(src, 0, dest, 0, src.length);
+		return (T[]) dest;
+	}
+	
+	
+ }
