@@ -62,14 +62,10 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	public String getQueueName() {
 		return queueName;
 	}
-	private void assertNotEmpty(String str,String name){
-		if(null == str || str.isEmpty())
-			throw new IllegalArgumentException(" '"+name+"' must not be null or empty");
-	}
-	
+
 	public RedisQueue<E> setQueueName(String queueName) {
-		assertNotEmpty(queueName,"queueName");
-		this.queueName = queueName;
+		if( ! Judge.isEmpty(queueName))
+			this.queueName = queueName;
 		return this;
 	}
 
