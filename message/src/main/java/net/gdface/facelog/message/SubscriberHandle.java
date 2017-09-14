@@ -25,4 +25,8 @@ public class SubscriberHandle extends JedisPubSub {
 			logger.error(e.getMessage(), e);
 		}
 	}
+
+	public void setOnMessageHandle(IOnMessage onMessageHandle) {
+		this.onMessageHandle = onMessageHandle;
+	}
 }

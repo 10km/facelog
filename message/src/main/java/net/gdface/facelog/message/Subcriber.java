@@ -7,7 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class Subcriber implements IOnMessage  {
+public abstract class Subcriber implements IOnMessage, AutoCloseable  {
 	protected static final Logger logger = LoggerFactory.getLogger(Subcriber.class);
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 	@SuppressWarnings("rawtypes")
@@ -15,13 +15,21 @@ public abstract class Subcriber implements IOnMessage  {
 	public Subcriber() {
 	}
 	
-	private String[] registedChannels(String... channels){
+	private String[] registedOnly(String... channels){
 		HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
 		if(!chSet.isEmpty())
 			chSet.retainAll(channelSubs.keySet());
 		return chSet.toArray(new String[chSet.size()]);
 	}
 	
+	private static String[] getChannelNames(Channel...channels){
+		HashSet<String> names = new HashSet<String>();
+		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
+			names.add(ch.name);
+		}
+		return names.toArray(new String[names.size()]);
+	}
+
 	protected abstract void _subscribe(String... channels);
 	
 	protected abstract void _unsubscribe(String... channels);
@@ -31,7 +39,7 @@ public abstract class Subcriber implements IOnMessage  {
 			if (null == channels || 0 == channels.length)
 				channels = channelSubs.keySet().toArray(new String[0]);
 			else {
-				channels = registedChannels(channels);
+				channels = registedOnly(channels);
 			}
 			if (0 < channels.length)
 				this._subscribe(channels);
@@ -40,26 +48,29 @@ public abstract class Subcriber implements IOnMessage  {
 	
 	public void unsubscribe(String... channels){
 		synchronized (this) {
-			_unsubscribe(registedChannels(channels));
+			_unsubscribe(registedOnly(channels));
 		}
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void onMessage(String channel, String message) {
-		ChannelSub channelSub = channelSubs.get(channel);
-		if(null == channelSub){
-			logger.warn("not found registered channel info for '{}'",channel);
+		ChannelSub channelSub = getChannelSub(channel);
+		if(null == channelSub){			
+			logger.warn("unregistered channel: '{}'",channel);
+			logger.warn(message);
 			return;
 		}
-		if(null != channelSub.handle){
-			try{
-				Object deserialized = encoder.fromJson(message, channelSub.type);
-				if(null != deserialized)
-					channelSub.handle.onSubscribe(deserialized);
-			}catch(Exception e){
-				logger.error(e.getMessage(),e);
-			}
+		if(null == channelSub.handle){
+			logger.warn("cann't dispatch because of null handle : '{}'",channel);
+			return; 
+		}
+		try{
+			Object deserialized = encoder.fromJson(message, channelSub.type);
+			if(null != deserialized)
+				channelSub.handle.onSubscribe(deserialized);
+		}catch(Exception e){
+			logger.error(e.getMessage(),e);
 		}
 	}
 	
@@ -79,7 +90,7 @@ public abstract class Subcriber implements IOnMessage  {
 	
 	public void unregister(String... channels) {
 		synchronized (this) {
-			channels = registedChannels(channels);
+			channels = registedOnly(channels);
 			if (0 < channels.length) {
 				_unsubscribe(channels);
 				for (String ch : channels) {
@@ -93,11 +104,13 @@ public abstract class Subcriber implements IOnMessage  {
 		unregister(getChannelNames(channels));	
 	}
 	
-	private static String[] getChannelNames(Channel...channels){
-		HashSet<String> names = new HashSet<String>();
-		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
-			names.add(ch.name);
-		}
-		return names.toArray(new String[names.size()]);
+	@Override
+	public void close() throws Exception {
+		this._unsubscribe();		
+	}
+
+	@SuppressWarnings("rawtypes")
+	public ChannelSub getChannelSub(String channel) {
+		return channelSubs.get(channel);
 	}
 }
