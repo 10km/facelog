@@ -21,5 +21,8 @@ public class RedisProducer<T> extends Producer<T> implements IRedisComponent {
 	public RedisProducer(Type type, JedisPoolLazy poolLazy) {
 		this(type,poolLazy,null);
 	}
-
+	
+	public RedisProducer(Type type) {
+		this(type,JedisPoolLazy.getDefaultInstance());
+	}
 }

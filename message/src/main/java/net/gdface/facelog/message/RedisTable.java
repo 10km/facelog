@@ -1,7 +1,6 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -11,10 +10,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
-import net.gdface.facelog.message.JedisPoolLazy.PropName;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Protocol;
 import redis.clients.jedis.Transaction;
 
 public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
@@ -39,22 +35,6 @@ public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
 	public RedisTable(Type type,JedisPoolLazy pool){
 		super(type);
 		poolLazy = pool;
-	}
-	public RedisTable(Type type,Map<PropName, Object> props) {
-		this(type,JedisPoolLazy.getInstance(props, true));
-	}
-
-	public RedisTable(Type type,String host, int port, final String password, int database) {
-		this(type, JedisPoolLazy.DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
-	}
-
-	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
-		this(type,JedisPoolLazy.getInstance(jedisPoolConfig, uri, timeout));
-	}
-
-	public RedisTable(Type type, JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
-			int database, int timeout) {
-		this(type,JedisPoolLazy.getInstance(jedisPoolConfig, host, port, password, database, timeout));
 	}
 
 	@Override

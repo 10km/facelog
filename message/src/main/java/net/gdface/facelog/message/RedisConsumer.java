@@ -22,4 +22,8 @@ public class RedisConsumer<T> extends Consumer<T> implements IRedisComponent {
 	public RedisConsumer(Type type, JedisPoolLazy poolLazy) {
 		this(type,poolLazy,null);
 	}
+	
+	public RedisConsumer(Type type) {
+		this(type,JedisPoolLazy.getDefaultInstance());
+	}
 }

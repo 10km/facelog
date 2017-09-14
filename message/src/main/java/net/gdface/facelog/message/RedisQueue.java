@@ -2,21 +2,16 @@ package net.gdface.facelog.message;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.util.AbstractQueue;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.message.JedisPoolLazy.PropName;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Protocol;
 
 /**
  * 
@@ -35,6 +30,17 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	@Override
 	public JedisPoolLazy getPoolLazy() {
 		return poolLazy;
+	}
+
+	@Override
+	public String getQueueName() {
+		return queueName;
+	}
+
+	public RedisQueue<E> setQueueName(String queueName) {
+		if( ! Judge.isEmpty(queueName))
+			this.queueName = queueName;
+		return this;
 	}
 
 	private Jedis getJedis(){
@@ -56,34 +62,6 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		this.type = type;
 		this.queueName = type.toString();
 		this.poolLazy = poolLazy;
-	}
-
-	@Override
-	public String getQueueName() {
-		return queueName;
-	}
-
-	public RedisQueue<E> setQueueName(String queueName) {
-		if( ! Judge.isEmpty(queueName))
-			this.queueName = queueName;
-		return this;
-	}
-
-	public RedisQueue(Type type,Map<PropName, Object> props) {
-		this(type,JedisPoolLazy.getInstance(props, true));
-	}
-
-	public RedisQueue(Type type,String host, int port, final String password, int database) {
-		this(type, JedisPoolLazy.DEFAULT_CONFIG, host, port, password, database, Protocol.DEFAULT_TIMEOUT);
-	}
-
-	public RedisQueue(Type type, JedisPoolConfig jedisPoolConfig, URI uri, int timeout) {
-		this(type,JedisPoolLazy.getInstance(jedisPoolConfig, uri, timeout));
-	}
-
-	public RedisQueue(Type type, JedisPoolConfig jedisPoolConfig, String host, int port, final String password,
-			int database, int timeout) {
-		this(type,JedisPoolLazy.getInstance(jedisPoolConfig, host, port, password, database, timeout));
 	}
 
 	public Type getType() {
