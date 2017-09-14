@@ -4,7 +4,13 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import redis.clients.jedis.Jedis;
 
-public class RedisPublish implements IPublish,IRedisComponent{
+/**
+ * 
+ * {@link IPublisher} redis实现
+ * @author guyadong
+ *
+ */
+public class RedisPublisher implements IPublisher,IRedisComponent{
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 	private final JedisPoolLazy poolLazy;
 
@@ -13,11 +19,11 @@ public class RedisPublish implements IPublish,IRedisComponent{
 		return this.poolLazy;
 	}
 
-	public RedisPublish() {
+	public RedisPublisher() {
 		this(JedisPoolLazy.getDefaultInstance());
 	}
 	
-	public RedisPublish(JedisPoolLazy poolLazy) {
+	public RedisPublisher(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 	}

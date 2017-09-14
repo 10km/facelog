@@ -7,9 +7,24 @@ import java.util.concurrent.RejectedExecutionException;
 
 import redis.clients.jedis.Jedis;
 
+/**
+ * {@link Subcriber}的redis 实现<br>
+ * 每个 {@link JedisPoolLazy} 实例保持一个 RedisSubscriber 对象<br>
+ * 对象可以复用(反复打开关闭) <br>
+ * 应用程序结束时要调用 {@link #close()} 取消所有订阅频道才能结束消息线程<br>
+ * 当设置为{@link #daemon}为true时,无需{@link #close()}关闭
+ * @author guyadong
+ *
+ */
 public class RedisSubscriber extends Subcriber implements IRedisComponent {
+	/**
+	 * 保存每个 {@link JedisPoolLazy}对应的实例
+	 */
 	private static final Map<JedisPoolLazy,RedisSubscriber>  subscribers = new Hashtable<JedisPoolLazy,RedisSubscriber>();
 	
+	/**
+	 * 删除所有{@link RedisSubscriber}对象
+	 */
 	public static void clearSubscribers(){
 		synchronized(RedisSubscriber.class){
 			for(RedisSubscriber subscribe:subscribers.values()){
@@ -19,6 +34,11 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 		}
 	}
 	
+	/**
+	 * 返回 {@link JedisPoolLazy}对应的实例,如果{@link #subscribers}没有找到，就创建一个新实例并加入{@link #subscribers}
+	 * @param jedisPoolLazy
+	 * @return 
+	 */
 	public static RedisSubscriber getSubscriber(JedisPoolLazy jedisPoolLazy) {
 		synchronized(RedisSubscriber.class){
 			RedisSubscriber pool = subscribers.get(jedisPoolLazy);
@@ -31,8 +51,10 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 	}
 
 	private final JedisPoolLazy poolLazy;
-	private final SubscriberHandle jedisPubSub; 
+	private final RedisSubHandle jedisPubSub; 
+	/** 执行消息线程的线程池对象 */
 	private ExecutorService executorService;
+	/** 为true时消息线程为守护线程，仅在{@link executorService}为null 时有效 */
 	private boolean daemon=false;
 	@Override
 	public JedisPoolLazy getPoolLazy() {
@@ -41,7 +63,7 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 	
 	protected RedisSubscriber(JedisPoolLazy poolLazy) {
 		super();
-		jedisPubSub=new SubscriberHandle(this); 
+		jedisPubSub=new RedisSubHandle(this); 
 		this.poolLazy = poolLazy;
 		subscribers.put(poolLazy, this);
 	}
@@ -63,6 +85,10 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 		}
 	}
 	
+	/**
+	 * 创建消息线程,如果指定了{@link #executorService} ，则消息线程在线程池中执行<br>
+	 * 否则创建新线程
+	 */
 	private synchronized void open(){
 		if(jedisPubSub.isSubscribed()) return;
 		Runnable run = new Runnable(){
@@ -92,11 +118,19 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 		thread.start();
 	}
 
+	/**
+	 * 设置用于执行消息线程的线程池
+	 * @param executorService
+	 * @return
+	 */
 	public RedisSubscriber setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
 		return this;
 	}
 
+	/**
+	 * @see #daemon
+	 */
 	public RedisSubscriber setDaemon(boolean daemon) {
 		this.daemon = daemon;
 		return this;
@@ -105,5 +139,6 @@ public class RedisSubscriber extends Subcriber implements IRedisComponent {
 	public RedisSubscriber setOnMessageHandle(IOnMessage onMessageHandle) {
 		jedisPubSub.setOnMessageHandle(onMessageHandle);
 		return this;
-	}	
+	}
+	
 }

@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * json实现对象序列化反序列化的抽象类
+ * @author guyadong
+ *
+ */
 public abstract class JsonEncoder {
 	public static  class NotBeanException extends RuntimeException{
 		public NotBeanException(String string) {

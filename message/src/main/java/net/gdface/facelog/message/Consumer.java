@@ -9,6 +9,16 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 基于阻塞队列 {@link BlockingQueue} 实现消费者模型<br>
+ * 默认配置为队列模型,设置{@link #isFifo}为false,则为栈模型,为栈模型时 {@link #queue}必须为双向队列{@link BlockingDeque}<br>
+ * 对象可以复用(反复打开关闭) <br>
+ * 应用程序结束时要调用 {@link #close()} 才能结束消费线程<br>
+ * 当设置为{@link #daemon}为true时,无需{@link #close()}关闭
+ * @author guyadong
+ *
+ * @param <T> 消费数据类型
+ */
 public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 	protected static final Logger logger = LoggerFactory.getLogger(Subcriber.class);
 
@@ -16,7 +26,17 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 		private static final long serialVersionUID = 1L;		
 	}	
 	
+	/**
+	 * 消费数据处理接口
+	 * @author guyadong
+	 *
+	 * @param <T>
+	 */
 	public static interface Action<T>{
+		/**
+		 * @param t
+		 * @throws BreakException 抛出时中止消费线程
+		 */
 		void consume(T t)throws BreakException;
 	}
 	
@@ -35,14 +55,17 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 		}};
 	private Action<T> action=nullAction;
 	private boolean daemon=false;
+	/** 获取队列的超时参数 */
 	private int timeoutMills = DEFAULT_CONSUMER_CHECK_INTERVAL;
 	private enum State{INIT,OPENED,CLOSED}
 	private State state = State.INIT;
+	/** 是否为先进先出队列 */
 	private boolean isFifo = true;
+	/** 执行消息线程的线程池对象 */
 	private ExecutorService executorService;
 	/**
-	 * @param executorService 指定运行的线程池,为null则创建一个新线程
-	 * @return
+	 * 创建消费线程,如果指定了{@link #executorService} ，则消费线程在线程池中执行<br>
+	 * 否则创建新线程
 	 */
 	public synchronized void open(){
 		if( state != State.INIT)return;
@@ -62,12 +85,18 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 							else
 								throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
 						}
-						if(null != t)
-							action.consume(t);
+						if(null != t){
+							try{
+								action.consume(t);
+							} catch (BreakException e) {
+								logger.info("consumer thread finished because BreakException");
+								break;
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
 					}
 					state =State.INIT;
-				} catch (InterruptedException e) {
-				} catch (BreakException e) {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

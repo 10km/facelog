@@ -9,6 +9,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+/**
+ * 
+ * 基于fastjson实现{@link JsonEncoder}
+ * @author guyadong
+ *
+ */
 class FastjsonEncoder extends JsonEncoder {
 	private static final FastjsonEncoder instance = new FastjsonEncoder();
 	

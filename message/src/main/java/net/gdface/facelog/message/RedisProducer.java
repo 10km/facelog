@@ -2,6 +2,12 @@ package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
 
+/**
+ * 基于 {@link RedisQueue} 的生产者模型实现
+ * @author guyadong
+ *
+ * @param <T>
+ */
 public class RedisProducer<T> extends Producer<T> implements IRedisComponent {
 	@Override
 	public JedisPoolLazy getPoolLazy() {
