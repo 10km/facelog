@@ -68,6 +68,11 @@ public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
         return singleton;
     }
    
+    @Override
+    protected Class<FaceLightBean> _beanType(){
+        return FaceLightBean.class;
+    }
+    
     public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }

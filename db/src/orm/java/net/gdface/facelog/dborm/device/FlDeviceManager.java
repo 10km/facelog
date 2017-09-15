@@ -93,7 +93,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         return new FlDeviceBean();
     }
-
+    
+    @Override
+    protected Class<FlDeviceBean> _beanType(){
+        return FlDeviceBean.class;
+    }
+    
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -259,7 +264,18 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
+    
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlImageBean.class,FlLogBean.class};
 
+    /**
+     * @see #getImportedBeansAsList(FlDeviceBean,int)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlDeviceBean bean, int ikIndex) throws DAOException {
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+    }
+    
     /**
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
@@ -283,7 +299,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
-
+    
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlDeviceBean,int)}

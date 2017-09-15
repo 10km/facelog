@@ -26,6 +26,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         B getBean();
     }
     public abstract static class Adapter<B extends FullBean<?>> implements TableManager<B>{
+        protected abstract Class<B> _beanType();
        /**
          * Insert the B bean into the database.
          * 
@@ -144,7 +145,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByWhere(String where, int[] fieldList, int startRow, int numRows)throws DAOException{
-            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])new Object[0]);
+            return this.loadByWhereAsList(where, fieldList, startRow, numRows).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
         }
 
         @Override
@@ -201,7 +202,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadUsingTemplate(B bean, int startRow, int numRows, int searchType)throws DAOException{
-            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])new Object[0]);
+            return this.loadUsingTemplateAsList(bean, startRow, numRows, searchType).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
         }
 
         @Override
@@ -274,7 +275,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadBySql(String sql, Object[] argList, int[] fieldList)throws DAOException{
-            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])new Object[0]);
+            return loadBySqlAsList(sql, argList, fieldList).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
         }
 
         @Override
@@ -321,10 +322,9 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
             throw new UnsupportedOperationException();
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public <T extends FullBean<?>> T[] getImportedBeans(B bean, int ikIndex)throws DAOException{
-            return this.getImportedBeansAsList(bean,ikIndex).toArray((T[])new Object[0]);
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -361,7 +361,7 @@ public interface TableManager<B extends FullBean<?>> extends Constant {
         @SuppressWarnings("unchecked")
         @Override
         public B[] loadByIndex(int keyIndex,Object ...keys)throws DAOException{
-            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])new Object[0]);
+            return this.loadByIndexAsList(keyIndex,keys).toArray((B[])java.lang.reflect.Array.newInstance(_beanType(),0));
         }
         
         @Override

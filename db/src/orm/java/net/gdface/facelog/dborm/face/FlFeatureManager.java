@@ -88,7 +88,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     {
         return new FlFeatureBean();
     }
-
+    
+    @Override
+    protected Class<FlFeatureBean> _beanType(){
+        return FlFeatureBean.class;
+    }
+    
  
       
 

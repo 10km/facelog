@@ -95,7 +95,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     {
         return new FlFaceBean();
     }
-
+    
+    @Override
+    protected Class<FlFaceBean> _beanType(){
+        return FlFaceBean.class;
+    }
+    
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -261,7 +266,18 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
+    
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlLogBean.class,FlLogBean.class};
 
+    /**
+     * @see #getImportedBeansAsList(FlFaceBean,int)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+    }
+    
     /**
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
@@ -285,7 +301,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
-
+    
     /**
      * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}

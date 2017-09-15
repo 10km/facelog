@@ -88,7 +88,12 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
     {
         return new FlLogLightBean();
     }
-
+    
+    @Override
+    protected Class<FlLogLightBean> _beanType(){
+        return FlLogLightBean.class;
+    }
+    
  
       
 

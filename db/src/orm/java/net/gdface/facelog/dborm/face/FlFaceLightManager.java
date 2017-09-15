@@ -88,7 +88,12 @@ public class FlFaceLightManager extends TableManager.Adapter<FlFaceLightBean>
     {
         return new FlFaceLightBean();
     }
-
+    
+    @Override
+    protected Class<FlFaceLightBean> _beanType(){
+        return FlFaceLightBean.class;
+    }
+    
  
       
 

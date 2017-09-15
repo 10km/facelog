@@ -70,6 +70,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         return singleton;
     }
    
+    @Override
+    protected Class<DeviceBean> _beanType(){
+        return DeviceBean.class;
+    }
+    
     public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
@@ -188,6 +193,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
+    
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{ImageBean.class,LogBean.class};
+
+    /**
+     * @see #getImportedBeansAsList(DeviceBean,int)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.db.BaseBean> T[] getImportedBeans(DeviceBean bean, int ikIndex){
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+    }
     
     /**
      * Retrieves imported T objects by ikIndex.<br>

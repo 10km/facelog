@@ -95,7 +95,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     {
         return new FlLogBean();
     }
-
+    
+    @Override
+    protected Class<FlLogBean> _beanType(){
+        return FlLogBean.class;
+    }
+    
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
