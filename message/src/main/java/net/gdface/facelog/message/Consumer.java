@@ -74,8 +74,8 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {
-				try {
-					while (state != State.CLOSED) {
+				while (state != State.CLOSED) {
+					try {
 						T t;
 						if(isFifo)
 							t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
@@ -95,10 +95,10 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 								e.printStackTrace();
 							}
 						}
+						state =State.INIT;
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					state =State.INIT;
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		};

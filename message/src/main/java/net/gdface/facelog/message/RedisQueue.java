@@ -279,7 +279,8 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		Jedis jedis = getJedis();
 		try{			
 			List<String> list = jedis.blpop((int)TimeUnit.SECONDS.convert(timeout, unit), this.queueName);
-			return this.encoder.fromJson(list.get(0),getType());
+			if(list.isEmpty())return null;
+			return this.encoder.fromJson(list.get(1),getType());
 		}finally{
 			releaseJedis();
 		}
@@ -290,7 +291,8 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		Jedis jedis = getJedis();
 		try{			
 			List<String> list = jedis.brpop((int)TimeUnit.SECONDS.convert(timeout, unit), this.queueName);
-			return this.encoder.fromJson(list.get(0),getType());
+			if(list.isEmpty())return null;
+			return this.encoder.fromJson(list.get(1),getType());
 		}finally{
 			releaseJedis();
 		}
