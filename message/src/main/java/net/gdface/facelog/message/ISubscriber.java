@@ -1,6 +1,6 @@
 package net.gdface.facelog.message;
 
-public interface ISubcriber extends AutoCloseable{
+public interface ISubscriber extends AutoCloseable{
 
 	/**
 	 * 订阅频道

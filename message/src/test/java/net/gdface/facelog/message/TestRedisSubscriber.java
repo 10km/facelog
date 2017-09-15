@@ -11,7 +11,7 @@ public class TestRedisSubscriber {
 
 	@Test
 	public void test() {
-		RedisSubscriber redisSubscriber = RedisSubscriber.getSubscriber(JedisPoolLazy.getDefaultInstance());
+		ISubscriber redisSubscriber = RedisSubscriber.getSubscriber(JedisPoolLazy.getDefaultInstance());
 		ChannelSub<String> chat1 = new ChannelSub<String>("chat1",String.class,new IOnSubscribe<String>(){
 
 			@Override

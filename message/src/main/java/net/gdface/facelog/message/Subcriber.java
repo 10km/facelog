@@ -15,7 +15,7 @@ import net.gdface.facelog.message.IOnSubscribe.UnsubscribeException;
  * @author guyadong
  *
  */
-public abstract class Subcriber implements IOnMessage, ISubcriber  {
+public abstract class Subcriber implements IOnMessage, ISubscriber  {
 	protected static final Logger logger = LoggerFactory.getLogger(Subcriber.class);
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 	/**  注册的频道对象 */
@@ -51,9 +51,7 @@ public abstract class Subcriber implements IOnMessage, ISubcriber  {
 	 */
 	protected abstract void _unsubscribe(String... channels);
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.message.ISubcriber#subscribe(java.lang.String)
-	 */
+
 	@Override
 	public void subscribe(String... channels) {
 		synchronized (this) {
@@ -67,9 +65,6 @@ public abstract class Subcriber implements IOnMessage, ISubcriber  {
 		}
 	}
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.message.ISubcriber#unsubscribe(java.lang.String)
-	 */
 	@Override
 	public void unsubscribe(String... channels){
 		synchronized (this) {
