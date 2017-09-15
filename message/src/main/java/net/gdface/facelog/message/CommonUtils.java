@@ -69,9 +69,23 @@ public class CommonUtils {
 		return (T[]) dest;
 	}
 	
+	/**
+	 * 将泛型集合转为数组,<br>
+	 * 如果src不为null则要求集合中至少有一个不为null的元素,否则抛出异常
+	 * 根据集合中第一个不为null的元素的类型创建数组。
+	 * @param src
+	 * @return  返回指定的泛型数组,如果src为null则返回null，
+	 */
+	@SuppressWarnings("unchecked")
 	public static final <T> T[] toGenericArray(Collection<T>src){
-		if(null == src)return null;			
-		return toGenericArray(src.toArray());
+		if(null == src)return null;
+		Object notNull=null;
+		// 找出第一个不为null的元素
+		for(T element:src)if(null != element){notNull=element;break;}
+		if(null == notNull)
+			throw new IllegalArgumentException(
+					"can't convert collection to array,because of all element is null");
+		return src.toArray( (T[]) Array.newInstance(notNull.getClass(), src.size()));
 	}
 	
 	
