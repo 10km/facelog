@@ -137,7 +137,7 @@ public abstract class Subcriber implements IOnMessage, ISubscriber  {
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		this._unsubscribe();		
 	}
 }

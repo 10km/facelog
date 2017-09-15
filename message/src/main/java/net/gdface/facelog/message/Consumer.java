@@ -118,7 +118,7 @@ public class Consumer<T>implements AutoCloseable,Constant,IQueueComponent<T>{
 	}
 	
 	@Override
-	public void close() throws Exception {
+	public void close(){
 		if(state == State.OPENED){
 			state = State.CLOSED;	
 		} 
