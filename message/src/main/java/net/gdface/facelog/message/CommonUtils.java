@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class CommonUtils {
 
@@ -60,18 +61,10 @@ public class CommonUtils {
 		}
 		return list;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public static final <T> T[] toGenericArray(Object...src){
-		if(null == src )return null;
-		Object dest = Array.newInstance(src.getClass().getComponentType(), src.length);
-		System.arraycopy(src, 0, dest, 0, src.length);
-		return (T[]) dest;
-	}
-	
+		
 	/**
-	 * 将泛型集合转为数组,<br>
-	 * 如果src不为null则要求集合中至少有一个不为null的元素,否则抛出异常
+	 * 将泛型集合转为数组<br>
+	 * 如果src不为null则要求集合中至少有一个不为null的元素,否则返回null
 	 * 根据集合中第一个不为null的元素的类型创建数组。
 	 * @param src
 	 * @return  返回指定的泛型数组,如果src为null则返回null，
@@ -82,11 +75,35 @@ public class CommonUtils {
 		Object notNull=null;
 		// 找出第一个不为null的元素
 		for(T element:src)if(null != element){notNull=element;break;}
-		if(null == notNull)
-			throw new IllegalArgumentException(
-					"can't convert collection to array,because of all element is null");
+		if(null == notNull)return null;// 所有元素为null则返回null
 		return src.toArray( (T[]) Array.newInstance(notNull.getClass(), src.size()));
 	}
 	
+	/**
+	 * @param src
+	 * @return
+	 * @see #toGenericArray(Collection)
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] toGenericArray(Set<T>src){
+		if(null == src|| src.isEmpty())return null;
+		Object notNull=null;
+		// 找出第一个不为null的元素
+		for(T element:src)if(null != element){notNull=element;break;}
+		return src.toArray( (T[]) Array.newInstance(notNull.getClass(), src.size()));
+	}
 	
+	/**
+	 * 将泛型集合转为数组<br>
+	 * @param src
+	 * @param componentType 指定返回的数组类型元素,不可为null
+	 * @return 返回指定的泛型数组,如果src为null则返回空数组
+	 */
+	@SuppressWarnings("unchecked")
+	public static final <T> T[] toGenericArray(Collection<T>src,Class<T> componentType){
+		if(null == componentType)
+			throw new NullPointerException();
+		if(null == src)return (T[]) Array.newInstance(componentType, 0);
+		return src.toArray( (T[]) Array.newInstance(componentType, src.size()));
+	}
  }

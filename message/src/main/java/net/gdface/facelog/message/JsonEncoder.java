@@ -2,6 +2,7 @@ package net.gdface.facelog.message;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,8 +58,13 @@ public abstract class JsonEncoder {
 	
 	public <T>List<Object> toJsonArray(@SuppressWarnings("unchecked") T...array){
 		if(null == array)return null;
+		return toJsonArray(Arrays.asList(array));
+	}
+	
+	public List<Object> toJsonArray(Collection<?> c){
+		if(null == c)return null;
 		ArrayList<Object> list = new ArrayList<Object>();
-		for( Object element:array){
+		for( Object element:c){
 			try{
 				list.add(this.toJsonMap(element));
 			}catch(NotBeanException e){
@@ -66,13 +72,6 @@ public abstract class JsonEncoder {
 			}
 		}
 		return list;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T>List<Object> toJsonArray(Collection<T> c){
-		return null == c 
-				? null
-				: toJsonArray(c.toArray((T[])new Object[0]));
 	}
 	
 	public static final JsonEncoder getEncoder(){

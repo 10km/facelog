@@ -13,16 +13,17 @@ public class TestArrayCast {
 	public <T>T[] testGerericArray(List<T> array){
 		@SuppressWarnings("unchecked")
 		T[] r = (T[]) new Object[0];
-		return array.toArray((T[]) new Object[0]);
+		return CommonUtils.toGenericArray(array);
 	}
 	
 	@Test
 	public void test() {
 		
-		String[] array = null;//new String[]{"hello","word"};
-		Object[] a2 = new ArrayList<String>().toArray();
-		Object[] res = CommonUtils.cleanNull(a2);
-//		testGerericArray(Arrays.asList(array));
+		String[] array = new String[]{};//new String[]{"hello","word"};
+		ArrayList<String> a2 = new ArrayList<String>(Arrays.asList(array));
+		
+		//Object[] res = CommonUtils.cleanNull(a2);
+		String[] r=CommonUtils.toGenericArray(a2,String.class);
 	}
 
 }
