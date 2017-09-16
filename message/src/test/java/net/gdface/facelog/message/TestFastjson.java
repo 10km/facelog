@@ -187,6 +187,14 @@ public class TestFastjson {
 	class GenBean<T>{
 		public T b;
 	}
+
+	public<T> void testTypeRef(){
+    	Type type = new TypeReference<GenBean<T>>(Date.class) {}.getType();
+    	if(type instanceof ParameterizedType)
+    		System.out.println(((ParameterizedType)type).getActualTypeArguments()[0]);
+    	else
+    		System.out.println(type);
+	}
 	@Test
 	public void testTypeReference(){
     	//System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
@@ -195,6 +203,7 @@ public class TestFastjson {
     		System.out.println(((ParameterizedType)type).getActualTypeArguments()[0]);
     	else
     		System.out.println(type);
+    	this.<Date>testTypeRef();
 	}
 	@Test
 	public void testisJavaBean(){
