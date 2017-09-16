@@ -2,6 +2,9 @@ package net.gdface.facelog.message;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
+import java.util.Date;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,5 +31,4 @@ public class TestRedisSubscriber {
 		
 		redisSubscriber.unsubscribe();;
 	}
-
 }

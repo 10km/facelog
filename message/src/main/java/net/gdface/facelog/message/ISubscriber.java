@@ -1,5 +1,7 @@
 package net.gdface.facelog.message;
 
+import java.util.Set;
+
 public interface ISubscriber extends AutoCloseable{
 
 	/**
@@ -20,22 +22,25 @@ public interface ISubscriber extends AutoCloseable{
 	 * 注册并订阅指定的频道
 	 * @param channels
 	 * @see #subscribe(String...)
+	 * @return 返回实际注册的频道名列表
 	 */
 	@SuppressWarnings("rawtypes")
-	void register(ChannelSub... channels);
+	Set<ChannelSub> register(ChannelSub... channels);
 
 	/**
 	 * 取消订阅指定的频道,并注销频道
 	 * @param channels
 	 * @see #unsubscribe(String...)
+	 * @return 返回实际注销的频道名列表
 	 */
-	void unregister(String... channels);
+	Set<String> unregister(String... channels);
 
 	/**
 	 * @param channels
 	 * @see #unregister(String...)
+	 * @return 返回实际注销的频道名列表
 	 */
-	void unregister(Channel... channels);
+	Set<String> unregister(Channel... channels);
 
 	/**
 	 * 返回注册的 {@link ChannelSub}对象

@@ -61,6 +61,16 @@ public class CommonUtils {
 		}
 		return list;
 	}
+	
+	public static final <T>  List<T> cleanNullAsList(Collection<T> objects) {
+		if (null == objects || 0 == objects.size())return new ArrayList<T>(0);
+		ArrayList<T> list = new ArrayList<T>(objects.size());
+		for( T element: objects){
+			if(null == element )continue;
+			list.add(element);
+		}
+		return list;
+	}
 		
 	/**
 	 * 将泛型集合转为数组<br>
