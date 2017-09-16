@@ -1,20 +1,56 @@
 package net.gdface.facelog.message;
 
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import redis.clients.jedis.Jedis;
 
 /**
- * 基于 {@link RedisQueue} 的消息费模型实现,支持多个list阻塞式读取(blpop, brpop)
+ * {@link AbstractConsumer}消费者模型实现,支持多个list阻塞式读取(blpop, brpop)
  * @author guyadong
  *
  * @param <T>
  */
 public class RedisConsumer extends AbstractConsumer implements IRedisComponent,ISubscriber {
+	/**
+	 * 保存每个 {@link JedisPoolLazy}对应的实例
+	 */
+	private static final Map<JedisPoolLazy,RedisConsumer>  consumers = new Hashtable<JedisPoolLazy,RedisConsumer>();
+	
+	/**
+	 * 删除所有{@link RedisSubscriber}对象
+	 */
+	public static void clearSubscribers(){
+		synchronized(RedisConsumer.class){
+			for(RedisConsumer subscribe:consumers.values()){
+				subscribe.unsubscribe();
+			}
+			consumers.clear();
+		}
+	}
+	
+	/**
+	 * 返回 {@link JedisPoolLazy}对应的实例,如果{@link #consumers}没有找到，就创建一个新实例并加入{@link #consumers}
+	 * @param jedisPoolLazy
+	 * @return 
+	 */
+	public static RedisConsumer getSubscriber(JedisPoolLazy jedisPoolLazy) {
+		synchronized(RedisConsumer.class){
+			RedisConsumer pool = consumers.get(jedisPoolLazy);
+			if (null == pool) {
+				pool = new RedisConsumer(jedisPoolLazy);
+				pool.setDaemon(true);
+				consumers.put(jedisPoolLazy, pool);
+			}
+			return pool;
+		}
+	}
+	
 	private final JedisPoolLazy poolLazy;
 	private final ChannelRegister register=new ChannelRegister();
 	private final Set<String> channelSub=Collections.synchronizedSet(new LinkedHashSet<String>());
@@ -24,7 +60,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 		return poolLazy;
 	}
 
-	public RedisConsumer(JedisPoolLazy poolLazy) {
+	protected RedisConsumer(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 		this.setTimeoutMills(DEFAULT_CONSUMER_CHECK_INTERVAL);

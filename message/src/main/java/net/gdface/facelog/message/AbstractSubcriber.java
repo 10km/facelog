@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
  * @author guyadong
  *
  */
-public abstract class Subcriber extends ChannelRegister implements IOnMessage, ISubscriber  {
-	protected static final Logger logger = LoggerFactory.getLogger(Subcriber.class);
-	public Subcriber() {
+public abstract class AbstractSubcriber extends ChannelRegister implements IOnMessage, ISubscriber  {
+	protected static final Logger logger = LoggerFactory.getLogger(AbstractSubcriber.class);
+	public AbstractSubcriber() {
 	}
 	
 	/**

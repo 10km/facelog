@@ -9,7 +9,7 @@ package net.gdface.facelog.message;
 public interface IOnSubscribe<T> {
 	/**
 	 * 取消订阅异常, {@link IOnSubscribe}接口抛出该异常时,{@link IOnMessage}对象会取消订阅当前频道<br>
-	 * 参见 {@link Subcriber#onMessage(String, String)} 实现代码
+	 * 参见 {@link ChannelRegister#onMessage(String, String)} 实现代码
 	 * @author guyadong
 	 *
 	 */

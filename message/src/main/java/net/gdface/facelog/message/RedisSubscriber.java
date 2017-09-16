@@ -8,7 +8,7 @@ import java.util.concurrent.RejectedExecutionException;
 import redis.clients.jedis.Jedis;
 
 /**
- * {@link Subcriber}的redis 实现<br>
+ * {@link AbstractSubcriber}的redis 实现<br>
  * 每个 {@link JedisPoolLazy} 实例保持一个 RedisSubscriber 对象<br>
  * 对象可以复用(反复打开关闭) <br>
  * 应用程序结束时要调用 {@link #close()} 取消所有订阅频道才能结束消息线程<br>
@@ -16,7 +16,7 @@ import redis.clients.jedis.Jedis;
  * @author guyadong
  *
  */
-public class RedisSubscriber extends Subcriber implements IRedisComponent {
+public class RedisSubscriber extends AbstractSubcriber implements IRedisComponent {
 	/**
 	 * 保存每个 {@link JedisPoolLazy}对应的实例
 	 */
