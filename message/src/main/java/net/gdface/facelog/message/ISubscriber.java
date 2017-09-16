@@ -2,7 +2,7 @@ package net.gdface.facelog.message;
 
 import java.util.Set;
 
-public interface ISubscriber extends AutoCloseable{
+public interface ISubscriber {
 
 	/**
 	 * 订阅频道
@@ -49,5 +49,7 @@ public interface ISubscriber extends AutoCloseable{
 	 */
 	@SuppressWarnings("rawtypes")
 	ChannelSub getChannelSub(String channel);
+
+	String[] getSubscribes();
 
 }

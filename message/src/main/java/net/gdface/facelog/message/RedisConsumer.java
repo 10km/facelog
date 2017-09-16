@@ -1,8 +1,6 @@
 package net.gdface.facelog.message;
 
-import java.util.Collections;
 import java.util.Hashtable;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,8 +50,8 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	}
 	
 	private final JedisPoolLazy poolLazy;
-	private final ChannelRegister register=new ChannelRegister();
-	private final Set<String> channelSub=Collections.synchronizedSet(new LinkedHashSet<String>());
+	private final ChannelDispatcher register=new ChannelDispatcher();
+	/** 以秒为单位的超时参数 */
 	private int timeout; 
 	@Override
 	public JedisPoolLazy getPoolLazy() {
@@ -67,36 +65,31 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	}
 
 	@Override
-	protected boolean needOpen() {
-		return register.channelSubs.size()>0;
-	}
-
-	@Override
 	protected Runnable getRunnable() {
 		return new Runnable(){
 			@Override
 			public void run() {
-				while (!isClosed()) {
-					try {
-						List<String> list;
-						Jedis jedis = poolLazy.apply();
-						try{
-							String[] keys = channelSub.toArray(new String[channelSub.size()]);
-							if(0 == keys.length)break;
-							if(isFifo){
-								list = jedis.blpop(timeout, keys);
-							}else{
-								list = jedis.brpop(timeout, keys);
-							}
-						}finally{
-							poolLazy.free();
+				try {
+					List<String> list;
+					Jedis jedis = poolLazy.apply();
+					try{
+						String[] keys =register.getSubscribes();
+						if(0 == keys.length)close();
+						if(isFifo){
+							list = jedis.blpop(timeout, keys);
+						}else{
+							list = jedis.brpop(timeout, keys);
 						}
-						if(!list.isEmpty()){
-							register.onMessage(list.get(0), list.get(1));
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
+					}finally{
+						poolLazy.free();
 					}
+					if(!list.isEmpty()){
+						String channel = list.get(0);
+						String message = list.get(1);
+						register.onMessage(channel, message);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		};
@@ -105,16 +98,12 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	@SuppressWarnings("rawtypes")
 	public Set<ChannelSub> register(ChannelSub... channels) {
 		Set<ChannelSub> chSet = register.register(channels);
-		subscribe(ChannelRegister.getChannelNames(chSet).toArray(new String[chSet.size()]));
-		this.open();
 		return chSet;
 	}
 	
 	@Override
 	public Set<String> unregister(String... channels) {
-		Set<String> chSet = register.unregister(channels);
-		unsubscribe(chSet.toArray(new String[chSet.size()]));
-		return chSet;
+		return register.unregister(channels);
 	}
 	
 	@Override
@@ -124,17 +113,23 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 
 	@Override
 	public void subscribe(String... channels) {
-		this.channelSub.addAll(this.register.registedOnlyAsSet(channels));		
+		this.register.subscribe(channels);
+		this.open();
 	}
 
 	@Override
 	public void unsubscribe(String... channels) {
-		this.channelSub.removeAll(CommonUtils.cleanEmptyAsList(channels));		
+		this.register.unsubscribe(channels);		
 	}
 
 	@SuppressWarnings("rawtypes")
 	public ChannelSub getChannelSub(String channel) {
 		return register.getChannelSub(channel);
+	}
+
+	@Override
+	public String[] getSubscribes() {
+		return register.getSubscribes();
 	}
 
 	@Override

@@ -1,17 +1,11 @@
 package net.gdface.facelog.message;
 
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 消息订阅者抽象类
  * @author guyadong
  *
  */
-public abstract class AbstractSubcriber extends ChannelRegister implements IOnMessage, ISubscriber  {
-	protected static final Logger logger = LoggerFactory.getLogger(AbstractSubcriber.class);
+public abstract class AbstractSubcriber extends ChannelDispatcher implements IOnMessage, ISubscriber,AutoCloseable  {
 	public AbstractSubcriber() {
 	}
 	
@@ -31,11 +25,8 @@ public abstract class AbstractSubcriber extends ChannelRegister implements IOnMe
 	@Override
 	public void subscribe(String... channels) {
 		synchronized (this) {
-			if (null == channels || 0 == channels.length)
-				channels = channelSubs.keySet().toArray(new String[0]);
-			else {
-				channels = registedOnly(channels);
-			}
+			super.subscribe(channels);
+			channels = getSubscribes();
 			if (0 < channels.length)
 				this._subscribe(channels);
 		}
@@ -44,37 +35,14 @@ public abstract class AbstractSubcriber extends ChannelRegister implements IOnMe
 	@Override
 	public void unsubscribe(String... channels){
 		synchronized (this) {
-			_unsubscribe(registedOnly(channels));
+			super.unsubscribe(channels);
+			_unsubscribe(getSubscribes());
 		}
-	}
-	
-	@Override
-	@SuppressWarnings({ "rawtypes" })
-	public Set<ChannelSub> register(ChannelSub... channels) {
-		synchronized (this) {
-			Set<ChannelSub> names = super.register(channels);
-			subscribe(getChannelNames(names).toArray(new String[0]));
-			return names;
-		}
-	}
-	
-	@Override
-	public Set<String> unregister(String... channels) {
-		synchronized (this) {
-			Set<String> names = super.unregister(channels);
-			if(!names.isEmpty())
-				_unsubscribe(names.toArray(new String[0]));
-			return names;
-		}
-	}
-	
-	@Override
-	public Set<String> unregister(Channel...channels){
-		return unregister(getChannelNames(channels));
 	}
 
 	@Override
 	public void close() {
-		this._unsubscribe();		
+		this.unsubscribe();		
 	}
+
 }

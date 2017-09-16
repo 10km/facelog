@@ -44,31 +44,28 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 		return new Runnable(){
 			@Override
 			public void run() {
-				while (!isClosed()) {
-					
-					try {
-						T t;
-						if(isFifo)
-							t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
-						else{
-							if(queue instanceof BlockingDeque)
-								t = ((BlockingDeque<T>)queue).pollLast(timeoutMills, TimeUnit.MILLISECONDS);
-							else
-								throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
-						}
-						if(null != t){
-							try{
-								action.onSubscribe(t);
-							} catch (UnsubscribeException e) {
-								logger.info("consumer thread finished because UnsubscribeException");
-								break;
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
+				try {
+					T t;
+					if(isFifo)
+						t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
+					else{
+						if(queue instanceof BlockingDeque)
+							t = ((BlockingDeque<T>)queue).pollLast(timeoutMills, TimeUnit.MILLISECONDS);
+						else
+							throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
 					}
+					if(null != t){
+						try{
+							action.onSubscribe(t);
+						} catch (UnsubscribeException e) {
+							logger.info("consumer thread finished because UnsubscribeException");
+							close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		};

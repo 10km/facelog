@@ -63,7 +63,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	
 	protected RedisSubscriber(JedisPoolLazy poolLazy) {
 		super();
-		jedisPubSub=new RedisSubHandle(this); 
+		this.jedisPubSub=new RedisSubHandle(this); 
 		this.poolLazy = poolLazy;
 		subscribers.put(poolLazy, this);
 	}

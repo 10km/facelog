@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,23 +19,24 @@ import net.gdface.facelog.message.IOnSubscribe.UnsubscribeException;
  * @author guyadong
  *
  */
-public class ChannelRegister implements IOnMessage {
-	protected static final Logger logger = LoggerFactory.getLogger(ChannelRegister.class);
+public class ChannelDispatcher implements IOnMessage,ISubscriber {
+	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
 
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */
 	@SuppressWarnings("rawtypes")
 	protected final Map<String, ChannelSub> channelSubs = Collections.synchronizedMap(new LinkedHashMap<String, ChannelSub>());
+	private final Set<String> subChannelSet=Collections.synchronizedSet(new LinkedHashSet<String>());
 
-	public ChannelRegister() {
+	public ChannelDispatcher() {
 	}
 
-	public ChannelRegister(@SuppressWarnings("rawtypes") ChannelSub...channels) {
+	public ChannelDispatcher(@SuppressWarnings("rawtypes") ChannelSub...channels) {
 		register(channels);
 	}
 	
-	public ChannelRegister(@SuppressWarnings("rawtypes") Collection<ChannelSub> channels) {
+	public ChannelDispatcher(@SuppressWarnings("rawtypes") Collection<ChannelSub> channels) {
 		this(null ==channels?null:channels.toArray(new ChannelSub[0]));
 	}
 	
@@ -75,6 +77,7 @@ public class ChannelRegister implements IOnMessage {
 			for (ChannelSub ch : chSet) {
 				channelSubs.put(ch.name, ch);
 			}
+			subscribe(getChannelNames(chSet).toArray(new String[0]));
 			return chSet;
 		}
 	}
@@ -85,6 +88,7 @@ public class ChannelRegister implements IOnMessage {
 			for (String ch : chSet) {
 				this.channelSubs.remove(ch);
 			}
+			unsubscribe(chSet.toArray(new String[0]));
 			return chSet;
 		}
 	}
@@ -107,10 +111,35 @@ public class ChannelRegister implements IOnMessage {
 				Object deserialized = this.encoder.fromJson(message,ch.type);
 				ch.onSubscribe(deserialized);
 			} catch (UnsubscribeException e) {
-				unregister(ch);
+				unsubscribe(ch.name);
 				logger.info("unregister channel: {}",channel);
 			} 
 		}else
 			logger.warn("unregistered channel: '{}'",channel);
+	}
+	
+	@Override
+	public void subscribe(String... channels) {
+		synchronized(this){
+			if (null == channels || 0 == channels.length)
+				channels = channelSubs.keySet().toArray(new String[0]);
+			else {
+				channels = registedOnly(channels);
+			}
+			this.subChannelSet.addAll(registedOnlyAsSet(channels));
+		}
+	}
+
+	@Override
+	public void unsubscribe(String... channels) {
+		if (null == channels || 0 == channels.length)
+			this.subChannelSet.clear();
+		else
+			this.subChannelSet.removeAll(CommonUtils.cleanEmptyAsList(channels));		
+	}
+	
+	@Override
+	public String[] getSubscribes(){
+		 return this.subChannelSet.toArray(new String[subChannelSet.size()]);
 	}
 }

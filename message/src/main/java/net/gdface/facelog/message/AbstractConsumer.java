@@ -29,74 +29,82 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	protected boolean isFifo = true;
 	/** 执行消费线程的线程池对象 */
 	private ExecutorService executorService;
-	/** 执行消费线程 */
-	private Thread consumerThread=null;
-
 	/**
-	 * 消费线程实现,根据 {@link #isClosed()}判断是否要结束线程
+	 * 消费线程实现,不可包含循环语句，循环由父类控制<br>
+	 * 可调用 {@link #close()}结束线程
 	 * @return
 	 */
 	protected abstract Runnable getRunnable();
-	
-	protected boolean needOpen(){return true;}
 	
 	/**
 	 * 创建消费线程,如果指定了{@link #executorService} ，则消费线程在线程池中执行<br>
 	 * 否则创建新线程
 	 */
 	protected synchronized void open(){
-		if(!needOpen())return;
 		switch( state ){
-		case OPENED:return;
-		case 	CLOSED:
-			// CLOSE是瞬态,要等consumerThread结束
+		case OPENED:{
 			try {
 				synchronized(state){
-					while(null != consumerThread && consumerThread.isAlive()){
-						state.wait();
-					}
+					state.wait();
+					// 在消费线程一个循环结束后判断状态
+					if(state == State.OPENED)return;
 				}
 			} catch (InterruptedException e) {}
+		}
+		case CLOSED:
 		case INIT:
 		}
 			
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {
-				consumerThread=Thread.currentThread();
-				try{
-					getRunnable().run();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
 				synchronized(state){
-					state =State.INIT;
-					// 通知消费线程结束
-					state.notify();
+					// 通知主线程 子线程已经启动
+					state.notifyAll();
 				}
-				consumerThread=null;
+				while(state != State.CLOSED){
+					try{
+						getRunnable().run();
+					}catch(Exception e){
+						e.printStackTrace();
+					}finally{
+						synchronized(state){
+							// 每一个循环结束都通知阻塞的主线程
+							state.notifyAll();
+						}
+					}
+				}
 			}			
 		};
-		if(null != executorService){
-			try{
-				executorService.submit(run);
-				return ;
-			}catch(RejectedExecutionException e){
-				executorService = null;
-				logger.warn("RejectedExecutionException: {}",e.getMessage());			}
+		try{
+			if(null != executorService){
+				try{
+					executorService.submit(run);
+					return ;
+				}catch(RejectedExecutionException e){
+					executorService = null;
+					logger.warn("RejectedExecutionException: {}",e.getMessage());			
+				}
+			}
+			Thread thread=new Thread(run);
+			thread.setDaemon(this.daemon);
+			thread.start();
+			return ;
+		}finally{
+			synchronized(state){
+				try {
+					// 等待子线程启动
+					state.wait();
+				} catch (InterruptedException e) {
+				}
+			}
+			state = State.OPENED;
 		}
-		Thread thread=new Thread(run);
-		thread.setDaemon(this.daemon);
-		thread.start();
-		state = State.OPENED;
-		return ;
 	}
 	
 	@Override
 	public void close(){
-		if(state == State.OPENED){
-			state = State.CLOSED;	
-		} 
+		state = State.CLOSED;	
 	}
 
 	/**
@@ -126,9 +134,5 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 
 	public boolean isOpened(){
 		return this.state == State.OPENED;
-	}
-	
-	protected boolean isClosed(){
-		return state == State.CLOSED;
 	}
 }

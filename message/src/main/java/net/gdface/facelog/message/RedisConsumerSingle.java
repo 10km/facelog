@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * 
- * 基于 {@link RedisQueue} 的消息费模型实现单消费者模型{@link ConsumerSingle}
+ * 基于 {@link RedisQueue} 实现单消费者模型{@link ConsumerSingle}
  * @author guyadong
  *
  * @param <T>
@@ -39,4 +39,7 @@ public class RedisConsumerSingle<T> extends ConsumerSingle<T> implements IRedisC
 		this(type,JedisPoolLazy.getDefaultInstance());
 	}
 
+	public RedisConsumerSingle(ChannelSub<T> channel,JedisPoolLazy poolLazy){
+		this(channel.type,poolLazy,channel.name);
+	}
 }
