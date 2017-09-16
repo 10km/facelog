@@ -27,7 +27,7 @@ public class Producer<T> implements IQueueComponent<T>{
 	 *                      为栈模型时 {@link #queue}必须为双向队列{@link BlockingDeque}<br>
 	 * @return
 	 */
-	public boolean push(T t,boolean fifo){
+	public boolean produce(T t,boolean fifo){
 		if(null == queue)
 			throw new NullPointerException("the field 'queue' not be initialized");
 		if(! fifo ){
@@ -44,7 +44,7 @@ public class Producer<T> implements IQueueComponent<T>{
 	 * @param t
 	 * @return
 	 */
-	public boolean push(T t){
+	public boolean produce(T t){
 		if(null == queue)
 			throw new NullPointerException("the field 'queue' not be initialized");
 		return queue.offer(t);
