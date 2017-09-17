@@ -40,7 +40,7 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 	}
 	
 	@Override
-	protected Runnable getRunnable(){
+	protected Runnable getCustomRunnable(){
 		return new Runnable(){
 			@Override
 			public void run() {

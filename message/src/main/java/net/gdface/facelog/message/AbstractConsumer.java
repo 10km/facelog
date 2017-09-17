@@ -34,77 +34,58 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	 * 可调用 {@link #close()}结束线程
 	 * @return
 	 */
-	protected abstract Runnable getRunnable();
+	protected abstract Runnable getCustomRunnable();
+	/** 消费循环对象 */
+	private final Runnable customeLoop = new Runnable(){
+		@Override
+		public void run() {
+			final Runnable customRun = getCustomRunnable();
+			while(!isClosed()){
+				try{
+					if(null != customRun)
+						customRun.run();	
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}			
+	};
 	
 	/**
 	 * 创建消费线程,如果指定了{@link #executorService} ，则消费线程在线程池中执行<br>
-	 * 否则创建新线程
+	 * 否则创建新线程(线程同步)
 	 */
-	protected synchronized void open(){
-		switch( state ){
-		case OPENED:{
-			try {
-				synchronized(state){
-					state.wait();
-					// 在消费线程一个循环结束后判断状态
-					if(state == State.OPENED)return;
-				}
-			} catch (InterruptedException e) {}
-		}
-		case CLOSED:
-		case INIT:
-		}
-			
-		Runnable run = new Runnable(){
-			@Override
-			public void run() {
-				synchronized(state){
-					// 通知主线程 子线程已经启动
-					state.notifyAll();
-				}
-				while(state != State.CLOSED){
-					try{
-						getRunnable().run();
-					}catch(Exception e){
-						e.printStackTrace();
-					}finally{
-						synchronized(state){
-							// 每一个循环结束都通知阻塞的主线程
-							state.notifyAll();
-						}
-					}
-				}
-			}			
-		};
-		try{
+	protected void open(){
+		// Double Checked Locking
+		if(state == State.OPENED)return;
+		synchronized(this){
+			if(state == State.OPENED)return;
+			state = State.OPENED;			
 			if(null != executorService){
 				try{
-					executorService.submit(run);
+					executorService.submit(customeLoop);
 					return ;
 				}catch(RejectedExecutionException e){
 					executorService = null;
 					logger.warn("RejectedExecutionException: {}",e.getMessage());			
 				}
 			}
-			Thread thread=new Thread(run);
+			Thread thread=new Thread(customeLoop);
 			thread.setDaemon(this.daemon);
 			thread.start();
 			return ;
-		}finally{
-			synchronized(state){
-				try {
-					// 等待子线程启动
-					state.wait();
-				} catch (InterruptedException e) {
-				}
-			}
-			state = State.OPENED;
 		}
 	}
 	
+	/**
+	 * 结束消费线程(线程同步)
+	 * @see java.lang.AutoCloseable#close()
+	 */
 	@Override
 	public void close(){
-		state = State.CLOSED;	
+		synchronized( this ){
+			state = State.CLOSED;
+		}
 	}
 
 	/**
@@ -132,7 +113,7 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 		return this;
 	}
 
-	public boolean isOpened(){
-		return this.state == State.OPENED;
+	private boolean isClosed(){
+		return this.state == State.CLOSED;
 	}
 }

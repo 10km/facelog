@@ -63,36 +63,37 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 		this.poolLazy = poolLazy;
 		this.setTimeoutMills(DEFAULT_CONSUMER_CHECK_INTERVAL);
 	}
-
-	@Override
-	protected Runnable getRunnable() {
-		return new Runnable(){
-			@Override
-			public void run() {
-				try {
-					List<String> list;
-					Jedis jedis = poolLazy.apply();
-					try{
-						String[] keys =register.getSubscribes();
-						if(0 == keys.length)close();
-						if(isFifo){
-							list = jedis.blpop(timeout, keys);
-						}else{
-							list = jedis.brpop(timeout, keys);
-						}
-					}finally{
-						poolLazy.free();
+	private final Runnable customRunnable = new Runnable(){
+		@Override
+		public void run() {
+			try {
+				List<String> list;
+				Jedis jedis = poolLazy.apply();
+				try{
+					String[] keys =register.getSubscribes();
+					if(0 == keys.length)close();
+					if(isFifo){
+						list = jedis.blpop(timeout, keys);
+					}else{
+						list = jedis.brpop(timeout, keys);
 					}
-					if(!list.isEmpty()){
-						String channel = list.get(0);
-						String message = list.get(1);
-						register.onMessage(channel, message);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				}finally{
+					poolLazy.free();
 				}
+				if(!list.isEmpty()){
+					String channel = list.get(0);
+					String message = list.get(1);
+					register.onMessage(channel, message);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		};
+		}
+	};
+	
+	@Override
+	protected Runnable getCustomRunnable() {
+		return customRunnable;
 	}
 
 	@SuppressWarnings("rawtypes")
