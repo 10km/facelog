@@ -2,6 +2,11 @@ package net.gdface.facelog.message;
 
 import java.util.Set;
 
+/**
+ * (消息)频道订阅接口
+ * @author guyadong
+ *
+ */
 public interface ISubscriber {
 
 	/**
@@ -25,7 +30,7 @@ public interface ISubscriber {
 	 * @return 返回实际注册的频道名列表
 	 */
 	@SuppressWarnings("rawtypes")
-	Set<ChannelSub> register(ChannelSub... channels);
+	Set<Channel> register(Channel... channels);
 
 	/**
 	 * 取消订阅指定的频道,并注销频道
@@ -40,16 +45,20 @@ public interface ISubscriber {
 	 * @see #unregister(String...)
 	 * @return 返回实际注销的频道名列表
 	 */
+	@SuppressWarnings("rawtypes")
 	Set<String> unregister(Channel... channels);
 
 	/**
-	 * 返回注册的 {@link ChannelSub}对象
+	 * 返回注册的 {@link Channel}对象
 	 * @param channel 频道名
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	ChannelSub getChannelSub(String channel);
+	Channel getChannelSub(String channel);
 
+	/**
+	 * @return 返回当前订阅的所有频道名
+	 */
 	String[] getSubscribes();
 
 }

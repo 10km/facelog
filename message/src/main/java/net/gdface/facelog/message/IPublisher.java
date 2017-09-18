@@ -14,5 +14,5 @@ public interface IPublisher  {
 	 * @param obj 消息对象
 	 * @param type 消息类型
 	 */
-	public void publish(Channel channel,Object obj,Type type);
+	public void publish(@SuppressWarnings("rawtypes") Channel channel,Object obj,Type type);
 }

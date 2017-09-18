@@ -39,7 +39,7 @@ public class RedisConsumerSingle<T> extends ConsumerSingle<T> implements IRedisC
 		this(type,JedisPoolLazy.getDefaultInstance());
 	}
 
-	public RedisConsumerSingle(ChannelSub<T> channel,JedisPoolLazy poolLazy){
+	public RedisConsumerSingle(Channel<T> channel,JedisPoolLazy poolLazy){
 		this(channel.type,poolLazy,channel.name);
 	}
 }

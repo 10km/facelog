@@ -7,8 +7,8 @@ import redis.clients.jedis.JedisPubSub;
 
 public class RedisSubHandle extends JedisPubSub {
 	private static final Logger logger = LoggerFactory.getLogger(RedisSubHandle.class);
-	private IOnMessage onMessageHandle;
-	public RedisSubHandle(IOnMessage onMessageHandle) {
+	private IMessageDispatcher onMessageHandle;
+	public RedisSubHandle(IMessageDispatcher onMessageHandle) {
 		super();
 		this.onMessageHandle = onMessageHandle;
 	}
@@ -27,7 +27,7 @@ public class RedisSubHandle extends JedisPubSub {
 		}
 	}
 
-	public void setOnMessageHandle(IOnMessage onMessageHandle) {
+	public void setOnMessageHandle(IMessageDispatcher onMessageHandle) {
 		this.onMessageHandle = onMessageHandle;
 	}
 }

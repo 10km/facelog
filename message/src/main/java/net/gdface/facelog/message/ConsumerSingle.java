@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.message.IOnSubscribe.UnsubscribeException;
+import net.gdface.facelog.message.IMessageAdapter.UnsubscribeException;
 
 /**
  * 基于阻塞队列 {@link BlockingQueue} 实现单个消费者模型<br>
@@ -20,55 +20,56 @@ import net.gdface.facelog.message.IOnSubscribe.UnsubscribeException;
  */
 public class ConsumerSingle<T> extends AbstractConsumer implements IQueueComponent<T>{
 	protected BlockingQueue<T> queue = new LinkedBlockingDeque<T>();
-	
+	private final Runnable customRunnable = new Runnable(){
+		@Override
+		public void run() {
+			try {
+				T t;
+				if(isFifo)
+					t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
+				else{
+					if(queue instanceof BlockingDeque)
+						t = ((BlockingDeque<T>)queue).pollLast(timeoutMills, TimeUnit.MILLISECONDS);
+					else
+						throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
+				}
+				if(null != t){
+					try{
+						adapter.onSubscribe(t);
+					} catch (UnsubscribeException e) {
+						logger.info("consumer thread finished because UnsubscribeException");
+						close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	};
 	public ConsumerSingle() {
 	}
 	public ConsumerSingle(BlockingQueue<T> queue) {
 		super();
 		this.queue = queue;
 	}
-	private IOnSubscribe<T> action = new IOnSubscribe<T>(){
+	/** 消息处理器 */
+	private IMessageAdapter<T> adapter = new IMessageAdapter<T>(){
 		@Override
-		public void onSubscribe(T t) throws net.gdface.facelog.message.IOnSubscribe.UnsubscribeException {
+		public void onSubscribe(T t) throws net.gdface.facelog.message.IMessageAdapter.UnsubscribeException {
 		}};
 	
-	public ConsumerSingle<T> setAction(IOnSubscribe<T> action) {
-		if(null != action){
-			this.action = action;
+	public ConsumerSingle<T> setAdapter(IMessageAdapter<T> adapter) {
+		if(null != adapter){
+			this.adapter = adapter;
 		}
 		return this;
 	}
 	
 	@Override
 	protected Runnable getCustomRunnable(){
-		return new Runnable(){
-			@Override
-			public void run() {
-				try {
-					T t;
-					if(isFifo)
-						t = queue.poll(timeoutMills, TimeUnit.MILLISECONDS);
-					else{
-						if(queue instanceof BlockingDeque)
-							t = ((BlockingDeque<T>)queue).pollLast(timeoutMills, TimeUnit.MILLISECONDS);
-						else
-							throw new UnsupportedOperationException(" queue must be instance of  BlockingDeque");
-					}
-					if(null != t){
-						try{
-							action.onSubscribe(t);
-						} catch (UnsubscribeException e) {
-							logger.info("consumer thread finished because UnsubscribeException");
-							close();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		return customRunnable;
 	}
 	
 	@Override
@@ -92,7 +93,7 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 	 * 改为public访问 
 	 */
 	@Override
-	public synchronized void open() {
+	public void open() {
 		super.open();
 	}
 	

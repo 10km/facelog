@@ -5,7 +5,7 @@ package net.gdface.facelog.message;
  * @author guyadong
  *
  */
-public abstract class AbstractSubcriber extends ChannelDispatcher implements IOnMessage, ISubscriber,AutoCloseable  {
+public abstract class AbstractSubcriber extends ChannelDispatcher implements IMessageDispatcher, ISubscriber,AutoCloseable  {
 	public AbstractSubcriber() {
 	}
 	

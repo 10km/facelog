@@ -15,16 +15,16 @@ public class TestRedisSubscriber {
 	@Test
 	public void test() {
 		ISubscriber redisSubscriber = RedisSubscriber.getSubscriber(JedisPoolLazy.getDefaultInstance());
-		ChannelSub<String> chat1 = new ChannelSub<String>("chat1",String.class,new IOnSubscribe<String>(){
+		Channel<String> chat1 = new Channel<String>("chat1",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.message.IOnSubscribe.UnsubscribeException {
+			public void onSubscribe(String t) throws net.gdface.facelog.message.IMessageAdapter.UnsubscribeException {
 				logger.info("{}:{}","chat1",t);
 			}} );
-		ChannelSub<String> chat2 = new ChannelSub<String>("chat2",String.class,new IOnSubscribe<String>(){
+		Channel<String> chat2 = new Channel<String>("chat2",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.message.IOnSubscribe.UnsubscribeException {
+			public void onSubscribe(String t) throws net.gdface.facelog.message.IMessageAdapter.UnsubscribeException {
 				logger.info("{}:{}","chat2",t);
 			}} );
 		redisSubscriber.register(chat1,chat2);

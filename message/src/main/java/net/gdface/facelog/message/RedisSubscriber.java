@@ -138,7 +138,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 		return this;
 	}
 
-	public RedisSubscriber setOnMessageHandle(IOnMessage onMessageHandle) {
+	public RedisSubscriber setOnMessageHandle(IMessageDispatcher onMessageHandle) {
 		jedisPubSub.setOnMessageHandle(onMessageHandle);
 		return this;
 	}

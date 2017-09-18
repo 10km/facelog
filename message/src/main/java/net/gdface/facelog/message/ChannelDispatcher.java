@@ -11,33 +11,33 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.gdface.facelog.message.IOnSubscribe.UnsubscribeException;
+import net.gdface.facelog.message.IMessageAdapter.UnsubscribeException;
 
 /**
- * 消息订阅对象({@link ChannelSub})管理类
+ * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发
  * 
  * @author guyadong
  *
  */
-public class ChannelDispatcher implements IOnMessage,ISubscriber {
+public class ChannelDispatcher implements IMessageDispatcher,ISubscriber {
 	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
 
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
 
 	/** 注册的频道对象 */
 	@SuppressWarnings("rawtypes")
-	protected final Map<String, ChannelSub> channelSubs = Collections.synchronizedMap(new LinkedHashMap<String, ChannelSub>());
+	protected final Map<String, Channel> channelSubs = Collections.synchronizedMap(new LinkedHashMap<String, Channel>());
 	private final Set<String> subChannelSet=Collections.synchronizedSet(new LinkedHashSet<String>());
 
 	public ChannelDispatcher() {
 	}
 
-	public ChannelDispatcher(@SuppressWarnings("rawtypes") ChannelSub...channels) {
+	public ChannelDispatcher(@SuppressWarnings("rawtypes") Channel...channels) {
 		register(channels);
 	}
 	
-	public ChannelDispatcher(@SuppressWarnings("rawtypes") Collection<ChannelSub> channels) {
-		this(null ==channels?null:channels.toArray(new ChannelSub[0]));
+	public ChannelDispatcher(@SuppressWarnings("rawtypes") Collection<Channel> channels) {
+		this(null ==channels?null:channels.toArray(new Channel[0]));
 	}
 	
 	public String[] registedOnly(String... channels) {
@@ -50,11 +50,13 @@ public class ChannelDispatcher implements IOnMessage,ISubscriber {
 			chSet.retainAll(channelSubs.keySet());
 		return chSet;
 	}
+	@SuppressWarnings("rawtypes")
 	public static String[] getChannelNames(Channel... channels) {
 		return getChannelNamesAsList(channels).toArray(new String[0]);
 	}
 
-	public static Set<String> getChannelNames(Collection<? extends Channel> channels) {
+	@SuppressWarnings("rawtypes")
+	public static Set<String> getChannelNames(Collection<Channel> channels) {
 		HashSet<String> names = new HashSet<String>();
 		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
 			names.add(ch.name);
@@ -62,6 +64,7 @@ public class ChannelDispatcher implements IOnMessage,ISubscriber {
 		return names;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static Set<String> getChannelNamesAsList(Channel... channels) {
 		HashSet<String> names = new HashSet<String>();
 		for (Channel ch : CommonUtils.cleanNullAsList(channels)) {
@@ -71,10 +74,10 @@ public class ChannelDispatcher implements IOnMessage,ISubscriber {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public Set<ChannelSub> register(ChannelSub... channels) {
+	public Set<Channel> register(Channel... channels) {
 		synchronized (this) {
-			HashSet<ChannelSub> chSet = new HashSet<ChannelSub>(CommonUtils.cleanNullAsList(channels));
-			for (ChannelSub ch : chSet) {
+			HashSet<Channel> chSet = new HashSet<Channel>(CommonUtils.cleanNullAsList(channels));
+			for (Channel ch : chSet) {
 				channelSubs.put(ch.name, ch);
 			}
 			subscribe(getChannelNames(chSet).toArray(new String[0]));
@@ -93,19 +96,20 @@ public class ChannelDispatcher implements IOnMessage,ISubscriber {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set<String> unregister(Channel... channels) {
 		return unregister(getChannelNames(channels));
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ChannelSub getChannelSub(String channel) {
+	public Channel getChannelSub(String channel) {
 		return channelSubs.get(channel);
 	}
 
 	@Override
 	public void onMessage(String channel, String message) {
 		@SuppressWarnings("unchecked")
-		ChannelSub<Object> ch=channelSubs.get(channel);
+		Channel<Object> ch=channelSubs.get(channel);
 		if(null !=ch){
 			try{
 				Object deserialized = this.encoder.fromJson(message,ch.type);

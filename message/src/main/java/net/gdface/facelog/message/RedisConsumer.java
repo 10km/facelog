@@ -71,6 +71,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 				Jedis jedis = poolLazy.apply();
 				try{
 					String[] keys =register.getSubscribes();
+					// 订阅频道为0时关闭线程
 					if(0 == keys.length)close();
 					if(isFifo){
 						list = jedis.blpop(timeout, keys);
@@ -97,8 +98,8 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Set<ChannelSub> register(ChannelSub... channels) {
-		Set<ChannelSub> chSet = register.register(channels);
+	public Set<Channel> register(Channel... channels) {
+		Set<Channel> chSet = register.register(channels);
 		return chSet;
 	}
 	
@@ -107,6 +108,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 		return register.unregister(channels);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Set<String> unregister(Channel... channels) {
 		return register.unregister(channels);
@@ -124,7 +126,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ChannelSub getChannelSub(String channel) {
+	public Channel getChannelSub(String channel) {
 		return register.getChannelSub(channel);
 	}
 

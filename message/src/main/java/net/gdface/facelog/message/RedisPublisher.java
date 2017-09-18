@@ -29,7 +29,7 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 	}
 	
 	@Override
-	public void publish(Channel channel, Object obj, Type type) {
+	public void publish(@SuppressWarnings("rawtypes") Channel channel, Object obj, Type type) {
 		if(null == obj)return;
 		if(null != channel.type){
 			if(channel.type instanceof Class<?> && !((Class<?>)channel.type).isInstance(obj)){
