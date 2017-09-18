@@ -7,10 +7,10 @@ import redis.clients.jedis.JedisPubSub;
 
 public class RedisSubHandle extends JedisPubSub {
 	private static final Logger logger = LoggerFactory.getLogger(RedisSubHandle.class);
-	private IMessageDispatcher onMessageHandle;
-	public RedisSubHandle(IMessageDispatcher onMessageHandle) {
+	private IMessageDispatcher dispatcher;
+	public RedisSubHandle(IMessageDispatcher dispatcher) {
 		super();
-		this.onMessageHandle = onMessageHandle;
+		this.dispatcher = dispatcher;
 	}
 
 	public RedisSubHandle() {
@@ -20,14 +20,14 @@ public class RedisSubHandle extends JedisPubSub {
 	public void onMessage(String channel, String message) {
 		if(Judge.isEmpty(channel) || Judge.isEmpty(message))return;
 		try {
-			if (null != onMessageHandle)
-				onMessageHandle.dispatch(channel, message);
+			if (null != dispatcher)
+				dispatcher.dispatch(channel, message);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
 
-	public void setOnMessageHandle(IMessageDispatcher onMessageHandle) {
-		this.onMessageHandle = onMessageHandle;
+	public void setDispatcher(IMessageDispatcher dispatcher) {
+		this.dispatcher = dispatcher;
 	}
 }
