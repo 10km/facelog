@@ -185,7 +185,7 @@ public class JedisPoolLazy {
 	
 	private JedisPool createPool(){
 		JedisPool pool;
-		int timeout = (int)parameters.get(PropName.timeout);
+		int timeout = (Integer)parameters.get(PropName.timeout);
 		URI uri = this.getCanonicalURI();
 		logger.info("jedis pool initialized(连接池初始化)  {} timeout : {} ms",uri,timeout);
 		pool = new JedisPool(

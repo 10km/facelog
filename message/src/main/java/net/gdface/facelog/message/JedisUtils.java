@@ -26,9 +26,9 @@ public class JedisUtils {
 		URI uri = (URI) parameters.get(JedisPoolLazy.PropName.uri);
 		if (null == uri) {
 			uri = createJedisURI((String) parameters.get(JedisPoolLazy.PropName.host),
-					(int) parameters.get(JedisPoolLazy.PropName.port),
+					(Integer) parameters.get(JedisPoolLazy.PropName.port),
 					(String) parameters.get(JedisPoolLazy.PropName.password),
-					(int)parameters.get(JedisPoolLazy.PropName.database));
+					(Integer)parameters.get(JedisPoolLazy.PropName.database));
 		}else{
 			try {
 				uri = new URI("jedis", 
