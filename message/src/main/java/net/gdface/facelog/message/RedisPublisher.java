@@ -32,6 +32,7 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 	public void publish(@SuppressWarnings("rawtypes") Channel channel, Object obj, Type type) {
 		if(null == obj)return;
 		if(null != channel.type){
+			// 检查发布的对象类型与频道数据类型是否匹配
 			if(channel.type instanceof Class<?> && !((Class<?>)channel.type).isInstance(obj)){
 				throw new IllegalArgumentException("invalid type of 'obj'");
 			}else if(channel.type instanceof ParameterizedType ){

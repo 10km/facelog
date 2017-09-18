@@ -16,9 +16,17 @@ public class Producer<T> extends IProducer.AbstractHandler<T> implements IQueueC
 	public static final<T> Producer<T>makeInstance(Type type,BlockingQueue<T> queue){
 		return new Producer<T>(type, queue){};
 	}
+
+	protected Producer(Class<T>clazz) {
+		super(clazz);
+	}
 	
 	protected Producer(Type type) {
 		super(type);
+	}
+	
+	protected Producer(Class<T> clazz, BlockingQueue<T> queue) {
+		this((Type)clazz,queue);
 	}
 	
 	protected Producer(Type type, BlockingQueue<T> queue) {
