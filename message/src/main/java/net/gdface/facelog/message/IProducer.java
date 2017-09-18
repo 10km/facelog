@@ -13,7 +13,14 @@ import java.util.concurrent.BlockingDeque;
  * @param <T>
  */
 public interface IProducer<T> {
-	public static abstract class AbstractHandler<T>extends TypeRef<T> implements IProducer<T> {
+	public static abstract class AbstractHandler<T> implements IProducer<T> {
+	    protected final Type type;
+		protected final Class<?> rawType;
+	    public AbstractHandler(Type type) {
+			super();
+			this.type = type;
+			this.rawType = TypeUtils.getRawClass(type);
+		}
 		/** 是否向队列末尾添加 */
 		protected boolean offerLast = true;
 		@Override

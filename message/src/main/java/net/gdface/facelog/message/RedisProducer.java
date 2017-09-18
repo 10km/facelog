@@ -20,7 +20,7 @@ public class RedisProducer<T> extends Producer<T> implements IRedisComponent {
 	}
 
 	public RedisProducer(Type type,JedisPoolLazy poolLazy, String queueName) {
-		super();
+		super(type);
 		this.setQueue(new RedisQueue<T>(type,poolLazy).setQueueName(queueName));
 	}
 	

@@ -1,5 +1,6 @@
 package net.gdface.facelog.message;
 
+import java.lang.reflect.Type;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 
@@ -11,12 +12,17 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Producer<T> extends IProducer.AbstractHandler<T> implements IQueueComponent<T>{
 	protected BlockingQueue<T> queue;
-	public Producer() {
-		super();
+	
+	public static final<T> Producer<T>makeInstance(Type type,BlockingQueue<T> queue){
+		return new Producer<T>(type, queue){};
 	}
-
-	public Producer(BlockingQueue<T> queue) {
-		super();
+	
+	protected Producer(Type type) {
+		super(type);
+	}
+	
+	protected Producer(Type type, BlockingQueue<T> queue) {
+		super(type);
 		this.queue = queue;
 	}
 	
