@@ -1,5 +1,6 @@
 package net.gdface.facelog.message;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import net.gdface.facelog.message.IMessageAdapter.UnsubscribeException;
  * @author guyadong
  *
  */
-public class ChannelDispatcher implements IMessageDispatcher,ISubscriber {
+public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 	protected static final Logger logger = LoggerFactory.getLogger(ChannelDispatcher.class);
 
 	private JsonEncoder encoder = JsonEncoder.getEncoder();
@@ -84,14 +85,16 @@ public class ChannelDispatcher implements IMessageDispatcher,ISubscriber {
 			return chSet;
 		}
 	}
-
+	@Override
 	public Set<String> unregister(String... channels) {
 		synchronized (this) {
 			HashSet<String> chSet = new HashSet<String>(CommonUtils.cleanEmptyAsList(channels));
-			for (String ch : chSet) {
-				this.channelSubs.remove(ch);
+			if(!chSet.isEmpty()){
+				unsubscribe(chSet.toArray(new String[0]));
+				for (String ch : chSet) {
+					this.channelSubs.remove(ch);
+				}
 			}
-			unsubscribe(chSet.toArray(new String[0]));
 			return chSet;
 		}
 	}
@@ -102,12 +105,12 @@ public class ChannelDispatcher implements IMessageDispatcher,ISubscriber {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Channel getChannelSub(String channel) {
+	public Channel getChannel(String channel) {
 		return channelSubs.get(channel);
 	}
 
 	@Override
-	public void onMessage(String channel, String message) {
+	public void dispatch(String channel, String message) {
 		@SuppressWarnings("unchecked")
 		Channel<Object> ch=channelSubs.get(channel);
 		if(null !=ch){
@@ -123,27 +126,33 @@ public class ChannelDispatcher implements IMessageDispatcher,ISubscriber {
 	}
 	
 	@Override
-	public void subscribe(String... channels) {
+	public String[] subscribe(String... channels) {
 		synchronized(this){
 			if (null == channels || 0 == channels.length)
 				channels = channelSubs.keySet().toArray(new String[0]);
 			else {
 				channels = registedOnly(channels);
 			}
-			this.subChannelSet.addAll(registedOnlyAsSet(channels));
+			this.subChannelSet.addAll(Arrays.asList(channels));
+			return channels;
 		}
 	}
 
 	@Override
-	public void unsubscribe(String... channels) {
-		if (null == channels || 0 == channels.length)
+	public String[] unsubscribe(String... channels) {
+		if (null == channels || 0 == channels.length){
+			channels = this.getSubscribes();
 			this.subChannelSet.clear();
-		else
-			this.subChannelSet.removeAll(CommonUtils.cleanEmptyAsList(channels));		
+		}else{
+			HashSet<String> chSet = this.registedOnlyAsSet(channels);
+			this.subChannelSet.removeAll(chSet);
+			channels = chSet.toArray(new String[0]);
+		}
+		return channels;
 	}
 	
 	@Override
 	public String[] getSubscribes(){
-		 return this.subChannelSet.toArray(new String[subChannelSet.size()]);
+		 return this.subChannelSet.toArray(new String[0]);
 	}
 }

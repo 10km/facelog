@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
  * {@link AbstractSubcriber}的redis 实现<br>
@@ -70,29 +71,26 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 
 	@Override
 	protected void _subscribe(String... channels) {
-		if(!jedisPubSub.isSubscribed())
+		try{
+			jedisPubSub.subscribe(channels);
+		}catch(JedisConnectionException e){
 			open(channels);
-		else
-			jedisPubSub.subscribe(channels);		
-	}
-
-	@Override
-	protected void _unsubscribe(String... channels) {		
-		if(jedisPubSub.isSubscribed()) {
-			if(null == channels || 0 == channels.length)
-				jedisPubSub.unsubscribe();
-			else
-				jedisPubSub.unsubscribe(channels);
 		}
 	}
 
+	@Override
+	protected void _unsubscribe(String... channels) {
+		if(jedisPubSub.isSubscribed()) {
+			jedisPubSub.unsubscribe(channels);
+		}
+	}
+	
 	/**
 	 * 创建消息线程,如果指定了{@link #executorService} ，则消息线程在线程池中执行<br>
 	 * 否则创建新线程
-	 * @param channels TODO
+	 * @param channels 频道名列表
 	 */
-	private synchronized void open(final String... channels){
-		if(jedisPubSub.isSubscribed()) return;
+	private void open(final String... channels){
 		Runnable run = new Runnable(){
 			@Override
 			public void run() {

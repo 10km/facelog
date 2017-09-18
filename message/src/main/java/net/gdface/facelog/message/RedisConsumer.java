@@ -15,7 +15,7 @@ import redis.clients.jedis.Jedis;
  *
  * @param <T>
  */
-public class RedisConsumer extends AbstractConsumer implements IRedisComponent,ISubscriber {
+public class RedisConsumer extends AbstractConsumer implements IRedisComponent,IMessageRegister {
 	/**
 	 * 保存每个 {@link JedisPoolLazy}对应的实例
 	 */
@@ -85,7 +85,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 				if(!list.isEmpty()){
 					String channel = list.get(0);
 					String message = list.get(1);
-					register.onMessage(channel, message);
+					register.dispatch(channel, message);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -117,19 +117,20 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	}
 
 	@Override
-	public void subscribe(String... channels) {
-		this.register.subscribe(channels);
+	public String[] subscribe(String... channels) {
+		channels = this.register.subscribe(channels);
 		this.open();
+		return channels;
 	}
 
 	@Override
-	public void unsubscribe(String... channels) {
-		this.register.unsubscribe(channels);
+	public String[] unsubscribe(String... channels) {
+		return this.register.unsubscribe(channels);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Channel getChannelSub(String channel) {
-		return register.getChannelSub(channel);
+	public Channel getChannel(String channel) {
+		return register.getChannel(channel);
 	}
 
 	@Override
@@ -141,6 +142,21 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	public AbstractConsumer setTimeoutMills(int timeoutMills) {
 		super.setTimeoutMills(timeoutMills);
 		this.timeout = (int) TimeUnit.SECONDS.convert(this.timeoutMills, TimeUnit.MILLISECONDS);
+		return this;
+	}
+	
+	/**
+	 * 设置超时参数(秒)
+	 * @param timeout (seconds)
+	 * @return 
+	 * @return
+	 * @see #setTimeoutMills(int)
+	 */
+	public RedisConsumer setTimeout(int timeout) {
+		if(timeout>0){
+			this.timeout = timeout;
+			super.setTimeoutMills((int) TimeUnit.MILLISECONDS.convert(timeout, TimeUnit.SECONDS));
+		}
 		return this;
 	}
 }

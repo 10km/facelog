@@ -3,25 +3,25 @@ package net.gdface.facelog.message;
 import java.util.Set;
 
 /**
- * (消息)频道订阅接口
+ * (消息)频道注册订阅接口
  * @author guyadong
  *
  */
-public interface ISubscriber {
+public interface IMessageRegister {
 
 	/**
 	 * 订阅频道
 	 * @param channels 频道名列表,为null或空时订阅所有 {@link #channelSubs}中的频道
-	 * @see #_subscribe(String...)
+	 * @return 返回实际订阅的频道列表
 	 */
-	void subscribe(String... channels);
+	String[] subscribe(String... channels);
 
 	/**
 	 * 取消频道订阅
 	 * @param channels
-	 * @see #_unsubscribe(String...)
+	 * @return 返回实际取消订阅的频道列表
 	 */
-	void unsubscribe(String... channels);
+	String[] unsubscribe(String... channels);
 
 	/**
 	 * 注册并订阅指定的频道
@@ -54,7 +54,7 @@ public interface ISubscriber {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	Channel getChannelSub(String channel);
+	Channel getChannel(String channel);
 
 	/**
 	 * @return 返回当前订阅的所有频道名

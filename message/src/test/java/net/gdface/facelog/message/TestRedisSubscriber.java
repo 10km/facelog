@@ -14,7 +14,7 @@ public class TestRedisSubscriber {
 
 	@Test
 	public void test() {
-		ISubscriber redisSubscriber = RedisSubscriber.getSubscriber(JedisPoolLazy.getDefaultInstance());
+		RedisSubscriber redisSubscriber = RedisSubscriber.getSubscriber(JedisPoolLazy.getDefaultInstance());
 		Channel<String> chat1 = new Channel<String>("chat1",String.class,new IMessageAdapter<String>(){
 
 			@Override
@@ -27,8 +27,16 @@ public class TestRedisSubscriber {
 			public void onSubscribe(String t) throws net.gdface.facelog.message.IMessageAdapter.UnsubscribeException {
 				logger.info("{}:{}","chat2",t);
 			}} );
+		Channel<String> chat3 = new Channel<String>("chat3",String.class,new IMessageAdapter<String>(){
+
+			@Override
+			public void onSubscribe(String t) throws net.gdface.facelog.message.IMessageAdapter.UnsubscribeException {
+				logger.info("{}:{}","chat3",t);
+			}} );
 		redisSubscriber.register(chat1,chat2);
 		
-		redisSubscriber.unsubscribe();;
+		redisSubscriber.register(chat3);
+		redisSubscriber.unsubscribe(chat1.name);
+		redisSubscriber.unsubscribe();
 	}
 }

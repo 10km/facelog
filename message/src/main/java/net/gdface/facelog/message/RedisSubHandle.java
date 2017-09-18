@@ -21,7 +21,7 @@ public class RedisSubHandle extends JedisPubSub {
 		if(Judge.isEmpty(channel) || Judge.isEmpty(message))return;
 		try {
 			if (null != onMessageHandle)
-				onMessageHandle.onMessage(channel, message);
+				onMessageHandle.dispatch(channel, message);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

@@ -7,9 +7,9 @@ package net.gdface.facelog.message;
  */
 public interface IMessageDispatcher {
 	/**
-	 * 消息处理方法
+	 * 消息分发
 	 * @param channel 收到消息的频道名
 	 * @param message 消息内容
 	 */
-	public void onMessage(String channel, String message);
+	public void dispatch(String channel, String message);
 }

@@ -126,6 +126,7 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	/**
 	 * @param timeoutMills (milliseconds)
 	 * @return
+	 * @see #timeoutMills
 	 */
 	public AbstractConsumer  setTimeoutMills(int timeoutMills) {
 		if(timeoutMills>0)
@@ -133,6 +134,11 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 		return this;
 	}
 	
+	/**
+	 * @see #isFifo
+	 * @param fifo  
+	 * @return
+	 */
 	public AbstractConsumer  setFifo(boolean fifo) {
 		this.isFifo = fifo;
 		return this;

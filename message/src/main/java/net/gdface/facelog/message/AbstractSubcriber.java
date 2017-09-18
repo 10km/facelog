@@ -5,7 +5,7 @@ package net.gdface.facelog.message;
  * @author guyadong
  *
  */
-public abstract class AbstractSubcriber extends ChannelDispatcher implements IMessageDispatcher, ISubscriber,AutoCloseable  {
+public abstract class AbstractSubcriber extends ChannelDispatcher implements AutoCloseable  {
 	public AbstractSubcriber() {
 	}
 	
@@ -23,20 +23,21 @@ public abstract class AbstractSubcriber extends ChannelDispatcher implements IMe
 	
 
 	@Override
-	public void subscribe(String... channels) {
+	public String[] subscribe(String... channels) {
 		synchronized (this) {
-			super.subscribe(channels);
-			channels = getSubscribes();
+			channels = super.subscribe(channels);
 			if (0 < channels.length)
 				this._subscribe(channels);
+			return channels;
 		}
 	}
 	
 	@Override
-	public void unsubscribe(String... channels){
+	public String[] unsubscribe(String... channels){
 		synchronized (this) {
-			super.unsubscribe(channels);
-			_unsubscribe(getSubscribes());
+			channels = super.unsubscribe(channels);
+			_unsubscribe(channels);
+			return channels;
 		}
 	}
 
