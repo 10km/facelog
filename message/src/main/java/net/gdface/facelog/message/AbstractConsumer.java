@@ -40,7 +40,7 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 		@Override
 		public void run() {
 			final Runnable customRun = getCustomRunnable();
-			while(!isClosed()){
+			while(isOpened()){
 				try{
 					if(null != customRun)
 						customRun.run();	
@@ -48,33 +48,55 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 					e.printStackTrace();
 				}
 			}
+			reset();
 		}			
 	};
-	
 	/**
-	 * 创建消费线程,如果指定了{@link #executorService} ，则消费线程在线程池中执行<br>
-	 * 否则创建新线程(线程同步)
+	 * 创建消费线程,如果指定了{@link #executorService} ，则消费线程在线程池中执行,
+	 * 否则创建新线程(线程同步)<br>
+	 * 此方法保证在多线程环境下只创建一个消费线程<br>
+	 * {@link State#OPENED}是瞬态,所以当状态为{@link State#OPENED}时线程要等待状态切换为{@link State#INIT},
+	 * 参见{@link #reset()}方法
 	 */
 	protected void open(){
 		// Double Checked Locking
-		if(state == State.OPENED)return;
-		synchronized(this){
+		// check 1
+		try{
 			if(state == State.OPENED)return;
-			state = State.OPENED;			
-			if(null != executorService){
-				try{
-					executorService.submit(customeLoop);
-					return ;
-				}catch(RejectedExecutionException e){
-					executorService = null;
-					logger.warn("RejectedExecutionException: {}",e.getMessage());			
+			if(state == State.CLOSED){
+				synchronized(this){
+					while(state != State.INIT){
+						// 等待状态变为State.INIT 参见reset()方法
+						this.wait();
+					}
 				}
 			}
-			Thread thread=new Thread(customeLoop);
-			thread.setDaemon(this.daemon);
-			thread.start();
-			return ;
-		}
+			// 当前状态为 State.INIT
+			synchronized(this){
+				// check 2
+				while(state != State.INIT){
+					if(state == State.OPENED)return;
+					if(state == State.CLOSED){
+						// 等待状态变为State.INIT 参见reset()方法
+						this.wait();
+					}
+				}
+				state = State.OPENED;	
+				if(null != executorService){
+					try{
+						executorService.submit(customeLoop);
+						return ;
+					}catch(RejectedExecutionException e){
+						executorService = null;
+						logger.warn("RejectedExecutionException: {}",e.getMessage());			
+					}
+				}
+				Thread thread=new Thread(customeLoop);
+				thread.setDaemon(this.daemon);
+				thread.start();
+				return ;
+			}
+		} catch (InterruptedException e) {}
 	}
 	
 	/**
@@ -84,7 +106,20 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	@Override
 	public void close(){
 		synchronized( this ){
-			state = State.CLOSED;
+			if(state == State.OPENED)
+				state = State.CLOSED;
+		}
+	}
+
+	private boolean isOpened(){
+		return this.state == State.OPENED;
+	}
+
+	/** 状态置为 {@link State#INIT} */
+	private void reset(){
+		synchronized( this ){
+			this.state = State.INIT;
+			this.notifyAll();
 		}
 	}
 
@@ -111,9 +146,5 @@ public abstract class AbstractConsumer implements AutoCloseable,Constant{
 	public AbstractConsumer  setDaemon(boolean daemon) {
 		this.daemon = daemon;
 		return this;
-	}
-
-	private boolean isClosed(){
-		return this.state == State.CLOSED;
 	}
 }
