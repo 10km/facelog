@@ -9,7 +9,8 @@ import java.util.concurrent.TimeUnit;
 import redis.clients.jedis.Jedis;
 
 /**
- * {@link AbstractConsumer}消费者模型实现,支持多个list阻塞式读取(blpop, brpop)
+ * {@link AbstractConsumer}消费者模型实现,支持多个list阻塞式读取(blpop, brpop)<br>
+ * 执行 {@link #subscribe(String...)}方法时会自动开启消费线程
  * @author guyadong
  *
  * @param <T>
@@ -100,6 +101,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	@SuppressWarnings("rawtypes")
 	public Set<Channel> register(Channel... channels) {
 		Set<Channel> chSet = register.register(channels);
+		this.open();
 		return chSet;
 	}
 	
@@ -122,7 +124,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 
 	@Override
 	public void unsubscribe(String... channels) {
-		this.register.unsubscribe(channels);		
+		this.register.unsubscribe(channels);
 	}
 
 	@SuppressWarnings("rawtypes")

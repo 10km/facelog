@@ -90,7 +90,7 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 	}
 
 	/**
-	 * 改为public访问 
+	 * 改为public访问,调用者必须显式调用此方法 
 	 */
 	@Override
 	public void open() {
