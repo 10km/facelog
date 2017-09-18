@@ -31,4 +31,14 @@ public class RedisProducer<T> extends Producer<T> implements IRedisComponent {
 	public RedisProducer(Type type) {
 		this(type,JedisPoolLazy.getDefaultInstance());
 	}
+
+	@Override
+	public int produce(@SuppressWarnings("unchecked") T... array) {
+		return ((RedisQueue<T>)queue).offer(this.offerLast,array);
+	}
+
+	@Override
+	public int produce(boolean offerLast, @SuppressWarnings("unchecked") T... array) {
+		return ((RedisQueue<T>)queue).offer(offerLast,array);
+	}
 }

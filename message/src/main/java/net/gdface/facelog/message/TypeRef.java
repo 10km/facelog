@@ -9,9 +9,20 @@ import java.lang.reflect.Type;
  */
 public class TypeRef<T> {
     protected final Type type;
+	protected final Class<?> rawType;
+    private static Class<?> getRawClass(Type type){
+        if(type instanceof Class<?>){
+            return (Class<?>) type;
+        } else if(type instanceof ParameterizedType){
+            return getRawClass(((ParameterizedType) type).getRawType());
+        } else{
+            throw new IllegalArgumentException("invalid type");
+        }
+    }
     protected TypeRef(){
         Type superClass = getClass().getGenericSuperclass();
         this.type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+        this.rawType = getRawClass(((ParameterizedType) superClass).getActualTypeArguments()[0]);
     }
 
     /**
@@ -20,4 +31,7 @@ public class TypeRef<T> {
     public Type getType() {
         return type;
     }
+	public Class<?> getRawType() {
+		return rawType;
+	}
 }

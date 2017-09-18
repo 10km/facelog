@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
  *
  * @param <T>
  */
-public class Producer<T> implements IQueueComponent<T>{
+public class Producer<T> extends IProducer.AbstractHandler<T> implements IQueueComponent<T>{
 	protected BlockingQueue<T> queue;
 	public Producer() {
 		super();
@@ -20,17 +20,9 @@ public class Producer<T> implements IQueueComponent<T>{
 		this.queue = queue;
 	}
 	
-	/**
-	 * 向队列{@link #queue}中压入数据
-	 * @param t
-	 * @param fifo 为false则为栈模型(向队列头部添加数据),<br>
-	 *                      为栈模型时 {@link #queue}必须为双向队列{@link BlockingDeque}<br>
-	 * @return
-	 */
-	public boolean produce(T t,boolean fifo){
-		if(null == queue)
-			throw new NullPointerException("the field 'queue' not be initialized");
-		if(! fifo ){
+	@Override
+	public boolean produce(T t,boolean offerLast){
+		if(! offerLast ){
 			if(queue instanceof BlockingDeque)
 				return ((BlockingDeque<T>)queue).offerFirst(t);
 			else
@@ -39,17 +31,14 @@ public class Producer<T> implements IQueueComponent<T>{
 			return queue.offer(t);
 	}
 	
-	/**
-	 * 向队列尾部添加数据
-	 * @param t
-	 * @return
-	 */
+	@Override
 	public boolean produce(T t){
-		if(null == queue)
-			throw new NullPointerException("the field 'queue' not be initialized");
-		return queue.offer(t);
+		if(this.offerLast)
+			return queue.offer(t);
+		else
+			return produce(t,offerLast);
 	}
-	
+
 	@Override
 	public BlockingQueue<T> getQueue() {
 		return queue;
@@ -64,5 +53,4 @@ public class Producer<T> implements IQueueComponent<T>{
 	public String getQueueName() {
 		return "unknow";
 	}
-
 }

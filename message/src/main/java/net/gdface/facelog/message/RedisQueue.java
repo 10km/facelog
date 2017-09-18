@@ -43,15 +43,7 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 		return this;
 	}
 
-	private Jedis getJedis(){
-        return poolLazy.apply();
-    }
-    
-    private void releaseJedis() {
-    	poolLazy.free();
-    }
-    
-	public RedisQueue(Type type) {
+    public RedisQueue(Type type) {
 		this(type,JedisPoolLazy.getDefaultInstance());
 	}
 	
@@ -90,11 +82,11 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	@Override
 	public int size() {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			return jedis.llen(queueName).intValue();
 		}finally{
-			this.releaseJedis();
+			poolLazy.free();
 		}
 	}
 
@@ -129,21 +121,21 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	@Override
 	public E pollFirst() {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			return this.encoder.fromJson(jedis.lpop(this.queueName),this.getType());
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
 	@Override
 	public E pollLast() {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			return this.encoder.fromJson(jedis.rpop(this.queueName),this.getType());
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
@@ -163,27 +155,27 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	@Override
 	public E peekFirst() {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			List<String> list = jedis.lrange(this.queueName,0,0);
 			if(list.size()>0)
 				return this.encoder.fromJson(list.get(0),this.getType());
 			else return null;
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
 	@Override
 	public E peekLast() {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			List<String> list = jedis.lrange(this.queueName,-1,-1);
 			if(list.size()>0)
 				return this.encoder.fromJson(list.get(0),this.getType());
 			else return null;
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
@@ -211,27 +203,59 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 	@Override
 	public boolean offerFirst(E e) {
 		if (e == null) throw new NullPointerException();
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			jedis.lpush(this.queueName, this.encoder.toJsonString(e));
 			return true;
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
-
+	
 	@Override
 	public boolean offerLast(E e) {
 		if (e == null) throw new NullPointerException();
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			jedis.rpush(this.queueName, this.encoder.toJsonString(e));
 			return true;
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
+	/**
+	 * 向队列添加一组对象
+	 * @param offerLast 是否添加到队列末尾
+	 * @param array 对象数组
+	 * @return
+	 */
+	public int offer(boolean offerLast,@SuppressWarnings("unchecked") E... array) {
+		List<E> list = CommonUtils.cleanNullAsList(array);
+		if(list.isEmpty())return 0;
+		String[] strings = new String[list.size()];
+		for(int i =0;i<strings.length;++i){
+			strings[i] = this.encoder.toJsonString(list.get(i));
+		}
+		Jedis jedis = poolLazy.apply();
+		try{
+			if(offerLast)
+				return jedis.rpush(this.queueName, strings).intValue();
+			else
+				return jedis.lpush(this.queueName, strings).intValue();
+		}finally{
+			poolLazy.free();
+		}
+	}
+	/** @see #offer(boolean, Object...) */
+	public int offerFirst(@SuppressWarnings("unchecked") E... e) {
+		return offer(false,e);
+	}
+	/** @see #offer(boolean, Object...) */
+	public int offerLast(@SuppressWarnings("unchecked") E... e) {
+		return offer(true,e);
+	}
+	
 	@Override
 	public void putFirst(E e) throws InterruptedException {
 		offerFirst(e);
@@ -254,47 +278,47 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	@Override
 	public E takeFirst() throws InterruptedException {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			List<String> list = jedis.blpop(Integer.MAX_VALUE, this.queueName);
 			return this.encoder.fromJson(list.get(0),getType());
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
 	@Override
 	public E takeLast() throws InterruptedException {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{
 			List<String> list = jedis.brpop(Integer.MAX_VALUE, this.queueName);
 			return this.encoder.fromJson(list.get(0),getType());
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
 	@Override
 	public E pollFirst(long timeout, TimeUnit unit) throws InterruptedException {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{			
 			List<String> list = jedis.blpop((int)TimeUnit.SECONDS.convert(timeout, unit), this.queueName);
 			if(list.isEmpty())return null;
 			return this.encoder.fromJson(list.get(1),getType());
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
 	@Override
 	public E pollLast(long timeout, TimeUnit unit) throws InterruptedException {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try{			
 			List<String> list = jedis.brpop((int)TimeUnit.SECONDS.convert(timeout, unit), this.queueName);
 			if(list.isEmpty())return null;
 			return this.encoder.fromJson(list.get(1),getType());
 		}finally{
-			releaseJedis();
+			poolLazy.free();
 		}
 	}
 
