@@ -22,7 +22,11 @@ public class Channel<T> implements IMessageAdapter<Object> {
 
 	/**  频道对应的消息处理器 */
 	private IMessageAdapter<T> adapter;
-
+	
+	public Channel(String name, Class<T> clazz) {
+		this(name,(Type)clazz);
+	}
+	
 	public Channel(String name, Type type) {
 		super();
 		Assert.notEmpty(name, "name");
