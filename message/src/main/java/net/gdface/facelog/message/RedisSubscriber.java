@@ -41,14 +41,13 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	 * @return 
 	 */
 	public static RedisSubscriber getSubscriber(JedisPoolLazy jedisPoolLazy) {
-		synchronized(RedisSubscriber.class){
-			RedisSubscriber pool = subscribers.get(jedisPoolLazy);
-			if (null == pool) {
-				pool = new RedisSubscriber(jedisPoolLazy).setDaemon(true);
-				subscribers.put(jedisPoolLazy, pool);
-			}
-			return pool;
+		// Double Checked Locking
+		RedisSubscriber subscriber = subscribers.get(jedisPoolLazy);
+		if(null == subscriber){
+			subscribers.putIfAbsent(jedisPoolLazy, new RedisSubscriber(jedisPoolLazy).setDaemon(true));
+			subscriber = subscribers.get(jedisPoolLazy);
 		}
+		return subscriber;
 	}
 
 	private final JedisPoolLazy poolLazy;

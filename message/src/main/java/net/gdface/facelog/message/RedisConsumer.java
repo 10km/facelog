@@ -34,20 +34,21 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	}
 	
 	/**
-	 * 返回 {@link JedisPoolLazy}对应的实例,如果{@link #consumers}没有找到，就创建一个新实例并加入{@link #consumers}
+	 * 返回 {@link JedisPoolLazy}对应的实例,如果{@link #consumers}没有找到，
+	 * 就创建一个新实例并加入{@link #consumers}
 	 * @param jedisPoolLazy
 	 * @return 
 	 */
 	public static RedisConsumer getSubscriber(JedisPoolLazy jedisPoolLazy) {
-		synchronized(RedisConsumer.class){
-			RedisConsumer pool = consumers.get(jedisPoolLazy);
-			if (null == pool) {
-				pool = new RedisConsumer(jedisPoolLazy);
-				pool.setDaemon(true);
-				consumers.put(jedisPoolLazy, pool);
-			}
-			return pool;
+		// Double Checked Locking
+		RedisConsumer consumer = consumers.get(jedisPoolLazy);
+		if (null == consumer) {
+			consumers.putIfAbsent(jedisPoolLazy,
+					(RedisConsumer) new RedisConsumer(jedisPoolLazy).setDaemon(true));
+			consumer = consumers.get(jedisPoolLazy);
 		}
+		return consumer;
+
 	}
 	
 	private final JedisPoolLazy poolLazy;
