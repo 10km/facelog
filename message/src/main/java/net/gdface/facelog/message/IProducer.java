@@ -1,6 +1,8 @@
 package net.gdface.facelog.message;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.concurrent.BlockingDeque;
 
