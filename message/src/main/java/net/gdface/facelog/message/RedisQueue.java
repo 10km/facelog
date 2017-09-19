@@ -39,7 +39,7 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	public RedisQueue<E> setQueueName(String queueName) {
 		if( ! Judge.isEmpty(queueName))
-			this.queueName = queueName;
+			this.queueName = ComponentType.Queue.check(poolLazy,queueName);
 		return this;
 	}
 
@@ -52,8 +52,8 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 			throw new IllegalArgumentException("invalid type of 'type' :must be Class<?> or ParameterizedType");
 		}
 		this.type = type;
-		this.queueName = type.toString();
 		this.poolLazy = poolLazy;
+		this.setQueueName(type.toString());
 	}
 
 	public Type getType() {

@@ -74,12 +74,14 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 		return names;
 	}
 
+	protected String check(String name){return name;}
+	
 	@SuppressWarnings({ "rawtypes" })
 	public Set<Channel> register(Channel... channels) {
 		synchronized (this) {
 			HashSet<Channel> chSet = new HashSet<Channel>(CommonUtils.cleanNullAsList(channels));
 			for (Channel ch : chSet) {
-				channelSubs.put(ch.name, ch);
+				channelSubs.put(check(ch.name), ch);
 			}
 			subscribe(getChannelNames(chSet).toArray(new String[0]));
 			return chSet;

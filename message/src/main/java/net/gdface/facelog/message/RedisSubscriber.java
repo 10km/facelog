@@ -139,5 +139,10 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 		jedisPubSub.setDispatcher(dispatcher);
 		return this;
 	}
+
+	@Override
+	protected String check(String name) {
+		return ComponentType.Channel.check(poolLazy, name);
+	}
 	
 }
