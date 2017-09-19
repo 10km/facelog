@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import net.gdface.facelog.simplemq.Channel;
 import net.gdface.facelog.simplemq.IMessageAdapter;
+import net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException;
 import net.gdface.facelog.simplemq.redis.JedisPoolLazy;
 import net.gdface.facelog.simplemq.redis.RedisSubscriber;
 
@@ -23,19 +24,19 @@ public class TestRedisSubscriber {
 		Channel<String> chat1 = new Channel<String>("chat1",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","chat1",t);
 			}} );
 		Channel<String> chat2 = new Channel<String>("chat2",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","chat2",t);
 			}} );
 		Channel<String> chat3 = new Channel<String>("chat3",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","chat3",t);
 			}} );
 		redisSubscriber.register(chat1,chat2);

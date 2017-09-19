@@ -57,7 +57,7 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 	/** 消息处理器 */
 	private IMessageAdapter<T> adapter = new IMessageAdapter<T>(){
 		@Override
-		public void onSubscribe(T t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+		public void onSubscribe(T t) throws SmqUnsubscribeException {
 		}};
 	
 	public ConsumerSingle<T> setAdapter(IMessageAdapter<T> adapter) {

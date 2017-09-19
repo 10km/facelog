@@ -53,7 +53,7 @@ public class Channel<T> implements IMessageAdapter<Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onSubscribe(Object t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+	public void onSubscribe(Object t) throws SmqUnsubscribeException {
 		if(null == this.adapter || null == t)return;
 		try{
 			this.adapter.onSubscribe((T) t);

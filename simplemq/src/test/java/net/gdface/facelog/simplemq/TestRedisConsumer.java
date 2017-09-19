@@ -37,19 +37,19 @@ public class TestRedisConsumer {
 		Channel<String> list1 = new Channel<String>("list1",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","list1",t);
 			}} );
 		Channel<String> list2 = new Channel<String>("list2",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","list2",t);
 			}} );
 		Channel<String> list3 = new Channel<String>("list3",String.class,new IMessageAdapter<String>(){
 
 			@Override
-			public void onSubscribe(String t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
+			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","list3",t);
 			}} );
 		consumer.register(list1,list2);
