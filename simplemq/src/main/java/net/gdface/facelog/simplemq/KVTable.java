@@ -18,22 +18,6 @@ public abstract class KVTable<V>{
 	protected static  class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		
 	}
-	public static class TableException extends RuntimeException{
-		private static final long serialVersionUID = 1L;
-
-		public TableException(String message, Throwable cause) {
-			super(message, cause);
-		}
-
-		public TableException(String message) {
-			super(message);
-		}
-
-		public TableException(Throwable cause) {
-			super(cause);
-		}
-	}
-	
 	public static interface Filter<V>{
 		boolean run(String key, V value) throws BreakException;
 	}

@@ -11,7 +11,7 @@ import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
 import net.gdface.facelog.simplemq.KVTable;
-import net.gdface.facelog.simplemq.KVTable.TableException;
+import net.gdface.facelog.simplemq.exceptions.SmqTableException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
@@ -104,7 +104,7 @@ public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
 				ctx.hdel(key, nullFields.toArray(new String[0]));
 			List<Object> response = ctx.exec();
 			if(response.isEmpty())
-				throw new TableException("Transaction error");
+				throw new SmqTableException("Transaction error");
 		} finally {
 			releaseJedis(jedis);
 		}
@@ -170,7 +170,7 @@ public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
 				jedis.del(keysNull.toArray(new String[0]));
 			List<Object> response = ctx.exec();
 			if(response.isEmpty())
-				throw new TableException("Transaction error");
+				throw new SmqTableException("Transaction error");
 		} finally {
 			releaseJedis(jedis);
 		}
@@ -207,7 +207,7 @@ public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
 				jedis.del(keysNull.toArray(new String[0]));
 			List<Object> response = ctx.exec();
 			if(response.isEmpty())
-				throw new TableException("Transaction error");
+				throw new SmqTableException("Transaction error");
 		} finally {
 			releaseJedis(jedis);
 		}
