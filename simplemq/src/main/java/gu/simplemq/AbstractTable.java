@@ -49,7 +49,6 @@ public abstract class AbstractTable<V>{
 		return type;
 	}
 	
-	protected static final String prefixEnd= ".";
 	private String keyHelper(V v){
 		if(null == this.keyHelper)
 			throw new UnsupportedOperationException("because of null keyHelper");

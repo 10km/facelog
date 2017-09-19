@@ -17,6 +17,7 @@ import redis.clients.jedis.Transaction;
 
 public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy poolLazy;
+	private static final String prefixEnd= ".";
 	/** 表名 */
 	private String prefix = null;
 	@Override
@@ -39,13 +40,14 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	public RedisTable(Type type,JedisPoolLazy pool, String tableName){
 		super(type);
 		poolLazy = pool;
-		if(null==tableName || tableName.trim().isEmpty()){
+		try{
+			this.setTableName(tableName);
+		}catch(Exception e){
 			if(type instanceof Class)
 				this.setTableName(((Class<?>)type).getSimpleName());
 			else
 				this.setTableName(type.toString());
-		}else
-			this.setTableName(tableName);
+		}
 	}
 
 	@Override
@@ -275,11 +277,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		if(null == prefix || prefix.trim().isEmpty() )
 			throw new IllegalArgumentException("'prefix' must not be null or empty");
 		return RedisComponentType.Table.check(this.poolLazy, 
-				prefix.trim().replaceAll("\\s+", "_").replaceAll("\\.", "_") + prefixEnd);		
+				prefix.trim().replaceAll("\\s+", "_").replaceAll("\\.", "_") );		
 	}
 
 	private String wrapKey(String key) {
-		return this.prefix + key;
+		return new StringBuilder(this.prefix).append(prefixEnd).append(key).toString();
 	}
 
 	private String unwrapKey(String key) {
