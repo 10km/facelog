@@ -12,12 +12,13 @@ import com.alibaba.fastjson.util.FieldInfo;
 
 import gu.simplemq.AbstractTable;
 import gu.simplemq.exceptions.SmqTableException;
-import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy poolLazy;
+	/** 表名 */
+	private String prefix = null;
 	@Override
 	public JedisPoolLazy getPoolLazy() {
 		return poolLazy;
@@ -32,12 +33,13 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
     }
     
 	public RedisTable(Type type) {
-		this(type,JedisPoolLazy.getDefaultInstance());
+		this(type,JedisPoolLazy.getDefaultInstance(), null);
 	}
 	
-	public RedisTable(Type type,JedisPoolLazy pool){
+	public RedisTable(Type type,JedisPoolLazy pool, String tableName){
 		super(type);
 		poolLazy = pool;
+		this.setTableName(tableName);
 	}
 
 	@Override
@@ -255,8 +257,26 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		return fields;
 	}
 
-	@Override
-	protected String check(String name) throws SmqTypeException {
-		return RedisComponentType.Table.check(this.poolLazy,name);
+	public String getTableName() {
+		return prefix;
+	}
+
+	public void setTableName(String prefix) {
+		this.prefix = format(prefix);
+	}
+
+	private String format(String prefix) {
+		if(null == prefix || 0 == prefix.trim().length() )
+			throw new IllegalArgumentException("'prefix' must not be null or empty");
+		return RedisComponentType.Table.check(this.poolLazy, 
+				prefix.trim().replaceAll("\\s+", "_").replaceAll("\\.", "_") + prefixEnd);		
+	}
+
+	private String wrapKey(String key) {
+		return this.prefix + key;
+	}
+
+	private String unwrapKey(String key) {
+		return key.substring(prefix.length()+prefixEnd.length());
 	}
 }

@@ -14,7 +14,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import gu.simplemq.exceptions.SmqTypeException;
 import gu.simplemq.json.JsonEncoder;
 import gu.simplemq.utils.Assert;
 import gu.simplemq.utils.TypeUtils;
@@ -35,59 +34,22 @@ public abstract class AbstractTable<V>{
 	protected final boolean isJavaBean ;
 	protected JsonEncoder encoder = JsonEncoder.getEncoder();
 	protected IKeyHelper<V> keyHelper;
-	/** 表名 */
-	private String prefix = null;
 	private List<String>filedNames = null;
 
 	public AbstractTable(Type type) {
-		this(type,null);
-	}
-
-	public AbstractTable(Type type, String prefix) {
 		super();
 		if( ! (type instanceof Class<?> ||  type instanceof ParameterizedType) ){
 			throw new IllegalArgumentException("invalid type of 'type' :must be Class<?> or ParameterizedType");
 		}
 		this.type = type;
 		this.isJavaBean = TypeUtils.isJavaBean(type);
-		this.setTableName(null == prefix ? type.toString():prefix);
 	}
 
 	public Type getType() {
 		return type;
 	}
 	
-	public String getTableName() {
-		return prefix;
-	}
-
-	public void setTableName(String prefix) {
-		this.prefix = format(prefix);
-	}
-
-	/**
-	 * 子类重写此方法,检查通道名是否合法
-	 * @param name
-	 * @return name 否则抛出异常
-	 * @throws SmqTypeException 
-	 */
-	protected String check(String name) throws SmqTypeException{return name;}
-	
-	private static final String prefixEnd= ".";
-	private String format(String prefix){
-		if(null == prefix || 0 == prefix.trim().length() )
-			throw new IllegalArgumentException("'prefix' must not be null or empty");
-		return check( prefix.trim().replaceAll("\\s+", "_").replaceAll("\\.", "_") + prefixEnd);		
-	}
-	
-	private String wrapKey(String key){
-		return this.prefix + key;
-	}
-	
-	private String unwrapKey(String key){
-		return key.substring(prefix.length()+prefixEnd.length());
-	}
-	
+	protected static final String prefixEnd= ".";
 	private String keyHelper(V v){
 		if(null == this.keyHelper)
 			throw new UnsupportedOperationException("because of null keyHelper");
