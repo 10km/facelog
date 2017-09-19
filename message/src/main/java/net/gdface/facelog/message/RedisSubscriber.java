@@ -142,7 +142,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 
 	@Override
 	protected String check(String name) {
-		return ComponentType.Channel.check(poolLazy, name);
+		return RedisComponentType.Channel.check(poolLazy, name);
 	}
 	
 }

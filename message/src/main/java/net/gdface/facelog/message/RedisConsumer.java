@@ -55,7 +55,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	private final ChannelDispatcher register=new ChannelDispatcher(){
 		@Override
 		protected String check(String name) {
-			return ComponentType.Queue.check(poolLazy,name);
+			return RedisComponentType.Queue.check(poolLazy,name);
 		}};
 	/** 以秒为单位的超时参数 */
 	private int timeout; 

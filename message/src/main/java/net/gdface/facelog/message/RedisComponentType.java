@@ -2,7 +2,7 @@ package net.gdface.facelog.message;
 
 import redis.clients.jedis.Jedis;
 
-enum ComponentType{
+enum RedisComponentType{
 	Table,Queue, Channel;
 	enum RedisKeyType{string,list,set,zset,none,hash}
 	public String check(JedisPoolLazy poolLazy,String name){

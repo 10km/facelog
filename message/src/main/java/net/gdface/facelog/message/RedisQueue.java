@@ -39,7 +39,7 @@ public class RedisQueue<E> extends AbstractQueue<E>implements IRedisQueue<E> {
 
 	public RedisQueue<E> setQueueName(String queueName) {
 		if( ! Judge.isEmpty(queueName))
-			this.queueName = ComponentType.Queue.check(poolLazy,queueName);
+			this.queueName = RedisComponentType.Queue.check(poolLazy,queueName);
 		return this;
 	}
 
