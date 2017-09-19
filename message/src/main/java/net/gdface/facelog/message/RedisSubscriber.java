@@ -1,7 +1,7 @@
 package net.gdface.facelog.message;
 
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -21,7 +21,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	/**
 	 * 保存每个 {@link JedisPoolLazy}对应的实例
 	 */
-	private static final Map<JedisPoolLazy,RedisSubscriber>  subscribers = new Hashtable<JedisPoolLazy,RedisSubscriber>();
+	private static final ConcurrentMap<JedisPoolLazy,RedisSubscriber>  subscribers = new ConcurrentHashMap<JedisPoolLazy,RedisSubscriber>();
 	
 	/**
 	 * 删除所有{@link RedisSubscriber}对象

@@ -1,9 +1,9 @@
 package net.gdface.facelog.message;
 
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import redis.clients.jedis.Jedis;
@@ -19,7 +19,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	/**
 	 * 保存每个 {@link JedisPoolLazy}对应的实例
 	 */
-	private static final Map<JedisPoolLazy,RedisConsumer>  consumers = new Hashtable<JedisPoolLazy,RedisConsumer>();
+	private static final ConcurrentMap<JedisPoolLazy,RedisConsumer>  consumers = new ConcurrentHashMap<JedisPoolLazy,RedisConsumer>();
 	
 	/**
 	 * 删除所有{@link RedisSubscriber}对象

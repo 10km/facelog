@@ -1,12 +1,12 @@
 package net.gdface.facelog.message;
 
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import redis.clients.jedis.Jedis;
 
 public class NameChecker {
-	private static final Map<JedisPoolLazy,NameChecker> checkers = new Hashtable<JedisPoolLazy,NameChecker>();
+	private static final ConcurrentMap<JedisPoolLazy,NameChecker> checkers = new ConcurrentHashMap<JedisPoolLazy,NameChecker>();
 
 	public static NameChecker getNameChecker(JedisPoolLazy poolLazy){
 		// Double Checked Locking
@@ -44,16 +44,16 @@ public class NameChecker {
 			}			
 		}
 	}
-	private final Map<String,ComponentType> nameTypes = new Hashtable<String,ComponentType>(); 
+	private final ConcurrentMap<String,ComponentType> nameTypes = new ConcurrentHashMap<String,ComponentType>(); 
 	protected NameChecker(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 	}
 	public void check(String name,ComponentType type){
 		if(Judge.isEmpty(name)|| null == type)
-			throw new IllegalArgumentException("the arguments must not be null");
+			throw new IllegalArgumentException("the arguments must not be null or empty");
 		ComponentType old = nameTypes.putIfAbsent(name, type);
-		if(null != old && old != type){
+		if(old != type){
 			throw new IllegalStateException(String.format("the '%s' can't be used for %s",name,type.toString()));
 		}
 	}
