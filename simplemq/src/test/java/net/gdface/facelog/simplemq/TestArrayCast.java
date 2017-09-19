@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import net.gdface.facelog.simplemq.CommonUtils;
+import net.gdface.facelog.simplemq.utils.CommonUtils;
 
 public class TestArrayCast {
 	

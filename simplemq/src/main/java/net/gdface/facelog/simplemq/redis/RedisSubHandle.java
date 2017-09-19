@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.gdface.facelog.simplemq.IMessageDispatcher;
-import net.gdface.facelog.simplemq.Judge;
+import net.gdface.facelog.simplemq.utils.Judge;
 import redis.clients.jedis.JedisPubSub;
 
 public class RedisSubHandle extends JedisPubSub {

@@ -15,8 +15,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.gdface.facelog.simplemq.json.JsonEncoder;
+import net.gdface.facelog.simplemq.utils.Assert;
+import net.gdface.facelog.simplemq.utils.TypeUtils;
 
-public abstract class KVTable<V>{
+public abstract class AbstractTable<V>{
 	protected static  class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		
 	}
@@ -35,7 +37,7 @@ public abstract class KVTable<V>{
 	private final String prefix;
 	private List<String>filedNames = null;
 
-	public KVTable(Type type) {
+	public AbstractTable(Type type) {
 		super();
 		if( ! (type instanceof Class<?> ||  type instanceof ParameterizedType) ){
 			throw new IllegalArgumentException("invalid type of 'type' :must be Class<?> or ParameterizedType");

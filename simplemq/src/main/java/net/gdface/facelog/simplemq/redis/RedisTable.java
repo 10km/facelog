@@ -10,12 +10,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
-import net.gdface.facelog.simplemq.KVTable;
+import net.gdface.facelog.simplemq.AbstractTable;
 import net.gdface.facelog.simplemq.exceptions.SmqTableException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
-public class RedisTable<V> extends KVTable<V> implements IRedisComponent {
+public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy poolLazy;
 	@Override
 	public JedisPoolLazy getPoolLazy() {

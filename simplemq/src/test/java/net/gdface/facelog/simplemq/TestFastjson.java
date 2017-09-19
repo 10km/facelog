@@ -19,7 +19,7 @@ import com.alibaba.fastjson.serializer.SerializeBeanInfo;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.FieldInfo;
 
-import net.gdface.facelog.simplemq.TypeUtils;
+import net.gdface.facelog.simplemq.utils.TypeUtils;
 
 public class TestFastjson {
 	public interface Person<T>{

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
 import net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException;
 import net.gdface.facelog.simplemq.json.JsonEncoder;
+import net.gdface.facelog.simplemq.utils.CommonUtils;
 
 /**
  * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发

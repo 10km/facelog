@@ -5,6 +5,8 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.concurrent.BlockingDeque;
 
+import net.gdface.facelog.simplemq.utils.TypeUtils;
+
 /**
  * 生产者模型接口
  * @author guyadong

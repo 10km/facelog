@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException;
+import net.gdface.facelog.simplemq.utils.Assert;
 
 /**
  * (消息)频道对象定义<br>

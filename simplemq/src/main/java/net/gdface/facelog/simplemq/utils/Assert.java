@@ -6,7 +6,7 @@
 * @date 2015年4月23日 上午9:48:17 
 * @version V1.0   
 */
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.utils;
 
 import java.util.Collection;
 

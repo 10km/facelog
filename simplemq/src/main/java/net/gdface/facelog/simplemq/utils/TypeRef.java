@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.utils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
