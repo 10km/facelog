@@ -1,11 +1,12 @@
 package net.gdface.facelog.message;
 
+import net.gdface.facelog.message.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 enum RedisComponentType{
 	Table,Queue, Channel;
 	enum RedisKeyType{string,list,set,zset,none,hash}
-	public String check(JedisPoolLazy poolLazy,String name){
+	public String check(JedisPoolLazy poolLazy,String name) throws SmqTypeException{
 		if(null == name || 0 == name.length())
 			throw new IllegalArgumentException("name must not be null or empty"); 
 		Jedis jedis = poolLazy.apply();
@@ -20,7 +21,7 @@ enum RedisComponentType{
 			case Channel:
 			default:
 			}
-			throw new IllegalStateException(String.format("the '%s' can't be used for %s",name,this.name()));
+			throw new SmqTypeException(String.format("the '%s' can't be used for %s",name,this.name()));
 		}finally{
 			poolLazy.free();
 		}			

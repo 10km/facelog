@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import net.gdface.facelog.message.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -54,7 +55,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 	private final JedisPoolLazy poolLazy;
 	private final ChannelDispatcher register=new ChannelDispatcher(){
 		@Override
-		protected String check(String name) {
+		protected String check(String name) throws SmqTypeException {
 			return RedisComponentType.Queue.check(poolLazy,name);
 		}};
 	/** 以秒为单位的超时参数 */

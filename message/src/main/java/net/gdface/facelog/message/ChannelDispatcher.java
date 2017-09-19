@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.gdface.facelog.message.IMessageAdapter.UnsubscribeException;
+import net.gdface.facelog.message.exceptions.SmqTypeException;
 
 /**
  * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发
@@ -74,7 +75,13 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 		return names;
 	}
 
-	protected String check(String name){return name;}
+	/**
+	 * 子类重写此方法,检查通道名是否合法
+	 * @param name
+	 * @return name 否则抛出异常
+	 * @throws SmqTypeException 
+	 */
+	protected String check(String name) throws SmqTypeException{return name;}
 	
 	@SuppressWarnings({ "rawtypes" })
 	public Set<Channel> register(Channel... channels) {

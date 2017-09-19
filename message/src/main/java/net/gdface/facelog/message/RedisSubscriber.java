@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
+import net.gdface.facelog.message.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
@@ -141,7 +142,7 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 	}
 
 	@Override
-	protected String check(String name) {
+	protected String check(String name) throws SmqTypeException {
 		return RedisComponentType.Channel.check(poolLazy, name);
 	}
 	
