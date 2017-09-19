@@ -11,6 +11,7 @@ import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
 import gu.exceptions.SmqTableException;
+import gu.exceptions.SmqTypeException;
 import gu.simplemq.AbstractTable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
@@ -252,6 +253,10 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			fields.add(field.name);
 		}
 		return fields;
+	}
 
+	@Override
+	protected String check(String name) throws SmqTypeException {
+		return RedisComponentType.Table.check(this.poolLazy,name);
 	}
 }
