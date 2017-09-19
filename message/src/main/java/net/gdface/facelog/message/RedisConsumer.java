@@ -78,7 +78,10 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 				try{
 					String[] keys =register.getSubscribes();
 					// 订阅频道为0时关闭线程
-					if(0 == keys.length)close();
+					if(0 == keys.length){
+						close();
+						return;
+					}
 					if(isFifo){
 						list = jedis.blpop(timeout, keys);
 					}else{
