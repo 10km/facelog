@@ -9,17 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.gdface.facelog.simplemq.exceptions.SmqNotBeanException;
+
 /**
  * json实现对象序列化反序列化的抽象类
  * @author guyadong
  *
  */
 public abstract class JsonEncoder {
-	public static  class NotBeanException extends RuntimeException{
-		public NotBeanException(String string) {
-		}
-		private static final long serialVersionUID = 1L;
-	}
 	public JsonEncoder() {
 	
 	}
@@ -30,7 +27,7 @@ public abstract class JsonEncoder {
 	 */
 	public abstract String toJsonString(Object obj);
 	
-	public abstract Map<String,String> toJsonMap(Object obj)throws NotBeanException;
+	public abstract Map<String,String> toJsonMap(Object obj)throws SmqNotBeanException;
 
 	/**
 	 * deserializes json into T
@@ -40,7 +37,7 @@ public abstract class JsonEncoder {
 	 */
 	public abstract <T> T fromJson(String json, Type type);
 	
-	public abstract <T> T fromJson(Map<String,String> fieldHash, Type type)throws NotBeanException ;
+	public abstract <T> T fromJson(Map<String,String> fieldHash, Type type)throws SmqNotBeanException ;
 	
 	public Map<String,Object> fromJson(Map<String,String> fieldHash,Map<String,Type> types){
 		if(null == fieldHash) return null;
@@ -67,7 +64,7 @@ public abstract class JsonEncoder {
 		for( Object element:c){
 			try{
 				list.add(this.toJsonMap(element));
-			}catch(NotBeanException e){
+			}catch(SmqNotBeanException e){
 				list.add(this.toJsonString(element));
 			}
 		}

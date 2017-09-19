@@ -9,6 +9,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import net.gdface.facelog.simplemq.exceptions.SmqNotBeanException;
+
 /**
  * 
  * 基于fastjson实现{@link JsonEncoder}
@@ -36,10 +38,10 @@ class FastjsonEncoder extends JsonEncoder {
 	}
 
 	@Override
-	public Map<String, String> toJsonMap(Object bean)throws NotBeanException {
+	public Map<String, String> toJsonMap(Object bean)throws SmqNotBeanException {
 		if(null ==bean )return null;
 		if(!TypeUtils.isJavaBean(bean.getClass()))
-			throw new NotBeanException("invalid type,not a java bean object");		
+			throw new SmqNotBeanException("invalid type,not a java bean object");		
 
 		JSONObject jsonObject =_toJSONObject(bean);
 		Map<String, String> fields = new LinkedHashMap<String, String>();
@@ -60,9 +62,9 @@ class FastjsonEncoder extends JsonEncoder {
 	}
 	
 	@Override
-	public <T> T fromJson(Map<String, String> fieldHash, Type type)throws NotBeanException {
+	public <T> T fromJson(Map<String, String> fieldHash, Type type)throws SmqNotBeanException {
 		if(!TypeUtils.isJavaBean(type))
-			throw new NotBeanException("invalid type,not a java bean");
+			throw new SmqNotBeanException("invalid type,not a java bean");
 		if(null == fieldHash || fieldHash.isEmpty())
 			throw new IllegalArgumentException("the argument 'json' must not be null or empty");
 		Map<String, Object> fields = new LinkedHashMap<String,Object>(); 
