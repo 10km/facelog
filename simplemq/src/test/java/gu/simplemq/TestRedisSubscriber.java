@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.exceptions.SmqUnsubscribeException;
 import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisSubscriber;
 

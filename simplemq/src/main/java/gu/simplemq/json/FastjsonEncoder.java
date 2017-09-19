@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
-import gu.exceptions.SmqNotBeanException;
+import gu.simplemq.exceptions.SmqNotBeanException;
 import gu.simplemq.utils.TypeUtils;
 
 /**

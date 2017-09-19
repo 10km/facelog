@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import gu.exceptions.SmqNotBeanException;
+import gu.simplemq.exceptions.SmqNotBeanException;
 
 /**
  * json实现对象序列化反序列化的抽象类

@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
-import gu.exceptions.SmqTableException;
-import gu.exceptions.SmqTypeException;
 import gu.simplemq.AbstractTable;
+import gu.simplemq.exceptions.SmqTableException;
+import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 

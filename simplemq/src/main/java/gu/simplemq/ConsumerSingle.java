@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-import gu.exceptions.SmqUnsubscribeException;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
 
 /**
  * 基于阻塞队列 {@link BlockingQueue} 实现单个消费者模型<br>

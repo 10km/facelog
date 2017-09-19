@@ -1,4 +1,4 @@
-package gu.exceptions;
+package gu.simplemq.exceptions;
 
 public  class SmqNotBeanException extends SmqExcepiton{
 	public SmqNotBeanException(String string) {

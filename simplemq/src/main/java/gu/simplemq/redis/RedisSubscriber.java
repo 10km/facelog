@@ -5,9 +5,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
-import gu.exceptions.SmqTypeException;
 import gu.simplemq.AbstractSubcriber;
 import gu.simplemq.IMessageDispatcher;
+import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 

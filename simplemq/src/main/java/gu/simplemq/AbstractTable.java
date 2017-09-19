@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import gu.exceptions.SmqTypeException;
+import gu.simplemq.exceptions.SmqTypeException;
 import gu.simplemq.json.JsonEncoder;
 import gu.simplemq.utils.Assert;
 import gu.simplemq.utils.TypeUtils;

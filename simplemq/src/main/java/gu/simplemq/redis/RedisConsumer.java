@@ -6,11 +6,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-import gu.exceptions.SmqTypeException;
 import gu.simplemq.AbstractConsumer;
 import gu.simplemq.Channel;
 import gu.simplemq.ChannelDispatcher;
 import gu.simplemq.IMessageRegister;
+import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 /**

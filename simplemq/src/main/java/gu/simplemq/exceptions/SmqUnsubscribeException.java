@@ -1,4 +1,4 @@
-package gu.exceptions;
+package gu.simplemq.exceptions;
 
 import gu.simplemq.ChannelDispatcher;
 import gu.simplemq.IMessageAdapter;

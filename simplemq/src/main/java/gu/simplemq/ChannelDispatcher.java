@@ -12,8 +12,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gu.exceptions.SmqTypeException;
-import gu.exceptions.SmqUnsubscribeException;
+import gu.simplemq.exceptions.SmqTypeException;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.json.JsonEncoder;
 import gu.simplemq.utils.CommonUtils;
 

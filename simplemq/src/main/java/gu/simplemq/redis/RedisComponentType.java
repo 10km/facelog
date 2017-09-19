@@ -1,6 +1,6 @@
 package gu.simplemq.redis;
 
-import gu.exceptions.SmqTypeException;
+import gu.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 enum RedisComponentType{

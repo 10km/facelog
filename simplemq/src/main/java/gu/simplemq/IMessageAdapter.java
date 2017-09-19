@@ -1,6 +1,6 @@
 package gu.simplemq;
 
-import gu.exceptions.SmqUnsubscribeException;
+import gu.simplemq.exceptions.SmqUnsubscribeException;
 
 /**
  * 订阅消息数据处理接口
