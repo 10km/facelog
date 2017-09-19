@@ -23,6 +23,6 @@
   <modules>
   	<module>common-java</module>
   	<module>db</module>
-    <module>message</module>
+    <module>simplemq</module>
   </modules>
 </project>
