@@ -39,7 +39,13 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	public RedisTable(Type type,JedisPoolLazy pool, String tableName){
 		super(type);
 		poolLazy = pool;
-		this.setTableName(tableName);
+		if(null==tableName || tableName.trim().isEmpty()){
+			if(type instanceof Class)
+				this.setTableName(((Class<?>)type).getSimpleName());
+			else
+				this.setTableName(type.toString());
+		}else
+			this.setTableName(tableName);
 	}
 
 	@Override
@@ -266,7 +272,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	private String format(String prefix) {
-		if(null == prefix || 0 == prefix.trim().length() )
+		if(null == prefix || prefix.trim().isEmpty() )
 			throw new IllegalArgumentException("'prefix' must not be null or empty");
 		return RedisComponentType.Table.check(this.poolLazy, 
 				prefix.trim().replaceAll("\\s+", "_").replaceAll("\\.", "_") + prefixEnd);		
