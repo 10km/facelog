@@ -8,7 +8,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import net.gdface.facelog.simplemq.JedisPoolLazy;
+import net.gdface.facelog.simplemq.redis.JedisPoolLazy;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

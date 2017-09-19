@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
+import net.gdface.facelog.simplemq.KVTable;
+import net.gdface.facelog.simplemq.KVTable.TableException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 

@@ -1,8 +1,10 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.gdface.facelog.simplemq.IMessageDispatcher;
+import net.gdface.facelog.simplemq.Judge;
 import redis.clients.jedis.JedisPubSub;
 
 public class RedisSubHandle extends JedisPubSub {

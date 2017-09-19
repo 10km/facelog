@@ -6,6 +6,8 @@ import java.lang.reflect.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException;
+
 /**
  * (消息)频道对象定义<br>
  * 这里的频道概念可以是发布/订阅模型中的频道,也可以是生产者/消费者模型中的队列
@@ -16,9 +18,9 @@ import org.slf4j.LoggerFactory;
 public class Channel<T> implements IMessageAdapter<Object> {
 	protected static final Logger logger = LoggerFactory.getLogger(Channel.class);
 	/**  频道名(消息来源) */
-	final String name;
+	public final String name;
 	/**  频道对应的消息数据类型 */
-	final Type type;
+	public final Type type;
 
 	/**  频道对应的消息处理器 */
 	private IMessageAdapter<T> adapter;
@@ -51,11 +53,11 @@ public class Channel<T> implements IMessageAdapter<Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onSubscribe(Object t) throws net.gdface.facelog.simplemq.IMessageAdapter.UnsubscribeException {
+	public void onSubscribe(Object t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
 		if(null == this.adapter || null == t)return;
 		try{
 			this.adapter.onSubscribe((T) t);
-		}catch(UnsubscribeException e){
+		}catch(SmqUnsubscribeException e){
 			throw e;
 		}catch(Exception e){
 			logger.error(e.getMessage(),e);

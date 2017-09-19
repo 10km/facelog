@@ -12,8 +12,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.gdface.facelog.simplemq.IMessageAdapter.UnsubscribeException;
 import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
+import net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException;
 
 /**
  * (消息)频道订阅对象({@link Channel})管理类,负责频道的注册/注销,订阅/取消,消息数据解析及分发
@@ -126,7 +126,7 @@ public class ChannelDispatcher implements IMessageDispatcher,IMessageRegister {
 			try{
 				Object deserialized = this.encoder.fromJson(message,ch.type);
 				ch.onSubscribe(deserialized);
-			} catch (UnsubscribeException e) {
+			} catch (SmqUnsubscribeException e) {
 				unsubscribe(ch.name);
 				logger.info("unregister channel: {}",channel);
 			} 

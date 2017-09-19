@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.simplemq.IMessageAdapter.UnsubscribeException;
+import net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException;
 
 /**
  * 基于阻塞队列 {@link BlockingQueue} 实现单个消费者模型<br>
@@ -36,7 +36,7 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 				if(null != t){
 					try{
 						adapter.onSubscribe(t);
-					} catch (UnsubscribeException e) {
+					} catch (SmqUnsubscribeException e) {
 						logger.info("consumer thread finished because UnsubscribeException");
 						close();
 					} catch (Exception e) {
@@ -57,7 +57,7 @@ public class ConsumerSingle<T> extends AbstractConsumer implements IQueueCompone
 	/** 消息处理器 */
 	private IMessageAdapter<T> adapter = new IMessageAdapter<T>(){
 		@Override
-		public void onSubscribe(T t) throws net.gdface.facelog.simplemq.IMessageAdapter.UnsubscribeException {
+		public void onSubscribe(T t) throws net.gdface.facelog.simplemq.exceptions.SmqUnsubscribeException {
 		}};
 	
 	public ConsumerSingle<T> setAdapter(IMessageAdapter<T> adapter) {

@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.util.List;
 import java.util.Set;
@@ -6,6 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import net.gdface.facelog.simplemq.AbstractConsumer;
+import net.gdface.facelog.simplemq.Channel;
+import net.gdface.facelog.simplemq.ChannelDispatcher;
+import net.gdface.facelog.simplemq.IMessageRegister;
 import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 

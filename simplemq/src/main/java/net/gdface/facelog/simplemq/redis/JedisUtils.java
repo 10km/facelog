@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.net.URI;
 import java.net.URISyntaxException;

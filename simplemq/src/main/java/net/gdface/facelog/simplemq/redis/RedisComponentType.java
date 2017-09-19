@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;

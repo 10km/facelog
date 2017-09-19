@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import net.gdface.facelog.simplemq.IKeyHelper;
-import net.gdface.facelog.simplemq.RedisTable;
+import net.gdface.facelog.simplemq.redis.RedisTable;
 
 public class TestKVTable {
 	private static final Logger logger = LoggerFactory.getLogger(TestKVTable.class);

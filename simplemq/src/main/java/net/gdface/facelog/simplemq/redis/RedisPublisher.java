@@ -1,7 +1,11 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
+import net.gdface.facelog.simplemq.Channel;
+import net.gdface.facelog.simplemq.IPublisher;
+import net.gdface.facelog.simplemq.JsonEncoder;
 import redis.clients.jedis.Jedis;
 
 /**

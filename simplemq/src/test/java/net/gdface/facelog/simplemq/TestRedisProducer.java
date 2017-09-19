@@ -6,8 +6,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import net.gdface.facelog.simplemq.JedisPoolLazy;
-import net.gdface.facelog.simplemq.RedisProducer;
+import net.gdface.facelog.simplemq.redis.JedisPoolLazy;
+import net.gdface.facelog.simplemq.redis.RedisProducer;
 
 public class TestRedisProducer {
 

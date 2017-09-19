@@ -1,6 +1,8 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.lang.reflect.Type;
+
+import net.gdface.facelog.simplemq.Producer;
 
 /**
  * 基于 {@link RedisQueue} 的生产者模型实现

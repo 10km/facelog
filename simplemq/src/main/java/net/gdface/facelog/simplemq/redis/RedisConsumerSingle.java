@@ -1,7 +1,10 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.BlockingQueue;
+
+import net.gdface.facelog.simplemq.Channel;
+import net.gdface.facelog.simplemq.ConsumerSingle;
 
 /**
  * 

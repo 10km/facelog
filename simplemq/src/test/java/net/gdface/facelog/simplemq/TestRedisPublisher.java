@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.gdface.facelog.simplemq.Channel;
-import net.gdface.facelog.simplemq.JedisPoolLazy;
-import net.gdface.facelog.simplemq.RedisPublisher;
+import net.gdface.facelog.simplemq.redis.JedisPoolLazy;
+import net.gdface.facelog.simplemq.redis.RedisPublisher;
 
 public class TestRedisPublisher {
 	private static final Logger logger = LoggerFactory.getLogger(TestRedisPublisher.class);

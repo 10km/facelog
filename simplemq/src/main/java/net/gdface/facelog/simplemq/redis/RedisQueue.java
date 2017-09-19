@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -11,6 +11,9 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import net.gdface.facelog.simplemq.CommonUtils;
+import net.gdface.facelog.simplemq.JsonEncoder;
+import net.gdface.facelog.simplemq.Judge;
 import redis.clients.jedis.Jedis;
 
 /**

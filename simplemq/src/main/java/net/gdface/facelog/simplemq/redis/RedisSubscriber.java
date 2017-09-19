@@ -1,10 +1,12 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.redis;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
+import net.gdface.facelog.simplemq.AbstractSubcriber;
+import net.gdface.facelog.simplemq.IMessageDispatcher;
 import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
