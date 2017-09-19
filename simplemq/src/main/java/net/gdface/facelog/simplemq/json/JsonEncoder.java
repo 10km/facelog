@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.json;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

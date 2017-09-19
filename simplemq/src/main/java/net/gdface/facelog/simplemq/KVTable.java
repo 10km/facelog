@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.gdface.facelog.simplemq.json.JsonEncoder;
+
 public abstract class KVTable<V>{
 	protected static  class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		

@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.json;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import net.gdface.facelog.simplemq.TypeUtils;
 import net.gdface.facelog.simplemq.exceptions.SmqNotBeanException;
 
 /**

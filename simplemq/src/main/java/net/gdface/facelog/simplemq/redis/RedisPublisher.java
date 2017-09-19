@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 
 import net.gdface.facelog.simplemq.Channel;
 import net.gdface.facelog.simplemq.IPublisher;
-import net.gdface.facelog.simplemq.JsonEncoder;
+import net.gdface.facelog.simplemq.json.JsonEncoder;
 import redis.clients.jedis.Jedis;
 
 /**

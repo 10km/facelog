@@ -1,4 +1,4 @@
-package net.gdface.facelog.simplemq;
+package net.gdface.facelog.simplemq.json;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

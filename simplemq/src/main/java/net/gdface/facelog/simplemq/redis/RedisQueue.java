@@ -12,8 +12,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.simplemq.CommonUtils;
-import net.gdface.facelog.simplemq.JsonEncoder;
 import net.gdface.facelog.simplemq.Judge;
+import net.gdface.facelog.simplemq.json.JsonEncoder;
 import redis.clients.jedis.Jedis;
 
 /**
