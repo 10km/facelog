@@ -1,6 +1,6 @@
 package net.gdface.facelog.simplemq;
 
-import net.gdface.facelog.message.exceptions.SmqTypeException;
+import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 enum RedisComponentType{

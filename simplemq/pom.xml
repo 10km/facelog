@@ -8,9 +8,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <groupId>net.gdface.facelog</groupId>
-  <artifactId>facelog-message</artifactId>
+  <artifactId>simplemq</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>facelog-message</name>
+  <name>simplemq</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

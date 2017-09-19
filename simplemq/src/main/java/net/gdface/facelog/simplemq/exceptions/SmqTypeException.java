@@ -1,4 +1,4 @@
-package net.gdface.facelog.message.exceptions;
+package net.gdface.facelog.simplemq.exceptions;
 
 public class SmqTypeException extends SmqExcepiton {
 	private static final long serialVersionUID = -6300483606411131090L;

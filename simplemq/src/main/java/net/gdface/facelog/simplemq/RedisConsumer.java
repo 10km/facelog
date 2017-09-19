@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.message.exceptions.SmqTypeException;
+import net.gdface.facelog.simplemq.exceptions.SmqTypeException;
 import redis.clients.jedis.Jedis;
 
 /**
