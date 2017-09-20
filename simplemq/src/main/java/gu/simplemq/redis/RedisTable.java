@@ -12,47 +12,53 @@ import com.alibaba.fastjson.util.FieldInfo;
 
 import gu.simplemq.AbstractTable;
 import gu.simplemq.exceptions.SmqTableException;
+import gu.simplemq.utils.Assert;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
+/**
+ * 基于redis的 string,hash类型实现 {@link AbstractTable}
+ * @author guyadong
+ *
+ * @param <V> 元素数据类型
+ */
 public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy poolLazy;
 	private static final String prefixEnd= ".";
 	/** 表名 */
-	private String prefix = null;
+	private final String prefix ;
 	@Override
 	public JedisPoolLazy getPoolLazy() {
 		return poolLazy;
 	}
 
-	private Jedis getJedis(){
-        return poolLazy.apply();
-    }
-    
-    private void releaseJedis(Jedis jedis) {
-    	poolLazy.free();
-    }
-    
 	public RedisTable(Type type) {
 		this(type,JedisPoolLazy.getDefaultInstance(), null);
 	}
 	
-	public RedisTable(Type type,JedisPoolLazy pool, String tableName){
+	/**
+	 * @param type 表中元素类型
+	 * @param pool 数据库连接池对象
+	 * @param tablename 表名,[a-zA-Z0-9_]以外的字符都被替换为_,参见 {@link #format(String)}
+	 */
+	public RedisTable(Type type,JedisPoolLazy pool, String tablename){
 		super(type);
 		poolLazy = pool;
 		try{
-			this.setTableName(tableName);
+			tablename = format(tablename);
 		}catch(Exception e){
 			if(type instanceof Class)
-				this.setTableName(((Class<?>)type).getSimpleName());
+				tablename = format(((Class<?>)type).getSimpleName());
 			else
-				this.setTableName(type.toString());
+				tablename = format(type.toString());
 		}
+		this.prefix = tablename;
 	}
 
 	@Override
 	protected V _get(String key) {
-		Jedis jedis = getJedis();
+		key = wrapKey(key);
+		Jedis jedis = poolLazy.apply();
 		try {
 			if(isJavaBean){
 				return this.encoder.fromJson(jedis.hgetAll(key), this.getType());
@@ -60,35 +66,29 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 				return this.encoder.fromJson(jedis.get(key), this.getType());
 			
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 	
-	protected void redisSet(String key, V value, boolean nx) {
-		Jedis jedis = getJedis();
+	@Override
+	protected void _set(String key, V value, boolean nx) {
+		key = wrapKey(key);
+		Jedis jedis = poolLazy.apply();
 		try {
 			if(nx)
 				jedis.setnx(key, this.encoder.toJsonString(value));
 			else
 				jedis.set(key, this.encoder.toJsonString(value));
 		} finally {
-			releaseJedis(jedis);
-		}
-	}
-	
-	@Override
-	protected void _set(String key, V value, boolean nx) {
-		if (isJavaBean){
-			setFields(nx, key, value);			
-		}else {
-			redisSet(key, value, nx);
+			poolLazy.free();
 		}
 	}
 	
 	@Override
 	protected void _setFields(String key, Map<String, String> fieldsValues, boolean nx) {
+		key = wrapKey(key);
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try {
 			HashMap<String, String> hash = new HashMap<String,String>();
 			ArrayList<String> nullFields = new ArrayList<String>();
@@ -117,13 +117,14 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			if(response.isEmpty())
 				throw new SmqTableException("Transaction error");
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}	
 	
 	@Override
 	protected void _setField(String key, String field,Object value,boolean nx) {
-		Jedis jedis = getJedis();
+		key = wrapKey(key);
+		Jedis jedis = poolLazy.apply();
 		try {
 			if(null != value){
 				if(nx)
@@ -133,42 +134,49 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			}else if(!nx)
 				jedis.hdel(key, field);
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 
 	@Override
-	protected int _remove(String... key) {
-		Jedis jedis = getJedis();
+	protected int _remove(String... keys) {
+		Jedis jedis = poolLazy.apply();
 		try {
-			return jedis.del(key).intValue(); 
+			String[] wkeys = new String[keys.length]; 
+			for(int i =0 ;i<keys.length;++i)wkeys[i] = wrapKey(keys[i]);
+			return jedis.del(wkeys).intValue(); 
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 
 	@Override
 	protected Set<String> _keys(String pattern) {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try {
-			return jedis.keys(pattern);
+			Set<String> keys = jedis.keys( wrapKey(pattern));
+			for(String key:keys.toArray(new String[keys.size()])){
+				keys.remove(key);
+				keys.add(unwrapKey(key));
+			}
+			return keys;
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 
 	protected void _setString(Map<String, V> m, boolean nx) {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try {
 			ArrayList<String> keysValues = new ArrayList<String>();
 			ArrayList<String> keysNull = new ArrayList<String>();
 			for(Entry<String, ? extends V> entry:m.entrySet())	{
 				V value = entry.getValue();
 				if(null != value){
-					keysValues.add(entry.getKey());
+					keysValues.add(wrapKey(entry.getKey()));
 					keysValues.add(this.encoder.toJsonString(value));
 				}else
-					keysNull.add(entry.getKey());
+					keysNull.add(wrapKey(entry.getKey()));
 			}
 			Transaction ctx = jedis.multi();
 			if(!keysValues.isEmpty()){
@@ -183,21 +191,21 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			if(response.isEmpty())
 				throw new SmqTableException("Transaction error");
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 	
 	protected void _setHash(Map<String,? extends V> m, boolean nx) {
-		Jedis jedis = getJedis();
+		Jedis jedis = poolLazy.apply();
 		try {
 			Map<String, Map<String,String>> keysValues = new HashMap<String, Map<String,String>>();
 			ArrayList<String> keysNull = new ArrayList<String>();
 			for(Entry<String, ? extends V> entry:m.entrySet())	{
 				V value = entry.getValue();
 				if(null != value){
-					keysValues.put(entry.getKey(), this.encoder.toJsonMap(value));
+					keysValues.put(wrapKey(entry.getKey()), this.encoder.toJsonMap(value));
 				}else
-					keysNull.add(entry.getKey());
+					keysNull.add(wrapKey(entry.getKey()));
 			}
 			Transaction ctx = jedis.multi();
 			if(!keysValues.isEmpty()){
@@ -220,7 +228,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			if(response.isEmpty())
 				throw new SmqTableException("Transaction error");
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 		
@@ -234,7 +242,8 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 
 	@Override
 	protected Map<String, Object> _getFields(String key, Map<String, Type> types) {
-		Jedis jedis = getJedis();
+		key = wrapKey(key);
+		Jedis jedis = poolLazy.apply();
 		try {
 			Map<String, String> fieldHash;
 			if(null == types || types.isEmpty()){
@@ -250,7 +259,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			}
 			return this.encoder.fromJson(fieldHash, types);
 		} finally {
-			releaseJedis(jedis);
+			poolLazy.free();
 		}
 	}
 	
@@ -269,15 +278,16 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		return prefix;
 	}
 
-	public void setTableName(String prefix) {
-		this.prefix = format(prefix);
-	}
-
+	/**
+	 * 格式化表名并检查检查名字是否可用
+	 * @param prefix
+	 * @return
+	 * @see {@link RedisComponentType#check(JedisPoolLazy, String)}
+	 */
 	private String format(String prefix) {
-		if(null == prefix || prefix.trim().isEmpty() )
-			throw new IllegalArgumentException("'prefix' must not be null or empty");
+		Assert.notEmpty(prefix, "prefix");
 		return RedisComponentType.Table.check(this.poolLazy, 
-				prefix.trim().replaceAll("\\s+", "_").replaceAll("\\.", "_") );		
+				prefix.replaceAll("[\\s\\W]+", "_"));
 	}
 
 	private String wrapKey(String key) {
@@ -285,6 +295,6 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 
 	private String unwrapKey(String key) {
-		return key.substring(prefix.length()+prefixEnd.length());
+		return key.substring(this.prefix.length()+prefixEnd.length());
 	}
 }

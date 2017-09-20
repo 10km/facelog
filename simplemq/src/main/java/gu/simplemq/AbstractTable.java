@@ -73,8 +73,12 @@ public abstract class AbstractTable<V>{
 		if(null == value ){
 			if(!nx)
 				remove(key);
-		}else
-			_set(key,value,nx);
+		}else{
+			if(isJavaBean)
+				setFields(nx, key, value);
+			else
+				_set(key,value,nx);
+		}
 	}
 	
 	public void set(V value,boolean nx){
@@ -82,16 +86,15 @@ public abstract class AbstractTable<V>{
 		set(keyHelper(value),value,nx);
 	}
 	
-	protected abstract <T>void _setField(String key, String field, T value, boolean nx);
+	protected abstract void _setField(String key, String field, Object value, boolean nx);
 	
-	public <T>void setField(String key, String field, T value, boolean nx){
+	public  void setField(String key, String field, Object value, boolean nx){
 		assertJavaBean();
 		Assert.notEmpty(key,"key");
 		Assert.notEmpty(field,"field");
 		_setField(key,field,value, nx);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setFields(boolean nx,String key,V obj, String ...fields){
 		assertJavaBean();
 		Assert.notEmpty(key,"key");
@@ -100,9 +103,9 @@ public abstract class AbstractTable<V>{
 				this.remove(key);
 			return ;
 		}
-		Map json = this.encoder.toJsonMap(obj);
+		Map<String, String> json = this.encoder.toJsonMap(obj);
 		if(null == fields || 0== fields.length)
-			fields = (String[]) json.keySet().toArray(new String[0]);
+			fields = json.keySet().toArray(new String[0]);
 		if(1 == fields.length){
 			Assert.notEmpty(fields[0],"fields[0]");
 			_setField(key,fields[0],json.get(fields[0]), nx);
@@ -314,8 +317,13 @@ public abstract class AbstractTable<V>{
 	
 	public List<String> getFieldNames() {
 		this.assertJavaBean();
-		if(null == filedNames)
-			filedNames= _getFieldNames();
+		if(null == filedNames){
+			synchronized(this){
+				if(null == filedNames){
+					filedNames= _getFieldNames();		
+				}
+			}
+		}			
 		return filedNames;
 	}
 }
