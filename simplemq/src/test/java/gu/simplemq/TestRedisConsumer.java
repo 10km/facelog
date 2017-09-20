@@ -13,6 +13,7 @@ import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisConsumer;
 import gu.simplemq.redis.RedisConsumerSingle;
+import gu.simplemq.redis.RedisFactory;
 
 public class TestRedisConsumer {
 	private static final Logger logger = LoggerFactory.getLogger(TestRedisConsumer.class);
@@ -33,7 +34,7 @@ public class TestRedisConsumer {
 	}
 	@Test
 	public void testRedisConsumer(){
-		RedisConsumer consumer = RedisConsumer.getSubscriber(JedisPoolLazy.getDefaultInstance());
+		RedisConsumer consumer = RedisFactory.getConsumer(JedisPoolLazy.getDefaultInstance());
 		Channel<String> list1 = new Channel<String>("list1",String.class,new IMessageAdapter<String>(){
 
 			@Override

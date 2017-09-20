@@ -2,8 +2,6 @@ package gu.simplemq.redis;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import gu.simplemq.AbstractConsumer;
@@ -21,41 +19,7 @@ import redis.clients.jedis.Jedis;
  * @param <T>
  */
 public class RedisConsumer extends AbstractConsumer implements IRedisComponent,IMessageRegister {
-	/**
-	 * 保存每个 {@link JedisPoolLazy}对应的实例
-	 */
-	private static final ConcurrentMap<JedisPoolLazy,RedisConsumer>  consumers = new ConcurrentHashMap<JedisPoolLazy,RedisConsumer>();
-	
-	/**
-	 * 删除所有{@link RedisSubscriber}对象
-	 */
-	public static void clearSubscribers(){
-		synchronized(RedisConsumer.class){
-			for(RedisConsumer subscribe:consumers.values()){
-				subscribe.unsubscribe();
-			}
-			consumers.clear();
-		}
-	}
-	
-	/**
-	 * 返回 {@link JedisPoolLazy}对应的实例,如果{@link #consumers}没有找到，
-	 * 就创建一个新实例并加入{@link #consumers}
-	 * @param jedisPoolLazy
-	 * @return 
-	 */
-	public static RedisConsumer getSubscriber(JedisPoolLazy jedisPoolLazy) {
-		// Double Checked Locking
-		RedisConsumer consumer = consumers.get(jedisPoolLazy);
-		if (null == consumer) {
-			consumers.putIfAbsent(jedisPoolLazy,
-					(RedisConsumer) new RedisConsumer(jedisPoolLazy).setDaemon(true));
-			consumer = consumers.get(jedisPoolLazy);
-		}
-		return consumer;
 
-	}
-	
 	private final JedisPoolLazy poolLazy;
 	private final ChannelDispatcher register=new ChannelDispatcher(){
 		@Override
@@ -69,7 +33,7 @@ public class RedisConsumer extends AbstractConsumer implements IRedisComponent,I
 		return poolLazy;
 	}
 
-	protected RedisConsumer(JedisPoolLazy poolLazy) {
+	RedisConsumer(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 		this.setTimeoutMills(DEFAULT_CONSUMER_CHECK_INTERVAL);

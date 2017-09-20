@@ -1,11 +1,11 @@
 package gu.simplemq.redis;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.util.Collection;
 
 import gu.simplemq.Channel;
 import gu.simplemq.IPublisher;
 import gu.simplemq.json.JsonEncoder;
+import gu.simplemq.utils.CommonUtils;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -23,27 +23,18 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 		return this.poolLazy;
 	}
 
-	public RedisPublisher() {
-		this(JedisPoolLazy.getDefaultInstance());
-	}
-	
-	public RedisPublisher(JedisPoolLazy poolLazy) {
+	RedisPublisher(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 	}
 	
 	@Override
-	public void publish(@SuppressWarnings("rawtypes") Channel channel, Object obj, Type type) {
+	public <T>void publish(Channel<T> channel, T obj) {
 		if(null == obj)return;
 		if(null != channel.type){
 			// 检查发布的对象类型与频道数据类型是否匹配
 			if(channel.type instanceof Class<?> && !((Class<?>)channel.type).isInstance(obj)){
 				throw new IllegalArgumentException("invalid type of 'obj'");
-			}else if(channel.type instanceof ParameterizedType ){
-				if(null == type)
-					throw new IllegalArgumentException("type must not be null'");
-				if(! (type !=channel.type))
-					throw new IllegalArgumentException("invalid type of 'obj'");
 			}
 		}
 		Jedis jedis = this.poolLazy.apply();
@@ -53,4 +44,21 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 			this.poolLazy.free();
 		}
 	}
+
+	@Override
+	public <T> void publish(Channel<T> channel, Collection<T> objects) {
+		objects= CommonUtils.cleanNullAsList(objects);
+		for(T obj:objects){
+			publish(channel,obj);
+		}
+	}
+
+	@Override
+	public <T> void publish(Channel<T> channel, @SuppressWarnings("unchecked") T... objects) {
+		objects = CommonUtils.cleanNull(objects);
+		for(T obj:objects){
+			publish(channel,obj);
+		}		
+	}
+
 }

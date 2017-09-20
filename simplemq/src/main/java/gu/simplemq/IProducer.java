@@ -1,120 +1,64 @@
 package gu.simplemq;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.concurrent.BlockingDeque;
-
-import gu.simplemq.utils.TypeUtils;
 
 /**
- * 生产者模型接口
+ * 生产者模型接口(多队列)
  * @author guyadong
  *
- * @param <T>
  */
-public interface IProducer<T> {
-	public static abstract class AbstractHandler<T> implements IProducer<T> {
-	    /** 是否向队列末尾添加 */
-		protected boolean offerLast = true;
-		protected final Type type;
-		protected final Class<?> rawType;
-	    public AbstractHandler(Type type) {
-			super();
-			this.type = type;
-			this.rawType = TypeUtils.getRawClass(type);
-		}
-		@Override
-		public int produce(@SuppressWarnings("unchecked") T...array){
-			int count = 0;
-			for(T t: array){
-				if(null != t){
-					produce(t);
-					++count;
-				}
-			}
-			return count;
-		}
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public int produce(Collection<T> c){
-			return null ==c?0:produce(c.toArray((T[])Array.newInstance(this.rawType, c.size())));
-		}
-
-		@Override
-		public IProducer<T> setOfferLast(boolean offerLast) {
-			this.offerLast = offerLast;
-			return this;
-		}
-
-		@Override
-		public int produce(boolean offerLast, @SuppressWarnings("unchecked") T... array) {
-			int count = 0;
-			for(T t: array){
-				if(null != t){
-					produce(t,offerLast);
-					++count;
-				}
-			}
-			return count;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public int produce(boolean offerLast, Collection<T> c) {
-			return null ==c?0:produce(offerLast,c.toArray((T[])Array.newInstance(this.rawType, c.size())));
-
-		}
-	}
+public interface IProducer {
+	
 	/**
-	 * 向队列{@link #queue}中压入数据
-	 * @param t
-	 * @param offerLast 为true向队列末尾添加<br>
-	 *                      为false时队列头部添加,要求{@link #queue}必须为双向队列{@link BlockingDeque}<br>
-	 * @return
+	 * 向指定的消息队列(频道)添加一个消息对象
+	 * @param channel
+	 * @param object
+	 * @param offerLast 为true添加到队列末尾
 	 */
-	boolean produce(T t, boolean offerLast);
+	<T> void produce(Channel<T> channel, T object, boolean offerLast);
 
 	/**
-	 * 向队列尾部添加数据
-	 * @param t
-	 * @return
+	 * 根据默认的队列添加模式,向指定的消息队列(频道)添加一个消息对象
+	 * @param channel
+	 * @param object
+	 * @see #setOfferLast(boolean)
 	 */
-	boolean produce(T t);
+	<T> void produce(Channel<T> channel, T object);
 
 	/**
-	 * 向队列添加一组对象
-	 * @param array
-	 * @return 实际添加的对象数目
+	 * @param channel
+	 * @param offerLast
+	 * @param objects
+	 * @see #produce(Channel, Object, boolean)
 	 */
-	int produce(boolean offerLast,@SuppressWarnings("unchecked") T... array);
+	<T> void produce(Channel<T> channel, boolean offerLast, @SuppressWarnings("unchecked") T... objects);
 
 	/**
+	 * @param channel
+	 * @param offerLast
 	 * @param c
-	 * @return
-	 * @see #produce(boolean, Object...)
+	 * @see #produce(Channel, Object, boolean)
 	 */
-	int produce(boolean offerLast,Collection<T> c);
+	<T> void produce(Channel<T> channel, boolean offerLast, Collection<T> c);
 
 	/**
-	 * 向队列添加一组对象
-	 * @param array
-	 * @return 实际添加的对象数目
-	 */
-	int produce(@SuppressWarnings("unchecked") T... array);
-
-	/**
+	 * @param channel
 	 * @param c
-	 * @return
-	 * @see #produce(Object...)
+	 * @see #produce(Channel, Object)
 	 */
-	int produce(Collection<T> c);
+	<T> void produce(Channel<T> channel, Collection<T>c);
+
 	/**
-	 * @see #offerLast
-	 * @param offerLast  
-	 * @return
+	 * @param channel
+	 * @param objects
+	 * @see #produce(Channel, Object) 
 	 */
-	IProducer<T> setOfferLast(boolean offerLast);
+	<T> void produce(Channel<T> channel, @SuppressWarnings("unchecked") T... objects);
+
+	/**
+	 * 设置默认的队列添加模式
+	 * @param offerLast 为true默认添加到队列末尾
+	 */
+	void setOfferLast(boolean offerLast);
 
 }

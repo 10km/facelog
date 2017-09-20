@@ -13,6 +13,7 @@ import gu.simplemq.Channel;
 import gu.simplemq.IMessageAdapter;
 import gu.simplemq.exceptions.SmqUnsubscribeException;
 import gu.simplemq.redis.JedisPoolLazy;
+import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisSubscriber;
 
 public class TestRedisSubscriber {
@@ -20,7 +21,7 @@ public class TestRedisSubscriber {
 
 	@Test
 	public void test() {
-		RedisSubscriber redisSubscriber = RedisSubscriber.getSubscriber(JedisPoolLazy.getDefaultInstance());
+		RedisSubscriber redisSubscriber = RedisFactory.getSubscriber(JedisPoolLazy.getDefaultInstance());
 		Channel<String> chat1 = new Channel<String>("chat1",String.class,new IMessageAdapter<String>(){
 
 			@Override

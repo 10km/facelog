@@ -1,46 +1,91 @@
 package gu.simplemq.redis;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.Array;
+import java.util.Collection;
 
-import gu.simplemq.Producer;
+import gu.simplemq.Channel;
+import gu.simplemq.IProducer;
+import gu.simplemq.json.JsonEncoder;
+import gu.simplemq.utils.CommonUtils;
+import gu.simplemq.utils.TypeUtils;
+import redis.clients.jedis.Jedis;
 
-/**
- * 基于 {@link RedisQueue} 的生产者模型实现
- * @author guyadong
- *
- * @param <T>
- */
-public class RedisProducer<T> extends Producer<T> implements IRedisComponent {
+public class RedisProducer implements IRedisComponent, IProducer{
+    /** 是否向队列末尾添加 */
+	protected boolean offerLast = true;
+	private JsonEncoder encoder = JsonEncoder.getEncoder();
+	private final JedisPoolLazy poolLazy;
 	@Override
 	public JedisPoolLazy getPoolLazy() {
-		return ((RedisQueue<T>)queue).getPoolLazy();
+		return poolLazy;
+	}
+	
+	RedisProducer(JedisPoolLazy poolLazy) {
+		super();
+		this.poolLazy = poolLazy;
 	}
 	
 	@Override
-	public String getQueueName() {
-		return ((RedisQueue<T>)queue).getQueueName();
-	}
-
-	public RedisProducer(Type type,JedisPoolLazy poolLazy, String queueName) {
-		super(type);
-		this.setQueue(new RedisQueue<T>(type,poolLazy).setQueueName(queueName));
+	public <T> void produce(Channel<T> channel, T object, boolean offerLast) {
+		if(null == object)return;
+		Jedis jedis = this.poolLazy.apply();
+		try{
+			if(offerLast)
+				jedis.rpush(channel.name, this.encoder.toJsonString(object));
+			else
+				jedis.lpush(channel.name, this.encoder.toJsonString(object));
+		}finally{
+			this.poolLazy.free();
+		}		
 	}
 	
-	public RedisProducer(Type type, JedisPoolLazy poolLazy) {
-		this(type,poolLazy,null);
-	}
-	
-	public RedisProducer(Type type) {
-		this(type,JedisPoolLazy.getDefaultInstance());
+	@Override
+	public <T> void produce(Channel<T> channel, T object) {
+		produce(channel,object,this.offerLast);	
 	}
 
 	@Override
-	public int produce(@SuppressWarnings("unchecked") T... array) {
-		return ((RedisQueue<T>)queue).offer(this.offerLast,array);
+	public <T> void produce(Channel<T> channel, boolean offerLast, @SuppressWarnings("unchecked") T... objects) {
+		objects = CommonUtils.cleanNull(objects);
+		if(0 == objects.length)return;
+		if(null != channel.type){
+			// 检查发布的对象类型与频道数据类型是否匹配
+			if(channel.type instanceof Class<?> && 
+					!((Class<?>)channel.type).isAssignableFrom(objects.getClass().getComponentType())){
+				throw new IllegalArgumentException("invalid component type of 'objects'");
+			}
+		}
+		String[] strings = new String[objects.length];
+		for(int i=0;i<strings.length;++i)
+			strings[i] = this.encoder.toJsonString(objects[i]);
+		Jedis jedis = this.poolLazy.apply();
+		try{
+			if(offerLast)
+				jedis.rpush(channel.name, strings);
+			else
+				jedis.lpush(channel.name, strings);
+		}finally{
+			this.poolLazy.free();
+		}
 	}
-
+	
 	@Override
-	public int produce(boolean offerLast, @SuppressWarnings("unchecked") T... array) {
-		return ((RedisQueue<T>)queue).offer(offerLast,array);
+	public <T> void produce(Channel<T> channel, @SuppressWarnings("unchecked") T... objects) {
+		produce(channel,this.offerLast,objects);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> void produce(Channel<T> channel, boolean offerLast, Collection<T>c) {
+		if(null == c ) return;
+		produce(channel,offerLast, c.toArray((T[]) Array.newInstance(TypeUtils.getRawClass(channel.type), 0)));
+	}
+	@Override
+	public <T> void produce(Channel<T> channel, Collection<T>c) {
+		produce(channel,this.offerLast,c);
+	}
+	@Override
+	public void setOfferLast(boolean offerLast) {
+		this.offerLast = offerLast;
 	}
 }

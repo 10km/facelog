@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import gu.simplemq.IKeyHelper;
+import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestRedisTable {
@@ -103,7 +104,7 @@ public class TestRedisTable {
 
 		group.addUser(guestUser);
 		group.addUser(rootUser);
-		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		RedisTable<Group> table = RedisFactory.getTable(Group.class);
 		table.setKeyHelper(new IKeyHelper<Group>(){
 			@Override
 			public String returnKey(Group v) {
@@ -116,14 +117,14 @@ public class TestRedisTable {
 	}
 	@Test
 	public void test2GetSetField() {
-		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		RedisTable<Group> table = RedisFactory.getTable(Group.class);
 		table.setField("100", "nullStr", null, false);
 		System.out.println(table.getField("100", "nullStr"));
 	}
 	
 	@Test
 	public void test3GetFields(){
-		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		RedisTable<Group> table = RedisFactory.getTable(Group.class);
 		Map<String, Object> values = table.getFields("100", (String[])null);
 		for(Entry<String, Object> entry:values.entrySet()){
 			System.out.printf("%s %s\n",entry.getKey(),entry.getValue());
@@ -132,7 +133,7 @@ public class TestRedisTable {
 	
 	@Test
 	public void test4GetFieldNames(){
-		RedisTable<Group> table = new RedisTable<Group>(Group.class);
+		RedisTable<Group> table = RedisFactory.getTable(Group.class);
 		for(String field:table.getFieldNames()){
 			logger.info(field);
 		}

@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
  *
  * @param <T>
  */
-public class Producer<T> extends IProducer.AbstractHandler<T> implements IQueueComponent<T>{
+public class Producer<T> extends IProducerSingle.AbstractHandler<T> implements IQueueComponent<T>{
 	protected BlockingQueue<T> queue;
 	
 	public static final<T> Producer<T>makeInstance(Type type,BlockingQueue<T> queue){

@@ -1,7 +1,5 @@
 package gu.simplemq.redis;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -21,37 +19,6 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  *
  */
 public class RedisSubscriber extends AbstractSubcriber implements IRedisComponent {
-	/**
-	 * 保存每个 {@link JedisPoolLazy}对应的实例
-	 */
-	private static final ConcurrentMap<JedisPoolLazy,RedisSubscriber>  subscribers = new ConcurrentHashMap<JedisPoolLazy,RedisSubscriber>();
-	
-	/**
-	 * 删除所有{@link RedisSubscriber}对象
-	 */
-	public static void clearSubscribers(){
-		synchronized(RedisSubscriber.class){
-			for(RedisSubscriber subscribe:subscribers.values()){
-				subscribe.unsubscribe();
-			}
-			subscribers.clear();
-		}
-	}
-	
-	/**
-	 * 返回 {@link JedisPoolLazy}对应的实例,如果{@link #subscribers}没有找到，就创建一个新实例并加入{@link #subscribers}
-	 * @param jedisPoolLazy
-	 * @return 
-	 */
-	public static RedisSubscriber getSubscriber(JedisPoolLazy jedisPoolLazy) {
-		// Double Checked Locking
-		RedisSubscriber subscriber = subscribers.get(jedisPoolLazy);
-		if(null == subscriber){
-			subscribers.putIfAbsent(jedisPoolLazy, new RedisSubscriber(jedisPoolLazy).setDaemon(true));
-			subscriber = subscribers.get(jedisPoolLazy);
-		}
-		return subscriber;
-	}
 
 	private final JedisPoolLazy poolLazy;
 	private final RedisSubHandle jedisPubSub; 
@@ -64,11 +31,10 @@ public class RedisSubscriber extends AbstractSubcriber implements IRedisComponen
 		return this.poolLazy;
 	}
 	
-	protected RedisSubscriber(JedisPoolLazy poolLazy) {
+	RedisSubscriber(JedisPoolLazy poolLazy) {
 		super();
 		this.jedisPubSub=new RedisSubHandle(this); 
 		this.poolLazy = poolLazy;
-		subscribers.put(poolLazy, this);
 	}
 
 	@Override

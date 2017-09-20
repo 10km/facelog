@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import gu.simplemq.utils.Judge;
 
-public class TablenameChecker implements IRedisComponent{
+class TablenameChecker implements IRedisComponent{
 	private static final ConcurrentMap<JedisPoolLazy,TablenameChecker> checkers = new ConcurrentHashMap<JedisPoolLazy,TablenameChecker>();
 
 	public static TablenameChecker getNameChecker(JedisPoolLazy poolLazy){

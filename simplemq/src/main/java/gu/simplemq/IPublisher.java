@@ -1,6 +1,6 @@
 package gu.simplemq;
 
-import java.lang.reflect.Type;
+import java.util.Collection;
 
 /**
  * 发布订阅接口
@@ -12,7 +12,10 @@ public interface IPublisher  {
 	 * 向指定的频道发布消息
 	 * @param channel 频道
 	 * @param obj 消息对象
-	 * @param type 消息类型
 	 */
-	public void publish(@SuppressWarnings("rawtypes") Channel channel,Object obj,Type type);
+	<T> void publish(Channel<T> channel,T obj);
+
+	<T> void publish(Channel<T> channel, Collection<T> objects);
+
+	<T> void publish(Channel<T> channel, @SuppressWarnings("unchecked") T... objects);
 }

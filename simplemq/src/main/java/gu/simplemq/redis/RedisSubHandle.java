@@ -7,15 +7,15 @@ import gu.simplemq.IMessageDispatcher;
 import gu.simplemq.utils.Judge;
 import redis.clients.jedis.JedisPubSub;
 
-public class RedisSubHandle extends JedisPubSub {
+class RedisSubHandle extends JedisPubSub {
 	private static final Logger logger = LoggerFactory.getLogger(RedisSubHandle.class);
 	private IMessageDispatcher dispatcher;
-	public RedisSubHandle(IMessageDispatcher dispatcher) {
+	RedisSubHandle(IMessageDispatcher dispatcher) {
 		super();
 		this.dispatcher = dispatcher;
 	}
 
-	public RedisSubHandle() {
+	RedisSubHandle() {
 	}
 
 	@Override

@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
@@ -24,22 +26,22 @@ import redis.clients.jedis.Transaction;
  * @param <V> 元素数据类型
  */
 public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
-	private final JedisPoolLazy poolLazy;
+	private final JedisPoolLazy pool;
 	private static final String prefixEnd= ".";
 	private final TablenameChecker checker ;
 	/** 表名 */
 	private final String prefix ;
 	@Override
 	public JedisPoolLazy getPoolLazy() {
-		return poolLazy;
+		return pool;
 	}
 
-	public RedisTable(Type type) {
-		this(type,JedisPoolLazy.getDefaultInstance(), null);
+	RedisTable(Class<V> clazz) {
+		this(clazz,JedisPoolLazy.getDefaultInstance(), null);
 	}
 	
-	public RedisTable(Class<V> type,JedisPoolLazy pool, String tablename){
-		this((Type)type,pool,tablename);
+	RedisTable(Class<V> clazz,JedisPoolLazy pool, String tablename){
+		this((Type)clazz,pool,tablename);
 	}
 	
 	/**
@@ -47,11 +49,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	 * @param pool 数据库连接池对象
 	 * @param tablename 表名,[a-zA-Z0-9_]以外的字符都被替换为_,参见 {@link #format(String)}
 	 */
-	public RedisTable(Type type,JedisPoolLazy pool, String tablename){
+	RedisTable(Type type,JedisPoolLazy pool, String tablename){
 		super(type);
 		Assert.notNull(pool, "pool");
-		this.poolLazy = pool;
-		this.checker = TablenameChecker.getNameChecker(poolLazy);
+		this.pool = pool;
+		this.checker = TablenameChecker.getNameChecker(pool);
 		try{
 			tablename = format(tablename);
 		}catch(Exception e){
@@ -66,7 +68,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	@Override
 	protected V _get(String key) {
 		key = wrapKey(key);
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			if(isJavaBean){
 				return this.encoder.fromJson(jedis.hgetAll(key), this.getType());
@@ -74,7 +76,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 				return this.encoder.fromJson(jedis.get(key), this.getType());
 			
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 	
@@ -86,7 +88,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		else{
 			String[] wkeys = CommonUtils.cleanEmpty(keys);
 			for(int i =0 ;i<keys.length;++i)wkeys[i] = wrapKey(wkeys[i]);
-			Jedis jedis = poolLazy.apply();
+			Jedis jedis = pool.apply();
 			try {				
 				List<String> values = jedis.mget(wkeys);
 				Map<String, Object> m = new HashMap<String,Object>();
@@ -94,7 +96,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 					m.put(wkeys[i], this.encoder.fromJson(values.get(i), this.getType()));
 				return (Map<String, V>) m;
 			} finally {
-				poolLazy.free();
+				pool.free();
 			}
 		}
 	}
@@ -102,14 +104,14 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	@Override
 	protected void _set(String key, V value, boolean nx) {
 		key = wrapKey(key);
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			if(nx)
 				jedis.setnx(key, this.encoder.toJsonString(value));
 			else
 				jedis.set(key, this.encoder.toJsonString(value));
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 	
@@ -117,7 +119,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	protected void _setFields(String key, Map<String, String> fieldsValues, boolean nx) {
 		key = wrapKey(key);
 		if(null == fieldsValues || fieldsValues.isEmpty())return;
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			HashMap<String, String> hash = new HashMap<String,String>();
 			ArrayList<String> nullFields = new ArrayList<String>();
@@ -146,14 +148,14 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			if(response.isEmpty())
 				throw new SmqTableException("Transaction error");
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}	
 	
 	@Override
 	protected void _setField(String key, String field,Object value,boolean nx) {
 		key = wrapKey(key);
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			if(null != value){
 				if(nx)
@@ -163,25 +165,25 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			}else if(!nx)
 				jedis.hdel(key, field);
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 
 	@Override
 	protected int _remove(String... keys) {
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			String[] wkeys = new String[keys.length]; 
 			for(int i =0 ;i<keys.length;++i)wkeys[i] = wrapKey(keys[i]);
 			return jedis.del(wkeys).intValue(); 
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 
 	@Override
 	protected Set<String> _keys(String pattern) {
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			Set<String> keys = jedis.keys( wrapKey(pattern));
 			for(String key:keys.toArray(new String[keys.size()])){
@@ -190,12 +192,12 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			}
 			return keys;
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 
 	protected void _setString(Map<String, V> m, boolean nx) {
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			ArrayList<String> keysValues = new ArrayList<String>();
 			ArrayList<String> keysNull = new ArrayList<String>();
@@ -220,12 +222,12 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			if(response.isEmpty())
 				throw new SmqTableException("Transaction error");
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 	
 	protected void _setHash(Map<String,? extends V> m, boolean nx) {
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			Map<String, Map<String,String>> keysValues = new HashMap<String, Map<String,String>>();
 			ArrayList<String> keysNull = new ArrayList<String>();
@@ -257,7 +259,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			if(response.isEmpty())
 				throw new SmqTableException("Transaction error");
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 		
@@ -272,7 +274,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	@Override
 	protected Map<String, Object> _getFields(String key, Map<String, Type> types) {
 		key = wrapKey(key);
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			Map<String, String> fieldHash;
 			if(null == types || types.isEmpty()){
@@ -288,7 +290,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 			}
 			return this.encoder.fromJson(fieldHash, types);
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 	
@@ -296,11 +298,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	public boolean containsKey(String key) {
 		Assert.notEmpty(key,"key");
 		key = wrapKey(key);
-		Jedis jedis = poolLazy.apply();
+		Jedis jedis = pool.apply();
 		try {
 			return jedis.exists(key);
 		} finally {
-			poolLazy.free();
+			pool.free();
 		}
 	}
 
