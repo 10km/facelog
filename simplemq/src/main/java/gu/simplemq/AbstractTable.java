@@ -16,8 +16,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import gu.simplemq.json.JsonEncoder;
 import gu.simplemq.utils.Assert;
+import gu.simplemq.utils.Judge;
 import gu.simplemq.utils.TypeUtils;
 
+/**
+ * KV表抽象类，K为String类型
+ * @author guyadong
+ *
+ * @param <V> 值对象数据类型 
+ */
 public abstract class AbstractTable<V>{
 	protected static  class BreakException extends RuntimeException{
 		private static final long serialVersionUID = 1L;		
@@ -64,6 +71,16 @@ public abstract class AbstractTable<V>{
 	public V get(String key){
 		Assert.notEmpty(key,"key");
 		return _get(key);
+	}
+	
+	public Map<String, V> get(String... keys){
+		@SuppressWarnings("unchecked")
+		HashMap<String, V> m = (HashMap<String, V>) new HashMap<String,Object>();
+		for(String key:keys){
+			if(!Judge.isEmpty(key))
+				m.put(key, _get(key));
+		}
+		return m;
 	}
 	
 	protected abstract void _set(String key, V value, boolean nx);
@@ -226,21 +243,26 @@ public abstract class AbstractTable<V>{
 		return get(key)!=null;
 	}
 
+	/**
+	 * 在表中查找指定的对象(V),如果找到(至少一个)返回true,否则返回false.
+	 * @param <V> 必须重写 equals()方法,提供对象比较能力,否则不能返回正确结果
+	 * @param pattern
+	 * @param v 
+	 * @return
+	 */
 	public boolean containsValue(final String pattern,final V v) {
-		if(null != v){
-			final AtomicBoolean b=new AtomicBoolean(false); 
-			foreach(pattern,new Filter<V>(){
-				@Override
-				public boolean run(String key, V value) throws BreakException {
-					if(v.equals(value)){
-						b.set(true);
-						throw new BreakException();
-					}
-					return false;
-				}});
-			return b.get();
-		}
-		return false;
+		if(null == v)return false;
+		final AtomicBoolean b=new AtomicBoolean(false); 
+		foreach(pattern,new Filter<V>(){
+			@Override
+			public boolean run(String key, V value) throws BreakException {
+				if(v.equals(value)){
+					b.set(true);
+					throw new BreakException();
+				}
+				return false;
+			}});
+		return b.get();
 	}
 	
 	public Map<String, V> values(final String pattern, Filter<V> filter) {

@@ -13,6 +13,7 @@ import com.alibaba.fastjson.util.FieldInfo;
 import gu.simplemq.AbstractTable;
 import gu.simplemq.exceptions.SmqTableException;
 import gu.simplemq.utils.Assert;
+import gu.simplemq.utils.CommonUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
@@ -25,6 +26,7 @@ import redis.clients.jedis.Transaction;
 public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy poolLazy;
 	private static final String prefixEnd= ".";
+	private final TablenameChecker checker ;
 	/** 表名 */
 	private final String prefix ;
 	@Override
@@ -36,6 +38,10 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		this(type,JedisPoolLazy.getDefaultInstance(), null);
 	}
 	
+	public RedisTable(Class<V> type,JedisPoolLazy pool, String tablename){
+		this((Type)type,pool,tablename);
+	}
+	
 	/**
 	 * @param type 表中元素类型
 	 * @param pool 数据库连接池对象
@@ -43,7 +49,9 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	 */
 	public RedisTable(Type type,JedisPoolLazy pool, String tablename){
 		super(type);
-		poolLazy = pool;
+		Assert.notNull(pool, "pool");
+		this.poolLazy = pool;
+		this.checker = TablenameChecker.getNameChecker(poolLazy);
 		try{
 			tablename = format(tablename);
 		}catch(Exception e){
@@ -70,6 +78,27 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, V> get(String... keys) {
+		if(isJavaBean)
+			return super.get(keys);
+		else{
+			String[] wkeys = CommonUtils.cleanEmpty(keys);
+			for(int i =0 ;i<keys.length;++i)wkeys[i] = wrapKey(wkeys[i]);
+			Jedis jedis = poolLazy.apply();
+			try {				
+				List<String> values = jedis.mget(wkeys);
+				Map<String, Object> m = new HashMap<String,Object>();
+				for(int i=0;i<wkeys.length;++i)
+					m.put(wkeys[i], this.encoder.fromJson(values.get(i), this.getType()));
+				return (Map<String, V>) m;
+			} finally {
+				poolLazy.free();
+			}
+		}
+	}
+
 	@Override
 	protected void _set(String key, V value, boolean nx) {
 		key = wrapKey(key);
@@ -264,6 +293,18 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	}
 	
 	@Override
+	public boolean containsKey(String key) {
+		Assert.notEmpty(key,"key");
+		key = wrapKey(key);
+		Jedis jedis = poolLazy.apply();
+		try {
+			return jedis.exists(key);
+		} finally {
+			poolLazy.free();
+		}
+	}
+
+	@Override
 	protected List<String> _getFieldNames(){
 		List<FieldInfo> fieldList = com.alibaba.fastjson.util.TypeUtils.computeGetters(
 				com.alibaba.fastjson.util.TypeUtils.getRawClass(this.getType()), null);
@@ -286,8 +327,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	 */
 	private String format(String prefix) {
 		Assert.notEmpty(prefix, "prefix");
-		return RedisComponentType.Table.check(this.poolLazy, 
-				prefix.replaceAll("[\\s\\W]+", "_"));
+		return checker.check(prefix.replaceAll("[\\s\\W]+", "_"), RedisComponentType.Table, this.getType());
 	}
 
 	private String wrapKey(String key) {
