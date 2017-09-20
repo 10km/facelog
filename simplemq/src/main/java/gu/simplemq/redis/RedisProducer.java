@@ -10,6 +10,11 @@ import gu.simplemq.utils.CommonUtils;
 import gu.simplemq.utils.TypeUtils;
 import redis.clients.jedis.Jedis;
 
+/**
+ * {@link IProducer} redis实现
+ * @author guyadong
+ *
+ */
 public class RedisProducer implements IRedisComponent, IProducer{
     /** 是否向队列末尾添加 */
 	protected boolean offerLast = true;
