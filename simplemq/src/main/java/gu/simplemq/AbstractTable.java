@@ -33,7 +33,7 @@ public abstract class AbstractTable<V>{
 	private final Type type;
 	protected final boolean isJavaBean ;
 	protected JsonEncoder encoder = JsonEncoder.getEncoder();
-	protected IKeyHelper<V> keyHelper;
+	private IKeyHelper<V> keyHelper;
 	private List<String>filedNames = null;
 
 	public AbstractTable(Type type) {

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +17,9 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import gu.simplemq.IKeyHelper;
 import gu.simplemq.redis.RedisTable;
-
-public class TestKVTable {
-	private static final Logger logger = LoggerFactory.getLogger(TestKVTable.class);
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class TestRedisTable {
+	private static final Logger logger = LoggerFactory.getLogger(TestRedisTable.class);
 
 	public interface Person<T>{
 		
@@ -86,7 +88,7 @@ public class TestKVTable {
 	
 	
 	@Test
-	public void testSetGet() {
+	public void test1SetGet() {
 		Group group = new Group();
 		group.setId(100L);
 		group.setName("admin");
@@ -113,14 +115,14 @@ public class TestKVTable {
 		System.out.println(JSON.toJSONString(deserialized,SerializerFeature.WriteMapNullValue));
 	}
 	@Test
-	public void testGetSetField() {
+	public void test2GetSetField() {
 		RedisTable<Group> table = new RedisTable<Group>(Group.class);
-		table.setField("100", "nullStr", null, true);
+		table.setField("100", "nullStr", null, false);
 		System.out.println(table.getField("100", "nullStr"));
 	}
 	
 	@Test
-	public void testGetFields(){
+	public void test3GetFields(){
 		RedisTable<Group> table = new RedisTable<Group>(Group.class);
 		Map<String, Object> values = table.getFields("100", (String[])null);
 		for(Entry<String, Object> entry:values.entrySet()){
@@ -129,7 +131,7 @@ public class TestKVTable {
 	}
 	
 	@Test
-	public void testGetFieldNames(){
+	public void test4GetFieldNames(){
 		RedisTable<Group> table = new RedisTable<Group>(Group.class);
 		for(String field:table.getFieldNames()){
 			logger.info(field);
