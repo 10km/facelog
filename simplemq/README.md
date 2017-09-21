@@ -1,9 +1,9 @@
-#simple Message Queue
+# simple Message Queue
 simple Message Queue(以下简称simpleMQ)设计用来实现一个支持消息推送的中间件
 
 simpleMQ基于redis和fastjson实现消息队列,频道订阅,K-V表，
 
-##消息队列
+## 消息队列
 
 消息队列被设计成producer/consumer模型
 
@@ -11,7 +11,7 @@ simpleMQ基于redis和fastjson实现消息队列,频道订阅,K-V表，
 
 [RedisConsumer.java](src/main/java/gu/simplemq/redis/RedisConsumer.java )
 
-##频道订阅
+## 频道订阅
 
 频道订阅被设计成publisher/subscriber模型
 
@@ -19,17 +19,17 @@ simpleMQ基于redis和fastjson实现消息队列,频道订阅,K-V表，
 
 [RedisSubscriber.java](src/main/java/gu/simplemq/redis/RedisSubscriber.java )
 
-##K-V表
+## K-V表
 
 K-V表
 
 [RedisTable.java](src/main/java/gu/simplemq/redis/RedisTable.java )
 
-##实例化
+## 实例化
 
 [RedisFactory.java](src/main/java/gu/simplemq/redis/RedisFactory.java )用于创建上述的类的实例
 
-#调用示例
+## 调用示例
 
 RedisConsumer示例
 
