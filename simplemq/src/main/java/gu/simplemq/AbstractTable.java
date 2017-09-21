@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -42,7 +43,7 @@ public abstract class AbstractTable<V>{
 	protected JsonEncoder encoder = JsonEncoder.getEncoder();
 	private IKeyHelper<V> keyHelper;
 	private List<String>filedNames = null;
-
+	protected KeyExpire keyExpire =new KeyExpire();
 	public AbstractTable(Type type) {
 		super();
 		if( ! (type instanceof Class<?> ||  type instanceof ParameterizedType) ){
@@ -347,5 +348,49 @@ public abstract class AbstractTable<V>{
 			}
 		}			
 		return filedNames;
+	}
+
+	public void setExpire(long time, TimeUnit timeUnit) {
+		keyExpire.setExpire(time, timeUnit);
+	}
+
+	public void setExpire(java.util.Date date) {
+		keyExpire.setExpire(date);
+	}
+
+	public void setExpire(boolean timestamp, long timeMills) {
+		keyExpire.setExpire(timestamp, timeMills);
+	}
+
+	public void expire(String key, long timeMills, boolean timestamp) {
+		keyExpire.expire(key, timeMills, timestamp);
+	}
+
+	public void expire(String key, long time, TimeUnit timeUnit) {
+		keyExpire.expire(key, time, timeUnit);
+	}
+
+	public void expire(String key, java.util.Date date) {
+		keyExpire.expire(key, date);
+	}
+
+	public void expire(String key) {
+		keyExpire.expire(key);
+	}
+
+	public void expire(V value, long timeMills, boolean timestamp) {
+		keyExpire.expire(keyHelper(value), timeMills, timestamp);
+	}
+
+	public void expire(V value, long time, TimeUnit timeUnit) {
+		keyExpire.expire(keyHelper(value), time, timeUnit);
+	}
+
+	public void expire(V value, java.util.Date date) {
+		keyExpire.expire(keyHelper(value), date);
+	}
+
+	public void expire(V value) {
+		keyExpire.expire(keyHelper(value));
 	}
 }

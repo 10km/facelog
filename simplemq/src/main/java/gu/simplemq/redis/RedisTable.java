@@ -27,6 +27,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	private final JedisPoolLazy pool;
 	private static final String prefixEnd= ".";
 	private final TablenameChecker checker ;
+	private final RedisKeyExpire redisExpire;
 	/** 表名 */
 	private final String prefix ;
 	@Override
@@ -61,6 +62,12 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 				tablename = format(type.toString());
 		}
 		this.prefix = tablename;
+		this.redisExpire = new RedisKeyExpire(this.pool){
+			@Override
+			protected String wrapKey(String key) {
+				return RedisTable.this.wrapKey(key);
+			}};
+		this.keyExpire = this.redisExpire;
 	}
 
 	@Override
