@@ -1,10 +1,5 @@
 package gu.simplemq;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Method;
-import java.util.Date;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +16,7 @@ public class TestRedisSubscriber {
 
 	@Test
 	public void test() {
-		RedisSubscriber redisSubscriber = RedisFactory.getSubscriber(JedisPoolLazy.getDefaultInstance());
+		RedisSubscriber subscriber = RedisFactory.getSubscriber(JedisPoolLazy.getDefaultInstance());
 		Channel<String> chat1 = new Channel<String>("chat1",String.class,new IMessageAdapter<String>(){
 
 			@Override
@@ -40,10 +35,10 @@ public class TestRedisSubscriber {
 			public void onSubscribe(String t) throws SmqUnsubscribeException {
 				logger.info("{}:{}","chat3",t);
 			}} );
-		redisSubscriber.register(chat1,chat2);
+		subscriber.register(chat1,chat2);
 		
-		redisSubscriber.register(chat3);
-		redisSubscriber.unsubscribe(chat1.name);
-		redisSubscriber.unsubscribe();
+		subscriber.register(chat3);
+		subscriber.unsubscribe(chat1.name);
+		subscriber.unsubscribe();
 	}
 }
