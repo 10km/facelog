@@ -25,7 +25,7 @@ public class RedisProducer implements IRedisComponent, IProducer{
 		return poolLazy;
 	}
 	
-	RedisProducer(JedisPoolLazy poolLazy) {
+	public RedisProducer(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 	}

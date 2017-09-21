@@ -23,7 +23,7 @@ public class RedisPublisher implements IPublisher,IRedisComponent{
 		return this.poolLazy;
 	}
 
-	RedisPublisher(JedisPoolLazy poolLazy) {
+	public RedisPublisher(JedisPoolLazy poolLazy) {
 		super();
 		this.poolLazy = poolLazy;
 	}

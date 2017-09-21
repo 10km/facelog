@@ -7,8 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
@@ -36,11 +34,11 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 		return pool;
 	}
 
-	RedisTable(Class<V> clazz) {
+	public RedisTable(Class<V> clazz) {
 		this(clazz,JedisPoolLazy.getDefaultInstance(), null);
 	}
 	
-	RedisTable(Class<V> clazz,JedisPoolLazy pool, String tablename){
+	public RedisTable(Class<V> clazz,JedisPoolLazy pool, String tablename){
 		this((Type)clazz,pool,tablename);
 	}
 	
@@ -49,7 +47,7 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	 * @param pool 数据库连接池对象
 	 * @param tablename 表名,[a-zA-Z0-9_]以外的字符都被替换为_,参见 {@link #format(String)}
 	 */
-	RedisTable(Type type,JedisPoolLazy pool, String tablename){
+	public RedisTable(Type type,JedisPoolLazy pool, String tablename){
 		super(type);
 		Assert.notNull(pool, "pool");
 		this.pool = pool;
