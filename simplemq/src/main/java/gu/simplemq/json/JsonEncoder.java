@@ -39,6 +39,14 @@ public abstract class JsonEncoder {
 	
 	public abstract <T> T fromJson(Map<String,String> fieldHash, Type type)throws SmqNotBeanException ;
 	
+	public <T>T fromJson(String json, Class<T> clazz) {		
+		return fromJson(json,(Type)clazz);
+	}
+	
+	public <T> T fromJson(Map<String,String> fieldHash, Class<T> clazz)throws SmqNotBeanException {
+		return fromJson(fieldHash,(Type)clazz);
+	}
+	
 	public Map<String,Object> fromJson(Map<String,String> fieldHash,Map<String,Type> types){
 		if(null == fieldHash) return null;
 		LinkedHashMap<String, Object> fields = new LinkedHashMap<String,Object>();
@@ -48,10 +56,6 @@ public abstract class JsonEncoder {
 		}
 		return fields;
 	}
-	
-	public <T>T fromJson(String json, Class<T> clazz) {		
-		return fromJson(json,(Type)clazz);
-	}	
 	
 	public <T>List<Object> toJsonArray(@SuppressWarnings("unchecked") T...array){
 		if(null == array)return null;
