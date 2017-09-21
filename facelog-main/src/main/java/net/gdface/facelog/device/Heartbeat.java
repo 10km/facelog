@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
-import gu.simplemq.utils.Assert;
 import net.gdface.facelog.CommonConstant;
+import net.gdface.utils.Assert;
 
 /**
  * 设备心跳包redis实现<br>
@@ -19,6 +19,12 @@ import net.gdface.facelog.CommonConstant;
 public class Heartbeat extends Thread implements CommonConstant{
 	private static Heartbeat heartbeat;
 	
+	/**
+	 * 启动设备心跳线程
+	 * @param deviceID
+	 * @param pool
+	 * @return
+	 */
 	public static synchronized Heartbeat startHeartbeat(String deviceID,JedisPoolLazy pool){
 		if(null ==heartbeat  || !heartbeat.isAlive()){
 			heartbeat = new Heartbeat(deviceID,pool);
