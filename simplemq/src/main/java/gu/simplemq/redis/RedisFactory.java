@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqExcepiton;
 
 /**
@@ -24,7 +25,9 @@ public class RedisFactory {
 	public static<V> RedisTable<V> getTable(Class<V> clazz,JedisPoolLazy pool, String tablename){
 		return getTable((Type)clazz,pool,tablename);
 	}
-	
+	public static<V> RedisTable<V> getTable(Channel<V> channel,JedisPoolLazy pool){
+		return getTable(channel.type,pool,channel.name);
+	}	
 	/**
 	 * 返回 {@link JedisPoolLazy}对应的{@link RedisTable}实例,如果{@link #tables}没有找到，
 	 * 就创建一个新实例并加入{@link #tables}

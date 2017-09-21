@@ -11,6 +11,7 @@ import java.util.Set;
 import com.alibaba.fastjson.util.FieldInfo;
 
 import gu.simplemq.AbstractTable;
+import gu.simplemq.Channel;
 import gu.simplemq.exceptions.SmqTableException;
 import gu.simplemq.utils.Assert;
 import gu.simplemq.utils.CommonUtils;
@@ -41,6 +42,10 @@ public class RedisTable<V> extends AbstractTable<V> implements IRedisComponent {
 	
 	public RedisTable(Class<V> clazz,JedisPoolLazy pool, String tablename){
 		this((Type)clazz,pool,tablename);
+	}
+	
+	public RedisTable(Channel<V> channel,JedisPoolLazy pool){
+		this(channel.type,pool,channel.name);
 	}
 	
 	/**
