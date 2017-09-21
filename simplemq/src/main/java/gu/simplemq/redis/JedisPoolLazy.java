@@ -20,7 +20,9 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 /**
- * 延迟初始化的 JedisPool封装类（线程安全）
+ * 延迟初始化的 JedisPool封装类（线程安全）,使用方法:<br>
+ * 通过 {@link #getDefaultInstance()} 和getInstance(...)系列静态方法获取{@link JedisPoolLazy}实例<br>
+ * 通过{@link #apply()} 和 {@link #free()}方法实现{@link Jedis}对象的申请和释放
  * @author guyadong
  *
  */
@@ -64,14 +66,25 @@ public class JedisPoolLazy {
 		}
 	});
 
+	/** 默认实例 */
 	private static JedisPoolLazy defaultInstance;
 	
+	/**
+	 * 返回默认实例,如果 {@link #defaultInstance}为null则创建默认实例
+	 * @return
+	 * @see #createDefaultInstance(Map)
+	 */
 	public static JedisPoolLazy getDefaultInstance() {
 		return null == defaultInstance
 				? createDefaultInstance(null) 
 				: defaultInstance;
 	}
 
+	/**
+	 * 根据指定的连接参数创建默认实例,只能被调用一次(线程安全)
+	 * @param props
+	 * @return
+	 */
 	public static synchronized final JedisPoolLazy createDefaultInstance(Map<PropName,Object> props){
 		if(null == defaultInstance){
 			defaultInstance = createInstance(props);
@@ -242,6 +255,10 @@ public class JedisPoolLazy {
 		}
 	}
 	
+	/**
+	 * @return
+	 * @see {@link JedisUtils#getCanonicalURI(Map)}
+	 */
 	public URI getCanonicalURI(){
 		return JedisUtils.getCanonicalURI(parameters);
 	}

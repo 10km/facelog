@@ -22,6 +22,11 @@ public class JedisUtils {
 		}	
 	}
 
+	/**
+	 * 根据连接参数创建一个{@link URI}对象
+	 * @param parameters
+	 * @return
+	 */
 	public static URI getCanonicalURI(Map<JedisPoolLazy.PropName,Object> parameters){
 		URI uri = (URI) parameters.get(JedisPoolLazy.PropName.uri);
 		if (null == uri) {
