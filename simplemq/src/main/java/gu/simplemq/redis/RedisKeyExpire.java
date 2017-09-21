@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import gu.simplemq.KeyExpire;
 import redis.clients.jedis.Jedis;
 
-public class RedisKeyExpire extends KeyExpire {
+class RedisKeyExpire extends KeyExpire {
 	private final JedisPoolLazy poolLazy;
 	public RedisKeyExpire(JedisPoolLazy poolLazy) {
 		super();
