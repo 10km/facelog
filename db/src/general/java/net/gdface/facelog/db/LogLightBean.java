@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * LogLightBean is a mapping of fl_log_light Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class LogLightBean
     implements Serializable,BaseBean,Comparable<LogLightBean>
 {
@@ -58,6 +57,7 @@ public class LogLightBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -77,6 +77,7 @@ public class LogLightBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -106,6 +107,7 @@ public class LogLightBean
      *
      * @return the value of id
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public Integer getId(){
         return id;
     }
@@ -117,6 +119,7 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to id
      */
+    @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal){    
         id = newVal;
     }
@@ -130,7 +133,6 @@ public class LogLightBean
     public void setId(int newVal){
         setId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
@@ -143,6 +145,7 @@ public class LogLightBean
      *
      * @return the value of personId
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public Integer getPersonId(){
         return personId;
     }
@@ -154,6 +157,7 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to personId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal){    
         personId = newVal;
     }
@@ -167,7 +171,6 @@ public class LogLightBean
     public void setPersonId(int newVal){
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
@@ -180,6 +183,7 @@ public class LogLightBean
      *
      * @return the value of name
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public String getName(){
         return name;
     }
@@ -191,10 +195,10 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to name
      */
+    @com.facebook.swift.codec.ThriftField
     public void setName(String newVal){    
         name = newVal;
     }
-
 
     /**
      * Getter method for {@link #papersType}.<br>
@@ -208,6 +212,7 @@ public class LogLightBean
      *
      * @return the value of papersType
      */
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getPapersType(){
         return papersType;
     }
@@ -219,6 +224,7 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to papersType
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPapersType(Integer newVal){    
         papersType = newVal;
     }
@@ -232,7 +238,6 @@ public class LogLightBean
     public void setPapersType(int newVal){
         setPapersType(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
@@ -245,6 +250,7 @@ public class LogLightBean
      *
      * @return the value of papersNum
      */
+    @com.facebook.swift.codec.ThriftField(6)
     public String getPapersNum(){
         return papersNum;
     }
@@ -256,10 +262,10 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to papersNum
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPapersNum(String newVal){    
         papersNum = newVal;
     }
-
 
     /**
      * Getter method for {@link #verifyTime}.<br>
@@ -273,6 +279,7 @@ public class LogLightBean
      *
      * @return the value of verifyTime
      */
+    @com.facebook.swift.codec.ThriftField(7)
     public java.util.Date getVerifyTime(){
         return verifyTime;
     }
@@ -284,6 +291,7 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to verifyTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setVerifyTime(java.util.Date newVal){    
         verifyTime = newVal;
     }
@@ -297,8 +305,6 @@ public class LogLightBean
     public void setVerifyTime(long newVal){
         setVerifyTime(new java.util.Date(newVal));
     }
-
-
 
     @Override
     public boolean equals(Object object)

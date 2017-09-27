@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * LogBean is a mapping of fl_log Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class LogBean
     implements Serializable,BaseBean,Comparable<LogBean>
 {
@@ -65,6 +64,7 @@ public class LogBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -84,6 +84,7 @@ public class LogBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -114,6 +115,7 @@ public class LogBean
      *
      * @return the value of id
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public Integer getId(){
         return id;
     }
@@ -125,6 +127,7 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to id
      */
+    @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal){    
         id = newVal;
     }
@@ -138,7 +141,6 @@ public class LogBean
     public void setId(int newVal){
         setId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
@@ -152,6 +154,7 @@ public class LogBean
      *
      * @return the value of personId
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public Integer getPersonId(){
         return personId;
     }
@@ -163,6 +166,7 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to personId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal){    
         personId = newVal;
     }
@@ -176,7 +180,6 @@ public class LogBean
     public void setPersonId(int newVal){
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
@@ -190,6 +193,7 @@ public class LogBean
      *
      * @return the value of deviceId
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -201,6 +205,7 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to deviceId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setDeviceId(Integer newVal){    
         deviceId = newVal;
     }
@@ -214,7 +219,6 @@ public class LogBean
     public void setDeviceId(int newVal){
         setDeviceId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #verifyFace}.<br>
      * Meta Data Information (in progress):
@@ -228,6 +232,7 @@ public class LogBean
      *
      * @return the value of verifyFace
      */
+    @com.facebook.swift.codec.ThriftField(5)
     public String getVerifyFace(){
         return verifyFace;
     }
@@ -239,10 +244,10 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to verifyFace
      */
+    @com.facebook.swift.codec.ThriftField
     public void setVerifyFace(String newVal){    
         verifyFace = newVal;
     }
-
 
     /**
      * Getter method for {@link #compareFace}.<br>
@@ -257,6 +262,7 @@ public class LogBean
      *
      * @return the value of compareFace
      */
+    @com.facebook.swift.codec.ThriftField(6)
     public String getCompareFace(){
         return compareFace;
     }
@@ -268,10 +274,10 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to compareFace
      */
+    @com.facebook.swift.codec.ThriftField
     public void setCompareFace(String newVal){    
         compareFace = newVal;
     }
-
 
     /**
      * Getter method for {@link #similarty}.<br>
@@ -285,6 +291,7 @@ public class LogBean
      *
      * @return the value of similarty
      */
+    @com.facebook.swift.codec.ThriftField(7)
     public Double getSimilarty(){
         return similarty;
     }
@@ -296,6 +303,7 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to similarty
      */
+    @com.facebook.swift.codec.ThriftField
     public void setSimilarty(Double newVal){    
         similarty = newVal;
     }
@@ -309,7 +317,6 @@ public class LogBean
     public void setSimilarty(double newVal){
         setSimilarty(new Double(newVal));
     }
-
     /**
      * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
@@ -322,6 +329,7 @@ public class LogBean
      *
      * @return the value of verifyTime
      */
+    @com.facebook.swift.codec.ThriftField(8)
     public java.util.Date getVerifyTime(){
         return verifyTime;
     }
@@ -333,6 +341,7 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to verifyTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setVerifyTime(java.util.Date newVal){    
         verifyTime = newVal;
     }
@@ -346,7 +355,6 @@ public class LogBean
     public void setVerifyTime(long newVal){
         setVerifyTime(new java.util.Date(newVal));
     }
-
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -358,6 +366,7 @@ public class LogBean
      *
      * @return the value of createTime
      */
+    @com.facebook.swift.codec.ThriftField(9)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -369,6 +378,7 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to createTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal){    
         createTime = newVal;
     }
@@ -382,8 +392,6 @@ public class LogBean
     public void setCreateTime(long newVal){
         setCreateTime(new java.util.Date(newVal));
     }
-
-
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -393,10 +401,12 @@ public class LogBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
+    @com.facebook.swift.codec.ThriftField(10)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -406,10 +416,12 @@ public class LogBean
      */
     private FaceBean referencedByVerifyFace;
     /** Getter method for {@link #referencedByVerifyFace}. */
+    @com.facebook.swift.codec.ThriftField(11)
     public FaceBean getReferencedByVerifyFace() {
         return this.referencedByVerifyFace;
     }
     /** Setter method for {@link #referencedByVerifyFace}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByVerifyFace(FaceBean reference) {
         this.referencedByVerifyFace = reference;
     }
@@ -419,10 +431,12 @@ public class LogBean
      */
     private FaceBean referencedByCompareFace;
     /** Getter method for {@link #referencedByCompareFace}. */
+    @com.facebook.swift.codec.ThriftField(12)
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
     /** Setter method for {@link #referencedByCompareFace}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByCompareFace(FaceBean reference) {
         this.referencedByCompareFace = reference;
     }
@@ -432,10 +446,12 @@ public class LogBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
+    @com.facebook.swift.codec.ThriftField(13)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }

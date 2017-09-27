@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * ImageBean is a mapping of fl_image Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class ImageBean
     implements Serializable,BaseBean,Comparable<ImageBean>
 {
@@ -68,6 +67,7 @@ public class ImageBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -87,6 +87,7 @@ public class ImageBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -120,6 +121,7 @@ public class ImageBean
      *
      * @return the value of md5
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public String getMd5(){
         return md5;
     }
@@ -131,10 +133,10 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to md5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setMd5(String newVal){    
         md5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #format}.<br>
@@ -148,6 +150,7 @@ public class ImageBean
      *
      * @return the value of format
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public String getFormat(){
         return format;
     }
@@ -159,10 +162,10 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to format
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFormat(String newVal){    
         format = newVal;
     }
-
 
     /**
      * Getter method for {@link #width}.<br>
@@ -176,6 +179,7 @@ public class ImageBean
      *
      * @return the value of width
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public Integer getWidth(){
         return width;
     }
@@ -187,6 +191,7 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to width
      */
+    @com.facebook.swift.codec.ThriftField
     public void setWidth(Integer newVal){    
         width = newVal;
     }
@@ -200,7 +205,6 @@ public class ImageBean
     public void setWidth(int newVal){
         setWidth(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #height}.<br>
      * Meta Data Information (in progress):
@@ -213,6 +217,7 @@ public class ImageBean
      *
      * @return the value of height
      */
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getHeight(){
         return height;
     }
@@ -224,6 +229,7 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to height
      */
+    @com.facebook.swift.codec.ThriftField
     public void setHeight(Integer newVal){    
         height = newVal;
     }
@@ -237,7 +243,6 @@ public class ImageBean
     public void setHeight(int newVal){
         setHeight(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #depth}.<br>
      * Meta Data Information (in progress):
@@ -250,6 +255,7 @@ public class ImageBean
      *
      * @return the value of depth
      */
+    @com.facebook.swift.codec.ThriftField(6)
     public Integer getDepth(){
         return depth;
     }
@@ -261,6 +267,7 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to depth
      */
+    @com.facebook.swift.codec.ThriftField
     public void setDepth(Integer newVal){    
         depth = newVal;
     }
@@ -274,7 +281,6 @@ public class ImageBean
     public void setDepth(int newVal){
         setDepth(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #faceNum}.<br>
      * Meta Data Information (in progress):
@@ -287,6 +293,7 @@ public class ImageBean
      *
      * @return the value of faceNum
      */
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getFaceNum(){
         return faceNum;
     }
@@ -298,6 +305,7 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to faceNum
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFaceNum(Integer newVal){    
         faceNum = newVal;
     }
@@ -311,7 +319,6 @@ public class ImageBean
     public void setFaceNum(int newVal){
         setFaceNum(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #thumbMd5}.<br>
      * Meta Data Information (in progress):
@@ -325,6 +332,7 @@ public class ImageBean
      *
      * @return the value of thumbMd5
      */
+    @com.facebook.swift.codec.ThriftField(8)
     public String getThumbMd5(){
         return thumbMd5;
     }
@@ -336,10 +344,10 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to thumbMd5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setThumbMd5(String newVal){    
         thumbMd5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #deviceId}.<br>
@@ -354,6 +362,7 @@ public class ImageBean
      *
      * @return the value of deviceId
      */
+    @com.facebook.swift.codec.ThriftField(9)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -365,6 +374,7 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to deviceId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setDeviceId(Integer newVal){    
         deviceId = newVal;
     }
@@ -378,8 +388,6 @@ public class ImageBean
     public void setDeviceId(int newVal){
         setDeviceId(new Integer(newVal));
     }
-
-
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -389,10 +397,12 @@ public class ImageBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
+    @com.facebook.swift.codec.ThriftField(10)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -402,10 +412,12 @@ public class ImageBean
      */
     private StoreBean referencedByMd5;
     /** Getter method for {@link #referencedByMd5}. */
+    @com.facebook.swift.codec.ThriftField(11)
     public StoreBean getReferencedByMd5() {
         return this.referencedByMd5;
     }
     /** Setter method for {@link #referencedByMd5}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByMd5(StoreBean reference) {
         this.referencedByMd5 = reference;
     }
@@ -415,10 +427,12 @@ public class ImageBean
      */
     private StoreBean referencedByThumbMd5;
     /** Getter method for {@link #referencedByThumbMd5}. */
+    @com.facebook.swift.codec.ThriftField(12)
     public StoreBean getReferencedByThumbMd5() {
         return this.referencedByThumbMd5;
     }
     /** Setter method for {@link #referencedByThumbMd5}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByThumbMd5(StoreBean reference) {
         this.referencedByThumbMd5 = reference;
     }

@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * PersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class PersonBean
     implements Serializable,BaseBean,Comparable<PersonBean>
 {
@@ -82,6 +81,7 @@ public class PersonBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -101,6 +101,7 @@ public class PersonBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -133,6 +134,7 @@ public class PersonBean
      *
      * @return the value of id
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public Integer getId(){
         return id;
     }
@@ -144,6 +146,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to id
      */
+    @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal){    
         id = newVal;
     }
@@ -157,7 +160,6 @@ public class PersonBean
     public void setId(int newVal){
         setId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
@@ -170,6 +172,7 @@ public class PersonBean
      *
      * @return the value of groupId
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public Integer getGroupId(){
         return groupId;
     }
@@ -181,6 +184,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to groupId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setGroupId(Integer newVal){    
         groupId = newVal;
     }
@@ -194,7 +198,6 @@ public class PersonBean
     public void setGroupId(int newVal){
         setGroupId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
@@ -207,6 +210,7 @@ public class PersonBean
      *
      * @return the value of name
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public String getName(){
         return name;
     }
@@ -218,10 +222,10 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to name
      */
+    @com.facebook.swift.codec.ThriftField
     public void setName(String newVal){    
         name = newVal;
     }
-
 
     /**
      * Getter method for {@link #sex}.<br>
@@ -235,6 +239,7 @@ public class PersonBean
      *
      * @return the value of sex
      */
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getSex(){
         return sex;
     }
@@ -246,6 +251,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to sex
      */
+    @com.facebook.swift.codec.ThriftField
     public void setSex(Integer newVal){    
         sex = newVal;
     }
@@ -259,7 +265,6 @@ public class PersonBean
     public void setSex(int newVal){
         setSex(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #birthdate}.<br>
      * Meta Data Information (in progress):
@@ -272,6 +277,7 @@ public class PersonBean
      *
      * @return the value of birthdate
      */
+    @com.facebook.swift.codec.ThriftField(6)
     public java.util.Date getBirthdate(){
         return birthdate;
     }
@@ -283,6 +289,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to birthdate
      */
+    @com.facebook.swift.codec.ThriftField
     public void setBirthdate(java.util.Date newVal){    
         birthdate = newVal;
     }
@@ -296,7 +303,6 @@ public class PersonBean
     public void setBirthdate(long newVal){
         setBirthdate(new java.util.Date(newVal));
     }
-
     /**
      * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
@@ -309,6 +315,7 @@ public class PersonBean
      *
      * @return the value of papersType
      */
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getPapersType(){
         return papersType;
     }
@@ -320,6 +327,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to papersType
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPapersType(Integer newVal){    
         papersType = newVal;
     }
@@ -333,7 +341,6 @@ public class PersonBean
     public void setPapersType(int newVal){
         setPapersType(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
@@ -346,6 +353,7 @@ public class PersonBean
      *
      * @return the value of papersNum
      */
+    @com.facebook.swift.codec.ThriftField(8)
     public String getPapersNum(){
         return papersNum;
     }
@@ -357,10 +365,10 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to papersNum
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPapersNum(String newVal){    
         papersNum = newVal;
     }
-
 
     /**
      * Getter method for {@link #photoId}.<br>
@@ -375,6 +383,7 @@ public class PersonBean
      *
      * @return the value of photoId
      */
+    @com.facebook.swift.codec.ThriftField(9)
     public String getPhotoId(){
         return photoId;
     }
@@ -386,10 +395,10 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to photoId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPhotoId(String newVal){    
         photoId = newVal;
     }
-
 
     /**
      * Getter method for {@link #faceMd5}.<br>
@@ -403,6 +412,7 @@ public class PersonBean
      *
      * @return the value of faceMd5
      */
+    @com.facebook.swift.codec.ThriftField(10)
     public String getFaceMd5(){
         return faceMd5;
     }
@@ -414,10 +424,10 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to faceMd5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFaceMd5(String newVal){    
         faceMd5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #expiryDate}.<br>
@@ -431,6 +441,7 @@ public class PersonBean
      *
      * @return the value of expiryDate
      */
+    @com.facebook.swift.codec.ThriftField(11)
     public java.util.Date getExpiryDate(){
         return expiryDate;
     }
@@ -442,6 +453,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to expiryDate
      */
+    @com.facebook.swift.codec.ThriftField
     public void setExpiryDate(java.util.Date newVal){    
         expiryDate = newVal;
     }
@@ -455,7 +467,6 @@ public class PersonBean
     public void setExpiryDate(long newVal){
         setExpiryDate(new java.util.Date(newVal));
     }
-
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -467,6 +478,7 @@ public class PersonBean
      *
      * @return the value of createTime
      */
+    @com.facebook.swift.codec.ThriftField(12)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -478,6 +490,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to createTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal){    
         createTime = newVal;
     }
@@ -491,7 +504,6 @@ public class PersonBean
     public void setCreateTime(long newVal){
         setCreateTime(new java.util.Date(newVal));
     }
-
     /**
      * Getter method for {@link #updateTime}.<br>
      * Meta Data Information (in progress):
@@ -503,6 +515,7 @@ public class PersonBean
      *
      * @return the value of updateTime
      */
+    @com.facebook.swift.codec.ThriftField(13)
     public java.util.Date getUpdateTime(){
         return updateTime;
     }
@@ -514,6 +527,7 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to updateTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setUpdateTime(java.util.Date newVal){    
         updateTime = newVal;
     }
@@ -527,8 +541,6 @@ public class PersonBean
     public void setUpdateTime(long newVal){
         setUpdateTime(new java.util.Date(newVal));
     }
-
-
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -538,10 +550,12 @@ public class PersonBean
      */
     private ImageBean referencedByPhotoId;
     /** Getter method for {@link #referencedByPhotoId}. */
+    @com.facebook.swift.codec.ThriftField(14)
     public ImageBean getReferencedByPhotoId() {
         return this.referencedByPhotoId;
     }
     /** Setter method for {@link #referencedByPhotoId}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByPhotoId(ImageBean reference) {
         this.referencedByPhotoId = reference;
     }

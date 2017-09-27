@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * StoreBean is a mapping of fl_store Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class StoreBean
     implements Serializable,BaseBean,Comparable<StoreBean>
 {
@@ -43,6 +42,7 @@ public class StoreBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -62,6 +62,7 @@ public class StoreBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -94,6 +95,7 @@ public class StoreBean
      *
      * @return the value of md5
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public String getMd5(){
         return md5;
     }
@@ -105,10 +107,10 @@ public class StoreBean
      *
      * @param newVal the new value to be assigned to md5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setMd5(String newVal){    
         md5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #encoding}.<br>
@@ -122,6 +124,7 @@ public class StoreBean
      *
      * @return the value of encoding
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public String getEncoding(){
         return encoding;
     }
@@ -133,10 +136,10 @@ public class StoreBean
      *
      * @param newVal the new value to be assigned to encoding
      */
+    @com.facebook.swift.codec.ThriftField
     public void setEncoding(String newVal){    
         encoding = newVal;
     }
-
 
     /**
      * Getter method for {@link #data}.<br>
@@ -150,6 +153,7 @@ public class StoreBean
      *
      * @return the value of data
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public byte[] getData(){
         return data;
     }
@@ -160,11 +164,10 @@ public class StoreBean
      *
      * @param newVal the new value to be assigned to data
      */
+    @com.facebook.swift.codec.ThriftField
     public void setData(byte[] newVal){    
         data = newVal;
     }
-
-
 
 
     @Override

@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * FeatureBean is a mapping of fl_feature Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class FeatureBean
     implements Serializable,BaseBean,Comparable<FeatureBean>
 {
@@ -50,6 +49,7 @@ public class FeatureBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -69,6 +69,7 @@ public class FeatureBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -98,6 +99,7 @@ public class FeatureBean
      *
      * @return the value of md5
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public String getMd5(){
         return md5;
     }
@@ -109,10 +111,10 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to md5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setMd5(String newVal){    
         md5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #personId}.<br>
@@ -126,6 +128,7 @@ public class FeatureBean
      *
      * @return the value of personId
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public Integer getPersonId(){
         return personId;
     }
@@ -137,6 +140,7 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to personId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal){    
         personId = newVal;
     }
@@ -150,7 +154,6 @@ public class FeatureBean
     public void setPersonId(int newVal){
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
@@ -163,6 +166,7 @@ public class FeatureBean
      *
      * @return the value of imgMd5
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public String getImgMd5(){
         return imgMd5;
     }
@@ -174,10 +178,10 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to imgMd5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setImgMd5(String newVal){    
         imgMd5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #feature}.<br>
@@ -191,6 +195,7 @@ public class FeatureBean
      *
      * @return the value of feature
      */
+    @com.facebook.swift.codec.ThriftField(5)
     public byte[] getFeature(){
         return feature;
     }
@@ -201,10 +206,10 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to feature
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFeature(byte[] newVal){    
         feature = newVal;
     }
-
 
     /**
      * Getter method for {@link #createTime}.<br>
@@ -217,6 +222,7 @@ public class FeatureBean
      *
      * @return the value of createTime
      */
+    @com.facebook.swift.codec.ThriftField(6)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -228,6 +234,7 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to createTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal){    
         createTime = newVal;
     }
@@ -241,8 +248,6 @@ public class FeatureBean
     public void setCreateTime(long newVal){
         setCreateTime(new java.util.Date(newVal));
     }
-
-
 
     @Override
     public boolean equals(Object object)

@@ -7,8 +7,6 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
-
-
 /**
  * FaceBean is a mapping of fl_face Table.
  * <br>Meta Data Information (in progress):
@@ -17,6 +15,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
+@com.facebook.swift.codec.ThriftStruct
 public class FaceBean
     implements Serializable,BaseBean,Comparable<FaceBean>
 {
@@ -85,6 +84,7 @@ public class FaceBean
      *
      * @return true if the current object is new, false if the object is not new
      */
+    @com.facebook.swift.codec.ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -104,6 +104,7 @@ public class FaceBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -136,6 +137,7 @@ public class FaceBean
      *
      * @return the value of md5
      */
+    @com.facebook.swift.codec.ThriftField(2)
     public String getMd5(){
         return md5;
     }
@@ -147,10 +149,10 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to md5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setMd5(String newVal){    
         md5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #personId}.<br>
@@ -165,6 +167,7 @@ public class FaceBean
      *
      * @return the value of personId
      */
+    @com.facebook.swift.codec.ThriftField(3)
     public Integer getPersonId(){
         return personId;
     }
@@ -176,6 +179,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to personId
      */
+    @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal){    
         personId = newVal;
     }
@@ -189,7 +193,6 @@ public class FaceBean
     public void setPersonId(int newVal){
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
@@ -203,6 +206,7 @@ public class FaceBean
      *
      * @return the value of imgMd5
      */
+    @com.facebook.swift.codec.ThriftField(4)
     public String getImgMd5(){
         return imgMd5;
     }
@@ -214,10 +218,10 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to imgMd5
      */
+    @com.facebook.swift.codec.ThriftField
     public void setImgMd5(String newVal){    
         imgMd5 = newVal;
     }
-
 
     /**
      * Getter method for {@link #faceLeft}.<br>
@@ -230,6 +234,7 @@ public class FaceBean
      *
      * @return the value of faceLeft
      */
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getFaceLeft(){
         return faceLeft;
     }
@@ -241,6 +246,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to faceLeft
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFaceLeft(Integer newVal){    
         faceLeft = newVal;
     }
@@ -254,7 +260,6 @@ public class FaceBean
     public void setFaceLeft(int newVal){
         setFaceLeft(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #faceTop}.<br>
      * Meta Data Information (in progress):
@@ -266,6 +271,7 @@ public class FaceBean
      *
      * @return the value of faceTop
      */
+    @com.facebook.swift.codec.ThriftField(6)
     public Integer getFaceTop(){
         return faceTop;
     }
@@ -277,6 +283,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to faceTop
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFaceTop(Integer newVal){    
         faceTop = newVal;
     }
@@ -290,7 +297,6 @@ public class FaceBean
     public void setFaceTop(int newVal){
         setFaceTop(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #faceWidth}.<br>
      * Meta Data Information (in progress):
@@ -302,6 +308,7 @@ public class FaceBean
      *
      * @return the value of faceWidth
      */
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getFaceWidth(){
         return faceWidth;
     }
@@ -313,6 +320,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to faceWidth
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFaceWidth(Integer newVal){    
         faceWidth = newVal;
     }
@@ -326,7 +334,6 @@ public class FaceBean
     public void setFaceWidth(int newVal){
         setFaceWidth(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #faceHeight}.<br>
      * Meta Data Information (in progress):
@@ -338,6 +345,7 @@ public class FaceBean
      *
      * @return the value of faceHeight
      */
+    @com.facebook.swift.codec.ThriftField(8)
     public Integer getFaceHeight(){
         return faceHeight;
     }
@@ -349,6 +357,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to faceHeight
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFaceHeight(Integer newVal){    
         faceHeight = newVal;
     }
@@ -362,7 +371,6 @@ public class FaceBean
     public void setFaceHeight(int newVal){
         setFaceHeight(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #eyeLeftx}.<br>
      * Meta Data Information (in progress):
@@ -374,6 +382,7 @@ public class FaceBean
      *
      * @return the value of eyeLeftx
      */
+    @com.facebook.swift.codec.ThriftField(9)
     public Integer getEyeLeftx(){
         return eyeLeftx;
     }
@@ -385,6 +394,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to eyeLeftx
      */
+    @com.facebook.swift.codec.ThriftField
     public void setEyeLeftx(Integer newVal){    
         eyeLeftx = newVal;
     }
@@ -398,7 +408,6 @@ public class FaceBean
     public void setEyeLeftx(int newVal){
         setEyeLeftx(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #eyeLefty}.<br>
      * Meta Data Information (in progress):
@@ -410,6 +419,7 @@ public class FaceBean
      *
      * @return the value of eyeLefty
      */
+    @com.facebook.swift.codec.ThriftField(10)
     public Integer getEyeLefty(){
         return eyeLefty;
     }
@@ -421,6 +431,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to eyeLefty
      */
+    @com.facebook.swift.codec.ThriftField
     public void setEyeLefty(Integer newVal){    
         eyeLefty = newVal;
     }
@@ -434,7 +445,6 @@ public class FaceBean
     public void setEyeLefty(int newVal){
         setEyeLefty(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #eyeRightx}.<br>
      * Meta Data Information (in progress):
@@ -446,6 +456,7 @@ public class FaceBean
      *
      * @return the value of eyeRightx
      */
+    @com.facebook.swift.codec.ThriftField(11)
     public Integer getEyeRightx(){
         return eyeRightx;
     }
@@ -457,6 +468,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to eyeRightx
      */
+    @com.facebook.swift.codec.ThriftField
     public void setEyeRightx(Integer newVal){    
         eyeRightx = newVal;
     }
@@ -470,7 +482,6 @@ public class FaceBean
     public void setEyeRightx(int newVal){
         setEyeRightx(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #eyeRighty}.<br>
      * Meta Data Information (in progress):
@@ -482,6 +493,7 @@ public class FaceBean
      *
      * @return the value of eyeRighty
      */
+    @com.facebook.swift.codec.ThriftField(12)
     public Integer getEyeRighty(){
         return eyeRighty;
     }
@@ -493,6 +505,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to eyeRighty
      */
+    @com.facebook.swift.codec.ThriftField
     public void setEyeRighty(Integer newVal){    
         eyeRighty = newVal;
     }
@@ -506,7 +519,6 @@ public class FaceBean
     public void setEyeRighty(int newVal){
         setEyeRighty(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #mouthX}.<br>
      * Meta Data Information (in progress):
@@ -518,6 +530,7 @@ public class FaceBean
      *
      * @return the value of mouthX
      */
+    @com.facebook.swift.codec.ThriftField(13)
     public Integer getMouthX(){
         return mouthX;
     }
@@ -529,6 +542,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to mouthX
      */
+    @com.facebook.swift.codec.ThriftField
     public void setMouthX(Integer newVal){    
         mouthX = newVal;
     }
@@ -542,7 +556,6 @@ public class FaceBean
     public void setMouthX(int newVal){
         setMouthX(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #mouthY}.<br>
      * Meta Data Information (in progress):
@@ -554,6 +567,7 @@ public class FaceBean
      *
      * @return the value of mouthY
      */
+    @com.facebook.swift.codec.ThriftField(14)
     public Integer getMouthY(){
         return mouthY;
     }
@@ -565,6 +579,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to mouthY
      */
+    @com.facebook.swift.codec.ThriftField
     public void setMouthY(Integer newVal){    
         mouthY = newVal;
     }
@@ -578,7 +593,6 @@ public class FaceBean
     public void setMouthY(int newVal){
         setMouthY(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #noseX}.<br>
      * Meta Data Information (in progress):
@@ -590,6 +604,7 @@ public class FaceBean
      *
      * @return the value of noseX
      */
+    @com.facebook.swift.codec.ThriftField(15)
     public Integer getNoseX(){
         return noseX;
     }
@@ -601,6 +616,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to noseX
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNoseX(Integer newVal){    
         noseX = newVal;
     }
@@ -614,7 +630,6 @@ public class FaceBean
     public void setNoseX(int newVal){
         setNoseX(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #noseY}.<br>
      * Meta Data Information (in progress):
@@ -626,6 +641,7 @@ public class FaceBean
      *
      * @return the value of noseY
      */
+    @com.facebook.swift.codec.ThriftField(16)
     public Integer getNoseY(){
         return noseY;
     }
@@ -637,6 +653,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to noseY
      */
+    @com.facebook.swift.codec.ThriftField
     public void setNoseY(Integer newVal){    
         noseY = newVal;
     }
@@ -650,7 +667,6 @@ public class FaceBean
     public void setNoseY(int newVal){
         setNoseY(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #angleYaw}.<br>
      * Meta Data Information (in progress):
@@ -662,6 +678,7 @@ public class FaceBean
      *
      * @return the value of angleYaw
      */
+    @com.facebook.swift.codec.ThriftField(17)
     public Integer getAngleYaw(){
         return angleYaw;
     }
@@ -673,6 +690,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to angleYaw
      */
+    @com.facebook.swift.codec.ThriftField
     public void setAngleYaw(Integer newVal){    
         angleYaw = newVal;
     }
@@ -686,7 +704,6 @@ public class FaceBean
     public void setAngleYaw(int newVal){
         setAngleYaw(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #anglePitch}.<br>
      * Meta Data Information (in progress):
@@ -698,6 +715,7 @@ public class FaceBean
      *
      * @return the value of anglePitch
      */
+    @com.facebook.swift.codec.ThriftField(18)
     public Integer getAnglePitch(){
         return anglePitch;
     }
@@ -709,6 +727,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to anglePitch
      */
+    @com.facebook.swift.codec.ThriftField
     public void setAnglePitch(Integer newVal){    
         anglePitch = newVal;
     }
@@ -722,7 +741,6 @@ public class FaceBean
     public void setAnglePitch(int newVal){
         setAnglePitch(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #angleRoll}.<br>
      * Meta Data Information (in progress):
@@ -734,6 +752,7 @@ public class FaceBean
      *
      * @return the value of angleRoll
      */
+    @com.facebook.swift.codec.ThriftField(19)
     public Integer getAngleRoll(){
         return angleRoll;
     }
@@ -745,6 +764,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to angleRoll
      */
+    @com.facebook.swift.codec.ThriftField
     public void setAngleRoll(Integer newVal){    
         angleRoll = newVal;
     }
@@ -758,7 +778,6 @@ public class FaceBean
     public void setAngleRoll(int newVal){
         setAngleRoll(new Integer(newVal));
     }
-
     /**
      * Getter method for {@link #extInfo}.<br>
      * Meta Data Information (in progress):
@@ -771,6 +790,7 @@ public class FaceBean
      *
      * @return the value of extInfo
      */
+    @com.facebook.swift.codec.ThriftField(20)
     public byte[] getExtInfo(){
         return extInfo;
     }
@@ -781,10 +801,10 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to extInfo
      */
+    @com.facebook.swift.codec.ThriftField
     public void setExtInfo(byte[] newVal){    
         extInfo = newVal;
     }
-
 
     /**
      * Getter method for {@link #feature}.<br>
@@ -798,6 +818,7 @@ public class FaceBean
      *
      * @return the value of feature
      */
+    @com.facebook.swift.codec.ThriftField(21)
     public byte[] getFeature(){
         return feature;
     }
@@ -808,10 +829,10 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to feature
      */
+    @com.facebook.swift.codec.ThriftField
     public void setFeature(byte[] newVal){    
         feature = newVal;
     }
-
 
     /**
      * Getter method for {@link #createTime}.<br>
@@ -824,6 +845,7 @@ public class FaceBean
      *
      * @return the value of createTime
      */
+    @com.facebook.swift.codec.ThriftField(22)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -835,6 +857,7 @@ public class FaceBean
      *
      * @param newVal the new value to be assigned to createTime
      */
+    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal){    
         createTime = newVal;
     }
@@ -848,8 +871,6 @@ public class FaceBean
     public void setCreateTime(long newVal){
         setCreateTime(new java.util.Date(newVal));
     }
-
-
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
@@ -859,10 +880,12 @@ public class FaceBean
      */
     private ImageBean referencedByImgMd5;
     /** Getter method for {@link #referencedByImgMd5}. */
+    @com.facebook.swift.codec.ThriftField(23)
     public ImageBean getReferencedByImgMd5() {
         return this.referencedByImgMd5;
     }
     /** Setter method for {@link #referencedByImgMd5}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByImgMd5(ImageBean reference) {
         this.referencedByImgMd5 = reference;
     }
@@ -872,10 +895,12 @@ public class FaceBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
+    @com.facebook.swift.codec.ThriftField(24)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
+    @com.facebook.swift.codec.ThriftField
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }
