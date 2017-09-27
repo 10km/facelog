@@ -6,9 +6,12 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.device;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlDeviceBean is a mapping of fl_device Table.
  * <br>Meta Data Information (in progress):
@@ -18,46 +21,94 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlDeviceBean
-    extends FlDeviceBeanBase
-    implements FullBean<FlDeviceBeanBase>
+    implements Serializable,FullBean<FlDeviceBean>,Comparable<FlDeviceBean>,Constant
 {
 	private static final long serialVersionUID = -1873511050244238973L;
-	
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    /** comments:设备id */
+    private Integer id;
 
-    private boolean nameIsModified = false;
-    private boolean nameIsInitialized = false;
+    /** comments:设备名称 */
+    private String name;
 
-    private boolean onlineIsModified = false;
-    private boolean onlineIsInitialized = false;
+    /** comments:设备是否在线标记 */
+    private Boolean online;
 
-    private boolean groupIdIsModified = false;
-    private boolean groupIdIsInitialized = false;
+    /** comments:设备所属组id */
+    private Integer groupId;
 
-    private boolean versionIsModified = false;
-    private boolean versionIsInitialized = false;
+    /** comments:设备版本号 */
+    private String version;
 
-    private boolean createTimeIsModified = false;
-    private boolean createTimeIsInitialized = false;
+    private java.util.Date createTime;
 
-    private boolean updateTimeIsModified = false;
-    private boolean updateTimeIsInitialized = false;
+    private java.util.Date updateTime;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlDeviceBean is via the createFlDeviceBean method in FlDeviceManager or
-     * via the factory class FlDeviceFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlDeviceBean(){
         super();
     }
     /**
      * create a FlDeviceBean from a instance
      */
-    FlDeviceBean(FlDeviceBeanBase bean){
+    FlDeviceBean(FlDeviceBean bean){
         super();
         copy(bean);
     }
@@ -92,12 +143,13 @@ public class FlDeviceBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+            (newVal == null && id == null && isIdInitialized())) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        id = newVal;
+
+        modified |= FL_DEVICE_ID_ID_MASK;
+        initialized |= FL_DEVICE_ID_ID_MASK;
     }
 
     /**
@@ -119,7 +171,7 @@ public class FlDeviceBean
      */
     public boolean isIdModified()
     {
-        return idIsModified;
+        return 0L != (modified & FL_DEVICE_ID_ID_MASK);
     }
 
     /**
@@ -131,9 +183,8 @@ public class FlDeviceBean
      */
     public boolean isIdInitialized()
     {
-        return idIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_ID_MASK);
     }
-
     /**
      * Getter method for name.
      * <br>
@@ -162,12 +213,13 @@ public class FlDeviceBean
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && nameIsInitialized)) {
+            (newVal == null && name == null && isNameInitialized())) {
             return;
         }
-        super.setName(newVal);
-        nameIsModified = true;
-        nameIsInitialized = true;
+        name = newVal;
+
+        modified |= FL_DEVICE_ID_NAME_MASK;
+        initialized |= FL_DEVICE_ID_NAME_MASK;
     }
 
     /**
@@ -177,7 +229,7 @@ public class FlDeviceBean
      */
     public boolean isNameModified()
     {
-        return nameIsModified;
+        return 0L != (modified & FL_DEVICE_ID_NAME_MASK);
     }
 
     /**
@@ -189,9 +241,8 @@ public class FlDeviceBean
      */
     public boolean isNameInitialized()
     {
-        return nameIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_NAME_MASK);
     }
-
     /**
      * Getter method for online.
      * <br>
@@ -220,12 +271,13 @@ public class FlDeviceBean
     public void setOnline(Boolean newVal)
     {
         if ((newVal != null && online != null && (newVal.compareTo(online) == 0)) ||
-            (newVal == null && online == null && onlineIsInitialized)) {
+            (newVal == null && online == null && isOnlineInitialized())) {
             return;
         }
-        super.setOnline(newVal);
-        onlineIsModified = true;
-        onlineIsInitialized = true;
+        online = newVal;
+
+        modified |= FL_DEVICE_ID_ONLINE_MASK;
+        initialized |= FL_DEVICE_ID_ONLINE_MASK;
     }
 
     /**
@@ -247,7 +299,7 @@ public class FlDeviceBean
      */
     public boolean isOnlineModified()
     {
-        return onlineIsModified;
+        return 0L != (modified & FL_DEVICE_ID_ONLINE_MASK);
     }
 
     /**
@@ -259,9 +311,8 @@ public class FlDeviceBean
      */
     public boolean isOnlineInitialized()
     {
-        return onlineIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_ONLINE_MASK);
     }
-
     /**
      * Getter method for groupId.
      * <br>
@@ -290,12 +341,13 @@ public class FlDeviceBean
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && groupIdIsInitialized)) {
+            (newVal == null && groupId == null && isGroupIdInitialized())) {
             return;
         }
-        super.setGroupId(newVal);
-        groupIdIsModified = true;
-        groupIdIsInitialized = true;
+        groupId = newVal;
+
+        modified |= FL_DEVICE_ID_GROUP_ID_MASK;
+        initialized |= FL_DEVICE_ID_GROUP_ID_MASK;
     }
 
     /**
@@ -317,7 +369,7 @@ public class FlDeviceBean
      */
     public boolean isGroupIdModified()
     {
-        return groupIdIsModified;
+        return 0L != (modified & FL_DEVICE_ID_GROUP_ID_MASK);
     }
 
     /**
@@ -329,9 +381,8 @@ public class FlDeviceBean
      */
     public boolean isGroupIdInitialized()
     {
-        return groupIdIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_GROUP_ID_MASK);
     }
-
     /**
      * Getter method for version.
      * <br>
@@ -360,12 +411,13 @@ public class FlDeviceBean
     public void setVersion(String newVal)
     {
         if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
-            (newVal == null && version == null && versionIsInitialized)) {
+            (newVal == null && version == null && isVersionInitialized())) {
             return;
         }
-        super.setVersion(newVal);
-        versionIsModified = true;
-        versionIsInitialized = true;
+        version = newVal;
+
+        modified |= FL_DEVICE_ID_VERSION_MASK;
+        initialized |= FL_DEVICE_ID_VERSION_MASK;
     }
 
     /**
@@ -375,7 +427,7 @@ public class FlDeviceBean
      */
     public boolean isVersionModified()
     {
-        return versionIsModified;
+        return 0L != (modified & FL_DEVICE_ID_VERSION_MASK);
     }
 
     /**
@@ -387,9 +439,8 @@ public class FlDeviceBean
      */
     public boolean isVersionInitialized()
     {
-        return versionIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_VERSION_MASK);
     }
-
     /**
      * Getter method for createTime.
      * <br>
@@ -417,12 +468,13 @@ public class FlDeviceBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && createTimeIsInitialized)) {
+            (newVal == null && createTime == null && isCreateTimeInitialized())) {
             return;
         }
-        super.setCreateTime(newVal);
-        createTimeIsModified = true;
-        createTimeIsInitialized = true;
+        createTime = newVal;
+
+        modified |= FL_DEVICE_ID_CREATE_TIME_MASK;
+        initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -444,7 +496,7 @@ public class FlDeviceBean
      */
     public boolean isCreateTimeModified()
     {
-        return createTimeIsModified;
+        return 0L != (modified & FL_DEVICE_ID_CREATE_TIME_MASK);
     }
 
     /**
@@ -456,9 +508,8 @@ public class FlDeviceBean
      */
     public boolean isCreateTimeInitialized()
     {
-        return createTimeIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_CREATE_TIME_MASK);
     }
-
     /**
      * Getter method for updateTime.
      * <br>
@@ -486,12 +537,13 @@ public class FlDeviceBean
     public void setUpdateTime(java.util.Date newVal)
     {
         if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && updateTimeIsInitialized)) {
+            (newVal == null && updateTime == null && isUpdateTimeInitialized())) {
             return;
         }
-        super.setUpdateTime(newVal);
-        updateTimeIsModified = true;
-        updateTimeIsInitialized = true;
+        updateTime = newVal;
+
+        modified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
+        initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
     }
 
     /**
@@ -513,7 +565,7 @@ public class FlDeviceBean
      */
     public boolean isUpdateTimeModified()
     {
-        return updateTimeIsModified;
+        return 0L != (modified & FL_DEVICE_ID_UPDATE_TIME_MASK);
     }
 
     /**
@@ -525,10 +577,8 @@ public class FlDeviceBean
      */
     public boolean isUpdateTimeInitialized()
     {
-        return updateTimeIsInitialized;
+        return 0L != (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK);
     }
-
-
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -539,9 +589,61 @@ public class FlDeviceBean
      */
     public boolean isModified()
     {
-        return idIsModified 		|| nameIsModified  		|| onlineIsModified  		|| groupIdIsModified  		|| versionIsModified  		|| createTimeIsModified  		|| updateTimeIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_DEVICE_ID_ID:
+            return isIdModified();
+        case FL_DEVICE_ID_NAME:
+            return isNameModified();
+        case FL_DEVICE_ID_ONLINE:
+            return isOnlineModified();
+        case FL_DEVICE_ID_GROUP_ID:
+            return isGroupIdModified();
+        case FL_DEVICE_ID_VERSION:
+            return isVersionModified();
+        case FL_DEVICE_ID_CREATE_TIME:
+            return isCreateTimeModified();
+        case FL_DEVICE_ID_UPDATE_TIME:
+            return isUpdateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_DEVICE_ID_ID:
+            return isIdInitialized();
+        case FL_DEVICE_ID_NAME:
+            return isNameInitialized();
+        case FL_DEVICE_ID_ONLINE:
+            return isOnlineInitialized();
+        case FL_DEVICE_ID_GROUP_ID:
+            return isGroupIdInitialized();
+        case FL_DEVICE_ID_VERSION:
+            return isVersionInitialized();
+        case FL_DEVICE_ID_CREATE_TIME:
+            return isCreateTimeInitialized();
+        case FL_DEVICE_ID_UPDATE_TIME:
+            return isUpdateTimeInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -549,24 +651,10 @@ public class FlDeviceBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdModified();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameModified();
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            return isOnlineModified();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return isGroupIdModified();
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            return isVersionModified();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeModified();
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return isUpdateTimeModified();
-        }
-        return false;		
+        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -578,24 +666,10 @@ public class FlDeviceBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdInitialized();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameInitialized();
-        } else if ("online".equalsIgnoreCase(column) || "online".equalsIgnoreCase(column)) {
-            return isOnlineInitialized();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return isGroupIdInitialized();
-        } else if ("version".equalsIgnoreCase(column) || "version".equalsIgnoreCase(column)) {
-            return isVersionInitialized();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeInitialized();
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return isUpdateTimeInitialized();
-        }
-        return false;		
+        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -603,24 +677,225 @@ public class FlDeviceBean
      */
     public void resetIsModified()
     {
-        idIsModified = false;
-        nameIsModified = false;
-        onlineIsModified = false;
-        groupIdIsModified = false;
-        versionIsModified = false;
-        createTimeIsModified = false;
-        updateTimeIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlDeviceBean)) {
+            return false;
+        }
+
+        FlDeviceBean obj = (FlDeviceBean) object;
+        return new EqualsBuilder()
+            .append(getId(), obj.getId())
+            .append(getName(), obj.getName())
+            .append(getOnline(), obj.getOnline())
+            .append(getGroupId(), obj.getGroupId())
+            .append(getVersion(), obj.getVersion())
+            .append(getCreateTime(), obj.getCreateTime())
+            .append(getUpdateTime(), obj.getUpdateTime())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getId())
+            .append(getName())
+            .append(getOnline())
+            .append(getGroupId())
+            .append(getVersion())
+            .append(getCreateTime())
+            .append(getUpdateTime())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tid=").append(getId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
+            .append("\tonline=").append(getOnline()).append("\n")
+            .append("\tgroup_id=").append(getGroupId()).append("\n")
+            .append("\tversion=").append(getVersion()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlDeviceBean object){
+        return new CompareToBuilder()
+            .append(getId(), object.getId())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlDeviceBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setId(bean.getId());
+            setName(bean.getName());
+            setOnline(bean.getOnline());
+            setGroupId(bean.getGroupId());
+            setVersion(bean.getVersion());
+            setCreateTime(bean.getCreateTime());
+            setUpdateTime(bean.getUpdateTime());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlDeviceBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getId()!=null)
+            setId(bean.getId());
+        if(bean.getName()!=null)
+            setName(bean.getName());
+        if(bean.getOnline()!=null)
+            setOnline(bean.getOnline());
+        if(bean.getGroupId()!=null)
+            setGroupId(bean.getGroupId());
+        if(bean.getVersion()!=null)
+            setVersion(bean.getVersion());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
+        if(bean.getUpdateTime()!=null)
+            setUpdateTime(bean.getUpdateTime());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlDeviceBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setId(null);
+        setName(null);
+        setOnline(null);
+        setGroupId(null);
+        setVersion(null);
+        setCreateTime(null);
+        setUpdateTime(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlDeviceBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlDeviceBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_DEVICE_ID_ID: 
+            return (T)getId();        
+        case FL_DEVICE_ID_NAME: 
+            return (T)getName();        
+        case FL_DEVICE_ID_ONLINE: 
+            return (T)getOnline();        
+        case FL_DEVICE_ID_GROUP_ID: 
+            return (T)getGroupId();        
+        case FL_DEVICE_ID_VERSION: 
+            return (T)getVersion();        
+        case FL_DEVICE_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        case FL_DEVICE_ID_UPDATE_TIME: 
+            return (T)getUpdateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_DEVICE_ID_ID:        
+            setId((Integer)value);
+        case FL_DEVICE_ID_NAME:        
+            setName((String)value);
+        case FL_DEVICE_ID_ONLINE:        
+            setOnline((Boolean)value);
+        case FL_DEVICE_ID_GROUP_ID:        
+            setGroupId((Integer)value);
+        case FL_DEVICE_ID_VERSION:        
+            setVersion((String)value);
+        case FL_DEVICE_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        case FL_DEVICE_ID_UPDATE_TIME:        
+            setUpdateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }

@@ -6,9 +6,14 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.face;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.image.FlImageBean;
+import net.gdface.facelog.dborm.person.FlPersonBean;
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlFaceBean is a mapping of fl_face Table.
  * <br>Meta Data Information (in progress):
@@ -18,88 +23,122 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlFaceBean
-    extends FlFaceBeanBase
-    implements FullBean<FlFaceBeanBase>
+    implements Serializable,FullBean<FlFaceBean>,Comparable<FlFaceBean>,Constant
 {
 	private static final long serialVersionUID = 2979758335038585995L;
-	
-    private boolean md5IsModified = false;
-    private boolean md5IsInitialized = false;
+    /** comments:主键,特征数据md5校验码 */
+    private String md5;
 
-    private boolean personIdIsModified = false;
-    private boolean personIdIsInitialized = false;
+    /** comments:外键,所属用户id */
+    private Integer personId;
 
-    private boolean imgMd5IsModified = false;
-    private boolean imgMd5IsInitialized = false;
+    /** comments:外键,所属图像id */
+    private String imgMd5;
 
-    private boolean faceLeftIsModified = false;
-    private boolean faceLeftIsInitialized = false;
+    private Integer faceLeft;
 
-    private boolean faceTopIsModified = false;
-    private boolean faceTopIsInitialized = false;
+    private Integer faceTop;
 
-    private boolean faceWidthIsModified = false;
-    private boolean faceWidthIsInitialized = false;
+    private Integer faceWidth;
 
-    private boolean faceHeightIsModified = false;
-    private boolean faceHeightIsInitialized = false;
+    private Integer faceHeight;
 
-    private boolean eyeLeftxIsModified = false;
-    private boolean eyeLeftxIsInitialized = false;
+    private Integer eyeLeftx;
 
-    private boolean eyeLeftyIsModified = false;
-    private boolean eyeLeftyIsInitialized = false;
+    private Integer eyeLefty;
 
-    private boolean eyeRightxIsModified = false;
-    private boolean eyeRightxIsInitialized = false;
+    private Integer eyeRightx;
 
-    private boolean eyeRightyIsModified = false;
-    private boolean eyeRightyIsInitialized = false;
+    private Integer eyeRighty;
 
-    private boolean mouthXIsModified = false;
-    private boolean mouthXIsInitialized = false;
+    private Integer mouthX;
 
-    private boolean mouthYIsModified = false;
-    private boolean mouthYIsInitialized = false;
+    private Integer mouthY;
 
-    private boolean noseXIsModified = false;
-    private boolean noseXIsInitialized = false;
+    private Integer noseX;
 
-    private boolean noseYIsModified = false;
-    private boolean noseYIsInitialized = false;
+    private Integer noseY;
 
-    private boolean angleYawIsModified = false;
-    private boolean angleYawIsInitialized = false;
+    private Integer angleYaw;
 
-    private boolean anglePitchIsModified = false;
-    private boolean anglePitchIsInitialized = false;
+    private Integer anglePitch;
 
-    private boolean angleRollIsModified = false;
-    private boolean angleRollIsInitialized = false;
+    private Integer angleRoll;
 
-    private boolean extInfoIsModified = false;
-    private boolean extInfoIsInitialized = false;
+    /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
+    private byte[] extInfo;
 
-    private boolean featureIsModified = false;
-    private boolean featureIsInitialized = false;
+    /** comments:二进制特征数据 */
+    private byte[] feature;
 
-    private boolean createTimeIsModified = false;
-    private boolean createTimeIsInitialized = false;
+    private java.util.Date createTime;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlFaceBean is via the createFlFaceBean method in FlFaceManager or
-     * via the factory class FlFaceFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlFaceBean(){
         super();
     }
     /**
      * create a FlFaceBean from a instance
      */
-    FlFaceBean(FlFaceBeanBase bean){
+    FlFaceBean(FlFaceBean bean){
         super();
         copy(bean);
     }
@@ -134,12 +173,13 @@ public class FlFaceBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && md5IsInitialized)) {
+            (newVal == null && md5 == null && isMd5Initialized())) {
             return;
         }
-        super.setMd5(newVal);
-        md5IsModified = true;
-        md5IsInitialized = true;
+        md5 = newVal;
+
+        modified |= FL_FACE_ID_MD5_MASK;
+        initialized |= FL_FACE_ID_MD5_MASK;
     }
 
     /**
@@ -149,7 +189,7 @@ public class FlFaceBean
      */
     public boolean isMd5Modified()
     {
-        return md5IsModified;
+        return 0L != (modified & FL_FACE_ID_MD5_MASK);
     }
 
     /**
@@ -161,9 +201,8 @@ public class FlFaceBean
      */
     public boolean isMd5Initialized()
     {
-        return md5IsInitialized;
+        return 0L != (initialized & FL_FACE_ID_MD5_MASK);
     }
-
     /**
      * Getter method for personId.
      * <br>
@@ -193,12 +232,13 @@ public class FlFaceBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && personIdIsInitialized)) {
+            (newVal == null && personId == null && isPersonIdInitialized())) {
             return;
         }
-        super.setPersonId(newVal);
-        personIdIsModified = true;
-        personIdIsInitialized = true;
+        personId = newVal;
+
+        modified |= FL_FACE_ID_PERSON_ID_MASK;
+        initialized |= FL_FACE_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -220,7 +260,7 @@ public class FlFaceBean
      */
     public boolean isPersonIdModified()
     {
-        return personIdIsModified;
+        return 0L != (modified & FL_FACE_ID_PERSON_ID_MASK);
     }
 
     /**
@@ -232,9 +272,8 @@ public class FlFaceBean
      */
     public boolean isPersonIdInitialized()
     {
-        return personIdIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_PERSON_ID_MASK);
     }
-
     /**
      * Getter method for imgMd5.
      * <br>
@@ -264,12 +303,13 @@ public class FlFaceBean
     public void setImgMd5(String newVal)
     {
         if ((newVal != null && imgMd5 != null && (newVal.compareTo(imgMd5) == 0)) ||
-            (newVal == null && imgMd5 == null && imgMd5IsInitialized)) {
+            (newVal == null && imgMd5 == null && isImgMd5Initialized())) {
             return;
         }
-        super.setImgMd5(newVal);
-        imgMd5IsModified = true;
-        imgMd5IsInitialized = true;
+        imgMd5 = newVal;
+
+        modified |= FL_FACE_ID_IMG_MD5_MASK;
+        initialized |= FL_FACE_ID_IMG_MD5_MASK;
     }
 
     /**
@@ -279,7 +319,7 @@ public class FlFaceBean
      */
     public boolean isImgMd5Modified()
     {
-        return imgMd5IsModified;
+        return 0L != (modified & FL_FACE_ID_IMG_MD5_MASK);
     }
 
     /**
@@ -291,9 +331,8 @@ public class FlFaceBean
      */
     public boolean isImgMd5Initialized()
     {
-        return imgMd5IsInitialized;
+        return 0L != (initialized & FL_FACE_ID_IMG_MD5_MASK);
     }
-
     /**
      * Getter method for faceLeft.
      * <br>
@@ -321,12 +360,13 @@ public class FlFaceBean
     public void setFaceLeft(Integer newVal)
     {
         if ((newVal != null && faceLeft != null && (newVal.compareTo(faceLeft) == 0)) ||
-            (newVal == null && faceLeft == null && faceLeftIsInitialized)) {
+            (newVal == null && faceLeft == null && isFaceLeftInitialized())) {
             return;
         }
-        super.setFaceLeft(newVal);
-        faceLeftIsModified = true;
-        faceLeftIsInitialized = true;
+        faceLeft = newVal;
+
+        modified |= FL_FACE_ID_FACE_LEFT_MASK;
+        initialized |= FL_FACE_ID_FACE_LEFT_MASK;
     }
 
     /**
@@ -348,7 +388,7 @@ public class FlFaceBean
      */
     public boolean isFaceLeftModified()
     {
-        return faceLeftIsModified;
+        return 0L != (modified & FL_FACE_ID_FACE_LEFT_MASK);
     }
 
     /**
@@ -360,9 +400,8 @@ public class FlFaceBean
      */
     public boolean isFaceLeftInitialized()
     {
-        return faceLeftIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_FACE_LEFT_MASK);
     }
-
     /**
      * Getter method for faceTop.
      * <br>
@@ -390,12 +429,13 @@ public class FlFaceBean
     public void setFaceTop(Integer newVal)
     {
         if ((newVal != null && faceTop != null && (newVal.compareTo(faceTop) == 0)) ||
-            (newVal == null && faceTop == null && faceTopIsInitialized)) {
+            (newVal == null && faceTop == null && isFaceTopInitialized())) {
             return;
         }
-        super.setFaceTop(newVal);
-        faceTopIsModified = true;
-        faceTopIsInitialized = true;
+        faceTop = newVal;
+
+        modified |= FL_FACE_ID_FACE_TOP_MASK;
+        initialized |= FL_FACE_ID_FACE_TOP_MASK;
     }
 
     /**
@@ -417,7 +457,7 @@ public class FlFaceBean
      */
     public boolean isFaceTopModified()
     {
-        return faceTopIsModified;
+        return 0L != (modified & FL_FACE_ID_FACE_TOP_MASK);
     }
 
     /**
@@ -429,9 +469,8 @@ public class FlFaceBean
      */
     public boolean isFaceTopInitialized()
     {
-        return faceTopIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_FACE_TOP_MASK);
     }
-
     /**
      * Getter method for faceWidth.
      * <br>
@@ -459,12 +498,13 @@ public class FlFaceBean
     public void setFaceWidth(Integer newVal)
     {
         if ((newVal != null && faceWidth != null && (newVal.compareTo(faceWidth) == 0)) ||
-            (newVal == null && faceWidth == null && faceWidthIsInitialized)) {
+            (newVal == null && faceWidth == null && isFaceWidthInitialized())) {
             return;
         }
-        super.setFaceWidth(newVal);
-        faceWidthIsModified = true;
-        faceWidthIsInitialized = true;
+        faceWidth = newVal;
+
+        modified |= FL_FACE_ID_FACE_WIDTH_MASK;
+        initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
     }
 
     /**
@@ -486,7 +526,7 @@ public class FlFaceBean
      */
     public boolean isFaceWidthModified()
     {
-        return faceWidthIsModified;
+        return 0L != (modified & FL_FACE_ID_FACE_WIDTH_MASK);
     }
 
     /**
@@ -498,9 +538,8 @@ public class FlFaceBean
      */
     public boolean isFaceWidthInitialized()
     {
-        return faceWidthIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_FACE_WIDTH_MASK);
     }
-
     /**
      * Getter method for faceHeight.
      * <br>
@@ -528,12 +567,13 @@ public class FlFaceBean
     public void setFaceHeight(Integer newVal)
     {
         if ((newVal != null && faceHeight != null && (newVal.compareTo(faceHeight) == 0)) ||
-            (newVal == null && faceHeight == null && faceHeightIsInitialized)) {
+            (newVal == null && faceHeight == null && isFaceHeightInitialized())) {
             return;
         }
-        super.setFaceHeight(newVal);
-        faceHeightIsModified = true;
-        faceHeightIsInitialized = true;
+        faceHeight = newVal;
+
+        modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
+        initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
     }
 
     /**
@@ -555,7 +595,7 @@ public class FlFaceBean
      */
     public boolean isFaceHeightModified()
     {
-        return faceHeightIsModified;
+        return 0L != (modified & FL_FACE_ID_FACE_HEIGHT_MASK);
     }
 
     /**
@@ -567,9 +607,8 @@ public class FlFaceBean
      */
     public boolean isFaceHeightInitialized()
     {
-        return faceHeightIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_FACE_HEIGHT_MASK);
     }
-
     /**
      * Getter method for eyeLeftx.
      * <br>
@@ -597,12 +636,13 @@ public class FlFaceBean
     public void setEyeLeftx(Integer newVal)
     {
         if ((newVal != null && eyeLeftx != null && (newVal.compareTo(eyeLeftx) == 0)) ||
-            (newVal == null && eyeLeftx == null && eyeLeftxIsInitialized)) {
+            (newVal == null && eyeLeftx == null && isEyeLeftxInitialized())) {
             return;
         }
-        super.setEyeLeftx(newVal);
-        eyeLeftxIsModified = true;
-        eyeLeftxIsInitialized = true;
+        eyeLeftx = newVal;
+
+        modified |= FL_FACE_ID_EYE_LEFTX_MASK;
+        initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
     }
 
     /**
@@ -624,7 +664,7 @@ public class FlFaceBean
      */
     public boolean isEyeLeftxModified()
     {
-        return eyeLeftxIsModified;
+        return 0L != (modified & FL_FACE_ID_EYE_LEFTX_MASK);
     }
 
     /**
@@ -636,9 +676,8 @@ public class FlFaceBean
      */
     public boolean isEyeLeftxInitialized()
     {
-        return eyeLeftxIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_EYE_LEFTX_MASK);
     }
-
     /**
      * Getter method for eyeLefty.
      * <br>
@@ -666,12 +705,13 @@ public class FlFaceBean
     public void setEyeLefty(Integer newVal)
     {
         if ((newVal != null && eyeLefty != null && (newVal.compareTo(eyeLefty) == 0)) ||
-            (newVal == null && eyeLefty == null && eyeLeftyIsInitialized)) {
+            (newVal == null && eyeLefty == null && isEyeLeftyInitialized())) {
             return;
         }
-        super.setEyeLefty(newVal);
-        eyeLeftyIsModified = true;
-        eyeLeftyIsInitialized = true;
+        eyeLefty = newVal;
+
+        modified |= FL_FACE_ID_EYE_LEFTY_MASK;
+        initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
     }
 
     /**
@@ -693,7 +733,7 @@ public class FlFaceBean
      */
     public boolean isEyeLeftyModified()
     {
-        return eyeLeftyIsModified;
+        return 0L != (modified & FL_FACE_ID_EYE_LEFTY_MASK);
     }
 
     /**
@@ -705,9 +745,8 @@ public class FlFaceBean
      */
     public boolean isEyeLeftyInitialized()
     {
-        return eyeLeftyIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_EYE_LEFTY_MASK);
     }
-
     /**
      * Getter method for eyeRightx.
      * <br>
@@ -735,12 +774,13 @@ public class FlFaceBean
     public void setEyeRightx(Integer newVal)
     {
         if ((newVal != null && eyeRightx != null && (newVal.compareTo(eyeRightx) == 0)) ||
-            (newVal == null && eyeRightx == null && eyeRightxIsInitialized)) {
+            (newVal == null && eyeRightx == null && isEyeRightxInitialized())) {
             return;
         }
-        super.setEyeRightx(newVal);
-        eyeRightxIsModified = true;
-        eyeRightxIsInitialized = true;
+        eyeRightx = newVal;
+
+        modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
+        initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
     }
 
     /**
@@ -762,7 +802,7 @@ public class FlFaceBean
      */
     public boolean isEyeRightxModified()
     {
-        return eyeRightxIsModified;
+        return 0L != (modified & FL_FACE_ID_EYE_RIGHTX_MASK);
     }
 
     /**
@@ -774,9 +814,8 @@ public class FlFaceBean
      */
     public boolean isEyeRightxInitialized()
     {
-        return eyeRightxIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_EYE_RIGHTX_MASK);
     }
-
     /**
      * Getter method for eyeRighty.
      * <br>
@@ -804,12 +843,13 @@ public class FlFaceBean
     public void setEyeRighty(Integer newVal)
     {
         if ((newVal != null && eyeRighty != null && (newVal.compareTo(eyeRighty) == 0)) ||
-            (newVal == null && eyeRighty == null && eyeRightyIsInitialized)) {
+            (newVal == null && eyeRighty == null && isEyeRightyInitialized())) {
             return;
         }
-        super.setEyeRighty(newVal);
-        eyeRightyIsModified = true;
-        eyeRightyIsInitialized = true;
+        eyeRighty = newVal;
+
+        modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
+        initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
     }
 
     /**
@@ -831,7 +871,7 @@ public class FlFaceBean
      */
     public boolean isEyeRightyModified()
     {
-        return eyeRightyIsModified;
+        return 0L != (modified & FL_FACE_ID_EYE_RIGHTY_MASK);
     }
 
     /**
@@ -843,9 +883,8 @@ public class FlFaceBean
      */
     public boolean isEyeRightyInitialized()
     {
-        return eyeRightyIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_EYE_RIGHTY_MASK);
     }
-
     /**
      * Getter method for mouthX.
      * <br>
@@ -873,12 +912,13 @@ public class FlFaceBean
     public void setMouthX(Integer newVal)
     {
         if ((newVal != null && mouthX != null && (newVal.compareTo(mouthX) == 0)) ||
-            (newVal == null && mouthX == null && mouthXIsInitialized)) {
+            (newVal == null && mouthX == null && isMouthXInitialized())) {
             return;
         }
-        super.setMouthX(newVal);
-        mouthXIsModified = true;
-        mouthXIsInitialized = true;
+        mouthX = newVal;
+
+        modified |= FL_FACE_ID_MOUTH_X_MASK;
+        initialized |= FL_FACE_ID_MOUTH_X_MASK;
     }
 
     /**
@@ -900,7 +940,7 @@ public class FlFaceBean
      */
     public boolean isMouthXModified()
     {
-        return mouthXIsModified;
+        return 0L != (modified & FL_FACE_ID_MOUTH_X_MASK);
     }
 
     /**
@@ -912,9 +952,8 @@ public class FlFaceBean
      */
     public boolean isMouthXInitialized()
     {
-        return mouthXIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_MOUTH_X_MASK);
     }
-
     /**
      * Getter method for mouthY.
      * <br>
@@ -942,12 +981,13 @@ public class FlFaceBean
     public void setMouthY(Integer newVal)
     {
         if ((newVal != null && mouthY != null && (newVal.compareTo(mouthY) == 0)) ||
-            (newVal == null && mouthY == null && mouthYIsInitialized)) {
+            (newVal == null && mouthY == null && isMouthYInitialized())) {
             return;
         }
-        super.setMouthY(newVal);
-        mouthYIsModified = true;
-        mouthYIsInitialized = true;
+        mouthY = newVal;
+
+        modified |= FL_FACE_ID_MOUTH_Y_MASK;
+        initialized |= FL_FACE_ID_MOUTH_Y_MASK;
     }
 
     /**
@@ -969,7 +1009,7 @@ public class FlFaceBean
      */
     public boolean isMouthYModified()
     {
-        return mouthYIsModified;
+        return 0L != (modified & FL_FACE_ID_MOUTH_Y_MASK);
     }
 
     /**
@@ -981,9 +1021,8 @@ public class FlFaceBean
      */
     public boolean isMouthYInitialized()
     {
-        return mouthYIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_MOUTH_Y_MASK);
     }
-
     /**
      * Getter method for noseX.
      * <br>
@@ -1011,12 +1050,13 @@ public class FlFaceBean
     public void setNoseX(Integer newVal)
     {
         if ((newVal != null && noseX != null && (newVal.compareTo(noseX) == 0)) ||
-            (newVal == null && noseX == null && noseXIsInitialized)) {
+            (newVal == null && noseX == null && isNoseXInitialized())) {
             return;
         }
-        super.setNoseX(newVal);
-        noseXIsModified = true;
-        noseXIsInitialized = true;
+        noseX = newVal;
+
+        modified |= FL_FACE_ID_NOSE_X_MASK;
+        initialized |= FL_FACE_ID_NOSE_X_MASK;
     }
 
     /**
@@ -1038,7 +1078,7 @@ public class FlFaceBean
      */
     public boolean isNoseXModified()
     {
-        return noseXIsModified;
+        return 0L != (modified & FL_FACE_ID_NOSE_X_MASK);
     }
 
     /**
@@ -1050,9 +1090,8 @@ public class FlFaceBean
      */
     public boolean isNoseXInitialized()
     {
-        return noseXIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_NOSE_X_MASK);
     }
-
     /**
      * Getter method for noseY.
      * <br>
@@ -1080,12 +1119,13 @@ public class FlFaceBean
     public void setNoseY(Integer newVal)
     {
         if ((newVal != null && noseY != null && (newVal.compareTo(noseY) == 0)) ||
-            (newVal == null && noseY == null && noseYIsInitialized)) {
+            (newVal == null && noseY == null && isNoseYInitialized())) {
             return;
         }
-        super.setNoseY(newVal);
-        noseYIsModified = true;
-        noseYIsInitialized = true;
+        noseY = newVal;
+
+        modified |= FL_FACE_ID_NOSE_Y_MASK;
+        initialized |= FL_FACE_ID_NOSE_Y_MASK;
     }
 
     /**
@@ -1107,7 +1147,7 @@ public class FlFaceBean
      */
     public boolean isNoseYModified()
     {
-        return noseYIsModified;
+        return 0L != (modified & FL_FACE_ID_NOSE_Y_MASK);
     }
 
     /**
@@ -1119,9 +1159,8 @@ public class FlFaceBean
      */
     public boolean isNoseYInitialized()
     {
-        return noseYIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_NOSE_Y_MASK);
     }
-
     /**
      * Getter method for angleYaw.
      * <br>
@@ -1149,12 +1188,13 @@ public class FlFaceBean
     public void setAngleYaw(Integer newVal)
     {
         if ((newVal != null && angleYaw != null && (newVal.compareTo(angleYaw) == 0)) ||
-            (newVal == null && angleYaw == null && angleYawIsInitialized)) {
+            (newVal == null && angleYaw == null && isAngleYawInitialized())) {
             return;
         }
-        super.setAngleYaw(newVal);
-        angleYawIsModified = true;
-        angleYawIsInitialized = true;
+        angleYaw = newVal;
+
+        modified |= FL_FACE_ID_ANGLE_YAW_MASK;
+        initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
     }
 
     /**
@@ -1176,7 +1216,7 @@ public class FlFaceBean
      */
     public boolean isAngleYawModified()
     {
-        return angleYawIsModified;
+        return 0L != (modified & FL_FACE_ID_ANGLE_YAW_MASK);
     }
 
     /**
@@ -1188,9 +1228,8 @@ public class FlFaceBean
      */
     public boolean isAngleYawInitialized()
     {
-        return angleYawIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_ANGLE_YAW_MASK);
     }
-
     /**
      * Getter method for anglePitch.
      * <br>
@@ -1218,12 +1257,13 @@ public class FlFaceBean
     public void setAnglePitch(Integer newVal)
     {
         if ((newVal != null && anglePitch != null && (newVal.compareTo(anglePitch) == 0)) ||
-            (newVal == null && anglePitch == null && anglePitchIsInitialized)) {
+            (newVal == null && anglePitch == null && isAnglePitchInitialized())) {
             return;
         }
-        super.setAnglePitch(newVal);
-        anglePitchIsModified = true;
-        anglePitchIsInitialized = true;
+        anglePitch = newVal;
+
+        modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
+        initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
     }
 
     /**
@@ -1245,7 +1285,7 @@ public class FlFaceBean
      */
     public boolean isAnglePitchModified()
     {
-        return anglePitchIsModified;
+        return 0L != (modified & FL_FACE_ID_ANGLE_PITCH_MASK);
     }
 
     /**
@@ -1257,9 +1297,8 @@ public class FlFaceBean
      */
     public boolean isAnglePitchInitialized()
     {
-        return anglePitchIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_ANGLE_PITCH_MASK);
     }
-
     /**
      * Getter method for angleRoll.
      * <br>
@@ -1287,12 +1326,13 @@ public class FlFaceBean
     public void setAngleRoll(Integer newVal)
     {
         if ((newVal != null && angleRoll != null && (newVal.compareTo(angleRoll) == 0)) ||
-            (newVal == null && angleRoll == null && angleRollIsInitialized)) {
+            (newVal == null && angleRoll == null && isAngleRollInitialized())) {
             return;
         }
-        super.setAngleRoll(newVal);
-        angleRollIsModified = true;
-        angleRollIsInitialized = true;
+        angleRoll = newVal;
+
+        modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
+        initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
     }
 
     /**
@@ -1314,7 +1354,7 @@ public class FlFaceBean
      */
     public boolean isAngleRollModified()
     {
-        return angleRollIsModified;
+        return 0L != (modified & FL_FACE_ID_ANGLE_ROLL_MASK);
     }
 
     /**
@@ -1326,9 +1366,8 @@ public class FlFaceBean
      */
     public boolean isAngleRollInitialized()
     {
-        return angleRollIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_ANGLE_ROLL_MASK);
     }
-
     /**
      * Getter method for extInfo.
      * <br>
@@ -1355,9 +1394,10 @@ public class FlFaceBean
      */
     public void setExtInfo(byte[] newVal)
     {
-        super.setExtInfo(newVal);
-        extInfoIsModified = true;
-        extInfoIsInitialized = true;
+        extInfo = newVal;
+
+        modified |= FL_FACE_ID_EXT_INFO_MASK;
+        initialized |= FL_FACE_ID_EXT_INFO_MASK;
     }
 
     /**
@@ -1367,7 +1407,7 @@ public class FlFaceBean
      */
     public boolean isExtInfoModified()
     {
-        return extInfoIsModified;
+        return 0L != (modified & FL_FACE_ID_EXT_INFO_MASK);
     }
 
     /**
@@ -1379,9 +1419,8 @@ public class FlFaceBean
      */
     public boolean isExtInfoInitialized()
     {
-        return extInfoIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_EXT_INFO_MASK);
     }
-
     /**
      * Getter method for feature.
      * <br>
@@ -1408,9 +1447,10 @@ public class FlFaceBean
      */
     public void setFeature(byte[] newVal)
     {
-        super.setFeature(newVal);
-        featureIsModified = true;
-        featureIsInitialized = true;
+        feature = newVal;
+
+        modified |= FL_FACE_ID_FEATURE_MASK;
+        initialized |= FL_FACE_ID_FEATURE_MASK;
     }
 
     /**
@@ -1420,7 +1460,7 @@ public class FlFaceBean
      */
     public boolean isFeatureModified()
     {
-        return featureIsModified;
+        return 0L != (modified & FL_FACE_ID_FEATURE_MASK);
     }
 
     /**
@@ -1432,9 +1472,8 @@ public class FlFaceBean
      */
     public boolean isFeatureInitialized()
     {
-        return featureIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_FEATURE_MASK);
     }
-
     /**
      * Getter method for createTime.
      * <br>
@@ -1462,12 +1501,13 @@ public class FlFaceBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && createTimeIsInitialized)) {
+            (newVal == null && createTime == null && isCreateTimeInitialized())) {
             return;
         }
-        super.setCreateTime(newVal);
-        createTimeIsModified = true;
-        createTimeIsInitialized = true;
+        createTime = newVal;
+
+        modified |= FL_FACE_ID_CREATE_TIME_MASK;
+        initialized |= FL_FACE_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -1489,7 +1529,7 @@ public class FlFaceBean
      */
     public boolean isCreateTimeModified()
     {
-        return createTimeIsModified;
+        return 0L != (modified & FL_FACE_ID_CREATE_TIME_MASK);
     }
 
     /**
@@ -1501,10 +1541,37 @@ public class FlFaceBean
      */
     public boolean isCreateTimeInitialized()
     {
-        return createTimeIsInitialized;
+        return 0L != (initialized & FL_FACE_ID_CREATE_TIME_MASK);
     }
-
-
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlImageBean} by {@link #imgMd5} . <br>
+     * FOREIGN KEY (img_md5) REFERENCES fl_image(md5)
+     */
+    private FlImageBean referencedByImgMd5;
+    /** Getter method for {@link #referencedByImgMd5}. */
+    public FlImageBean getReferencedByImgMd5() {
+        return this.referencedByImgMd5;
+    }
+    /** Setter method for {@link #referencedByImgMd5}. */
+    public void setReferencedByImgMd5(FlImageBean reference) {
+        this.referencedByImgMd5 = reference;
+    }
+    /** 
+     * The referenced {@link FlPersonBean} by {@link #personId} . <br>
+     * FOREIGN KEY (person_id) REFERENCES fl_person(id)
+     */
+    private FlPersonBean referencedByPersonId;
+    /** Getter method for {@link #referencedByPersonId}. */
+    public FlPersonBean getReferencedByPersonId() {
+        return this.referencedByPersonId;
+    }
+    /** Setter method for {@link #referencedByPersonId}. */
+    public void setReferencedByPersonId(FlPersonBean reference) {
+        this.referencedByPersonId = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -1515,9 +1582,117 @@ public class FlFaceBean
      */
     public boolean isModified()
     {
-        return md5IsModified 		|| personIdIsModified  		|| imgMd5IsModified  		|| faceLeftIsModified  		|| faceTopIsModified  		|| faceWidthIsModified  		|| faceHeightIsModified  		|| eyeLeftxIsModified  		|| eyeLeftyIsModified  		|| eyeRightxIsModified  		|| eyeRightyIsModified  		|| mouthXIsModified  		|| mouthYIsModified  		|| noseXIsModified  		|| noseYIsModified  		|| angleYawIsModified  		|| anglePitchIsModified  		|| angleRollIsModified  		|| extInfoIsModified  		|| featureIsModified  		|| createTimeIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_FACE_ID_MD5:
+            return isMd5Modified();
+        case FL_FACE_ID_PERSON_ID:
+            return isPersonIdModified();
+        case FL_FACE_ID_IMG_MD5:
+            return isImgMd5Modified();
+        case FL_FACE_ID_FACE_LEFT:
+            return isFaceLeftModified();
+        case FL_FACE_ID_FACE_TOP:
+            return isFaceTopModified();
+        case FL_FACE_ID_FACE_WIDTH:
+            return isFaceWidthModified();
+        case FL_FACE_ID_FACE_HEIGHT:
+            return isFaceHeightModified();
+        case FL_FACE_ID_EYE_LEFTX:
+            return isEyeLeftxModified();
+        case FL_FACE_ID_EYE_LEFTY:
+            return isEyeLeftyModified();
+        case FL_FACE_ID_EYE_RIGHTX:
+            return isEyeRightxModified();
+        case FL_FACE_ID_EYE_RIGHTY:
+            return isEyeRightyModified();
+        case FL_FACE_ID_MOUTH_X:
+            return isMouthXModified();
+        case FL_FACE_ID_MOUTH_Y:
+            return isMouthYModified();
+        case FL_FACE_ID_NOSE_X:
+            return isNoseXModified();
+        case FL_FACE_ID_NOSE_Y:
+            return isNoseYModified();
+        case FL_FACE_ID_ANGLE_YAW:
+            return isAngleYawModified();
+        case FL_FACE_ID_ANGLE_PITCH:
+            return isAnglePitchModified();
+        case FL_FACE_ID_ANGLE_ROLL:
+            return isAngleRollModified();
+        case FL_FACE_ID_EXT_INFO:
+            return isExtInfoModified();
+        case FL_FACE_ID_FEATURE:
+            return isFeatureModified();
+        case FL_FACE_ID_CREATE_TIME:
+            return isCreateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_FACE_ID_MD5:
+            return isMd5Initialized();
+        case FL_FACE_ID_PERSON_ID:
+            return isPersonIdInitialized();
+        case FL_FACE_ID_IMG_MD5:
+            return isImgMd5Initialized();
+        case FL_FACE_ID_FACE_LEFT:
+            return isFaceLeftInitialized();
+        case FL_FACE_ID_FACE_TOP:
+            return isFaceTopInitialized();
+        case FL_FACE_ID_FACE_WIDTH:
+            return isFaceWidthInitialized();
+        case FL_FACE_ID_FACE_HEIGHT:
+            return isFaceHeightInitialized();
+        case FL_FACE_ID_EYE_LEFTX:
+            return isEyeLeftxInitialized();
+        case FL_FACE_ID_EYE_LEFTY:
+            return isEyeLeftyInitialized();
+        case FL_FACE_ID_EYE_RIGHTX:
+            return isEyeRightxInitialized();
+        case FL_FACE_ID_EYE_RIGHTY:
+            return isEyeRightyInitialized();
+        case FL_FACE_ID_MOUTH_X:
+            return isMouthXInitialized();
+        case FL_FACE_ID_MOUTH_Y:
+            return isMouthYInitialized();
+        case FL_FACE_ID_NOSE_X:
+            return isNoseXInitialized();
+        case FL_FACE_ID_NOSE_Y:
+            return isNoseYInitialized();
+        case FL_FACE_ID_ANGLE_YAW:
+            return isAngleYawInitialized();
+        case FL_FACE_ID_ANGLE_PITCH:
+            return isAnglePitchInitialized();
+        case FL_FACE_ID_ANGLE_ROLL:
+            return isAngleRollInitialized();
+        case FL_FACE_ID_EXT_INFO:
+            return isExtInfoInitialized();
+        case FL_FACE_ID_FEATURE:
+            return isFeatureInitialized();
+        case FL_FACE_ID_CREATE_TIME:
+            return isCreateTimeInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -1525,52 +1700,10 @@ public class FlFaceBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
-            return isMd5Modified();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdModified();
-        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
-            return isImgMd5Modified();
-        } else if ("face_left".equalsIgnoreCase(column) || "faceLeft".equalsIgnoreCase(column)) {
-            return isFaceLeftModified();
-        } else if ("face_top".equalsIgnoreCase(column) || "faceTop".equalsIgnoreCase(column)) {
-            return isFaceTopModified();
-        } else if ("face_width".equalsIgnoreCase(column) || "faceWidth".equalsIgnoreCase(column)) {
-            return isFaceWidthModified();
-        } else if ("face_height".equalsIgnoreCase(column) || "faceHeight".equalsIgnoreCase(column)) {
-            return isFaceHeightModified();
-        } else if ("eye_leftx".equalsIgnoreCase(column) || "eyeLeftx".equalsIgnoreCase(column)) {
-            return isEyeLeftxModified();
-        } else if ("eye_lefty".equalsIgnoreCase(column) || "eyeLefty".equalsIgnoreCase(column)) {
-            return isEyeLeftyModified();
-        } else if ("eye_rightx".equalsIgnoreCase(column) || "eyeRightx".equalsIgnoreCase(column)) {
-            return isEyeRightxModified();
-        } else if ("eye_righty".equalsIgnoreCase(column) || "eyeRighty".equalsIgnoreCase(column)) {
-            return isEyeRightyModified();
-        } else if ("mouth_x".equalsIgnoreCase(column) || "mouthX".equalsIgnoreCase(column)) {
-            return isMouthXModified();
-        } else if ("mouth_y".equalsIgnoreCase(column) || "mouthY".equalsIgnoreCase(column)) {
-            return isMouthYModified();
-        } else if ("nose_x".equalsIgnoreCase(column) || "noseX".equalsIgnoreCase(column)) {
-            return isNoseXModified();
-        } else if ("nose_y".equalsIgnoreCase(column) || "noseY".equalsIgnoreCase(column)) {
-            return isNoseYModified();
-        } else if ("angle_yaw".equalsIgnoreCase(column) || "angleYaw".equalsIgnoreCase(column)) {
-            return isAngleYawModified();
-        } else if ("angle_pitch".equalsIgnoreCase(column) || "anglePitch".equalsIgnoreCase(column)) {
-            return isAnglePitchModified();
-        } else if ("angle_roll".equalsIgnoreCase(column) || "angleRoll".equalsIgnoreCase(column)) {
-            return isAngleRollModified();
-        } else if ("ext_info".equalsIgnoreCase(column) || "extInfo".equalsIgnoreCase(column)) {
-            return isExtInfoModified();
-        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
-            return isFeatureModified();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeModified();
-        }
-        return false;		
+        int index = FL_FACE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -1582,52 +1715,10 @@ public class FlFaceBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
-            return isMd5Initialized();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdInitialized();
-        } else if ("img_md5".equalsIgnoreCase(column) || "imgMd5".equalsIgnoreCase(column)) {
-            return isImgMd5Initialized();
-        } else if ("face_left".equalsIgnoreCase(column) || "faceLeft".equalsIgnoreCase(column)) {
-            return isFaceLeftInitialized();
-        } else if ("face_top".equalsIgnoreCase(column) || "faceTop".equalsIgnoreCase(column)) {
-            return isFaceTopInitialized();
-        } else if ("face_width".equalsIgnoreCase(column) || "faceWidth".equalsIgnoreCase(column)) {
-            return isFaceWidthInitialized();
-        } else if ("face_height".equalsIgnoreCase(column) || "faceHeight".equalsIgnoreCase(column)) {
-            return isFaceHeightInitialized();
-        } else if ("eye_leftx".equalsIgnoreCase(column) || "eyeLeftx".equalsIgnoreCase(column)) {
-            return isEyeLeftxInitialized();
-        } else if ("eye_lefty".equalsIgnoreCase(column) || "eyeLefty".equalsIgnoreCase(column)) {
-            return isEyeLeftyInitialized();
-        } else if ("eye_rightx".equalsIgnoreCase(column) || "eyeRightx".equalsIgnoreCase(column)) {
-            return isEyeRightxInitialized();
-        } else if ("eye_righty".equalsIgnoreCase(column) || "eyeRighty".equalsIgnoreCase(column)) {
-            return isEyeRightyInitialized();
-        } else if ("mouth_x".equalsIgnoreCase(column) || "mouthX".equalsIgnoreCase(column)) {
-            return isMouthXInitialized();
-        } else if ("mouth_y".equalsIgnoreCase(column) || "mouthY".equalsIgnoreCase(column)) {
-            return isMouthYInitialized();
-        } else if ("nose_x".equalsIgnoreCase(column) || "noseX".equalsIgnoreCase(column)) {
-            return isNoseXInitialized();
-        } else if ("nose_y".equalsIgnoreCase(column) || "noseY".equalsIgnoreCase(column)) {
-            return isNoseYInitialized();
-        } else if ("angle_yaw".equalsIgnoreCase(column) || "angleYaw".equalsIgnoreCase(column)) {
-            return isAngleYawInitialized();
-        } else if ("angle_pitch".equalsIgnoreCase(column) || "anglePitch".equalsIgnoreCase(column)) {
-            return isAnglePitchInitialized();
-        } else if ("angle_roll".equalsIgnoreCase(column) || "angleRoll".equalsIgnoreCase(column)) {
-            return isAngleRollInitialized();
-        } else if ("ext_info".equalsIgnoreCase(column) || "extInfo".equalsIgnoreCase(column)) {
-            return isExtInfoInitialized();
-        } else if ("feature".equalsIgnoreCase(column) || "feature".equalsIgnoreCase(column)) {
-            return isFeatureInitialized();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeInitialized();
-        }
-        return false;		
+        int index = FL_FACE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -1635,38 +1726,379 @@ public class FlFaceBean
      */
     public void resetIsModified()
     {
-        md5IsModified = false;
-        personIdIsModified = false;
-        imgMd5IsModified = false;
-        faceLeftIsModified = false;
-        faceTopIsModified = false;
-        faceWidthIsModified = false;
-        faceHeightIsModified = false;
-        eyeLeftxIsModified = false;
-        eyeLeftyIsModified = false;
-        eyeRightxIsModified = false;
-        eyeRightyIsModified = false;
-        mouthXIsModified = false;
-        mouthYIsModified = false;
-        noseXIsModified = false;
-        noseYIsModified = false;
-        angleYawIsModified = false;
-        anglePitchIsModified = false;
-        angleRollIsModified = false;
-        extInfoIsModified = false;
-        featureIsModified = false;
-        createTimeIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlFaceBean)) {
+            return false;
+        }
+
+        FlFaceBean obj = (FlFaceBean) object;
+        return new EqualsBuilder()
+            .append(getMd5(), obj.getMd5())
+            .append(getPersonId(), obj.getPersonId())
+            .append(getImgMd5(), obj.getImgMd5())
+            .append(getFaceLeft(), obj.getFaceLeft())
+            .append(getFaceTop(), obj.getFaceTop())
+            .append(getFaceWidth(), obj.getFaceWidth())
+            .append(getFaceHeight(), obj.getFaceHeight())
+            .append(getEyeLeftx(), obj.getEyeLeftx())
+            .append(getEyeLefty(), obj.getEyeLefty())
+            .append(getEyeRightx(), obj.getEyeRightx())
+            .append(getEyeRighty(), obj.getEyeRighty())
+            .append(getMouthX(), obj.getMouthX())
+            .append(getMouthY(), obj.getMouthY())
+            .append(getNoseX(), obj.getNoseX())
+            .append(getNoseY(), obj.getNoseY())
+            .append(getAngleYaw(), obj.getAngleYaw())
+            .append(getAnglePitch(), obj.getAnglePitch())
+            .append(getAngleRoll(), obj.getAngleRoll())
+            .append(getExtInfo(), obj.getExtInfo())
+            .append(getFeature(), obj.getFeature())
+            .append(getCreateTime(), obj.getCreateTime())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getMd5())
+            .append(getPersonId())
+            .append(getImgMd5())
+            .append(getFaceLeft())
+            .append(getFaceTop())
+            .append(getFaceWidth())
+            .append(getFaceHeight())
+            .append(getEyeLeftx())
+            .append(getEyeLefty())
+            .append(getEyeRightx())
+            .append(getEyeRighty())
+            .append(getMouthX())
+            .append(getMouthY())
+            .append(getNoseX())
+            .append(getNoseY())
+            .append(getAngleYaw())
+            .append(getAnglePitch())
+            .append(getAngleRoll())
+            .append(getExtInfo())
+            .append(getFeature())
+            .append(getCreateTime())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tmd5=").append(getMd5()).append("\n")
+            .append("\tperson_id=").append(getPersonId()).append("\n")
+            .append("\timg_md5=").append(getImgMd5()).append("\n")
+            .append("\tface_left=").append(getFaceLeft()).append("\n")
+            .append("\tface_top=").append(getFaceTop()).append("\n")
+            .append("\tface_width=").append(getFaceWidth()).append("\n")
+            .append("\tface_height=").append(getFaceHeight()).append("\n")
+            .append("\teye_leftx=").append(getEyeLeftx()).append("\n")
+            .append("\teye_lefty=").append(getEyeLefty()).append("\n")
+            .append("\teye_rightx=").append(getEyeRightx()).append("\n")
+            .append("\teye_righty=").append(getEyeRighty()).append("\n")
+            .append("\tmouth_x=").append(getMouthX()).append("\n")
+            .append("\tmouth_y=").append(getMouthY()).append("\n")
+            .append("\tnose_x=").append(getNoseX()).append("\n")
+            .append("\tnose_y=").append(getNoseY()).append("\n")
+            .append("\tangle_yaw=").append(getAngleYaw()).append("\n")
+            .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
+            .append("\tangle_roll=").append(getAngleRoll()).append("\n")
+            .append("\text_info=").append(getExtInfo().length).append(" bytes\n")
+            .append("\tfeature=").append(getFeature().length).append(" bytes\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlFaceBean object){
+        return new CompareToBuilder()
+            .append(getMd5(), object.getMd5())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlFaceBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setMd5(bean.getMd5());
+            setPersonId(bean.getPersonId());
+            setImgMd5(bean.getImgMd5());
+            setFaceLeft(bean.getFaceLeft());
+            setFaceTop(bean.getFaceTop());
+            setFaceWidth(bean.getFaceWidth());
+            setFaceHeight(bean.getFaceHeight());
+            setEyeLeftx(bean.getEyeLeftx());
+            setEyeLefty(bean.getEyeLefty());
+            setEyeRightx(bean.getEyeRightx());
+            setEyeRighty(bean.getEyeRighty());
+            setMouthX(bean.getMouthX());
+            setMouthY(bean.getMouthY());
+            setNoseX(bean.getNoseX());
+            setNoseY(bean.getNoseY());
+            setAngleYaw(bean.getAngleYaw());
+            setAnglePitch(bean.getAnglePitch());
+            setAngleRoll(bean.getAngleRoll());
+            setExtInfo(bean.getExtInfo());
+            setFeature(bean.getFeature());
+            setCreateTime(bean.getCreateTime());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlFaceBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getMd5()!=null)
+            setMd5(bean.getMd5());
+        if(bean.getPersonId()!=null)
+            setPersonId(bean.getPersonId());
+        if(bean.getImgMd5()!=null)
+            setImgMd5(bean.getImgMd5());
+        if(bean.getFaceLeft()!=null)
+            setFaceLeft(bean.getFaceLeft());
+        if(bean.getFaceTop()!=null)
+            setFaceTop(bean.getFaceTop());
+        if(bean.getFaceWidth()!=null)
+            setFaceWidth(bean.getFaceWidth());
+        if(bean.getFaceHeight()!=null)
+            setFaceHeight(bean.getFaceHeight());
+        if(bean.getEyeLeftx()!=null)
+            setEyeLeftx(bean.getEyeLeftx());
+        if(bean.getEyeLefty()!=null)
+            setEyeLefty(bean.getEyeLefty());
+        if(bean.getEyeRightx()!=null)
+            setEyeRightx(bean.getEyeRightx());
+        if(bean.getEyeRighty()!=null)
+            setEyeRighty(bean.getEyeRighty());
+        if(bean.getMouthX()!=null)
+            setMouthX(bean.getMouthX());
+        if(bean.getMouthY()!=null)
+            setMouthY(bean.getMouthY());
+        if(bean.getNoseX()!=null)
+            setNoseX(bean.getNoseX());
+        if(bean.getNoseY()!=null)
+            setNoseY(bean.getNoseY());
+        if(bean.getAngleYaw()!=null)
+            setAngleYaw(bean.getAngleYaw());
+        if(bean.getAnglePitch()!=null)
+            setAnglePitch(bean.getAnglePitch());
+        if(bean.getAngleRoll()!=null)
+            setAngleRoll(bean.getAngleRoll());
+        if(bean.getExtInfo()!=null)
+            setExtInfo(bean.getExtInfo());
+        if(bean.getFeature()!=null)
+            setFeature(bean.getFeature());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlFaceBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setMd5(null);
+        setPersonId(null);
+        setImgMd5(null);
+        setFaceLeft(null);
+        setFaceTop(null);
+        setFaceWidth(null);
+        setFaceHeight(null);
+        setEyeLeftx(null);
+        setEyeLefty(null);
+        setEyeRightx(null);
+        setEyeRighty(null);
+        setMouthX(null);
+        setMouthY(null);
+        setNoseX(null);
+        setNoseY(null);
+        setAngleYaw(null);
+        setAnglePitch(null);
+        setAngleRoll(null);
+        setExtInfo(null);
+        setFeature(null);
+        setCreateTime(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlFaceBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlFaceBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_FACE_ID_MD5: 
+            return (T)getMd5();        
+        case FL_FACE_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_FACE_ID_IMG_MD5: 
+            return (T)getImgMd5();        
+        case FL_FACE_ID_FACE_LEFT: 
+            return (T)getFaceLeft();        
+        case FL_FACE_ID_FACE_TOP: 
+            return (T)getFaceTop();        
+        case FL_FACE_ID_FACE_WIDTH: 
+            return (T)getFaceWidth();        
+        case FL_FACE_ID_FACE_HEIGHT: 
+            return (T)getFaceHeight();        
+        case FL_FACE_ID_EYE_LEFTX: 
+            return (T)getEyeLeftx();        
+        case FL_FACE_ID_EYE_LEFTY: 
+            return (T)getEyeLefty();        
+        case FL_FACE_ID_EYE_RIGHTX: 
+            return (T)getEyeRightx();        
+        case FL_FACE_ID_EYE_RIGHTY: 
+            return (T)getEyeRighty();        
+        case FL_FACE_ID_MOUTH_X: 
+            return (T)getMouthX();        
+        case FL_FACE_ID_MOUTH_Y: 
+            return (T)getMouthY();        
+        case FL_FACE_ID_NOSE_X: 
+            return (T)getNoseX();        
+        case FL_FACE_ID_NOSE_Y: 
+            return (T)getNoseY();        
+        case FL_FACE_ID_ANGLE_YAW: 
+            return (T)getAngleYaw();        
+        case FL_FACE_ID_ANGLE_PITCH: 
+            return (T)getAnglePitch();        
+        case FL_FACE_ID_ANGLE_ROLL: 
+            return (T)getAngleRoll();        
+        case FL_FACE_ID_EXT_INFO: 
+            return (T)getExtInfo();        
+        case FL_FACE_ID_FEATURE: 
+            return (T)getFeature();        
+        case FL_FACE_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_FACE_ID_MD5:        
+            setMd5((String)value);
+        case FL_FACE_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_FACE_ID_IMG_MD5:        
+            setImgMd5((String)value);
+        case FL_FACE_ID_FACE_LEFT:        
+            setFaceLeft((Integer)value);
+        case FL_FACE_ID_FACE_TOP:        
+            setFaceTop((Integer)value);
+        case FL_FACE_ID_FACE_WIDTH:        
+            setFaceWidth((Integer)value);
+        case FL_FACE_ID_FACE_HEIGHT:        
+            setFaceHeight((Integer)value);
+        case FL_FACE_ID_EYE_LEFTX:        
+            setEyeLeftx((Integer)value);
+        case FL_FACE_ID_EYE_LEFTY:        
+            setEyeLefty((Integer)value);
+        case FL_FACE_ID_EYE_RIGHTX:        
+            setEyeRightx((Integer)value);
+        case FL_FACE_ID_EYE_RIGHTY:        
+            setEyeRighty((Integer)value);
+        case FL_FACE_ID_MOUTH_X:        
+            setMouthX((Integer)value);
+        case FL_FACE_ID_MOUTH_Y:        
+            setMouthY((Integer)value);
+        case FL_FACE_ID_NOSE_X:        
+            setNoseX((Integer)value);
+        case FL_FACE_ID_NOSE_Y:        
+            setNoseY((Integer)value);
+        case FL_FACE_ID_ANGLE_YAW:        
+            setAngleYaw((Integer)value);
+        case FL_FACE_ID_ANGLE_PITCH:        
+            setAnglePitch((Integer)value);
+        case FL_FACE_ID_ANGLE_ROLL:        
+            setAngleRoll((Integer)value);
+        case FL_FACE_ID_EXT_INFO:        
+            setExtInfo((byte[])value);
+        case FL_FACE_ID_FEATURE:        
+            setFeature((byte[])value);
+        case FL_FACE_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_FACE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_FACE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }

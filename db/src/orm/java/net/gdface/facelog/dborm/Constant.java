@@ -99,184 +99,274 @@ public interface Constant {
     //////////////////////////////////////    
     /** Identify the fl_device.id field . */
     public static final int FL_DEVICE_ID_ID = 0;
+    public static final long FL_DEVICE_ID_ID_MASK = 1L << 0;
     /** Identify the fl_device.name field . */
     public static final int FL_DEVICE_ID_NAME = 1;
+    public static final long FL_DEVICE_ID_NAME_MASK = 1L << 1;
     /** Identify the fl_device.online field . */
     public static final int FL_DEVICE_ID_ONLINE = 2;
+    public static final long FL_DEVICE_ID_ONLINE_MASK = 1L << 2;
     /** Identify the fl_device.group_id field . */
     public static final int FL_DEVICE_ID_GROUP_ID = 3;
+    public static final long FL_DEVICE_ID_GROUP_ID_MASK = 1L << 3;
     /** Identify the fl_device.version field . */
     public static final int FL_DEVICE_ID_VERSION = 4;
+    public static final long FL_DEVICE_ID_VERSION_MASK = 1L << 4;
     /** Identify the fl_device.create_time field . */
     public static final int FL_DEVICE_ID_CREATE_TIME = 5;
+    public static final long FL_DEVICE_ID_CREATE_TIME_MASK = 1L << 5;
     /** Identify the fl_device.update_time field . */
     public static final int FL_DEVICE_ID_UPDATE_TIME = 6;
+    public static final long FL_DEVICE_ID_UPDATE_TIME_MASK = 1L << 6;
     /** Identify the fl_face.md5 field . */
     public static final int FL_FACE_ID_MD5 = 0;
+    public static final long FL_FACE_ID_MD5_MASK = 1L << 0;
     /** Identify the fl_face.person_id field . */
     public static final int FL_FACE_ID_PERSON_ID = 1;
+    public static final long FL_FACE_ID_PERSON_ID_MASK = 1L << 1;
     /** Identify the fl_face.img_md5 field . */
     public static final int FL_FACE_ID_IMG_MD5 = 2;
+    public static final long FL_FACE_ID_IMG_MD5_MASK = 1L << 2;
     /** Identify the fl_face.face_left field . */
     public static final int FL_FACE_ID_FACE_LEFT = 3;
+    public static final long FL_FACE_ID_FACE_LEFT_MASK = 1L << 3;
     /** Identify the fl_face.face_top field . */
     public static final int FL_FACE_ID_FACE_TOP = 4;
+    public static final long FL_FACE_ID_FACE_TOP_MASK = 1L << 4;
     /** Identify the fl_face.face_width field . */
     public static final int FL_FACE_ID_FACE_WIDTH = 5;
+    public static final long FL_FACE_ID_FACE_WIDTH_MASK = 1L << 5;
     /** Identify the fl_face.face_height field . */
     public static final int FL_FACE_ID_FACE_HEIGHT = 6;
+    public static final long FL_FACE_ID_FACE_HEIGHT_MASK = 1L << 6;
     /** Identify the fl_face.eye_leftx field . */
     public static final int FL_FACE_ID_EYE_LEFTX = 7;
+    public static final long FL_FACE_ID_EYE_LEFTX_MASK = 1L << 7;
     /** Identify the fl_face.eye_lefty field . */
     public static final int FL_FACE_ID_EYE_LEFTY = 8;
+    public static final long FL_FACE_ID_EYE_LEFTY_MASK = 1L << 8;
     /** Identify the fl_face.eye_rightx field . */
     public static final int FL_FACE_ID_EYE_RIGHTX = 9;
+    public static final long FL_FACE_ID_EYE_RIGHTX_MASK = 1L << 9;
     /** Identify the fl_face.eye_righty field . */
     public static final int FL_FACE_ID_EYE_RIGHTY = 10;
+    public static final long FL_FACE_ID_EYE_RIGHTY_MASK = 1L << 10;
     /** Identify the fl_face.mouth_x field . */
     public static final int FL_FACE_ID_MOUTH_X = 11;
+    public static final long FL_FACE_ID_MOUTH_X_MASK = 1L << 11;
     /** Identify the fl_face.mouth_y field . */
     public static final int FL_FACE_ID_MOUTH_Y = 12;
+    public static final long FL_FACE_ID_MOUTH_Y_MASK = 1L << 12;
     /** Identify the fl_face.nose_x field . */
     public static final int FL_FACE_ID_NOSE_X = 13;
+    public static final long FL_FACE_ID_NOSE_X_MASK = 1L << 13;
     /** Identify the fl_face.nose_y field . */
     public static final int FL_FACE_ID_NOSE_Y = 14;
+    public static final long FL_FACE_ID_NOSE_Y_MASK = 1L << 14;
     /** Identify the fl_face.angle_yaw field . */
     public static final int FL_FACE_ID_ANGLE_YAW = 15;
+    public static final long FL_FACE_ID_ANGLE_YAW_MASK = 1L << 15;
     /** Identify the fl_face.angle_pitch field . */
     public static final int FL_FACE_ID_ANGLE_PITCH = 16;
+    public static final long FL_FACE_ID_ANGLE_PITCH_MASK = 1L << 16;
     /** Identify the fl_face.angle_roll field . */
     public static final int FL_FACE_ID_ANGLE_ROLL = 17;
+    public static final long FL_FACE_ID_ANGLE_ROLL_MASK = 1L << 17;
     /** Identify the fl_face.ext_info field . */
     public static final int FL_FACE_ID_EXT_INFO = 18;
+    public static final long FL_FACE_ID_EXT_INFO_MASK = 1L << 18;
     /** Identify the fl_face.feature field . */
     public static final int FL_FACE_ID_FEATURE = 19;
+    public static final long FL_FACE_ID_FEATURE_MASK = 1L << 19;
     /** Identify the fl_face.create_time field . */
     public static final int FL_FACE_ID_CREATE_TIME = 20;
+    public static final long FL_FACE_ID_CREATE_TIME_MASK = 1L << 20;
     /** Identify the fl_image.md5 field . */
     public static final int FL_IMAGE_ID_MD5 = 0;
+    public static final long FL_IMAGE_ID_MD5_MASK = 1L << 0;
     /** Identify the fl_image.format field . */
     public static final int FL_IMAGE_ID_FORMAT = 1;
+    public static final long FL_IMAGE_ID_FORMAT_MASK = 1L << 1;
     /** Identify the fl_image.width field . */
     public static final int FL_IMAGE_ID_WIDTH = 2;
+    public static final long FL_IMAGE_ID_WIDTH_MASK = 1L << 2;
     /** Identify the fl_image.height field . */
     public static final int FL_IMAGE_ID_HEIGHT = 3;
+    public static final long FL_IMAGE_ID_HEIGHT_MASK = 1L << 3;
     /** Identify the fl_image.depth field . */
     public static final int FL_IMAGE_ID_DEPTH = 4;
+    public static final long FL_IMAGE_ID_DEPTH_MASK = 1L << 4;
     /** Identify the fl_image.face_num field . */
     public static final int FL_IMAGE_ID_FACE_NUM = 5;
+    public static final long FL_IMAGE_ID_FACE_NUM_MASK = 1L << 5;
     /** Identify the fl_image.thumb_md5 field . */
     public static final int FL_IMAGE_ID_THUMB_MD5 = 6;
+    public static final long FL_IMAGE_ID_THUMB_MD5_MASK = 1L << 6;
     /** Identify the fl_image.device_id field . */
     public static final int FL_IMAGE_ID_DEVICE_ID = 7;
+    public static final long FL_IMAGE_ID_DEVICE_ID_MASK = 1L << 7;
     /** Identify the fl_log.id field . */
     public static final int FL_LOG_ID_ID = 0;
+    public static final long FL_LOG_ID_ID_MASK = 1L << 0;
     /** Identify the fl_log.person_id field . */
     public static final int FL_LOG_ID_PERSON_ID = 1;
+    public static final long FL_LOG_ID_PERSON_ID_MASK = 1L << 1;
     /** Identify the fl_log.device_id field . */
     public static final int FL_LOG_ID_DEVICE_ID = 2;
+    public static final long FL_LOG_ID_DEVICE_ID_MASK = 1L << 2;
     /** Identify the fl_log.verify_face field . */
     public static final int FL_LOG_ID_VERIFY_FACE = 3;
+    public static final long FL_LOG_ID_VERIFY_FACE_MASK = 1L << 3;
     /** Identify the fl_log.compare_face field . */
     public static final int FL_LOG_ID_COMPARE_FACE = 4;
+    public static final long FL_LOG_ID_COMPARE_FACE_MASK = 1L << 4;
     /** Identify the fl_log.similarty field . */
     public static final int FL_LOG_ID_SIMILARTY = 5;
+    public static final long FL_LOG_ID_SIMILARTY_MASK = 1L << 5;
     /** Identify the fl_log.verify_time field . */
     public static final int FL_LOG_ID_VERIFY_TIME = 6;
+    public static final long FL_LOG_ID_VERIFY_TIME_MASK = 1L << 6;
     /** Identify the fl_log.create_time field . */
     public static final int FL_LOG_ID_CREATE_TIME = 7;
+    public static final long FL_LOG_ID_CREATE_TIME_MASK = 1L << 7;
     /** Identify the fl_person.id field . */
     public static final int FL_PERSON_ID_ID = 0;
+    public static final long FL_PERSON_ID_ID_MASK = 1L << 0;
     /** Identify the fl_person.group_id field . */
     public static final int FL_PERSON_ID_GROUP_ID = 1;
+    public static final long FL_PERSON_ID_GROUP_ID_MASK = 1L << 1;
     /** Identify the fl_person.name field . */
     public static final int FL_PERSON_ID_NAME = 2;
+    public static final long FL_PERSON_ID_NAME_MASK = 1L << 2;
     /** Identify the fl_person.sex field . */
     public static final int FL_PERSON_ID_SEX = 3;
+    public static final long FL_PERSON_ID_SEX_MASK = 1L << 3;
     /** Identify the fl_person.birthdate field . */
     public static final int FL_PERSON_ID_BIRTHDATE = 4;
+    public static final long FL_PERSON_ID_BIRTHDATE_MASK = 1L << 4;
     /** Identify the fl_person.papers_type field . */
     public static final int FL_PERSON_ID_PAPERS_TYPE = 5;
+    public static final long FL_PERSON_ID_PAPERS_TYPE_MASK = 1L << 5;
     /** Identify the fl_person.papers_num field . */
     public static final int FL_PERSON_ID_PAPERS_NUM = 6;
+    public static final long FL_PERSON_ID_PAPERS_NUM_MASK = 1L << 6;
     /** Identify the fl_person.photo_id field . */
     public static final int FL_PERSON_ID_PHOTO_ID = 7;
+    public static final long FL_PERSON_ID_PHOTO_ID_MASK = 1L << 7;
     /** Identify the fl_person.face_md5 field . */
     public static final int FL_PERSON_ID_FACE_MD5 = 8;
+    public static final long FL_PERSON_ID_FACE_MD5_MASK = 1L << 8;
     /** Identify the fl_person.expiry_date field . */
     public static final int FL_PERSON_ID_EXPIRY_DATE = 9;
+    public static final long FL_PERSON_ID_EXPIRY_DATE_MASK = 1L << 9;
     /** Identify the fl_person.create_time field . */
     public static final int FL_PERSON_ID_CREATE_TIME = 10;
+    public static final long FL_PERSON_ID_CREATE_TIME_MASK = 1L << 10;
     /** Identify the fl_person.update_time field . */
     public static final int FL_PERSON_ID_UPDATE_TIME = 11;
+    public static final long FL_PERSON_ID_UPDATE_TIME_MASK = 1L << 11;
     /** Identify the fl_store.md5 field . */
     public static final int FL_STORE_ID_MD5 = 0;
+    public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
     /** Identify the fl_store.encoding field . */
     public static final int FL_STORE_ID_ENCODING = 1;
+    public static final long FL_STORE_ID_ENCODING_MASK = 1L << 1;
     /** Identify the fl_store.data field . */
     public static final int FL_STORE_ID_DATA = 2;
+    public static final long FL_STORE_ID_DATA_MASK = 1L << 2;
     /** Identify the fl_face_light.md5 field . */
     public static final int FL_FACE_LIGHT_ID_MD5 = 0;
+    public static final long FL_FACE_LIGHT_ID_MD5_MASK = 1L << 0;
     /** Identify the fl_face_light.person_id field . */
     public static final int FL_FACE_LIGHT_ID_PERSON_ID = 1;
+    public static final long FL_FACE_LIGHT_ID_PERSON_ID_MASK = 1L << 1;
     /** Identify the fl_face_light.img_md5 field . */
     public static final int FL_FACE_LIGHT_ID_IMG_MD5 = 2;
+    public static final long FL_FACE_LIGHT_ID_IMG_MD5_MASK = 1L << 2;
     /** Identify the fl_face_light.face_left field . */
     public static final int FL_FACE_LIGHT_ID_FACE_LEFT = 3;
+    public static final long FL_FACE_LIGHT_ID_FACE_LEFT_MASK = 1L << 3;
     /** Identify the fl_face_light.face_top field . */
     public static final int FL_FACE_LIGHT_ID_FACE_TOP = 4;
+    public static final long FL_FACE_LIGHT_ID_FACE_TOP_MASK = 1L << 4;
     /** Identify the fl_face_light.face_width field . */
     public static final int FL_FACE_LIGHT_ID_FACE_WIDTH = 5;
+    public static final long FL_FACE_LIGHT_ID_FACE_WIDTH_MASK = 1L << 5;
     /** Identify the fl_face_light.face_height field . */
     public static final int FL_FACE_LIGHT_ID_FACE_HEIGHT = 6;
+    public static final long FL_FACE_LIGHT_ID_FACE_HEIGHT_MASK = 1L << 6;
     /** Identify the fl_face_light.eye_leftx field . */
     public static final int FL_FACE_LIGHT_ID_EYE_LEFTX = 7;
+    public static final long FL_FACE_LIGHT_ID_EYE_LEFTX_MASK = 1L << 7;
     /** Identify the fl_face_light.eye_lefty field . */
     public static final int FL_FACE_LIGHT_ID_EYE_LEFTY = 8;
+    public static final long FL_FACE_LIGHT_ID_EYE_LEFTY_MASK = 1L << 8;
     /** Identify the fl_face_light.eye_rightx field . */
     public static final int FL_FACE_LIGHT_ID_EYE_RIGHTX = 9;
+    public static final long FL_FACE_LIGHT_ID_EYE_RIGHTX_MASK = 1L << 9;
     /** Identify the fl_face_light.eye_righty field . */
     public static final int FL_FACE_LIGHT_ID_EYE_RIGHTY = 10;
+    public static final long FL_FACE_LIGHT_ID_EYE_RIGHTY_MASK = 1L << 10;
     /** Identify the fl_face_light.mouth_x field . */
     public static final int FL_FACE_LIGHT_ID_MOUTH_X = 11;
+    public static final long FL_FACE_LIGHT_ID_MOUTH_X_MASK = 1L << 11;
     /** Identify the fl_face_light.mouth_y field . */
     public static final int FL_FACE_LIGHT_ID_MOUTH_Y = 12;
+    public static final long FL_FACE_LIGHT_ID_MOUTH_Y_MASK = 1L << 12;
     /** Identify the fl_face_light.nose_x field . */
     public static final int FL_FACE_LIGHT_ID_NOSE_X = 13;
+    public static final long FL_FACE_LIGHT_ID_NOSE_X_MASK = 1L << 13;
     /** Identify the fl_face_light.nose_y field . */
     public static final int FL_FACE_LIGHT_ID_NOSE_Y = 14;
+    public static final long FL_FACE_LIGHT_ID_NOSE_Y_MASK = 1L << 14;
     /** Identify the fl_face_light.angle_yaw field . */
     public static final int FL_FACE_LIGHT_ID_ANGLE_YAW = 15;
+    public static final long FL_FACE_LIGHT_ID_ANGLE_YAW_MASK = 1L << 15;
     /** Identify the fl_face_light.angle_pitch field . */
     public static final int FL_FACE_LIGHT_ID_ANGLE_PITCH = 16;
+    public static final long FL_FACE_LIGHT_ID_ANGLE_PITCH_MASK = 1L << 16;
     /** Identify the fl_face_light.angle_roll field . */
     public static final int FL_FACE_LIGHT_ID_ANGLE_ROLL = 17;
+    public static final long FL_FACE_LIGHT_ID_ANGLE_ROLL_MASK = 1L << 17;
     /** Identify the fl_face_light.ext_info field . */
     public static final int FL_FACE_LIGHT_ID_EXT_INFO = 18;
+    public static final long FL_FACE_LIGHT_ID_EXT_INFO_MASK = 1L << 18;
     /** Identify the fl_face_light.create_time field . */
     public static final int FL_FACE_LIGHT_ID_CREATE_TIME = 19;
+    public static final long FL_FACE_LIGHT_ID_CREATE_TIME_MASK = 1L << 19;
     /** Identify the fl_feature.md5 field . */
     public static final int FL_FEATURE_ID_MD5 = 0;
+    public static final long FL_FEATURE_ID_MD5_MASK = 1L << 0;
     /** Identify the fl_feature.person_id field . */
     public static final int FL_FEATURE_ID_PERSON_ID = 1;
+    public static final long FL_FEATURE_ID_PERSON_ID_MASK = 1L << 1;
     /** Identify the fl_feature.img_md5 field . */
     public static final int FL_FEATURE_ID_IMG_MD5 = 2;
+    public static final long FL_FEATURE_ID_IMG_MD5_MASK = 1L << 2;
     /** Identify the fl_feature.feature field . */
     public static final int FL_FEATURE_ID_FEATURE = 3;
+    public static final long FL_FEATURE_ID_FEATURE_MASK = 1L << 3;
     /** Identify the fl_feature.create_time field . */
     public static final int FL_FEATURE_ID_CREATE_TIME = 4;
+    public static final long FL_FEATURE_ID_CREATE_TIME_MASK = 1L << 4;
     /** Identify the fl_log_light.id field . */
     public static final int FL_LOG_LIGHT_ID_ID = 0;
+    public static final long FL_LOG_LIGHT_ID_ID_MASK = 1L << 0;
     /** Identify the fl_log_light.person_id field . */
     public static final int FL_LOG_LIGHT_ID_PERSON_ID = 1;
+    public static final long FL_LOG_LIGHT_ID_PERSON_ID_MASK = 1L << 1;
     /** Identify the fl_log_light.name field . */
     public static final int FL_LOG_LIGHT_ID_NAME = 2;
+    public static final long FL_LOG_LIGHT_ID_NAME_MASK = 1L << 2;
     /** Identify the fl_log_light.papers_type field . */
     public static final int FL_LOG_LIGHT_ID_PAPERS_TYPE = 3;
+    public static final long FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK = 1L << 3;
     /** Identify the fl_log_light.papers_num field . */
     public static final int FL_LOG_LIGHT_ID_PAPERS_NUM = 4;
+    public static final long FL_LOG_LIGHT_ID_PAPERS_NUM_MASK = 1L << 4;
     /** Identify the fl_log_light.verify_time field . */
     public static final int FL_LOG_LIGHT_ID_VERIFY_TIME = 5;
+    public static final long FL_LOG_LIGHT_ID_VERIFY_TIME_MASK = 1L << 5;
     //////////////////////////////////////
     // COLUMN NAME DECLARE
     //////////////////////////////////////    
@@ -387,6 +477,16 @@ public interface Constant {
                             + ",version"
                             + ",create_time"
                             + ",update_time";
+    public static final java.util.List<String> FL_DEVICE_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_device table. */
+    public static final String FL_DEVICE_JAVA_FIELDS = "id"
+                            + ",name"
+                            + ",online"
+                            + ",groupId"
+                            + ",version"
+                            + ",createTime"
+                            + ",updateTime";
+    public static final java.util.List<String> FL_DEVICE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_face table. */
     public static final String FL_FACE_FIELDS = "md5"
                             + ",person_id"
@@ -409,6 +509,30 @@ public interface Constant {
                             + ",ext_info"
                             + ",feature"
                             + ",create_time";
+    public static final java.util.List<String> FL_FACE_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_face table. */
+    public static final String FL_FACE_JAVA_FIELDS = "md5"
+                            + ",personId"
+                            + ",imgMd5"
+                            + ",faceLeft"
+                            + ",faceTop"
+                            + ",faceWidth"
+                            + ",faceHeight"
+                            + ",eyeLeftx"
+                            + ",eyeLefty"
+                            + ",eyeRightx"
+                            + ",eyeRighty"
+                            + ",mouthX"
+                            + ",mouthY"
+                            + ",noseX"
+                            + ",noseY"
+                            + ",angleYaw"
+                            + ",anglePitch"
+                            + ",angleRoll"
+                            + ",extInfo"
+                            + ",feature"
+                            + ",createTime";
+    public static final java.util.List<String> FL_FACE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_image table. */
     public static final String FL_IMAGE_FIELDS = "md5"
                             + ",format"
@@ -418,6 +542,17 @@ public interface Constant {
                             + ",face_num"
                             + ",thumb_md5"
                             + ",device_id";
+    public static final java.util.List<String> FL_IMAGE_FIELDS_LIST = java.util.Arrays.asList(FL_IMAGE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_image table. */
+    public static final String FL_IMAGE_JAVA_FIELDS = "md5"
+                            + ",format"
+                            + ",width"
+                            + ",height"
+                            + ",depth"
+                            + ",faceNum"
+                            + ",thumbMd5"
+                            + ",deviceId";
+    public static final java.util.List<String> FL_IMAGE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_IMAGE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_log table. */
     public static final String FL_LOG_FIELDS = "id"
                             + ",person_id"
@@ -427,6 +562,17 @@ public interface Constant {
                             + ",similarty"
                             + ",verify_time"
                             + ",create_time";
+    public static final java.util.List<String> FL_LOG_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_log table. */
+    public static final String FL_LOG_JAVA_FIELDS = "id"
+                            + ",personId"
+                            + ",deviceId"
+                            + ",verifyFace"
+                            + ",compareFace"
+                            + ",similarty"
+                            + ",verifyTime"
+                            + ",createTime";
+    public static final java.util.List<String> FL_LOG_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_person table. */
     public static final String FL_PERSON_FIELDS = "id"
                             + ",group_id"
@@ -440,10 +586,31 @@ public interface Constant {
                             + ",expiry_date"
                             + ",create_time"
                             + ",update_time";
+    public static final java.util.List<String> FL_PERSON_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_person table. */
+    public static final String FL_PERSON_JAVA_FIELDS = "id"
+                            + ",groupId"
+                            + ",name"
+                            + ",sex"
+                            + ",birthdate"
+                            + ",papersType"
+                            + ",papersNum"
+                            + ",photoId"
+                            + ",faceMd5"
+                            + ",expiryDate"
+                            + ",createTime"
+                            + ",updateTime";
+    public static final java.util.List<String> FL_PERSON_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_store table. */
     public static final String FL_STORE_FIELDS = "md5"
                             + ",encoding"
                             + ",data";
+    public static final java.util.List<String> FL_STORE_FIELDS_LIST = java.util.Arrays.asList(FL_STORE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_store table. */
+    public static final String FL_STORE_JAVA_FIELDS = "md5"
+                            + ",encoding"
+                            + ",data";
+    public static final java.util.List<String> FL_STORE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_STORE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_face_light table. */
     public static final String FL_FACE_LIGHT_FIELDS = "md5"
                             + ",person_id"
@@ -465,12 +632,43 @@ public interface Constant {
                             + ",angle_roll"
                             + ",ext_info"
                             + ",create_time";
+    public static final java.util.List<String> FL_FACE_LIGHT_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_LIGHT_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_face_light table. */
+    public static final String FL_FACE_LIGHT_JAVA_FIELDS = "md5"
+                            + ",personId"
+                            + ",imgMd5"
+                            + ",faceLeft"
+                            + ",faceTop"
+                            + ",faceWidth"
+                            + ",faceHeight"
+                            + ",eyeLeftx"
+                            + ",eyeLefty"
+                            + ",eyeRightx"
+                            + ",eyeRighty"
+                            + ",mouthX"
+                            + ",mouthY"
+                            + ",noseX"
+                            + ",noseY"
+                            + ",angleYaw"
+                            + ",anglePitch"
+                            + ",angleRoll"
+                            + ",extInfo"
+                            + ",createTime";
+    public static final java.util.List<String> FL_FACE_LIGHT_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_LIGHT_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_feature table. */
     public static final String FL_FEATURE_FIELDS = "md5"
                             + ",person_id"
                             + ",img_md5"
                             + ",feature"
                             + ",create_time";
+    public static final java.util.List<String> FL_FEATURE_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_feature table. */
+    public static final String FL_FEATURE_JAVA_FIELDS = "md5"
+                            + ",personId"
+                            + ",imgMd5"
+                            + ",feature"
+                            + ",createTime";
+    public static final java.util.List<String> FL_FEATURE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_log_light table. */
     public static final String FL_LOG_LIGHT_FIELDS = "id"
                             + ",person_id"
@@ -478,4 +676,13 @@ public interface Constant {
                             + ",papers_type"
                             + ",papers_num"
                             + ",verify_time";
+    public static final java.util.List<String> FL_LOG_LIGHT_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_LIGHT_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_log_light table. */
+    public static final String FL_LOG_LIGHT_JAVA_FIELDS = "id"
+                            + ",personId"
+                            + ",name"
+                            + ",papersType"
+                            + ",papersNum"
+                            + ",verifyTime";
+    public static final java.util.List<String> FL_LOG_LIGHT_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_LIGHT_JAVA_FIELDS.split(","));
 }

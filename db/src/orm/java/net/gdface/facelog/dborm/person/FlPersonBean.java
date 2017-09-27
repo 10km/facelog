@@ -6,9 +6,13 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.person;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.image.FlImageBean;
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlPersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
@@ -18,61 +22,109 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlPersonBean
-    extends FlPersonBeanBase
-    implements FullBean<FlPersonBeanBase>
+    implements Serializable,FullBean<FlPersonBean>,Comparable<FlPersonBean>,Constant
 {
 	private static final long serialVersionUID = -4314407042657759584L;
-	
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    /** comments:用户识别码 */
+    private Integer id;
 
-    private boolean groupIdIsModified = false;
-    private boolean groupIdIsInitialized = false;
+    /** comments:用户所属组id */
+    private Integer groupId;
 
-    private boolean nameIsModified = false;
-    private boolean nameIsInitialized = false;
+    /** comments:姓名 */
+    private String name;
 
-    private boolean sexIsModified = false;
-    private boolean sexIsInitialized = false;
+    /** comments:性别,0:女,1:男 */
+    private Integer sex;
 
-    private boolean birthdateIsModified = false;
-    private boolean birthdateIsInitialized = false;
+    /** comments:出生日期 */
+    private java.util.Date birthdate;
 
-    private boolean papersTypeIsModified = false;
-    private boolean papersTypeIsInitialized = false;
+    /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
+    private Integer papersType;
 
-    private boolean papersNumIsModified = false;
-    private boolean papersNumIsInitialized = false;
+    /** comments:证件号码 */
+    private String papersNum;
 
-    private boolean photoIdIsModified = false;
-    private boolean photoIdIsInitialized = false;
+    /** comments:用户默认照片(证件照,标准照)的md5校验码,外键 */
+    private String photoId;
 
-    private boolean faceMd5IsModified = false;
-    private boolean faceMd5IsInitialized = false;
+    /** comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新 */
+    private String faceMd5;
 
-    private boolean expiryDateIsModified = false;
-    private boolean expiryDateIsInitialized = false;
+    /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
+    private java.util.Date expiryDate;
 
-    private boolean createTimeIsModified = false;
-    private boolean createTimeIsInitialized = false;
+    private java.util.Date createTime;
 
-    private boolean updateTimeIsModified = false;
-    private boolean updateTimeIsInitialized = false;
+    private java.util.Date updateTime;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlPersonBean is via the createFlPersonBean method in FlPersonManager or
-     * via the factory class FlPersonFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlPersonBean(){
         super();
     }
     /**
      * create a FlPersonBean from a instance
      */
-    FlPersonBean(FlPersonBeanBase bean){
+    FlPersonBean(FlPersonBean bean){
         super();
         copy(bean);
     }
@@ -107,12 +159,13 @@ public class FlPersonBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+            (newVal == null && id == null && isIdInitialized())) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        id = newVal;
+
+        modified |= FL_PERSON_ID_ID_MASK;
+        initialized |= FL_PERSON_ID_ID_MASK;
     }
 
     /**
@@ -134,7 +187,7 @@ public class FlPersonBean
      */
     public boolean isIdModified()
     {
-        return idIsModified;
+        return 0L != (modified & FL_PERSON_ID_ID_MASK);
     }
 
     /**
@@ -146,9 +199,8 @@ public class FlPersonBean
      */
     public boolean isIdInitialized()
     {
-        return idIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_ID_MASK);
     }
-
     /**
      * Getter method for groupId.
      * <br>
@@ -177,12 +229,13 @@ public class FlPersonBean
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && groupIdIsInitialized)) {
+            (newVal == null && groupId == null && isGroupIdInitialized())) {
             return;
         }
-        super.setGroupId(newVal);
-        groupIdIsModified = true;
-        groupIdIsInitialized = true;
+        groupId = newVal;
+
+        modified |= FL_PERSON_ID_GROUP_ID_MASK;
+        initialized |= FL_PERSON_ID_GROUP_ID_MASK;
     }
 
     /**
@@ -204,7 +257,7 @@ public class FlPersonBean
      */
     public boolean isGroupIdModified()
     {
-        return groupIdIsModified;
+        return 0L != (modified & FL_PERSON_ID_GROUP_ID_MASK);
     }
 
     /**
@@ -216,9 +269,8 @@ public class FlPersonBean
      */
     public boolean isGroupIdInitialized()
     {
-        return groupIdIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_GROUP_ID_MASK);
     }
-
     /**
      * Getter method for name.
      * <br>
@@ -247,12 +299,13 @@ public class FlPersonBean
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && nameIsInitialized)) {
+            (newVal == null && name == null && isNameInitialized())) {
             return;
         }
-        super.setName(newVal);
-        nameIsModified = true;
-        nameIsInitialized = true;
+        name = newVal;
+
+        modified |= FL_PERSON_ID_NAME_MASK;
+        initialized |= FL_PERSON_ID_NAME_MASK;
     }
 
     /**
@@ -262,7 +315,7 @@ public class FlPersonBean
      */
     public boolean isNameModified()
     {
-        return nameIsModified;
+        return 0L != (modified & FL_PERSON_ID_NAME_MASK);
     }
 
     /**
@@ -274,9 +327,8 @@ public class FlPersonBean
      */
     public boolean isNameInitialized()
     {
-        return nameIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_NAME_MASK);
     }
-
     /**
      * Getter method for sex.
      * <br>
@@ -305,12 +357,13 @@ public class FlPersonBean
     public void setSex(Integer newVal)
     {
         if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
-            (newVal == null && sex == null && sexIsInitialized)) {
+            (newVal == null && sex == null && isSexInitialized())) {
             return;
         }
-        super.setSex(newVal);
-        sexIsModified = true;
-        sexIsInitialized = true;
+        sex = newVal;
+
+        modified |= FL_PERSON_ID_SEX_MASK;
+        initialized |= FL_PERSON_ID_SEX_MASK;
     }
 
     /**
@@ -332,7 +385,7 @@ public class FlPersonBean
      */
     public boolean isSexModified()
     {
-        return sexIsModified;
+        return 0L != (modified & FL_PERSON_ID_SEX_MASK);
     }
 
     /**
@@ -344,9 +397,8 @@ public class FlPersonBean
      */
     public boolean isSexInitialized()
     {
-        return sexIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_SEX_MASK);
     }
-
     /**
      * Getter method for birthdate.
      * <br>
@@ -375,12 +427,13 @@ public class FlPersonBean
     public void setBirthdate(java.util.Date newVal)
     {
         if ((newVal != null && birthdate != null && (newVal.compareTo(birthdate) == 0)) ||
-            (newVal == null && birthdate == null && birthdateIsInitialized)) {
+            (newVal == null && birthdate == null && isBirthdateInitialized())) {
             return;
         }
-        super.setBirthdate(newVal);
-        birthdateIsModified = true;
-        birthdateIsInitialized = true;
+        birthdate = newVal;
+
+        modified |= FL_PERSON_ID_BIRTHDATE_MASK;
+        initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
     }
 
     /**
@@ -402,7 +455,7 @@ public class FlPersonBean
      */
     public boolean isBirthdateModified()
     {
-        return birthdateIsModified;
+        return 0L != (modified & FL_PERSON_ID_BIRTHDATE_MASK);
     }
 
     /**
@@ -414,9 +467,8 @@ public class FlPersonBean
      */
     public boolean isBirthdateInitialized()
     {
-        return birthdateIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_BIRTHDATE_MASK);
     }
-
     /**
      * Getter method for papersType.
      * <br>
@@ -445,12 +497,13 @@ public class FlPersonBean
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && papersTypeIsInitialized)) {
+            (newVal == null && papersType == null && isPapersTypeInitialized())) {
             return;
         }
-        super.setPapersType(newVal);
-        papersTypeIsModified = true;
-        papersTypeIsInitialized = true;
+        papersType = newVal;
+
+        modified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_PERSON_ID_PAPERS_TYPE_MASK;
     }
 
     /**
@@ -472,7 +525,7 @@ public class FlPersonBean
      */
     public boolean isPapersTypeModified()
     {
-        return papersTypeIsModified;
+        return 0L != (modified & FL_PERSON_ID_PAPERS_TYPE_MASK);
     }
 
     /**
@@ -484,9 +537,8 @@ public class FlPersonBean
      */
     public boolean isPapersTypeInitialized()
     {
-        return papersTypeIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK);
     }
-
     /**
      * Getter method for papersNum.
      * <br>
@@ -515,12 +567,13 @@ public class FlPersonBean
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && papersNumIsInitialized)) {
+            (newVal == null && papersNum == null && isPapersNumInitialized())) {
             return;
         }
-        super.setPapersNum(newVal);
-        papersNumIsModified = true;
-        papersNumIsInitialized = true;
+        papersNum = newVal;
+
+        modified |= FL_PERSON_ID_PAPERS_NUM_MASK;
+        initialized |= FL_PERSON_ID_PAPERS_NUM_MASK;
     }
 
     /**
@@ -530,7 +583,7 @@ public class FlPersonBean
      */
     public boolean isPapersNumModified()
     {
-        return papersNumIsModified;
+        return 0L != (modified & FL_PERSON_ID_PAPERS_NUM_MASK);
     }
 
     /**
@@ -542,9 +595,8 @@ public class FlPersonBean
      */
     public boolean isPapersNumInitialized()
     {
-        return papersNumIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_PAPERS_NUM_MASK);
     }
-
     /**
      * Getter method for photoId.
      * <br>
@@ -574,12 +626,13 @@ public class FlPersonBean
     public void setPhotoId(String newVal)
     {
         if ((newVal != null && photoId != null && (newVal.compareTo(photoId) == 0)) ||
-            (newVal == null && photoId == null && photoIdIsInitialized)) {
+            (newVal == null && photoId == null && isPhotoIdInitialized())) {
             return;
         }
-        super.setPhotoId(newVal);
-        photoIdIsModified = true;
-        photoIdIsInitialized = true;
+        photoId = newVal;
+
+        modified |= FL_PERSON_ID_PHOTO_ID_MASK;
+        initialized |= FL_PERSON_ID_PHOTO_ID_MASK;
     }
 
     /**
@@ -589,7 +642,7 @@ public class FlPersonBean
      */
     public boolean isPhotoIdModified()
     {
-        return photoIdIsModified;
+        return 0L != (modified & FL_PERSON_ID_PHOTO_ID_MASK);
     }
 
     /**
@@ -601,9 +654,8 @@ public class FlPersonBean
      */
     public boolean isPhotoIdInitialized()
     {
-        return photoIdIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_PHOTO_ID_MASK);
     }
-
     /**
      * Getter method for faceMd5.
      * <br>
@@ -632,12 +684,13 @@ public class FlPersonBean
     public void setFaceMd5(String newVal)
     {
         if ((newVal != null && faceMd5 != null && (newVal.compareTo(faceMd5) == 0)) ||
-            (newVal == null && faceMd5 == null && faceMd5IsInitialized)) {
+            (newVal == null && faceMd5 == null && isFaceMd5Initialized())) {
             return;
         }
-        super.setFaceMd5(newVal);
-        faceMd5IsModified = true;
-        faceMd5IsInitialized = true;
+        faceMd5 = newVal;
+
+        modified |= FL_PERSON_ID_FACE_MD5_MASK;
+        initialized |= FL_PERSON_ID_FACE_MD5_MASK;
     }
 
     /**
@@ -647,7 +700,7 @@ public class FlPersonBean
      */
     public boolean isFaceMd5Modified()
     {
-        return faceMd5IsModified;
+        return 0L != (modified & FL_PERSON_ID_FACE_MD5_MASK);
     }
 
     /**
@@ -659,9 +712,8 @@ public class FlPersonBean
      */
     public boolean isFaceMd5Initialized()
     {
-        return faceMd5IsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_FACE_MD5_MASK);
     }
-
     /**
      * Getter method for expiryDate.
      * <br>
@@ -690,12 +742,13 @@ public class FlPersonBean
     public void setExpiryDate(java.util.Date newVal)
     {
         if ((newVal != null && expiryDate != null && (newVal.compareTo(expiryDate) == 0)) ||
-            (newVal == null && expiryDate == null && expiryDateIsInitialized)) {
+            (newVal == null && expiryDate == null && isExpiryDateInitialized())) {
             return;
         }
-        super.setExpiryDate(newVal);
-        expiryDateIsModified = true;
-        expiryDateIsInitialized = true;
+        expiryDate = newVal;
+
+        modified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
+        initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
     }
 
     /**
@@ -717,7 +770,7 @@ public class FlPersonBean
      */
     public boolean isExpiryDateModified()
     {
-        return expiryDateIsModified;
+        return 0L != (modified & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
 
     /**
@@ -729,9 +782,8 @@ public class FlPersonBean
      */
     public boolean isExpiryDateInitialized()
     {
-        return expiryDateIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
-
     /**
      * Getter method for createTime.
      * <br>
@@ -759,12 +811,13 @@ public class FlPersonBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && createTimeIsInitialized)) {
+            (newVal == null && createTime == null && isCreateTimeInitialized())) {
             return;
         }
-        super.setCreateTime(newVal);
-        createTimeIsModified = true;
-        createTimeIsInitialized = true;
+        createTime = newVal;
+
+        modified |= FL_PERSON_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -786,7 +839,7 @@ public class FlPersonBean
      */
     public boolean isCreateTimeModified()
     {
-        return createTimeIsModified;
+        return 0L != (modified & FL_PERSON_ID_CREATE_TIME_MASK);
     }
 
     /**
@@ -798,9 +851,8 @@ public class FlPersonBean
      */
     public boolean isCreateTimeInitialized()
     {
-        return createTimeIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_CREATE_TIME_MASK);
     }
-
     /**
      * Getter method for updateTime.
      * <br>
@@ -828,12 +880,13 @@ public class FlPersonBean
     public void setUpdateTime(java.util.Date newVal)
     {
         if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && updateTimeIsInitialized)) {
+            (newVal == null && updateTime == null && isUpdateTimeInitialized())) {
             return;
         }
-        super.setUpdateTime(newVal);
-        updateTimeIsModified = true;
-        updateTimeIsInitialized = true;
+        updateTime = newVal;
+
+        modified |= FL_PERSON_ID_UPDATE_TIME_MASK;
+        initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
     }
 
     /**
@@ -855,7 +908,7 @@ public class FlPersonBean
      */
     public boolean isUpdateTimeModified()
     {
-        return updateTimeIsModified;
+        return 0L != (modified & FL_PERSON_ID_UPDATE_TIME_MASK);
     }
 
     /**
@@ -867,10 +920,24 @@ public class FlPersonBean
      */
     public boolean isUpdateTimeInitialized()
     {
-        return updateTimeIsInitialized;
+        return 0L != (initialized & FL_PERSON_ID_UPDATE_TIME_MASK);
     }
-
-
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlImageBean} by {@link #photoId} . <br>
+     * FOREIGN KEY (photo_id) REFERENCES fl_image(md5)
+     */
+    private FlImageBean referencedByPhotoId;
+    /** Getter method for {@link #referencedByPhotoId}. */
+    public FlImageBean getReferencedByPhotoId() {
+        return this.referencedByPhotoId;
+    }
+    /** Setter method for {@link #referencedByPhotoId}. */
+    public void setReferencedByPhotoId(FlImageBean reference) {
+        this.referencedByPhotoId = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -881,9 +948,81 @@ public class FlPersonBean
      */
     public boolean isModified()
     {
-        return idIsModified 		|| groupIdIsModified  		|| nameIsModified  		|| sexIsModified  		|| birthdateIsModified  		|| papersTypeIsModified  		|| papersNumIsModified  		|| photoIdIsModified  		|| faceMd5IsModified  		|| expiryDateIsModified  		|| createTimeIsModified  		|| updateTimeIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_PERSON_ID_ID:
+            return isIdModified();
+        case FL_PERSON_ID_GROUP_ID:
+            return isGroupIdModified();
+        case FL_PERSON_ID_NAME:
+            return isNameModified();
+        case FL_PERSON_ID_SEX:
+            return isSexModified();
+        case FL_PERSON_ID_BIRTHDATE:
+            return isBirthdateModified();
+        case FL_PERSON_ID_PAPERS_TYPE:
+            return isPapersTypeModified();
+        case FL_PERSON_ID_PAPERS_NUM:
+            return isPapersNumModified();
+        case FL_PERSON_ID_PHOTO_ID:
+            return isPhotoIdModified();
+        case FL_PERSON_ID_FACE_MD5:
+            return isFaceMd5Modified();
+        case FL_PERSON_ID_EXPIRY_DATE:
+            return isExpiryDateModified();
+        case FL_PERSON_ID_CREATE_TIME:
+            return isCreateTimeModified();
+        case FL_PERSON_ID_UPDATE_TIME:
+            return isUpdateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_PERSON_ID_ID:
+            return isIdInitialized();
+        case FL_PERSON_ID_GROUP_ID:
+            return isGroupIdInitialized();
+        case FL_PERSON_ID_NAME:
+            return isNameInitialized();
+        case FL_PERSON_ID_SEX:
+            return isSexInitialized();
+        case FL_PERSON_ID_BIRTHDATE:
+            return isBirthdateInitialized();
+        case FL_PERSON_ID_PAPERS_TYPE:
+            return isPapersTypeInitialized();
+        case FL_PERSON_ID_PAPERS_NUM:
+            return isPapersNumInitialized();
+        case FL_PERSON_ID_PHOTO_ID:
+            return isPhotoIdInitialized();
+        case FL_PERSON_ID_FACE_MD5:
+            return isFaceMd5Initialized();
+        case FL_PERSON_ID_EXPIRY_DATE:
+            return isExpiryDateInitialized();
+        case FL_PERSON_ID_CREATE_TIME:
+            return isCreateTimeInitialized();
+        case FL_PERSON_ID_UPDATE_TIME:
+            return isUpdateTimeInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -891,34 +1030,10 @@ public class FlPersonBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdModified();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return isGroupIdModified();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameModified();
-        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
-            return isSexModified();
-        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
-            return isBirthdateModified();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return isPapersTypeModified();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return isPapersNumModified();
-        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
-            return isPhotoIdModified();
-        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
-            return isFaceMd5Modified();
-        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
-            return isExpiryDateModified();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeModified();
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return isUpdateTimeModified();
-        }
-        return false;		
+        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -930,34 +1045,10 @@ public class FlPersonBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdInitialized();
-        } else if ("group_id".equalsIgnoreCase(column) || "groupId".equalsIgnoreCase(column)) {
-            return isGroupIdInitialized();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameInitialized();
-        } else if ("sex".equalsIgnoreCase(column) || "sex".equalsIgnoreCase(column)) {
-            return isSexInitialized();
-        } else if ("birthdate".equalsIgnoreCase(column) || "birthdate".equalsIgnoreCase(column)) {
-            return isBirthdateInitialized();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return isPapersTypeInitialized();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return isPapersNumInitialized();
-        } else if ("photo_id".equalsIgnoreCase(column) || "photoId".equalsIgnoreCase(column)) {
-            return isPhotoIdInitialized();
-        } else if ("face_md5".equalsIgnoreCase(column) || "faceMd5".equalsIgnoreCase(column)) {
-            return isFaceMd5Initialized();
-        } else if ("expiry_date".equalsIgnoreCase(column) || "expiryDate".equalsIgnoreCase(column)) {
-            return isExpiryDateInitialized();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeInitialized();
-        } else if ("update_time".equalsIgnoreCase(column) || "updateTime".equalsIgnoreCase(column)) {
-            return isUpdateTimeInitialized();
-        }
-        return false;		
+        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -965,29 +1056,280 @@ public class FlPersonBean
      */
     public void resetIsModified()
     {
-        idIsModified = false;
-        groupIdIsModified = false;
-        nameIsModified = false;
-        sexIsModified = false;
-        birthdateIsModified = false;
-        papersTypeIsModified = false;
-        papersNumIsModified = false;
-        photoIdIsModified = false;
-        faceMd5IsModified = false;
-        expiryDateIsModified = false;
-        createTimeIsModified = false;
-        updateTimeIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlPersonBean)) {
+            return false;
+        }
+
+        FlPersonBean obj = (FlPersonBean) object;
+        return new EqualsBuilder()
+            .append(getId(), obj.getId())
+            .append(getGroupId(), obj.getGroupId())
+            .append(getName(), obj.getName())
+            .append(getSex(), obj.getSex())
+            .append(getBirthdate(), obj.getBirthdate())
+            .append(getPapersType(), obj.getPapersType())
+            .append(getPapersNum(), obj.getPapersNum())
+            .append(getPhotoId(), obj.getPhotoId())
+            .append(getFaceMd5(), obj.getFaceMd5())
+            .append(getExpiryDate(), obj.getExpiryDate())
+            .append(getCreateTime(), obj.getCreateTime())
+            .append(getUpdateTime(), obj.getUpdateTime())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getId())
+            .append(getGroupId())
+            .append(getName())
+            .append(getSex())
+            .append(getBirthdate())
+            .append(getPapersType())
+            .append(getPapersNum())
+            .append(getPhotoId())
+            .append(getFaceMd5())
+            .append(getExpiryDate())
+            .append(getCreateTime())
+            .append(getUpdateTime())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tid=").append(getId()).append("\n")
+            .append("\tgroup_id=").append(getGroupId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
+            .append("\tsex=").append(getSex()).append("\n")
+            .append("\tbirthdate=").append(getBirthdate()).append("\n")
+            .append("\tpapers_type=").append(getPapersType()).append("\n")
+            .append("\tpapers_num=").append(getPapersNum()).append("\n")
+            .append("\tphoto_id=").append(getPhotoId()).append("\n")
+            .append("\tface_md5=").append(getFaceMd5()).append("\n")
+            .append("\texpiry_date=").append(getExpiryDate()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlPersonBean object){
+        return new CompareToBuilder()
+            .append(getId(), object.getId())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlPersonBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setId(bean.getId());
+            setGroupId(bean.getGroupId());
+            setName(bean.getName());
+            setSex(bean.getSex());
+            setBirthdate(bean.getBirthdate());
+            setPapersType(bean.getPapersType());
+            setPapersNum(bean.getPapersNum());
+            setPhotoId(bean.getPhotoId());
+            setFaceMd5(bean.getFaceMd5());
+            setExpiryDate(bean.getExpiryDate());
+            setCreateTime(bean.getCreateTime());
+            setUpdateTime(bean.getUpdateTime());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlPersonBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getId()!=null)
+            setId(bean.getId());
+        if(bean.getGroupId()!=null)
+            setGroupId(bean.getGroupId());
+        if(bean.getName()!=null)
+            setName(bean.getName());
+        if(bean.getSex()!=null)
+            setSex(bean.getSex());
+        if(bean.getBirthdate()!=null)
+            setBirthdate(bean.getBirthdate());
+        if(bean.getPapersType()!=null)
+            setPapersType(bean.getPapersType());
+        if(bean.getPapersNum()!=null)
+            setPapersNum(bean.getPapersNum());
+        if(bean.getPhotoId()!=null)
+            setPhotoId(bean.getPhotoId());
+        if(bean.getFaceMd5()!=null)
+            setFaceMd5(bean.getFaceMd5());
+        if(bean.getExpiryDate()!=null)
+            setExpiryDate(bean.getExpiryDate());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
+        if(bean.getUpdateTime()!=null)
+            setUpdateTime(bean.getUpdateTime());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlPersonBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setId(null);
+        setGroupId(null);
+        setName(null);
+        setSex(null);
+        setBirthdate(null);
+        setPapersType(null);
+        setPapersNum(null);
+        setPhotoId(null);
+        setFaceMd5(null);
+        setExpiryDate(null);
+        setCreateTime(null);
+        setUpdateTime(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlPersonBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlPersonBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_PERSON_ID_ID: 
+            return (T)getId();        
+        case FL_PERSON_ID_GROUP_ID: 
+            return (T)getGroupId();        
+        case FL_PERSON_ID_NAME: 
+            return (T)getName();        
+        case FL_PERSON_ID_SEX: 
+            return (T)getSex();        
+        case FL_PERSON_ID_BIRTHDATE: 
+            return (T)getBirthdate();        
+        case FL_PERSON_ID_PAPERS_TYPE: 
+            return (T)getPapersType();        
+        case FL_PERSON_ID_PAPERS_NUM: 
+            return (T)getPapersNum();        
+        case FL_PERSON_ID_PHOTO_ID: 
+            return (T)getPhotoId();        
+        case FL_PERSON_ID_FACE_MD5: 
+            return (T)getFaceMd5();        
+        case FL_PERSON_ID_EXPIRY_DATE: 
+            return (T)getExpiryDate();        
+        case FL_PERSON_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        case FL_PERSON_ID_UPDATE_TIME: 
+            return (T)getUpdateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_PERSON_ID_ID:        
+            setId((Integer)value);
+        case FL_PERSON_ID_GROUP_ID:        
+            setGroupId((Integer)value);
+        case FL_PERSON_ID_NAME:        
+            setName((String)value);
+        case FL_PERSON_ID_SEX:        
+            setSex((Integer)value);
+        case FL_PERSON_ID_BIRTHDATE:        
+            setBirthdate((java.util.Date)value);
+        case FL_PERSON_ID_PAPERS_TYPE:        
+            setPapersType((Integer)value);
+        case FL_PERSON_ID_PAPERS_NUM:        
+            setPapersNum((String)value);
+        case FL_PERSON_ID_PHOTO_ID:        
+            setPhotoId((String)value);
+        case FL_PERSON_ID_FACE_MD5:        
+            setFaceMd5((String)value);
+        case FL_PERSON_ID_EXPIRY_DATE:        
+            setExpiryDate((java.util.Date)value);
+        case FL_PERSON_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        case FL_PERSON_ID_UPDATE_TIME:        
+            setUpdateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }

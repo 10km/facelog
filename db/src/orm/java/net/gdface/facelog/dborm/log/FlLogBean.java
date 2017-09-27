@@ -6,9 +6,15 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.log;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.device.FlDeviceBean;
+import net.gdface.facelog.dborm.face.FlFaceBean;
+import net.gdface.facelog.dborm.person.FlPersonBean;
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlLogBean is a mapping of fl_log Table.
  * <br>Meta Data Information (in progress):
@@ -18,49 +24,98 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlLogBean
-    extends FlLogBeanBase
-    implements FullBean<FlLogBeanBase>
+    implements Serializable,FullBean<FlLogBean>,Comparable<FlLogBean>,Constant
 {
 	private static final long serialVersionUID = 7869683986300606649L;
-	
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    /** comments:日志id */
+    private Integer id;
 
-    private boolean personIdIsModified = false;
-    private boolean personIdIsInitialized = false;
+    /** comments:外键,用户id */
+    private Integer personId;
 
-    private boolean deviceIdIsModified = false;
-    private boolean deviceIdIsInitialized = false;
+    /** comments:外键,图像来源设备id */
+    private Integer deviceId;
 
-    private boolean verifyFaceIsModified = false;
-    private boolean verifyFaceIsInitialized = false;
+    /** comments:外键,验证人脸信息id */
+    private String verifyFace;
 
-    private boolean compareFaceIsModified = false;
-    private boolean compareFaceIsInitialized = false;
+    /** comments:外键,数据库中最相似的对比人脸id */
+    private String compareFace;
 
-    private boolean similartyIsModified = false;
-    private boolean similartyIsInitialized = false;
+    /** comments:验证相似度 */
+    private Double similarty;
 
-    private boolean verifyTimeIsModified = false;
-    private boolean verifyTimeIsInitialized = false;
+    /** comments:验证时间(可能由前端设备提供时间) */
+    private java.util.Date verifyTime;
 
-    private boolean createTimeIsModified = false;
-    private boolean createTimeIsInitialized = false;
+    private java.util.Date createTime;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlLogBean is via the createFlLogBean method in FlLogManager or
-     * via the factory class FlLogFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlLogBean(){
         super();
     }
     /**
      * create a FlLogBean from a instance
      */
-    FlLogBean(FlLogBeanBase bean){
+    FlLogBean(FlLogBean bean){
         super();
         copy(bean);
     }
@@ -93,12 +148,13 @@ public class FlLogBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+            (newVal == null && id == null && isIdInitialized())) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        id = newVal;
+
+        modified |= FL_LOG_ID_ID_MASK;
+        initialized |= FL_LOG_ID_ID_MASK;
     }
 
     /**
@@ -120,7 +176,7 @@ public class FlLogBean
      */
     public boolean isIdModified()
     {
-        return idIsModified;
+        return 0L != (modified & FL_LOG_ID_ID_MASK);
     }
 
     /**
@@ -132,9 +188,8 @@ public class FlLogBean
      */
     public boolean isIdInitialized()
     {
-        return idIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_ID_MASK);
     }
-
     /**
      * Getter method for personId.
      * <br>
@@ -164,12 +219,13 @@ public class FlLogBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && personIdIsInitialized)) {
+            (newVal == null && personId == null && isPersonIdInitialized())) {
             return;
         }
-        super.setPersonId(newVal);
-        personIdIsModified = true;
-        personIdIsInitialized = true;
+        personId = newVal;
+
+        modified |= FL_LOG_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -191,7 +247,7 @@ public class FlLogBean
      */
     public boolean isPersonIdModified()
     {
-        return personIdIsModified;
+        return 0L != (modified & FL_LOG_ID_PERSON_ID_MASK);
     }
 
     /**
@@ -203,9 +259,8 @@ public class FlLogBean
      */
     public boolean isPersonIdInitialized()
     {
-        return personIdIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_PERSON_ID_MASK);
     }
-
     /**
      * Getter method for deviceId.
      * <br>
@@ -235,12 +290,13 @@ public class FlLogBean
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && deviceIdIsInitialized)) {
+            (newVal == null && deviceId == null && isDeviceIdInitialized())) {
             return;
         }
-        super.setDeviceId(newVal);
-        deviceIdIsModified = true;
-        deviceIdIsInitialized = true;
+        deviceId = newVal;
+
+        modified |= FL_LOG_ID_DEVICE_ID_MASK;
+        initialized |= FL_LOG_ID_DEVICE_ID_MASK;
     }
 
     /**
@@ -262,7 +318,7 @@ public class FlLogBean
      */
     public boolean isDeviceIdModified()
     {
-        return deviceIdIsModified;
+        return 0L != (modified & FL_LOG_ID_DEVICE_ID_MASK);
     }
 
     /**
@@ -274,9 +330,8 @@ public class FlLogBean
      */
     public boolean isDeviceIdInitialized()
     {
-        return deviceIdIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_DEVICE_ID_MASK);
     }
-
     /**
      * Getter method for verifyFace.
      * <br>
@@ -306,12 +361,13 @@ public class FlLogBean
     public void setVerifyFace(String newVal)
     {
         if ((newVal != null && verifyFace != null && (newVal.compareTo(verifyFace) == 0)) ||
-            (newVal == null && verifyFace == null && verifyFaceIsInitialized)) {
+            (newVal == null && verifyFace == null && isVerifyFaceInitialized())) {
             return;
         }
-        super.setVerifyFace(newVal);
-        verifyFaceIsModified = true;
-        verifyFaceIsInitialized = true;
+        verifyFace = newVal;
+
+        modified |= FL_LOG_ID_VERIFY_FACE_MASK;
+        initialized |= FL_LOG_ID_VERIFY_FACE_MASK;
     }
 
     /**
@@ -321,7 +377,7 @@ public class FlLogBean
      */
     public boolean isVerifyFaceModified()
     {
-        return verifyFaceIsModified;
+        return 0L != (modified & FL_LOG_ID_VERIFY_FACE_MASK);
     }
 
     /**
@@ -333,9 +389,8 @@ public class FlLogBean
      */
     public boolean isVerifyFaceInitialized()
     {
-        return verifyFaceIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_VERIFY_FACE_MASK);
     }
-
     /**
      * Getter method for compareFace.
      * <br>
@@ -365,12 +420,13 @@ public class FlLogBean
     public void setCompareFace(String newVal)
     {
         if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
-            (newVal == null && compareFace == null && compareFaceIsInitialized)) {
+            (newVal == null && compareFace == null && isCompareFaceInitialized())) {
             return;
         }
-        super.setCompareFace(newVal);
-        compareFaceIsModified = true;
-        compareFaceIsInitialized = true;
+        compareFace = newVal;
+
+        modified |= FL_LOG_ID_COMPARE_FACE_MASK;
+        initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
     }
 
     /**
@@ -380,7 +436,7 @@ public class FlLogBean
      */
     public boolean isCompareFaceModified()
     {
-        return compareFaceIsModified;
+        return 0L != (modified & FL_LOG_ID_COMPARE_FACE_MASK);
     }
 
     /**
@@ -392,9 +448,8 @@ public class FlLogBean
      */
     public boolean isCompareFaceInitialized()
     {
-        return compareFaceIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
     }
-
     /**
      * Getter method for similarty.
      * <br>
@@ -423,12 +478,13 @@ public class FlLogBean
     public void setSimilarty(Double newVal)
     {
         if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
-            (newVal == null && similarty == null && similartyIsInitialized)) {
+            (newVal == null && similarty == null && isSimilartyInitialized())) {
             return;
         }
-        super.setSimilarty(newVal);
-        similartyIsModified = true;
-        similartyIsInitialized = true;
+        similarty = newVal;
+
+        modified |= FL_LOG_ID_SIMILARTY_MASK;
+        initialized |= FL_LOG_ID_SIMILARTY_MASK;
     }
 
     /**
@@ -450,7 +506,7 @@ public class FlLogBean
      */
     public boolean isSimilartyModified()
     {
-        return similartyIsModified;
+        return 0L != (modified & FL_LOG_ID_SIMILARTY_MASK);
     }
 
     /**
@@ -462,9 +518,8 @@ public class FlLogBean
      */
     public boolean isSimilartyInitialized()
     {
-        return similartyIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_SIMILARTY_MASK);
     }
-
     /**
      * Getter method for verifyTime.
      * <br>
@@ -493,12 +548,13 @@ public class FlLogBean
     public void setVerifyTime(java.util.Date newVal)
     {
         if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && verifyTimeIsInitialized)) {
+            (newVal == null && verifyTime == null && isVerifyTimeInitialized())) {
             return;
         }
-        super.setVerifyTime(newVal);
-        verifyTimeIsModified = true;
-        verifyTimeIsInitialized = true;
+        verifyTime = newVal;
+
+        modified |= FL_LOG_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_ID_VERIFY_TIME_MASK;
     }
 
     /**
@@ -520,7 +576,7 @@ public class FlLogBean
      */
     public boolean isVerifyTimeModified()
     {
-        return verifyTimeIsModified;
+        return 0L != (modified & FL_LOG_ID_VERIFY_TIME_MASK);
     }
 
     /**
@@ -532,9 +588,8 @@ public class FlLogBean
      */
     public boolean isVerifyTimeInitialized()
     {
-        return verifyTimeIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_VERIFY_TIME_MASK);
     }
-
     /**
      * Getter method for createTime.
      * <br>
@@ -562,12 +617,13 @@ public class FlLogBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && createTimeIsInitialized)) {
+            (newVal == null && createTime == null && isCreateTimeInitialized())) {
             return;
         }
-        super.setCreateTime(newVal);
-        createTimeIsModified = true;
-        createTimeIsInitialized = true;
+        createTime = newVal;
+
+        modified |= FL_LOG_ID_CREATE_TIME_MASK;
+        initialized |= FL_LOG_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -589,7 +645,7 @@ public class FlLogBean
      */
     public boolean isCreateTimeModified()
     {
-        return createTimeIsModified;
+        return 0L != (modified & FL_LOG_ID_CREATE_TIME_MASK);
     }
 
     /**
@@ -601,10 +657,63 @@ public class FlLogBean
      */
     public boolean isCreateTimeInitialized()
     {
-        return createTimeIsInitialized;
+        return 0L != (initialized & FL_LOG_ID_CREATE_TIME_MASK);
     }
-
-
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlDeviceBean} by {@link #deviceId} . <br>
+     * FOREIGN KEY (device_id) REFERENCES fl_device(id)
+     */
+    private FlDeviceBean referencedByDeviceId;
+    /** Getter method for {@link #referencedByDeviceId}. */
+    public FlDeviceBean getReferencedByDeviceId() {
+        return this.referencedByDeviceId;
+    }
+    /** Setter method for {@link #referencedByDeviceId}. */
+    public void setReferencedByDeviceId(FlDeviceBean reference) {
+        this.referencedByDeviceId = reference;
+    }
+    /** 
+     * The referenced {@link FlFaceBean} by {@link #verifyFace} . <br>
+     * FOREIGN KEY (verify_face) REFERENCES fl_face(md5)
+     */
+    private FlFaceBean referencedByVerifyFace;
+    /** Getter method for {@link #referencedByVerifyFace}. */
+    public FlFaceBean getReferencedByVerifyFace() {
+        return this.referencedByVerifyFace;
+    }
+    /** Setter method for {@link #referencedByVerifyFace}. */
+    public void setReferencedByVerifyFace(FlFaceBean reference) {
+        this.referencedByVerifyFace = reference;
+    }
+    /** 
+     * The referenced {@link FlFaceBean} by {@link #compareFace} . <br>
+     * FOREIGN KEY (compare_face) REFERENCES fl_face(md5)
+     */
+    private FlFaceBean referencedByCompareFace;
+    /** Getter method for {@link #referencedByCompareFace}. */
+    public FlFaceBean getReferencedByCompareFace() {
+        return this.referencedByCompareFace;
+    }
+    /** Setter method for {@link #referencedByCompareFace}. */
+    public void setReferencedByCompareFace(FlFaceBean reference) {
+        this.referencedByCompareFace = reference;
+    }
+    /** 
+     * The referenced {@link FlPersonBean} by {@link #personId} . <br>
+     * FOREIGN KEY (person_id) REFERENCES fl_person(id)
+     */
+    private FlPersonBean referencedByPersonId;
+    /** Getter method for {@link #referencedByPersonId}. */
+    public FlPersonBean getReferencedByPersonId() {
+        return this.referencedByPersonId;
+    }
+    /** Setter method for {@link #referencedByPersonId}. */
+    public void setReferencedByPersonId(FlPersonBean reference) {
+        this.referencedByPersonId = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -615,9 +724,65 @@ public class FlLogBean
      */
     public boolean isModified()
     {
-        return idIsModified 		|| personIdIsModified  		|| deviceIdIsModified  		|| verifyFaceIsModified  		|| compareFaceIsModified  		|| similartyIsModified  		|| verifyTimeIsModified  		|| createTimeIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_LOG_ID_ID:
+            return isIdModified();
+        case FL_LOG_ID_PERSON_ID:
+            return isPersonIdModified();
+        case FL_LOG_ID_DEVICE_ID:
+            return isDeviceIdModified();
+        case FL_LOG_ID_VERIFY_FACE:
+            return isVerifyFaceModified();
+        case FL_LOG_ID_COMPARE_FACE:
+            return isCompareFaceModified();
+        case FL_LOG_ID_SIMILARTY:
+            return isSimilartyModified();
+        case FL_LOG_ID_VERIFY_TIME:
+            return isVerifyTimeModified();
+        case FL_LOG_ID_CREATE_TIME:
+            return isCreateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_LOG_ID_ID:
+            return isIdInitialized();
+        case FL_LOG_ID_PERSON_ID:
+            return isPersonIdInitialized();
+        case FL_LOG_ID_DEVICE_ID:
+            return isDeviceIdInitialized();
+        case FL_LOG_ID_VERIFY_FACE:
+            return isVerifyFaceInitialized();
+        case FL_LOG_ID_COMPARE_FACE:
+            return isCompareFaceInitialized();
+        case FL_LOG_ID_SIMILARTY:
+            return isSimilartyInitialized();
+        case FL_LOG_ID_VERIFY_TIME:
+            return isVerifyTimeInitialized();
+        case FL_LOG_ID_CREATE_TIME:
+            return isCreateTimeInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -625,26 +790,10 @@ public class FlLogBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdModified();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdModified();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return isDeviceIdModified();
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            return isVerifyFaceModified();
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            return isCompareFaceModified();
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            return isSimilartyModified();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeModified();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeModified();
-        }
-        return false;		
+        int index = FL_LOG_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -656,26 +805,10 @@ public class FlLogBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdInitialized();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdInitialized();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return isDeviceIdInitialized();
-        } else if ("verify_face".equalsIgnoreCase(column) || "verifyFace".equalsIgnoreCase(column)) {
-            return isVerifyFaceInitialized();
-        } else if ("compare_face".equalsIgnoreCase(column) || "compareFace".equalsIgnoreCase(column)) {
-            return isCompareFaceInitialized();
-        } else if ("similarty".equalsIgnoreCase(column) || "similarty".equalsIgnoreCase(column)) {
-            return isSimilartyInitialized();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeInitialized();
-        } else if ("create_time".equalsIgnoreCase(column) || "createTime".equalsIgnoreCase(column)) {
-            return isCreateTimeInitialized();
-        }
-        return false;		
+        int index = FL_LOG_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -683,25 +816,236 @@ public class FlLogBean
      */
     public void resetIsModified()
     {
-        idIsModified = false;
-        personIdIsModified = false;
-        deviceIdIsModified = false;
-        verifyFaceIsModified = false;
-        compareFaceIsModified = false;
-        similartyIsModified = false;
-        verifyTimeIsModified = false;
-        createTimeIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlLogBean)) {
+            return false;
+        }
+
+        FlLogBean obj = (FlLogBean) object;
+        return new EqualsBuilder()
+            .append(getId(), obj.getId())
+            .append(getPersonId(), obj.getPersonId())
+            .append(getDeviceId(), obj.getDeviceId())
+            .append(getVerifyFace(), obj.getVerifyFace())
+            .append(getCompareFace(), obj.getCompareFace())
+            .append(getSimilarty(), obj.getSimilarty())
+            .append(getVerifyTime(), obj.getVerifyTime())
+            .append(getCreateTime(), obj.getCreateTime())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getId())
+            .append(getPersonId())
+            .append(getDeviceId())
+            .append(getVerifyFace())
+            .append(getCompareFace())
+            .append(getSimilarty())
+            .append(getVerifyTime())
+            .append(getCreateTime())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tid=").append(getId()).append("\n")
+            .append("\tperson_id=").append(getPersonId()).append("\n")
+            .append("\tdevice_id=").append(getDeviceId()).append("\n")
+            .append("\tverify_face=").append(getVerifyFace()).append("\n")
+            .append("\tcompare_face=").append(getCompareFace()).append("\n")
+            .append("\tsimilarty=").append(getSimilarty()).append("\n")
+            .append("\tverify_time=").append(getVerifyTime()).append("\n")
+            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlLogBean object){
+        return new CompareToBuilder()
+            .append(getId(), object.getId())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlLogBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setId(bean.getId());
+            setPersonId(bean.getPersonId());
+            setDeviceId(bean.getDeviceId());
+            setVerifyFace(bean.getVerifyFace());
+            setCompareFace(bean.getCompareFace());
+            setSimilarty(bean.getSimilarty());
+            setVerifyTime(bean.getVerifyTime());
+            setCreateTime(bean.getCreateTime());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlLogBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getId()!=null)
+            setId(bean.getId());
+        if(bean.getPersonId()!=null)
+            setPersonId(bean.getPersonId());
+        if(bean.getDeviceId()!=null)
+            setDeviceId(bean.getDeviceId());
+        if(bean.getVerifyFace()!=null)
+            setVerifyFace(bean.getVerifyFace());
+        if(bean.getCompareFace()!=null)
+            setCompareFace(bean.getCompareFace());
+        if(bean.getSimilarty()!=null)
+            setSimilarty(bean.getSimilarty());
+        if(bean.getVerifyTime()!=null)
+            setVerifyTime(bean.getVerifyTime());
+        if(bean.getCreateTime()!=null)
+            setCreateTime(bean.getCreateTime());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlLogBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setId(null);
+        setPersonId(null);
+        setDeviceId(null);
+        setVerifyFace(null);
+        setCompareFace(null);
+        setSimilarty(null);
+        setVerifyTime(null);
+        setCreateTime(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlLogBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlLogBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_LOG_ID_ID: 
+            return (T)getId();        
+        case FL_LOG_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_LOG_ID_DEVICE_ID: 
+            return (T)getDeviceId();        
+        case FL_LOG_ID_VERIFY_FACE: 
+            return (T)getVerifyFace();        
+        case FL_LOG_ID_COMPARE_FACE: 
+            return (T)getCompareFace();        
+        case FL_LOG_ID_SIMILARTY: 
+            return (T)getSimilarty();        
+        case FL_LOG_ID_VERIFY_TIME: 
+            return (T)getVerifyTime();        
+        case FL_LOG_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_LOG_ID_ID:        
+            setId((Integer)value);
+        case FL_LOG_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_LOG_ID_DEVICE_ID:        
+            setDeviceId((Integer)value);
+        case FL_LOG_ID_VERIFY_FACE:        
+            setVerifyFace((String)value);
+        case FL_LOG_ID_COMPARE_FACE:        
+            setCompareFace((String)value);
+        case FL_LOG_ID_SIMILARTY:        
+            setSimilarty((Double)value);
+        case FL_LOG_ID_VERIFY_TIME:        
+            setVerifyTime((java.util.Date)value);
+        case FL_LOG_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_LOG_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_LOG_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }

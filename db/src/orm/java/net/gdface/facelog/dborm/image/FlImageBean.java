@@ -6,9 +6,14 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.image;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.device.FlDeviceBean;
+import net.gdface.facelog.dborm.image.FlStoreBean;
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlImageBean is a mapping of fl_image Table.
  * <br>Meta Data Information (in progress):
@@ -18,49 +23,99 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlImageBean
-    extends FlImageBeanBase
-    implements FullBean<FlImageBeanBase>
+    implements Serializable,FullBean<FlImageBean>,Comparable<FlImageBean>,Constant
 {
 	private static final long serialVersionUID = 646979810912117585L;
-	
-    private boolean md5IsModified = false;
-    private boolean md5IsInitialized = false;
+    /** comments:主键,图像md5检验码,同时也是外键fl_store(md5) */
+    private String md5;
 
-    private boolean formatIsModified = false;
-    private boolean formatIsInitialized = false;
+    /** comments:图像格式 */
+    private String format;
 
-    private boolean widthIsModified = false;
-    private boolean widthIsInitialized = false;
+    /** comments:图像宽度 */
+    private Integer width;
 
-    private boolean heightIsModified = false;
-    private boolean heightIsInitialized = false;
+    /** comments:图像高度 */
+    private Integer height;
 
-    private boolean depthIsModified = false;
-    private boolean depthIsInitialized = false;
+    /** comments:通道数 */
+    private Integer depth;
 
-    private boolean faceNumIsModified = false;
-    private boolean faceNumIsInitialized = false;
+    /** comments:图像中的人脸数目 */
+    private Integer faceNum;
 
-    private boolean thumbMd5IsModified = false;
-    private boolean thumbMd5IsInitialized = false;
+    /** comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5) */
+    private String thumbMd5;
 
-    private boolean deviceIdIsModified = false;
-    private boolean deviceIdIsInitialized = false;
+    /** comments:外键,图像来源设备 */
+    private Integer deviceId;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlImageBean is via the createFlImageBean method in FlImageManager or
-     * via the factory class FlImageFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlImageBean(){
         super();
     }
     /**
      * create a FlImageBean from a instance
      */
-    FlImageBean(FlImageBeanBase bean){
+    FlImageBean(FlImageBean bean){
         super();
         copy(bean);
     }
@@ -96,12 +151,13 @@ public class FlImageBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && md5IsInitialized)) {
+            (newVal == null && md5 == null && isMd5Initialized())) {
             return;
         }
-        super.setMd5(newVal);
-        md5IsModified = true;
-        md5IsInitialized = true;
+        md5 = newVal;
+
+        modified |= FL_IMAGE_ID_MD5_MASK;
+        initialized |= FL_IMAGE_ID_MD5_MASK;
     }
 
     /**
@@ -111,7 +167,7 @@ public class FlImageBean
      */
     public boolean isMd5Modified()
     {
-        return md5IsModified;
+        return 0L != (modified & FL_IMAGE_ID_MD5_MASK);
     }
 
     /**
@@ -123,9 +179,8 @@ public class FlImageBean
      */
     public boolean isMd5Initialized()
     {
-        return md5IsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_MD5_MASK);
     }
-
     /**
      * Getter method for format.
      * <br>
@@ -154,12 +209,13 @@ public class FlImageBean
     public void setFormat(String newVal)
     {
         if ((newVal != null && format != null && (newVal.compareTo(format) == 0)) ||
-            (newVal == null && format == null && formatIsInitialized)) {
+            (newVal == null && format == null && isFormatInitialized())) {
             return;
         }
-        super.setFormat(newVal);
-        formatIsModified = true;
-        formatIsInitialized = true;
+        format = newVal;
+
+        modified |= FL_IMAGE_ID_FORMAT_MASK;
+        initialized |= FL_IMAGE_ID_FORMAT_MASK;
     }
 
     /**
@@ -169,7 +225,7 @@ public class FlImageBean
      */
     public boolean isFormatModified()
     {
-        return formatIsModified;
+        return 0L != (modified & FL_IMAGE_ID_FORMAT_MASK);
     }
 
     /**
@@ -181,9 +237,8 @@ public class FlImageBean
      */
     public boolean isFormatInitialized()
     {
-        return formatIsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_FORMAT_MASK);
     }
-
     /**
      * Getter method for width.
      * <br>
@@ -212,12 +267,13 @@ public class FlImageBean
     public void setWidth(Integer newVal)
     {
         if ((newVal != null && width != null && (newVal.compareTo(width) == 0)) ||
-            (newVal == null && width == null && widthIsInitialized)) {
+            (newVal == null && width == null && isWidthInitialized())) {
             return;
         }
-        super.setWidth(newVal);
-        widthIsModified = true;
-        widthIsInitialized = true;
+        width = newVal;
+
+        modified |= FL_IMAGE_ID_WIDTH_MASK;
+        initialized |= FL_IMAGE_ID_WIDTH_MASK;
     }
 
     /**
@@ -239,7 +295,7 @@ public class FlImageBean
      */
     public boolean isWidthModified()
     {
-        return widthIsModified;
+        return 0L != (modified & FL_IMAGE_ID_WIDTH_MASK);
     }
 
     /**
@@ -251,9 +307,8 @@ public class FlImageBean
      */
     public boolean isWidthInitialized()
     {
-        return widthIsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_WIDTH_MASK);
     }
-
     /**
      * Getter method for height.
      * <br>
@@ -282,12 +337,13 @@ public class FlImageBean
     public void setHeight(Integer newVal)
     {
         if ((newVal != null && height != null && (newVal.compareTo(height) == 0)) ||
-            (newVal == null && height == null && heightIsInitialized)) {
+            (newVal == null && height == null && isHeightInitialized())) {
             return;
         }
-        super.setHeight(newVal);
-        heightIsModified = true;
-        heightIsInitialized = true;
+        height = newVal;
+
+        modified |= FL_IMAGE_ID_HEIGHT_MASK;
+        initialized |= FL_IMAGE_ID_HEIGHT_MASK;
     }
 
     /**
@@ -309,7 +365,7 @@ public class FlImageBean
      */
     public boolean isHeightModified()
     {
-        return heightIsModified;
+        return 0L != (modified & FL_IMAGE_ID_HEIGHT_MASK);
     }
 
     /**
@@ -321,9 +377,8 @@ public class FlImageBean
      */
     public boolean isHeightInitialized()
     {
-        return heightIsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_HEIGHT_MASK);
     }
-
     /**
      * Getter method for depth.
      * <br>
@@ -352,12 +407,13 @@ public class FlImageBean
     public void setDepth(Integer newVal)
     {
         if ((newVal != null && depth != null && (newVal.compareTo(depth) == 0)) ||
-            (newVal == null && depth == null && depthIsInitialized)) {
+            (newVal == null && depth == null && isDepthInitialized())) {
             return;
         }
-        super.setDepth(newVal);
-        depthIsModified = true;
-        depthIsInitialized = true;
+        depth = newVal;
+
+        modified |= FL_IMAGE_ID_DEPTH_MASK;
+        initialized |= FL_IMAGE_ID_DEPTH_MASK;
     }
 
     /**
@@ -379,7 +435,7 @@ public class FlImageBean
      */
     public boolean isDepthModified()
     {
-        return depthIsModified;
+        return 0L != (modified & FL_IMAGE_ID_DEPTH_MASK);
     }
 
     /**
@@ -391,9 +447,8 @@ public class FlImageBean
      */
     public boolean isDepthInitialized()
     {
-        return depthIsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_DEPTH_MASK);
     }
-
     /**
      * Getter method for faceNum.
      * <br>
@@ -422,12 +477,13 @@ public class FlImageBean
     public void setFaceNum(Integer newVal)
     {
         if ((newVal != null && faceNum != null && (newVal.compareTo(faceNum) == 0)) ||
-            (newVal == null && faceNum == null && faceNumIsInitialized)) {
+            (newVal == null && faceNum == null && isFaceNumInitialized())) {
             return;
         }
-        super.setFaceNum(newVal);
-        faceNumIsModified = true;
-        faceNumIsInitialized = true;
+        faceNum = newVal;
+
+        modified |= FL_IMAGE_ID_FACE_NUM_MASK;
+        initialized |= FL_IMAGE_ID_FACE_NUM_MASK;
     }
 
     /**
@@ -449,7 +505,7 @@ public class FlImageBean
      */
     public boolean isFaceNumModified()
     {
-        return faceNumIsModified;
+        return 0L != (modified & FL_IMAGE_ID_FACE_NUM_MASK);
     }
 
     /**
@@ -461,9 +517,8 @@ public class FlImageBean
      */
     public boolean isFaceNumInitialized()
     {
-        return faceNumIsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_FACE_NUM_MASK);
     }
-
     /**
      * Getter method for thumbMd5.
      * <br>
@@ -493,12 +548,13 @@ public class FlImageBean
     public void setThumbMd5(String newVal)
     {
         if ((newVal != null && thumbMd5 != null && (newVal.compareTo(thumbMd5) == 0)) ||
-            (newVal == null && thumbMd5 == null && thumbMd5IsInitialized)) {
+            (newVal == null && thumbMd5 == null && isThumbMd5Initialized())) {
             return;
         }
-        super.setThumbMd5(newVal);
-        thumbMd5IsModified = true;
-        thumbMd5IsInitialized = true;
+        thumbMd5 = newVal;
+
+        modified |= FL_IMAGE_ID_THUMB_MD5_MASK;
+        initialized |= FL_IMAGE_ID_THUMB_MD5_MASK;
     }
 
     /**
@@ -508,7 +564,7 @@ public class FlImageBean
      */
     public boolean isThumbMd5Modified()
     {
-        return thumbMd5IsModified;
+        return 0L != (modified & FL_IMAGE_ID_THUMB_MD5_MASK);
     }
 
     /**
@@ -520,9 +576,8 @@ public class FlImageBean
      */
     public boolean isThumbMd5Initialized()
     {
-        return thumbMd5IsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_THUMB_MD5_MASK);
     }
-
     /**
      * Getter method for deviceId.
      * <br>
@@ -552,12 +607,13 @@ public class FlImageBean
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && deviceIdIsInitialized)) {
+            (newVal == null && deviceId == null && isDeviceIdInitialized())) {
             return;
         }
-        super.setDeviceId(newVal);
-        deviceIdIsModified = true;
-        deviceIdIsInitialized = true;
+        deviceId = newVal;
+
+        modified |= FL_IMAGE_ID_DEVICE_ID_MASK;
+        initialized |= FL_IMAGE_ID_DEVICE_ID_MASK;
     }
 
     /**
@@ -579,7 +635,7 @@ public class FlImageBean
      */
     public boolean isDeviceIdModified()
     {
-        return deviceIdIsModified;
+        return 0L != (modified & FL_IMAGE_ID_DEVICE_ID_MASK);
     }
 
     /**
@@ -591,10 +647,50 @@ public class FlImageBean
      */
     public boolean isDeviceIdInitialized()
     {
-        return deviceIdIsInitialized;
+        return 0L != (initialized & FL_IMAGE_ID_DEVICE_ID_MASK);
     }
-
-
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlDeviceBean} by {@link #deviceId} . <br>
+     * FOREIGN KEY (device_id) REFERENCES fl_device(id)
+     */
+    private FlDeviceBean referencedByDeviceId;
+    /** Getter method for {@link #referencedByDeviceId}. */
+    public FlDeviceBean getReferencedByDeviceId() {
+        return this.referencedByDeviceId;
+    }
+    /** Setter method for {@link #referencedByDeviceId}. */
+    public void setReferencedByDeviceId(FlDeviceBean reference) {
+        this.referencedByDeviceId = reference;
+    }
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #md5} . <br>
+     * FOREIGN KEY (md5) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByMd5;
+    /** Getter method for {@link #referencedByMd5}. */
+    public FlStoreBean getReferencedByMd5() {
+        return this.referencedByMd5;
+    }
+    /** Setter method for {@link #referencedByMd5}. */
+    public void setReferencedByMd5(FlStoreBean reference) {
+        this.referencedByMd5 = reference;
+    }
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #thumbMd5} . <br>
+     * FOREIGN KEY (thumb_md5) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByThumbMd5;
+    /** Getter method for {@link #referencedByThumbMd5}. */
+    public FlStoreBean getReferencedByThumbMd5() {
+        return this.referencedByThumbMd5;
+    }
+    /** Setter method for {@link #referencedByThumbMd5}. */
+    public void setReferencedByThumbMd5(FlStoreBean reference) {
+        this.referencedByThumbMd5 = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -605,9 +701,65 @@ public class FlImageBean
      */
     public boolean isModified()
     {
-        return md5IsModified 		|| formatIsModified  		|| widthIsModified  		|| heightIsModified  		|| depthIsModified  		|| faceNumIsModified  		|| thumbMd5IsModified  		|| deviceIdIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_IMAGE_ID_MD5:
+            return isMd5Modified();
+        case FL_IMAGE_ID_FORMAT:
+            return isFormatModified();
+        case FL_IMAGE_ID_WIDTH:
+            return isWidthModified();
+        case FL_IMAGE_ID_HEIGHT:
+            return isHeightModified();
+        case FL_IMAGE_ID_DEPTH:
+            return isDepthModified();
+        case FL_IMAGE_ID_FACE_NUM:
+            return isFaceNumModified();
+        case FL_IMAGE_ID_THUMB_MD5:
+            return isThumbMd5Modified();
+        case FL_IMAGE_ID_DEVICE_ID:
+            return isDeviceIdModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_IMAGE_ID_MD5:
+            return isMd5Initialized();
+        case FL_IMAGE_ID_FORMAT:
+            return isFormatInitialized();
+        case FL_IMAGE_ID_WIDTH:
+            return isWidthInitialized();
+        case FL_IMAGE_ID_HEIGHT:
+            return isHeightInitialized();
+        case FL_IMAGE_ID_DEPTH:
+            return isDepthInitialized();
+        case FL_IMAGE_ID_FACE_NUM:
+            return isFaceNumInitialized();
+        case FL_IMAGE_ID_THUMB_MD5:
+            return isThumbMd5Initialized();
+        case FL_IMAGE_ID_DEVICE_ID:
+            return isDeviceIdInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -615,26 +767,10 @@ public class FlImageBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
-            return isMd5Modified();
-        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
-            return isFormatModified();
-        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
-            return isWidthModified();
-        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
-            return isHeightModified();
-        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
-            return isDepthModified();
-        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
-            return isFaceNumModified();
-        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
-            return isThumbMd5Modified();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return isDeviceIdModified();
-        }
-        return false;		
+        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -646,26 +782,10 @@ public class FlImageBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
-            return isMd5Initialized();
-        } else if ("format".equalsIgnoreCase(column) || "format".equalsIgnoreCase(column)) {
-            return isFormatInitialized();
-        } else if ("width".equalsIgnoreCase(column) || "width".equalsIgnoreCase(column)) {
-            return isWidthInitialized();
-        } else if ("height".equalsIgnoreCase(column) || "height".equalsIgnoreCase(column)) {
-            return isHeightInitialized();
-        } else if ("depth".equalsIgnoreCase(column) || "depth".equalsIgnoreCase(column)) {
-            return isDepthInitialized();
-        } else if ("face_num".equalsIgnoreCase(column) || "faceNum".equalsIgnoreCase(column)) {
-            return isFaceNumInitialized();
-        } else if ("thumb_md5".equalsIgnoreCase(column) || "thumbMd5".equalsIgnoreCase(column)) {
-            return isThumbMd5Initialized();
-        } else if ("device_id".equalsIgnoreCase(column) || "deviceId".equalsIgnoreCase(column)) {
-            return isDeviceIdInitialized();
-        }
-        return false;		
+        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -673,25 +793,236 @@ public class FlImageBean
      */
     public void resetIsModified()
     {
-        md5IsModified = false;
-        formatIsModified = false;
-        widthIsModified = false;
-        heightIsModified = false;
-        depthIsModified = false;
-        faceNumIsModified = false;
-        thumbMd5IsModified = false;
-        deviceIdIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlImageBean)) {
+            return false;
+        }
+
+        FlImageBean obj = (FlImageBean) object;
+        return new EqualsBuilder()
+            .append(getMd5(), obj.getMd5())
+            .append(getFormat(), obj.getFormat())
+            .append(getWidth(), obj.getWidth())
+            .append(getHeight(), obj.getHeight())
+            .append(getDepth(), obj.getDepth())
+            .append(getFaceNum(), obj.getFaceNum())
+            .append(getThumbMd5(), obj.getThumbMd5())
+            .append(getDeviceId(), obj.getDeviceId())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getMd5())
+            .append(getFormat())
+            .append(getWidth())
+            .append(getHeight())
+            .append(getDepth())
+            .append(getFaceNum())
+            .append(getThumbMd5())
+            .append(getDeviceId())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tmd5=").append(getMd5()).append("\n")
+            .append("\tformat=").append(getFormat()).append("\n")
+            .append("\twidth=").append(getWidth()).append("\n")
+            .append("\theight=").append(getHeight()).append("\n")
+            .append("\tdepth=").append(getDepth()).append("\n")
+            .append("\tface_num=").append(getFaceNum()).append("\n")
+            .append("\tthumb_md5=").append(getThumbMd5()).append("\n")
+            .append("\tdevice_id=").append(getDeviceId()).append("\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlImageBean object){
+        return new CompareToBuilder()
+            .append(getMd5(), object.getMd5())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlImageBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setMd5(bean.getMd5());
+            setFormat(bean.getFormat());
+            setWidth(bean.getWidth());
+            setHeight(bean.getHeight());
+            setDepth(bean.getDepth());
+            setFaceNum(bean.getFaceNum());
+            setThumbMd5(bean.getThumbMd5());
+            setDeviceId(bean.getDeviceId());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlImageBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getMd5()!=null)
+            setMd5(bean.getMd5());
+        if(bean.getFormat()!=null)
+            setFormat(bean.getFormat());
+        if(bean.getWidth()!=null)
+            setWidth(bean.getWidth());
+        if(bean.getHeight()!=null)
+            setHeight(bean.getHeight());
+        if(bean.getDepth()!=null)
+            setDepth(bean.getDepth());
+        if(bean.getFaceNum()!=null)
+            setFaceNum(bean.getFaceNum());
+        if(bean.getThumbMd5()!=null)
+            setThumbMd5(bean.getThumbMd5());
+        if(bean.getDeviceId()!=null)
+            setDeviceId(bean.getDeviceId());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlImageBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setMd5(null);
+        setFormat(null);
+        setWidth(null);
+        setHeight(null);
+        setDepth(null);
+        setFaceNum(null);
+        setThumbMd5(null);
+        setDeviceId(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlImageBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlImageBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_IMAGE_ID_MD5: 
+            return (T)getMd5();        
+        case FL_IMAGE_ID_FORMAT: 
+            return (T)getFormat();        
+        case FL_IMAGE_ID_WIDTH: 
+            return (T)getWidth();        
+        case FL_IMAGE_ID_HEIGHT: 
+            return (T)getHeight();        
+        case FL_IMAGE_ID_DEPTH: 
+            return (T)getDepth();        
+        case FL_IMAGE_ID_FACE_NUM: 
+            return (T)getFaceNum();        
+        case FL_IMAGE_ID_THUMB_MD5: 
+            return (T)getThumbMd5();        
+        case FL_IMAGE_ID_DEVICE_ID: 
+            return (T)getDeviceId();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_IMAGE_ID_MD5:        
+            setMd5((String)value);
+        case FL_IMAGE_ID_FORMAT:        
+            setFormat((String)value);
+        case FL_IMAGE_ID_WIDTH:        
+            setWidth((Integer)value);
+        case FL_IMAGE_ID_HEIGHT:        
+            setHeight((Integer)value);
+        case FL_IMAGE_ID_DEPTH:        
+            setDepth((Integer)value);
+        case FL_IMAGE_ID_FACE_NUM:        
+            setFaceNum((Integer)value);
+        case FL_IMAGE_ID_THUMB_MD5:        
+            setThumbMd5((String)value);
+        case FL_IMAGE_ID_DEVICE_ID:        
+            setDeviceId((Integer)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }

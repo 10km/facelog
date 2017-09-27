@@ -6,9 +6,12 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.image;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlStoreBean is a mapping of fl_store Table.
  * <br>Meta Data Information (in progress):
@@ -18,34 +21,84 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlStoreBean
-    extends FlStoreBeanBase
-    implements FullBean<FlStoreBeanBase>
+    implements Serializable,FullBean<FlStoreBean>,Comparable<FlStoreBean>,Constant
 {
 	private static final long serialVersionUID = -5705582857978645940L;
-	
-    private boolean md5IsModified = false;
-    private boolean md5IsInitialized = false;
+    /** comments:主键,md5检验码 */
+    private String md5;
 
-    private boolean encodingIsModified = false;
-    private boolean encodingIsInitialized = false;
+    /** comments:编码类型,GBK,UTF8... */
+    private String encoding;
 
-    private boolean dataIsModified = false;
-    private boolean dataIsInitialized = false;
+    /** comments:二进制数据 */
+    private byte[] data;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlStoreBean is via the createFlStoreBean method in FlStoreManager or
-     * via the factory class FlStoreFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlStoreBean(){
         super();
     }
     /**
      * create a FlStoreBean from a instance
      */
-    FlStoreBean(FlStoreBeanBase bean){
+    FlStoreBean(FlStoreBean bean){
         super();
         copy(bean);
     }
@@ -80,12 +133,13 @@ public class FlStoreBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && md5IsInitialized)) {
+            (newVal == null && md5 == null && isMd5Initialized())) {
             return;
         }
-        super.setMd5(newVal);
-        md5IsModified = true;
-        md5IsInitialized = true;
+        md5 = newVal;
+
+        modified |= FL_STORE_ID_MD5_MASK;
+        initialized |= FL_STORE_ID_MD5_MASK;
     }
 
     /**
@@ -95,7 +149,7 @@ public class FlStoreBean
      */
     public boolean isMd5Modified()
     {
-        return md5IsModified;
+        return 0L != (modified & FL_STORE_ID_MD5_MASK);
     }
 
     /**
@@ -107,9 +161,8 @@ public class FlStoreBean
      */
     public boolean isMd5Initialized()
     {
-        return md5IsInitialized;
+        return 0L != (initialized & FL_STORE_ID_MD5_MASK);
     }
-
     /**
      * Getter method for encoding.
      * <br>
@@ -138,12 +191,13 @@ public class FlStoreBean
     public void setEncoding(String newVal)
     {
         if ((newVal != null && encoding != null && (newVal.compareTo(encoding) == 0)) ||
-            (newVal == null && encoding == null && encodingIsInitialized)) {
+            (newVal == null && encoding == null && isEncodingInitialized())) {
             return;
         }
-        super.setEncoding(newVal);
-        encodingIsModified = true;
-        encodingIsInitialized = true;
+        encoding = newVal;
+
+        modified |= FL_STORE_ID_ENCODING_MASK;
+        initialized |= FL_STORE_ID_ENCODING_MASK;
     }
 
     /**
@@ -153,7 +207,7 @@ public class FlStoreBean
      */
     public boolean isEncodingModified()
     {
-        return encodingIsModified;
+        return 0L != (modified & FL_STORE_ID_ENCODING_MASK);
     }
 
     /**
@@ -165,9 +219,8 @@ public class FlStoreBean
      */
     public boolean isEncodingInitialized()
     {
-        return encodingIsInitialized;
+        return 0L != (initialized & FL_STORE_ID_ENCODING_MASK);
     }
-
     /**
      * Getter method for data.
      * <br>
@@ -194,9 +247,10 @@ public class FlStoreBean
      */
     public void setData(byte[] newVal)
     {
-        super.setData(newVal);
-        dataIsModified = true;
-        dataIsInitialized = true;
+        data = newVal;
+
+        modified |= FL_STORE_ID_DATA_MASK;
+        initialized |= FL_STORE_ID_DATA_MASK;
     }
 
     /**
@@ -206,7 +260,7 @@ public class FlStoreBean
      */
     public boolean isDataModified()
     {
-        return dataIsModified;
+        return 0L != (modified & FL_STORE_ID_DATA_MASK);
     }
 
     /**
@@ -218,10 +272,8 @@ public class FlStoreBean
      */
     public boolean isDataInitialized()
     {
-        return dataIsInitialized;
+        return 0L != (initialized & FL_STORE_ID_DATA_MASK);
     }
-
-
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -232,9 +284,45 @@ public class FlStoreBean
      */
     public boolean isModified()
     {
-        return md5IsModified 		|| encodingIsModified  		|| dataIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_STORE_ID_MD5:
+            return isMd5Modified();
+        case FL_STORE_ID_ENCODING:
+            return isEncodingModified();
+        case FL_STORE_ID_DATA:
+            return isDataModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_STORE_ID_MD5:
+            return isMd5Initialized();
+        case FL_STORE_ID_ENCODING:
+            return isEncodingInitialized();
+        case FL_STORE_ID_DATA:
+            return isDataInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -242,16 +330,10 @@ public class FlStoreBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
-            return isMd5Modified();
-        } else if ("encoding".equalsIgnoreCase(column) || "encoding".equalsIgnoreCase(column)) {
-            return isEncodingModified();
-        } else if ("data".equalsIgnoreCase(column) || "data".equalsIgnoreCase(column)) {
-            return isDataModified();
-        }
-        return false;		
+        int index = FL_STORE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -263,16 +345,10 @@ public class FlStoreBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("md5".equalsIgnoreCase(column) || "md5".equalsIgnoreCase(column)) {
-            return isMd5Initialized();
-        } else if ("encoding".equalsIgnoreCase(column) || "encoding".equalsIgnoreCase(column)) {
-            return isEncodingInitialized();
-        } else if ("data".equalsIgnoreCase(column) || "data".equalsIgnoreCase(column)) {
-            return isDataInitialized();
-        }
-        return false;		
+        int index = FL_STORE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -280,20 +356,181 @@ public class FlStoreBean
      */
     public void resetIsModified()
     {
-        md5IsModified = false;
-        encodingIsModified = false;
-        dataIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlStoreBean)) {
+            return false;
+        }
+
+        FlStoreBean obj = (FlStoreBean) object;
+        return new EqualsBuilder()
+            .append(getMd5(), obj.getMd5())
+            .append(getEncoding(), obj.getEncoding())
+            .append(getData(), obj.getData())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getMd5())
+            .append(getEncoding())
+            .append(getData())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tmd5=").append(getMd5()).append("\n")
+            .append("\tencoding=").append(getEncoding()).append("\n")
+            .append("\tdata=").append(getData().length).append(" bytes\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlStoreBean object){
+        return new CompareToBuilder()
+            .append(getMd5(), object.getMd5())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlStoreBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setMd5(bean.getMd5());
+            setEncoding(bean.getEncoding());
+            setData(bean.getData());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlStoreBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getMd5()!=null)
+            setMd5(bean.getMd5());
+        if(bean.getEncoding()!=null)
+            setEncoding(bean.getEncoding());
+        if(bean.getData()!=null)
+            setData(bean.getData());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlStoreBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setMd5(null);
+        setEncoding(null);
+        setData(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlStoreBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlStoreBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_STORE_ID_MD5: 
+            return (T)getMd5();        
+        case FL_STORE_ID_ENCODING: 
+            return (T)getEncoding();        
+        case FL_STORE_ID_DATA: 
+            return (T)getData();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_STORE_ID_MD5:        
+            setMd5((String)value);
+        case FL_STORE_ID_ENCODING:        
+            setEncoding((String)value);
+        case FL_STORE_ID_DATA:        
+            setData((byte[])value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_STORE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_STORE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }

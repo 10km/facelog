@@ -10,10 +10,21 @@ package net.gdface.facelog.dborm;
 /**
  * @author guyadong
  */
-public interface FullBean <B> extends BaseBean<B>{
+public interface FullBean <B> {
+    public abstract void copy(B bean);
+    public abstract void copy(B bean, String... fieldList);
+    public abstract void copy(B bean, int... fieldList);
+    public abstract void copyIfNotNull(B bean);
+    public abstract <T>T getValue(int columnID);
+    public abstract <T> void setValue(int columnID,T value);
+    public abstract<T>T getValue(String column);
+    public abstract<T>void setValue(String column,T value);
+    public abstract boolean isNew();
+    public abstract void isNew(boolean isNew);
     public abstract boolean isModified();
     public abstract void resetIsModified();
+    public abstract boolean isInitialized(int columnID);
+    public abstract boolean isModified(int columnID);
     public abstract boolean isInitialized(String column);
     public abstract boolean isModified(String column);
-
 }

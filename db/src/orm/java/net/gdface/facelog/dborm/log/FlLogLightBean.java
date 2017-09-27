@@ -6,9 +6,12 @@
 // ______________________________________________________
 
 package net.gdface.facelog.dborm.log;
-
+import java.io.Serializable;
+import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.FullBean;
-
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
  * FlLogLightBean is a mapping of fl_log_light Table.
  * <br>Meta Data Information (in progress):
@@ -18,43 +21,93 @@ import net.gdface.facelog.dborm.FullBean;
  * @author sql2java
 */
 public class FlLogLightBean
-    extends FlLogLightBeanBase
-    implements FullBean<FlLogLightBeanBase>
+    implements Serializable,FullBean<FlLogLightBean>,Comparable<FlLogLightBean>,Constant
 {
 	private static final long serialVersionUID = -8629124492169570652L;
-	
-    private boolean idIsModified = false;
-    private boolean idIsInitialized = false;
+    /** comments:日志id */
+    private Integer id;
 
-    private boolean personIdIsModified = false;
-    private boolean personIdIsInitialized = false;
+    /** comments:用户识别码 */
+    private Integer personId;
 
-    private boolean nameIsModified = false;
-    private boolean nameIsInitialized = false;
+    /** comments:姓名 */
+    private String name;
 
-    private boolean papersTypeIsModified = false;
-    private boolean papersTypeIsInitialized = false;
+    /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
+    private Integer papersType;
 
-    private boolean papersNumIsModified = false;
-    private boolean papersNumIsInitialized = false;
+    /** comments:证件号码 */
+    private String papersNum;
 
-    private boolean verifyTimeIsModified = false;
-    private boolean verifyTimeIsInitialized = false;
+    /** comments:验证时间(可能由前端设备提供时间) */
+    private java.util.Date verifyTime;
 
-
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
+    private boolean _isNew = true;
+    /**
+     * Determines if the current object is new.
+     *
+     * @return true if the current object is new, false if the object is not new
+     */
+    public boolean isNew()
+    {
+        return _isNew;
+    }
 
     /**
-     * Prefered methods to create a FlLogLightBean is via the createFlLogLightBean method in FlLogLightManager or
-     * via the factory class FlLogLightFactory create method
-     * 为了能在webservice中传递对象，此处从protected改为public
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
      */
+    public void isNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * Specifies to the object if it has been set as new.
+     *
+     * @param isNew the boolean value to be assigned to the isNew field
+     */
+    public void setNew(boolean isNew)
+    {
+        this._isNew = isNew;
+    }
+    /**
+     * @return the modified status of columns
+     */
+    public long getModified(){
+        return modified;
+    }
+
+    /**
+     * @param modified the modified status bit to be assigned to {@link #modified}
+     */
+    public void setModified(long modified){
+        this.modified = modified;
+    }
+    /**
+     * @return the initialized status of columns
+     */
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
     public FlLogLightBean(){
         super();
     }
     /**
      * create a FlLogLightBean from a instance
      */
-    FlLogLightBean(FlLogLightBeanBase bean){
+    FlLogLightBean(FlLogLightBean bean){
         super();
         copy(bean);
     }
@@ -86,12 +139,13 @@ public class FlLogLightBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && idIsInitialized)) {
+            (newVal == null && id == null && isIdInitialized())) {
             return;
         }
-        super.setId(newVal);
-        idIsModified = true;
-        idIsInitialized = true;
+        id = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_ID_MASK;
     }
 
     /**
@@ -113,7 +167,7 @@ public class FlLogLightBean
      */
     public boolean isIdModified()
     {
-        return idIsModified;
+        return 0L != (modified & FL_LOG_LIGHT_ID_ID_MASK);
     }
 
     /**
@@ -125,9 +179,8 @@ public class FlLogLightBean
      */
     public boolean isIdInitialized()
     {
-        return idIsInitialized;
+        return 0L != (initialized & FL_LOG_LIGHT_ID_ID_MASK);
     }
-
     /**
      * Getter method for personId.
      * <br>
@@ -156,12 +209,13 @@ public class FlLogLightBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && personIdIsInitialized)) {
+            (newVal == null && personId == null && isPersonIdInitialized())) {
             return;
         }
-        super.setPersonId(newVal);
-        personIdIsModified = true;
-        personIdIsInitialized = true;
+        personId = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -183,7 +237,7 @@ public class FlLogLightBean
      */
     public boolean isPersonIdModified()
     {
-        return personIdIsModified;
+        return 0L != (modified & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
 
     /**
@@ -195,9 +249,8 @@ public class FlLogLightBean
      */
     public boolean isPersonIdInitialized()
     {
-        return personIdIsInitialized;
+        return 0L != (initialized & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
-
     /**
      * Getter method for name.
      * <br>
@@ -226,12 +279,13 @@ public class FlLogLightBean
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && nameIsInitialized)) {
+            (newVal == null && name == null && isNameInitialized())) {
             return;
         }
-        super.setName(newVal);
-        nameIsModified = true;
-        nameIsInitialized = true;
+        name = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_NAME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
     }
 
     /**
@@ -241,7 +295,7 @@ public class FlLogLightBean
      */
     public boolean isNameModified()
     {
-        return nameIsModified;
+        return 0L != (modified & FL_LOG_LIGHT_ID_NAME_MASK);
     }
 
     /**
@@ -253,9 +307,8 @@ public class FlLogLightBean
      */
     public boolean isNameInitialized()
     {
-        return nameIsInitialized;
+        return 0L != (initialized & FL_LOG_LIGHT_ID_NAME_MASK);
     }
-
     /**
      * Getter method for papersType.
      * <br>
@@ -284,12 +337,13 @@ public class FlLogLightBean
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && papersTypeIsInitialized)) {
+            (newVal == null && papersType == null && isPapersTypeInitialized())) {
             return;
         }
-        super.setPapersType(newVal);
-        papersTypeIsModified = true;
-        papersTypeIsInitialized = true;
+        papersType = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
     }
 
     /**
@@ -311,7 +365,7 @@ public class FlLogLightBean
      */
     public boolean isPapersTypeModified()
     {
-        return papersTypeIsModified;
+        return 0L != (modified & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
     }
 
     /**
@@ -323,9 +377,8 @@ public class FlLogLightBean
      */
     public boolean isPapersTypeInitialized()
     {
-        return papersTypeIsInitialized;
+        return 0L != (initialized & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
     }
-
     /**
      * Getter method for papersNum.
      * <br>
@@ -354,12 +407,13 @@ public class FlLogLightBean
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && papersNumIsInitialized)) {
+            (newVal == null && papersNum == null && isPapersNumInitialized())) {
             return;
         }
-        super.setPapersNum(newVal);
-        papersNumIsModified = true;
-        papersNumIsInitialized = true;
+        papersNum = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
     }
 
     /**
@@ -369,7 +423,7 @@ public class FlLogLightBean
      */
     public boolean isPapersNumModified()
     {
-        return papersNumIsModified;
+        return 0L != (modified & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
     }
 
     /**
@@ -381,9 +435,8 @@ public class FlLogLightBean
      */
     public boolean isPapersNumInitialized()
     {
-        return papersNumIsInitialized;
+        return 0L != (initialized & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
     }
-
     /**
      * Getter method for verifyTime.
      * <br>
@@ -412,12 +465,13 @@ public class FlLogLightBean
     public void setVerifyTime(java.util.Date newVal)
     {
         if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && verifyTimeIsInitialized)) {
+            (newVal == null && verifyTime == null && isVerifyTimeInitialized())) {
             return;
         }
-        super.setVerifyTime(newVal);
-        verifyTimeIsModified = true;
-        verifyTimeIsInitialized = true;
+        verifyTime = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
     }
 
     /**
@@ -439,7 +493,7 @@ public class FlLogLightBean
      */
     public boolean isVerifyTimeModified()
     {
-        return verifyTimeIsModified;
+        return 0L != (modified & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
 
     /**
@@ -451,10 +505,8 @@ public class FlLogLightBean
      */
     public boolean isVerifyTimeInitialized()
     {
-        return verifyTimeIsInitialized;
+        return 0L != (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
-
-
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -465,9 +517,57 @@ public class FlLogLightBean
      */
     public boolean isModified()
     {
-        return idIsModified 		|| personIdIsModified  		|| nameIsModified  		|| papersTypeIsModified  		|| papersNumIsModified  		|| verifyTimeIsModified  ;
+        return 0 != modified;
     }
-    
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_LOG_LIGHT_ID_ID:
+            return isIdModified();
+        case FL_LOG_LIGHT_ID_PERSON_ID:
+            return isPersonIdModified();
+        case FL_LOG_LIGHT_ID_NAME:
+            return isNameModified();
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:
+            return isPapersTypeModified();
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:
+            return isPapersNumModified();
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:
+            return isVerifyTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_LOG_LIGHT_ID_ID:
+            return isIdInitialized();
+        case FL_LOG_LIGHT_ID_PERSON_ID:
+            return isPersonIdInitialized();
+        case FL_LOG_LIGHT_ID_NAME:
+            return isNameInitialized();
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:
+            return isPapersTypeInitialized();
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:
+            return isPapersNumInitialized();
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:
+            return isVerifyTimeInitialized();
+        }
+        return false;
+    }
     /**
      * Determines if the {@code column} has been modified.
      * @param column
@@ -475,22 +575,10 @@ public class FlLogLightBean
      * @author guyadong
      */
     public boolean isModified(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdModified();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdModified();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameModified();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return isPapersTypeModified();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return isPapersNumModified();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeModified();
-        }
-        return false;		
+        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
+        return isModified(index);
     }
 
     /**
@@ -502,22 +590,10 @@ public class FlLogLightBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        if (null == column || "".equals(column)) {
-            return false;
-        } else if ("id".equalsIgnoreCase(column) || "id".equalsIgnoreCase(column)) {
-            return isIdInitialized();
-        } else if ("person_id".equalsIgnoreCase(column) || "personId".equalsIgnoreCase(column)) {
-            return isPersonIdInitialized();
-        } else if ("name".equalsIgnoreCase(column) || "name".equalsIgnoreCase(column)) {
-            return isNameInitialized();
-        } else if ("papers_type".equalsIgnoreCase(column) || "papersType".equalsIgnoreCase(column)) {
-            return isPapersTypeInitialized();
-        } else if ("papers_num".equalsIgnoreCase(column) || "papersNum".equalsIgnoreCase(column)) {
-            return isPapersNumInitialized();
-        } else if ("verify_time".equalsIgnoreCase(column) || "verifyTime".equalsIgnoreCase(column)) {
-            return isVerifyTimeInitialized();
-        }
-        return false;		
+        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
+        return isInitialized(index);
     }
     
     /**
@@ -525,23 +601,219 @@ public class FlLogLightBean
      */
     public void resetIsModified()
     {
-        idIsModified = false;
-        personIdIsModified = false;
-        nameIsModified = false;
-        papersTypeIsModified = false;
-        papersNumIsModified = false;
-        verifyTimeIsModified = false;
+        modified = 0L;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof FlLogLightBean)) {
+            return false;
+        }
+
+        FlLogLightBean obj = (FlLogLightBean) object;
+        return new EqualsBuilder()
+            .append(getId(), obj.getId())
+            .append(getPersonId(), obj.getPersonId())
+            .append(getName(), obj.getName())
+            .append(getPapersType(), obj.getPapersType())
+            .append(getPapersNum(), obj.getPapersNum())
+            .append(getVerifyTime(), obj.getVerifyTime())
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(-82280557, -700257973)
+            .append(getId())
+            .append(getPersonId())
+            .append(getName())
+            .append(getPapersType())
+            .append(getPapersNum())
+            .append(getVerifyTime())
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
+            .append("\tid=").append(getId()).append("\n")
+            .append("\tperson_id=").append(getPersonId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
+            .append("\tpapers_type=").append(getPapersType()).append("\n")
+            .append("\tpapers_num=").append(getPapersNum()).append("\n")
+            .append("\tverify_time=").append(getVerifyTime()).append("\n")
+            .append("]\n")
+            .toString();
+    }
+
+    @Override
+    public int compareTo(FlLogLightBean object){
+        return new CompareToBuilder()
+            .append(getId(), object.getId())
+            .append(getPersonId(), object.getPersonId())
+            .append(getName(), object.getName())
+            .append(getPapersType(), object.getPapersType())
+            .append(getPapersNum(), object.getPapersNum())
+            .append(getVerifyTime(), object.getVerifyTime())
+            .toComparison();
+    }
+    /**
+    * Copies property of the passed bean into the current bean.<br>
+    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copy(FlLogLightBean bean)
+    {
+        if(bean.isNew()){
+            copyIfNotNull(bean);
+        }else{        
+            isNew(bean.isNew());
+            setId(bean.getId());
+            setPersonId(bean.getPersonId());
+            setName(bean.getName());
+            setPapersType(bean.getPapersType());
+            setPapersNum(bean.getPapersNum());
+            setVerifyTime(bean.getVerifyTime());
+        }
+    }
+    /**
+    * Copies property of the passed bean into the current bean if property not null.
+    *
+    * @param bean the bean to copy into the current bean
+    * @author guyadong
+    */
+    public void copyIfNotNull(FlLogLightBean bean)
+    {
+        isNew(bean.isNew());
+        if(bean.getId()!=null)
+            setId(bean.getId());
+        if(bean.getPersonId()!=null)
+            setPersonId(bean.getPersonId());
+        if(bean.getName()!=null)
+            setName(bean.getName());
+        if(bean.getPapersType()!=null)
+            setPapersType(bean.getPapersType());
+        if(bean.getPapersNum()!=null)
+            setPapersNum(bean.getPapersNum());
+        if(bean.getVerifyTime()!=null)
+            setVerifyTime(bean.getVerifyTime());
     }
 
     /**
-     * set all field to null and reset all modification status
-     * @see #resetIsModified() 
-     */
+    * set all field to null
+    *
+    * @author guyadong
+    */
     public FlLogLightBean clean()
     {
-        super.clean();
-        resetIsModified();
+        isNew(true);
+        setId(null);
+        setPersonId(null);
+        setName(null);
+        setPapersType(null);
+        setPapersNum(null);
+        setVerifyTime(null);
         return this;
     }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FlLogLightBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FlLogLightBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean);
+        else
+            for (int i = 0; i < fieldList.length; i++) {
+                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+            }
+    }
 
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_LOG_LIGHT_ID_ID: 
+            return (T)getId();        
+        case FL_LOG_LIGHT_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_LOG_LIGHT_ID_NAME: 
+            return (T)getName();        
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE: 
+            return (T)getPapersType();        
+        case FL_LOG_LIGHT_ID_PAPERS_NUM: 
+            return (T)getPapersNum();        
+        case FL_LOG_LIGHT_ID_VERIFY_TIME: 
+            return (T)getVerifyTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_LOG_LIGHT_ID_ID:        
+            setId((Integer)value);
+        case FL_LOG_LIGHT_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_LOG_LIGHT_ID_NAME:        
+            setName((String)value);
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:        
+            setPapersType((Integer)value);
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:        
+            setPapersNum((String)value);
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:        
+            setVerifyTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
+        return getValue(index);
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
+        setValue(index,value);
+    }
 }
