@@ -42,5 +42,10 @@
 		    <version>1.7.25</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>com.facebook.swift</groupId>
+		    <artifactId>swift-service</artifactId>
+		    <version>0.14.2</version>
+		</dependency>
   </dependencies>
 </project>
