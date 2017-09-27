@@ -79,12 +79,16 @@ public class TestFastjson {
 	    }
 
 	    public void setUsers(List<User> users) {
-	        this.users = users;
+	    	this.users = users;
 	    }
 
-	        public void addUser(User user) {
-	            users.add(user);
-	        }
+	    public void addUser(User user) {
+	    	users.add(user);
+	    }
+	    
+	    public boolean _getModified(){
+	    	return false;
+	    }
 	}
 	@Test
 	public void test() {
