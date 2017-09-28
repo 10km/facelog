@@ -27,7 +27,7 @@ import net.gdface.facelog.db.LogLightBean;
  *
  */
 public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
-    public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> _converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
+    public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
         @Override
         protected void _fromRight(DeviceBean left, net.gdface.facelog.dborm.device.FlDeviceBean right) {
@@ -71,7 +71,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> _converterFaceBean=new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean>(){
+    public static final IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> converterFaceBean=new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean>(){
 
         @Override
         protected void _fromRight(FaceBean left, net.gdface.facelog.dborm.face.FlFaceBean right) {
@@ -170,7 +170,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> _converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.dborm.image.FlImageBean>(){
+    public static final IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.dborm.image.FlImageBean>(){
 
         @Override
         protected void _fromRight(ImageBean left, net.gdface.facelog.dborm.image.FlImageBean right) {
@@ -216,7 +216,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> _converterLogBean=new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.dborm.log.FlLogBean>(){
+    public static final IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> converterLogBean=new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.dborm.log.FlLogBean>(){
 
         @Override
         protected void _fromRight(LogBean left, net.gdface.facelog.dborm.log.FlLogBean right) {
@@ -263,7 +263,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> _converterPersonBean=new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean>(){
+    public static final IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> converterPersonBean=new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean>(){
 
         @Override
         protected void _fromRight(PersonBean left, net.gdface.facelog.dborm.person.FlPersonBean right) {
@@ -327,7 +327,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> _converterStoreBean=new IBeanConverter.AbstractHandle<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean>(){
+    public static final IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> converterStoreBean=new IBeanConverter.AbstractHandle<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean>(){
 
         @Override
         protected void _fromRight(StoreBean left, net.gdface.facelog.dborm.image.FlStoreBean right) {
@@ -353,7 +353,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean> _converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean>(){
+    public static final IBeanConverter<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean> converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean>(){
 
         @Override
         protected void _fromRight(FaceLightBean left, net.gdface.facelog.dborm.face.FlFaceLightBean right) {
@@ -448,7 +448,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> _converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
+    public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
 
         @Override
         protected void _fromRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
@@ -483,7 +483,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
-    public static final IBeanConverter<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean> _converterLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean>(){
+    public static final IBeanConverter<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean> converterLogLightBean=new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean>(){
 
         @Override
         protected void _fromRight(LogLightBean left, net.gdface.facelog.dborm.log.FlLogLightBean right) {
@@ -529,15 +529,15 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
     private static final Vector<Object[]> CONVERTERS= new Vector<Object[]>(){
         private static final long serialVersionUID = 1L;
         {
-            add(new Object[]{DeviceBean.class, net.gdface.facelog.dborm.device.FlDeviceBean.class, _converterDeviceBean});
-            add(new Object[]{FaceBean.class, net.gdface.facelog.dborm.face.FlFaceBean.class, _converterFaceBean});
-            add(new Object[]{ImageBean.class, net.gdface.facelog.dborm.image.FlImageBean.class, _converterImageBean});
-            add(new Object[]{LogBean.class, net.gdface.facelog.dborm.log.FlLogBean.class, _converterLogBean});
-            add(new Object[]{PersonBean.class, net.gdface.facelog.dborm.person.FlPersonBean.class, _converterPersonBean});
-            add(new Object[]{StoreBean.class, net.gdface.facelog.dborm.image.FlStoreBean.class, _converterStoreBean});
-            add(new Object[]{FaceLightBean.class, net.gdface.facelog.dborm.face.FlFaceLightBean.class, _converterFaceLightBean});
-            add(new Object[]{FeatureBean.class, net.gdface.facelog.dborm.face.FlFeatureBean.class, _converterFeatureBean});
-            add(new Object[]{LogLightBean.class, net.gdface.facelog.dborm.log.FlLogLightBean.class, _converterLogLightBean});
+            add(new Object[]{DeviceBean.class, net.gdface.facelog.dborm.device.FlDeviceBean.class, converterDeviceBean});
+            add(new Object[]{FaceBean.class, net.gdface.facelog.dborm.face.FlFaceBean.class, converterFaceBean});
+            add(new Object[]{ImageBean.class, net.gdface.facelog.dborm.image.FlImageBean.class, converterImageBean});
+            add(new Object[]{LogBean.class, net.gdface.facelog.dborm.log.FlLogBean.class, converterLogBean});
+            add(new Object[]{PersonBean.class, net.gdface.facelog.dborm.person.FlPersonBean.class, converterPersonBean});
+            add(new Object[]{StoreBean.class, net.gdface.facelog.dborm.image.FlStoreBean.class, converterStoreBean});
+            add(new Object[]{FaceLightBean.class, net.gdface.facelog.dborm.face.FlFaceLightBean.class, converterFaceLightBean});
+            add(new Object[]{FeatureBean.class, net.gdface.facelog.dborm.face.FlFeatureBean.class, converterFeatureBean});
+            add(new Object[]{LogLightBean.class, net.gdface.facelog.dborm.log.FlLogLightBean.class, converterLogLightBean});
         }};
     
     private static final <L,R> int getIndex(Class<L> lClass,Class<R> rClass){
@@ -595,38 +595,38 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
     }
     @Override
     public IBeanConverter<DeviceBean, net.gdface.facelog.dborm.device.FlDeviceBean> getDeviceBeanConverter() {
-        return _converterDeviceBean;
+        return converterDeviceBean;
     }
     @Override
     public IBeanConverter<FaceBean, net.gdface.facelog.dborm.face.FlFaceBean> getFaceBeanConverter() {
-        return _converterFaceBean;
+        return converterFaceBean;
     }
     @Override
     public IBeanConverter<ImageBean, net.gdface.facelog.dborm.image.FlImageBean> getImageBeanConverter() {
-        return _converterImageBean;
+        return converterImageBean;
     }
     @Override
     public IBeanConverter<LogBean, net.gdface.facelog.dborm.log.FlLogBean> getLogBeanConverter() {
-        return _converterLogBean;
+        return converterLogBean;
     }
     @Override
     public IBeanConverter<PersonBean, net.gdface.facelog.dborm.person.FlPersonBean> getPersonBeanConverter() {
-        return _converterPersonBean;
+        return converterPersonBean;
     }
     @Override
     public IBeanConverter<StoreBean, net.gdface.facelog.dborm.image.FlStoreBean> getStoreBeanConverter() {
-        return _converterStoreBean;
+        return converterStoreBean;
     }
     @Override
     public IBeanConverter<FaceLightBean, net.gdface.facelog.dborm.face.FlFaceLightBean> getFaceLightBeanConverter() {
-        return _converterFaceLightBean;
+        return converterFaceLightBean;
     }
     @Override
     public IBeanConverter<FeatureBean, net.gdface.facelog.dborm.face.FlFeatureBean> getFeatureBeanConverter() {
-        return _converterFeatureBean;
+        return converterFeatureBean;
     }
     @Override
     public IBeanConverter<LogLightBean, net.gdface.facelog.dborm.log.FlLogLightBean> getLogLightBeanConverter() {
-        return _converterLogLightBean;
+        return converterLogLightBean;
     }
 }
