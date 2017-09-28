@@ -97,274 +97,274 @@ public interface Constant {
     //////////////////////////////////////
     // COLUMN ID DECLARE
     //////////////////////////////////////    
-    /** Identify the fl_device.id field . */
+    /** Identify the fl_device.id field (ordinal:1). */
     public static final int FL_DEVICE_ID_ID = 0;
     public static final long FL_DEVICE_ID_ID_MASK = 1L << 0;
-    /** Identify the fl_device.name field . */
+    /** Identify the fl_device.name field (ordinal:2). */
     public static final int FL_DEVICE_ID_NAME = 1;
     public static final long FL_DEVICE_ID_NAME_MASK = 1L << 1;
-    /** Identify the fl_device.online field . */
+    /** Identify the fl_device.online field (ordinal:3). */
     public static final int FL_DEVICE_ID_ONLINE = 2;
     public static final long FL_DEVICE_ID_ONLINE_MASK = 1L << 2;
-    /** Identify the fl_device.group_id field . */
+    /** Identify the fl_device.group_id field (ordinal:4). */
     public static final int FL_DEVICE_ID_GROUP_ID = 3;
     public static final long FL_DEVICE_ID_GROUP_ID_MASK = 1L << 3;
-    /** Identify the fl_device.version field . */
+    /** Identify the fl_device.version field (ordinal:5). */
     public static final int FL_DEVICE_ID_VERSION = 4;
     public static final long FL_DEVICE_ID_VERSION_MASK = 1L << 4;
-    /** Identify the fl_device.create_time field . */
+    /** Identify the fl_device.create_time field (ordinal:6). */
     public static final int FL_DEVICE_ID_CREATE_TIME = 5;
     public static final long FL_DEVICE_ID_CREATE_TIME_MASK = 1L << 5;
-    /** Identify the fl_device.update_time field . */
+    /** Identify the fl_device.update_time field (ordinal:7). */
     public static final int FL_DEVICE_ID_UPDATE_TIME = 6;
     public static final long FL_DEVICE_ID_UPDATE_TIME_MASK = 1L << 6;
-    /** Identify the fl_face.md5 field . */
+    /** Identify the fl_face.md5 field (ordinal:1). */
     public static final int FL_FACE_ID_MD5 = 0;
     public static final long FL_FACE_ID_MD5_MASK = 1L << 0;
-    /** Identify the fl_face.person_id field . */
+    /** Identify the fl_face.person_id field (ordinal:2). */
     public static final int FL_FACE_ID_PERSON_ID = 1;
     public static final long FL_FACE_ID_PERSON_ID_MASK = 1L << 1;
-    /** Identify the fl_face.img_md5 field . */
+    /** Identify the fl_face.img_md5 field (ordinal:3). */
     public static final int FL_FACE_ID_IMG_MD5 = 2;
     public static final long FL_FACE_ID_IMG_MD5_MASK = 1L << 2;
-    /** Identify the fl_face.face_left field . */
+    /** Identify the fl_face.face_left field (ordinal:4). */
     public static final int FL_FACE_ID_FACE_LEFT = 3;
     public static final long FL_FACE_ID_FACE_LEFT_MASK = 1L << 3;
-    /** Identify the fl_face.face_top field . */
+    /** Identify the fl_face.face_top field (ordinal:5). */
     public static final int FL_FACE_ID_FACE_TOP = 4;
     public static final long FL_FACE_ID_FACE_TOP_MASK = 1L << 4;
-    /** Identify the fl_face.face_width field . */
+    /** Identify the fl_face.face_width field (ordinal:6). */
     public static final int FL_FACE_ID_FACE_WIDTH = 5;
     public static final long FL_FACE_ID_FACE_WIDTH_MASK = 1L << 5;
-    /** Identify the fl_face.face_height field . */
+    /** Identify the fl_face.face_height field (ordinal:7). */
     public static final int FL_FACE_ID_FACE_HEIGHT = 6;
     public static final long FL_FACE_ID_FACE_HEIGHT_MASK = 1L << 6;
-    /** Identify the fl_face.eye_leftx field . */
+    /** Identify the fl_face.eye_leftx field (ordinal:8). */
     public static final int FL_FACE_ID_EYE_LEFTX = 7;
     public static final long FL_FACE_ID_EYE_LEFTX_MASK = 1L << 7;
-    /** Identify the fl_face.eye_lefty field . */
+    /** Identify the fl_face.eye_lefty field (ordinal:9). */
     public static final int FL_FACE_ID_EYE_LEFTY = 8;
     public static final long FL_FACE_ID_EYE_LEFTY_MASK = 1L << 8;
-    /** Identify the fl_face.eye_rightx field . */
+    /** Identify the fl_face.eye_rightx field (ordinal:10). */
     public static final int FL_FACE_ID_EYE_RIGHTX = 9;
     public static final long FL_FACE_ID_EYE_RIGHTX_MASK = 1L << 9;
-    /** Identify the fl_face.eye_righty field . */
+    /** Identify the fl_face.eye_righty field (ordinal:11). */
     public static final int FL_FACE_ID_EYE_RIGHTY = 10;
     public static final long FL_FACE_ID_EYE_RIGHTY_MASK = 1L << 10;
-    /** Identify the fl_face.mouth_x field . */
+    /** Identify the fl_face.mouth_x field (ordinal:12). */
     public static final int FL_FACE_ID_MOUTH_X = 11;
     public static final long FL_FACE_ID_MOUTH_X_MASK = 1L << 11;
-    /** Identify the fl_face.mouth_y field . */
+    /** Identify the fl_face.mouth_y field (ordinal:13). */
     public static final int FL_FACE_ID_MOUTH_Y = 12;
     public static final long FL_FACE_ID_MOUTH_Y_MASK = 1L << 12;
-    /** Identify the fl_face.nose_x field . */
+    /** Identify the fl_face.nose_x field (ordinal:14). */
     public static final int FL_FACE_ID_NOSE_X = 13;
     public static final long FL_FACE_ID_NOSE_X_MASK = 1L << 13;
-    /** Identify the fl_face.nose_y field . */
+    /** Identify the fl_face.nose_y field (ordinal:15). */
     public static final int FL_FACE_ID_NOSE_Y = 14;
     public static final long FL_FACE_ID_NOSE_Y_MASK = 1L << 14;
-    /** Identify the fl_face.angle_yaw field . */
+    /** Identify the fl_face.angle_yaw field (ordinal:16). */
     public static final int FL_FACE_ID_ANGLE_YAW = 15;
     public static final long FL_FACE_ID_ANGLE_YAW_MASK = 1L << 15;
-    /** Identify the fl_face.angle_pitch field . */
+    /** Identify the fl_face.angle_pitch field (ordinal:17). */
     public static final int FL_FACE_ID_ANGLE_PITCH = 16;
     public static final long FL_FACE_ID_ANGLE_PITCH_MASK = 1L << 16;
-    /** Identify the fl_face.angle_roll field . */
+    /** Identify the fl_face.angle_roll field (ordinal:18). */
     public static final int FL_FACE_ID_ANGLE_ROLL = 17;
     public static final long FL_FACE_ID_ANGLE_ROLL_MASK = 1L << 17;
-    /** Identify the fl_face.ext_info field . */
+    /** Identify the fl_face.ext_info field (ordinal:19). */
     public static final int FL_FACE_ID_EXT_INFO = 18;
     public static final long FL_FACE_ID_EXT_INFO_MASK = 1L << 18;
-    /** Identify the fl_face.feature field . */
+    /** Identify the fl_face.feature field (ordinal:20). */
     public static final int FL_FACE_ID_FEATURE = 19;
     public static final long FL_FACE_ID_FEATURE_MASK = 1L << 19;
-    /** Identify the fl_face.create_time field . */
+    /** Identify the fl_face.create_time field (ordinal:21). */
     public static final int FL_FACE_ID_CREATE_TIME = 20;
     public static final long FL_FACE_ID_CREATE_TIME_MASK = 1L << 20;
-    /** Identify the fl_image.md5 field . */
+    /** Identify the fl_image.md5 field (ordinal:1). */
     public static final int FL_IMAGE_ID_MD5 = 0;
     public static final long FL_IMAGE_ID_MD5_MASK = 1L << 0;
-    /** Identify the fl_image.format field . */
+    /** Identify the fl_image.format field (ordinal:2). */
     public static final int FL_IMAGE_ID_FORMAT = 1;
     public static final long FL_IMAGE_ID_FORMAT_MASK = 1L << 1;
-    /** Identify the fl_image.width field . */
+    /** Identify the fl_image.width field (ordinal:3). */
     public static final int FL_IMAGE_ID_WIDTH = 2;
     public static final long FL_IMAGE_ID_WIDTH_MASK = 1L << 2;
-    /** Identify the fl_image.height field . */
+    /** Identify the fl_image.height field (ordinal:4). */
     public static final int FL_IMAGE_ID_HEIGHT = 3;
     public static final long FL_IMAGE_ID_HEIGHT_MASK = 1L << 3;
-    /** Identify the fl_image.depth field . */
+    /** Identify the fl_image.depth field (ordinal:5). */
     public static final int FL_IMAGE_ID_DEPTH = 4;
     public static final long FL_IMAGE_ID_DEPTH_MASK = 1L << 4;
-    /** Identify the fl_image.face_num field . */
+    /** Identify the fl_image.face_num field (ordinal:6). */
     public static final int FL_IMAGE_ID_FACE_NUM = 5;
     public static final long FL_IMAGE_ID_FACE_NUM_MASK = 1L << 5;
-    /** Identify the fl_image.thumb_md5 field . */
+    /** Identify the fl_image.thumb_md5 field (ordinal:7). */
     public static final int FL_IMAGE_ID_THUMB_MD5 = 6;
     public static final long FL_IMAGE_ID_THUMB_MD5_MASK = 1L << 6;
-    /** Identify the fl_image.device_id field . */
+    /** Identify the fl_image.device_id field (ordinal:8). */
     public static final int FL_IMAGE_ID_DEVICE_ID = 7;
     public static final long FL_IMAGE_ID_DEVICE_ID_MASK = 1L << 7;
-    /** Identify the fl_log.id field . */
+    /** Identify the fl_log.id field (ordinal:1). */
     public static final int FL_LOG_ID_ID = 0;
     public static final long FL_LOG_ID_ID_MASK = 1L << 0;
-    /** Identify the fl_log.person_id field . */
+    /** Identify the fl_log.person_id field (ordinal:2). */
     public static final int FL_LOG_ID_PERSON_ID = 1;
     public static final long FL_LOG_ID_PERSON_ID_MASK = 1L << 1;
-    /** Identify the fl_log.device_id field . */
+    /** Identify the fl_log.device_id field (ordinal:3). */
     public static final int FL_LOG_ID_DEVICE_ID = 2;
     public static final long FL_LOG_ID_DEVICE_ID_MASK = 1L << 2;
-    /** Identify the fl_log.verify_face field . */
+    /** Identify the fl_log.verify_face field (ordinal:4). */
     public static final int FL_LOG_ID_VERIFY_FACE = 3;
     public static final long FL_LOG_ID_VERIFY_FACE_MASK = 1L << 3;
-    /** Identify the fl_log.compare_face field . */
+    /** Identify the fl_log.compare_face field (ordinal:5). */
     public static final int FL_LOG_ID_COMPARE_FACE = 4;
     public static final long FL_LOG_ID_COMPARE_FACE_MASK = 1L << 4;
-    /** Identify the fl_log.similarty field . */
+    /** Identify the fl_log.similarty field (ordinal:6). */
     public static final int FL_LOG_ID_SIMILARTY = 5;
     public static final long FL_LOG_ID_SIMILARTY_MASK = 1L << 5;
-    /** Identify the fl_log.verify_time field . */
+    /** Identify the fl_log.verify_time field (ordinal:7). */
     public static final int FL_LOG_ID_VERIFY_TIME = 6;
     public static final long FL_LOG_ID_VERIFY_TIME_MASK = 1L << 6;
-    /** Identify the fl_log.create_time field . */
+    /** Identify the fl_log.create_time field (ordinal:8). */
     public static final int FL_LOG_ID_CREATE_TIME = 7;
     public static final long FL_LOG_ID_CREATE_TIME_MASK = 1L << 7;
-    /** Identify the fl_person.id field . */
+    /** Identify the fl_person.id field (ordinal:1). */
     public static final int FL_PERSON_ID_ID = 0;
     public static final long FL_PERSON_ID_ID_MASK = 1L << 0;
-    /** Identify the fl_person.group_id field . */
+    /** Identify the fl_person.group_id field (ordinal:2). */
     public static final int FL_PERSON_ID_GROUP_ID = 1;
     public static final long FL_PERSON_ID_GROUP_ID_MASK = 1L << 1;
-    /** Identify the fl_person.name field . */
+    /** Identify the fl_person.name field (ordinal:3). */
     public static final int FL_PERSON_ID_NAME = 2;
     public static final long FL_PERSON_ID_NAME_MASK = 1L << 2;
-    /** Identify the fl_person.sex field . */
+    /** Identify the fl_person.sex field (ordinal:4). */
     public static final int FL_PERSON_ID_SEX = 3;
     public static final long FL_PERSON_ID_SEX_MASK = 1L << 3;
-    /** Identify the fl_person.birthdate field . */
+    /** Identify the fl_person.birthdate field (ordinal:5). */
     public static final int FL_PERSON_ID_BIRTHDATE = 4;
     public static final long FL_PERSON_ID_BIRTHDATE_MASK = 1L << 4;
-    /** Identify the fl_person.papers_type field . */
+    /** Identify the fl_person.papers_type field (ordinal:6). */
     public static final int FL_PERSON_ID_PAPERS_TYPE = 5;
     public static final long FL_PERSON_ID_PAPERS_TYPE_MASK = 1L << 5;
-    /** Identify the fl_person.papers_num field . */
+    /** Identify the fl_person.papers_num field (ordinal:7). */
     public static final int FL_PERSON_ID_PAPERS_NUM = 6;
     public static final long FL_PERSON_ID_PAPERS_NUM_MASK = 1L << 6;
-    /** Identify the fl_person.photo_id field . */
+    /** Identify the fl_person.photo_id field (ordinal:8). */
     public static final int FL_PERSON_ID_PHOTO_ID = 7;
     public static final long FL_PERSON_ID_PHOTO_ID_MASK = 1L << 7;
-    /** Identify the fl_person.face_md5 field . */
+    /** Identify the fl_person.face_md5 field (ordinal:9). */
     public static final int FL_PERSON_ID_FACE_MD5 = 8;
     public static final long FL_PERSON_ID_FACE_MD5_MASK = 1L << 8;
-    /** Identify the fl_person.expiry_date field . */
+    /** Identify the fl_person.expiry_date field (ordinal:10). */
     public static final int FL_PERSON_ID_EXPIRY_DATE = 9;
     public static final long FL_PERSON_ID_EXPIRY_DATE_MASK = 1L << 9;
-    /** Identify the fl_person.create_time field . */
+    /** Identify the fl_person.create_time field (ordinal:11). */
     public static final int FL_PERSON_ID_CREATE_TIME = 10;
     public static final long FL_PERSON_ID_CREATE_TIME_MASK = 1L << 10;
-    /** Identify the fl_person.update_time field . */
+    /** Identify the fl_person.update_time field (ordinal:12). */
     public static final int FL_PERSON_ID_UPDATE_TIME = 11;
     public static final long FL_PERSON_ID_UPDATE_TIME_MASK = 1L << 11;
-    /** Identify the fl_store.md5 field . */
+    /** Identify the fl_store.md5 field (ordinal:1). */
     public static final int FL_STORE_ID_MD5 = 0;
     public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
-    /** Identify the fl_store.encoding field . */
+    /** Identify the fl_store.encoding field (ordinal:2). */
     public static final int FL_STORE_ID_ENCODING = 1;
     public static final long FL_STORE_ID_ENCODING_MASK = 1L << 1;
-    /** Identify the fl_store.data field . */
+    /** Identify the fl_store.data field (ordinal:3). */
     public static final int FL_STORE_ID_DATA = 2;
     public static final long FL_STORE_ID_DATA_MASK = 1L << 2;
-    /** Identify the fl_face_light.md5 field . */
+    /** Identify the fl_face_light.md5 field (ordinal:1). */
     public static final int FL_FACE_LIGHT_ID_MD5 = 0;
     public static final long FL_FACE_LIGHT_ID_MD5_MASK = 1L << 0;
-    /** Identify the fl_face_light.person_id field . */
+    /** Identify the fl_face_light.person_id field (ordinal:2). */
     public static final int FL_FACE_LIGHT_ID_PERSON_ID = 1;
     public static final long FL_FACE_LIGHT_ID_PERSON_ID_MASK = 1L << 1;
-    /** Identify the fl_face_light.img_md5 field . */
+    /** Identify the fl_face_light.img_md5 field (ordinal:3). */
     public static final int FL_FACE_LIGHT_ID_IMG_MD5 = 2;
     public static final long FL_FACE_LIGHT_ID_IMG_MD5_MASK = 1L << 2;
-    /** Identify the fl_face_light.face_left field . */
+    /** Identify the fl_face_light.face_left field (ordinal:4). */
     public static final int FL_FACE_LIGHT_ID_FACE_LEFT = 3;
     public static final long FL_FACE_LIGHT_ID_FACE_LEFT_MASK = 1L << 3;
-    /** Identify the fl_face_light.face_top field . */
+    /** Identify the fl_face_light.face_top field (ordinal:5). */
     public static final int FL_FACE_LIGHT_ID_FACE_TOP = 4;
     public static final long FL_FACE_LIGHT_ID_FACE_TOP_MASK = 1L << 4;
-    /** Identify the fl_face_light.face_width field . */
+    /** Identify the fl_face_light.face_width field (ordinal:6). */
     public static final int FL_FACE_LIGHT_ID_FACE_WIDTH = 5;
     public static final long FL_FACE_LIGHT_ID_FACE_WIDTH_MASK = 1L << 5;
-    /** Identify the fl_face_light.face_height field . */
+    /** Identify the fl_face_light.face_height field (ordinal:7). */
     public static final int FL_FACE_LIGHT_ID_FACE_HEIGHT = 6;
     public static final long FL_FACE_LIGHT_ID_FACE_HEIGHT_MASK = 1L << 6;
-    /** Identify the fl_face_light.eye_leftx field . */
+    /** Identify the fl_face_light.eye_leftx field (ordinal:8). */
     public static final int FL_FACE_LIGHT_ID_EYE_LEFTX = 7;
     public static final long FL_FACE_LIGHT_ID_EYE_LEFTX_MASK = 1L << 7;
-    /** Identify the fl_face_light.eye_lefty field . */
+    /** Identify the fl_face_light.eye_lefty field (ordinal:9). */
     public static final int FL_FACE_LIGHT_ID_EYE_LEFTY = 8;
     public static final long FL_FACE_LIGHT_ID_EYE_LEFTY_MASK = 1L << 8;
-    /** Identify the fl_face_light.eye_rightx field . */
+    /** Identify the fl_face_light.eye_rightx field (ordinal:10). */
     public static final int FL_FACE_LIGHT_ID_EYE_RIGHTX = 9;
     public static final long FL_FACE_LIGHT_ID_EYE_RIGHTX_MASK = 1L << 9;
-    /** Identify the fl_face_light.eye_righty field . */
+    /** Identify the fl_face_light.eye_righty field (ordinal:11). */
     public static final int FL_FACE_LIGHT_ID_EYE_RIGHTY = 10;
     public static final long FL_FACE_LIGHT_ID_EYE_RIGHTY_MASK = 1L << 10;
-    /** Identify the fl_face_light.mouth_x field . */
+    /** Identify the fl_face_light.mouth_x field (ordinal:12). */
     public static final int FL_FACE_LIGHT_ID_MOUTH_X = 11;
     public static final long FL_FACE_LIGHT_ID_MOUTH_X_MASK = 1L << 11;
-    /** Identify the fl_face_light.mouth_y field . */
+    /** Identify the fl_face_light.mouth_y field (ordinal:13). */
     public static final int FL_FACE_LIGHT_ID_MOUTH_Y = 12;
     public static final long FL_FACE_LIGHT_ID_MOUTH_Y_MASK = 1L << 12;
-    /** Identify the fl_face_light.nose_x field . */
+    /** Identify the fl_face_light.nose_x field (ordinal:14). */
     public static final int FL_FACE_LIGHT_ID_NOSE_X = 13;
     public static final long FL_FACE_LIGHT_ID_NOSE_X_MASK = 1L << 13;
-    /** Identify the fl_face_light.nose_y field . */
+    /** Identify the fl_face_light.nose_y field (ordinal:15). */
     public static final int FL_FACE_LIGHT_ID_NOSE_Y = 14;
     public static final long FL_FACE_LIGHT_ID_NOSE_Y_MASK = 1L << 14;
-    /** Identify the fl_face_light.angle_yaw field . */
+    /** Identify the fl_face_light.angle_yaw field (ordinal:16). */
     public static final int FL_FACE_LIGHT_ID_ANGLE_YAW = 15;
     public static final long FL_FACE_LIGHT_ID_ANGLE_YAW_MASK = 1L << 15;
-    /** Identify the fl_face_light.angle_pitch field . */
+    /** Identify the fl_face_light.angle_pitch field (ordinal:17). */
     public static final int FL_FACE_LIGHT_ID_ANGLE_PITCH = 16;
     public static final long FL_FACE_LIGHT_ID_ANGLE_PITCH_MASK = 1L << 16;
-    /** Identify the fl_face_light.angle_roll field . */
+    /** Identify the fl_face_light.angle_roll field (ordinal:18). */
     public static final int FL_FACE_LIGHT_ID_ANGLE_ROLL = 17;
     public static final long FL_FACE_LIGHT_ID_ANGLE_ROLL_MASK = 1L << 17;
-    /** Identify the fl_face_light.ext_info field . */
+    /** Identify the fl_face_light.ext_info field (ordinal:19). */
     public static final int FL_FACE_LIGHT_ID_EXT_INFO = 18;
     public static final long FL_FACE_LIGHT_ID_EXT_INFO_MASK = 1L << 18;
-    /** Identify the fl_face_light.create_time field . */
+    /** Identify the fl_face_light.create_time field (ordinal:20). */
     public static final int FL_FACE_LIGHT_ID_CREATE_TIME = 19;
     public static final long FL_FACE_LIGHT_ID_CREATE_TIME_MASK = 1L << 19;
-    /** Identify the fl_feature.md5 field . */
+    /** Identify the fl_feature.md5 field (ordinal:1). */
     public static final int FL_FEATURE_ID_MD5 = 0;
     public static final long FL_FEATURE_ID_MD5_MASK = 1L << 0;
-    /** Identify the fl_feature.person_id field . */
+    /** Identify the fl_feature.person_id field (ordinal:2). */
     public static final int FL_FEATURE_ID_PERSON_ID = 1;
     public static final long FL_FEATURE_ID_PERSON_ID_MASK = 1L << 1;
-    /** Identify the fl_feature.img_md5 field . */
+    /** Identify the fl_feature.img_md5 field (ordinal:3). */
     public static final int FL_FEATURE_ID_IMG_MD5 = 2;
     public static final long FL_FEATURE_ID_IMG_MD5_MASK = 1L << 2;
-    /** Identify the fl_feature.feature field . */
+    /** Identify the fl_feature.feature field (ordinal:4). */
     public static final int FL_FEATURE_ID_FEATURE = 3;
     public static final long FL_FEATURE_ID_FEATURE_MASK = 1L << 3;
-    /** Identify the fl_feature.create_time field . */
+    /** Identify the fl_feature.create_time field (ordinal:5). */
     public static final int FL_FEATURE_ID_CREATE_TIME = 4;
     public static final long FL_FEATURE_ID_CREATE_TIME_MASK = 1L << 4;
-    /** Identify the fl_log_light.id field . */
+    /** Identify the fl_log_light.id field (ordinal:1). */
     public static final int FL_LOG_LIGHT_ID_ID = 0;
     public static final long FL_LOG_LIGHT_ID_ID_MASK = 1L << 0;
-    /** Identify the fl_log_light.person_id field . */
+    /** Identify the fl_log_light.person_id field (ordinal:2). */
     public static final int FL_LOG_LIGHT_ID_PERSON_ID = 1;
     public static final long FL_LOG_LIGHT_ID_PERSON_ID_MASK = 1L << 1;
-    /** Identify the fl_log_light.name field . */
+    /** Identify the fl_log_light.name field (ordinal:3). */
     public static final int FL_LOG_LIGHT_ID_NAME = 2;
     public static final long FL_LOG_LIGHT_ID_NAME_MASK = 1L << 2;
-    /** Identify the fl_log_light.papers_type field . */
+    /** Identify the fl_log_light.papers_type field (ordinal:4). */
     public static final int FL_LOG_LIGHT_ID_PAPERS_TYPE = 3;
     public static final long FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK = 1L << 3;
-    /** Identify the fl_log_light.papers_num field . */
+    /** Identify the fl_log_light.papers_num field (ordinal:5). */
     public static final int FL_LOG_LIGHT_ID_PAPERS_NUM = 4;
     public static final long FL_LOG_LIGHT_ID_PAPERS_NUM_MASK = 1L << 4;
-    /** Identify the fl_log_light.verify_time field . */
+    /** Identify the fl_log_light.verify_time field (ordinal:6). */
     public static final int FL_LOG_LIGHT_ID_VERIFY_TIME = 5;
     public static final long FL_LOG_LIGHT_ID_VERIFY_TIME_MASK = 1L << 5;
     //////////////////////////////////////

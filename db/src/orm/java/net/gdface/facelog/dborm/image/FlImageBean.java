@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.image;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
@@ -20,12 +20,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: 图像存储表,用于存储系统中所有用到的图像数据 </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlImageBean
-    implements Serializable,FullBean<FlImageBean>,Comparable<FlImageBean>,Constant
+    implements Serializable,BaseBean<FlImageBean>,Comparable<FlImageBean>,Constant
 {
-	private static final long serialVersionUID = 646979810912117585L;
+    private static final long serialVersionUID = 646979810912117585L;
+    
     /** comments:主键,图像md5检验码,同时也是外键fl_store(md5) */
     private String md5;
 
@@ -113,15 +114,7 @@ public class FlImageBean
         super();
     }
     /**
-     * create a FlImageBean from a instance
-     */
-    FlImageBean(FlImageBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -140,8 +133,7 @@ public class FlImageBean
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -151,7 +143,7 @@ public class FlImageBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && isMd5Initialized())) {
+            (newVal == null && md5 == null && checkMd5Initialized())) {
             return;
         }
         md5 = newVal;
@@ -165,25 +157,24 @@ public class FlImageBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMd5Modified()
+    public boolean checkMd5Modified()
     {
-        return 0L != (modified & FL_IMAGE_ID_MD5_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_MD5_MASK);
     }
 
     /**
-     * Determines if the md5 has been initialized.
-     * <br>
+     * Determines if the md5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMd5Initialized()
+    public boolean checkMd5Initialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_MD5_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_MD5_MASK);
     }
     /**
-     * Getter method for format.
-     * <br>
+     * Getter method for {@link #format}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.format</li>
@@ -198,8 +189,7 @@ public class FlImageBean
         return format;
     }
     /**
-     * Setter method for format.
-     * <br>
+     * Setter method for {@link #format}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -209,7 +199,7 @@ public class FlImageBean
     public void setFormat(String newVal)
     {
         if ((newVal != null && format != null && (newVal.compareTo(format) == 0)) ||
-            (newVal == null && format == null && isFormatInitialized())) {
+            (newVal == null && format == null && checkFormatInitialized())) {
             return;
         }
         format = newVal;
@@ -223,25 +213,24 @@ public class FlImageBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFormatModified()
+    public boolean checkFormatModified()
     {
-        return 0L != (modified & FL_IMAGE_ID_FORMAT_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_FORMAT_MASK);
     }
 
     /**
-     * Determines if the format has been initialized.
-     * <br>
+     * Determines if the format has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFormatInitialized()
+    public boolean checkFormatInitialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_FORMAT_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_FORMAT_MASK);
     }
     /**
-     * Getter method for width.
-     * <br>
+     * Getter method for {@link #width}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.width</li>
@@ -256,8 +245,7 @@ public class FlImageBean
         return width;
     }
     /**
-     * Setter method for width.
-     * <br>
+     * Setter method for {@link #width}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -267,7 +255,7 @@ public class FlImageBean
     public void setWidth(Integer newVal)
     {
         if ((newVal != null && width != null && (newVal.compareTo(width) == 0)) ||
-            (newVal == null && width == null && isWidthInitialized())) {
+            (newVal == null && width == null && checkWidthInitialized())) {
             return;
         }
         width = newVal;
@@ -277,8 +265,7 @@ public class FlImageBean
     }
 
     /**
-     * Setter method for width.
-     * <br>
+     * Setter method for {@link #width}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to width
@@ -287,31 +274,29 @@ public class FlImageBean
     {
         setWidth(new Integer(newVal));
     }
-
     /**
      * Determines if the width has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isWidthModified()
+    public boolean checkWidthModified()
     {
-        return 0L != (modified & FL_IMAGE_ID_WIDTH_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_WIDTH_MASK);
     }
 
     /**
-     * Determines if the width has been initialized.
-     * <br>
+     * Determines if the width has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isWidthInitialized()
+    public boolean checkWidthInitialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_WIDTH_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_WIDTH_MASK);
     }
     /**
-     * Getter method for height.
-     * <br>
+     * Getter method for {@link #height}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.height</li>
@@ -326,8 +311,7 @@ public class FlImageBean
         return height;
     }
     /**
-     * Setter method for height.
-     * <br>
+     * Setter method for {@link #height}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -337,7 +321,7 @@ public class FlImageBean
     public void setHeight(Integer newVal)
     {
         if ((newVal != null && height != null && (newVal.compareTo(height) == 0)) ||
-            (newVal == null && height == null && isHeightInitialized())) {
+            (newVal == null && height == null && checkHeightInitialized())) {
             return;
         }
         height = newVal;
@@ -347,8 +331,7 @@ public class FlImageBean
     }
 
     /**
-     * Setter method for height.
-     * <br>
+     * Setter method for {@link #height}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to height
@@ -357,31 +340,29 @@ public class FlImageBean
     {
         setHeight(new Integer(newVal));
     }
-
     /**
      * Determines if the height has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isHeightModified()
+    public boolean checkHeightModified()
     {
-        return 0L != (modified & FL_IMAGE_ID_HEIGHT_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_HEIGHT_MASK);
     }
 
     /**
-     * Determines if the height has been initialized.
-     * <br>
+     * Determines if the height has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isHeightInitialized()
+    public boolean checkHeightInitialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_HEIGHT_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_HEIGHT_MASK);
     }
     /**
-     * Getter method for depth.
-     * <br>
+     * Getter method for {@link #depth}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.depth</li>
@@ -396,8 +377,7 @@ public class FlImageBean
         return depth;
     }
     /**
-     * Setter method for depth.
-     * <br>
+     * Setter method for {@link #depth}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -407,7 +387,7 @@ public class FlImageBean
     public void setDepth(Integer newVal)
     {
         if ((newVal != null && depth != null && (newVal.compareTo(depth) == 0)) ||
-            (newVal == null && depth == null && isDepthInitialized())) {
+            (newVal == null && depth == null && checkDepthInitialized())) {
             return;
         }
         depth = newVal;
@@ -417,8 +397,7 @@ public class FlImageBean
     }
 
     /**
-     * Setter method for depth.
-     * <br>
+     * Setter method for {@link #depth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to depth
@@ -427,31 +406,29 @@ public class FlImageBean
     {
         setDepth(new Integer(newVal));
     }
-
     /**
      * Determines if the depth has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isDepthModified()
+    public boolean checkDepthModified()
     {
-        return 0L != (modified & FL_IMAGE_ID_DEPTH_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_DEPTH_MASK);
     }
 
     /**
-     * Determines if the depth has been initialized.
-     * <br>
+     * Determines if the depth has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isDepthInitialized()
+    public boolean checkDepthInitialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_DEPTH_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_DEPTH_MASK);
     }
     /**
-     * Getter method for faceNum.
-     * <br>
+     * Getter method for {@link #faceNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.face_num</li>
@@ -466,8 +443,7 @@ public class FlImageBean
         return faceNum;
     }
     /**
-     * Setter method for faceNum.
-     * <br>
+     * Setter method for {@link #faceNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -477,7 +453,7 @@ public class FlImageBean
     public void setFaceNum(Integer newVal)
     {
         if ((newVal != null && faceNum != null && (newVal.compareTo(faceNum) == 0)) ||
-            (newVal == null && faceNum == null && isFaceNumInitialized())) {
+            (newVal == null && faceNum == null && checkFaceNumInitialized())) {
             return;
         }
         faceNum = newVal;
@@ -487,8 +463,7 @@ public class FlImageBean
     }
 
     /**
-     * Setter method for faceNum.
-     * <br>
+     * Setter method for {@link #faceNum}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceNum
@@ -497,31 +472,29 @@ public class FlImageBean
     {
         setFaceNum(new Integer(newVal));
     }
-
     /**
      * Determines if the faceNum has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFaceNumModified()
+    public boolean checkFaceNumModified()
     {
-        return 0L != (modified & FL_IMAGE_ID_FACE_NUM_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_FACE_NUM_MASK);
     }
 
     /**
-     * Determines if the faceNum has been initialized.
-     * <br>
+     * Determines if the faceNum has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFaceNumInitialized()
+    public boolean checkFaceNumInitialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_FACE_NUM_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_FACE_NUM_MASK);
     }
     /**
-     * Getter method for thumbMd5.
-     * <br>
+     * Getter method for {@link #thumbMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.thumb_md5</li>
@@ -537,8 +510,7 @@ public class FlImageBean
         return thumbMd5;
     }
     /**
-     * Setter method for thumbMd5.
-     * <br>
+     * Setter method for {@link #thumbMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -548,7 +520,7 @@ public class FlImageBean
     public void setThumbMd5(String newVal)
     {
         if ((newVal != null && thumbMd5 != null && (newVal.compareTo(thumbMd5) == 0)) ||
-            (newVal == null && thumbMd5 == null && isThumbMd5Initialized())) {
+            (newVal == null && thumbMd5 == null && checkThumbMd5Initialized())) {
             return;
         }
         thumbMd5 = newVal;
@@ -562,25 +534,24 @@ public class FlImageBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isThumbMd5Modified()
+    public boolean checkThumbMd5Modified()
     {
-        return 0L != (modified & FL_IMAGE_ID_THUMB_MD5_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_THUMB_MD5_MASK);
     }
 
     /**
-     * Determines if the thumbMd5 has been initialized.
-     * <br>
+     * Determines if the thumbMd5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isThumbMd5Initialized()
+    public boolean checkThumbMd5Initialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_THUMB_MD5_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_THUMB_MD5_MASK);
     }
     /**
-     * Getter method for deviceId.
-     * <br>
+     * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.device_id</li>
@@ -596,8 +567,7 @@ public class FlImageBean
         return deviceId;
     }
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -607,7 +577,7 @@ public class FlImageBean
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && isDeviceIdInitialized())) {
+            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
             return;
         }
         deviceId = newVal;
@@ -617,8 +587,7 @@ public class FlImageBean
     }
 
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to deviceId
@@ -627,27 +596,26 @@ public class FlImageBean
     {
         setDeviceId(new Integer(newVal));
     }
-
     /**
      * Determines if the deviceId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isDeviceIdModified()
+    public boolean checkDeviceIdModified()
     {
-        return 0L != (modified & FL_IMAGE_ID_DEVICE_ID_MASK);
+        return 0L !=  (modified & FL_IMAGE_ID_DEVICE_ID_MASK);
     }
 
     /**
-     * Determines if the deviceId has been initialized.
-     * <br>
+     * Determines if the deviceId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isDeviceIdInitialized()
+    public boolean checkDeviceIdInitialized()
     {
-        return 0L != (initialized & FL_IMAGE_ID_DEVICE_ID_MASK);
+        return 0L !=  (initialized & FL_IMAGE_ID_DEVICE_ID_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -713,21 +681,21 @@ public class FlImageBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_IMAGE_ID_MD5:
-            return isMd5Modified();
+            return checkMd5Modified();
         case FL_IMAGE_ID_FORMAT:
-            return isFormatModified();
+            return checkFormatModified();
         case FL_IMAGE_ID_WIDTH:
-            return isWidthModified();
+            return checkWidthModified();
         case FL_IMAGE_ID_HEIGHT:
-            return isHeightModified();
+            return checkHeightModified();
         case FL_IMAGE_ID_DEPTH:
-            return isDepthModified();
+            return checkDepthModified();
         case FL_IMAGE_ID_FACE_NUM:
-            return isFaceNumModified();
+            return checkFaceNumModified();
         case FL_IMAGE_ID_THUMB_MD5:
-            return isThumbMd5Modified();
+            return checkThumbMd5Modified();
         case FL_IMAGE_ID_DEVICE_ID:
-            return isDeviceIdModified();
+            return checkDeviceIdModified();
         }
         return false;
     }
@@ -742,35 +710,33 @@ public class FlImageBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_IMAGE_ID_MD5:
-            return isMd5Initialized();
+            return checkMd5Initialized();
         case FL_IMAGE_ID_FORMAT:
-            return isFormatInitialized();
+            return checkFormatInitialized();
         case FL_IMAGE_ID_WIDTH:
-            return isWidthInitialized();
+            return checkWidthInitialized();
         case FL_IMAGE_ID_HEIGHT:
-            return isHeightInitialized();
+            return checkHeightInitialized();
         case FL_IMAGE_ID_DEPTH:
-            return isDepthInitialized();
+            return checkDepthInitialized();
         case FL_IMAGE_ID_FACE_NUM:
-            return isFaceNumInitialized();
+            return checkFaceNumInitialized();
         case FL_IMAGE_ID_THUMB_MD5:
-            return isThumbMd5Initialized();
+            return checkThumbMd5Initialized();
         case FL_IMAGE_ID_DEVICE_ID:
-            return isDeviceIdInitialized();
+            return checkDeviceIdInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -782,10 +748,7 @@ public class FlImageBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -795,7 +758,13 @@ public class FlImageBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -852,54 +821,6 @@ public class FlImageBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlImageBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setFormat(bean.getFormat());
-            setWidth(bean.getWidth());
-            setHeight(bean.getHeight());
-            setDepth(bean.getDepth());
-            setFaceNum(bean.getFaceNum());
-            setThumbMd5(bean.getThumbMd5());
-            setDeviceId(bean.getDeviceId());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlImageBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getFormat()!=null)
-            setFormat(bean.getFormat());
-        if(bean.getWidth()!=null)
-            setWidth(bean.getWidth());
-        if(bean.getHeight()!=null)
-            setHeight(bean.getHeight());
-        if(bean.getDepth()!=null)
-            setDepth(bean.getDepth());
-        if(bean.getFaceNum()!=null)
-            setFaceNum(bean.getFaceNum());
-        if(bean.getThumbMd5()!=null)
-            setThumbMd5(bean.getThumbMd5());
-        if(bean.getDeviceId()!=null)
-            setDeviceId(bean.getDeviceId());
-    }
 
     /**
     * set all field to null
@@ -908,7 +829,6 @@ public class FlImageBean
     */
     public FlImageBean clean()
     {
-        isNew(true);
         setMd5(null);
         setFormat(null);
         setWidth(null);
@@ -917,6 +837,9 @@ public class FlImageBean
         setFaceNum(null);
         setThumbMd5(null);
         setDeviceId(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -929,10 +852,14 @@ public class FlImageBean
     public void copy(FlImageBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 8; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -945,11 +872,15 @@ public class FlImageBean
     public void copy(FlImageBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -1009,10 +940,7 @@ public class FlImageBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -1020,9 +948,13 @@ public class FlImageBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

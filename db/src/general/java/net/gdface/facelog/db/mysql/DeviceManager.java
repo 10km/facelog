@@ -201,7 +201,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T[] getImportedBeans(DeviceBean bean, int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(DeviceBean bean, int ikIndex){
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -218,7 +218,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(DeviceBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(DeviceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (java.util.List<T>)this.getFlImageBeansByDeviceIdAsList(bean);
@@ -242,7 +242,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (T[])setFlImageBeansByDeviceId(bean,(ImageBean[])importedBeans);
@@ -265,7 +265,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (C)setFlImageBeansByDeviceId(bean,(java.util.Collection<ImageBean>)importedBeans);

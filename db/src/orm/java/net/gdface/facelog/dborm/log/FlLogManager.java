@@ -384,7 +384,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -410,7 +410,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
@@ -660,7 +660,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_log (");
 
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -668,7 +668,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -676,7 +676,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -684,7 +684,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isVerifyFaceModified()) {
+            if (bean.checkVerifyFaceModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -692,7 +692,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isCompareFaceModified()) {
+            if (bean.checkCompareFaceModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -700,7 +700,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isSimilartyModified()) {
+            if (bean.checkSimilartyModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -708,7 +708,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isVerifyTimeModified()) {
+            if (bean.checkVerifyTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -716,7 +716,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -742,7 +742,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
 
             ps.executeUpdate();
 
-            if (!bean.isIdModified())
+            if (!bean.checkIdModified())
             {
                 PreparedStatement ps2 = null;
                 ResultSet rs = null;
@@ -800,7 +800,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             sql = new StringBuilder("UPDATE fl_log SET ");
             boolean useComma=false;
 
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -809,7 +809,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("id=?");
             }
 
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -818,7 +818,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("person_id=?");
             }
 
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -827,7 +827,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("device_id=?");
             }
 
-            if (bean.isVerifyFaceModified()) {
+            if (bean.checkVerifyFaceModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -836,7 +836,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("verify_face=?");
             }
 
-            if (bean.isCompareFaceModified()) {
+            if (bean.checkCompareFaceModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -845,7 +845,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("compare_face=?");
             }
 
-            if (bean.isSimilartyModified()) {
+            if (bean.checkSimilartyModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -854,7 +854,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("similarty=?");
             }
 
-            if (bean.isVerifyTimeModified()) {
+            if (bean.checkVerifyTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -863,7 +863,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("verify_time=?");
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -953,7 +953,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public int deleteUsingTemplate(FlLogBean bean) throws DAOException
     {
-        if(bean.isIdInitialized() && null != bean.getId()){
+        if(bean.checkIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
         if( !this.listenerContainer.isEmpty()){
@@ -1397,7 +1397,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         }
         try
         {
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 _dirtyCount ++;
                 if (bean.getId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
@@ -1405,7 +1405,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
                 }
             }
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 _dirtyCount ++;
                 if (bean.getPersonId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
@@ -1413,7 +1413,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
                 }
             }
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 _dirtyCount ++;
                 if (bean.getDeviceId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id IS NULL");
@@ -1421,7 +1421,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id = ?");
                 }
             }
-            if (bean.isVerifyFaceModified()) {
+            if (bean.checkVerifyFaceModified()) {
                 _dirtyCount ++;
                 if (bean.getVerifyFace() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_face IS NULL");
@@ -1429,7 +1429,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_face ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isCompareFaceModified()) {
+            if (bean.checkCompareFaceModified()) {
                 _dirtyCount ++;
                 if (bean.getCompareFace() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_face IS NULL");
@@ -1437,7 +1437,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_face ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isSimilartyModified()) {
+            if (bean.checkSimilartyModified()) {
                 _dirtyCount ++;
                 if (bean.getSimilarty() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("similarty IS NULL");
@@ -1445,7 +1445,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("similarty = ?");
                 }
             }
-            if (bean.isVerifyTimeModified()) {
+            if (bean.checkVerifyTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getVerifyTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_time IS NULL");
@@ -1453,7 +1453,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_time = ?");
                 }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
@@ -1485,19 +1485,19 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
                 if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
                 if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
             }
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
                 if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
             }
-            if (bean.isVerifyFaceModified()) {
+            if (bean.checkVerifyFaceModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFace() + "]");
@@ -1519,7 +1519,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isCompareFaceModified()) {
+            if (bean.checkCompareFaceModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCompareFace() + "]");
@@ -1541,15 +1541,15 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isSimilartyModified()) {
+            if (bean.checkSimilartyModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSimilarty() + "]");
                 if (bean.getSimilarty() == null) { ps.setNull(++_dirtyCount, Types.DOUBLE); } else { Manager.setDouble(ps, ++_dirtyCount, bean.getSimilarty()); }
             }
-            if (bean.isVerifyTimeModified()) {
+            if (bean.checkVerifyTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyTime() + "]");
                 if (bean.getVerifyTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getVerifyTime().getTime())); }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }

@@ -17,50 +17,38 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class ImageBean
-    implements Serializable,BaseBean,Comparable<ImageBean>
+    implements Serializable,BaseBean<ImageBean>,Comparable<ImageBean>,Constant
 {
     private static final long serialVersionUID = -5491214114261088424L;
     
-    /**
-     * comments:主键,图像md5检验码,同时也是外键fl_store(md5)
-     */
+    /** comments:主键,图像md5检验码,同时也是外键fl_store(md5) */
     private String md5;
 
-    /**
-     * comments:图像格式
-     */
+    /** comments:图像格式 */
     private String format;
 
-    /**
-     * comments:图像宽度
-     */
+    /** comments:图像宽度 */
     private Integer width;
 
-    /**
-     * comments:图像高度
-     */
+    /** comments:图像高度 */
     private Integer height;
 
-    /**
-     * comments:通道数
-     */
+    /** comments:通道数 */
     private Integer depth;
 
-    /**
-     * comments:图像中的人脸数目
-     */
+    /** comments:图像中的人脸数目 */
     private Integer faceNum;
 
-    /**
-     * comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5)
-     */
+    /** comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5) */
     private String thumbMd5;
 
-    /**
-     * comments:外键,图像来源设备
-     */
+    /** comments:外键,图像来源设备 */
     private Integer deviceId;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -92,18 +80,38 @@ public class ImageBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a ImageBean is via the createImageBean method in FlImageManager or
-     * via the factory class FlImageFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public ImageBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a ImageBean from a instance
+     * @return the initialized status of columns
      */
-    public ImageBean(ImageBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public ImageBean(){
+        super();
     }
     /**
      * Getter method for {@link #md5}.<br>
@@ -121,7 +129,7 @@ public class ImageBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -134,10 +142,39 @@ public class ImageBean
      * @param newVal the new value to be assigned to md5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setMd5(String newVal){    
+    public void setMd5(String newVal)
+    {
+        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
+            (newVal == null && md5 == null && checkMd5Initialized())) {
+            return;
+        }
         md5 = newVal;
+
+        modified |= FL_IMAGE_ID_MD5_MASK;
+        initialized |= FL_IMAGE_ID_MD5_MASK;
     }
 
+    /**
+     * Determines if the md5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMd5Modified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_MD5_MASK);
+    }
+
+    /**
+     * Determines if the md5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_MD5_MASK);
+    }
     /**
      * Getter method for {@link #format}.<br>
      * Meta Data Information (in progress):
@@ -150,7 +187,7 @@ public class ImageBean
      *
      * @return the value of format
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public String getFormat(){
         return format;
     }
@@ -163,10 +200,39 @@ public class ImageBean
      * @param newVal the new value to be assigned to format
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFormat(String newVal){    
+    public void setFormat(String newVal)
+    {
+        if ((newVal != null && format != null && (newVal.compareTo(format) == 0)) ||
+            (newVal == null && format == null && checkFormatInitialized())) {
+            return;
+        }
         format = newVal;
+
+        modified |= FL_IMAGE_ID_FORMAT_MASK;
+        initialized |= FL_IMAGE_ID_FORMAT_MASK;
     }
 
+    /**
+     * Determines if the format has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFormatModified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_FORMAT_MASK);
+    }
+
+    /**
+     * Determines if the format has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFormatInitialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_FORMAT_MASK);
+    }
     /**
      * Getter method for {@link #width}.<br>
      * Meta Data Information (in progress):
@@ -179,7 +245,7 @@ public class ImageBean
      *
      * @return the value of width
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public Integer getWidth(){
         return width;
     }
@@ -192,8 +258,16 @@ public class ImageBean
      * @param newVal the new value to be assigned to width
      */
     @com.facebook.swift.codec.ThriftField
-    public void setWidth(Integer newVal){    
+    public void setWidth(Integer newVal)
+    {
+        if ((newVal != null && width != null && (newVal.compareTo(width) == 0)) ||
+            (newVal == null && width == null && checkWidthInitialized())) {
+            return;
+        }
         width = newVal;
+
+        modified |= FL_IMAGE_ID_WIDTH_MASK;
+        initialized |= FL_IMAGE_ID_WIDTH_MASK;
     }
 
     /**
@@ -202,8 +276,30 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to width
      */
-    public void setWidth(int newVal){
+    public void setWidth(int newVal)
+    {
         setWidth(new Integer(newVal));
+    }
+    /**
+     * Determines if the width has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkWidthModified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_WIDTH_MASK);
+    }
+
+    /**
+     * Determines if the width has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkWidthInitialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_WIDTH_MASK);
     }
     /**
      * Getter method for {@link #height}.<br>
@@ -217,7 +313,7 @@ public class ImageBean
      *
      * @return the value of height
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getHeight(){
         return height;
     }
@@ -230,8 +326,16 @@ public class ImageBean
      * @param newVal the new value to be assigned to height
      */
     @com.facebook.swift.codec.ThriftField
-    public void setHeight(Integer newVal){    
+    public void setHeight(Integer newVal)
+    {
+        if ((newVal != null && height != null && (newVal.compareTo(height) == 0)) ||
+            (newVal == null && height == null && checkHeightInitialized())) {
+            return;
+        }
         height = newVal;
+
+        modified |= FL_IMAGE_ID_HEIGHT_MASK;
+        initialized |= FL_IMAGE_ID_HEIGHT_MASK;
     }
 
     /**
@@ -240,8 +344,30 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to height
      */
-    public void setHeight(int newVal){
+    public void setHeight(int newVal)
+    {
         setHeight(new Integer(newVal));
+    }
+    /**
+     * Determines if the height has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkHeightModified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_HEIGHT_MASK);
+    }
+
+    /**
+     * Determines if the height has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkHeightInitialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_HEIGHT_MASK);
     }
     /**
      * Getter method for {@link #depth}.<br>
@@ -255,7 +381,7 @@ public class ImageBean
      *
      * @return the value of depth
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public Integer getDepth(){
         return depth;
     }
@@ -268,8 +394,16 @@ public class ImageBean
      * @param newVal the new value to be assigned to depth
      */
     @com.facebook.swift.codec.ThriftField
-    public void setDepth(Integer newVal){    
+    public void setDepth(Integer newVal)
+    {
+        if ((newVal != null && depth != null && (newVal.compareTo(depth) == 0)) ||
+            (newVal == null && depth == null && checkDepthInitialized())) {
+            return;
+        }
         depth = newVal;
+
+        modified |= FL_IMAGE_ID_DEPTH_MASK;
+        initialized |= FL_IMAGE_ID_DEPTH_MASK;
     }
 
     /**
@@ -278,8 +412,30 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to depth
      */
-    public void setDepth(int newVal){
+    public void setDepth(int newVal)
+    {
         setDepth(new Integer(newVal));
+    }
+    /**
+     * Determines if the depth has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDepthModified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_DEPTH_MASK);
+    }
+
+    /**
+     * Determines if the depth has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDepthInitialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_DEPTH_MASK);
     }
     /**
      * Getter method for {@link #faceNum}.<br>
@@ -293,7 +449,7 @@ public class ImageBean
      *
      * @return the value of faceNum
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(9)
     public Integer getFaceNum(){
         return faceNum;
     }
@@ -306,8 +462,16 @@ public class ImageBean
      * @param newVal the new value to be assigned to faceNum
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFaceNum(Integer newVal){    
+    public void setFaceNum(Integer newVal)
+    {
+        if ((newVal != null && faceNum != null && (newVal.compareTo(faceNum) == 0)) ||
+            (newVal == null && faceNum == null && checkFaceNumInitialized())) {
+            return;
+        }
         faceNum = newVal;
+
+        modified |= FL_IMAGE_ID_FACE_NUM_MASK;
+        initialized |= FL_IMAGE_ID_FACE_NUM_MASK;
     }
 
     /**
@@ -316,8 +480,30 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to faceNum
      */
-    public void setFaceNum(int newVal){
+    public void setFaceNum(int newVal)
+    {
         setFaceNum(new Integer(newVal));
+    }
+    /**
+     * Determines if the faceNum has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFaceNumModified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_FACE_NUM_MASK);
+    }
+
+    /**
+     * Determines if the faceNum has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFaceNumInitialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_FACE_NUM_MASK);
     }
     /**
      * Getter method for {@link #thumbMd5}.<br>
@@ -332,7 +518,7 @@ public class ImageBean
      *
      * @return the value of thumbMd5
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(10)
     public String getThumbMd5(){
         return thumbMd5;
     }
@@ -345,10 +531,39 @@ public class ImageBean
      * @param newVal the new value to be assigned to thumbMd5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setThumbMd5(String newVal){    
+    public void setThumbMd5(String newVal)
+    {
+        if ((newVal != null && thumbMd5 != null && (newVal.compareTo(thumbMd5) == 0)) ||
+            (newVal == null && thumbMd5 == null && checkThumbMd5Initialized())) {
+            return;
+        }
         thumbMd5 = newVal;
+
+        modified |= FL_IMAGE_ID_THUMB_MD5_MASK;
+        initialized |= FL_IMAGE_ID_THUMB_MD5_MASK;
     }
 
+    /**
+     * Determines if the thumbMd5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkThumbMd5Modified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_THUMB_MD5_MASK);
+    }
+
+    /**
+     * Determines if the thumbMd5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkThumbMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_THUMB_MD5_MASK);
+    }
     /**
      * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
@@ -362,7 +577,7 @@ public class ImageBean
      *
      * @return the value of deviceId
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @com.facebook.swift.codec.ThriftField(11)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -375,8 +590,16 @@ public class ImageBean
      * @param newVal the new value to be assigned to deviceId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setDeviceId(Integer newVal){    
+    public void setDeviceId(Integer newVal)
+    {
+        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
+            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
+            return;
+        }
         deviceId = newVal;
+
+        modified |= FL_IMAGE_ID_DEVICE_ID_MASK;
+        initialized |= FL_IMAGE_ID_DEVICE_ID_MASK;
     }
 
     /**
@@ -385,8 +608,30 @@ public class ImageBean
      *
      * @param newVal the new value to be assigned to deviceId
      */
-    public void setDeviceId(int newVal){
+    public void setDeviceId(int newVal)
+    {
         setDeviceId(new Integer(newVal));
+    }
+    /**
+     * Determines if the deviceId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDeviceIdModified()
+    {
+        return 0L !=  (modified & FL_IMAGE_ID_DEVICE_ID_MASK);
+    }
+
+    /**
+     * Determines if the deviceId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDeviceIdInitialized()
+    {
+        return 0L !=  (initialized & FL_IMAGE_ID_DEVICE_ID_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -397,7 +642,7 @@ public class ImageBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @com.facebook.swift.codec.ThriftField(10)
+    @com.facebook.swift.codec.ThriftField(12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
@@ -412,7 +657,7 @@ public class ImageBean
      */
     private StoreBean referencedByMd5;
     /** Getter method for {@link #referencedByMd5}. */
-    @com.facebook.swift.codec.ThriftField(11)
+    @com.facebook.swift.codec.ThriftField(13)
     public StoreBean getReferencedByMd5() {
         return this.referencedByMd5;
     }
@@ -427,7 +672,7 @@ public class ImageBean
      */
     private StoreBean referencedByThumbMd5;
     /** Getter method for {@link #referencedByThumbMd5}. */
-    @com.facebook.swift.codec.ThriftField(12)
+    @com.facebook.swift.codec.ThriftField(14)
     public StoreBean getReferencedByThumbMd5() {
         return this.referencedByThumbMd5;
     }
@@ -437,6 +682,111 @@ public class ImageBean
         this.referencedByThumbMd5 = reference;
     }
 
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_IMAGE_ID_MD5:
+            return checkMd5Modified();
+        case FL_IMAGE_ID_FORMAT:
+            return checkFormatModified();
+        case FL_IMAGE_ID_WIDTH:
+            return checkWidthModified();
+        case FL_IMAGE_ID_HEIGHT:
+            return checkHeightModified();
+        case FL_IMAGE_ID_DEPTH:
+            return checkDepthModified();
+        case FL_IMAGE_ID_FACE_NUM:
+            return checkFaceNumModified();
+        case FL_IMAGE_ID_THUMB_MD5:
+            return checkThumbMd5Modified();
+        case FL_IMAGE_ID_DEVICE_ID:
+            return checkDeviceIdModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_IMAGE_ID_MD5:
+            return checkMd5Initialized();
+        case FL_IMAGE_ID_FORMAT:
+            return checkFormatInitialized();
+        case FL_IMAGE_ID_WIDTH:
+            return checkWidthInitialized();
+        case FL_IMAGE_ID_HEIGHT:
+            return checkHeightInitialized();
+        case FL_IMAGE_ID_DEPTH:
+            return checkDepthInitialized();
+        case FL_IMAGE_ID_FACE_NUM:
+            return checkFaceNumInitialized();
+        case FL_IMAGE_ID_THUMB_MD5:
+            return checkThumbMd5Initialized();
+        case FL_IMAGE_ID_DEVICE_ID:
+            return checkDeviceIdInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -493,54 +843,6 @@ public class ImageBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(ImageBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setFormat(bean.getFormat());
-            setWidth(bean.getWidth());
-            setHeight(bean.getHeight());
-            setDepth(bean.getDepth());
-            setFaceNum(bean.getFaceNum());
-            setThumbMd5(bean.getThumbMd5());
-            setDeviceId(bean.getDeviceId());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(ImageBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getFormat()!=null)
-            setFormat(bean.getFormat());
-        if(bean.getWidth()!=null)
-            setWidth(bean.getWidth());
-        if(bean.getHeight()!=null)
-            setHeight(bean.getHeight());
-        if(bean.getDepth()!=null)
-            setDepth(bean.getDepth());
-        if(bean.getFaceNum()!=null)
-            setFaceNum(bean.getFaceNum());
-        if(bean.getThumbMd5()!=null)
-            setThumbMd5(bean.getThumbMd5());
-        if(bean.getDeviceId()!=null)
-            setDeviceId(bean.getDeviceId());
-    }
 
     /**
     * set all field to null
@@ -549,7 +851,6 @@ public class ImageBean
     */
     public ImageBean clean()
     {
-        isNew(true);
         setMd5(null);
         setFormat(null);
         setWidth(null);
@@ -558,6 +859,124 @@ public class ImageBean
         setFaceNum(null);
         setThumbMd5(null);
         setDeviceId(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(ImageBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 8; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(ImageBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_IMAGE_ID_MD5: 
+            return (T)getMd5();        
+        case FL_IMAGE_ID_FORMAT: 
+            return (T)getFormat();        
+        case FL_IMAGE_ID_WIDTH: 
+            return (T)getWidth();        
+        case FL_IMAGE_ID_HEIGHT: 
+            return (T)getHeight();        
+        case FL_IMAGE_ID_DEPTH: 
+            return (T)getDepth();        
+        case FL_IMAGE_ID_FACE_NUM: 
+            return (T)getFaceNum();        
+        case FL_IMAGE_ID_THUMB_MD5: 
+            return (T)getThumbMd5();        
+        case FL_IMAGE_ID_DEVICE_ID: 
+            return (T)getDeviceId();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_IMAGE_ID_MD5:        
+            setMd5((String)value);
+        case FL_IMAGE_ID_FORMAT:        
+            setFormat((String)value);
+        case FL_IMAGE_ID_WIDTH:        
+            setWidth((Integer)value);
+        case FL_IMAGE_ID_HEIGHT:        
+            setHeight((Integer)value);
+        case FL_IMAGE_ID_DEPTH:        
+            setDepth((Integer)value);
+        case FL_IMAGE_ID_FACE_NUM:        
+            setFaceNum((Integer)value);
+        case FL_IMAGE_ID_THUMB_MD5:        
+            setThumbMd5((String)value);
+        case FL_IMAGE_ID_DEVICE_ID:        
+            setDeviceId((Integer)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_IMAGE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

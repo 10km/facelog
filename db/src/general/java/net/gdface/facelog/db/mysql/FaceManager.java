@@ -202,7 +202,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T[] getImportedBeans(FaceBean bean, int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(FaceBean bean, int ikIndex){
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -219,7 +219,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (java.util.List<T>)this.getFlLogBeansByVerifyFaceAsList(bean);
@@ -243,7 +243,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (T[])setFlLogBeansByVerifyFace(bean,(LogBean[])importedBeans);
@@ -266,7 +266,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (C)setFlLogBeansByVerifyFace(bean,(java.util.Collection<LogBean>)importedBeans);
@@ -575,7 +575,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T getReferencedBean(FaceBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T getReferencedBean(FaceBean bean,int fkIndex){
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.getReferencedByImgMd5(bean);
@@ -595,7 +595,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.setReferencedByImgMd5(bean, (ImageBean)beanToSet);

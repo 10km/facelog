@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.log;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -18,12 +18,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: VIEW </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlLogLightBean
-    implements Serializable,FullBean<FlLogLightBean>,Comparable<FlLogLightBean>,Constant
+    implements Serializable,BaseBean<FlLogLightBean>,Comparable<FlLogLightBean>,Constant
 {
-	private static final long serialVersionUID = -8629124492169570652L;
+    private static final long serialVersionUID = -8629124492169570652L;
+    
     /** comments:日志id */
     private Integer id;
 
@@ -105,15 +106,7 @@ public class FlLogLightBean
         super();
     }
     /**
-     * create a FlLogLightBean from a instance
-     */
-    FlLogLightBean(FlLogLightBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.id</li>
@@ -128,8 +121,7 @@ public class FlLogLightBean
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -139,7 +131,7 @@ public class FlLogLightBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && isIdInitialized())) {
+            (newVal == null && id == null && checkIdInitialized())) {
             return;
         }
         id = newVal;
@@ -149,8 +141,7 @@ public class FlLogLightBean
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -159,31 +150,29 @@ public class FlLogLightBean
     {
         setId(new Integer(newVal));
     }
-
     /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean checkIdModified()
     {
-        return 0L != (modified & FL_LOG_LIGHT_ID_ID_MASK);
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_ID_MASK);
     }
 
     /**
-     * Determines if the id has been initialized.
-     * <br>
+     * Determines if the id has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean checkIdInitialized()
     {
-        return 0L != (initialized & FL_LOG_LIGHT_ID_ID_MASK);
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_ID_MASK);
     }
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.person_id</li>
@@ -198,8 +187,7 @@ public class FlLogLightBean
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -209,7 +197,7 @@ public class FlLogLightBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && isPersonIdInitialized())) {
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
             return;
         }
         personId = newVal;
@@ -219,8 +207,7 @@ public class FlLogLightBean
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -229,31 +216,29 @@ public class FlLogLightBean
     {
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Determines if the personId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPersonIdModified()
+    public boolean checkPersonIdModified()
     {
-        return 0L != (modified & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
 
     /**
-     * Determines if the personId has been initialized.
-     * <br>
+     * Determines if the personId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPersonIdInitialized()
+    public boolean checkPersonIdInitialized()
     {
-        return 0L != (initialized & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
     /**
-     * Getter method for name.
-     * <br>
+     * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.name</li>
@@ -268,8 +253,7 @@ public class FlLogLightBean
         return name;
     }
     /**
-     * Setter method for name.
-     * <br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -279,7 +263,7 @@ public class FlLogLightBean
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && isNameInitialized())) {
+            (newVal == null && name == null && checkNameInitialized())) {
             return;
         }
         name = newVal;
@@ -293,25 +277,24 @@ public class FlLogLightBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isNameModified()
+    public boolean checkNameModified()
     {
-        return 0L != (modified & FL_LOG_LIGHT_ID_NAME_MASK);
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_NAME_MASK);
     }
 
     /**
-     * Determines if the name has been initialized.
-     * <br>
+     * Determines if the name has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isNameInitialized()
+    public boolean checkNameInitialized()
     {
-        return 0L != (initialized & FL_LOG_LIGHT_ID_NAME_MASK);
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_NAME_MASK);
     }
     /**
-     * Getter method for papersType.
-     * <br>
+     * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.papers_type</li>
@@ -326,8 +309,7 @@ public class FlLogLightBean
         return papersType;
     }
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -337,7 +319,7 @@ public class FlLogLightBean
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && isPapersTypeInitialized())) {
+            (newVal == null && papersType == null && checkPapersTypeInitialized())) {
             return;
         }
         papersType = newVal;
@@ -347,8 +329,7 @@ public class FlLogLightBean
     }
 
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to papersType
@@ -357,31 +338,29 @@ public class FlLogLightBean
     {
         setPapersType(new Integer(newVal));
     }
-
     /**
      * Determines if the papersType has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPapersTypeModified()
+    public boolean checkPapersTypeModified()
     {
-        return 0L != (modified & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
     }
 
     /**
-     * Determines if the papersType has been initialized.
-     * <br>
+     * Determines if the papersType has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPapersTypeInitialized()
+    public boolean checkPapersTypeInitialized()
     {
-        return 0L != (initialized & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
     }
     /**
-     * Getter method for papersNum.
-     * <br>
+     * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.papers_num</li>
@@ -396,8 +375,7 @@ public class FlLogLightBean
         return papersNum;
     }
     /**
-     * Setter method for papersNum.
-     * <br>
+     * Setter method for {@link #papersNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -407,7 +385,7 @@ public class FlLogLightBean
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && isPapersNumInitialized())) {
+            (newVal == null && papersNum == null && checkPapersNumInitialized())) {
             return;
         }
         papersNum = newVal;
@@ -421,25 +399,24 @@ public class FlLogLightBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPapersNumModified()
+    public boolean checkPapersNumModified()
     {
-        return 0L != (modified & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
     }
 
     /**
-     * Determines if the papersNum has been initialized.
-     * <br>
+     * Determines if the papersNum has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPapersNumInitialized()
+    public boolean checkPapersNumInitialized()
     {
-        return 0L != (initialized & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
     }
     /**
-     * Getter method for verifyTime.
-     * <br>
+     * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.verify_time</li>
@@ -454,8 +431,7 @@ public class FlLogLightBean
         return verifyTime;
     }
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -465,7 +441,7 @@ public class FlLogLightBean
     public void setVerifyTime(java.util.Date newVal)
     {
         if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && isVerifyTimeInitialized())) {
+            (newVal == null && verifyTime == null && checkVerifyTimeInitialized())) {
             return;
         }
         verifyTime = newVal;
@@ -475,8 +451,7 @@ public class FlLogLightBean
     }
 
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to verifyTime
@@ -485,27 +460,26 @@ public class FlLogLightBean
     {
         setVerifyTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the verifyTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isVerifyTimeModified()
+    public boolean checkVerifyTimeModified()
     {
-        return 0L != (modified & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
 
     /**
-     * Determines if the verifyTime has been initialized.
-     * <br>
+     * Determines if the verifyTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isVerifyTimeInitialized()
+    public boolean checkVerifyTimeInitialized()
     {
-        return 0L != (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
     }
 
     /**
@@ -529,17 +503,17 @@ public class FlLogLightBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_LOG_LIGHT_ID_ID:
-            return isIdModified();
+            return checkIdModified();
         case FL_LOG_LIGHT_ID_PERSON_ID:
-            return isPersonIdModified();
+            return checkPersonIdModified();
         case FL_LOG_LIGHT_ID_NAME:
-            return isNameModified();
+            return checkNameModified();
         case FL_LOG_LIGHT_ID_PAPERS_TYPE:
-            return isPapersTypeModified();
+            return checkPapersTypeModified();
         case FL_LOG_LIGHT_ID_PAPERS_NUM:
-            return isPapersNumModified();
+            return checkPapersNumModified();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
-            return isVerifyTimeModified();
+            return checkVerifyTimeModified();
         }
         return false;
     }
@@ -554,31 +528,29 @@ public class FlLogLightBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_LOG_LIGHT_ID_ID:
-            return isIdInitialized();
+            return checkIdInitialized();
         case FL_LOG_LIGHT_ID_PERSON_ID:
-            return isPersonIdInitialized();
+            return checkPersonIdInitialized();
         case FL_LOG_LIGHT_ID_NAME:
-            return isNameInitialized();
+            return checkNameInitialized();
         case FL_LOG_LIGHT_ID_PAPERS_TYPE:
-            return isPapersTypeInitialized();
+            return checkPapersTypeInitialized();
         case FL_LOG_LIGHT_ID_PAPERS_NUM:
-            return isPapersNumInitialized();
+            return checkPapersNumInitialized();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
-            return isVerifyTimeInitialized();
+            return checkVerifyTimeInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -590,10 +562,7 @@ public class FlLogLightBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -603,7 +572,13 @@ public class FlLogLightBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -659,48 +634,6 @@ public class FlLogLightBean
             .append(getVerifyTime(), object.getVerifyTime())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlLogLightBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setPersonId(bean.getPersonId());
-            setName(bean.getName());
-            setPapersType(bean.getPapersType());
-            setPapersNum(bean.getPapersNum());
-            setVerifyTime(bean.getVerifyTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlLogLightBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getPapersType()!=null)
-            setPapersType(bean.getPapersType());
-        if(bean.getPapersNum()!=null)
-            setPapersNum(bean.getPapersNum());
-        if(bean.getVerifyTime()!=null)
-            setVerifyTime(bean.getVerifyTime());
-    }
 
     /**
     * set all field to null
@@ -709,13 +642,15 @@ public class FlLogLightBean
     */
     public FlLogLightBean clean()
     {
-        isNew(true);
         setId(null);
         setPersonId(null);
         setName(null);
         setPapersType(null);
         setPapersNum(null);
         setVerifyTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -728,10 +663,14 @@ public class FlLogLightBean
     public void copy(FlLogLightBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 6; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -744,11 +683,15 @@ public class FlLogLightBean
     public void copy(FlLogLightBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -800,10 +743,7 @@ public class FlLogLightBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -811,9 +751,13 @@ public class FlLogLightBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

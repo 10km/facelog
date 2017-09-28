@@ -272,7 +272,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlDeviceBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlDeviceBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -290,7 +290,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (List<T>)this.getFlImageBeansByDeviceIdAsList(bean);
@@ -311,7 +311,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (T[])setFlImageBeansByDeviceId(bean,(FlImageBean[])importedBeans);
@@ -332,7 +332,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (C)setFlImageBeansByDeviceId(bean,(java.util.Collection<FlImageBean>)importedBeans);
@@ -680,7 +680,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_device (");
 
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -688,7 +688,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -696,7 +696,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isOnlineModified()) {
+            if (bean.checkOnlineModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -704,7 +704,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -712,7 +712,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isVersionModified()) {
+            if (bean.checkVersionModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -720,7 +720,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -728,7 +728,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -754,7 +754,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
 
             ps.executeUpdate();
 
-            if (!bean.isIdModified())
+            if (!bean.checkIdModified())
             {
                 PreparedStatement ps2 = null;
                 ResultSet rs = null;
@@ -812,7 +812,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             sql = new StringBuilder("UPDATE fl_device SET ");
             boolean useComma=false;
 
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -821,7 +821,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 sql.append("id=?");
             }
 
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -830,7 +830,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 sql.append("name=?");
             }
 
-            if (bean.isOnlineModified()) {
+            if (bean.checkOnlineModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -839,7 +839,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 sql.append("online=?");
             }
 
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -848,7 +848,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 sql.append("group_id=?");
             }
 
-            if (bean.isVersionModified()) {
+            if (bean.checkVersionModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -857,7 +857,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 sql.append("version=?");
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -866,7 +866,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 sql.append("create_time=?");
             }
 
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -956,7 +956,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public int deleteUsingTemplate(FlDeviceBean bean) throws DAOException
     {
-        if(bean.isIdInitialized() && null != bean.getId()){
+        if(bean.checkIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
         if( !this.listenerContainer.isEmpty()){
@@ -1150,7 +1150,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         }
         try
         {
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 _dirtyCount ++;
                 if (bean.getId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
@@ -1158,7 +1158,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
                 }
             }
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 _dirtyCount ++;
                 if (bean.getName() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
@@ -1166,7 +1166,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isOnlineModified()) {
+            if (bean.checkOnlineModified()) {
                 _dirtyCount ++;
                 if (bean.getOnline() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("online IS NULL");
@@ -1174,7 +1174,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("online = ?");
                 }
             }
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 _dirtyCount ++;
                 if (bean.getGroupId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
@@ -1182,7 +1182,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id = ?");
                 }
             }
-            if (bean.isVersionModified()) {
+            if (bean.checkVersionModified()) {
                 _dirtyCount ++;
                 if (bean.getVersion() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version IS NULL");
@@ -1190,7 +1190,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
@@ -1198,7 +1198,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
                 }
             }
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getUpdateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
@@ -1230,11 +1230,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
                 if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
@@ -1256,15 +1256,15 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isOnlineModified()) {
+            if (bean.checkOnlineModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getOnline() + "]");
                 if (bean.getOnline() == null) { ps.setNull(++_dirtyCount, Types.BIT); } else { Manager.setBoolean(ps, ++_dirtyCount, bean.getOnline()); }
             }
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
                 if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
             }
-            if (bean.isVersionModified()) {
+            if (bean.checkVersionModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVersion() + "]");
@@ -1286,11 +1286,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
                 if (bean.getUpdateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }

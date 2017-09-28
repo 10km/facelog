@@ -270,7 +270,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlStoreBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlStoreBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -288,7 +288,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (List<T>)this.getFlImageBeansByMd5AsList(bean);
@@ -309,7 +309,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (T[])setFlImageBeansByMd5(bean,(FlImageBean[])importedBeans);
@@ -330,7 +330,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (C)setFlImageBeansByMd5(bean,(java.util.Collection<FlImageBean>)importedBeans);
@@ -678,7 +678,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_store (");
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -686,7 +686,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 _dirtyCount++;
             }
 
-            if (bean.isEncodingModified()) {
+            if (bean.checkEncodingModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -694,7 +694,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 _dirtyCount++;
             }
 
-            if (bean.isDataModified()) {
+            if (bean.checkDataModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -761,7 +761,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             sql = new StringBuilder("UPDATE fl_store SET ");
             boolean useComma=false;
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -770,7 +770,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 sql.append("md5=?");
             }
 
-            if (bean.isEncodingModified()) {
+            if (bean.checkEncodingModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -779,7 +779,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                 sql.append("encoding=?");
             }
 
-            if (bean.isDataModified()) {
+            if (bean.checkDataModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -869,7 +869,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public int deleteUsingTemplate(FlStoreBean bean) throws DAOException
     {
-        if(bean.isMd5Initialized() && null != bean.getMd5()){
+        if(bean.checkMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
         if( !this.listenerContainer.isEmpty()){
@@ -1063,7 +1063,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         }
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
@@ -1071,7 +1071,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isEncodingModified()) {
+            if (bean.checkEncodingModified()) {
                 _dirtyCount ++;
                 if (bean.getEncoding() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("encoding IS NULL");
@@ -1079,7 +1079,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("encoding ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isDataModified()) {
+            if (bean.checkDataModified()) {
                 _dirtyCount ++;
                 if (bean.getData() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("data IS NULL");
@@ -1111,7 +1111,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
@@ -1133,7 +1133,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isEncodingModified()) {
+            if (bean.checkEncodingModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEncoding() + "]");
@@ -1155,7 +1155,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isDataModified()) {
+            if (bean.checkDataModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getData() + "]");
                 if (bean.getData() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getData()); }
             }

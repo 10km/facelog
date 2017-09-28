@@ -276,7 +276,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlImageBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlImageBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -294,7 +294,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlImageBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlImageBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
             return (List<T>)this.getFlFaceBeansByImgMd5AsList(bean);
@@ -315,7 +315,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlImageBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlImageBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
             return (T[])setFlFaceBeansByImgMd5(bean,(FlFaceBean[])importedBeans);
@@ -336,7 +336,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlImageBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlImageBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMG_MD5:
             return (C)setFlFaceBeansByImgMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
@@ -661,7 +661,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T getReferencedBean(FlImageBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlImageBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -685,7 +685,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T setReferencedBean(FlImageBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlImageBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
@@ -893,7 +893,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_image (");
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -901,7 +901,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFormatModified()) {
+            if (bean.checkFormatModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -909,7 +909,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isWidthModified()) {
+            if (bean.checkWidthModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -917,7 +917,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isHeightModified()) {
+            if (bean.checkHeightModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -925,7 +925,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isDepthModified()) {
+            if (bean.checkDepthModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -933,7 +933,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFaceNumModified()) {
+            if (bean.checkFaceNumModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -941,7 +941,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isThumbMd5Modified()) {
+            if (bean.checkThumbMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -949,7 +949,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 _dirtyCount++;
             }
 
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -1016,7 +1016,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             sql = new StringBuilder("UPDATE fl_image SET ");
             boolean useComma=false;
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1025,7 +1025,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("md5=?");
             }
 
-            if (bean.isFormatModified()) {
+            if (bean.checkFormatModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1034,7 +1034,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("format=?");
             }
 
-            if (bean.isWidthModified()) {
+            if (bean.checkWidthModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1043,7 +1043,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("width=?");
             }
 
-            if (bean.isHeightModified()) {
+            if (bean.checkHeightModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1052,7 +1052,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("height=?");
             }
 
-            if (bean.isDepthModified()) {
+            if (bean.checkDepthModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1061,7 +1061,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("depth=?");
             }
 
-            if (bean.isFaceNumModified()) {
+            if (bean.checkFaceNumModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1070,7 +1070,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("face_num=?");
             }
 
-            if (bean.isThumbMd5Modified()) {
+            if (bean.checkThumbMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1079,7 +1079,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 sql.append("thumb_md5=?");
             }
 
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1169,7 +1169,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public int deleteUsingTemplate(FlImageBean bean) throws DAOException
     {
-        if(bean.isMd5Initialized() && null != bean.getMd5()){
+        if(bean.checkMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
         if( !this.listenerContainer.isEmpty()){
@@ -1507,7 +1507,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         }
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
@@ -1515,7 +1515,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isFormatModified()) {
+            if (bean.checkFormatModified()) {
                 _dirtyCount ++;
                 if (bean.getFormat() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("format IS NULL");
@@ -1523,7 +1523,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("format ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isWidthModified()) {
+            if (bean.checkWidthModified()) {
                 _dirtyCount ++;
                 if (bean.getWidth() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width IS NULL");
@@ -1531,7 +1531,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("width = ?");
                 }
             }
-            if (bean.isHeightModified()) {
+            if (bean.checkHeightModified()) {
                 _dirtyCount ++;
                 if (bean.getHeight() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height IS NULL");
@@ -1539,7 +1539,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("height = ?");
                 }
             }
-            if (bean.isDepthModified()) {
+            if (bean.checkDepthModified()) {
                 _dirtyCount ++;
                 if (bean.getDepth() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth IS NULL");
@@ -1547,7 +1547,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("depth = ?");
                 }
             }
-            if (bean.isFaceNumModified()) {
+            if (bean.checkFaceNumModified()) {
                 _dirtyCount ++;
                 if (bean.getFaceNum() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num IS NULL");
@@ -1555,7 +1555,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_num = ?");
                 }
             }
-            if (bean.isThumbMd5Modified()) {
+            if (bean.checkThumbMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getThumbMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 IS NULL");
@@ -1563,7 +1563,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("thumb_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 _dirtyCount ++;
                 if (bean.getDeviceId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id IS NULL");
@@ -1595,7 +1595,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
@@ -1617,7 +1617,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isFormatModified()) {
+            if (bean.checkFormatModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFormat() + "]");
@@ -1639,23 +1639,23 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isWidthModified()) {
+            if (bean.checkWidthModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getWidth() + "]");
                 if (bean.getWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getWidth()); }
             }
-            if (bean.isHeightModified()) {
+            if (bean.checkHeightModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getHeight() + "]");
                 if (bean.getHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getHeight()); }
             }
-            if (bean.isDepthModified()) {
+            if (bean.checkDepthModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDepth() + "]");
                 if (bean.getDepth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDepth()); }
             }
-            if (bean.isFaceNumModified()) {
+            if (bean.checkFaceNumModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceNum() + "]");
                 if (bean.getFaceNum() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceNum()); }
             }
-            if (bean.isThumbMd5Modified()) {
+            if (bean.checkThumbMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "]");
@@ -1677,7 +1677,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isDeviceIdModified()) {
+            if (bean.checkDeviceIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
                 if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
             }

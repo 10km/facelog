@@ -168,7 +168,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_feature (");
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -176,7 +176,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 _dirtyCount++;
             }
 
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -184,7 +184,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 _dirtyCount++;
             }
 
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -192,7 +192,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -200,7 +200,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 _dirtyCount++;
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -268,7 +268,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             sql = new StringBuilder("UPDATE fl_feature SET ");
             boolean useComma=false;
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -277,7 +277,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 sql.append("md5=?");
             }
 
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -286,7 +286,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 sql.append("person_id=?");
             }
 
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -295,7 +295,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 sql.append("img_md5=?");
             }
 
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -304,7 +304,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 sql.append("feature=?");
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -583,7 +583,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         }
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
@@ -591,7 +591,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 _dirtyCount ++;
                 if (bean.getPersonId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
@@ -599,7 +599,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
                 }
             }
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getImgMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
@@ -607,7 +607,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 _dirtyCount ++;
                 if (bean.getFeature() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature IS NULL");
@@ -615,7 +615,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature = ?");
                 }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
@@ -647,7 +647,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
@@ -669,11 +669,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
                 if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
             }
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "]");
@@ -695,11 +695,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
                 if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getFeature()); }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }

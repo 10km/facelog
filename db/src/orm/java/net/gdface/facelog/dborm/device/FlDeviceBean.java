@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.device;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -18,12 +18,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: 前端设备基本信息 </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlDeviceBean
-    implements Serializable,FullBean<FlDeviceBean>,Comparable<FlDeviceBean>,Constant
+    implements Serializable,BaseBean<FlDeviceBean>,Comparable<FlDeviceBean>,Constant
 {
-	private static final long serialVersionUID = -1873511050244238973L;
+    private static final long serialVersionUID = -1873511050244238973L;
+    
     /** comments:设备id */
     private Integer id;
 
@@ -106,15 +107,7 @@ public class FlDeviceBean
         super();
     }
     /**
-     * create a FlDeviceBean from a instance
-     */
-    FlDeviceBean(FlDeviceBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -132,8 +125,7 @@ public class FlDeviceBean
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -143,7 +135,7 @@ public class FlDeviceBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && isIdInitialized())) {
+            (newVal == null && id == null && checkIdInitialized())) {
             return;
         }
         id = newVal;
@@ -153,8 +145,7 @@ public class FlDeviceBean
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -163,31 +154,29 @@ public class FlDeviceBean
     {
         setId(new Integer(newVal));
     }
-
     /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean checkIdModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_ID_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_ID_MASK);
     }
 
     /**
-     * Determines if the id has been initialized.
-     * <br>
+     * Determines if the id has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean checkIdInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_ID_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_ID_MASK);
     }
     /**
-     * Getter method for name.
-     * <br>
+     * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.name</li>
@@ -202,8 +191,7 @@ public class FlDeviceBean
         return name;
     }
     /**
-     * Setter method for name.
-     * <br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -213,7 +201,7 @@ public class FlDeviceBean
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && isNameInitialized())) {
+            (newVal == null && name == null && checkNameInitialized())) {
             return;
         }
         name = newVal;
@@ -227,25 +215,24 @@ public class FlDeviceBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isNameModified()
+    public boolean checkNameModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_NAME_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_NAME_MASK);
     }
 
     /**
-     * Determines if the name has been initialized.
-     * <br>
+     * Determines if the name has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isNameInitialized()
+    public boolean checkNameInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_NAME_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_NAME_MASK);
     }
     /**
-     * Getter method for online.
-     * <br>
+     * Getter method for {@link #online}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.online</li>
@@ -260,8 +247,7 @@ public class FlDeviceBean
         return online;
     }
     /**
-     * Setter method for online.
-     * <br>
+     * Setter method for {@link #online}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -271,7 +257,7 @@ public class FlDeviceBean
     public void setOnline(Boolean newVal)
     {
         if ((newVal != null && online != null && (newVal.compareTo(online) == 0)) ||
-            (newVal == null && online == null && isOnlineInitialized())) {
+            (newVal == null && online == null && checkOnlineInitialized())) {
             return;
         }
         online = newVal;
@@ -281,8 +267,7 @@ public class FlDeviceBean
     }
 
     /**
-     * Setter method for online.
-     * <br>
+     * Setter method for {@link #online}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to online
@@ -291,31 +276,29 @@ public class FlDeviceBean
     {
         setOnline(new Boolean(newVal));
     }
-
     /**
      * Determines if the online has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isOnlineModified()
+    public boolean checkOnlineModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_ONLINE_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_ONLINE_MASK);
     }
 
     /**
-     * Determines if the online has been initialized.
-     * <br>
+     * Determines if the online has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isOnlineInitialized()
+    public boolean checkOnlineInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_ONLINE_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_ONLINE_MASK);
     }
     /**
-     * Getter method for groupId.
-     * <br>
+     * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.group_id</li>
@@ -330,8 +313,7 @@ public class FlDeviceBean
         return groupId;
     }
     /**
-     * Setter method for groupId.
-     * <br>
+     * Setter method for {@link #groupId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -341,7 +323,7 @@ public class FlDeviceBean
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && isGroupIdInitialized())) {
+            (newVal == null && groupId == null && checkGroupIdInitialized())) {
             return;
         }
         groupId = newVal;
@@ -351,8 +333,7 @@ public class FlDeviceBean
     }
 
     /**
-     * Setter method for groupId.
-     * <br>
+     * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to groupId
@@ -361,31 +342,29 @@ public class FlDeviceBean
     {
         setGroupId(new Integer(newVal));
     }
-
     /**
      * Determines if the groupId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isGroupIdModified()
+    public boolean checkGroupIdModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_GROUP_ID_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_GROUP_ID_MASK);
     }
 
     /**
-     * Determines if the groupId has been initialized.
-     * <br>
+     * Determines if the groupId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isGroupIdInitialized()
+    public boolean checkGroupIdInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_GROUP_ID_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_GROUP_ID_MASK);
     }
     /**
-     * Getter method for version.
-     * <br>
+     * Getter method for {@link #version}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.version</li>
@@ -400,8 +379,7 @@ public class FlDeviceBean
         return version;
     }
     /**
-     * Setter method for version.
-     * <br>
+     * Setter method for {@link #version}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -411,7 +389,7 @@ public class FlDeviceBean
     public void setVersion(String newVal)
     {
         if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
-            (newVal == null && version == null && isVersionInitialized())) {
+            (newVal == null && version == null && checkVersionInitialized())) {
             return;
         }
         version = newVal;
@@ -425,25 +403,24 @@ public class FlDeviceBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isVersionModified()
+    public boolean checkVersionModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_VERSION_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_VERSION_MASK);
     }
 
     /**
-     * Determines if the version has been initialized.
-     * <br>
+     * Determines if the version has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isVersionInitialized()
+    public boolean checkVersionInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_VERSION_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.create_time</li>
@@ -457,8 +434,7 @@ public class FlDeviceBean
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -468,7 +444,7 @@ public class FlDeviceBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && isCreateTimeInitialized())) {
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
             return;
         }
         createTime = newVal;
@@ -478,8 +454,7 @@ public class FlDeviceBean
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -488,31 +463,29 @@ public class FlDeviceBean
     {
         setCreateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isCreateTimeModified()
+    public boolean checkCreateTimeModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_CREATE_TIME_MASK);
     }
 
     /**
-     * Determines if the createTime has been initialized.
-     * <br>
+     * Determines if the createTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isCreateTimeInitialized()
+    public boolean checkCreateTimeInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_CREATE_TIME_MASK);
     }
     /**
-     * Getter method for updateTime.
-     * <br>
+     * Getter method for {@link #updateTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.update_time</li>
@@ -526,8 +499,7 @@ public class FlDeviceBean
         return updateTime;
     }
     /**
-     * Setter method for updateTime.
-     * <br>
+     * Setter method for {@link #updateTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -537,7 +509,7 @@ public class FlDeviceBean
     public void setUpdateTime(java.util.Date newVal)
     {
         if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && isUpdateTimeInitialized())) {
+            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
             return;
         }
         updateTime = newVal;
@@ -547,8 +519,7 @@ public class FlDeviceBean
     }
 
     /**
-     * Setter method for updateTime.
-     * <br>
+     * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to updateTime
@@ -557,27 +528,26 @@ public class FlDeviceBean
     {
         setUpdateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the updateTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isUpdateTimeModified()
+    public boolean checkUpdateTimeModified()
     {
-        return 0L != (modified & FL_DEVICE_ID_UPDATE_TIME_MASK);
+        return 0L !=  (modified & FL_DEVICE_ID_UPDATE_TIME_MASK);
     }
 
     /**
-     * Determines if the updateTime has been initialized.
-     * <br>
+     * Determines if the updateTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isUpdateTimeInitialized()
+    public boolean checkUpdateTimeInitialized()
     {
-        return 0L != (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK);
+        return 0L !=  (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK);
     }
 
     /**
@@ -601,19 +571,19 @@ public class FlDeviceBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_DEVICE_ID_ID:
-            return isIdModified();
+            return checkIdModified();
         case FL_DEVICE_ID_NAME:
-            return isNameModified();
+            return checkNameModified();
         case FL_DEVICE_ID_ONLINE:
-            return isOnlineModified();
+            return checkOnlineModified();
         case FL_DEVICE_ID_GROUP_ID:
-            return isGroupIdModified();
+            return checkGroupIdModified();
         case FL_DEVICE_ID_VERSION:
-            return isVersionModified();
+            return checkVersionModified();
         case FL_DEVICE_ID_CREATE_TIME:
-            return isCreateTimeModified();
+            return checkCreateTimeModified();
         case FL_DEVICE_ID_UPDATE_TIME:
-            return isUpdateTimeModified();
+            return checkUpdateTimeModified();
         }
         return false;
     }
@@ -628,33 +598,31 @@ public class FlDeviceBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_DEVICE_ID_ID:
-            return isIdInitialized();
+            return checkIdInitialized();
         case FL_DEVICE_ID_NAME:
-            return isNameInitialized();
+            return checkNameInitialized();
         case FL_DEVICE_ID_ONLINE:
-            return isOnlineInitialized();
+            return checkOnlineInitialized();
         case FL_DEVICE_ID_GROUP_ID:
-            return isGroupIdInitialized();
+            return checkGroupIdInitialized();
         case FL_DEVICE_ID_VERSION:
-            return isVersionInitialized();
+            return checkVersionInitialized();
         case FL_DEVICE_ID_CREATE_TIME:
-            return isCreateTimeInitialized();
+            return checkCreateTimeInitialized();
         case FL_DEVICE_ID_UPDATE_TIME:
-            return isUpdateTimeInitialized();
+            return checkUpdateTimeInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -666,10 +634,7 @@ public class FlDeviceBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -679,7 +644,13 @@ public class FlDeviceBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -733,51 +704,6 @@ public class FlDeviceBean
             .append(getId(), object.getId())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlDeviceBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setName(bean.getName());
-            setOnline(bean.getOnline());
-            setGroupId(bean.getGroupId());
-            setVersion(bean.getVersion());
-            setCreateTime(bean.getCreateTime());
-            setUpdateTime(bean.getUpdateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlDeviceBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getOnline()!=null)
-            setOnline(bean.getOnline());
-        if(bean.getGroupId()!=null)
-            setGroupId(bean.getGroupId());
-        if(bean.getVersion()!=null)
-            setVersion(bean.getVersion());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getUpdateTime()!=null)
-            setUpdateTime(bean.getUpdateTime());
-    }
 
     /**
     * set all field to null
@@ -786,7 +712,6 @@ public class FlDeviceBean
     */
     public FlDeviceBean clean()
     {
-        isNew(true);
         setId(null);
         setName(null);
         setOnline(null);
@@ -794,6 +719,9 @@ public class FlDeviceBean
         setVersion(null);
         setCreateTime(null);
         setUpdateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -806,10 +734,14 @@ public class FlDeviceBean
     public void copy(FlDeviceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 7; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -822,11 +754,15 @@ public class FlDeviceBean
     public void copy(FlDeviceBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -882,10 +818,7 @@ public class FlDeviceBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -893,9 +826,13 @@ public class FlDeviceBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

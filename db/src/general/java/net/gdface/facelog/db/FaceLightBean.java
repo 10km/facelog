@@ -17,23 +17,17 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class FaceLightBean
-    implements Serializable,BaseBean,Comparable<FaceLightBean>
+    implements Serializable,BaseBean<FaceLightBean>,Comparable<FaceLightBean>,Constant
 {
     private static final long serialVersionUID = -990429198278915105L;
     
-    /**
-     * comments:主键,特征数据md5校验码
-     */
+    /** comments:主键,特征数据md5校验码 */
     private String md5;
 
-    /**
-     * comments:外键,所属用户id
-     */
+    /** comments:外键,所属用户id */
     private Integer personId;
 
-    /**
-     * comments:外键,所属图像id
-     */
+    /** comments:外键,所属图像id */
     private String imgMd5;
 
     private Integer faceLeft;
@@ -66,13 +60,15 @@ public class FaceLightBean
 
     private Integer angleRoll;
 
-    /**
-     * comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析
-     */
+    /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
     private byte[] extInfo;
 
     private java.util.Date createTime;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -104,18 +100,38 @@ public class FaceLightBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a FaceLightBean is via the createFaceLightBean method in FlFaceLightManager or
-     * via the factory class FlFaceLightFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public FaceLightBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a FaceLightBean from a instance
+     * @return the initialized status of columns
      */
-    public FaceLightBean(FaceLightBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public FaceLightBean(){
+        super();
     }
     /**
      * Getter method for {@link #md5}.<br>
@@ -129,7 +145,7 @@ public class FaceLightBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -142,10 +158,39 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to md5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setMd5(String newVal){    
+    public void setMd5(String newVal)
+    {
+        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
+            (newVal == null && md5 == null && checkMd5Initialized())) {
+            return;
+        }
         md5 = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_MD5_MASK;
+        initialized |= FL_FACE_LIGHT_ID_MD5_MASK;
     }
 
+    /**
+     * Determines if the md5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMd5Modified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_MD5_MASK);
+    }
+
+    /**
+     * Determines if the md5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_MD5_MASK);
+    }
     /**
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
@@ -158,7 +203,7 @@ public class FaceLightBean
      *
      * @return the value of personId
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getPersonId(){
         return personId;
     }
@@ -171,8 +216,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPersonId(Integer newVal){    
+    public void setPersonId(Integer newVal)
+    {
+        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
+            return;
+        }
         personId = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_PERSON_ID_MASK;
+        initialized |= FL_FACE_LIGHT_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -181,8 +234,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to personId
      */
-    public void setPersonId(int newVal){
+    public void setPersonId(int newVal)
+    {
         setPersonId(new Integer(newVal));
+    }
+    /**
+     * Determines if the personId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPersonIdModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_PERSON_ID_MASK);
+    }
+
+    /**
+     * Determines if the personId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPersonIdInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_PERSON_ID_MASK);
     }
     /**
      * Getter method for {@link #imgMd5}.<br>
@@ -196,7 +271,7 @@ public class FaceLightBean
      *
      * @return the value of imgMd5
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public String getImgMd5(){
         return imgMd5;
     }
@@ -209,10 +284,39 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to imgMd5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setImgMd5(String newVal){    
+    public void setImgMd5(String newVal)
+    {
+        if ((newVal != null && imgMd5 != null && (newVal.compareTo(imgMd5) == 0)) ||
+            (newVal == null && imgMd5 == null && checkImgMd5Initialized())) {
+            return;
+        }
         imgMd5 = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_IMG_MD5_MASK;
+        initialized |= FL_FACE_LIGHT_ID_IMG_MD5_MASK;
     }
 
+    /**
+     * Determines if the imgMd5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkImgMd5Modified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_IMG_MD5_MASK);
+    }
+
+    /**
+     * Determines if the imgMd5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkImgMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_IMG_MD5_MASK);
+    }
     /**
      * Getter method for {@link #faceLeft}.<br>
      * Meta Data Information (in progress):
@@ -224,7 +328,7 @@ public class FaceLightBean
      *
      * @return the value of faceLeft
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getFaceLeft(){
         return faceLeft;
     }
@@ -237,8 +341,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to faceLeft
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFaceLeft(Integer newVal){    
+    public void setFaceLeft(Integer newVal)
+    {
+        if ((newVal != null && faceLeft != null && (newVal.compareTo(faceLeft) == 0)) ||
+            (newVal == null && faceLeft == null && checkFaceLeftInitialized())) {
+            return;
+        }
         faceLeft = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_FACE_LEFT_MASK;
+        initialized |= FL_FACE_LIGHT_ID_FACE_LEFT_MASK;
     }
 
     /**
@@ -247,8 +359,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to faceLeft
      */
-    public void setFaceLeft(int newVal){
+    public void setFaceLeft(int newVal)
+    {
         setFaceLeft(new Integer(newVal));
+    }
+    /**
+     * Determines if the faceLeft has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFaceLeftModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_FACE_LEFT_MASK);
+    }
+
+    /**
+     * Determines if the faceLeft has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFaceLeftInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_FACE_LEFT_MASK);
     }
     /**
      * Getter method for {@link #faceTop}.<br>
@@ -261,7 +395,7 @@ public class FaceLightBean
      *
      * @return the value of faceTop
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public Integer getFaceTop(){
         return faceTop;
     }
@@ -274,8 +408,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to faceTop
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFaceTop(Integer newVal){    
+    public void setFaceTop(Integer newVal)
+    {
+        if ((newVal != null && faceTop != null && (newVal.compareTo(faceTop) == 0)) ||
+            (newVal == null && faceTop == null && checkFaceTopInitialized())) {
+            return;
+        }
         faceTop = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_FACE_TOP_MASK;
+        initialized |= FL_FACE_LIGHT_ID_FACE_TOP_MASK;
     }
 
     /**
@@ -284,8 +426,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to faceTop
      */
-    public void setFaceTop(int newVal){
+    public void setFaceTop(int newVal)
+    {
         setFaceTop(new Integer(newVal));
+    }
+    /**
+     * Determines if the faceTop has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFaceTopModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_FACE_TOP_MASK);
+    }
+
+    /**
+     * Determines if the faceTop has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFaceTopInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_FACE_TOP_MASK);
     }
     /**
      * Getter method for {@link #faceWidth}.<br>
@@ -298,7 +462,7 @@ public class FaceLightBean
      *
      * @return the value of faceWidth
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(9)
     public Integer getFaceWidth(){
         return faceWidth;
     }
@@ -311,8 +475,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to faceWidth
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFaceWidth(Integer newVal){    
+    public void setFaceWidth(Integer newVal)
+    {
+        if ((newVal != null && faceWidth != null && (newVal.compareTo(faceWidth) == 0)) ||
+            (newVal == null && faceWidth == null && checkFaceWidthInitialized())) {
+            return;
+        }
         faceWidth = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_FACE_WIDTH_MASK;
+        initialized |= FL_FACE_LIGHT_ID_FACE_WIDTH_MASK;
     }
 
     /**
@@ -321,8 +493,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to faceWidth
      */
-    public void setFaceWidth(int newVal){
+    public void setFaceWidth(int newVal)
+    {
         setFaceWidth(new Integer(newVal));
+    }
+    /**
+     * Determines if the faceWidth has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFaceWidthModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_FACE_WIDTH_MASK);
+    }
+
+    /**
+     * Determines if the faceWidth has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFaceWidthInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_FACE_WIDTH_MASK);
     }
     /**
      * Getter method for {@link #faceHeight}.<br>
@@ -335,7 +529,7 @@ public class FaceLightBean
      *
      * @return the value of faceHeight
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(10)
     public Integer getFaceHeight(){
         return faceHeight;
     }
@@ -348,8 +542,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to faceHeight
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFaceHeight(Integer newVal){    
+    public void setFaceHeight(Integer newVal)
+    {
+        if ((newVal != null && faceHeight != null && (newVal.compareTo(faceHeight) == 0)) ||
+            (newVal == null && faceHeight == null && checkFaceHeightInitialized())) {
+            return;
+        }
         faceHeight = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_FACE_HEIGHT_MASK;
+        initialized |= FL_FACE_LIGHT_ID_FACE_HEIGHT_MASK;
     }
 
     /**
@@ -358,8 +560,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to faceHeight
      */
-    public void setFaceHeight(int newVal){
+    public void setFaceHeight(int newVal)
+    {
         setFaceHeight(new Integer(newVal));
+    }
+    /**
+     * Determines if the faceHeight has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFaceHeightModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_FACE_HEIGHT_MASK);
+    }
+
+    /**
+     * Determines if the faceHeight has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFaceHeightInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_FACE_HEIGHT_MASK);
     }
     /**
      * Getter method for {@link #eyeLeftx}.<br>
@@ -372,7 +596,7 @@ public class FaceLightBean
      *
      * @return the value of eyeLeftx
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @com.facebook.swift.codec.ThriftField(11)
     public Integer getEyeLeftx(){
         return eyeLeftx;
     }
@@ -385,8 +609,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to eyeLeftx
      */
     @com.facebook.swift.codec.ThriftField
-    public void setEyeLeftx(Integer newVal){    
+    public void setEyeLeftx(Integer newVal)
+    {
+        if ((newVal != null && eyeLeftx != null && (newVal.compareTo(eyeLeftx) == 0)) ||
+            (newVal == null && eyeLeftx == null && checkEyeLeftxInitialized())) {
+            return;
+        }
         eyeLeftx = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_EYE_LEFTX_MASK;
+        initialized |= FL_FACE_LIGHT_ID_EYE_LEFTX_MASK;
     }
 
     /**
@@ -395,8 +627,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to eyeLeftx
      */
-    public void setEyeLeftx(int newVal){
+    public void setEyeLeftx(int newVal)
+    {
         setEyeLeftx(new Integer(newVal));
+    }
+    /**
+     * Determines if the eyeLeftx has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkEyeLeftxModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_EYE_LEFTX_MASK);
+    }
+
+    /**
+     * Determines if the eyeLeftx has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkEyeLeftxInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_EYE_LEFTX_MASK);
     }
     /**
      * Getter method for {@link #eyeLefty}.<br>
@@ -409,7 +663,7 @@ public class FaceLightBean
      *
      * @return the value of eyeLefty
      */
-    @com.facebook.swift.codec.ThriftField(10)
+    @com.facebook.swift.codec.ThriftField(12)
     public Integer getEyeLefty(){
         return eyeLefty;
     }
@@ -422,8 +676,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to eyeLefty
      */
     @com.facebook.swift.codec.ThriftField
-    public void setEyeLefty(Integer newVal){    
+    public void setEyeLefty(Integer newVal)
+    {
+        if ((newVal != null && eyeLefty != null && (newVal.compareTo(eyeLefty) == 0)) ||
+            (newVal == null && eyeLefty == null && checkEyeLeftyInitialized())) {
+            return;
+        }
         eyeLefty = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_EYE_LEFTY_MASK;
+        initialized |= FL_FACE_LIGHT_ID_EYE_LEFTY_MASK;
     }
 
     /**
@@ -432,8 +694,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to eyeLefty
      */
-    public void setEyeLefty(int newVal){
+    public void setEyeLefty(int newVal)
+    {
         setEyeLefty(new Integer(newVal));
+    }
+    /**
+     * Determines if the eyeLefty has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkEyeLeftyModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_EYE_LEFTY_MASK);
+    }
+
+    /**
+     * Determines if the eyeLefty has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkEyeLeftyInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_EYE_LEFTY_MASK);
     }
     /**
      * Getter method for {@link #eyeRightx}.<br>
@@ -446,7 +730,7 @@ public class FaceLightBean
      *
      * @return the value of eyeRightx
      */
-    @com.facebook.swift.codec.ThriftField(11)
+    @com.facebook.swift.codec.ThriftField(13)
     public Integer getEyeRightx(){
         return eyeRightx;
     }
@@ -459,8 +743,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to eyeRightx
      */
     @com.facebook.swift.codec.ThriftField
-    public void setEyeRightx(Integer newVal){    
+    public void setEyeRightx(Integer newVal)
+    {
+        if ((newVal != null && eyeRightx != null && (newVal.compareTo(eyeRightx) == 0)) ||
+            (newVal == null && eyeRightx == null && checkEyeRightxInitialized())) {
+            return;
+        }
         eyeRightx = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_EYE_RIGHTX_MASK;
+        initialized |= FL_FACE_LIGHT_ID_EYE_RIGHTX_MASK;
     }
 
     /**
@@ -469,8 +761,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to eyeRightx
      */
-    public void setEyeRightx(int newVal){
+    public void setEyeRightx(int newVal)
+    {
         setEyeRightx(new Integer(newVal));
+    }
+    /**
+     * Determines if the eyeRightx has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkEyeRightxModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_EYE_RIGHTX_MASK);
+    }
+
+    /**
+     * Determines if the eyeRightx has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkEyeRightxInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_EYE_RIGHTX_MASK);
     }
     /**
      * Getter method for {@link #eyeRighty}.<br>
@@ -483,7 +797,7 @@ public class FaceLightBean
      *
      * @return the value of eyeRighty
      */
-    @com.facebook.swift.codec.ThriftField(12)
+    @com.facebook.swift.codec.ThriftField(14)
     public Integer getEyeRighty(){
         return eyeRighty;
     }
@@ -496,8 +810,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to eyeRighty
      */
     @com.facebook.swift.codec.ThriftField
-    public void setEyeRighty(Integer newVal){    
+    public void setEyeRighty(Integer newVal)
+    {
+        if ((newVal != null && eyeRighty != null && (newVal.compareTo(eyeRighty) == 0)) ||
+            (newVal == null && eyeRighty == null && checkEyeRightyInitialized())) {
+            return;
+        }
         eyeRighty = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_EYE_RIGHTY_MASK;
+        initialized |= FL_FACE_LIGHT_ID_EYE_RIGHTY_MASK;
     }
 
     /**
@@ -506,8 +828,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to eyeRighty
      */
-    public void setEyeRighty(int newVal){
+    public void setEyeRighty(int newVal)
+    {
         setEyeRighty(new Integer(newVal));
+    }
+    /**
+     * Determines if the eyeRighty has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkEyeRightyModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_EYE_RIGHTY_MASK);
+    }
+
+    /**
+     * Determines if the eyeRighty has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkEyeRightyInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_EYE_RIGHTY_MASK);
     }
     /**
      * Getter method for {@link #mouthX}.<br>
@@ -520,7 +864,7 @@ public class FaceLightBean
      *
      * @return the value of mouthX
      */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(15)
     public Integer getMouthX(){
         return mouthX;
     }
@@ -533,8 +877,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to mouthX
      */
     @com.facebook.swift.codec.ThriftField
-    public void setMouthX(Integer newVal){    
+    public void setMouthX(Integer newVal)
+    {
+        if ((newVal != null && mouthX != null && (newVal.compareTo(mouthX) == 0)) ||
+            (newVal == null && mouthX == null && checkMouthXInitialized())) {
+            return;
+        }
         mouthX = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_MOUTH_X_MASK;
+        initialized |= FL_FACE_LIGHT_ID_MOUTH_X_MASK;
     }
 
     /**
@@ -543,8 +895,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to mouthX
      */
-    public void setMouthX(int newVal){
+    public void setMouthX(int newVal)
+    {
         setMouthX(new Integer(newVal));
+    }
+    /**
+     * Determines if the mouthX has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMouthXModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_MOUTH_X_MASK);
+    }
+
+    /**
+     * Determines if the mouthX has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMouthXInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_MOUTH_X_MASK);
     }
     /**
      * Getter method for {@link #mouthY}.<br>
@@ -557,7 +931,7 @@ public class FaceLightBean
      *
      * @return the value of mouthY
      */
-    @com.facebook.swift.codec.ThriftField(14)
+    @com.facebook.swift.codec.ThriftField(16)
     public Integer getMouthY(){
         return mouthY;
     }
@@ -570,8 +944,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to mouthY
      */
     @com.facebook.swift.codec.ThriftField
-    public void setMouthY(Integer newVal){    
+    public void setMouthY(Integer newVal)
+    {
+        if ((newVal != null && mouthY != null && (newVal.compareTo(mouthY) == 0)) ||
+            (newVal == null && mouthY == null && checkMouthYInitialized())) {
+            return;
+        }
         mouthY = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_MOUTH_Y_MASK;
+        initialized |= FL_FACE_LIGHT_ID_MOUTH_Y_MASK;
     }
 
     /**
@@ -580,8 +962,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to mouthY
      */
-    public void setMouthY(int newVal){
+    public void setMouthY(int newVal)
+    {
         setMouthY(new Integer(newVal));
+    }
+    /**
+     * Determines if the mouthY has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMouthYModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_MOUTH_Y_MASK);
+    }
+
+    /**
+     * Determines if the mouthY has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMouthYInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_MOUTH_Y_MASK);
     }
     /**
      * Getter method for {@link #noseX}.<br>
@@ -594,7 +998,7 @@ public class FaceLightBean
      *
      * @return the value of noseX
      */
-    @com.facebook.swift.codec.ThriftField(15)
+    @com.facebook.swift.codec.ThriftField(17)
     public Integer getNoseX(){
         return noseX;
     }
@@ -607,8 +1011,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to noseX
      */
     @com.facebook.swift.codec.ThriftField
-    public void setNoseX(Integer newVal){    
+    public void setNoseX(Integer newVal)
+    {
+        if ((newVal != null && noseX != null && (newVal.compareTo(noseX) == 0)) ||
+            (newVal == null && noseX == null && checkNoseXInitialized())) {
+            return;
+        }
         noseX = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_NOSE_X_MASK;
+        initialized |= FL_FACE_LIGHT_ID_NOSE_X_MASK;
     }
 
     /**
@@ -617,8 +1029,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to noseX
      */
-    public void setNoseX(int newVal){
+    public void setNoseX(int newVal)
+    {
         setNoseX(new Integer(newVal));
+    }
+    /**
+     * Determines if the noseX has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkNoseXModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_NOSE_X_MASK);
+    }
+
+    /**
+     * Determines if the noseX has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkNoseXInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_NOSE_X_MASK);
     }
     /**
      * Getter method for {@link #noseY}.<br>
@@ -631,7 +1065,7 @@ public class FaceLightBean
      *
      * @return the value of noseY
      */
-    @com.facebook.swift.codec.ThriftField(16)
+    @com.facebook.swift.codec.ThriftField(18)
     public Integer getNoseY(){
         return noseY;
     }
@@ -644,8 +1078,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to noseY
      */
     @com.facebook.swift.codec.ThriftField
-    public void setNoseY(Integer newVal){    
+    public void setNoseY(Integer newVal)
+    {
+        if ((newVal != null && noseY != null && (newVal.compareTo(noseY) == 0)) ||
+            (newVal == null && noseY == null && checkNoseYInitialized())) {
+            return;
+        }
         noseY = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_NOSE_Y_MASK;
+        initialized |= FL_FACE_LIGHT_ID_NOSE_Y_MASK;
     }
 
     /**
@@ -654,8 +1096,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to noseY
      */
-    public void setNoseY(int newVal){
+    public void setNoseY(int newVal)
+    {
         setNoseY(new Integer(newVal));
+    }
+    /**
+     * Determines if the noseY has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkNoseYModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_NOSE_Y_MASK);
+    }
+
+    /**
+     * Determines if the noseY has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkNoseYInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_NOSE_Y_MASK);
     }
     /**
      * Getter method for {@link #angleYaw}.<br>
@@ -668,7 +1132,7 @@ public class FaceLightBean
      *
      * @return the value of angleYaw
      */
-    @com.facebook.swift.codec.ThriftField(17)
+    @com.facebook.swift.codec.ThriftField(19)
     public Integer getAngleYaw(){
         return angleYaw;
     }
@@ -681,8 +1145,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to angleYaw
      */
     @com.facebook.swift.codec.ThriftField
-    public void setAngleYaw(Integer newVal){    
+    public void setAngleYaw(Integer newVal)
+    {
+        if ((newVal != null && angleYaw != null && (newVal.compareTo(angleYaw) == 0)) ||
+            (newVal == null && angleYaw == null && checkAngleYawInitialized())) {
+            return;
+        }
         angleYaw = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_ANGLE_YAW_MASK;
+        initialized |= FL_FACE_LIGHT_ID_ANGLE_YAW_MASK;
     }
 
     /**
@@ -691,8 +1163,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to angleYaw
      */
-    public void setAngleYaw(int newVal){
+    public void setAngleYaw(int newVal)
+    {
         setAngleYaw(new Integer(newVal));
+    }
+    /**
+     * Determines if the angleYaw has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkAngleYawModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_ANGLE_YAW_MASK);
+    }
+
+    /**
+     * Determines if the angleYaw has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkAngleYawInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_ANGLE_YAW_MASK);
     }
     /**
      * Getter method for {@link #anglePitch}.<br>
@@ -705,7 +1199,7 @@ public class FaceLightBean
      *
      * @return the value of anglePitch
      */
-    @com.facebook.swift.codec.ThriftField(18)
+    @com.facebook.swift.codec.ThriftField(20)
     public Integer getAnglePitch(){
         return anglePitch;
     }
@@ -718,8 +1212,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to anglePitch
      */
     @com.facebook.swift.codec.ThriftField
-    public void setAnglePitch(Integer newVal){    
+    public void setAnglePitch(Integer newVal)
+    {
+        if ((newVal != null && anglePitch != null && (newVal.compareTo(anglePitch) == 0)) ||
+            (newVal == null && anglePitch == null && checkAnglePitchInitialized())) {
+            return;
+        }
         anglePitch = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_ANGLE_PITCH_MASK;
+        initialized |= FL_FACE_LIGHT_ID_ANGLE_PITCH_MASK;
     }
 
     /**
@@ -728,8 +1230,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to anglePitch
      */
-    public void setAnglePitch(int newVal){
+    public void setAnglePitch(int newVal)
+    {
         setAnglePitch(new Integer(newVal));
+    }
+    /**
+     * Determines if the anglePitch has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkAnglePitchModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_ANGLE_PITCH_MASK);
+    }
+
+    /**
+     * Determines if the anglePitch has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkAnglePitchInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_ANGLE_PITCH_MASK);
     }
     /**
      * Getter method for {@link #angleRoll}.<br>
@@ -742,7 +1266,7 @@ public class FaceLightBean
      *
      * @return the value of angleRoll
      */
-    @com.facebook.swift.codec.ThriftField(19)
+    @com.facebook.swift.codec.ThriftField(21)
     public Integer getAngleRoll(){
         return angleRoll;
     }
@@ -755,8 +1279,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to angleRoll
      */
     @com.facebook.swift.codec.ThriftField
-    public void setAngleRoll(Integer newVal){    
+    public void setAngleRoll(Integer newVal)
+    {
+        if ((newVal != null && angleRoll != null && (newVal.compareTo(angleRoll) == 0)) ||
+            (newVal == null && angleRoll == null && checkAngleRollInitialized())) {
+            return;
+        }
         angleRoll = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_ANGLE_ROLL_MASK;
+        initialized |= FL_FACE_LIGHT_ID_ANGLE_ROLL_MASK;
     }
 
     /**
@@ -765,8 +1297,30 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to angleRoll
      */
-    public void setAngleRoll(int newVal){
+    public void setAngleRoll(int newVal)
+    {
         setAngleRoll(new Integer(newVal));
+    }
+    /**
+     * Determines if the angleRoll has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkAngleRollModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_ANGLE_ROLL_MASK);
+    }
+
+    /**
+     * Determines if the angleRoll has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkAngleRollInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_ANGLE_ROLL_MASK);
     }
     /**
      * Getter method for {@link #extInfo}.<br>
@@ -780,7 +1334,7 @@ public class FaceLightBean
      *
      * @return the value of extInfo
      */
-    @com.facebook.swift.codec.ThriftField(20)
+    @com.facebook.swift.codec.ThriftField(22)
     public byte[] getExtInfo(){
         return extInfo;
     }
@@ -792,10 +1346,35 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to extInfo
      */
     @com.facebook.swift.codec.ThriftField
-    public void setExtInfo(byte[] newVal){    
+    public void setExtInfo(byte[] newVal)
+    {
         extInfo = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_EXT_INFO_MASK;
+        initialized |= FL_FACE_LIGHT_ID_EXT_INFO_MASK;
     }
 
+    /**
+     * Determines if the extInfo has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExtInfoModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_EXT_INFO_MASK);
+    }
+
+    /**
+     * Determines if the extInfo has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExtInfoInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_EXT_INFO_MASK);
+    }
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -807,7 +1386,7 @@ public class FaceLightBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(21)
+    @com.facebook.swift.codec.ThriftField(23)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -820,8 +1399,16 @@ public class FaceLightBean
      * @param newVal the new value to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCreateTime(java.util.Date newVal){    
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+            return;
+        }
         createTime = newVal;
+
+        modified |= FL_FACE_LIGHT_ID_CREATE_TIME_MASK;
+        initialized |= FL_FACE_LIGHT_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -830,10 +1417,185 @@ public class FaceLightBean
      *
      * @param newVal the new value to be assigned to createTime
      */
-    public void setCreateTime(long newVal){
+    public void setCreateTime(long newVal)
+    {
         setCreateTime(new java.util.Date(newVal));
     }
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCreateTimeModified()
+    {
+        return 0L !=  (modified & FL_FACE_LIGHT_ID_CREATE_TIME_MASK);
+    }
 
+    /**
+     * Determines if the createTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCreateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_FACE_LIGHT_ID_CREATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_FACE_LIGHT_ID_MD5:
+            return checkMd5Modified();
+        case FL_FACE_LIGHT_ID_PERSON_ID:
+            return checkPersonIdModified();
+        case FL_FACE_LIGHT_ID_IMG_MD5:
+            return checkImgMd5Modified();
+        case FL_FACE_LIGHT_ID_FACE_LEFT:
+            return checkFaceLeftModified();
+        case FL_FACE_LIGHT_ID_FACE_TOP:
+            return checkFaceTopModified();
+        case FL_FACE_LIGHT_ID_FACE_WIDTH:
+            return checkFaceWidthModified();
+        case FL_FACE_LIGHT_ID_FACE_HEIGHT:
+            return checkFaceHeightModified();
+        case FL_FACE_LIGHT_ID_EYE_LEFTX:
+            return checkEyeLeftxModified();
+        case FL_FACE_LIGHT_ID_EYE_LEFTY:
+            return checkEyeLeftyModified();
+        case FL_FACE_LIGHT_ID_EYE_RIGHTX:
+            return checkEyeRightxModified();
+        case FL_FACE_LIGHT_ID_EYE_RIGHTY:
+            return checkEyeRightyModified();
+        case FL_FACE_LIGHT_ID_MOUTH_X:
+            return checkMouthXModified();
+        case FL_FACE_LIGHT_ID_MOUTH_Y:
+            return checkMouthYModified();
+        case FL_FACE_LIGHT_ID_NOSE_X:
+            return checkNoseXModified();
+        case FL_FACE_LIGHT_ID_NOSE_Y:
+            return checkNoseYModified();
+        case FL_FACE_LIGHT_ID_ANGLE_YAW:
+            return checkAngleYawModified();
+        case FL_FACE_LIGHT_ID_ANGLE_PITCH:
+            return checkAnglePitchModified();
+        case FL_FACE_LIGHT_ID_ANGLE_ROLL:
+            return checkAngleRollModified();
+        case FL_FACE_LIGHT_ID_EXT_INFO:
+            return checkExtInfoModified();
+        case FL_FACE_LIGHT_ID_CREATE_TIME:
+            return checkCreateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_FACE_LIGHT_ID_MD5:
+            return checkMd5Initialized();
+        case FL_FACE_LIGHT_ID_PERSON_ID:
+            return checkPersonIdInitialized();
+        case FL_FACE_LIGHT_ID_IMG_MD5:
+            return checkImgMd5Initialized();
+        case FL_FACE_LIGHT_ID_FACE_LEFT:
+            return checkFaceLeftInitialized();
+        case FL_FACE_LIGHT_ID_FACE_TOP:
+            return checkFaceTopInitialized();
+        case FL_FACE_LIGHT_ID_FACE_WIDTH:
+            return checkFaceWidthInitialized();
+        case FL_FACE_LIGHT_ID_FACE_HEIGHT:
+            return checkFaceHeightInitialized();
+        case FL_FACE_LIGHT_ID_EYE_LEFTX:
+            return checkEyeLeftxInitialized();
+        case FL_FACE_LIGHT_ID_EYE_LEFTY:
+            return checkEyeLeftyInitialized();
+        case FL_FACE_LIGHT_ID_EYE_RIGHTX:
+            return checkEyeRightxInitialized();
+        case FL_FACE_LIGHT_ID_EYE_RIGHTY:
+            return checkEyeRightyInitialized();
+        case FL_FACE_LIGHT_ID_MOUTH_X:
+            return checkMouthXInitialized();
+        case FL_FACE_LIGHT_ID_MOUTH_Y:
+            return checkMouthYInitialized();
+        case FL_FACE_LIGHT_ID_NOSE_X:
+            return checkNoseXInitialized();
+        case FL_FACE_LIGHT_ID_NOSE_Y:
+            return checkNoseYInitialized();
+        case FL_FACE_LIGHT_ID_ANGLE_YAW:
+            return checkAngleYawInitialized();
+        case FL_FACE_LIGHT_ID_ANGLE_PITCH:
+            return checkAnglePitchInitialized();
+        case FL_FACE_LIGHT_ID_ANGLE_ROLL:
+            return checkAngleRollInitialized();
+        case FL_FACE_LIGHT_ID_EXT_INFO:
+            return checkExtInfoInitialized();
+        case FL_FACE_LIGHT_ID_CREATE_TIME:
+            return checkCreateTimeInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -945,90 +1707,6 @@ public class FaceLightBean
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FaceLightBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setPersonId(bean.getPersonId());
-            setImgMd5(bean.getImgMd5());
-            setFaceLeft(bean.getFaceLeft());
-            setFaceTop(bean.getFaceTop());
-            setFaceWidth(bean.getFaceWidth());
-            setFaceHeight(bean.getFaceHeight());
-            setEyeLeftx(bean.getEyeLeftx());
-            setEyeLefty(bean.getEyeLefty());
-            setEyeRightx(bean.getEyeRightx());
-            setEyeRighty(bean.getEyeRighty());
-            setMouthX(bean.getMouthX());
-            setMouthY(bean.getMouthY());
-            setNoseX(bean.getNoseX());
-            setNoseY(bean.getNoseY());
-            setAngleYaw(bean.getAngleYaw());
-            setAnglePitch(bean.getAnglePitch());
-            setAngleRoll(bean.getAngleRoll());
-            setExtInfo(bean.getExtInfo());
-            setCreateTime(bean.getCreateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FaceLightBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getImgMd5()!=null)
-            setImgMd5(bean.getImgMd5());
-        if(bean.getFaceLeft()!=null)
-            setFaceLeft(bean.getFaceLeft());
-        if(bean.getFaceTop()!=null)
-            setFaceTop(bean.getFaceTop());
-        if(bean.getFaceWidth()!=null)
-            setFaceWidth(bean.getFaceWidth());
-        if(bean.getFaceHeight()!=null)
-            setFaceHeight(bean.getFaceHeight());
-        if(bean.getEyeLeftx()!=null)
-            setEyeLeftx(bean.getEyeLeftx());
-        if(bean.getEyeLefty()!=null)
-            setEyeLefty(bean.getEyeLefty());
-        if(bean.getEyeRightx()!=null)
-            setEyeRightx(bean.getEyeRightx());
-        if(bean.getEyeRighty()!=null)
-            setEyeRighty(bean.getEyeRighty());
-        if(bean.getMouthX()!=null)
-            setMouthX(bean.getMouthX());
-        if(bean.getMouthY()!=null)
-            setMouthY(bean.getMouthY());
-        if(bean.getNoseX()!=null)
-            setNoseX(bean.getNoseX());
-        if(bean.getNoseY()!=null)
-            setNoseY(bean.getNoseY());
-        if(bean.getAngleYaw()!=null)
-            setAngleYaw(bean.getAngleYaw());
-        if(bean.getAnglePitch()!=null)
-            setAnglePitch(bean.getAnglePitch());
-        if(bean.getAngleRoll()!=null)
-            setAngleRoll(bean.getAngleRoll());
-        if(bean.getExtInfo()!=null)
-            setExtInfo(bean.getExtInfo());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-    }
 
     /**
     * set all field to null
@@ -1037,7 +1715,6 @@ public class FaceLightBean
     */
     public FaceLightBean clean()
     {
-        isNew(true);
         setMd5(null);
         setPersonId(null);
         setImgMd5(null);
@@ -1058,6 +1735,172 @@ public class FaceLightBean
         setAngleRoll(null);
         setExtInfo(null);
         setCreateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FaceLightBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 20; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FaceLightBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_FACE_LIGHT_ID_MD5: 
+            return (T)getMd5();        
+        case FL_FACE_LIGHT_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_FACE_LIGHT_ID_IMG_MD5: 
+            return (T)getImgMd5();        
+        case FL_FACE_LIGHT_ID_FACE_LEFT: 
+            return (T)getFaceLeft();        
+        case FL_FACE_LIGHT_ID_FACE_TOP: 
+            return (T)getFaceTop();        
+        case FL_FACE_LIGHT_ID_FACE_WIDTH: 
+            return (T)getFaceWidth();        
+        case FL_FACE_LIGHT_ID_FACE_HEIGHT: 
+            return (T)getFaceHeight();        
+        case FL_FACE_LIGHT_ID_EYE_LEFTX: 
+            return (T)getEyeLeftx();        
+        case FL_FACE_LIGHT_ID_EYE_LEFTY: 
+            return (T)getEyeLefty();        
+        case FL_FACE_LIGHT_ID_EYE_RIGHTX: 
+            return (T)getEyeRightx();        
+        case FL_FACE_LIGHT_ID_EYE_RIGHTY: 
+            return (T)getEyeRighty();        
+        case FL_FACE_LIGHT_ID_MOUTH_X: 
+            return (T)getMouthX();        
+        case FL_FACE_LIGHT_ID_MOUTH_Y: 
+            return (T)getMouthY();        
+        case FL_FACE_LIGHT_ID_NOSE_X: 
+            return (T)getNoseX();        
+        case FL_FACE_LIGHT_ID_NOSE_Y: 
+            return (T)getNoseY();        
+        case FL_FACE_LIGHT_ID_ANGLE_YAW: 
+            return (T)getAngleYaw();        
+        case FL_FACE_LIGHT_ID_ANGLE_PITCH: 
+            return (T)getAnglePitch();        
+        case FL_FACE_LIGHT_ID_ANGLE_ROLL: 
+            return (T)getAngleRoll();        
+        case FL_FACE_LIGHT_ID_EXT_INFO: 
+            return (T)getExtInfo();        
+        case FL_FACE_LIGHT_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_FACE_LIGHT_ID_MD5:        
+            setMd5((String)value);
+        case FL_FACE_LIGHT_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_FACE_LIGHT_ID_IMG_MD5:        
+            setImgMd5((String)value);
+        case FL_FACE_LIGHT_ID_FACE_LEFT:        
+            setFaceLeft((Integer)value);
+        case FL_FACE_LIGHT_ID_FACE_TOP:        
+            setFaceTop((Integer)value);
+        case FL_FACE_LIGHT_ID_FACE_WIDTH:        
+            setFaceWidth((Integer)value);
+        case FL_FACE_LIGHT_ID_FACE_HEIGHT:        
+            setFaceHeight((Integer)value);
+        case FL_FACE_LIGHT_ID_EYE_LEFTX:        
+            setEyeLeftx((Integer)value);
+        case FL_FACE_LIGHT_ID_EYE_LEFTY:        
+            setEyeLefty((Integer)value);
+        case FL_FACE_LIGHT_ID_EYE_RIGHTX:        
+            setEyeRightx((Integer)value);
+        case FL_FACE_LIGHT_ID_EYE_RIGHTY:        
+            setEyeRighty((Integer)value);
+        case FL_FACE_LIGHT_ID_MOUTH_X:        
+            setMouthX((Integer)value);
+        case FL_FACE_LIGHT_ID_MOUTH_Y:        
+            setMouthY((Integer)value);
+        case FL_FACE_LIGHT_ID_NOSE_X:        
+            setNoseX((Integer)value);
+        case FL_FACE_LIGHT_ID_NOSE_Y:        
+            setNoseY((Integer)value);
+        case FL_FACE_LIGHT_ID_ANGLE_YAW:        
+            setAngleYaw((Integer)value);
+        case FL_FACE_LIGHT_ID_ANGLE_PITCH:        
+            setAnglePitch((Integer)value);
+        case FL_FACE_LIGHT_ID_ANGLE_ROLL:        
+            setAngleRoll((Integer)value);
+        case FL_FACE_LIGHT_ID_EXT_INFO:        
+            setExtInfo((byte[])value);
+        case FL_FACE_LIGHT_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_FACE_LIGHT_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_FACE_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

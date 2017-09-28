@@ -17,40 +17,32 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class LogLightBean
-    implements Serializable,BaseBean,Comparable<LogLightBean>
+    implements Serializable,BaseBean<LogLightBean>,Comparable<LogLightBean>,Constant
 {
     private static final long serialVersionUID = 4419196843551738129L;
     
-    /**
-     * comments:日志id
-     */
+    /** comments:日志id */
     private Integer id;
 
-    /**
-     * comments:用户识别码
-     */
+    /** comments:用户识别码 */
     private Integer personId;
 
-    /**
-     * comments:姓名
-     */
+    /** comments:姓名 */
     private String name;
 
-    /**
-     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-     */
+    /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
     private Integer papersType;
 
-    /**
-     * comments:证件号码
-     */
+    /** comments:证件号码 */
     private String papersNum;
 
-    /**
-     * comments:验证时间(可能由前端设备提供时间)
-     */
+    /** comments:验证时间(可能由前端设备提供时间) */
     private java.util.Date verifyTime;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -82,18 +74,38 @@ public class LogLightBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a LogLightBean is via the createLogLightBean method in FlLogLightManager or
-     * via the factory class FlLogLightFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public LogLightBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a LogLightBean from a instance
+     * @return the initialized status of columns
      */
-    public LogLightBean(LogLightBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public LogLightBean(){
+        super();
     }
     /**
      * Getter method for {@link #id}.<br>
@@ -107,7 +119,7 @@ public class LogLightBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -120,8 +132,16 @@ public class LogLightBean
      * @param newVal the new value to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
-    public void setId(Integer newVal){    
+    public void setId(Integer newVal)
+    {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && checkIdInitialized())) {
+            return;
+        }
         id = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_ID_MASK;
     }
 
     /**
@@ -130,8 +150,30 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to id
      */
-    public void setId(int newVal){
+    public void setId(int newVal)
+    {
         setId(new Integer(newVal));
+    }
+    /**
+     * Determines if the id has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkIdModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_ID_MASK);
+    }
+
+    /**
+     * Determines if the id has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkIdInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_ID_MASK);
     }
     /**
      * Getter method for {@link #personId}.<br>
@@ -145,7 +187,7 @@ public class LogLightBean
      *
      * @return the value of personId
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getPersonId(){
         return personId;
     }
@@ -158,8 +200,16 @@ public class LogLightBean
      * @param newVal the new value to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPersonId(Integer newVal){    
+    public void setPersonId(Integer newVal)
+    {
+        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
+            return;
+        }
         personId = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -168,8 +218,30 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to personId
      */
-    public void setPersonId(int newVal){
+    public void setPersonId(int newVal)
+    {
         setPersonId(new Integer(newVal));
+    }
+    /**
+     * Determines if the personId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPersonIdModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
+    }
+
+    /**
+     * Determines if the personId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPersonIdInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
     /**
      * Getter method for {@link #name}.<br>
@@ -183,7 +255,7 @@ public class LogLightBean
      *
      * @return the value of name
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public String getName(){
         return name;
     }
@@ -196,10 +268,39 @@ public class LogLightBean
      * @param newVal the new value to be assigned to name
      */
     @com.facebook.swift.codec.ThriftField
-    public void setName(String newVal){    
+    public void setName(String newVal)
+    {
+        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
+            (newVal == null && name == null && checkNameInitialized())) {
+            return;
+        }
         name = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_NAME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
     }
 
+    /**
+     * Determines if the name has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkNameModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_NAME_MASK);
+    }
+
+    /**
+     * Determines if the name has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkNameInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_NAME_MASK);
+    }
     /**
      * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
@@ -212,7 +313,7 @@ public class LogLightBean
      *
      * @return the value of papersType
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getPapersType(){
         return papersType;
     }
@@ -225,8 +326,16 @@ public class LogLightBean
      * @param newVal the new value to be assigned to papersType
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPapersType(Integer newVal){    
+    public void setPapersType(Integer newVal)
+    {
+        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
+            (newVal == null && papersType == null && checkPapersTypeInitialized())) {
+            return;
+        }
         papersType = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
     }
 
     /**
@@ -235,8 +344,30 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(int newVal){
+    public void setPapersType(int newVal)
+    {
         setPapersType(new Integer(newVal));
+    }
+    /**
+     * Determines if the papersType has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPapersTypeModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
+    }
+
+    /**
+     * Determines if the papersType has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPapersTypeInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK);
     }
     /**
      * Getter method for {@link #papersNum}.<br>
@@ -250,7 +381,7 @@ public class LogLightBean
      *
      * @return the value of papersNum
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public String getPapersNum(){
         return papersNum;
     }
@@ -263,10 +394,39 @@ public class LogLightBean
      * @param newVal the new value to be assigned to papersNum
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPapersNum(String newVal){    
+    public void setPapersNum(String newVal)
+    {
+        if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
+            (newVal == null && papersNum == null && checkPapersNumInitialized())) {
+            return;
+        }
         papersNum = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
+        initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
     }
 
+    /**
+     * Determines if the papersNum has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPapersNumModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
+    }
+
+    /**
+     * Determines if the papersNum has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPapersNumInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK);
+    }
     /**
      * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
@@ -279,7 +439,7 @@ public class LogLightBean
      *
      * @return the value of verifyTime
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(9)
     public java.util.Date getVerifyTime(){
         return verifyTime;
     }
@@ -292,8 +452,16 @@ public class LogLightBean
      * @param newVal the new value to be assigned to verifyTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setVerifyTime(java.util.Date newVal){    
+    public void setVerifyTime(java.util.Date newVal)
+    {
+        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
+            (newVal == null && verifyTime == null && checkVerifyTimeInitialized())) {
+            return;
+        }
         verifyTime = newVal;
+
+        modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
     }
 
     /**
@@ -302,10 +470,129 @@ public class LogLightBean
      *
      * @param newVal the new value to be assigned to verifyTime
      */
-    public void setVerifyTime(long newVal){
+    public void setVerifyTime(long newVal)
+    {
         setVerifyTime(new java.util.Date(newVal));
     }
+    /**
+     * Determines if the verifyTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkVerifyTimeModified()
+    {
+        return 0L !=  (modified & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
+    }
 
+    /**
+     * Determines if the verifyTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkVerifyTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK);
+    }
+
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_LOG_LIGHT_ID_ID:
+            return checkIdModified();
+        case FL_LOG_LIGHT_ID_PERSON_ID:
+            return checkPersonIdModified();
+        case FL_LOG_LIGHT_ID_NAME:
+            return checkNameModified();
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:
+            return checkPapersTypeModified();
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:
+            return checkPapersNumModified();
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:
+            return checkVerifyTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_LOG_LIGHT_ID_ID:
+            return checkIdInitialized();
+        case FL_LOG_LIGHT_ID_PERSON_ID:
+            return checkPersonIdInitialized();
+        case FL_LOG_LIGHT_ID_NAME:
+            return checkNameInitialized();
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:
+            return checkPapersTypeInitialized();
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:
+            return checkPapersNumInitialized();
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:
+            return checkVerifyTimeInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -361,48 +648,6 @@ public class LogLightBean
             .append(getVerifyTime(), object.getVerifyTime())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(LogLightBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setPersonId(bean.getPersonId());
-            setName(bean.getName());
-            setPapersType(bean.getPapersType());
-            setPapersNum(bean.getPapersNum());
-            setVerifyTime(bean.getVerifyTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(LogLightBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getPapersType()!=null)
-            setPapersType(bean.getPapersType());
-        if(bean.getPapersNum()!=null)
-            setPapersNum(bean.getPapersNum());
-        if(bean.getVerifyTime()!=null)
-            setVerifyTime(bean.getVerifyTime());
-    }
 
     /**
     * set all field to null
@@ -411,13 +656,122 @@ public class LogLightBean
     */
     public LogLightBean clean()
     {
-        isNew(true);
         setId(null);
         setPersonId(null);
         setName(null);
         setPapersType(null);
         setPapersNum(null);
         setVerifyTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(LogLightBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 6; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(LogLightBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_LOG_LIGHT_ID_ID: 
+            return (T)getId();        
+        case FL_LOG_LIGHT_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_LOG_LIGHT_ID_NAME: 
+            return (T)getName();        
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE: 
+            return (T)getPapersType();        
+        case FL_LOG_LIGHT_ID_PAPERS_NUM: 
+            return (T)getPapersNum();        
+        case FL_LOG_LIGHT_ID_VERIFY_TIME: 
+            return (T)getVerifyTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_LOG_LIGHT_ID_ID:        
+            setId((Integer)value);
+        case FL_LOG_LIGHT_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_LOG_LIGHT_ID_NAME:        
+            setName((String)value);
+        case FL_LOG_LIGHT_ID_PAPERS_TYPE:        
+            setPapersType((Integer)value);
+        case FL_LOG_LIGHT_ID_PAPERS_NUM:        
+            setPapersNum((String)value);
+        case FL_LOG_LIGHT_ID_VERIFY_TIME:        
+            setVerifyTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_LOG_LIGHT_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

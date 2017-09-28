@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.log;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.person.FlPersonBean;
@@ -21,12 +21,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: 人脸验证日志,记录所有通过验证的人员 </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlLogBean
-    implements Serializable,FullBean<FlLogBean>,Comparable<FlLogBean>,Constant
+    implements Serializable,BaseBean<FlLogBean>,Comparable<FlLogBean>,Constant
 {
-	private static final long serialVersionUID = 7869683986300606649L;
+    private static final long serialVersionUID = 7869683986300606649L;
+    
     /** comments:日志id */
     private Integer id;
 
@@ -113,15 +114,7 @@ public class FlLogBean
         super();
     }
     /**
-     * create a FlLogBean from a instance
-     */
-    FlLogBean(FlLogBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -137,8 +130,7 @@ public class FlLogBean
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -148,7 +140,7 @@ public class FlLogBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && isIdInitialized())) {
+            (newVal == null && id == null && checkIdInitialized())) {
             return;
         }
         id = newVal;
@@ -158,8 +150,7 @@ public class FlLogBean
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -168,31 +159,29 @@ public class FlLogBean
     {
         setId(new Integer(newVal));
     }
-
     /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean checkIdModified()
     {
-        return 0L != (modified & FL_LOG_ID_ID_MASK);
+        return 0L !=  (modified & FL_LOG_ID_ID_MASK);
     }
 
     /**
-     * Determines if the id has been initialized.
-     * <br>
+     * Determines if the id has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean checkIdInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_ID_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_ID_MASK);
     }
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.person_id</li>
@@ -208,8 +197,7 @@ public class FlLogBean
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -219,7 +207,7 @@ public class FlLogBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && isPersonIdInitialized())) {
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
             return;
         }
         personId = newVal;
@@ -229,8 +217,7 @@ public class FlLogBean
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -239,31 +226,29 @@ public class FlLogBean
     {
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Determines if the personId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPersonIdModified()
+    public boolean checkPersonIdModified()
     {
-        return 0L != (modified & FL_LOG_ID_PERSON_ID_MASK);
+        return 0L !=  (modified & FL_LOG_ID_PERSON_ID_MASK);
     }
 
     /**
-     * Determines if the personId has been initialized.
-     * <br>
+     * Determines if the personId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPersonIdInitialized()
+    public boolean checkPersonIdInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_PERSON_ID_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_PERSON_ID_MASK);
     }
     /**
-     * Getter method for deviceId.
-     * <br>
+     * Getter method for {@link #deviceId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.device_id</li>
@@ -279,8 +264,7 @@ public class FlLogBean
         return deviceId;
     }
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -290,7 +274,7 @@ public class FlLogBean
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && isDeviceIdInitialized())) {
+            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
             return;
         }
         deviceId = newVal;
@@ -300,8 +284,7 @@ public class FlLogBean
     }
 
     /**
-     * Setter method for deviceId.
-     * <br>
+     * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to deviceId
@@ -310,31 +293,29 @@ public class FlLogBean
     {
         setDeviceId(new Integer(newVal));
     }
-
     /**
      * Determines if the deviceId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isDeviceIdModified()
+    public boolean checkDeviceIdModified()
     {
-        return 0L != (modified & FL_LOG_ID_DEVICE_ID_MASK);
+        return 0L !=  (modified & FL_LOG_ID_DEVICE_ID_MASK);
     }
 
     /**
-     * Determines if the deviceId has been initialized.
-     * <br>
+     * Determines if the deviceId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isDeviceIdInitialized()
+    public boolean checkDeviceIdInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_DEVICE_ID_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_DEVICE_ID_MASK);
     }
     /**
-     * Getter method for verifyFace.
-     * <br>
+     * Getter method for {@link #verifyFace}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.verify_face</li>
@@ -350,8 +331,7 @@ public class FlLogBean
         return verifyFace;
     }
     /**
-     * Setter method for verifyFace.
-     * <br>
+     * Setter method for {@link #verifyFace}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -361,7 +341,7 @@ public class FlLogBean
     public void setVerifyFace(String newVal)
     {
         if ((newVal != null && verifyFace != null && (newVal.compareTo(verifyFace) == 0)) ||
-            (newVal == null && verifyFace == null && isVerifyFaceInitialized())) {
+            (newVal == null && verifyFace == null && checkVerifyFaceInitialized())) {
             return;
         }
         verifyFace = newVal;
@@ -375,25 +355,24 @@ public class FlLogBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isVerifyFaceModified()
+    public boolean checkVerifyFaceModified()
     {
-        return 0L != (modified & FL_LOG_ID_VERIFY_FACE_MASK);
+        return 0L !=  (modified & FL_LOG_ID_VERIFY_FACE_MASK);
     }
 
     /**
-     * Determines if the verifyFace has been initialized.
-     * <br>
+     * Determines if the verifyFace has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isVerifyFaceInitialized()
+    public boolean checkVerifyFaceInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_VERIFY_FACE_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_VERIFY_FACE_MASK);
     }
     /**
-     * Getter method for compareFace.
-     * <br>
+     * Getter method for {@link #compareFace}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.compare_face</li>
@@ -409,8 +388,7 @@ public class FlLogBean
         return compareFace;
     }
     /**
-     * Setter method for compareFace.
-     * <br>
+     * Setter method for {@link #compareFace}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -420,7 +398,7 @@ public class FlLogBean
     public void setCompareFace(String newVal)
     {
         if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
-            (newVal == null && compareFace == null && isCompareFaceInitialized())) {
+            (newVal == null && compareFace == null && checkCompareFaceInitialized())) {
             return;
         }
         compareFace = newVal;
@@ -434,25 +412,24 @@ public class FlLogBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isCompareFaceModified()
+    public boolean checkCompareFaceModified()
     {
-        return 0L != (modified & FL_LOG_ID_COMPARE_FACE_MASK);
+        return 0L !=  (modified & FL_LOG_ID_COMPARE_FACE_MASK);
     }
 
     /**
-     * Determines if the compareFace has been initialized.
-     * <br>
+     * Determines if the compareFace has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isCompareFaceInitialized()
+    public boolean checkCompareFaceInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
     }
     /**
-     * Getter method for similarty.
-     * <br>
+     * Getter method for {@link #similarty}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.similarty</li>
@@ -467,8 +444,7 @@ public class FlLogBean
         return similarty;
     }
     /**
-     * Setter method for similarty.
-     * <br>
+     * Setter method for {@link #similarty}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -478,7 +454,7 @@ public class FlLogBean
     public void setSimilarty(Double newVal)
     {
         if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
-            (newVal == null && similarty == null && isSimilartyInitialized())) {
+            (newVal == null && similarty == null && checkSimilartyInitialized())) {
             return;
         }
         similarty = newVal;
@@ -488,8 +464,7 @@ public class FlLogBean
     }
 
     /**
-     * Setter method for similarty.
-     * <br>
+     * Setter method for {@link #similarty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to similarty
@@ -498,31 +473,29 @@ public class FlLogBean
     {
         setSimilarty(new Double(newVal));
     }
-
     /**
      * Determines if the similarty has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isSimilartyModified()
+    public boolean checkSimilartyModified()
     {
-        return 0L != (modified & FL_LOG_ID_SIMILARTY_MASK);
+        return 0L !=  (modified & FL_LOG_ID_SIMILARTY_MASK);
     }
 
     /**
-     * Determines if the similarty has been initialized.
-     * <br>
+     * Determines if the similarty has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isSimilartyInitialized()
+    public boolean checkSimilartyInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_SIMILARTY_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK);
     }
     /**
-     * Getter method for verifyTime.
-     * <br>
+     * Getter method for {@link #verifyTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.verify_time</li>
@@ -537,8 +510,7 @@ public class FlLogBean
         return verifyTime;
     }
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -548,7 +520,7 @@ public class FlLogBean
     public void setVerifyTime(java.util.Date newVal)
     {
         if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && isVerifyTimeInitialized())) {
+            (newVal == null && verifyTime == null && checkVerifyTimeInitialized())) {
             return;
         }
         verifyTime = newVal;
@@ -558,8 +530,7 @@ public class FlLogBean
     }
 
     /**
-     * Setter method for verifyTime.
-     * <br>
+     * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to verifyTime
@@ -568,31 +539,29 @@ public class FlLogBean
     {
         setVerifyTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the verifyTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isVerifyTimeModified()
+    public boolean checkVerifyTimeModified()
     {
-        return 0L != (modified & FL_LOG_ID_VERIFY_TIME_MASK);
+        return 0L !=  (modified & FL_LOG_ID_VERIFY_TIME_MASK);
     }
 
     /**
-     * Determines if the verifyTime has been initialized.
-     * <br>
+     * Determines if the verifyTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isVerifyTimeInitialized()
+    public boolean checkVerifyTimeInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_VERIFY_TIME_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_VERIFY_TIME_MASK);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.create_time</li>
@@ -606,8 +575,7 @@ public class FlLogBean
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -617,7 +585,7 @@ public class FlLogBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && isCreateTimeInitialized())) {
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
             return;
         }
         createTime = newVal;
@@ -627,8 +595,7 @@ public class FlLogBean
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -637,27 +604,26 @@ public class FlLogBean
     {
         setCreateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isCreateTimeModified()
+    public boolean checkCreateTimeModified()
     {
-        return 0L != (modified & FL_LOG_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_LOG_ID_CREATE_TIME_MASK);
     }
 
     /**
-     * Determines if the createTime has been initialized.
-     * <br>
+     * Determines if the createTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isCreateTimeInitialized()
+    public boolean checkCreateTimeInitialized()
     {
-        return 0L != (initialized & FL_LOG_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_CREATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -736,21 +702,21 @@ public class FlLogBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_LOG_ID_ID:
-            return isIdModified();
+            return checkIdModified();
         case FL_LOG_ID_PERSON_ID:
-            return isPersonIdModified();
+            return checkPersonIdModified();
         case FL_LOG_ID_DEVICE_ID:
-            return isDeviceIdModified();
+            return checkDeviceIdModified();
         case FL_LOG_ID_VERIFY_FACE:
-            return isVerifyFaceModified();
+            return checkVerifyFaceModified();
         case FL_LOG_ID_COMPARE_FACE:
-            return isCompareFaceModified();
+            return checkCompareFaceModified();
         case FL_LOG_ID_SIMILARTY:
-            return isSimilartyModified();
+            return checkSimilartyModified();
         case FL_LOG_ID_VERIFY_TIME:
-            return isVerifyTimeModified();
+            return checkVerifyTimeModified();
         case FL_LOG_ID_CREATE_TIME:
-            return isCreateTimeModified();
+            return checkCreateTimeModified();
         }
         return false;
     }
@@ -765,35 +731,33 @@ public class FlLogBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_LOG_ID_ID:
-            return isIdInitialized();
+            return checkIdInitialized();
         case FL_LOG_ID_PERSON_ID:
-            return isPersonIdInitialized();
+            return checkPersonIdInitialized();
         case FL_LOG_ID_DEVICE_ID:
-            return isDeviceIdInitialized();
+            return checkDeviceIdInitialized();
         case FL_LOG_ID_VERIFY_FACE:
-            return isVerifyFaceInitialized();
+            return checkVerifyFaceInitialized();
         case FL_LOG_ID_COMPARE_FACE:
-            return isCompareFaceInitialized();
+            return checkCompareFaceInitialized();
         case FL_LOG_ID_SIMILARTY:
-            return isSimilartyInitialized();
+            return checkSimilartyInitialized();
         case FL_LOG_ID_VERIFY_TIME:
-            return isVerifyTimeInitialized();
+            return checkVerifyTimeInitialized();
         case FL_LOG_ID_CREATE_TIME:
-            return isCreateTimeInitialized();
+            return checkCreateTimeInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_LOG_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -805,10 +769,7 @@ public class FlLogBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_LOG_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -818,7 +779,13 @@ public class FlLogBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -875,54 +842,6 @@ public class FlLogBean
             .append(getId(), object.getId())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlLogBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setPersonId(bean.getPersonId());
-            setDeviceId(bean.getDeviceId());
-            setVerifyFace(bean.getVerifyFace());
-            setCompareFace(bean.getCompareFace());
-            setSimilarty(bean.getSimilarty());
-            setVerifyTime(bean.getVerifyTime());
-            setCreateTime(bean.getCreateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlLogBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getDeviceId()!=null)
-            setDeviceId(bean.getDeviceId());
-        if(bean.getVerifyFace()!=null)
-            setVerifyFace(bean.getVerifyFace());
-        if(bean.getCompareFace()!=null)
-            setCompareFace(bean.getCompareFace());
-        if(bean.getSimilarty()!=null)
-            setSimilarty(bean.getSimilarty());
-        if(bean.getVerifyTime()!=null)
-            setVerifyTime(bean.getVerifyTime());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-    }
 
     /**
     * set all field to null
@@ -931,7 +850,6 @@ public class FlLogBean
     */
     public FlLogBean clean()
     {
-        isNew(true);
         setId(null);
         setPersonId(null);
         setDeviceId(null);
@@ -940,6 +858,9 @@ public class FlLogBean
         setSimilarty(null);
         setVerifyTime(null);
         setCreateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -952,10 +873,14 @@ public class FlLogBean
     public void copy(FlLogBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 8; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -968,11 +893,15 @@ public class FlLogBean
     public void copy(FlLogBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -1032,10 +961,7 @@ public class FlLogBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_LOG_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -1043,9 +969,13 @@ public class FlLogBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_LOG_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

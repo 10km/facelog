@@ -17,39 +17,33 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class DeviceBean
-    implements Serializable,BaseBean,Comparable<DeviceBean>
+    implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant
 {
     private static final long serialVersionUID = -1983784566394161565L;
     
-    /**
-     * comments:设备id
-     */
+    /** comments:设备id */
     private Integer id;
 
-    /**
-     * comments:设备名称
-     */
+    /** comments:设备名称 */
     private String name;
 
-    /**
-     * comments:设备是否在线标记
-     */
+    /** comments:设备是否在线标记 */
     private Boolean online;
 
-    /**
-     * comments:设备所属组id
-     */
+    /** comments:设备所属组id */
     private Integer groupId;
 
-    /**
-     * comments:设备版本号
-     */
+    /** comments:设备版本号 */
     private String version;
 
     private java.util.Date createTime;
 
     private java.util.Date updateTime;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -81,18 +75,38 @@ public class DeviceBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a DeviceBean is via the createDeviceBean method in FlDeviceManager or
-     * via the factory class FlDeviceFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public DeviceBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a DeviceBean from a instance
+     * @return the initialized status of columns
      */
-    public DeviceBean(DeviceBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public DeviceBean(){
+        super();
     }
     /**
      * Getter method for {@link #id}.<br>
@@ -109,7 +123,7 @@ public class DeviceBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -122,8 +136,16 @@ public class DeviceBean
      * @param newVal the new value to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
-    public void setId(Integer newVal){    
+    public void setId(Integer newVal)
+    {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && checkIdInitialized())) {
+            return;
+        }
         id = newVal;
+
+        modified |= FL_DEVICE_ID_ID_MASK;
+        initialized |= FL_DEVICE_ID_ID_MASK;
     }
 
     /**
@@ -132,8 +154,30 @@ public class DeviceBean
      *
      * @param newVal the new value to be assigned to id
      */
-    public void setId(int newVal){
+    public void setId(int newVal)
+    {
         setId(new Integer(newVal));
+    }
+    /**
+     * Determines if the id has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkIdModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_ID_MASK);
+    }
+
+    /**
+     * Determines if the id has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkIdInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_ID_MASK);
     }
     /**
      * Getter method for {@link #name}.<br>
@@ -147,7 +191,7 @@ public class DeviceBean
      *
      * @return the value of name
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public String getName(){
         return name;
     }
@@ -160,10 +204,39 @@ public class DeviceBean
      * @param newVal the new value to be assigned to name
      */
     @com.facebook.swift.codec.ThriftField
-    public void setName(String newVal){    
+    public void setName(String newVal)
+    {
+        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
+            (newVal == null && name == null && checkNameInitialized())) {
+            return;
+        }
         name = newVal;
+
+        modified |= FL_DEVICE_ID_NAME_MASK;
+        initialized |= FL_DEVICE_ID_NAME_MASK;
     }
 
+    /**
+     * Determines if the name has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkNameModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_NAME_MASK);
+    }
+
+    /**
+     * Determines if the name has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkNameInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_NAME_MASK);
+    }
     /**
      * Getter method for {@link #online}.<br>
      * Meta Data Information (in progress):
@@ -176,7 +249,7 @@ public class DeviceBean
      *
      * @return the value of online
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public Boolean getOnline(){
         return online;
     }
@@ -189,8 +262,16 @@ public class DeviceBean
      * @param newVal the new value to be assigned to online
      */
     @com.facebook.swift.codec.ThriftField
-    public void setOnline(Boolean newVal){    
+    public void setOnline(Boolean newVal)
+    {
+        if ((newVal != null && online != null && (newVal.compareTo(online) == 0)) ||
+            (newVal == null && online == null && checkOnlineInitialized())) {
+            return;
+        }
         online = newVal;
+
+        modified |= FL_DEVICE_ID_ONLINE_MASK;
+        initialized |= FL_DEVICE_ID_ONLINE_MASK;
     }
 
     /**
@@ -199,8 +280,30 @@ public class DeviceBean
      *
      * @param newVal the new value to be assigned to online
      */
-    public void setOnline(boolean newVal){
+    public void setOnline(boolean newVal)
+    {
         setOnline(new Boolean(newVal));
+    }
+    /**
+     * Determines if the online has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkOnlineModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_ONLINE_MASK);
+    }
+
+    /**
+     * Determines if the online has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkOnlineInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_ONLINE_MASK);
     }
     /**
      * Getter method for {@link #groupId}.<br>
@@ -214,7 +317,7 @@ public class DeviceBean
      *
      * @return the value of groupId
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getGroupId(){
         return groupId;
     }
@@ -227,8 +330,16 @@ public class DeviceBean
      * @param newVal the new value to be assigned to groupId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setGroupId(Integer newVal){    
+    public void setGroupId(Integer newVal)
+    {
+        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
+            (newVal == null && groupId == null && checkGroupIdInitialized())) {
+            return;
+        }
         groupId = newVal;
+
+        modified |= FL_DEVICE_ID_GROUP_ID_MASK;
+        initialized |= FL_DEVICE_ID_GROUP_ID_MASK;
     }
 
     /**
@@ -237,8 +348,30 @@ public class DeviceBean
      *
      * @param newVal the new value to be assigned to groupId
      */
-    public void setGroupId(int newVal){
+    public void setGroupId(int newVal)
+    {
         setGroupId(new Integer(newVal));
+    }
+    /**
+     * Determines if the groupId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkGroupIdModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_GROUP_ID_MASK);
+    }
+
+    /**
+     * Determines if the groupId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkGroupIdInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_GROUP_ID_MASK);
     }
     /**
      * Getter method for {@link #version}.<br>
@@ -252,7 +385,7 @@ public class DeviceBean
      *
      * @return the value of version
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public String getVersion(){
         return version;
     }
@@ -265,10 +398,39 @@ public class DeviceBean
      * @param newVal the new value to be assigned to version
      */
     @com.facebook.swift.codec.ThriftField
-    public void setVersion(String newVal){    
+    public void setVersion(String newVal)
+    {
+        if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
+            (newVal == null && version == null && checkVersionInitialized())) {
+            return;
+        }
         version = newVal;
+
+        modified |= FL_DEVICE_ID_VERSION_MASK;
+        initialized |= FL_DEVICE_ID_VERSION_MASK;
     }
 
+    /**
+     * Determines if the version has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkVersionModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_VERSION_MASK);
+    }
+
+    /**
+     * Determines if the version has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkVersionInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK);
+    }
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -280,7 +442,7 @@ public class DeviceBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(9)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -293,8 +455,16 @@ public class DeviceBean
      * @param newVal the new value to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCreateTime(java.util.Date newVal){    
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+            return;
+        }
         createTime = newVal;
+
+        modified |= FL_DEVICE_ID_CREATE_TIME_MASK;
+        initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -303,8 +473,30 @@ public class DeviceBean
      *
      * @param newVal the new value to be assigned to createTime
      */
-    public void setCreateTime(long newVal){
+    public void setCreateTime(long newVal)
+    {
         setCreateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCreateTimeModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_CREATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the createTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCreateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_CREATE_TIME_MASK);
     }
     /**
      * Getter method for {@link #updateTime}.<br>
@@ -317,7 +509,7 @@ public class DeviceBean
      *
      * @return the value of updateTime
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(10)
     public java.util.Date getUpdateTime(){
         return updateTime;
     }
@@ -330,8 +522,16 @@ public class DeviceBean
      * @param newVal the new value to be assigned to updateTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setUpdateTime(java.util.Date newVal){    
+    public void setUpdateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
+            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
+            return;
+        }
         updateTime = newVal;
+
+        modified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
+        initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
     }
 
     /**
@@ -340,10 +540,133 @@ public class DeviceBean
      *
      * @param newVal the new value to be assigned to updateTime
      */
-    public void setUpdateTime(long newVal){
+    public void setUpdateTime(long newVal)
+    {
         setUpdateTime(new java.util.Date(newVal));
     }
+    /**
+     * Determines if the updateTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkUpdateTimeModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_UPDATE_TIME_MASK);
+    }
 
+    /**
+     * Determines if the updateTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkUpdateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_DEVICE_ID_ID:
+            return checkIdModified();
+        case FL_DEVICE_ID_NAME:
+            return checkNameModified();
+        case FL_DEVICE_ID_ONLINE:
+            return checkOnlineModified();
+        case FL_DEVICE_ID_GROUP_ID:
+            return checkGroupIdModified();
+        case FL_DEVICE_ID_VERSION:
+            return checkVersionModified();
+        case FL_DEVICE_ID_CREATE_TIME:
+            return checkCreateTimeModified();
+        case FL_DEVICE_ID_UPDATE_TIME:
+            return checkUpdateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_DEVICE_ID_ID:
+            return checkIdInitialized();
+        case FL_DEVICE_ID_NAME:
+            return checkNameInitialized();
+        case FL_DEVICE_ID_ONLINE:
+            return checkOnlineInitialized();
+        case FL_DEVICE_ID_GROUP_ID:
+            return checkGroupIdInitialized();
+        case FL_DEVICE_ID_VERSION:
+            return checkVersionInitialized();
+        case FL_DEVICE_ID_CREATE_TIME:
+            return checkCreateTimeInitialized();
+        case FL_DEVICE_ID_UPDATE_TIME:
+            return checkUpdateTimeInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -397,51 +720,6 @@ public class DeviceBean
             .append(getId(), object.getId())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(DeviceBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setName(bean.getName());
-            setOnline(bean.getOnline());
-            setGroupId(bean.getGroupId());
-            setVersion(bean.getVersion());
-            setCreateTime(bean.getCreateTime());
-            setUpdateTime(bean.getUpdateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(DeviceBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getOnline()!=null)
-            setOnline(bean.getOnline());
-        if(bean.getGroupId()!=null)
-            setGroupId(bean.getGroupId());
-        if(bean.getVersion()!=null)
-            setVersion(bean.getVersion());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getUpdateTime()!=null)
-            setUpdateTime(bean.getUpdateTime());
-    }
 
     /**
     * set all field to null
@@ -450,7 +728,6 @@ public class DeviceBean
     */
     public DeviceBean clean()
     {
-        isNew(true);
         setId(null);
         setName(null);
         setOnline(null);
@@ -458,6 +735,120 @@ public class DeviceBean
         setVersion(null);
         setCreateTime(null);
         setUpdateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(DeviceBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 7; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(DeviceBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_DEVICE_ID_ID: 
+            return (T)getId();        
+        case FL_DEVICE_ID_NAME: 
+            return (T)getName();        
+        case FL_DEVICE_ID_ONLINE: 
+            return (T)getOnline();        
+        case FL_DEVICE_ID_GROUP_ID: 
+            return (T)getGroupId();        
+        case FL_DEVICE_ID_VERSION: 
+            return (T)getVersion();        
+        case FL_DEVICE_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        case FL_DEVICE_ID_UPDATE_TIME: 
+            return (T)getUpdateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_DEVICE_ID_ID:        
+            setId((Integer)value);
+        case FL_DEVICE_ID_NAME:        
+            setName((String)value);
+        case FL_DEVICE_ID_ONLINE:        
+            setOnline((Boolean)value);
+        case FL_DEVICE_ID_GROUP_ID:        
+            setGroupId((Integer)value);
+        case FL_DEVICE_ID_VERSION:        
+            setVersion((String)value);
+        case FL_DEVICE_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        case FL_DEVICE_ID_UPDATE_TIME:        
+            setUpdateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_DEVICE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

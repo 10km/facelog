@@ -17,64 +17,48 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class PersonBean
-    implements Serializable,BaseBean,Comparable<PersonBean>
+    implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant
 {
     private static final long serialVersionUID = 7741617836285025804L;
     
-    /**
-     * comments:用户识别码
-     */
+    /** comments:用户识别码 */
     private Integer id;
 
-    /**
-     * comments:用户所属组id
-     */
+    /** comments:用户所属组id */
     private Integer groupId;
 
-    /**
-     * comments:姓名
-     */
+    /** comments:姓名 */
     private String name;
 
-    /**
-     * comments:性别,0:女,1:男
-     */
+    /** comments:性别,0:女,1:男 */
     private Integer sex;
 
-    /**
-     * comments:出生日期
-     */
+    /** comments:出生日期 */
     private java.util.Date birthdate;
 
-    /**
-     * comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-     */
+    /** comments:证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他 */
     private Integer papersType;
 
-    /**
-     * comments:证件号码
-     */
+    /** comments:证件号码 */
     private String papersNum;
 
-    /**
-     * comments:用户默认照片(证件照,标准照)的md5校验码,外键
-     */
+    /** comments:用户默认照片(证件照,标准照)的md5校验码,外键 */
     private String photoId;
 
-    /**
-     * comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新
-     */
+    /** comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新 */
     private String faceMd5;
 
-    /**
-     * comments:验证有效期限(超过期限不能通过验证),为NULL永久有效
-     */
+    /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
     private java.util.Date expiryDate;
 
     private java.util.Date createTime;
 
     private java.util.Date updateTime;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -106,18 +90,38 @@ public class PersonBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a PersonBean is via the createPersonBean method in FlPersonManager or
-     * via the factory class FlPersonFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public PersonBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a PersonBean from a instance
+     * @return the initialized status of columns
      */
-    public PersonBean(PersonBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public PersonBean(){
+        super();
     }
     /**
      * Getter method for {@link #id}.<br>
@@ -134,7 +138,7 @@ public class PersonBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -147,8 +151,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
-    public void setId(Integer newVal){    
+    public void setId(Integer newVal)
+    {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && checkIdInitialized())) {
+            return;
+        }
         id = newVal;
+
+        modified |= FL_PERSON_ID_ID_MASK;
+        initialized |= FL_PERSON_ID_ID_MASK;
     }
 
     /**
@@ -157,8 +169,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to id
      */
-    public void setId(int newVal){
+    public void setId(int newVal)
+    {
         setId(new Integer(newVal));
+    }
+    /**
+     * Determines if the id has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkIdModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_ID_MASK);
+    }
+
+    /**
+     * Determines if the id has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkIdInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_ID_MASK);
     }
     /**
      * Getter method for {@link #groupId}.<br>
@@ -172,7 +206,7 @@ public class PersonBean
      *
      * @return the value of groupId
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getGroupId(){
         return groupId;
     }
@@ -185,8 +219,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to groupId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setGroupId(Integer newVal){    
+    public void setGroupId(Integer newVal)
+    {
+        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
+            (newVal == null && groupId == null && checkGroupIdInitialized())) {
+            return;
+        }
         groupId = newVal;
+
+        modified |= FL_PERSON_ID_GROUP_ID_MASK;
+        initialized |= FL_PERSON_ID_GROUP_ID_MASK;
     }
 
     /**
@@ -195,8 +237,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to groupId
      */
-    public void setGroupId(int newVal){
+    public void setGroupId(int newVal)
+    {
         setGroupId(new Integer(newVal));
+    }
+    /**
+     * Determines if the groupId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkGroupIdModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_GROUP_ID_MASK);
+    }
+
+    /**
+     * Determines if the groupId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkGroupIdInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_GROUP_ID_MASK);
     }
     /**
      * Getter method for {@link #name}.<br>
@@ -210,7 +274,7 @@ public class PersonBean
      *
      * @return the value of name
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public String getName(){
         return name;
     }
@@ -223,10 +287,39 @@ public class PersonBean
      * @param newVal the new value to be assigned to name
      */
     @com.facebook.swift.codec.ThriftField
-    public void setName(String newVal){    
+    public void setName(String newVal)
+    {
+        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
+            (newVal == null && name == null && checkNameInitialized())) {
+            return;
+        }
         name = newVal;
+
+        modified |= FL_PERSON_ID_NAME_MASK;
+        initialized |= FL_PERSON_ID_NAME_MASK;
     }
 
+    /**
+     * Determines if the name has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkNameModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_NAME_MASK);
+    }
+
+    /**
+     * Determines if the name has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkNameInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_NAME_MASK);
+    }
     /**
      * Getter method for {@link #sex}.<br>
      * Meta Data Information (in progress):
@@ -239,7 +332,7 @@ public class PersonBean
      *
      * @return the value of sex
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getSex(){
         return sex;
     }
@@ -252,8 +345,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to sex
      */
     @com.facebook.swift.codec.ThriftField
-    public void setSex(Integer newVal){    
+    public void setSex(Integer newVal)
+    {
+        if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
+            (newVal == null && sex == null && checkSexInitialized())) {
+            return;
+        }
         sex = newVal;
+
+        modified |= FL_PERSON_ID_SEX_MASK;
+        initialized |= FL_PERSON_ID_SEX_MASK;
     }
 
     /**
@@ -262,8 +363,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to sex
      */
-    public void setSex(int newVal){
+    public void setSex(int newVal)
+    {
         setSex(new Integer(newVal));
+    }
+    /**
+     * Determines if the sex has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkSexModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_SEX_MASK);
+    }
+
+    /**
+     * Determines if the sex has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkSexInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_SEX_MASK);
     }
     /**
      * Getter method for {@link #birthdate}.<br>
@@ -277,7 +400,7 @@ public class PersonBean
      *
      * @return the value of birthdate
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public java.util.Date getBirthdate(){
         return birthdate;
     }
@@ -290,8 +413,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to birthdate
      */
     @com.facebook.swift.codec.ThriftField
-    public void setBirthdate(java.util.Date newVal){    
+    public void setBirthdate(java.util.Date newVal)
+    {
+        if ((newVal != null && birthdate != null && (newVal.compareTo(birthdate) == 0)) ||
+            (newVal == null && birthdate == null && checkBirthdateInitialized())) {
+            return;
+        }
         birthdate = newVal;
+
+        modified |= FL_PERSON_ID_BIRTHDATE_MASK;
+        initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
     }
 
     /**
@@ -300,8 +431,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to birthdate
      */
-    public void setBirthdate(long newVal){
+    public void setBirthdate(long newVal)
+    {
         setBirthdate(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the birthdate has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkBirthdateModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_BIRTHDATE_MASK);
+    }
+
+    /**
+     * Determines if the birthdate has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkBirthdateInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK);
     }
     /**
      * Getter method for {@link #papersType}.<br>
@@ -315,7 +468,7 @@ public class PersonBean
      *
      * @return the value of papersType
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(9)
     public Integer getPapersType(){
         return papersType;
     }
@@ -328,8 +481,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to papersType
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPapersType(Integer newVal){    
+    public void setPapersType(Integer newVal)
+    {
+        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
+            (newVal == null && papersType == null && checkPapersTypeInitialized())) {
+            return;
+        }
         papersType = newVal;
+
+        modified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
+        initialized |= FL_PERSON_ID_PAPERS_TYPE_MASK;
     }
 
     /**
@@ -338,8 +499,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to papersType
      */
-    public void setPapersType(int newVal){
+    public void setPapersType(int newVal)
+    {
         setPapersType(new Integer(newVal));
+    }
+    /**
+     * Determines if the papersType has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPapersTypeModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_PAPERS_TYPE_MASK);
+    }
+
+    /**
+     * Determines if the papersType has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPapersTypeInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK);
     }
     /**
      * Getter method for {@link #papersNum}.<br>
@@ -353,7 +536,7 @@ public class PersonBean
      *
      * @return the value of papersNum
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(10)
     public String getPapersNum(){
         return papersNum;
     }
@@ -366,10 +549,39 @@ public class PersonBean
      * @param newVal the new value to be assigned to papersNum
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPapersNum(String newVal){    
+    public void setPapersNum(String newVal)
+    {
+        if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
+            (newVal == null && papersNum == null && checkPapersNumInitialized())) {
+            return;
+        }
         papersNum = newVal;
+
+        modified |= FL_PERSON_ID_PAPERS_NUM_MASK;
+        initialized |= FL_PERSON_ID_PAPERS_NUM_MASK;
     }
 
+    /**
+     * Determines if the papersNum has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPapersNumModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_PAPERS_NUM_MASK);
+    }
+
+    /**
+     * Determines if the papersNum has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPapersNumInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_PAPERS_NUM_MASK);
+    }
     /**
      * Getter method for {@link #photoId}.<br>
      * Meta Data Information (in progress):
@@ -383,7 +595,7 @@ public class PersonBean
      *
      * @return the value of photoId
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @com.facebook.swift.codec.ThriftField(11)
     public String getPhotoId(){
         return photoId;
     }
@@ -396,10 +608,39 @@ public class PersonBean
      * @param newVal the new value to be assigned to photoId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPhotoId(String newVal){    
+    public void setPhotoId(String newVal)
+    {
+        if ((newVal != null && photoId != null && (newVal.compareTo(photoId) == 0)) ||
+            (newVal == null && photoId == null && checkPhotoIdInitialized())) {
+            return;
+        }
         photoId = newVal;
+
+        modified |= FL_PERSON_ID_PHOTO_ID_MASK;
+        initialized |= FL_PERSON_ID_PHOTO_ID_MASK;
     }
 
+    /**
+     * Determines if the photoId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPhotoIdModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_PHOTO_ID_MASK);
+    }
+
+    /**
+     * Determines if the photoId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPhotoIdInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_PHOTO_ID_MASK);
+    }
     /**
      * Getter method for {@link #faceMd5}.<br>
      * Meta Data Information (in progress):
@@ -412,7 +653,7 @@ public class PersonBean
      *
      * @return the value of faceMd5
      */
-    @com.facebook.swift.codec.ThriftField(10)
+    @com.facebook.swift.codec.ThriftField(12)
     public String getFaceMd5(){
         return faceMd5;
     }
@@ -425,10 +666,39 @@ public class PersonBean
      * @param newVal the new value to be assigned to faceMd5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFaceMd5(String newVal){    
+    public void setFaceMd5(String newVal)
+    {
+        if ((newVal != null && faceMd5 != null && (newVal.compareTo(faceMd5) == 0)) ||
+            (newVal == null && faceMd5 == null && checkFaceMd5Initialized())) {
+            return;
+        }
         faceMd5 = newVal;
+
+        modified |= FL_PERSON_ID_FACE_MD5_MASK;
+        initialized |= FL_PERSON_ID_FACE_MD5_MASK;
     }
 
+    /**
+     * Determines if the faceMd5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFaceMd5Modified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_FACE_MD5_MASK);
+    }
+
+    /**
+     * Determines if the faceMd5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFaceMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_FACE_MD5_MASK);
+    }
     /**
      * Getter method for {@link #expiryDate}.<br>
      * Meta Data Information (in progress):
@@ -441,7 +711,7 @@ public class PersonBean
      *
      * @return the value of expiryDate
      */
-    @com.facebook.swift.codec.ThriftField(11)
+    @com.facebook.swift.codec.ThriftField(13)
     public java.util.Date getExpiryDate(){
         return expiryDate;
     }
@@ -454,8 +724,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to expiryDate
      */
     @com.facebook.swift.codec.ThriftField
-    public void setExpiryDate(java.util.Date newVal){    
+    public void setExpiryDate(java.util.Date newVal)
+    {
+        if ((newVal != null && expiryDate != null && (newVal.compareTo(expiryDate) == 0)) ||
+            (newVal == null && expiryDate == null && checkExpiryDateInitialized())) {
+            return;
+        }
         expiryDate = newVal;
+
+        modified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
+        initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
     }
 
     /**
@@ -464,8 +742,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to expiryDate
      */
-    public void setExpiryDate(long newVal){
+    public void setExpiryDate(long newVal)
+    {
         setExpiryDate(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the expiryDate has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkExpiryDateModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_EXPIRY_DATE_MASK);
+    }
+
+    /**
+     * Determines if the expiryDate has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkExpiryDateInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     /**
      * Getter method for {@link #createTime}.<br>
@@ -478,7 +778,7 @@ public class PersonBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(12)
+    @com.facebook.swift.codec.ThriftField(14)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -491,8 +791,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCreateTime(java.util.Date newVal){    
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+            return;
+        }
         createTime = newVal;
+
+        modified |= FL_PERSON_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -501,8 +809,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to createTime
      */
-    public void setCreateTime(long newVal){
+    public void setCreateTime(long newVal)
+    {
         setCreateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCreateTimeModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_CREATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the createTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCreateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_CREATE_TIME_MASK);
     }
     /**
      * Getter method for {@link #updateTime}.<br>
@@ -515,7 +845,7 @@ public class PersonBean
      *
      * @return the value of updateTime
      */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(15)
     public java.util.Date getUpdateTime(){
         return updateTime;
     }
@@ -528,8 +858,16 @@ public class PersonBean
      * @param newVal the new value to be assigned to updateTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setUpdateTime(java.util.Date newVal){    
+    public void setUpdateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
+            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
+            return;
+        }
         updateTime = newVal;
+
+        modified |= FL_PERSON_ID_UPDATE_TIME_MASK;
+        initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
     }
 
     /**
@@ -538,8 +876,30 @@ public class PersonBean
      *
      * @param newVal the new value to be assigned to updateTime
      */
-    public void setUpdateTime(long newVal){
+    public void setUpdateTime(long newVal)
+    {
         setUpdateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the updateTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkUpdateTimeModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_UPDATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the updateTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkUpdateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_UPDATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -550,7 +910,7 @@ public class PersonBean
      */
     private ImageBean referencedByPhotoId;
     /** Getter method for {@link #referencedByPhotoId}. */
-    @com.facebook.swift.codec.ThriftField(14)
+    @com.facebook.swift.codec.ThriftField(16)
     public ImageBean getReferencedByPhotoId() {
         return this.referencedByPhotoId;
     }
@@ -560,6 +920,127 @@ public class PersonBean
         this.referencedByPhotoId = reference;
     }
 
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_PERSON_ID_ID:
+            return checkIdModified();
+        case FL_PERSON_ID_GROUP_ID:
+            return checkGroupIdModified();
+        case FL_PERSON_ID_NAME:
+            return checkNameModified();
+        case FL_PERSON_ID_SEX:
+            return checkSexModified();
+        case FL_PERSON_ID_BIRTHDATE:
+            return checkBirthdateModified();
+        case FL_PERSON_ID_PAPERS_TYPE:
+            return checkPapersTypeModified();
+        case FL_PERSON_ID_PAPERS_NUM:
+            return checkPapersNumModified();
+        case FL_PERSON_ID_PHOTO_ID:
+            return checkPhotoIdModified();
+        case FL_PERSON_ID_FACE_MD5:
+            return checkFaceMd5Modified();
+        case FL_PERSON_ID_EXPIRY_DATE:
+            return checkExpiryDateModified();
+        case FL_PERSON_ID_CREATE_TIME:
+            return checkCreateTimeModified();
+        case FL_PERSON_ID_UPDATE_TIME:
+            return checkUpdateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_PERSON_ID_ID:
+            return checkIdInitialized();
+        case FL_PERSON_ID_GROUP_ID:
+            return checkGroupIdInitialized();
+        case FL_PERSON_ID_NAME:
+            return checkNameInitialized();
+        case FL_PERSON_ID_SEX:
+            return checkSexInitialized();
+        case FL_PERSON_ID_BIRTHDATE:
+            return checkBirthdateInitialized();
+        case FL_PERSON_ID_PAPERS_TYPE:
+            return checkPapersTypeInitialized();
+        case FL_PERSON_ID_PAPERS_NUM:
+            return checkPapersNumInitialized();
+        case FL_PERSON_ID_PHOTO_ID:
+            return checkPhotoIdInitialized();
+        case FL_PERSON_ID_FACE_MD5:
+            return checkFaceMd5Initialized();
+        case FL_PERSON_ID_EXPIRY_DATE:
+            return checkExpiryDateInitialized();
+        case FL_PERSON_ID_CREATE_TIME:
+            return checkCreateTimeInitialized();
+        case FL_PERSON_ID_UPDATE_TIME:
+            return checkUpdateTimeInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -628,66 +1109,6 @@ public class PersonBean
             .append(getId(), object.getId())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(PersonBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setGroupId(bean.getGroupId());
-            setName(bean.getName());
-            setSex(bean.getSex());
-            setBirthdate(bean.getBirthdate());
-            setPapersType(bean.getPapersType());
-            setPapersNum(bean.getPapersNum());
-            setPhotoId(bean.getPhotoId());
-            setFaceMd5(bean.getFaceMd5());
-            setExpiryDate(bean.getExpiryDate());
-            setCreateTime(bean.getCreateTime());
-            setUpdateTime(bean.getUpdateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(PersonBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getGroupId()!=null)
-            setGroupId(bean.getGroupId());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getSex()!=null)
-            setSex(bean.getSex());
-        if(bean.getBirthdate()!=null)
-            setBirthdate(bean.getBirthdate());
-        if(bean.getPapersType()!=null)
-            setPapersType(bean.getPapersType());
-        if(bean.getPapersNum()!=null)
-            setPapersNum(bean.getPapersNum());
-        if(bean.getPhotoId()!=null)
-            setPhotoId(bean.getPhotoId());
-        if(bean.getFaceMd5()!=null)
-            setFaceMd5(bean.getFaceMd5());
-        if(bean.getExpiryDate()!=null)
-            setExpiryDate(bean.getExpiryDate());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getUpdateTime()!=null)
-            setUpdateTime(bean.getUpdateTime());
-    }
 
     /**
     * set all field to null
@@ -696,7 +1117,6 @@ public class PersonBean
     */
     public PersonBean clean()
     {
-        isNew(true);
         setId(null);
         setGroupId(null);
         setName(null);
@@ -709,6 +1129,140 @@ public class PersonBean
         setExpiryDate(null);
         setCreateTime(null);
         setUpdateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(PersonBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 12; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(PersonBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_PERSON_ID_ID: 
+            return (T)getId();        
+        case FL_PERSON_ID_GROUP_ID: 
+            return (T)getGroupId();        
+        case FL_PERSON_ID_NAME: 
+            return (T)getName();        
+        case FL_PERSON_ID_SEX: 
+            return (T)getSex();        
+        case FL_PERSON_ID_BIRTHDATE: 
+            return (T)getBirthdate();        
+        case FL_PERSON_ID_PAPERS_TYPE: 
+            return (T)getPapersType();        
+        case FL_PERSON_ID_PAPERS_NUM: 
+            return (T)getPapersNum();        
+        case FL_PERSON_ID_PHOTO_ID: 
+            return (T)getPhotoId();        
+        case FL_PERSON_ID_FACE_MD5: 
+            return (T)getFaceMd5();        
+        case FL_PERSON_ID_EXPIRY_DATE: 
+            return (T)getExpiryDate();        
+        case FL_PERSON_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        case FL_PERSON_ID_UPDATE_TIME: 
+            return (T)getUpdateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_PERSON_ID_ID:        
+            setId((Integer)value);
+        case FL_PERSON_ID_GROUP_ID:        
+            setGroupId((Integer)value);
+        case FL_PERSON_ID_NAME:        
+            setName((String)value);
+        case FL_PERSON_ID_SEX:        
+            setSex((Integer)value);
+        case FL_PERSON_ID_BIRTHDATE:        
+            setBirthdate((java.util.Date)value);
+        case FL_PERSON_ID_PAPERS_TYPE:        
+            setPapersType((Integer)value);
+        case FL_PERSON_ID_PAPERS_NUM:        
+            setPapersNum((String)value);
+        case FL_PERSON_ID_PHOTO_ID:        
+            setPhotoId((String)value);
+        case FL_PERSON_ID_FACE_MD5:        
+            setFaceMd5((String)value);
+        case FL_PERSON_ID_EXPIRY_DATE:        
+            setExpiryDate((java.util.Date)value);
+        case FL_PERSON_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        case FL_PERSON_ID_UPDATE_TIME:        
+            setUpdateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

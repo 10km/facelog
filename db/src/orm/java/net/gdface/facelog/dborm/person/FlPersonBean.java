@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.person;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
@@ -19,12 +19,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: 人员基本描述信息 </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlPersonBean
-    implements Serializable,FullBean<FlPersonBean>,Comparable<FlPersonBean>,Constant
+    implements Serializable,BaseBean<FlPersonBean>,Comparable<FlPersonBean>,Constant
 {
-	private static final long serialVersionUID = -4314407042657759584L;
+    private static final long serialVersionUID = -4314407042657759584L;
+    
     /** comments:用户识别码 */
     private Integer id;
 
@@ -122,15 +123,7 @@ public class FlPersonBean
         super();
     }
     /**
-     * create a FlPersonBean from a instance
-     */
-    FlPersonBean(FlPersonBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for id.
-     * <br>
+     * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -148,8 +141,7 @@ public class FlPersonBean
         return id;
     }
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -159,7 +151,7 @@ public class FlPersonBean
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && isIdInitialized())) {
+            (newVal == null && id == null && checkIdInitialized())) {
             return;
         }
         id = newVal;
@@ -169,8 +161,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for id.
-     * <br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to id
@@ -179,31 +170,29 @@ public class FlPersonBean
     {
         setId(new Integer(newVal));
     }
-
     /**
      * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isIdModified()
+    public boolean checkIdModified()
     {
-        return 0L != (modified & FL_PERSON_ID_ID_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_ID_MASK);
     }
 
     /**
-     * Determines if the id has been initialized.
-     * <br>
+     * Determines if the id has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isIdInitialized()
+    public boolean checkIdInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_ID_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_ID_MASK);
     }
     /**
-     * Getter method for groupId.
-     * <br>
+     * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.group_id</li>
@@ -218,8 +207,7 @@ public class FlPersonBean
         return groupId;
     }
     /**
-     * Setter method for groupId.
-     * <br>
+     * Setter method for {@link #groupId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -229,7 +217,7 @@ public class FlPersonBean
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && isGroupIdInitialized())) {
+            (newVal == null && groupId == null && checkGroupIdInitialized())) {
             return;
         }
         groupId = newVal;
@@ -239,8 +227,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for groupId.
-     * <br>
+     * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to groupId
@@ -249,31 +236,29 @@ public class FlPersonBean
     {
         setGroupId(new Integer(newVal));
     }
-
     /**
      * Determines if the groupId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isGroupIdModified()
+    public boolean checkGroupIdModified()
     {
-        return 0L != (modified & FL_PERSON_ID_GROUP_ID_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_GROUP_ID_MASK);
     }
 
     /**
-     * Determines if the groupId has been initialized.
-     * <br>
+     * Determines if the groupId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isGroupIdInitialized()
+    public boolean checkGroupIdInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_GROUP_ID_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_GROUP_ID_MASK);
     }
     /**
-     * Getter method for name.
-     * <br>
+     * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.name</li>
@@ -288,8 +273,7 @@ public class FlPersonBean
         return name;
     }
     /**
-     * Setter method for name.
-     * <br>
+     * Setter method for {@link #name}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -299,7 +283,7 @@ public class FlPersonBean
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && isNameInitialized())) {
+            (newVal == null && name == null && checkNameInitialized())) {
             return;
         }
         name = newVal;
@@ -313,25 +297,24 @@ public class FlPersonBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isNameModified()
+    public boolean checkNameModified()
     {
-        return 0L != (modified & FL_PERSON_ID_NAME_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_NAME_MASK);
     }
 
     /**
-     * Determines if the name has been initialized.
-     * <br>
+     * Determines if the name has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isNameInitialized()
+    public boolean checkNameInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_NAME_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_NAME_MASK);
     }
     /**
-     * Getter method for sex.
-     * <br>
+     * Getter method for {@link #sex}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.sex</li>
@@ -346,8 +329,7 @@ public class FlPersonBean
         return sex;
     }
     /**
-     * Setter method for sex.
-     * <br>
+     * Setter method for {@link #sex}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -357,7 +339,7 @@ public class FlPersonBean
     public void setSex(Integer newVal)
     {
         if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
-            (newVal == null && sex == null && isSexInitialized())) {
+            (newVal == null && sex == null && checkSexInitialized())) {
             return;
         }
         sex = newVal;
@@ -367,8 +349,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for sex.
-     * <br>
+     * Setter method for {@link #sex}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to sex
@@ -377,31 +358,29 @@ public class FlPersonBean
     {
         setSex(new Integer(newVal));
     }
-
     /**
      * Determines if the sex has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isSexModified()
+    public boolean checkSexModified()
     {
-        return 0L != (modified & FL_PERSON_ID_SEX_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_SEX_MASK);
     }
 
     /**
-     * Determines if the sex has been initialized.
-     * <br>
+     * Determines if the sex has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isSexInitialized()
+    public boolean checkSexInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_SEX_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_SEX_MASK);
     }
     /**
-     * Getter method for birthdate.
-     * <br>
+     * Getter method for {@link #birthdate}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.birthdate</li>
@@ -416,8 +395,7 @@ public class FlPersonBean
         return birthdate;
     }
     /**
-     * Setter method for birthdate.
-     * <br>
+     * Setter method for {@link #birthdate}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -427,7 +405,7 @@ public class FlPersonBean
     public void setBirthdate(java.util.Date newVal)
     {
         if ((newVal != null && birthdate != null && (newVal.compareTo(birthdate) == 0)) ||
-            (newVal == null && birthdate == null && isBirthdateInitialized())) {
+            (newVal == null && birthdate == null && checkBirthdateInitialized())) {
             return;
         }
         birthdate = newVal;
@@ -437,8 +415,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for birthdate.
-     * <br>
+     * Setter method for {@link #birthdate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to birthdate
@@ -447,31 +424,29 @@ public class FlPersonBean
     {
         setBirthdate(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the birthdate has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isBirthdateModified()
+    public boolean checkBirthdateModified()
     {
-        return 0L != (modified & FL_PERSON_ID_BIRTHDATE_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_BIRTHDATE_MASK);
     }
 
     /**
-     * Determines if the birthdate has been initialized.
-     * <br>
+     * Determines if the birthdate has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isBirthdateInitialized()
+    public boolean checkBirthdateInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_BIRTHDATE_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_BIRTHDATE_MASK);
     }
     /**
-     * Getter method for papersType.
-     * <br>
+     * Getter method for {@link #papersType}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.papers_type</li>
@@ -486,8 +461,7 @@ public class FlPersonBean
         return papersType;
     }
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -497,7 +471,7 @@ public class FlPersonBean
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && isPapersTypeInitialized())) {
+            (newVal == null && papersType == null && checkPapersTypeInitialized())) {
             return;
         }
         papersType = newVal;
@@ -507,8 +481,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for papersType.
-     * <br>
+     * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to papersType
@@ -517,31 +490,29 @@ public class FlPersonBean
     {
         setPapersType(new Integer(newVal));
     }
-
     /**
      * Determines if the papersType has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPapersTypeModified()
+    public boolean checkPapersTypeModified()
     {
-        return 0L != (modified & FL_PERSON_ID_PAPERS_TYPE_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_PAPERS_TYPE_MASK);
     }
 
     /**
-     * Determines if the papersType has been initialized.
-     * <br>
+     * Determines if the papersType has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPapersTypeInitialized()
+    public boolean checkPapersTypeInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_PAPERS_TYPE_MASK);
     }
     /**
-     * Getter method for papersNum.
-     * <br>
+     * Getter method for {@link #papersNum}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.papers_num</li>
@@ -556,8 +527,7 @@ public class FlPersonBean
         return papersNum;
     }
     /**
-     * Setter method for papersNum.
-     * <br>
+     * Setter method for {@link #papersNum}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -567,7 +537,7 @@ public class FlPersonBean
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && isPapersNumInitialized())) {
+            (newVal == null && papersNum == null && checkPapersNumInitialized())) {
             return;
         }
         papersNum = newVal;
@@ -581,25 +551,24 @@ public class FlPersonBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPapersNumModified()
+    public boolean checkPapersNumModified()
     {
-        return 0L != (modified & FL_PERSON_ID_PAPERS_NUM_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_PAPERS_NUM_MASK);
     }
 
     /**
-     * Determines if the papersNum has been initialized.
-     * <br>
+     * Determines if the papersNum has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPapersNumInitialized()
+    public boolean checkPapersNumInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_PAPERS_NUM_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_PAPERS_NUM_MASK);
     }
     /**
-     * Getter method for photoId.
-     * <br>
+     * Getter method for {@link #photoId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.photo_id</li>
@@ -615,8 +584,7 @@ public class FlPersonBean
         return photoId;
     }
     /**
-     * Setter method for photoId.
-     * <br>
+     * Setter method for {@link #photoId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -626,7 +594,7 @@ public class FlPersonBean
     public void setPhotoId(String newVal)
     {
         if ((newVal != null && photoId != null && (newVal.compareTo(photoId) == 0)) ||
-            (newVal == null && photoId == null && isPhotoIdInitialized())) {
+            (newVal == null && photoId == null && checkPhotoIdInitialized())) {
             return;
         }
         photoId = newVal;
@@ -640,25 +608,24 @@ public class FlPersonBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPhotoIdModified()
+    public boolean checkPhotoIdModified()
     {
-        return 0L != (modified & FL_PERSON_ID_PHOTO_ID_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_PHOTO_ID_MASK);
     }
 
     /**
-     * Determines if the photoId has been initialized.
-     * <br>
+     * Determines if the photoId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPhotoIdInitialized()
+    public boolean checkPhotoIdInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_PHOTO_ID_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_PHOTO_ID_MASK);
     }
     /**
-     * Getter method for faceMd5.
-     * <br>
+     * Getter method for {@link #faceMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.face_md5</li>
@@ -673,8 +640,7 @@ public class FlPersonBean
         return faceMd5;
     }
     /**
-     * Setter method for faceMd5.
-     * <br>
+     * Setter method for {@link #faceMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -684,7 +650,7 @@ public class FlPersonBean
     public void setFaceMd5(String newVal)
     {
         if ((newVal != null && faceMd5 != null && (newVal.compareTo(faceMd5) == 0)) ||
-            (newVal == null && faceMd5 == null && isFaceMd5Initialized())) {
+            (newVal == null && faceMd5 == null && checkFaceMd5Initialized())) {
             return;
         }
         faceMd5 = newVal;
@@ -698,25 +664,24 @@ public class FlPersonBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFaceMd5Modified()
+    public boolean checkFaceMd5Modified()
     {
-        return 0L != (modified & FL_PERSON_ID_FACE_MD5_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_FACE_MD5_MASK);
     }
 
     /**
-     * Determines if the faceMd5 has been initialized.
-     * <br>
+     * Determines if the faceMd5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFaceMd5Initialized()
+    public boolean checkFaceMd5Initialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_FACE_MD5_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_FACE_MD5_MASK);
     }
     /**
-     * Getter method for expiryDate.
-     * <br>
+     * Getter method for {@link #expiryDate}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.expiry_date</li>
@@ -731,8 +696,7 @@ public class FlPersonBean
         return expiryDate;
     }
     /**
-     * Setter method for expiryDate.
-     * <br>
+     * Setter method for {@link #expiryDate}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -742,7 +706,7 @@ public class FlPersonBean
     public void setExpiryDate(java.util.Date newVal)
     {
         if ((newVal != null && expiryDate != null && (newVal.compareTo(expiryDate) == 0)) ||
-            (newVal == null && expiryDate == null && isExpiryDateInitialized())) {
+            (newVal == null && expiryDate == null && checkExpiryDateInitialized())) {
             return;
         }
         expiryDate = newVal;
@@ -752,8 +716,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for expiryDate.
-     * <br>
+     * Setter method for {@link #expiryDate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to expiryDate
@@ -762,31 +725,29 @@ public class FlPersonBean
     {
         setExpiryDate(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the expiryDate has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isExpiryDateModified()
+    public boolean checkExpiryDateModified()
     {
-        return 0L != (modified & FL_PERSON_ID_EXPIRY_DATE_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
 
     /**
-     * Determines if the expiryDate has been initialized.
-     * <br>
+     * Determines if the expiryDate has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isExpiryDateInitialized()
+    public boolean checkExpiryDateInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.create_time</li>
@@ -800,8 +761,7 @@ public class FlPersonBean
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -811,7 +771,7 @@ public class FlPersonBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && isCreateTimeInitialized())) {
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
             return;
         }
         createTime = newVal;
@@ -821,8 +781,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -831,31 +790,29 @@ public class FlPersonBean
     {
         setCreateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isCreateTimeModified()
+    public boolean checkCreateTimeModified()
     {
-        return 0L != (modified & FL_PERSON_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_CREATE_TIME_MASK);
     }
 
     /**
-     * Determines if the createTime has been initialized.
-     * <br>
+     * Determines if the createTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isCreateTimeInitialized()
+    public boolean checkCreateTimeInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_CREATE_TIME_MASK);
     }
     /**
-     * Getter method for updateTime.
-     * <br>
+     * Getter method for {@link #updateTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.update_time</li>
@@ -869,8 +826,7 @@ public class FlPersonBean
         return updateTime;
     }
     /**
-     * Setter method for updateTime.
-     * <br>
+     * Setter method for {@link #updateTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -880,7 +836,7 @@ public class FlPersonBean
     public void setUpdateTime(java.util.Date newVal)
     {
         if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && isUpdateTimeInitialized())) {
+            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
             return;
         }
         updateTime = newVal;
@@ -890,8 +846,7 @@ public class FlPersonBean
     }
 
     /**
-     * Setter method for updateTime.
-     * <br>
+     * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to updateTime
@@ -900,27 +855,26 @@ public class FlPersonBean
     {
         setUpdateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the updateTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isUpdateTimeModified()
+    public boolean checkUpdateTimeModified()
     {
-        return 0L != (modified & FL_PERSON_ID_UPDATE_TIME_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_UPDATE_TIME_MASK);
     }
 
     /**
-     * Determines if the updateTime has been initialized.
-     * <br>
+     * Determines if the updateTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isUpdateTimeInitialized()
+    public boolean checkUpdateTimeInitialized()
     {
-        return 0L != (initialized & FL_PERSON_ID_UPDATE_TIME_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_UPDATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -960,29 +914,29 @@ public class FlPersonBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_PERSON_ID_ID:
-            return isIdModified();
+            return checkIdModified();
         case FL_PERSON_ID_GROUP_ID:
-            return isGroupIdModified();
+            return checkGroupIdModified();
         case FL_PERSON_ID_NAME:
-            return isNameModified();
+            return checkNameModified();
         case FL_PERSON_ID_SEX:
-            return isSexModified();
+            return checkSexModified();
         case FL_PERSON_ID_BIRTHDATE:
-            return isBirthdateModified();
+            return checkBirthdateModified();
         case FL_PERSON_ID_PAPERS_TYPE:
-            return isPapersTypeModified();
+            return checkPapersTypeModified();
         case FL_PERSON_ID_PAPERS_NUM:
-            return isPapersNumModified();
+            return checkPapersNumModified();
         case FL_PERSON_ID_PHOTO_ID:
-            return isPhotoIdModified();
+            return checkPhotoIdModified();
         case FL_PERSON_ID_FACE_MD5:
-            return isFaceMd5Modified();
+            return checkFaceMd5Modified();
         case FL_PERSON_ID_EXPIRY_DATE:
-            return isExpiryDateModified();
+            return checkExpiryDateModified();
         case FL_PERSON_ID_CREATE_TIME:
-            return isCreateTimeModified();
+            return checkCreateTimeModified();
         case FL_PERSON_ID_UPDATE_TIME:
-            return isUpdateTimeModified();
+            return checkUpdateTimeModified();
         }
         return false;
     }
@@ -997,43 +951,41 @@ public class FlPersonBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_PERSON_ID_ID:
-            return isIdInitialized();
+            return checkIdInitialized();
         case FL_PERSON_ID_GROUP_ID:
-            return isGroupIdInitialized();
+            return checkGroupIdInitialized();
         case FL_PERSON_ID_NAME:
-            return isNameInitialized();
+            return checkNameInitialized();
         case FL_PERSON_ID_SEX:
-            return isSexInitialized();
+            return checkSexInitialized();
         case FL_PERSON_ID_BIRTHDATE:
-            return isBirthdateInitialized();
+            return checkBirthdateInitialized();
         case FL_PERSON_ID_PAPERS_TYPE:
-            return isPapersTypeInitialized();
+            return checkPapersTypeInitialized();
         case FL_PERSON_ID_PAPERS_NUM:
-            return isPapersNumInitialized();
+            return checkPapersNumInitialized();
         case FL_PERSON_ID_PHOTO_ID:
-            return isPhotoIdInitialized();
+            return checkPhotoIdInitialized();
         case FL_PERSON_ID_FACE_MD5:
-            return isFaceMd5Initialized();
+            return checkFaceMd5Initialized();
         case FL_PERSON_ID_EXPIRY_DATE:
-            return isExpiryDateInitialized();
+            return checkExpiryDateInitialized();
         case FL_PERSON_ID_CREATE_TIME:
-            return isCreateTimeInitialized();
+            return checkCreateTimeInitialized();
         case FL_PERSON_ID_UPDATE_TIME:
-            return isUpdateTimeInitialized();
+            return checkUpdateTimeInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -1045,10 +997,7 @@ public class FlPersonBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -1058,7 +1007,13 @@ public class FlPersonBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -1127,66 +1082,6 @@ public class FlPersonBean
             .append(getId(), object.getId())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlPersonBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setGroupId(bean.getGroupId());
-            setName(bean.getName());
-            setSex(bean.getSex());
-            setBirthdate(bean.getBirthdate());
-            setPapersType(bean.getPapersType());
-            setPapersNum(bean.getPapersNum());
-            setPhotoId(bean.getPhotoId());
-            setFaceMd5(bean.getFaceMd5());
-            setExpiryDate(bean.getExpiryDate());
-            setCreateTime(bean.getCreateTime());
-            setUpdateTime(bean.getUpdateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlPersonBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getGroupId()!=null)
-            setGroupId(bean.getGroupId());
-        if(bean.getName()!=null)
-            setName(bean.getName());
-        if(bean.getSex()!=null)
-            setSex(bean.getSex());
-        if(bean.getBirthdate()!=null)
-            setBirthdate(bean.getBirthdate());
-        if(bean.getPapersType()!=null)
-            setPapersType(bean.getPapersType());
-        if(bean.getPapersNum()!=null)
-            setPapersNum(bean.getPapersNum());
-        if(bean.getPhotoId()!=null)
-            setPhotoId(bean.getPhotoId());
-        if(bean.getFaceMd5()!=null)
-            setFaceMd5(bean.getFaceMd5());
-        if(bean.getExpiryDate()!=null)
-            setExpiryDate(bean.getExpiryDate());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-        if(bean.getUpdateTime()!=null)
-            setUpdateTime(bean.getUpdateTime());
-    }
 
     /**
     * set all field to null
@@ -1195,7 +1090,6 @@ public class FlPersonBean
     */
     public FlPersonBean clean()
     {
-        isNew(true);
         setId(null);
         setGroupId(null);
         setName(null);
@@ -1208,6 +1102,9 @@ public class FlPersonBean
         setExpiryDate(null);
         setCreateTime(null);
         setUpdateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -1220,10 +1117,14 @@ public class FlPersonBean
     public void copy(FlPersonBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 12; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -1236,11 +1137,15 @@ public class FlPersonBean
     public void copy(FlPersonBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -1316,10 +1221,7 @@ public class FlPersonBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_PERSON_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -1327,9 +1229,13 @@ public class FlPersonBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_PERSON_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

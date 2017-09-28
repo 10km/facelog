@@ -274,7 +274,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -292,7 +292,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (List<T>)this.getFlLogBeansByVerifyFaceAsList(bean);
@@ -313,7 +313,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (T[])setFlLogBeansByVerifyFace(bean,(FlLogBean[])importedBeans);
@@ -334,7 +334,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_VERIFY_FACE:
             return (C)setFlLogBeansByVerifyFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
@@ -648,7 +648,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.getReferencedByImgMd5(bean);
@@ -670,7 +670,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_FACE_FK_IMG_MD5:
             return  (T)this.setReferencedByImgMd5(bean, (FlImageBean)beanToSet);
@@ -836,7 +836,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_face (");
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -844,7 +844,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -852,7 +852,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -860,7 +860,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFaceLeftModified()) {
+            if (bean.checkFaceLeftModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -868,7 +868,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFaceTopModified()) {
+            if (bean.checkFaceTopModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -876,7 +876,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFaceWidthModified()) {
+            if (bean.checkFaceWidthModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -884,7 +884,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFaceHeightModified()) {
+            if (bean.checkFaceHeightModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -892,7 +892,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isEyeLeftxModified()) {
+            if (bean.checkEyeLeftxModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -900,7 +900,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isEyeLeftyModified()) {
+            if (bean.checkEyeLeftyModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -908,7 +908,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isEyeRightxModified()) {
+            if (bean.checkEyeRightxModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -916,7 +916,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isEyeRightyModified()) {
+            if (bean.checkEyeRightyModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -924,7 +924,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isMouthXModified()) {
+            if (bean.checkMouthXModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -932,7 +932,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isMouthYModified()) {
+            if (bean.checkMouthYModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -940,7 +940,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isNoseXModified()) {
+            if (bean.checkNoseXModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -948,7 +948,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isNoseYModified()) {
+            if (bean.checkNoseYModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -956,7 +956,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isAngleYawModified()) {
+            if (bean.checkAngleYawModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -964,7 +964,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isAnglePitchModified()) {
+            if (bean.checkAnglePitchModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -972,7 +972,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isAngleRollModified()) {
+            if (bean.checkAngleRollModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -980,7 +980,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isExtInfoModified()) {
+            if (bean.checkExtInfoModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -988,7 +988,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -996,7 +996,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -1063,7 +1063,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             sql = new StringBuilder("UPDATE fl_face SET ");
             boolean useComma=false;
 
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1072,7 +1072,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("md5=?");
             }
 
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1081,7 +1081,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("person_id=?");
             }
 
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1090,7 +1090,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("img_md5=?");
             }
 
-            if (bean.isFaceLeftModified()) {
+            if (bean.checkFaceLeftModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1099,7 +1099,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("face_left=?");
             }
 
-            if (bean.isFaceTopModified()) {
+            if (bean.checkFaceTopModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1108,7 +1108,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("face_top=?");
             }
 
-            if (bean.isFaceWidthModified()) {
+            if (bean.checkFaceWidthModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1117,7 +1117,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("face_width=?");
             }
 
-            if (bean.isFaceHeightModified()) {
+            if (bean.checkFaceHeightModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1126,7 +1126,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("face_height=?");
             }
 
-            if (bean.isEyeLeftxModified()) {
+            if (bean.checkEyeLeftxModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1135,7 +1135,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("eye_leftx=?");
             }
 
-            if (bean.isEyeLeftyModified()) {
+            if (bean.checkEyeLeftyModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1144,7 +1144,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("eye_lefty=?");
             }
 
-            if (bean.isEyeRightxModified()) {
+            if (bean.checkEyeRightxModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1153,7 +1153,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("eye_rightx=?");
             }
 
-            if (bean.isEyeRightyModified()) {
+            if (bean.checkEyeRightyModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1162,7 +1162,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("eye_righty=?");
             }
 
-            if (bean.isMouthXModified()) {
+            if (bean.checkMouthXModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1171,7 +1171,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("mouth_x=?");
             }
 
-            if (bean.isMouthYModified()) {
+            if (bean.checkMouthYModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1180,7 +1180,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("mouth_y=?");
             }
 
-            if (bean.isNoseXModified()) {
+            if (bean.checkNoseXModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1189,7 +1189,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("nose_x=?");
             }
 
-            if (bean.isNoseYModified()) {
+            if (bean.checkNoseYModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1198,7 +1198,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("nose_y=?");
             }
 
-            if (bean.isAngleYawModified()) {
+            if (bean.checkAngleYawModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1207,7 +1207,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("angle_yaw=?");
             }
 
-            if (bean.isAnglePitchModified()) {
+            if (bean.checkAnglePitchModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1216,7 +1216,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("angle_pitch=?");
             }
 
-            if (bean.isAngleRollModified()) {
+            if (bean.checkAngleRollModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1225,7 +1225,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("angle_roll=?");
             }
 
-            if (bean.isExtInfoModified()) {
+            if (bean.checkExtInfoModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1234,7 +1234,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("ext_info=?");
             }
 
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1243,7 +1243,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("feature=?");
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1333,7 +1333,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public int deleteUsingTemplate(FlFaceBean bean) throws DAOException
     {
-        if(bean.isMd5Initialized() && null != bean.getMd5()){
+        if(bean.checkMd5Initialized() && null != bean.getMd5()){
             return this.deleteByPrimaryKey(bean.getMd5());
         }
         if( !this.listenerContainer.isEmpty()){
@@ -1671,7 +1671,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
@@ -1679,7 +1679,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 _dirtyCount ++;
                 if (bean.getPersonId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
@@ -1687,7 +1687,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
                 }
             }
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getImgMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
@@ -1695,7 +1695,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isFaceLeftModified()) {
+            if (bean.checkFaceLeftModified()) {
                 _dirtyCount ++;
                 if (bean.getFaceLeft() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left IS NULL");
@@ -1703,7 +1703,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_left = ?");
                 }
             }
-            if (bean.isFaceTopModified()) {
+            if (bean.checkFaceTopModified()) {
                 _dirtyCount ++;
                 if (bean.getFaceTop() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top IS NULL");
@@ -1711,7 +1711,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_top = ?");
                 }
             }
-            if (bean.isFaceWidthModified()) {
+            if (bean.checkFaceWidthModified()) {
                 _dirtyCount ++;
                 if (bean.getFaceWidth() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width IS NULL");
@@ -1719,7 +1719,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_width = ?");
                 }
             }
-            if (bean.isFaceHeightModified()) {
+            if (bean.checkFaceHeightModified()) {
                 _dirtyCount ++;
                 if (bean.getFaceHeight() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height IS NULL");
@@ -1727,7 +1727,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_height = ?");
                 }
             }
-            if (bean.isEyeLeftxModified()) {
+            if (bean.checkEyeLeftxModified()) {
                 _dirtyCount ++;
                 if (bean.getEyeLeftx() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx IS NULL");
@@ -1735,7 +1735,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_leftx = ?");
                 }
             }
-            if (bean.isEyeLeftyModified()) {
+            if (bean.checkEyeLeftyModified()) {
                 _dirtyCount ++;
                 if (bean.getEyeLefty() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty IS NULL");
@@ -1743,7 +1743,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_lefty = ?");
                 }
             }
-            if (bean.isEyeRightxModified()) {
+            if (bean.checkEyeRightxModified()) {
                 _dirtyCount ++;
                 if (bean.getEyeRightx() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx IS NULL");
@@ -1751,7 +1751,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_rightx = ?");
                 }
             }
-            if (bean.isEyeRightyModified()) {
+            if (bean.checkEyeRightyModified()) {
                 _dirtyCount ++;
                 if (bean.getEyeRighty() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty IS NULL");
@@ -1759,7 +1759,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("eye_righty = ?");
                 }
             }
-            if (bean.isMouthXModified()) {
+            if (bean.checkMouthXModified()) {
                 _dirtyCount ++;
                 if (bean.getMouthX() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x IS NULL");
@@ -1767,7 +1767,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_x = ?");
                 }
             }
-            if (bean.isMouthYModified()) {
+            if (bean.checkMouthYModified()) {
                 _dirtyCount ++;
                 if (bean.getMouthY() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y IS NULL");
@@ -1775,7 +1775,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mouth_y = ?");
                 }
             }
-            if (bean.isNoseXModified()) {
+            if (bean.checkNoseXModified()) {
                 _dirtyCount ++;
                 if (bean.getNoseX() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x IS NULL");
@@ -1783,7 +1783,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_x = ?");
                 }
             }
-            if (bean.isNoseYModified()) {
+            if (bean.checkNoseYModified()) {
                 _dirtyCount ++;
                 if (bean.getNoseY() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y IS NULL");
@@ -1791,7 +1791,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("nose_y = ?");
                 }
             }
-            if (bean.isAngleYawModified()) {
+            if (bean.checkAngleYawModified()) {
                 _dirtyCount ++;
                 if (bean.getAngleYaw() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw IS NULL");
@@ -1799,7 +1799,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_yaw = ?");
                 }
             }
-            if (bean.isAnglePitchModified()) {
+            if (bean.checkAnglePitchModified()) {
                 _dirtyCount ++;
                 if (bean.getAnglePitch() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch IS NULL");
@@ -1807,7 +1807,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_pitch = ?");
                 }
             }
-            if (bean.isAngleRollModified()) {
+            if (bean.checkAngleRollModified()) {
                 _dirtyCount ++;
                 if (bean.getAngleRoll() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll IS NULL");
@@ -1815,7 +1815,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("angle_roll = ?");
                 }
             }
-            if (bean.isExtInfoModified()) {
+            if (bean.checkExtInfoModified()) {
                 _dirtyCount ++;
                 if (bean.getExtInfo() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info IS NULL");
@@ -1823,7 +1823,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info = ?");
                 }
             }
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 _dirtyCount ++;
                 if (bean.getFeature() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature IS NULL");
@@ -1831,7 +1831,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature = ?");
                 }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
@@ -1863,7 +1863,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isMd5Modified()) {
+            if (bean.checkMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
@@ -1885,11 +1885,11 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPersonIdModified()) {
+            if (bean.checkPersonIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
                 if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
             }
-            if (bean.isImgMd5Modified()) {
+            if (bean.checkImgMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "]");
@@ -1911,75 +1911,75 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isFaceLeftModified()) {
+            if (bean.checkFaceLeftModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceLeft() + "]");
                 if (bean.getFaceLeft() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
             }
-            if (bean.isFaceTopModified()) {
+            if (bean.checkFaceTopModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceTop() + "]");
                 if (bean.getFaceTop() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
             }
-            if (bean.isFaceWidthModified()) {
+            if (bean.checkFaceWidthModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceWidth() + "]");
                 if (bean.getFaceWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
             }
-            if (bean.isFaceHeightModified()) {
+            if (bean.checkFaceHeightModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceHeight() + "]");
                 if (bean.getFaceHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
             }
-            if (bean.isEyeLeftxModified()) {
+            if (bean.checkEyeLeftxModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLeftx() + "]");
                 if (bean.getEyeLeftx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
             }
-            if (bean.isEyeLeftyModified()) {
+            if (bean.checkEyeLeftyModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLefty() + "]");
                 if (bean.getEyeLefty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
             }
-            if (bean.isEyeRightxModified()) {
+            if (bean.checkEyeRightxModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRightx() + "]");
                 if (bean.getEyeRightx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
             }
-            if (bean.isEyeRightyModified()) {
+            if (bean.checkEyeRightyModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRighty() + "]");
                 if (bean.getEyeRighty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
             }
-            if (bean.isMouthXModified()) {
+            if (bean.checkMouthXModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthX() + "]");
                 if (bean.getMouthX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
             }
-            if (bean.isMouthYModified()) {
+            if (bean.checkMouthYModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthY() + "]");
                 if (bean.getMouthY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
             }
-            if (bean.isNoseXModified()) {
+            if (bean.checkNoseXModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseX() + "]");
                 if (bean.getNoseX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
             }
-            if (bean.isNoseYModified()) {
+            if (bean.checkNoseYModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseY() + "]");
                 if (bean.getNoseY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
             }
-            if (bean.isAngleYawModified()) {
+            if (bean.checkAngleYawModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleYaw() + "]");
                 if (bean.getAngleYaw() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
             }
-            if (bean.isAnglePitchModified()) {
+            if (bean.checkAnglePitchModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAnglePitch() + "]");
                 if (bean.getAnglePitch() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
             }
-            if (bean.isAngleRollModified()) {
+            if (bean.checkAngleRollModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleRoll() + "]");
                 if (bean.getAngleRoll() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
             }
-            if (bean.isExtInfoModified()) {
+            if (bean.checkExtInfoModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
                 if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getExtInfo()); }
             }
-            if (bean.isFeatureModified()) {
+            if (bean.checkFeatureModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
                 if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getFeature()); }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }

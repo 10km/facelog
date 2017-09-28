@@ -274,7 +274,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] getImportedBeans(FlPersonBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlPersonBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -292,7 +292,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
             return (List<T>)this.getFlFaceBeansByPersonIdAsList(bean);
@@ -313,7 +313,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
             return (T[])setFlFaceBeansByPersonId(bean,(FlFaceBean[])importedBeans);
@@ -334,7 +334,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FACE_PERSON_ID:
             return (C)setFlFaceBeansByPersonId(bean,(java.util.Collection<FlFaceBean>)importedBeans);
@@ -637,7 +637,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T getReferencedBean(FlPersonBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlPersonBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_PERSON_FK_PHOTO_ID:
             return  (T)this.getReferencedByPhotoId(bean);
@@ -657,7 +657,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.FullBean<?>> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_PERSON_FK_PHOTO_ID:
             return  (T)this.setReferencedByPhotoId(bean, (FlImageBean)beanToSet);
@@ -781,7 +781,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_person (");
 
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -789,7 +789,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -797,7 +797,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -805,7 +805,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isSexModified()) {
+            if (bean.checkSexModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -813,7 +813,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isBirthdateModified()) {
+            if (bean.checkBirthdateModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -821,7 +821,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isPapersTypeModified()) {
+            if (bean.checkPapersTypeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -829,7 +829,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isPapersNumModified()) {
+            if (bean.checkPapersNumModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -837,7 +837,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isPhotoIdModified()) {
+            if (bean.checkPhotoIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -845,7 +845,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isFaceMd5Modified()) {
+            if (bean.checkFaceMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -853,7 +853,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isExpiryDateModified()) {
+            if (bean.checkExpiryDateModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -861,7 +861,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -869,7 +869,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 _dirtyCount++;
             }
 
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
@@ -895,7 +895,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
             ps.executeUpdate();
 
-            if (!bean.isIdModified())
+            if (!bean.checkIdModified())
             {
                 PreparedStatement ps2 = null;
                 ResultSet rs = null;
@@ -953,7 +953,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             sql = new StringBuilder("UPDATE fl_person SET ");
             boolean useComma=false;
 
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -962,7 +962,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("id=?");
             }
 
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -971,7 +971,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("group_id=?");
             }
 
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -980,7 +980,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("name=?");
             }
 
-            if (bean.isSexModified()) {
+            if (bean.checkSexModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -989,7 +989,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("sex=?");
             }
 
-            if (bean.isBirthdateModified()) {
+            if (bean.checkBirthdateModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -998,7 +998,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("birthdate=?");
             }
 
-            if (bean.isPapersTypeModified()) {
+            if (bean.checkPapersTypeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1007,7 +1007,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("papers_type=?");
             }
 
-            if (bean.isPapersNumModified()) {
+            if (bean.checkPapersNumModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1016,7 +1016,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("papers_num=?");
             }
 
-            if (bean.isPhotoIdModified()) {
+            if (bean.checkPhotoIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1025,7 +1025,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("photo_id=?");
             }
 
-            if (bean.isFaceMd5Modified()) {
+            if (bean.checkFaceMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1034,7 +1034,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("face_md5=?");
             }
 
-            if (bean.isExpiryDateModified()) {
+            if (bean.checkExpiryDateModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1043,7 +1043,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("expiry_date=?");
             }
 
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1052,7 +1052,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("create_time=?");
             }
 
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
@@ -1142,7 +1142,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public int deleteUsingTemplate(FlPersonBean bean) throws DAOException
     {
-        if(bean.isIdInitialized() && null != bean.getId()){
+        if(bean.checkIdInitialized() && null != bean.getId()){
             return this.deleteByPrimaryKey(bean.getId());
         }
         if( !this.listenerContainer.isEmpty()){
@@ -1559,7 +1559,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         }
         try
         {
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 _dirtyCount ++;
                 if (bean.getId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
@@ -1567,7 +1567,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
                 }
             }
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 _dirtyCount ++;
                 if (bean.getGroupId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
@@ -1575,7 +1575,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id = ?");
                 }
             }
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 _dirtyCount ++;
                 if (bean.getName() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name IS NULL");
@@ -1583,7 +1583,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isSexModified()) {
+            if (bean.checkSexModified()) {
                 _dirtyCount ++;
                 if (bean.getSex() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex IS NULL");
@@ -1591,7 +1591,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("sex = ?");
                 }
             }
-            if (bean.isBirthdateModified()) {
+            if (bean.checkBirthdateModified()) {
                 _dirtyCount ++;
                 if (bean.getBirthdate() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate IS NULL");
@@ -1599,7 +1599,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("birthdate = ?");
                 }
             }
-            if (bean.isPapersTypeModified()) {
+            if (bean.checkPapersTypeModified()) {
                 _dirtyCount ++;
                 if (bean.getPapersType() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type IS NULL");
@@ -1607,7 +1607,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_type = ?");
                 }
             }
-            if (bean.isPapersNumModified()) {
+            if (bean.checkPapersNumModified()) {
                 _dirtyCount ++;
                 if (bean.getPapersNum() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num IS NULL");
@@ -1615,7 +1615,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("papers_num ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isPhotoIdModified()) {
+            if (bean.checkPhotoIdModified()) {
                 _dirtyCount ++;
                 if (bean.getPhotoId() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id IS NULL");
@@ -1623,7 +1623,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("photo_id ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isFaceMd5Modified()) {
+            if (bean.checkFaceMd5Modified()) {
                 _dirtyCount ++;
                 if (bean.getFaceMd5() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 IS NULL");
@@ -1631,7 +1631,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("face_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.isExpiryDateModified()) {
+            if (bean.checkExpiryDateModified()) {
                 _dirtyCount ++;
                 if (bean.getExpiryDate() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date IS NULL");
@@ -1639,7 +1639,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("expiry_date = ?");
                 }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getCreateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
@@ -1647,7 +1647,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
                 }
             }
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getUpdateTime() == null) {
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
@@ -1679,15 +1679,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.isIdModified()) {
+            if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
                 if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
-            if (bean.isGroupIdModified()) {
+            if (bean.checkGroupIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
                 if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
             }
-            if (bean.isNameModified()) {
+            if (bean.checkNameModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
@@ -1709,19 +1709,19 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isSexModified()) {
+            if (bean.checkSexModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSex() + "]");
                 if (bean.getSex() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getSex()); }
             }
-            if (bean.isBirthdateModified()) {
+            if (bean.checkBirthdateModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getBirthdate() + "]");
                 if (bean.getBirthdate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getBirthdate().getTime())); }
             }
-            if (bean.isPapersTypeModified()) {
+            if (bean.checkPapersTypeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersType() + "]");
                 if (bean.getPapersType() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPapersType()); }
             }
-            if (bean.isPapersNumModified()) {
+            if (bean.checkPapersNumModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPapersNum() + "]");
@@ -1743,7 +1743,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isPhotoIdModified()) {
+            if (bean.checkPhotoIdModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPhotoId() + "]");
@@ -1765,7 +1765,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isFaceMd5Modified()) {
+            if (bean.checkFaceMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceMd5() + "]");
@@ -1787,15 +1787,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.isExpiryDateModified()) {
+            if (bean.checkExpiryDateModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExpiryDate() + "]");
                 if (bean.getExpiryDate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
             }
-            if (bean.isCreateTimeModified()) {
+            if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
                 if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
-            if (bean.isUpdateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
                 if (bean.getUpdateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }

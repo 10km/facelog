@@ -17,47 +17,37 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class LogBean
-    implements Serializable,BaseBean,Comparable<LogBean>
+    implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant
 {
     private static final long serialVersionUID = 46995545005652737L;
     
-    /**
-     * comments:日志id
-     */
+    /** comments:日志id */
     private Integer id;
 
-    /**
-     * comments:外键,用户id
-     */
+    /** comments:外键,用户id */
     private Integer personId;
 
-    /**
-     * comments:外键,图像来源设备id
-     */
+    /** comments:外键,图像来源设备id */
     private Integer deviceId;
 
-    /**
-     * comments:外键,验证人脸信息id
-     */
+    /** comments:外键,验证人脸信息id */
     private String verifyFace;
 
-    /**
-     * comments:外键,数据库中最相似的对比人脸id
-     */
+    /** comments:外键,数据库中最相似的对比人脸id */
     private String compareFace;
 
-    /**
-     * comments:验证相似度
-     */
+    /** comments:验证相似度 */
     private Double similarty;
 
-    /**
-     * comments:验证时间(可能由前端设备提供时间)
-     */
+    /** comments:验证时间(可能由前端设备提供时间) */
     private java.util.Date verifyTime;
 
     private java.util.Date createTime;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -89,18 +79,38 @@ public class LogBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a LogBean is via the createLogBean method in FlLogManager or
-     * via the factory class FlLogFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public LogBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a LogBean from a instance
+     * @return the initialized status of columns
      */
-    public LogBean(LogBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public LogBean(){
+        super();
     }
     /**
      * Getter method for {@link #id}.<br>
@@ -115,7 +125,7 @@ public class LogBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -128,8 +138,16 @@ public class LogBean
      * @param newVal the new value to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
-    public void setId(Integer newVal){    
+    public void setId(Integer newVal)
+    {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && checkIdInitialized())) {
+            return;
+        }
         id = newVal;
+
+        modified |= FL_LOG_ID_ID_MASK;
+        initialized |= FL_LOG_ID_ID_MASK;
     }
 
     /**
@@ -138,8 +156,30 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to id
      */
-    public void setId(int newVal){
+    public void setId(int newVal)
+    {
         setId(new Integer(newVal));
+    }
+    /**
+     * Determines if the id has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkIdModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_ID_MASK);
+    }
+
+    /**
+     * Determines if the id has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkIdInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_ID_MASK);
     }
     /**
      * Getter method for {@link #personId}.<br>
@@ -154,7 +194,7 @@ public class LogBean
      *
      * @return the value of personId
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getPersonId(){
         return personId;
     }
@@ -167,8 +207,16 @@ public class LogBean
      * @param newVal the new value to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPersonId(Integer newVal){    
+    public void setPersonId(Integer newVal)
+    {
+        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
+            return;
+        }
         personId = newVal;
+
+        modified |= FL_LOG_ID_PERSON_ID_MASK;
+        initialized |= FL_LOG_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -177,8 +225,30 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to personId
      */
-    public void setPersonId(int newVal){
+    public void setPersonId(int newVal)
+    {
         setPersonId(new Integer(newVal));
+    }
+    /**
+     * Determines if the personId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPersonIdModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_PERSON_ID_MASK);
+    }
+
+    /**
+     * Determines if the personId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPersonIdInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_PERSON_ID_MASK);
     }
     /**
      * Getter method for {@link #deviceId}.<br>
@@ -193,7 +263,7 @@ public class LogBean
      *
      * @return the value of deviceId
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -206,8 +276,16 @@ public class LogBean
      * @param newVal the new value to be assigned to deviceId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setDeviceId(Integer newVal){    
+    public void setDeviceId(Integer newVal)
+    {
+        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
+            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
+            return;
+        }
         deviceId = newVal;
+
+        modified |= FL_LOG_ID_DEVICE_ID_MASK;
+        initialized |= FL_LOG_ID_DEVICE_ID_MASK;
     }
 
     /**
@@ -216,8 +294,30 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to deviceId
      */
-    public void setDeviceId(int newVal){
+    public void setDeviceId(int newVal)
+    {
         setDeviceId(new Integer(newVal));
+    }
+    /**
+     * Determines if the deviceId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDeviceIdModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_DEVICE_ID_MASK);
+    }
+
+    /**
+     * Determines if the deviceId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDeviceIdInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_DEVICE_ID_MASK);
     }
     /**
      * Getter method for {@link #verifyFace}.<br>
@@ -232,7 +332,7 @@ public class LogBean
      *
      * @return the value of verifyFace
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public String getVerifyFace(){
         return verifyFace;
     }
@@ -245,10 +345,39 @@ public class LogBean
      * @param newVal the new value to be assigned to verifyFace
      */
     @com.facebook.swift.codec.ThriftField
-    public void setVerifyFace(String newVal){    
+    public void setVerifyFace(String newVal)
+    {
+        if ((newVal != null && verifyFace != null && (newVal.compareTo(verifyFace) == 0)) ||
+            (newVal == null && verifyFace == null && checkVerifyFaceInitialized())) {
+            return;
+        }
         verifyFace = newVal;
+
+        modified |= FL_LOG_ID_VERIFY_FACE_MASK;
+        initialized |= FL_LOG_ID_VERIFY_FACE_MASK;
     }
 
+    /**
+     * Determines if the verifyFace has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkVerifyFaceModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_VERIFY_FACE_MASK);
+    }
+
+    /**
+     * Determines if the verifyFace has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkVerifyFaceInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_VERIFY_FACE_MASK);
+    }
     /**
      * Getter method for {@link #compareFace}.<br>
      * Meta Data Information (in progress):
@@ -262,7 +391,7 @@ public class LogBean
      *
      * @return the value of compareFace
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public String getCompareFace(){
         return compareFace;
     }
@@ -275,10 +404,39 @@ public class LogBean
      * @param newVal the new value to be assigned to compareFace
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCompareFace(String newVal){    
+    public void setCompareFace(String newVal)
+    {
+        if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
+            (newVal == null && compareFace == null && checkCompareFaceInitialized())) {
+            return;
+        }
         compareFace = newVal;
+
+        modified |= FL_LOG_ID_COMPARE_FACE_MASK;
+        initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
     }
 
+    /**
+     * Determines if the compareFace has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCompareFaceModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_COMPARE_FACE_MASK);
+    }
+
+    /**
+     * Determines if the compareFace has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCompareFaceInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
+    }
     /**
      * Getter method for {@link #similarty}.<br>
      * Meta Data Information (in progress):
@@ -291,7 +449,7 @@ public class LogBean
      *
      * @return the value of similarty
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(9)
     public Double getSimilarty(){
         return similarty;
     }
@@ -304,8 +462,16 @@ public class LogBean
      * @param newVal the new value to be assigned to similarty
      */
     @com.facebook.swift.codec.ThriftField
-    public void setSimilarty(Double newVal){    
+    public void setSimilarty(Double newVal)
+    {
+        if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
+            (newVal == null && similarty == null && checkSimilartyInitialized())) {
+            return;
+        }
         similarty = newVal;
+
+        modified |= FL_LOG_ID_SIMILARTY_MASK;
+        initialized |= FL_LOG_ID_SIMILARTY_MASK;
     }
 
     /**
@@ -314,8 +480,30 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to similarty
      */
-    public void setSimilarty(double newVal){
+    public void setSimilarty(double newVal)
+    {
         setSimilarty(new Double(newVal));
+    }
+    /**
+     * Determines if the similarty has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkSimilartyModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_SIMILARTY_MASK);
+    }
+
+    /**
+     * Determines if the similarty has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkSimilartyInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_SIMILARTY_MASK);
     }
     /**
      * Getter method for {@link #verifyTime}.<br>
@@ -329,7 +517,7 @@ public class LogBean
      *
      * @return the value of verifyTime
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(10)
     public java.util.Date getVerifyTime(){
         return verifyTime;
     }
@@ -342,8 +530,16 @@ public class LogBean
      * @param newVal the new value to be assigned to verifyTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setVerifyTime(java.util.Date newVal){    
+    public void setVerifyTime(java.util.Date newVal)
+    {
+        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
+            (newVal == null && verifyTime == null && checkVerifyTimeInitialized())) {
+            return;
+        }
         verifyTime = newVal;
+
+        modified |= FL_LOG_ID_VERIFY_TIME_MASK;
+        initialized |= FL_LOG_ID_VERIFY_TIME_MASK;
     }
 
     /**
@@ -352,8 +548,30 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to verifyTime
      */
-    public void setVerifyTime(long newVal){
+    public void setVerifyTime(long newVal)
+    {
         setVerifyTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the verifyTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkVerifyTimeModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_VERIFY_TIME_MASK);
+    }
+
+    /**
+     * Determines if the verifyTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkVerifyTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_VERIFY_TIME_MASK);
     }
     /**
      * Getter method for {@link #createTime}.<br>
@@ -366,7 +584,7 @@ public class LogBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @com.facebook.swift.codec.ThriftField(11)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -379,8 +597,16 @@ public class LogBean
      * @param newVal the new value to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCreateTime(java.util.Date newVal){    
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+            return;
+        }
         createTime = newVal;
+
+        modified |= FL_LOG_ID_CREATE_TIME_MASK;
+        initialized |= FL_LOG_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -389,8 +615,30 @@ public class LogBean
      *
      * @param newVal the new value to be assigned to createTime
      */
-    public void setCreateTime(long newVal){
+    public void setCreateTime(long newVal)
+    {
         setCreateTime(new java.util.Date(newVal));
+    }
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCreateTimeModified()
+    {
+        return 0L !=  (modified & FL_LOG_ID_CREATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the createTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCreateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_LOG_ID_CREATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -401,7 +649,7 @@ public class LogBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @com.facebook.swift.codec.ThriftField(10)
+    @com.facebook.swift.codec.ThriftField(12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
@@ -416,7 +664,7 @@ public class LogBean
      */
     private FaceBean referencedByVerifyFace;
     /** Getter method for {@link #referencedByVerifyFace}. */
-    @com.facebook.swift.codec.ThriftField(11)
+    @com.facebook.swift.codec.ThriftField(13)
     public FaceBean getReferencedByVerifyFace() {
         return this.referencedByVerifyFace;
     }
@@ -431,7 +679,7 @@ public class LogBean
      */
     private FaceBean referencedByCompareFace;
     /** Getter method for {@link #referencedByCompareFace}. */
-    @com.facebook.swift.codec.ThriftField(12)
+    @com.facebook.swift.codec.ThriftField(14)
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
@@ -446,7 +694,7 @@ public class LogBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(15)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
@@ -456,6 +704,111 @@ public class LogBean
         this.referencedByPersonId = reference;
     }
 
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_LOG_ID_ID:
+            return checkIdModified();
+        case FL_LOG_ID_PERSON_ID:
+            return checkPersonIdModified();
+        case FL_LOG_ID_DEVICE_ID:
+            return checkDeviceIdModified();
+        case FL_LOG_ID_VERIFY_FACE:
+            return checkVerifyFaceModified();
+        case FL_LOG_ID_COMPARE_FACE:
+            return checkCompareFaceModified();
+        case FL_LOG_ID_SIMILARTY:
+            return checkSimilartyModified();
+        case FL_LOG_ID_VERIFY_TIME:
+            return checkVerifyTimeModified();
+        case FL_LOG_ID_CREATE_TIME:
+            return checkCreateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_LOG_ID_ID:
+            return checkIdInitialized();
+        case FL_LOG_ID_PERSON_ID:
+            return checkPersonIdInitialized();
+        case FL_LOG_ID_DEVICE_ID:
+            return checkDeviceIdInitialized();
+        case FL_LOG_ID_VERIFY_FACE:
+            return checkVerifyFaceInitialized();
+        case FL_LOG_ID_COMPARE_FACE:
+            return checkCompareFaceInitialized();
+        case FL_LOG_ID_SIMILARTY:
+            return checkSimilartyInitialized();
+        case FL_LOG_ID_VERIFY_TIME:
+            return checkVerifyTimeInitialized();
+        case FL_LOG_ID_CREATE_TIME:
+            return checkCreateTimeInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -512,54 +865,6 @@ public class LogBean
             .append(getId(), object.getId())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(LogBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setId(bean.getId());
-            setPersonId(bean.getPersonId());
-            setDeviceId(bean.getDeviceId());
-            setVerifyFace(bean.getVerifyFace());
-            setCompareFace(bean.getCompareFace());
-            setSimilarty(bean.getSimilarty());
-            setVerifyTime(bean.getVerifyTime());
-            setCreateTime(bean.getCreateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(LogBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getId()!=null)
-            setId(bean.getId());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getDeviceId()!=null)
-            setDeviceId(bean.getDeviceId());
-        if(bean.getVerifyFace()!=null)
-            setVerifyFace(bean.getVerifyFace());
-        if(bean.getCompareFace()!=null)
-            setCompareFace(bean.getCompareFace());
-        if(bean.getSimilarty()!=null)
-            setSimilarty(bean.getSimilarty());
-        if(bean.getVerifyTime()!=null)
-            setVerifyTime(bean.getVerifyTime());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-    }
 
     /**
     * set all field to null
@@ -568,7 +873,6 @@ public class LogBean
     */
     public LogBean clean()
     {
-        isNew(true);
         setId(null);
         setPersonId(null);
         setDeviceId(null);
@@ -577,6 +881,124 @@ public class LogBean
         setSimilarty(null);
         setVerifyTime(null);
         setCreateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(LogBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 8; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(LogBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_LOG_ID_ID: 
+            return (T)getId();        
+        case FL_LOG_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_LOG_ID_DEVICE_ID: 
+            return (T)getDeviceId();        
+        case FL_LOG_ID_VERIFY_FACE: 
+            return (T)getVerifyFace();        
+        case FL_LOG_ID_COMPARE_FACE: 
+            return (T)getCompareFace();        
+        case FL_LOG_ID_SIMILARTY: 
+            return (T)getSimilarty();        
+        case FL_LOG_ID_VERIFY_TIME: 
+            return (T)getVerifyTime();        
+        case FL_LOG_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_LOG_ID_ID:        
+            setId((Integer)value);
+        case FL_LOG_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_LOG_ID_DEVICE_ID:        
+            setDeviceId((Integer)value);
+        case FL_LOG_ID_VERIFY_FACE:        
+            setVerifyFace((String)value);
+        case FL_LOG_ID_COMPARE_FACE:        
+            setCompareFace((String)value);
+        case FL_LOG_ID_SIMILARTY:        
+            setSimilarty((Double)value);
+        case FL_LOG_ID_VERIFY_TIME:        
+            setVerifyTime((java.util.Date)value);
+        case FL_LOG_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_LOG_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

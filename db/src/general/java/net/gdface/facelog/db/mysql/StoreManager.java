@@ -200,7 +200,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T[] getImportedBeans(StoreBean bean, int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(StoreBean bean, int ikIndex){
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -217,7 +217,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (java.util.List<T>)this.getFlImageBeansByMd5AsList(bean);
@@ -241,7 +241,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T[] setImportedBeans(StoreBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(StoreBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (T[])setFlImageBeansByMd5(bean,(ImageBean[])importedBeans);
@@ -264,7 +264,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (C)setFlImageBeansByMd5(bean,(java.util.Collection<ImageBean>)importedBeans);

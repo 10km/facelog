@@ -17,25 +17,23 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class StoreBean
-    implements Serializable,BaseBean,Comparable<StoreBean>
+    implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant
 {
     private static final long serialVersionUID = -1684185165668832146L;
     
-    /**
-     * comments:主键,md5检验码
-     */
+    /** comments:主键,md5检验码 */
     private String md5;
 
-    /**
-     * comments:编码类型,GBK,UTF8...
-     */
+    /** comments:编码类型,GBK,UTF8... */
     private String encoding;
 
-    /**
-     * comments:二进制数据
-     */
+    /** comments:二进制数据 */
     private byte[] data;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -67,18 +65,38 @@ public class StoreBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a StoreBean is via the createStoreBean method in FlStoreManager or
-     * via the factory class FlStoreFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public StoreBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a StoreBean from a instance
+     * @return the initialized status of columns
      */
-    public StoreBean(StoreBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public StoreBean(){
+        super();
     }
     /**
      * Getter method for {@link #md5}.<br>
@@ -95,7 +113,7 @@ public class StoreBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -108,10 +126,39 @@ public class StoreBean
      * @param newVal the new value to be assigned to md5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setMd5(String newVal){    
+    public void setMd5(String newVal)
+    {
+        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
+            (newVal == null && md5 == null && checkMd5Initialized())) {
+            return;
+        }
         md5 = newVal;
+
+        modified |= FL_STORE_ID_MD5_MASK;
+        initialized |= FL_STORE_ID_MD5_MASK;
     }
 
+    /**
+     * Determines if the md5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMd5Modified()
+    {
+        return 0L !=  (modified & FL_STORE_ID_MD5_MASK);
+    }
+
+    /**
+     * Determines if the md5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_STORE_ID_MD5_MASK);
+    }
     /**
      * Getter method for {@link #encoding}.<br>
      * Meta Data Information (in progress):
@@ -124,7 +171,7 @@ public class StoreBean
      *
      * @return the value of encoding
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public String getEncoding(){
         return encoding;
     }
@@ -137,10 +184,39 @@ public class StoreBean
      * @param newVal the new value to be assigned to encoding
      */
     @com.facebook.swift.codec.ThriftField
-    public void setEncoding(String newVal){    
+    public void setEncoding(String newVal)
+    {
+        if ((newVal != null && encoding != null && (newVal.compareTo(encoding) == 0)) ||
+            (newVal == null && encoding == null && checkEncodingInitialized())) {
+            return;
+        }
         encoding = newVal;
+
+        modified |= FL_STORE_ID_ENCODING_MASK;
+        initialized |= FL_STORE_ID_ENCODING_MASK;
     }
 
+    /**
+     * Determines if the encoding has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkEncodingModified()
+    {
+        return 0L !=  (modified & FL_STORE_ID_ENCODING_MASK);
+    }
+
+    /**
+     * Determines if the encoding has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkEncodingInitialized()
+    {
+        return 0L !=  (initialized & FL_STORE_ID_ENCODING_MASK);
+    }
     /**
      * Getter method for {@link #data}.<br>
      * Meta Data Information (in progress):
@@ -153,7 +229,7 @@ public class StoreBean
      *
      * @return the value of data
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public byte[] getData(){
         return data;
     }
@@ -165,11 +241,121 @@ public class StoreBean
      * @param newVal the new value to be assigned to data
      */
     @com.facebook.swift.codec.ThriftField
-    public void setData(byte[] newVal){    
+    public void setData(byte[] newVal)
+    {
         data = newVal;
+
+        modified |= FL_STORE_ID_DATA_MASK;
+        initialized |= FL_STORE_ID_DATA_MASK;
     }
 
+    /**
+     * Determines if the data has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkDataModified()
+    {
+        return 0L !=  (modified & FL_STORE_ID_DATA_MASK);
+    }
 
+    /**
+     * Determines if the data has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkDataInitialized()
+    {
+        return 0L !=  (initialized & FL_STORE_ID_DATA_MASK);
+    }
+
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_STORE_ID_MD5:
+            return checkMd5Modified();
+        case FL_STORE_ID_ENCODING:
+            return checkEncodingModified();
+        case FL_STORE_ID_DATA:
+            return checkDataModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_STORE_ID_MD5:
+            return checkMd5Initialized();
+        case FL_STORE_ID_ENCODING:
+            return checkEncodingInitialized();
+        case FL_STORE_ID_DATA:
+            return checkDataInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -211,39 +397,6 @@ public class StoreBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(StoreBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setEncoding(bean.getEncoding());
-            setData(bean.getData());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(StoreBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getEncoding()!=null)
-            setEncoding(bean.getEncoding());
-        if(bean.getData()!=null)
-            setData(bean.getData());
-    }
 
     /**
     * set all field to null
@@ -252,10 +405,107 @@ public class StoreBean
     */
     public StoreBean clean()
     {
-        isNew(true);
         setMd5(null);
         setEncoding(null);
         setData(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(StoreBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 3; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(StoreBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_STORE_ID_MD5: 
+            return (T)getMd5();        
+        case FL_STORE_ID_ENCODING: 
+            return (T)getEncoding();        
+        case FL_STORE_ID_DATA: 
+            return (T)getData();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_STORE_ID_MD5:        
+            setMd5((String)value);
+        case FL_STORE_ID_ENCODING:        
+            setEncoding((String)value);
+        case FL_STORE_ID_DATA:        
+            setData((byte[])value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_STORE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

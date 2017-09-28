@@ -17,32 +17,28 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class FeatureBean
-    implements Serializable,BaseBean,Comparable<FeatureBean>
+    implements Serializable,BaseBean<FeatureBean>,Comparable<FeatureBean>,Constant
 {
     private static final long serialVersionUID = -2191238184879882524L;
     
-    /**
-     * comments:主键,特征数据md5校验码
-     */
+    /** comments:主键,特征数据md5校验码 */
     private String md5;
 
-    /**
-     * comments:外键,所属用户id
-     */
+    /** comments:外键,所属用户id */
     private Integer personId;
 
-    /**
-     * comments:外键,所属图像id
-     */
+    /** comments:外键,所属图像id */
     private String imgMd5;
 
-    /**
-     * comments:二进制特征数据
-     */
+    /** comments:二进制特征数据 */
     private byte[] feature;
 
     private java.util.Date createTime;
 
+    /** columns modified flag */
+    private long modified = 0L;
+    /** columns initialized flag */
+    private long initialized = 0L;
     private boolean _isNew = true;
     /**
      * Determines if the current object is new.
@@ -74,18 +70,38 @@ public class FeatureBean
     {
         this._isNew = isNew;
     }
+    /**
+     * @return the modified status of columns
+     */
+    @com.facebook.swift.codec.ThriftField(2)
+    public long getModified(){
+        return modified;
+    }
 
     /**
-     * Prefered methods to create a FeatureBean is via the createFeatureBean method in FlFeatureManager or
-     * via the factory class FlFeatureFactory create method
+     * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    public FeatureBean(){
+    @com.facebook.swift.codec.ThriftField
+    public void setModified(long modified){
+        this.modified = modified;
     }
     /**
-     * create a FeatureBean from a instance
+     * @return the initialized status of columns
      */
-    public FeatureBean(FeatureBean bean){
-        this.copy(bean);
+    @com.facebook.swift.codec.ThriftField(3)
+    public long getInitialized(){
+        return initialized;
+    }
+
+    /**
+     * @param initialized the initialized status bit to be assigned to {@link #initialized}
+     */
+    @com.facebook.swift.codec.ThriftField
+    public void setInitialized(long initialized){
+        this.initialized = initialized;
+    }
+    public FeatureBean(){
+        super();
     }
     /**
      * Getter method for {@link #md5}.<br>
@@ -99,7 +115,7 @@ public class FeatureBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @com.facebook.swift.codec.ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -112,10 +128,39 @@ public class FeatureBean
      * @param newVal the new value to be assigned to md5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setMd5(String newVal){    
+    public void setMd5(String newVal)
+    {
+        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
+            (newVal == null && md5 == null && checkMd5Initialized())) {
+            return;
+        }
         md5 = newVal;
+
+        modified |= FL_FEATURE_ID_MD5_MASK;
+        initialized |= FL_FEATURE_ID_MD5_MASK;
     }
 
+    /**
+     * Determines if the md5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMd5Modified()
+    {
+        return 0L !=  (modified & FL_FEATURE_ID_MD5_MASK);
+    }
+
+    /**
+     * Determines if the md5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_FEATURE_ID_MD5_MASK);
+    }
     /**
      * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
@@ -128,7 +173,7 @@ public class FeatureBean
      *
      * @return the value of personId
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @com.facebook.swift.codec.ThriftField(5)
     public Integer getPersonId(){
         return personId;
     }
@@ -141,8 +186,16 @@ public class FeatureBean
      * @param newVal the new value to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPersonId(Integer newVal){    
+    public void setPersonId(Integer newVal)
+    {
+        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
+            return;
+        }
         personId = newVal;
+
+        modified |= FL_FEATURE_ID_PERSON_ID_MASK;
+        initialized |= FL_FEATURE_ID_PERSON_ID_MASK;
     }
 
     /**
@@ -151,8 +204,30 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to personId
      */
-    public void setPersonId(int newVal){
+    public void setPersonId(int newVal)
+    {
         setPersonId(new Integer(newVal));
+    }
+    /**
+     * Determines if the personId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPersonIdModified()
+    {
+        return 0L !=  (modified & FL_FEATURE_ID_PERSON_ID_MASK);
+    }
+
+    /**
+     * Determines if the personId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPersonIdInitialized()
+    {
+        return 0L !=  (initialized & FL_FEATURE_ID_PERSON_ID_MASK);
     }
     /**
      * Getter method for {@link #imgMd5}.<br>
@@ -166,7 +241,7 @@ public class FeatureBean
      *
      * @return the value of imgMd5
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @com.facebook.swift.codec.ThriftField(6)
     public String getImgMd5(){
         return imgMd5;
     }
@@ -179,10 +254,39 @@ public class FeatureBean
      * @param newVal the new value to be assigned to imgMd5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setImgMd5(String newVal){    
+    public void setImgMd5(String newVal)
+    {
+        if ((newVal != null && imgMd5 != null && (newVal.compareTo(imgMd5) == 0)) ||
+            (newVal == null && imgMd5 == null && checkImgMd5Initialized())) {
+            return;
+        }
         imgMd5 = newVal;
+
+        modified |= FL_FEATURE_ID_IMG_MD5_MASK;
+        initialized |= FL_FEATURE_ID_IMG_MD5_MASK;
     }
 
+    /**
+     * Determines if the imgMd5 has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkImgMd5Modified()
+    {
+        return 0L !=  (modified & FL_FEATURE_ID_IMG_MD5_MASK);
+    }
+
+    /**
+     * Determines if the imgMd5 has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkImgMd5Initialized()
+    {
+        return 0L !=  (initialized & FL_FEATURE_ID_IMG_MD5_MASK);
+    }
     /**
      * Getter method for {@link #feature}.<br>
      * Meta Data Information (in progress):
@@ -195,7 +299,7 @@ public class FeatureBean
      *
      * @return the value of feature
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @com.facebook.swift.codec.ThriftField(7)
     public byte[] getFeature(){
         return feature;
     }
@@ -207,10 +311,35 @@ public class FeatureBean
      * @param newVal the new value to be assigned to feature
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFeature(byte[] newVal){    
+    public void setFeature(byte[] newVal)
+    {
         feature = newVal;
+
+        modified |= FL_FEATURE_ID_FEATURE_MASK;
+        initialized |= FL_FEATURE_ID_FEATURE_MASK;
     }
 
+    /**
+     * Determines if the feature has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkFeatureModified()
+    {
+        return 0L !=  (modified & FL_FEATURE_ID_FEATURE_MASK);
+    }
+
+    /**
+     * Determines if the feature has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkFeatureInitialized()
+    {
+        return 0L !=  (initialized & FL_FEATURE_ID_FEATURE_MASK);
+    }
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
@@ -222,7 +351,7 @@ public class FeatureBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @com.facebook.swift.codec.ThriftField(8)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -235,8 +364,16 @@ public class FeatureBean
      * @param newVal the new value to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCreateTime(java.util.Date newVal){    
+    public void setCreateTime(java.util.Date newVal)
+    {
+        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+            return;
+        }
         createTime = newVal;
+
+        modified |= FL_FEATURE_ID_CREATE_TIME_MASK;
+        initialized |= FL_FEATURE_ID_CREATE_TIME_MASK;
     }
 
     /**
@@ -245,10 +382,125 @@ public class FeatureBean
      *
      * @param newVal the new value to be assigned to createTime
      */
-    public void setCreateTime(long newVal){
+    public void setCreateTime(long newVal)
+    {
         setCreateTime(new java.util.Date(newVal));
     }
+    /**
+     * Determines if the createTime has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkCreateTimeModified()
+    {
+        return 0L !=  (modified & FL_FEATURE_ID_CREATE_TIME_MASK);
+    }
 
+    /**
+     * Determines if the createTime has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkCreateTimeInitialized()
+    {
+        return 0L !=  (initialized & FL_FEATURE_ID_CREATE_TIME_MASK);
+    }
+
+    /**
+     * Determines if the object has been modified since the last time this method was called.
+     * <br>
+     * We can also determine if this object has ever been modified since its creation.
+     *
+     * @return true if the object has been modified, false if the object has not been modified
+     */
+    public boolean isModified()
+    {
+        return 0 != modified;
+    }
+  
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param columnID
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(int columnID){
+        switch ( columnID ){
+        case FL_FEATURE_ID_MD5:
+            return checkMd5Modified();
+        case FL_FEATURE_ID_PERSON_ID:
+            return checkPersonIdModified();
+        case FL_FEATURE_ID_IMG_MD5:
+            return checkImgMd5Modified();
+        case FL_FEATURE_ID_FEATURE:
+            return checkFeatureModified();
+        case FL_FEATURE_ID_CREATE_TIME:
+            return checkCreateTimeModified();
+        }
+        return false;
+    }
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param columnID
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(int columnID){
+        switch(columnID) {
+        case FL_FEATURE_ID_MD5:
+            return checkMd5Initialized();
+        case FL_FEATURE_ID_PERSON_ID:
+            return checkPersonIdInitialized();
+        case FL_FEATURE_ID_IMG_MD5:
+            return checkImgMd5Initialized();
+        case FL_FEATURE_ID_FEATURE:
+            return checkFeatureInitialized();
+        case FL_FEATURE_ID_CREATE_TIME:
+            return checkCreateTimeInitialized();
+        }
+        return false;
+    }
+    
+    /**
+     * Determines if the {@code column} has been modified.
+     * @param column
+     * @return true if the field has been modified, false if the field has not been modified
+     * @author guyadong
+     */
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
+    }
+
+    /**
+     * Determines if the {@code column} has been initialized.
+     * <br>
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     * @param column
+     * @return true if the field has been initialized, false otherwise
+     * @author guyadong
+     */
+    public boolean isInitialized(String column){
+        return isInitialized(columnIDOf(column));
+    }
+    
+    /**
+     * Resets the object modification status to 'not modified'.
+     */
+    public void resetIsModified()
+    {
+        modified = 0L;
+    }
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -300,45 +552,6 @@ public class FeatureBean
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FeatureBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setPersonId(bean.getPersonId());
-            setImgMd5(bean.getImgMd5());
-            setFeature(bean.getFeature());
-            setCreateTime(bean.getCreateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FeatureBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getImgMd5()!=null)
-            setImgMd5(bean.getImgMd5());
-        if(bean.getFeature()!=null)
-            setFeature(bean.getFeature());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-    }
 
     /**
     * set all field to null
@@ -347,12 +560,117 @@ public class FeatureBean
     */
     public FeatureBean clean()
     {
-        isNew(true);
         setMd5(null);
         setPersonId(null);
         setImgMd5(null);
         setFeature(null);
         setCreateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
+    }
+    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column id list to copy into the current bean
+     */
+    public void copy(FeatureBean bean, int... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            for (int i = 0; i < 5; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
+        else
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
+            }
+    }
+        
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @param fieldList the column name list to copy into the current bean
+     */
+    public void copy(FeatureBean bean, String... fieldList)
+    {
+        if (null == fieldList || 0 == fieldList.length)
+            copy(bean,(int[])null);
+        else{
+            int field;
+            for (int i = 0; i < fieldList.length; i++) {
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
+            }
+        }
+    }
+
+    /**
+     * return a object representation of the given column id
+     */
+    @SuppressWarnings("unchecked")
+    public <T>T getValue(int columnID)
+    {
+        switch( columnID ){
+        case FL_FEATURE_ID_MD5: 
+            return (T)getMd5();        
+        case FL_FEATURE_ID_PERSON_ID: 
+            return (T)getPersonId();        
+        case FL_FEATURE_ID_IMG_MD5: 
+            return (T)getImgMd5();        
+        case FL_FEATURE_ID_FEATURE: 
+            return (T)getFeature();        
+        case FL_FEATURE_ID_CREATE_TIME: 
+            return (T)getCreateTime();        
+        }
+        return null;
+    }
+
+    /**
+     * set a value representation of the given column id
+     */
+    public <T> void setValue(int columnID,T value)
+    {
+        switch( columnID ) {
+        case FL_FEATURE_ID_MD5:        
+            setMd5((String)value);
+        case FL_FEATURE_ID_PERSON_ID:        
+            setPersonId((Integer)value);
+        case FL_FEATURE_ID_IMG_MD5:        
+            setImgMd5((String)value);
+        case FL_FEATURE_ID_FEATURE:        
+            setFeature((byte[])value);
+        case FL_FEATURE_ID_CREATE_TIME:        
+            setCreateTime((java.util.Date)value);
+        }
+    }
+    
+    /**
+     * return a object representation of the given field
+     */
+    public <T>T getValue(String column)
+    {
+        return getValue(columnIDOf(column));
+    }
+
+    /**
+     * set a value representation of the given field
+     */
+    public <T>void setValue(String column,T value)
+    {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
+        int index = FL_FEATURE_FIELDS_LIST.indexOf(column);
+        if( 0 > index ) 
+            index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
+        return index;    
     }
 }

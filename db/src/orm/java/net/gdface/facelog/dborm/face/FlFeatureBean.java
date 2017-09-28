@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.face;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -18,12 +18,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: VIEW </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlFeatureBean
-    implements Serializable,FullBean<FlFeatureBean>,Comparable<FlFeatureBean>,Constant
+    implements Serializable,BaseBean<FlFeatureBean>,Comparable<FlFeatureBean>,Constant
 {
-	private static final long serialVersionUID = 9009645819979798812L;
+    private static final long serialVersionUID = 9009645819979798812L;
+    
     /** comments:主键,特征数据md5校验码 */
     private String md5;
 
@@ -101,15 +102,7 @@ public class FlFeatureBean
         super();
     }
     /**
-     * create a FlFeatureBean from a instance
-     */
-    FlFeatureBean(FlFeatureBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.md5</li>
@@ -124,8 +117,7 @@ public class FlFeatureBean
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -135,7 +127,7 @@ public class FlFeatureBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && isMd5Initialized())) {
+            (newVal == null && md5 == null && checkMd5Initialized())) {
             return;
         }
         md5 = newVal;
@@ -149,25 +141,24 @@ public class FlFeatureBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMd5Modified()
+    public boolean checkMd5Modified()
     {
-        return 0L != (modified & FL_FEATURE_ID_MD5_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_MD5_MASK);
     }
 
     /**
-     * Determines if the md5 has been initialized.
-     * <br>
+     * Determines if the md5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMd5Initialized()
+    public boolean checkMd5Initialized()
     {
-        return 0L != (initialized & FL_FEATURE_ID_MD5_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_MD5_MASK);
     }
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.person_id</li>
@@ -182,8 +173,7 @@ public class FlFeatureBean
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -193,7 +183,7 @@ public class FlFeatureBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && isPersonIdInitialized())) {
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
             return;
         }
         personId = newVal;
@@ -203,8 +193,7 @@ public class FlFeatureBean
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -213,31 +202,29 @@ public class FlFeatureBean
     {
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Determines if the personId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPersonIdModified()
+    public boolean checkPersonIdModified()
     {
-        return 0L != (modified & FL_FEATURE_ID_PERSON_ID_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_PERSON_ID_MASK);
     }
 
     /**
-     * Determines if the personId has been initialized.
-     * <br>
+     * Determines if the personId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPersonIdInitialized()
+    public boolean checkPersonIdInitialized()
     {
-        return 0L != (initialized & FL_FEATURE_ID_PERSON_ID_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_PERSON_ID_MASK);
     }
     /**
-     * Getter method for imgMd5.
-     * <br>
+     * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.img_md5</li>
@@ -252,8 +239,7 @@ public class FlFeatureBean
         return imgMd5;
     }
     /**
-     * Setter method for imgMd5.
-     * <br>
+     * Setter method for {@link #imgMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -263,7 +249,7 @@ public class FlFeatureBean
     public void setImgMd5(String newVal)
     {
         if ((newVal != null && imgMd5 != null && (newVal.compareTo(imgMd5) == 0)) ||
-            (newVal == null && imgMd5 == null && isImgMd5Initialized())) {
+            (newVal == null && imgMd5 == null && checkImgMd5Initialized())) {
             return;
         }
         imgMd5 = newVal;
@@ -277,25 +263,24 @@ public class FlFeatureBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isImgMd5Modified()
+    public boolean checkImgMd5Modified()
     {
-        return 0L != (modified & FL_FEATURE_ID_IMG_MD5_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_IMG_MD5_MASK);
     }
 
     /**
-     * Determines if the imgMd5 has been initialized.
-     * <br>
+     * Determines if the imgMd5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isImgMd5Initialized()
+    public boolean checkImgMd5Initialized()
     {
-        return 0L != (initialized & FL_FEATURE_ID_IMG_MD5_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_IMG_MD5_MASK);
     }
     /**
-     * Getter method for feature.
-     * <br>
+     * Getter method for {@link #feature}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.feature</li>
@@ -310,8 +295,7 @@ public class FlFeatureBean
         return feature;
     }
     /**
-     * Setter method for feature.
-     * <br>
+     * Setter method for {@link #feature}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -330,25 +314,24 @@ public class FlFeatureBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFeatureModified()
+    public boolean checkFeatureModified()
     {
-        return 0L != (modified & FL_FEATURE_ID_FEATURE_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_FEATURE_MASK);
     }
 
     /**
-     * Determines if the feature has been initialized.
-     * <br>
+     * Determines if the feature has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFeatureInitialized()
+    public boolean checkFeatureInitialized()
     {
-        return 0L != (initialized & FL_FEATURE_ID_FEATURE_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_FEATURE_MASK);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.create_time</li>
@@ -362,8 +345,7 @@ public class FlFeatureBean
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -373,7 +355,7 @@ public class FlFeatureBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && isCreateTimeInitialized())) {
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
             return;
         }
         createTime = newVal;
@@ -383,8 +365,7 @@ public class FlFeatureBean
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -393,27 +374,26 @@ public class FlFeatureBean
     {
         setCreateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isCreateTimeModified()
+    public boolean checkCreateTimeModified()
     {
-        return 0L != (modified & FL_FEATURE_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_CREATE_TIME_MASK);
     }
 
     /**
-     * Determines if the createTime has been initialized.
-     * <br>
+     * Determines if the createTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isCreateTimeInitialized()
+    public boolean checkCreateTimeInitialized()
     {
-        return 0L != (initialized & FL_FEATURE_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_CREATE_TIME_MASK);
     }
 
     /**
@@ -437,15 +417,15 @@ public class FlFeatureBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_FEATURE_ID_MD5:
-            return isMd5Modified();
+            return checkMd5Modified();
         case FL_FEATURE_ID_PERSON_ID:
-            return isPersonIdModified();
+            return checkPersonIdModified();
         case FL_FEATURE_ID_IMG_MD5:
-            return isImgMd5Modified();
+            return checkImgMd5Modified();
         case FL_FEATURE_ID_FEATURE:
-            return isFeatureModified();
+            return checkFeatureModified();
         case FL_FEATURE_ID_CREATE_TIME:
-            return isCreateTimeModified();
+            return checkCreateTimeModified();
         }
         return false;
     }
@@ -460,29 +440,27 @@ public class FlFeatureBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_FEATURE_ID_MD5:
-            return isMd5Initialized();
+            return checkMd5Initialized();
         case FL_FEATURE_ID_PERSON_ID:
-            return isPersonIdInitialized();
+            return checkPersonIdInitialized();
         case FL_FEATURE_ID_IMG_MD5:
-            return isImgMd5Initialized();
+            return checkImgMd5Initialized();
         case FL_FEATURE_ID_FEATURE:
-            return isFeatureInitialized();
+            return checkFeatureInitialized();
         case FL_FEATURE_ID_CREATE_TIME:
-            return isCreateTimeInitialized();
+            return checkCreateTimeInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_FEATURE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -494,10 +472,7 @@ public class FlFeatureBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_FEATURE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -507,7 +482,13 @@ public class FlFeatureBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -559,45 +540,6 @@ public class FlFeatureBean
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlFeatureBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setPersonId(bean.getPersonId());
-            setImgMd5(bean.getImgMd5());
-            setFeature(bean.getFeature());
-            setCreateTime(bean.getCreateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlFeatureBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getImgMd5()!=null)
-            setImgMd5(bean.getImgMd5());
-        if(bean.getFeature()!=null)
-            setFeature(bean.getFeature());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-    }
 
     /**
     * set all field to null
@@ -606,12 +548,14 @@ public class FlFeatureBean
     */
     public FlFeatureBean clean()
     {
-        isNew(true);
         setMd5(null);
         setPersonId(null);
         setImgMd5(null);
         setFeature(null);
         setCreateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -624,10 +568,14 @@ public class FlFeatureBean
     public void copy(FlFeatureBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 5; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -640,11 +588,15 @@ public class FlFeatureBean
     public void copy(FlFeatureBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -692,10 +644,7 @@ public class FlFeatureBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_FEATURE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -703,9 +652,13 @@ public class FlFeatureBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_FEATURE_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

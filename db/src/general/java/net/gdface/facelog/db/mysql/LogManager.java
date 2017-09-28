@@ -314,7 +314,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T getReferencedBean(LogBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T getReferencedBean(LogBean bean,int fkIndex){
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -338,7 +338,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean> T setReferencedBean(LogBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T setReferencedBean(LogBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);

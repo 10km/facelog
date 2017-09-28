@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.image;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -18,12 +18,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: 二进制大数据存储表 </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlStoreBean
-    implements Serializable,FullBean<FlStoreBean>,Comparable<FlStoreBean>,Constant
+    implements Serializable,BaseBean<FlStoreBean>,Comparable<FlStoreBean>,Constant
 {
-	private static final long serialVersionUID = -5705582857978645940L;
+    private static final long serialVersionUID = -5705582857978645940L;
+    
     /** comments:主键,md5检验码 */
     private String md5;
 
@@ -96,15 +97,7 @@ public class FlStoreBean
         super();
     }
     /**
-     * create a FlStoreBean from a instance
-     */
-    FlStoreBean(FlStoreBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -122,8 +115,7 @@ public class FlStoreBean
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -133,7 +125,7 @@ public class FlStoreBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && isMd5Initialized())) {
+            (newVal == null && md5 == null && checkMd5Initialized())) {
             return;
         }
         md5 = newVal;
@@ -147,25 +139,24 @@ public class FlStoreBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMd5Modified()
+    public boolean checkMd5Modified()
     {
-        return 0L != (modified & FL_STORE_ID_MD5_MASK);
+        return 0L !=  (modified & FL_STORE_ID_MD5_MASK);
     }
 
     /**
-     * Determines if the md5 has been initialized.
-     * <br>
+     * Determines if the md5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMd5Initialized()
+    public boolean checkMd5Initialized()
     {
-        return 0L != (initialized & FL_STORE_ID_MD5_MASK);
+        return 0L !=  (initialized & FL_STORE_ID_MD5_MASK);
     }
     /**
-     * Getter method for encoding.
-     * <br>
+     * Getter method for {@link #encoding}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.encoding</li>
@@ -180,8 +171,7 @@ public class FlStoreBean
         return encoding;
     }
     /**
-     * Setter method for encoding.
-     * <br>
+     * Setter method for {@link #encoding}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -191,7 +181,7 @@ public class FlStoreBean
     public void setEncoding(String newVal)
     {
         if ((newVal != null && encoding != null && (newVal.compareTo(encoding) == 0)) ||
-            (newVal == null && encoding == null && isEncodingInitialized())) {
+            (newVal == null && encoding == null && checkEncodingInitialized())) {
             return;
         }
         encoding = newVal;
@@ -205,25 +195,24 @@ public class FlStoreBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isEncodingModified()
+    public boolean checkEncodingModified()
     {
-        return 0L != (modified & FL_STORE_ID_ENCODING_MASK);
+        return 0L !=  (modified & FL_STORE_ID_ENCODING_MASK);
     }
 
     /**
-     * Determines if the encoding has been initialized.
-     * <br>
+     * Determines if the encoding has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isEncodingInitialized()
+    public boolean checkEncodingInitialized()
     {
-        return 0L != (initialized & FL_STORE_ID_ENCODING_MASK);
+        return 0L !=  (initialized & FL_STORE_ID_ENCODING_MASK);
     }
     /**
-     * Getter method for data.
-     * <br>
+     * Getter method for {@link #data}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_store.data</li>
@@ -238,8 +227,7 @@ public class FlStoreBean
         return data;
     }
     /**
-     * Setter method for data.
-     * <br>
+     * Setter method for {@link #data}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -258,21 +246,21 @@ public class FlStoreBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isDataModified()
+    public boolean checkDataModified()
     {
-        return 0L != (modified & FL_STORE_ID_DATA_MASK);
+        return 0L !=  (modified & FL_STORE_ID_DATA_MASK);
     }
 
     /**
-     * Determines if the data has been initialized.
-     * <br>
+     * Determines if the data has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isDataInitialized()
+    public boolean checkDataInitialized()
     {
-        return 0L != (initialized & FL_STORE_ID_DATA_MASK);
+        return 0L !=  (initialized & FL_STORE_ID_DATA_MASK);
     }
 
     /**
@@ -296,11 +284,11 @@ public class FlStoreBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_STORE_ID_MD5:
-            return isMd5Modified();
+            return checkMd5Modified();
         case FL_STORE_ID_ENCODING:
-            return isEncodingModified();
+            return checkEncodingModified();
         case FL_STORE_ID_DATA:
-            return isDataModified();
+            return checkDataModified();
         }
         return false;
     }
@@ -315,25 +303,23 @@ public class FlStoreBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_STORE_ID_MD5:
-            return isMd5Initialized();
+            return checkMd5Initialized();
         case FL_STORE_ID_ENCODING:
-            return isEncodingInitialized();
+            return checkEncodingInitialized();
         case FL_STORE_ID_DATA:
-            return isDataInitialized();
+            return checkDataInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_STORE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -345,10 +331,7 @@ public class FlStoreBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_STORE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -358,7 +341,13 @@ public class FlStoreBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -400,39 +389,6 @@ public class FlStoreBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlStoreBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setEncoding(bean.getEncoding());
-            setData(bean.getData());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlStoreBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getEncoding()!=null)
-            setEncoding(bean.getEncoding());
-        if(bean.getData()!=null)
-            setData(bean.getData());
-    }
 
     /**
     * set all field to null
@@ -441,10 +397,12 @@ public class FlStoreBean
     */
     public FlStoreBean clean()
     {
-        isNew(true);
         setMd5(null);
         setEncoding(null);
         setData(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -457,10 +415,14 @@ public class FlStoreBean
     public void copy(FlStoreBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 3; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -473,11 +435,15 @@ public class FlStoreBean
     public void copy(FlStoreBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -517,10 +483,7 @@ public class FlStoreBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_STORE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -528,9 +491,13 @@ public class FlStoreBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_STORE_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }

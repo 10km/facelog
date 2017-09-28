@@ -8,7 +8,7 @@
 package net.gdface.facelog.dborm.face;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
-import net.gdface.facelog.dborm.FullBean;
+import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
@@ -20,12 +20,13 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * <ul>
  *    <li>comments: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外) </li>
  * </ul>
- * @author sql2java
+ * @author guyadong
 */
 public class FlFaceBean
-    implements Serializable,FullBean<FlFaceBean>,Comparable<FlFaceBean>,Constant
+    implements Serializable,BaseBean<FlFaceBean>,Comparable<FlFaceBean>,Constant
 {
-	private static final long serialVersionUID = 2979758335038585995L;
+    private static final long serialVersionUID = 2979758335038585995L;
+    
     /** comments:主键,特征数据md5校验码 */
     private String md5;
 
@@ -136,15 +137,7 @@ public class FlFaceBean
         super();
     }
     /**
-     * create a FlFaceBean from a instance
-     */
-    FlFaceBean(FlFaceBean bean){
-        super();
-        copy(bean);
-    }
-    /**
-     * Getter method for md5.
-     * <br>
+     * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -162,8 +155,7 @@ public class FlFaceBean
         return md5;
     }
     /**
-     * Setter method for md5.
-     * <br>
+     * Setter method for {@link #md5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -173,7 +165,7 @@ public class FlFaceBean
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && isMd5Initialized())) {
+            (newVal == null && md5 == null && checkMd5Initialized())) {
             return;
         }
         md5 = newVal;
@@ -187,25 +179,24 @@ public class FlFaceBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMd5Modified()
+    public boolean checkMd5Modified()
     {
-        return 0L != (modified & FL_FACE_ID_MD5_MASK);
+        return 0L !=  (modified & FL_FACE_ID_MD5_MASK);
     }
 
     /**
-     * Determines if the md5 has been initialized.
-     * <br>
+     * Determines if the md5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMd5Initialized()
+    public boolean checkMd5Initialized()
     {
-        return 0L != (initialized & FL_FACE_ID_MD5_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_MD5_MASK);
     }
     /**
-     * Getter method for personId.
-     * <br>
+     * Getter method for {@link #personId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.person_id</li>
@@ -221,8 +212,7 @@ public class FlFaceBean
         return personId;
     }
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -232,7 +222,7 @@ public class FlFaceBean
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && isPersonIdInitialized())) {
+            (newVal == null && personId == null && checkPersonIdInitialized())) {
             return;
         }
         personId = newVal;
@@ -242,8 +232,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for personId.
-     * <br>
+     * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to personId
@@ -252,31 +241,29 @@ public class FlFaceBean
     {
         setPersonId(new Integer(newVal));
     }
-
     /**
      * Determines if the personId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isPersonIdModified()
+    public boolean checkPersonIdModified()
     {
-        return 0L != (modified & FL_FACE_ID_PERSON_ID_MASK);
+        return 0L !=  (modified & FL_FACE_ID_PERSON_ID_MASK);
     }
 
     /**
-     * Determines if the personId has been initialized.
-     * <br>
+     * Determines if the personId has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isPersonIdInitialized()
+    public boolean checkPersonIdInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_PERSON_ID_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_PERSON_ID_MASK);
     }
     /**
-     * Getter method for imgMd5.
-     * <br>
+     * Getter method for {@link #imgMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.img_md5</li>
@@ -292,8 +279,7 @@ public class FlFaceBean
         return imgMd5;
     }
     /**
-     * Setter method for imgMd5.
-     * <br>
+     * Setter method for {@link #imgMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -303,7 +289,7 @@ public class FlFaceBean
     public void setImgMd5(String newVal)
     {
         if ((newVal != null && imgMd5 != null && (newVal.compareTo(imgMd5) == 0)) ||
-            (newVal == null && imgMd5 == null && isImgMd5Initialized())) {
+            (newVal == null && imgMd5 == null && checkImgMd5Initialized())) {
             return;
         }
         imgMd5 = newVal;
@@ -317,25 +303,24 @@ public class FlFaceBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isImgMd5Modified()
+    public boolean checkImgMd5Modified()
     {
-        return 0L != (modified & FL_FACE_ID_IMG_MD5_MASK);
+        return 0L !=  (modified & FL_FACE_ID_IMG_MD5_MASK);
     }
 
     /**
-     * Determines if the imgMd5 has been initialized.
-     * <br>
+     * Determines if the imgMd5 has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isImgMd5Initialized()
+    public boolean checkImgMd5Initialized()
     {
-        return 0L != (initialized & FL_FACE_ID_IMG_MD5_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_IMG_MD5_MASK);
     }
     /**
-     * Getter method for faceLeft.
-     * <br>
+     * Getter method for {@link #faceLeft}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_left</li>
@@ -349,8 +334,7 @@ public class FlFaceBean
         return faceLeft;
     }
     /**
-     * Setter method for faceLeft.
-     * <br>
+     * Setter method for {@link #faceLeft}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -360,7 +344,7 @@ public class FlFaceBean
     public void setFaceLeft(Integer newVal)
     {
         if ((newVal != null && faceLeft != null && (newVal.compareTo(faceLeft) == 0)) ||
-            (newVal == null && faceLeft == null && isFaceLeftInitialized())) {
+            (newVal == null && faceLeft == null && checkFaceLeftInitialized())) {
             return;
         }
         faceLeft = newVal;
@@ -370,8 +354,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for faceLeft.
-     * <br>
+     * Setter method for {@link #faceLeft}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceLeft
@@ -380,31 +363,29 @@ public class FlFaceBean
     {
         setFaceLeft(new Integer(newVal));
     }
-
     /**
      * Determines if the faceLeft has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFaceLeftModified()
+    public boolean checkFaceLeftModified()
     {
-        return 0L != (modified & FL_FACE_ID_FACE_LEFT_MASK);
+        return 0L !=  (modified & FL_FACE_ID_FACE_LEFT_MASK);
     }
 
     /**
-     * Determines if the faceLeft has been initialized.
-     * <br>
+     * Determines if the faceLeft has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFaceLeftInitialized()
+    public boolean checkFaceLeftInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_FACE_LEFT_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_FACE_LEFT_MASK);
     }
     /**
-     * Getter method for faceTop.
-     * <br>
+     * Getter method for {@link #faceTop}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_top</li>
@@ -418,8 +399,7 @@ public class FlFaceBean
         return faceTop;
     }
     /**
-     * Setter method for faceTop.
-     * <br>
+     * Setter method for {@link #faceTop}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -429,7 +409,7 @@ public class FlFaceBean
     public void setFaceTop(Integer newVal)
     {
         if ((newVal != null && faceTop != null && (newVal.compareTo(faceTop) == 0)) ||
-            (newVal == null && faceTop == null && isFaceTopInitialized())) {
+            (newVal == null && faceTop == null && checkFaceTopInitialized())) {
             return;
         }
         faceTop = newVal;
@@ -439,8 +419,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for faceTop.
-     * <br>
+     * Setter method for {@link #faceTop}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceTop
@@ -449,31 +428,29 @@ public class FlFaceBean
     {
         setFaceTop(new Integer(newVal));
     }
-
     /**
      * Determines if the faceTop has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFaceTopModified()
+    public boolean checkFaceTopModified()
     {
-        return 0L != (modified & FL_FACE_ID_FACE_TOP_MASK);
+        return 0L !=  (modified & FL_FACE_ID_FACE_TOP_MASK);
     }
 
     /**
-     * Determines if the faceTop has been initialized.
-     * <br>
+     * Determines if the faceTop has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFaceTopInitialized()
+    public boolean checkFaceTopInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_FACE_TOP_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_FACE_TOP_MASK);
     }
     /**
-     * Getter method for faceWidth.
-     * <br>
+     * Getter method for {@link #faceWidth}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_width</li>
@@ -487,8 +464,7 @@ public class FlFaceBean
         return faceWidth;
     }
     /**
-     * Setter method for faceWidth.
-     * <br>
+     * Setter method for {@link #faceWidth}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -498,7 +474,7 @@ public class FlFaceBean
     public void setFaceWidth(Integer newVal)
     {
         if ((newVal != null && faceWidth != null && (newVal.compareTo(faceWidth) == 0)) ||
-            (newVal == null && faceWidth == null && isFaceWidthInitialized())) {
+            (newVal == null && faceWidth == null && checkFaceWidthInitialized())) {
             return;
         }
         faceWidth = newVal;
@@ -508,8 +484,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for faceWidth.
-     * <br>
+     * Setter method for {@link #faceWidth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceWidth
@@ -518,31 +493,29 @@ public class FlFaceBean
     {
         setFaceWidth(new Integer(newVal));
     }
-
     /**
      * Determines if the faceWidth has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFaceWidthModified()
+    public boolean checkFaceWidthModified()
     {
-        return 0L != (modified & FL_FACE_ID_FACE_WIDTH_MASK);
+        return 0L !=  (modified & FL_FACE_ID_FACE_WIDTH_MASK);
     }
 
     /**
-     * Determines if the faceWidth has been initialized.
-     * <br>
+     * Determines if the faceWidth has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFaceWidthInitialized()
+    public boolean checkFaceWidthInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_FACE_WIDTH_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_FACE_WIDTH_MASK);
     }
     /**
-     * Getter method for faceHeight.
-     * <br>
+     * Getter method for {@link #faceHeight}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_height</li>
@@ -556,8 +529,7 @@ public class FlFaceBean
         return faceHeight;
     }
     /**
-     * Setter method for faceHeight.
-     * <br>
+     * Setter method for {@link #faceHeight}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -567,7 +539,7 @@ public class FlFaceBean
     public void setFaceHeight(Integer newVal)
     {
         if ((newVal != null && faceHeight != null && (newVal.compareTo(faceHeight) == 0)) ||
-            (newVal == null && faceHeight == null && isFaceHeightInitialized())) {
+            (newVal == null && faceHeight == null && checkFaceHeightInitialized())) {
             return;
         }
         faceHeight = newVal;
@@ -577,8 +549,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for faceHeight.
-     * <br>
+     * Setter method for {@link #faceHeight}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to faceHeight
@@ -587,31 +558,29 @@ public class FlFaceBean
     {
         setFaceHeight(new Integer(newVal));
     }
-
     /**
      * Determines if the faceHeight has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFaceHeightModified()
+    public boolean checkFaceHeightModified()
     {
-        return 0L != (modified & FL_FACE_ID_FACE_HEIGHT_MASK);
+        return 0L !=  (modified & FL_FACE_ID_FACE_HEIGHT_MASK);
     }
 
     /**
-     * Determines if the faceHeight has been initialized.
-     * <br>
+     * Determines if the faceHeight has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFaceHeightInitialized()
+    public boolean checkFaceHeightInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_FACE_HEIGHT_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_FACE_HEIGHT_MASK);
     }
     /**
-     * Getter method for eyeLeftx.
-     * <br>
+     * Getter method for {@link #eyeLeftx}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_leftx</li>
@@ -625,8 +594,7 @@ public class FlFaceBean
         return eyeLeftx;
     }
     /**
-     * Setter method for eyeLeftx.
-     * <br>
+     * Setter method for {@link #eyeLeftx}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -636,7 +604,7 @@ public class FlFaceBean
     public void setEyeLeftx(Integer newVal)
     {
         if ((newVal != null && eyeLeftx != null && (newVal.compareTo(eyeLeftx) == 0)) ||
-            (newVal == null && eyeLeftx == null && isEyeLeftxInitialized())) {
+            (newVal == null && eyeLeftx == null && checkEyeLeftxInitialized())) {
             return;
         }
         eyeLeftx = newVal;
@@ -646,8 +614,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for eyeLeftx.
-     * <br>
+     * Setter method for {@link #eyeLeftx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeLeftx
@@ -656,31 +623,29 @@ public class FlFaceBean
     {
         setEyeLeftx(new Integer(newVal));
     }
-
     /**
      * Determines if the eyeLeftx has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isEyeLeftxModified()
+    public boolean checkEyeLeftxModified()
     {
-        return 0L != (modified & FL_FACE_ID_EYE_LEFTX_MASK);
+        return 0L !=  (modified & FL_FACE_ID_EYE_LEFTX_MASK);
     }
 
     /**
-     * Determines if the eyeLeftx has been initialized.
-     * <br>
+     * Determines if the eyeLeftx has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isEyeLeftxInitialized()
+    public boolean checkEyeLeftxInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_EYE_LEFTX_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_EYE_LEFTX_MASK);
     }
     /**
-     * Getter method for eyeLefty.
-     * <br>
+     * Getter method for {@link #eyeLefty}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_lefty</li>
@@ -694,8 +659,7 @@ public class FlFaceBean
         return eyeLefty;
     }
     /**
-     * Setter method for eyeLefty.
-     * <br>
+     * Setter method for {@link #eyeLefty}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -705,7 +669,7 @@ public class FlFaceBean
     public void setEyeLefty(Integer newVal)
     {
         if ((newVal != null && eyeLefty != null && (newVal.compareTo(eyeLefty) == 0)) ||
-            (newVal == null && eyeLefty == null && isEyeLeftyInitialized())) {
+            (newVal == null && eyeLefty == null && checkEyeLeftyInitialized())) {
             return;
         }
         eyeLefty = newVal;
@@ -715,8 +679,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for eyeLefty.
-     * <br>
+     * Setter method for {@link #eyeLefty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeLefty
@@ -725,31 +688,29 @@ public class FlFaceBean
     {
         setEyeLefty(new Integer(newVal));
     }
-
     /**
      * Determines if the eyeLefty has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isEyeLeftyModified()
+    public boolean checkEyeLeftyModified()
     {
-        return 0L != (modified & FL_FACE_ID_EYE_LEFTY_MASK);
+        return 0L !=  (modified & FL_FACE_ID_EYE_LEFTY_MASK);
     }
 
     /**
-     * Determines if the eyeLefty has been initialized.
-     * <br>
+     * Determines if the eyeLefty has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isEyeLeftyInitialized()
+    public boolean checkEyeLeftyInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_EYE_LEFTY_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_EYE_LEFTY_MASK);
     }
     /**
-     * Getter method for eyeRightx.
-     * <br>
+     * Getter method for {@link #eyeRightx}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_rightx</li>
@@ -763,8 +724,7 @@ public class FlFaceBean
         return eyeRightx;
     }
     /**
-     * Setter method for eyeRightx.
-     * <br>
+     * Setter method for {@link #eyeRightx}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -774,7 +734,7 @@ public class FlFaceBean
     public void setEyeRightx(Integer newVal)
     {
         if ((newVal != null && eyeRightx != null && (newVal.compareTo(eyeRightx) == 0)) ||
-            (newVal == null && eyeRightx == null && isEyeRightxInitialized())) {
+            (newVal == null && eyeRightx == null && checkEyeRightxInitialized())) {
             return;
         }
         eyeRightx = newVal;
@@ -784,8 +744,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for eyeRightx.
-     * <br>
+     * Setter method for {@link #eyeRightx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeRightx
@@ -794,31 +753,29 @@ public class FlFaceBean
     {
         setEyeRightx(new Integer(newVal));
     }
-
     /**
      * Determines if the eyeRightx has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isEyeRightxModified()
+    public boolean checkEyeRightxModified()
     {
-        return 0L != (modified & FL_FACE_ID_EYE_RIGHTX_MASK);
+        return 0L !=  (modified & FL_FACE_ID_EYE_RIGHTX_MASK);
     }
 
     /**
-     * Determines if the eyeRightx has been initialized.
-     * <br>
+     * Determines if the eyeRightx has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isEyeRightxInitialized()
+    public boolean checkEyeRightxInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_EYE_RIGHTX_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_EYE_RIGHTX_MASK);
     }
     /**
-     * Getter method for eyeRighty.
-     * <br>
+     * Getter method for {@link #eyeRighty}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.eye_righty</li>
@@ -832,8 +789,7 @@ public class FlFaceBean
         return eyeRighty;
     }
     /**
-     * Setter method for eyeRighty.
-     * <br>
+     * Setter method for {@link #eyeRighty}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -843,7 +799,7 @@ public class FlFaceBean
     public void setEyeRighty(Integer newVal)
     {
         if ((newVal != null && eyeRighty != null && (newVal.compareTo(eyeRighty) == 0)) ||
-            (newVal == null && eyeRighty == null && isEyeRightyInitialized())) {
+            (newVal == null && eyeRighty == null && checkEyeRightyInitialized())) {
             return;
         }
         eyeRighty = newVal;
@@ -853,8 +809,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for eyeRighty.
-     * <br>
+     * Setter method for {@link #eyeRighty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to eyeRighty
@@ -863,31 +818,29 @@ public class FlFaceBean
     {
         setEyeRighty(new Integer(newVal));
     }
-
     /**
      * Determines if the eyeRighty has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isEyeRightyModified()
+    public boolean checkEyeRightyModified()
     {
-        return 0L != (modified & FL_FACE_ID_EYE_RIGHTY_MASK);
+        return 0L !=  (modified & FL_FACE_ID_EYE_RIGHTY_MASK);
     }
 
     /**
-     * Determines if the eyeRighty has been initialized.
-     * <br>
+     * Determines if the eyeRighty has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isEyeRightyInitialized()
+    public boolean checkEyeRightyInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_EYE_RIGHTY_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_EYE_RIGHTY_MASK);
     }
     /**
-     * Getter method for mouthX.
-     * <br>
+     * Getter method for {@link #mouthX}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.mouth_x</li>
@@ -901,8 +854,7 @@ public class FlFaceBean
         return mouthX;
     }
     /**
-     * Setter method for mouthX.
-     * <br>
+     * Setter method for {@link #mouthX}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -912,7 +864,7 @@ public class FlFaceBean
     public void setMouthX(Integer newVal)
     {
         if ((newVal != null && mouthX != null && (newVal.compareTo(mouthX) == 0)) ||
-            (newVal == null && mouthX == null && isMouthXInitialized())) {
+            (newVal == null && mouthX == null && checkMouthXInitialized())) {
             return;
         }
         mouthX = newVal;
@@ -922,8 +874,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for mouthX.
-     * <br>
+     * Setter method for {@link #mouthX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to mouthX
@@ -932,31 +883,29 @@ public class FlFaceBean
     {
         setMouthX(new Integer(newVal));
     }
-
     /**
      * Determines if the mouthX has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMouthXModified()
+    public boolean checkMouthXModified()
     {
-        return 0L != (modified & FL_FACE_ID_MOUTH_X_MASK);
+        return 0L !=  (modified & FL_FACE_ID_MOUTH_X_MASK);
     }
 
     /**
-     * Determines if the mouthX has been initialized.
-     * <br>
+     * Determines if the mouthX has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMouthXInitialized()
+    public boolean checkMouthXInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_MOUTH_X_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_MOUTH_X_MASK);
     }
     /**
-     * Getter method for mouthY.
-     * <br>
+     * Getter method for {@link #mouthY}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.mouth_y</li>
@@ -970,8 +919,7 @@ public class FlFaceBean
         return mouthY;
     }
     /**
-     * Setter method for mouthY.
-     * <br>
+     * Setter method for {@link #mouthY}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -981,7 +929,7 @@ public class FlFaceBean
     public void setMouthY(Integer newVal)
     {
         if ((newVal != null && mouthY != null && (newVal.compareTo(mouthY) == 0)) ||
-            (newVal == null && mouthY == null && isMouthYInitialized())) {
+            (newVal == null && mouthY == null && checkMouthYInitialized())) {
             return;
         }
         mouthY = newVal;
@@ -991,8 +939,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for mouthY.
-     * <br>
+     * Setter method for {@link #mouthY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to mouthY
@@ -1001,31 +948,29 @@ public class FlFaceBean
     {
         setMouthY(new Integer(newVal));
     }
-
     /**
      * Determines if the mouthY has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isMouthYModified()
+    public boolean checkMouthYModified()
     {
-        return 0L != (modified & FL_FACE_ID_MOUTH_Y_MASK);
+        return 0L !=  (modified & FL_FACE_ID_MOUTH_Y_MASK);
     }
 
     /**
-     * Determines if the mouthY has been initialized.
-     * <br>
+     * Determines if the mouthY has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isMouthYInitialized()
+    public boolean checkMouthYInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_MOUTH_Y_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_MOUTH_Y_MASK);
     }
     /**
-     * Getter method for noseX.
-     * <br>
+     * Getter method for {@link #noseX}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.nose_x</li>
@@ -1039,8 +984,7 @@ public class FlFaceBean
         return noseX;
     }
     /**
-     * Setter method for noseX.
-     * <br>
+     * Setter method for {@link #noseX}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -1050,7 +994,7 @@ public class FlFaceBean
     public void setNoseX(Integer newVal)
     {
         if ((newVal != null && noseX != null && (newVal.compareTo(noseX) == 0)) ||
-            (newVal == null && noseX == null && isNoseXInitialized())) {
+            (newVal == null && noseX == null && checkNoseXInitialized())) {
             return;
         }
         noseX = newVal;
@@ -1060,8 +1004,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for noseX.
-     * <br>
+     * Setter method for {@link #noseX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to noseX
@@ -1070,31 +1013,29 @@ public class FlFaceBean
     {
         setNoseX(new Integer(newVal));
     }
-
     /**
      * Determines if the noseX has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isNoseXModified()
+    public boolean checkNoseXModified()
     {
-        return 0L != (modified & FL_FACE_ID_NOSE_X_MASK);
+        return 0L !=  (modified & FL_FACE_ID_NOSE_X_MASK);
     }
 
     /**
-     * Determines if the noseX has been initialized.
-     * <br>
+     * Determines if the noseX has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isNoseXInitialized()
+    public boolean checkNoseXInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_NOSE_X_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_NOSE_X_MASK);
     }
     /**
-     * Getter method for noseY.
-     * <br>
+     * Getter method for {@link #noseY}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.nose_y</li>
@@ -1108,8 +1049,7 @@ public class FlFaceBean
         return noseY;
     }
     /**
-     * Setter method for noseY.
-     * <br>
+     * Setter method for {@link #noseY}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -1119,7 +1059,7 @@ public class FlFaceBean
     public void setNoseY(Integer newVal)
     {
         if ((newVal != null && noseY != null && (newVal.compareTo(noseY) == 0)) ||
-            (newVal == null && noseY == null && isNoseYInitialized())) {
+            (newVal == null && noseY == null && checkNoseYInitialized())) {
             return;
         }
         noseY = newVal;
@@ -1129,8 +1069,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for noseY.
-     * <br>
+     * Setter method for {@link #noseY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to noseY
@@ -1139,31 +1078,29 @@ public class FlFaceBean
     {
         setNoseY(new Integer(newVal));
     }
-
     /**
      * Determines if the noseY has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isNoseYModified()
+    public boolean checkNoseYModified()
     {
-        return 0L != (modified & FL_FACE_ID_NOSE_Y_MASK);
+        return 0L !=  (modified & FL_FACE_ID_NOSE_Y_MASK);
     }
 
     /**
-     * Determines if the noseY has been initialized.
-     * <br>
+     * Determines if the noseY has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isNoseYInitialized()
+    public boolean checkNoseYInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_NOSE_Y_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_NOSE_Y_MASK);
     }
     /**
-     * Getter method for angleYaw.
-     * <br>
+     * Getter method for {@link #angleYaw}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.angle_yaw</li>
@@ -1177,8 +1114,7 @@ public class FlFaceBean
         return angleYaw;
     }
     /**
-     * Setter method for angleYaw.
-     * <br>
+     * Setter method for {@link #angleYaw}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -1188,7 +1124,7 @@ public class FlFaceBean
     public void setAngleYaw(Integer newVal)
     {
         if ((newVal != null && angleYaw != null && (newVal.compareTo(angleYaw) == 0)) ||
-            (newVal == null && angleYaw == null && isAngleYawInitialized())) {
+            (newVal == null && angleYaw == null && checkAngleYawInitialized())) {
             return;
         }
         angleYaw = newVal;
@@ -1198,8 +1134,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for angleYaw.
-     * <br>
+     * Setter method for {@link #angleYaw}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to angleYaw
@@ -1208,31 +1143,29 @@ public class FlFaceBean
     {
         setAngleYaw(new Integer(newVal));
     }
-
     /**
      * Determines if the angleYaw has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isAngleYawModified()
+    public boolean checkAngleYawModified()
     {
-        return 0L != (modified & FL_FACE_ID_ANGLE_YAW_MASK);
+        return 0L !=  (modified & FL_FACE_ID_ANGLE_YAW_MASK);
     }
 
     /**
-     * Determines if the angleYaw has been initialized.
-     * <br>
+     * Determines if the angleYaw has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isAngleYawInitialized()
+    public boolean checkAngleYawInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_ANGLE_YAW_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_ANGLE_YAW_MASK);
     }
     /**
-     * Getter method for anglePitch.
-     * <br>
+     * Getter method for {@link #anglePitch}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.angle_pitch</li>
@@ -1246,8 +1179,7 @@ public class FlFaceBean
         return anglePitch;
     }
     /**
-     * Setter method for anglePitch.
-     * <br>
+     * Setter method for {@link #anglePitch}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -1257,7 +1189,7 @@ public class FlFaceBean
     public void setAnglePitch(Integer newVal)
     {
         if ((newVal != null && anglePitch != null && (newVal.compareTo(anglePitch) == 0)) ||
-            (newVal == null && anglePitch == null && isAnglePitchInitialized())) {
+            (newVal == null && anglePitch == null && checkAnglePitchInitialized())) {
             return;
         }
         anglePitch = newVal;
@@ -1267,8 +1199,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for anglePitch.
-     * <br>
+     * Setter method for {@link #anglePitch}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to anglePitch
@@ -1277,31 +1208,29 @@ public class FlFaceBean
     {
         setAnglePitch(new Integer(newVal));
     }
-
     /**
      * Determines if the anglePitch has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isAnglePitchModified()
+    public boolean checkAnglePitchModified()
     {
-        return 0L != (modified & FL_FACE_ID_ANGLE_PITCH_MASK);
+        return 0L !=  (modified & FL_FACE_ID_ANGLE_PITCH_MASK);
     }
 
     /**
-     * Determines if the anglePitch has been initialized.
-     * <br>
+     * Determines if the anglePitch has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isAnglePitchInitialized()
+    public boolean checkAnglePitchInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_ANGLE_PITCH_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_ANGLE_PITCH_MASK);
     }
     /**
-     * Getter method for angleRoll.
-     * <br>
+     * Getter method for {@link #angleRoll}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.angle_roll</li>
@@ -1315,8 +1244,7 @@ public class FlFaceBean
         return angleRoll;
     }
     /**
-     * Setter method for angleRoll.
-     * <br>
+     * Setter method for {@link #angleRoll}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -1326,7 +1254,7 @@ public class FlFaceBean
     public void setAngleRoll(Integer newVal)
     {
         if ((newVal != null && angleRoll != null && (newVal.compareTo(angleRoll) == 0)) ||
-            (newVal == null && angleRoll == null && isAngleRollInitialized())) {
+            (newVal == null && angleRoll == null && checkAngleRollInitialized())) {
             return;
         }
         angleRoll = newVal;
@@ -1336,8 +1264,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for angleRoll.
-     * <br>
+     * Setter method for {@link #angleRoll}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to angleRoll
@@ -1346,31 +1273,29 @@ public class FlFaceBean
     {
         setAngleRoll(new Integer(newVal));
     }
-
     /**
      * Determines if the angleRoll has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isAngleRollModified()
+    public boolean checkAngleRollModified()
     {
-        return 0L != (modified & FL_FACE_ID_ANGLE_ROLL_MASK);
+        return 0L !=  (modified & FL_FACE_ID_ANGLE_ROLL_MASK);
     }
 
     /**
-     * Determines if the angleRoll has been initialized.
-     * <br>
+     * Determines if the angleRoll has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isAngleRollInitialized()
+    public boolean checkAngleRollInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_ANGLE_ROLL_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_ANGLE_ROLL_MASK);
     }
     /**
-     * Getter method for extInfo.
-     * <br>
+     * Getter method for {@link #extInfo}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.ext_info</li>
@@ -1385,8 +1310,7 @@ public class FlFaceBean
         return extInfo;
     }
     /**
-     * Setter method for extInfo.
-     * <br>
+     * Setter method for {@link #extInfo}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -1405,25 +1329,24 @@ public class FlFaceBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isExtInfoModified()
+    public boolean checkExtInfoModified()
     {
-        return 0L != (modified & FL_FACE_ID_EXT_INFO_MASK);
+        return 0L !=  (modified & FL_FACE_ID_EXT_INFO_MASK);
     }
 
     /**
-     * Determines if the extInfo has been initialized.
-     * <br>
+     * Determines if the extInfo has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isExtInfoInitialized()
+    public boolean checkExtInfoInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_EXT_INFO_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_EXT_INFO_MASK);
     }
     /**
-     * Getter method for feature.
-     * <br>
+     * Getter method for {@link #feature}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.feature</li>
@@ -1438,8 +1361,7 @@ public class FlFaceBean
         return feature;
     }
     /**
-     * Setter method for feature.
-     * <br>
+     * Setter method for {@link #feature}.<br>
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
@@ -1458,25 +1380,24 @@ public class FlFaceBean
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isFeatureModified()
+    public boolean checkFeatureModified()
     {
-        return 0L != (modified & FL_FACE_ID_FEATURE_MASK);
+        return 0L !=  (modified & FL_FACE_ID_FEATURE_MASK);
     }
 
     /**
-     * Determines if the feature has been initialized.
-     * <br>
+     * Determines if the feature has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isFeatureInitialized()
+    public boolean checkFeatureInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_FEATURE_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_FEATURE_MASK);
     }
     /**
-     * Getter method for createTime.
-     * <br>
+     * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.create_time</li>
@@ -1490,8 +1411,7 @@ public class FlFaceBean
         return createTime;
     }
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
@@ -1501,7 +1421,7 @@ public class FlFaceBean
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && isCreateTimeInitialized())) {
+            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
             return;
         }
         createTime = newVal;
@@ -1511,8 +1431,7 @@ public class FlFaceBean
     }
 
     /**
-     * Setter method for createTime.
-     * <br>
+     * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
      * @param newVal the new value to be assigned to createTime
@@ -1521,27 +1440,26 @@ public class FlFaceBean
     {
         setCreateTime(new java.util.Date(newVal));
     }
-
     /**
      * Determines if the createTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean isCreateTimeModified()
+    public boolean checkCreateTimeModified()
     {
-        return 0L != (modified & FL_FACE_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_FACE_ID_CREATE_TIME_MASK);
     }
 
     /**
-     * Determines if the createTime has been initialized.
-     * <br>
+     * Determines if the createTime has been initialized.<br>
+     *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean isCreateTimeInitialized()
+    public boolean checkCreateTimeInitialized()
     {
-        return 0L != (initialized & FL_FACE_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_CREATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -1594,47 +1512,47 @@ public class FlFaceBean
     public boolean isModified(int columnID){
         switch ( columnID ){
         case FL_FACE_ID_MD5:
-            return isMd5Modified();
+            return checkMd5Modified();
         case FL_FACE_ID_PERSON_ID:
-            return isPersonIdModified();
+            return checkPersonIdModified();
         case FL_FACE_ID_IMG_MD5:
-            return isImgMd5Modified();
+            return checkImgMd5Modified();
         case FL_FACE_ID_FACE_LEFT:
-            return isFaceLeftModified();
+            return checkFaceLeftModified();
         case FL_FACE_ID_FACE_TOP:
-            return isFaceTopModified();
+            return checkFaceTopModified();
         case FL_FACE_ID_FACE_WIDTH:
-            return isFaceWidthModified();
+            return checkFaceWidthModified();
         case FL_FACE_ID_FACE_HEIGHT:
-            return isFaceHeightModified();
+            return checkFaceHeightModified();
         case FL_FACE_ID_EYE_LEFTX:
-            return isEyeLeftxModified();
+            return checkEyeLeftxModified();
         case FL_FACE_ID_EYE_LEFTY:
-            return isEyeLeftyModified();
+            return checkEyeLeftyModified();
         case FL_FACE_ID_EYE_RIGHTX:
-            return isEyeRightxModified();
+            return checkEyeRightxModified();
         case FL_FACE_ID_EYE_RIGHTY:
-            return isEyeRightyModified();
+            return checkEyeRightyModified();
         case FL_FACE_ID_MOUTH_X:
-            return isMouthXModified();
+            return checkMouthXModified();
         case FL_FACE_ID_MOUTH_Y:
-            return isMouthYModified();
+            return checkMouthYModified();
         case FL_FACE_ID_NOSE_X:
-            return isNoseXModified();
+            return checkNoseXModified();
         case FL_FACE_ID_NOSE_Y:
-            return isNoseYModified();
+            return checkNoseYModified();
         case FL_FACE_ID_ANGLE_YAW:
-            return isAngleYawModified();
+            return checkAngleYawModified();
         case FL_FACE_ID_ANGLE_PITCH:
-            return isAnglePitchModified();
+            return checkAnglePitchModified();
         case FL_FACE_ID_ANGLE_ROLL:
-            return isAngleRollModified();
+            return checkAngleRollModified();
         case FL_FACE_ID_EXT_INFO:
-            return isExtInfoModified();
+            return checkExtInfoModified();
         case FL_FACE_ID_FEATURE:
-            return isFeatureModified();
+            return checkFeatureModified();
         case FL_FACE_ID_CREATE_TIME:
-            return isCreateTimeModified();
+            return checkCreateTimeModified();
         }
         return false;
     }
@@ -1649,61 +1567,59 @@ public class FlFaceBean
     public boolean isInitialized(int columnID){
         switch(columnID) {
         case FL_FACE_ID_MD5:
-            return isMd5Initialized();
+            return checkMd5Initialized();
         case FL_FACE_ID_PERSON_ID:
-            return isPersonIdInitialized();
+            return checkPersonIdInitialized();
         case FL_FACE_ID_IMG_MD5:
-            return isImgMd5Initialized();
+            return checkImgMd5Initialized();
         case FL_FACE_ID_FACE_LEFT:
-            return isFaceLeftInitialized();
+            return checkFaceLeftInitialized();
         case FL_FACE_ID_FACE_TOP:
-            return isFaceTopInitialized();
+            return checkFaceTopInitialized();
         case FL_FACE_ID_FACE_WIDTH:
-            return isFaceWidthInitialized();
+            return checkFaceWidthInitialized();
         case FL_FACE_ID_FACE_HEIGHT:
-            return isFaceHeightInitialized();
+            return checkFaceHeightInitialized();
         case FL_FACE_ID_EYE_LEFTX:
-            return isEyeLeftxInitialized();
+            return checkEyeLeftxInitialized();
         case FL_FACE_ID_EYE_LEFTY:
-            return isEyeLeftyInitialized();
+            return checkEyeLeftyInitialized();
         case FL_FACE_ID_EYE_RIGHTX:
-            return isEyeRightxInitialized();
+            return checkEyeRightxInitialized();
         case FL_FACE_ID_EYE_RIGHTY:
-            return isEyeRightyInitialized();
+            return checkEyeRightyInitialized();
         case FL_FACE_ID_MOUTH_X:
-            return isMouthXInitialized();
+            return checkMouthXInitialized();
         case FL_FACE_ID_MOUTH_Y:
-            return isMouthYInitialized();
+            return checkMouthYInitialized();
         case FL_FACE_ID_NOSE_X:
-            return isNoseXInitialized();
+            return checkNoseXInitialized();
         case FL_FACE_ID_NOSE_Y:
-            return isNoseYInitialized();
+            return checkNoseYInitialized();
         case FL_FACE_ID_ANGLE_YAW:
-            return isAngleYawInitialized();
+            return checkAngleYawInitialized();
         case FL_FACE_ID_ANGLE_PITCH:
-            return isAnglePitchInitialized();
+            return checkAnglePitchInitialized();
         case FL_FACE_ID_ANGLE_ROLL:
-            return isAngleRollInitialized();
+            return checkAngleRollInitialized();
         case FL_FACE_ID_EXT_INFO:
-            return isExtInfoInitialized();
+            return checkExtInfoInitialized();
         case FL_FACE_ID_FEATURE:
-            return isFeatureInitialized();
+            return checkFeatureInitialized();
         case FL_FACE_ID_CREATE_TIME:
-            return isCreateTimeInitialized();
+            return checkCreateTimeInitialized();
         }
         return false;
     }
+    
     /**
      * Determines if the {@code column} has been modified.
      * @param column
      * @return true if the field has been modified, false if the field has not been modified
      * @author guyadong
      */
-    public boolean isModified(String column){
-        int index = FL_FACE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
-        return isModified(index);
+    public boolean isModified(String column){        
+        return isModified(columnIDOf(column));
     }
 
     /**
@@ -1715,10 +1631,7 @@ public class FlFaceBean
      * @author guyadong
      */
     public boolean isInitialized(String column){
-        int index = FL_FACE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
-        return isInitialized(index);
+        return isInitialized(columnIDOf(column));
     }
     
     /**
@@ -1728,7 +1641,13 @@ public class FlFaceBean
     {
         modified = 0L;
     }
-
+    /**
+     * Resets the object initialization status to 'not initialized'.
+     */
+    private void resetInitialized()
+    {
+        initialized = 0L;
+    }
     @Override
     public boolean equals(Object object)
     {
@@ -1824,93 +1743,6 @@ public class FlFaceBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-    /**
-    * Copies property of the passed bean into the current bean.<br>
-    * if bean.isNew() is true, call {@link #copyIfNotNull(GfCodeBeanBase)}
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copy(FlFaceBean bean)
-    {
-        if(bean.isNew()){
-            copyIfNotNull(bean);
-        }else{        
-            isNew(bean.isNew());
-            setMd5(bean.getMd5());
-            setPersonId(bean.getPersonId());
-            setImgMd5(bean.getImgMd5());
-            setFaceLeft(bean.getFaceLeft());
-            setFaceTop(bean.getFaceTop());
-            setFaceWidth(bean.getFaceWidth());
-            setFaceHeight(bean.getFaceHeight());
-            setEyeLeftx(bean.getEyeLeftx());
-            setEyeLefty(bean.getEyeLefty());
-            setEyeRightx(bean.getEyeRightx());
-            setEyeRighty(bean.getEyeRighty());
-            setMouthX(bean.getMouthX());
-            setMouthY(bean.getMouthY());
-            setNoseX(bean.getNoseX());
-            setNoseY(bean.getNoseY());
-            setAngleYaw(bean.getAngleYaw());
-            setAnglePitch(bean.getAnglePitch());
-            setAngleRoll(bean.getAngleRoll());
-            setExtInfo(bean.getExtInfo());
-            setFeature(bean.getFeature());
-            setCreateTime(bean.getCreateTime());
-        }
-    }
-    /**
-    * Copies property of the passed bean into the current bean if property not null.
-    *
-    * @param bean the bean to copy into the current bean
-    * @author guyadong
-    */
-    public void copyIfNotNull(FlFaceBean bean)
-    {
-        isNew(bean.isNew());
-        if(bean.getMd5()!=null)
-            setMd5(bean.getMd5());
-        if(bean.getPersonId()!=null)
-            setPersonId(bean.getPersonId());
-        if(bean.getImgMd5()!=null)
-            setImgMd5(bean.getImgMd5());
-        if(bean.getFaceLeft()!=null)
-            setFaceLeft(bean.getFaceLeft());
-        if(bean.getFaceTop()!=null)
-            setFaceTop(bean.getFaceTop());
-        if(bean.getFaceWidth()!=null)
-            setFaceWidth(bean.getFaceWidth());
-        if(bean.getFaceHeight()!=null)
-            setFaceHeight(bean.getFaceHeight());
-        if(bean.getEyeLeftx()!=null)
-            setEyeLeftx(bean.getEyeLeftx());
-        if(bean.getEyeLefty()!=null)
-            setEyeLefty(bean.getEyeLefty());
-        if(bean.getEyeRightx()!=null)
-            setEyeRightx(bean.getEyeRightx());
-        if(bean.getEyeRighty()!=null)
-            setEyeRighty(bean.getEyeRighty());
-        if(bean.getMouthX()!=null)
-            setMouthX(bean.getMouthX());
-        if(bean.getMouthY()!=null)
-            setMouthY(bean.getMouthY());
-        if(bean.getNoseX()!=null)
-            setNoseX(bean.getNoseX());
-        if(bean.getNoseY()!=null)
-            setNoseY(bean.getNoseY());
-        if(bean.getAngleYaw()!=null)
-            setAngleYaw(bean.getAngleYaw());
-        if(bean.getAnglePitch()!=null)
-            setAnglePitch(bean.getAnglePitch());
-        if(bean.getAngleRoll()!=null)
-            setAngleRoll(bean.getAngleRoll());
-        if(bean.getExtInfo()!=null)
-            setExtInfo(bean.getExtInfo());
-        if(bean.getFeature()!=null)
-            setFeature(bean.getFeature());
-        if(bean.getCreateTime()!=null)
-            setCreateTime(bean.getCreateTime());
-    }
 
     /**
     * set all field to null
@@ -1919,7 +1751,6 @@ public class FlFaceBean
     */
     public FlFaceBean clean()
     {
-        isNew(true);
         setMd5(null);
         setPersonId(null);
         setImgMd5(null);
@@ -1941,6 +1772,9 @@ public class FlFaceBean
         setExtInfo(null);
         setFeature(null);
         setCreateTime(null);
+        isNew(true);
+        resetInitialized();
+        resetIsModified();
         return this;
     }
     
@@ -1953,10 +1787,14 @@ public class FlFaceBean
     public void copy(FlFaceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
+            for (int i = 0; i < 21; ++i) {
+                if( bean.isInitialized(i))
+                    setValue(i, bean.getValue(i));
+            }
         else
-            for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i], bean.getValue(fieldList[i]));
+            for (int i = 0; i < fieldList.length; ++i) {
+                if( bean.isInitialized(fieldList[i]))
+                    setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
     }
         
@@ -1969,11 +1807,15 @@ public class FlFaceBean
     public void copy(FlFaceBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            copy(bean);
-        else
+            copy(bean,(int[])null);
+        else{
+            int field;
             for (int i = 0; i < fieldList.length; i++) {
-                setValue(fieldList[i].trim(), bean.getValue(fieldList[i].trim()));
+                field = columnIDOf(fieldList[i].trim());
+                if(bean.isInitialized(field))
+                    setValue(field, bean.getValue(field));
             }
+        }
     }
 
     /**
@@ -2085,10 +1927,7 @@ public class FlFaceBean
      */
     public <T>T getValue(String column)
     {
-        int index = FL_FACE_FIELDS_LIST.indexOf(column);
-        if( 0 > index ) 
-            index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
-        return getValue(index);
+        return getValue(columnIDOf(column));
     }
 
     /**
@@ -2096,9 +1935,13 @@ public class FlFaceBean
      */
     public <T>void setValue(String column,T value)
     {
+        setValue(columnIDOf(column),value);
+    }
+
+    public static int columnIDOf(String column){
         int index = FL_FACE_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
             index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
-        setValue(index,value);
+        return index;    
     }
 }
