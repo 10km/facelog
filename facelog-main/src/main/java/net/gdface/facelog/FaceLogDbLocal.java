@@ -5,10 +5,8 @@ import java.util.Date;
 import java.util.List;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
-import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.IFaceManager;
-import net.gdface.facelog.db.IFeatureManager;
 import net.gdface.facelog.db.IImageManager;
 import net.gdface.facelog.db.ILogManager;
 import net.gdface.facelog.db.IPersonManager;
@@ -26,7 +24,6 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		net.gdface.facelog.db.Constant {
 	private static final IDeviceManager deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
 	private static final IFaceManager faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);
-	private static final IFeatureManager featureManager = (IFeatureManager) TableInstance.getInstance(FeatureBean.class);
 	private static final IImageManager imageManager = (IImageManager) TableInstance.getInstance(ImageBean.class);
 	private static final ILogManager logManager = (ILogManager) TableInstance.getInstance(LogBean.class);
 	private static final IPersonManager personManager = (IPersonManager) TableInstance.getInstance(PersonBean.class);
@@ -67,6 +64,22 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 				return true;
 			Date expiryDate = personBean.getExpiryDate();
 			return null== expiryDate?false:expiryDate.before(new Date());
+		}catch(ServiceRuntime e){
+			throw e;
+		}catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public void disablePerson(int id)throws ServiceRuntime{
+		setPersonExpiryDate(id,new Date());
+	}
+	public void setPersonExpiryDate(int id,Date expiryDate)throws ServiceRuntime{
+		try{
+			PersonBean personBean = getPerson(id);
+			if(null == personBean)
+				return ;
+			personBean.setExpiryDate(expiryDate);
+			personManager.save(personBean);
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
@@ -206,7 +219,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			DeviceBean deviceBean = deviceManager.loadByPrimaryKey(deviceId);
 			if(null == deviceBean){
 				throw new IllegalArgumentException(String.format("invalid device id %d",deviceId));
-			}			
+			}
 			return saveImage(imageBytes,deviceBean,impFlFacebyImgMd5,impFlPersonbyPhotoId);		
 		}catch(ServiceRuntime e){
 			throw e;
@@ -217,12 +230,32 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	/**
 	 * 根据图像的MD5校验码返回图像数据
 	 * @param imageMD5
-	 * @return 图像数据,如果数据库中没有对应的图像则返回null
+	 * @return 
 	 * @throws ServiceRuntime
+	 * @see {@link #getBinary(String)}
 	 */
 	public byte[] getImage(String imageMD5)throws ServiceRuntime{
+		return getBinary(imageMD5);
+	}
+	/**
+	 * 根据MD5校验码返回人脸特征数据
+	 * @param md5
+	 * @return
+	 * @throws ServiceRuntime
+	 * @see {@link #getBinary(String)}
+	 */
+	public byte[] getFeature(String md5)throws ServiceRuntime{
+		return getBinary(md5);
+	}
+	/**
+	 * 根据MD5校验码返回二进制数据
+	 * @param md5
+	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
+	 * @throws ServiceRuntime
+	 */
+	public byte[] getBinary(String md5)throws ServiceRuntime{
 		try{
-			StoreBean storeBean = storeManager.loadByPrimaryKey(imageMD5);
+			StoreBean storeBean = storeManager.loadByPrimaryKey(md5);
 			return null ==storeBean?null:storeBean.getData();
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
