@@ -118,13 +118,21 @@ public class RedisFactory {
 		consumers.clearInstances();
 	}
 	/**
-	 * 返回 {@link JedisPoolLazy}对应的{@link RedisConsumer}实例,如果没有找到
+	 * 返回 {@link JedisPoolLazy}对应的{@link RedisConsumer}实例
 	 * @param jedisPoolLazy
 	 * @return
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#getInstance(gu.simplemq.redis.JedisPoolLazy)
 	 */
 	public static RedisConsumer getConsumer(JedisPoolLazy jedisPoolLazy) {
 		return consumers.getInstance(jedisPoolLazy);
+	}
+	
+	/** 
+	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisConsumer}实例
+	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
+	 */
+	public static RedisConsumer getConsumer() {
+		return consumers.getInstance(JedisPoolLazy.getDefaultInstance());
 	}
 	/**
 	 * 删除所有{@link RedisSubscriber}对象
@@ -142,6 +150,13 @@ public class RedisFactory {
 	public static RedisSubscriber getSubscriber(JedisPoolLazy jedisPoolLazy) {
 		return subscribers.getInstance(jedisPoolLazy);
 	}
+	/** 
+	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisSubscriber}实例
+	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
+	 */
+	public static RedisSubscriber getSubscriber() {
+		return subscribers.getInstance(JedisPoolLazy.getDefaultInstance());
+	}
 	/**
 	 * 返回 {@link JedisPoolLazy}对应的{@link RedisProducer}实例
 	 * @param jedisPoolLazy
@@ -151,8 +166,15 @@ public class RedisFactory {
 	public static RedisProducer getProducer(JedisPoolLazy jedisPoolLazy) {
 		return producers.getInstance(jedisPoolLazy);
 	}
+	/** 
+	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisProducer}实例
+	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
+	 */
+	public static RedisProducer getProducer() {
+		return producers.getInstance(JedisPoolLazy.getDefaultInstance());
+	}
 	/**
-	 * 返回 {@link JedisPoolLazy}对应的{@link RedisPublisher}实例,如果没有找到
+	 * 返回 {@link JedisPoolLazy}对应的{@link RedisPublisher}实例
 	 * @param jedisPoolLazy
 	 * @return
 	 * @see gu.simplemq.redis.RedisFactory.RedisInstance#getInstance(gu.simplemq.redis.JedisPoolLazy)
@@ -160,5 +182,11 @@ public class RedisFactory {
 	public static RedisPublisher getPublisher(JedisPoolLazy jedisPoolLazy) {
 		return publishers.getInstance(jedisPoolLazy);
 	}
-	
+	/** 
+	 * 返回{@link JedisPoolLazy}默认实例对应的{@link RedisPublisher}实例
+	 * @see  {@link JedisPoolLazy#getDefaultInstance()}
+	 */
+	public static RedisPublisher getPublisher() {
+		return publishers.getInstance(JedisPoolLazy.getDefaultInstance());
+	}
 }

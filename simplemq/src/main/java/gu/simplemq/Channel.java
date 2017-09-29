@@ -16,7 +16,7 @@ import gu.simplemq.utils.Assert;
  *
  * @param <T> 频道消息数据类型
  */
-public class Channel<T> implements IMessageAdapter<Object> {
+public class Channel<T> implements IMessageAdapter<Object>, Cloneable {
 	protected static final Logger logger = LoggerFactory.getLogger(Channel.class);
 	/**  频道名(消息来源) */
 	public final String name;
@@ -29,7 +29,32 @@ public class Channel<T> implements IMessageAdapter<Object> {
 	public Channel(String name, Class<T> clazz) {
 		this(name,(Type)clazz);
 	}
-	
+    private static Class<?> getRawClass(Type type){
+        if(type instanceof Class<?>){
+            return (Class<?>) type;
+        } else if(type instanceof ParameterizedType){
+            return getRawClass(((ParameterizedType) type).getRawType());
+        } else{
+            throw new IllegalArgumentException("invalid type");
+        }
+    }
+    /**
+     * usage:<pre>new Channel&lt;Model&gt;("name"){};</pre>
+     * @param name
+     */
+    public Channel(String name){
+    	Assert.notEmpty(name, "name");
+        this.name = name;
+        Type superClass = getClass().getGenericSuperclass();
+        this.type = getRawClass(((ParameterizedType) superClass).getActualTypeArguments()[0]);
+    }
+    /**
+     * usage:<pre>new Channel&lt;Model&gt;("name",handle){};</pre>
+     */
+    public Channel(String name,IMessageAdapter<T> handle){
+    	this(name);
+    	this.adapter = handle;
+    }
 	public Channel(String name, Type type) {
 		super();
 		Assert.notEmpty(name, "name");
@@ -72,9 +97,31 @@ public class Channel<T> implements IMessageAdapter<Object> {
 	}
 	/**
 	 * @param adapter 要设置的 adapter
+	 * @return 
 	 */
-	public void setAdapter(IMessageAdapter<T> adapter) {
+	public Channel<T> setAdapter(IMessageAdapter<T> adapter) {
 		this.adapter = adapter;
+		return this;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		return equalsIgnoreAdapter(obj) && (adapter == ((Channel<?>)obj).adapter);
+	}
+	public boolean equalsIgnoreAdapter(Object obj) {
+		if(super.equals(obj))return true;
+		if(!(obj instanceof Channel))return false;
+		Channel<?> oth = (Channel<?>)obj;
+		return name.equals(oth.name) && type == oth.type;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Channel<T> clone() {
+		try {
+			return (Channel<T>) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
