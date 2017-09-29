@@ -16,7 +16,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * FlStoreBean is a mapping of fl_store Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 二进制大数据存储表 </li>
+ *    <li>comments: 二进制数据存储表 </li>
  * </ul>
  * @author guyadong
 */
@@ -103,7 +103,11 @@ public class FlStoreBean
      * <ul>
      * <li>full name: fl_store.md5</li>
      * <li> imported key: fl_image.md5</li>
+     * <li> imported key: fl_log.verify_feature</li>
+     * <li> imported key: fl_log.compare_feature</li>
      * <li> imported key: fl_image.thumb_md5</li>
+     * <li> imported key: fl_person.feature_md5</li>
+     * <li> imported key: fl_face.feature_md5</li>
      * <li>comments: 主键,md5检验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>

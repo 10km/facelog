@@ -21,14 +21,11 @@ public class FaceBean
 {
     private static final long serialVersionUID = -1428389659131258505L;
     
-    /** comments:主键,特征数据md5校验码 */
-    private String md5;
-
-    /** comments:外键,所属用户id */
-    private Integer personId;
+    /** comments:主键 */
+    private Integer id;
 
     /** comments:外键,所属图像id */
-    private String imgMd5;
+    private String imageMd5;
 
     private Integer faceLeft;
 
@@ -63,8 +60,8 @@ public class FaceBean
     /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
     private byte[] extInfo;
 
-    /** comments:二进制特征数据 */
-    private byte[] feature;
+    /** comments:外键,人脸特征数据MD5 id */
+    private String featureMd5;
 
     private java.util.Date createTime;
 
@@ -137,193 +134,132 @@ public class FaceBean
         super();
     }
     /**
-     * Getter method for {@link #md5}.<br>
+     * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.md5</li>
-     * <li> imported key: fl_log.verify_face</li>
-     * <li> imported key: fl_log.compare_face</li>
-     * <li>comments: 主键,特征数据md5校验码</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
-     * </ul>
-     *
-     * @return the value of md5
-     */
-    @com.facebook.swift.codec.ThriftField(4)
-    public String getMd5(){
-        return md5;
-    }
-    /**
-     * Setter method for {@link #md5}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to md5
-     */
-    @com.facebook.swift.codec.ThriftField
-    public void setMd5(String newVal)
-    {
-        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && checkMd5Initialized())) {
-            return;
-        }
-        md5 = newVal;
-
-        modified |= FL_FACE_ID_MD5_MASK;
-        initialized |= FL_FACE_ID_MD5_MASK;
-    }
-
-    /**
-     * Determines if the md5 has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkMd5Modified()
-    {
-        return 0L !=  (modified & FL_FACE_ID_MD5_MASK);
-    }
-
-    /**
-     * Determines if the md5 has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkMd5Initialized()
-    {
-        return 0L !=  (initialized & FL_FACE_ID_MD5_MASK);
-    }
-    /**
-     * Getter method for {@link #personId}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_face.person_id</li>
-     * <li> foreign key: fl_person.id</li>
-     * <li>comments: 外键,所属用户id</li>
+     * <li>full name: fl_face.id</li>
+     * <li>comments: 主键</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of personId
+     * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(5)
-    public Integer getPersonId(){
-        return personId;
+    @com.facebook.swift.codec.ThriftField(4)
+    public Integer getId(){
+        return id;
     }
     /**
-     * Setter method for {@link #personId}.<br>
+     * Setter method for {@link #id}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
-    public void setPersonId(Integer newVal)
+    public void setId(Integer newVal)
     {
-        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && checkPersonIdInitialized())) {
+        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
+            (newVal == null && id == null && checkIdInitialized())) {
             return;
         }
-        personId = newVal;
+        id = newVal;
 
-        modified |= FL_FACE_ID_PERSON_ID_MASK;
-        initialized |= FL_FACE_ID_PERSON_ID_MASK;
+        modified |= FL_FACE_ID_ID_MASK;
+        initialized |= FL_FACE_ID_ID_MASK;
     }
 
     /**
-     * Setter method for {@link #personId}.<br>
+     * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value to be assigned to id
      */
-    public void setPersonId(int newVal)
+    public void setId(int newVal)
     {
-        setPersonId(new Integer(newVal));
+        setId(new Integer(newVal));
     }
     /**
-     * Determines if the personId has been modified.
+     * Determines if the id has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkPersonIdModified()
+    public boolean checkIdModified()
     {
-        return 0L !=  (modified & FL_FACE_ID_PERSON_ID_MASK);
+        return 0L !=  (modified & FL_FACE_ID_ID_MASK);
     }
 
     /**
-     * Determines if the personId has been initialized.<br>
+     * Determines if the id has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkPersonIdInitialized()
+    public boolean checkIdInitialized()
     {
-        return 0L !=  (initialized & FL_FACE_ID_PERSON_ID_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_ID_MASK);
     }
     /**
-     * Getter method for {@link #imgMd5}.<br>
+     * Getter method for {@link #imageMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.img_md5</li>
+     * <li>full name: fl_face.image_md5</li>
      * <li> foreign key: fl_image.md5</li>
      * <li>comments: 外键,所属图像id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of imgMd5
+     * @return the value of imageMd5
      */
-    @com.facebook.swift.codec.ThriftField(6)
-    public String getImgMd5(){
-        return imgMd5;
+    @com.facebook.swift.codec.ThriftField(5)
+    public String getImageMd5(){
+        return imageMd5;
     }
     /**
-     * Setter method for {@link #imgMd5}.<br>
+     * Setter method for {@link #imageMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to imgMd5
+     * @param newVal the new value to be assigned to imageMd5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setImgMd5(String newVal)
+    public void setImageMd5(String newVal)
     {
-        if ((newVal != null && imgMd5 != null && (newVal.compareTo(imgMd5) == 0)) ||
-            (newVal == null && imgMd5 == null && checkImgMd5Initialized())) {
+        if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
+            (newVal == null && imageMd5 == null && checkImageMd5Initialized())) {
             return;
         }
-        imgMd5 = newVal;
+        imageMd5 = newVal;
 
-        modified |= FL_FACE_ID_IMG_MD5_MASK;
-        initialized |= FL_FACE_ID_IMG_MD5_MASK;
+        modified |= FL_FACE_ID_IMAGE_MD5_MASK;
+        initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
     }
 
     /**
-     * Determines if the imgMd5 has been modified.
+     * Determines if the imageMd5 has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkImgMd5Modified()
+    public boolean checkImageMd5Modified()
     {
-        return 0L !=  (modified & FL_FACE_ID_IMG_MD5_MASK);
+        return 0L !=  (modified & FL_FACE_ID_IMAGE_MD5_MASK);
     }
 
     /**
-     * Determines if the imgMd5 has been initialized.<br>
+     * Determines if the imageMd5 has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkImgMd5Initialized()
+    public boolean checkImageMd5Initialized()
     {
-        return 0L !=  (initialized & FL_FACE_ID_IMG_MD5_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_IMAGE_MD5_MASK);
     }
     /**
      * Getter method for {@link #faceLeft}.<br>
@@ -336,7 +272,7 @@ public class FaceBean
      *
      * @return the value of faceLeft
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(6)
     public Integer getFaceLeft(){
         return faceLeft;
     }
@@ -403,7 +339,7 @@ public class FaceBean
      *
      * @return the value of faceTop
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(7)
     public Integer getFaceTop(){
         return faceTop;
     }
@@ -470,7 +406,7 @@ public class FaceBean
      *
      * @return the value of faceWidth
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @com.facebook.swift.codec.ThriftField(8)
     public Integer getFaceWidth(){
         return faceWidth;
     }
@@ -537,7 +473,7 @@ public class FaceBean
      *
      * @return the value of faceHeight
      */
-    @com.facebook.swift.codec.ThriftField(10)
+    @com.facebook.swift.codec.ThriftField(9)
     public Integer getFaceHeight(){
         return faceHeight;
     }
@@ -604,7 +540,7 @@ public class FaceBean
      *
      * @return the value of eyeLeftx
      */
-    @com.facebook.swift.codec.ThriftField(11)
+    @com.facebook.swift.codec.ThriftField(10)
     public Integer getEyeLeftx(){
         return eyeLeftx;
     }
@@ -671,7 +607,7 @@ public class FaceBean
      *
      * @return the value of eyeLefty
      */
-    @com.facebook.swift.codec.ThriftField(12)
+    @com.facebook.swift.codec.ThriftField(11)
     public Integer getEyeLefty(){
         return eyeLefty;
     }
@@ -738,7 +674,7 @@ public class FaceBean
      *
      * @return the value of eyeRightx
      */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(12)
     public Integer getEyeRightx(){
         return eyeRightx;
     }
@@ -805,7 +741,7 @@ public class FaceBean
      *
      * @return the value of eyeRighty
      */
-    @com.facebook.swift.codec.ThriftField(14)
+    @com.facebook.swift.codec.ThriftField(13)
     public Integer getEyeRighty(){
         return eyeRighty;
     }
@@ -872,7 +808,7 @@ public class FaceBean
      *
      * @return the value of mouthX
      */
-    @com.facebook.swift.codec.ThriftField(15)
+    @com.facebook.swift.codec.ThriftField(14)
     public Integer getMouthX(){
         return mouthX;
     }
@@ -939,7 +875,7 @@ public class FaceBean
      *
      * @return the value of mouthY
      */
-    @com.facebook.swift.codec.ThriftField(16)
+    @com.facebook.swift.codec.ThriftField(15)
     public Integer getMouthY(){
         return mouthY;
     }
@@ -1006,7 +942,7 @@ public class FaceBean
      *
      * @return the value of noseX
      */
-    @com.facebook.swift.codec.ThriftField(17)
+    @com.facebook.swift.codec.ThriftField(16)
     public Integer getNoseX(){
         return noseX;
     }
@@ -1073,7 +1009,7 @@ public class FaceBean
      *
      * @return the value of noseY
      */
-    @com.facebook.swift.codec.ThriftField(18)
+    @com.facebook.swift.codec.ThriftField(17)
     public Integer getNoseY(){
         return noseY;
     }
@@ -1140,7 +1076,7 @@ public class FaceBean
      *
      * @return the value of angleYaw
      */
-    @com.facebook.swift.codec.ThriftField(19)
+    @com.facebook.swift.codec.ThriftField(18)
     public Integer getAngleYaw(){
         return angleYaw;
     }
@@ -1207,7 +1143,7 @@ public class FaceBean
      *
      * @return the value of anglePitch
      */
-    @com.facebook.swift.codec.ThriftField(20)
+    @com.facebook.swift.codec.ThriftField(19)
     public Integer getAnglePitch(){
         return anglePitch;
     }
@@ -1274,7 +1210,7 @@ public class FaceBean
      *
      * @return the value of angleRoll
      */
-    @com.facebook.swift.codec.ThriftField(21)
+    @com.facebook.swift.codec.ThriftField(20)
     public Integer getAngleRoll(){
         return angleRoll;
     }
@@ -1342,7 +1278,7 @@ public class FaceBean
      *
      * @return the value of extInfo
      */
-    @com.facebook.swift.codec.ThriftField(22)
+    @com.facebook.swift.codec.ThriftField(21)
     public byte[] getExtInfo(){
         return extInfo;
     }
@@ -1384,57 +1320,63 @@ public class FaceBean
         return 0L !=  (initialized & FL_FACE_ID_EXT_INFO_MASK);
     }
     /**
-     * Getter method for {@link #feature}.<br>
+     * Getter method for {@link #featureMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_face.feature</li>
-     * <li>comments: 二进制特征数据</li>
-     * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
+     * <li>full name: fl_face.feature_md5</li>
+     * <li> foreign key: fl_store.md5</li>
+     * <li>comments: 外键,人脸特征数据MD5 id</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of feature
+     * @return the value of featureMd5
      */
-    @com.facebook.swift.codec.ThriftField(23)
-    public byte[] getFeature(){
-        return feature;
+    @com.facebook.swift.codec.ThriftField(22)
+    public String getFeatureMd5(){
+        return featureMd5;
     }
     /**
-     * Setter method for {@link #feature}.<br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * Setter method for {@link #featureMd5}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to feature
+     * @param newVal the new value to be assigned to featureMd5
      */
     @com.facebook.swift.codec.ThriftField
-    public void setFeature(byte[] newVal)
+    public void setFeatureMd5(String newVal)
     {
-        feature = newVal;
+        if ((newVal != null && featureMd5 != null && (newVal.compareTo(featureMd5) == 0)) ||
+            (newVal == null && featureMd5 == null && checkFeatureMd5Initialized())) {
+            return;
+        }
+        featureMd5 = newVal;
 
-        modified |= FL_FACE_ID_FEATURE_MASK;
-        initialized |= FL_FACE_ID_FEATURE_MASK;
+        modified |= FL_FACE_ID_FEATURE_MD5_MASK;
+        initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
     }
 
     /**
-     * Determines if the feature has been modified.
+     * Determines if the featureMd5 has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkFeatureModified()
+    public boolean checkFeatureMd5Modified()
     {
-        return 0L !=  (modified & FL_FACE_ID_FEATURE_MASK);
+        return 0L !=  (modified & FL_FACE_ID_FEATURE_MD5_MASK);
     }
 
     /**
-     * Determines if the feature has been initialized.<br>
+     * Determines if the featureMd5 has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkFeatureInitialized()
+    public boolean checkFeatureMd5Initialized()
     {
-        return 0L !=  (initialized & FL_FACE_ID_FEATURE_MASK);
+        return 0L !=  (initialized & FL_FACE_ID_FEATURE_MD5_MASK);
     }
     /**
      * Getter method for {@link #createTime}.<br>
@@ -1447,7 +1389,7 @@ public class FaceBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(24)
+    @com.facebook.swift.codec.ThriftField(23)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -1507,34 +1449,34 @@ public class FaceBean
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link ImageBean} by {@link #imgMd5} . <br>
-     * FOREIGN KEY (img_md5) REFERENCES fl_image(md5)
+     * The referenced {@link ImageBean} by {@link #imageMd5} . <br>
+     * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
-    private ImageBean referencedByImgMd5;
-    /** Getter method for {@link #referencedByImgMd5}. */
-    @com.facebook.swift.codec.ThriftField(25)
-    public ImageBean getReferencedByImgMd5() {
-        return this.referencedByImgMd5;
+    private ImageBean referencedByImageMd5;
+    /** Getter method for {@link #referencedByImageMd5}. */
+    @com.facebook.swift.codec.ThriftField(24)
+    public ImageBean getReferencedByImageMd5() {
+        return this.referencedByImageMd5;
     }
-    /** Setter method for {@link #referencedByImgMd5}. */
+    /** Setter method for {@link #referencedByImageMd5}. */
     @com.facebook.swift.codec.ThriftField
-    public void setReferencedByImgMd5(ImageBean reference) {
-        this.referencedByImgMd5 = reference;
+    public void setReferencedByImageMd5(ImageBean reference) {
+        this.referencedByImageMd5 = reference;
     }
     /** 
-     * The referenced {@link PersonBean} by {@link #personId} . <br>
-     * FOREIGN KEY (person_id) REFERENCES fl_person(id)
+     * The referenced {@link StoreBean} by {@link #featureMd5} . <br>
+     * FOREIGN KEY (feature_md5) REFERENCES fl_store(md5)
      */
-    private PersonBean referencedByPersonId;
-    /** Getter method for {@link #referencedByPersonId}. */
-    @com.facebook.swift.codec.ThriftField(26)
-    public PersonBean getReferencedByPersonId() {
-        return this.referencedByPersonId;
+    private StoreBean referencedByFeatureMd5;
+    /** Getter method for {@link #referencedByFeatureMd5}. */
+    @com.facebook.swift.codec.ThriftField(25)
+    public StoreBean getReferencedByFeatureMd5() {
+        return this.referencedByFeatureMd5;
     }
-    /** Setter method for {@link #referencedByPersonId}. */
+    /** Setter method for {@link #referencedByFeatureMd5}. */
     @com.facebook.swift.codec.ThriftField
-    public void setReferencedByPersonId(PersonBean reference) {
-        this.referencedByPersonId = reference;
+    public void setReferencedByFeatureMd5(StoreBean reference) {
+        this.referencedByFeatureMd5 = reference;
     }
 
     /**
@@ -1557,12 +1499,10 @@ public class FaceBean
      */
     public boolean isModified(int columnID){
         switch ( columnID ){
-        case FL_FACE_ID_MD5:
-            return checkMd5Modified();
-        case FL_FACE_ID_PERSON_ID:
-            return checkPersonIdModified();
-        case FL_FACE_ID_IMG_MD5:
-            return checkImgMd5Modified();
+        case FL_FACE_ID_ID:
+            return checkIdModified();
+        case FL_FACE_ID_IMAGE_MD5:
+            return checkImageMd5Modified();
         case FL_FACE_ID_FACE_LEFT:
             return checkFaceLeftModified();
         case FL_FACE_ID_FACE_TOP:
@@ -1595,8 +1535,8 @@ public class FaceBean
             return checkAngleRollModified();
         case FL_FACE_ID_EXT_INFO:
             return checkExtInfoModified();
-        case FL_FACE_ID_FEATURE:
-            return checkFeatureModified();
+        case FL_FACE_ID_FEATURE_MD5:
+            return checkFeatureMd5Modified();
         case FL_FACE_ID_CREATE_TIME:
             return checkCreateTimeModified();
         }
@@ -1612,12 +1552,10 @@ public class FaceBean
      */
     public boolean isInitialized(int columnID){
         switch(columnID) {
-        case FL_FACE_ID_MD5:
-            return checkMd5Initialized();
-        case FL_FACE_ID_PERSON_ID:
-            return checkPersonIdInitialized();
-        case FL_FACE_ID_IMG_MD5:
-            return checkImgMd5Initialized();
+        case FL_FACE_ID_ID:
+            return checkIdInitialized();
+        case FL_FACE_ID_IMAGE_MD5:
+            return checkImageMd5Initialized();
         case FL_FACE_ID_FACE_LEFT:
             return checkFaceLeftInitialized();
         case FL_FACE_ID_FACE_TOP:
@@ -1650,8 +1588,8 @@ public class FaceBean
             return checkAngleRollInitialized();
         case FL_FACE_ID_EXT_INFO:
             return checkExtInfoInitialized();
-        case FL_FACE_ID_FEATURE:
-            return checkFeatureInitialized();
+        case FL_FACE_ID_FEATURE_MD5:
+            return checkFeatureMd5Initialized();
         case FL_FACE_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         }
@@ -1703,9 +1641,8 @@ public class FaceBean
 
         FaceBean obj = (FaceBean) object;
         return new EqualsBuilder()
-            .append(getMd5(), obj.getMd5())
-            .append(getPersonId(), obj.getPersonId())
-            .append(getImgMd5(), obj.getImgMd5())
+            .append(getId(), obj.getId())
+            .append(getImageMd5(), obj.getImageMd5())
             .append(getFaceLeft(), obj.getFaceLeft())
             .append(getFaceTop(), obj.getFaceTop())
             .append(getFaceWidth(), obj.getFaceWidth())
@@ -1722,7 +1659,7 @@ public class FaceBean
             .append(getAnglePitch(), obj.getAnglePitch())
             .append(getAngleRoll(), obj.getAngleRoll())
             .append(getExtInfo(), obj.getExtInfo())
-            .append(getFeature(), obj.getFeature())
+            .append(getFeatureMd5(), obj.getFeatureMd5())
             .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
@@ -1731,9 +1668,8 @@ public class FaceBean
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getMd5())
-            .append(getPersonId())
-            .append(getImgMd5())
+            .append(getId())
+            .append(getImageMd5())
             .append(getFaceLeft())
             .append(getFaceTop())
             .append(getFaceWidth())
@@ -1750,7 +1686,7 @@ public class FaceBean
             .append(getAnglePitch())
             .append(getAngleRoll())
             .append(getExtInfo())
-            .append(getFeature())
+            .append(getFeatureMd5())
             .append(getCreateTime())
             .toHashCode();
     }
@@ -1758,9 +1694,8 @@ public class FaceBean
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tmd5=").append(getMd5()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
-            .append("\timg_md5=").append(getImgMd5()).append("\n")
+            .append("\tid=").append(getId()).append("\n")
+            .append("\timage_md5=").append(getImageMd5()).append("\n")
             .append("\tface_left=").append(getFaceLeft()).append("\n")
             .append("\tface_top=").append(getFaceTop()).append("\n")
             .append("\tface_width=").append(getFaceWidth()).append("\n")
@@ -1777,7 +1712,7 @@ public class FaceBean
             .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
             .append("\tangle_roll=").append(getAngleRoll()).append("\n")
             .append("\text_info=").append(getExtInfo().length).append(" bytes\n")
-            .append("\tfeature=").append(getFeature().length).append(" bytes\n")
+            .append("\tfeature_md5=").append(getFeatureMd5()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
@@ -1786,7 +1721,7 @@ public class FaceBean
     @Override
     public int compareTo(FaceBean object){
         return new CompareToBuilder()
-            .append(getMd5(), object.getMd5())
+            .append(getId(), object.getId())
             .toComparison();
     }
     @Override
@@ -1804,9 +1739,8 @@ public class FaceBean
     */
     public FaceBean clean()
     {
-        setMd5(null);
-        setPersonId(null);
-        setImgMd5(null);
+        setId(null);
+        setImageMd5(null);
         setFaceLeft(null);
         setFaceTop(null);
         setFaceWidth(null);
@@ -1823,7 +1757,7 @@ public class FaceBean
         setAnglePitch(null);
         setAngleRoll(null);
         setExtInfo(null);
-        setFeature(null);
+        setFeatureMd5(null);
         setCreateTime(null);
         isNew(true);
         resetInitialized();
@@ -1840,7 +1774,7 @@ public class FaceBean
     public void copy(FaceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 21; ++i) {
+            for (int i = 0; i < 20; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -1878,12 +1812,10 @@ public class FaceBean
     public <T>T getValue(int columnID)
     {
         switch( columnID ){
-        case FL_FACE_ID_MD5: 
-            return (T)getMd5();        
-        case FL_FACE_ID_PERSON_ID: 
-            return (T)getPersonId();        
-        case FL_FACE_ID_IMG_MD5: 
-            return (T)getImgMd5();        
+        case FL_FACE_ID_ID: 
+            return (T)getId();        
+        case FL_FACE_ID_IMAGE_MD5: 
+            return (T)getImageMd5();        
         case FL_FACE_ID_FACE_LEFT: 
             return (T)getFaceLeft();        
         case FL_FACE_ID_FACE_TOP: 
@@ -1916,8 +1848,8 @@ public class FaceBean
             return (T)getAngleRoll();        
         case FL_FACE_ID_EXT_INFO: 
             return (T)getExtInfo();        
-        case FL_FACE_ID_FEATURE: 
-            return (T)getFeature();        
+        case FL_FACE_ID_FEATURE_MD5: 
+            return (T)getFeatureMd5();        
         case FL_FACE_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         }
@@ -1930,12 +1862,10 @@ public class FaceBean
     public <T> void setValue(int columnID,T value)
     {
         switch( columnID ) {
-        case FL_FACE_ID_MD5:        
-            setMd5((String)value);
-        case FL_FACE_ID_PERSON_ID:        
-            setPersonId((Integer)value);
-        case FL_FACE_ID_IMG_MD5:        
-            setImgMd5((String)value);
+        case FL_FACE_ID_ID:        
+            setId((Integer)value);
+        case FL_FACE_ID_IMAGE_MD5:        
+            setImageMd5((String)value);
         case FL_FACE_ID_FACE_LEFT:        
             setFaceLeft((Integer)value);
         case FL_FACE_ID_FACE_TOP:        
@@ -1968,8 +1898,8 @@ public class FaceBean
             setAngleRoll((Integer)value);
         case FL_FACE_ID_EXT_INFO:        
             setExtInfo((byte[])value);
-        case FL_FACE_ID_FEATURE:        
-            setFeature((byte[])value);
+        case FL_FACE_ID_FEATURE_MD5:        
+            setFeatureMd5((String)value);
         case FL_FACE_ID_CREATE_TIME:        
             setCreateTime((java.util.Date)value);
         }

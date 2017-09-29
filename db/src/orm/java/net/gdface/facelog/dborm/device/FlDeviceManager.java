@@ -696,14 +696,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
-            if (bean.checkOnlineModified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("online");
-                _dirtyCount++;
-            }
-
             if (bean.checkGroupIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
@@ -828,15 +820,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     useComma=true;
                 }
                 sql.append("name=?");
-            }
-
-            if (bean.checkOnlineModified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("online=?");
             }
 
             if (bean.checkGroupIdModified()) {
@@ -1004,6 +987,97 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
 
 
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
+
+    /**
+     * Retrieves an array of FlDeviceBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return an array of FlDeviceBean
+     * @throws DAOException
+     */
+    public FlDeviceBean[] loadByIndexGroupId(Integer groupId) throws DAOException
+    {
+        return (FlDeviceBean[])this.loadByIndexGroupIdAsList(groupId).toArray(new FlDeviceBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of FlDeviceBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return a list of FlDeviceBean
+     * @throws DAOException
+     */
+    public List<FlDeviceBean> loadByIndexGroupIdAsList(Integer groupId) throws DAOException
+    {
+        FlDeviceBean bean = this.createBean();
+        bean.setGroupId(groupId);
+        return loadUsingTemplateAsList(bean);
+    }
+    /**
+     * Deletes rows using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndexGroupId(Integer groupId) throws DAOException
+    {
+        FlDeviceBean bean = this.createBean();
+        bean.setGroupId(groupId);
+        return deleteUsingTemplate(bean);
+    }
+    
+    
+    /**
+     * Retrieves a list of FlDeviceBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     * @param keys key values of index
+     * @return a list of FlDeviceBean
+     * @throws DAOException
+     */
+    public List<FlDeviceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
+    {
+        switch(keyIndex){
+        case FL_DEVICE_INDEX_GROUP_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            if(null != keys[0] && !(keys[0] instanceof Integer))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
+        }
+        default:
+            throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
+    {
+        switch(keyIndex){
+        case FL_DEVICE_INDEX_GROUP_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            if(null != keys[0] && !(keys[0] instanceof Integer))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            return this.deleteByIndexGroupId((Integer)keys[0]);
+        }
+        default:
+            throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
+        }        
+    }
+
 
     //_____________________________________________________________________
     //
@@ -1166,14 +1240,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkOnlineModified()) {
-                _dirtyCount ++;
-                if (bean.getOnline() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("online IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("online = ?");
-                }
-            }
             if (bean.checkGroupIdModified()) {
                 _dirtyCount ++;
                 if (bean.getGroupId() == null) {
@@ -1255,10 +1321,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
-            }
-            if (bean.checkOnlineModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getOnline() + "]");
-                if (bean.getOnline() == null) { ps.setNull(++_dirtyCount, Types.BIT); } else { Manager.setBoolean(ps, ++_dirtyCount, bean.getOnline()); }
             }
             if (bean.checkGroupIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
@@ -1401,11 +1463,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         {
             bean.setId(Manager.getInteger(rs, 1));
             bean.setName(rs.getString(2));
-            bean.setOnline(Manager.getBoolean(rs, 3));
-            bean.setGroupId(Manager.getInteger(rs, 4));
-            bean.setVersion(rs.getString(5));
-            bean.setCreateTime(rs.getTimestamp(6));
-            bean.setUpdateTime(rs.getTimestamp(7));
+            bean.setGroupId(Manager.getInteger(rs, 3));
+            bean.setVersion(rs.getString(4));
+            bean.setCreateTime(rs.getTimestamp(5));
+            bean.setUpdateTime(rs.getTimestamp(6));
         }
         catch(SQLException e)
         {
@@ -1444,10 +1505,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     case FL_DEVICE_ID_NAME:
                         ++pos;
                         bean.setName(rs.getString(pos));
-                        break;
-                    case FL_DEVICE_ID_ONLINE:
-                        ++pos;
-                        bean.setOnline(Manager.getBoolean(rs, pos));
                         break;
                     case FL_DEVICE_ID_GROUP_ID:
                         ++pos;
@@ -1495,7 +1552,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         {
             bean.setId(Manager.getInteger(rs, "id"));
             bean.setName(rs.getString("name"));
-            bean.setOnline(Manager.getBoolean(rs, "online"));
             bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setVersion(rs.getString("version"));
             bean.setCreateTime(rs.getTimestamp("create_time"));

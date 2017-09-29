@@ -51,46 +51,6 @@ public interface IPersonManager extends TableManager<PersonBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the {@link FaceBean} object from the fl_face.person_id field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
-    public FaceBean[] getFlFaceBeansByPersonId(PersonBean bean);
-
-    /**
-     * Retrieves the {@link FaceBean} object from fl_face.person_id field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
-    public java.util.List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean);
-
-    /**
-     * set  the {@link FaceBean} object array associate to PersonBean by the fl_face.person_id field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the referenced {@link PersonBean}
-     * @param importedBeans imported beans from fl_face
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByPersonId(FaceBean, PersonBean)
-     */
-    //3.3 SET IMPORTED
-    public FaceBean[] setFlFaceBeansByPersonId(PersonBean bean , FaceBean[] importedBeans);
-
-    /**
-     * set  the {@link FaceBean} object java.util.Collection associate to PersonBean by the fl_face.person_id field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the referenced {@link PersonBean} 
-     * @param importedBeans imported beans from fl_face 
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByPersonId(FaceBean, PersonBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByPersonId(PersonBean bean , C importedBeans);
-
-    /**
      * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
      * @param bean the {@link PersonBean}
@@ -134,58 +94,58 @@ public interface IPersonManager extends TableManager<PersonBean>
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
-     * @param refFlImagebyPhotoId the {@link ImageBean} bean referenced by {@link PersonBean} 
-     * @param impFlFacebyPersonId the {@link FaceBean} bean refer to {@link PersonBean} 
+     * @param refFlImagebyImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
+     * @param refFlStorebyFeatureMd5 the {@link StoreBean} bean referenced by {@link PersonBean} 
      * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.5 SYNC SAVE 
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyPhotoId 
-        , FaceBean[] impFlFacebyPersonId , LogBean[] impFlLogbyPersonId );
+        , ImageBean refFlImagebyImageMd5 , StoreBean refFlStorebyFeatureMd5 
+        , LogBean[] impFlLogbyPersonId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , FaceBean[] , LogBean[] )}
+     * @see {@link #save(PersonBean , ImageBean , StoreBean , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyPhotoId 
-        ,final FaceBean[] impFlFacebyPersonId ,final LogBean[] impFlLogbyPersonId );
+        ,final ImageBean refFlImagebyImageMd5 ,final StoreBean refFlStorebyFeatureMd5 
+        ,final LogBean[] impFlLogbyPersonId );
     /**
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
-     * @param refFlImagebyPhotoId the {@link ImageBean} bean referenced by {@link PersonBean} 
-     * @param impFlFacebyPersonId the {@link FaceBean} bean refer to {@link PersonBean} 
+     * @param refFlImagebyImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
+     * @param refFlStorebyFeatureMd5 the {@link StoreBean} bean referenced by {@link PersonBean} 
      * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.7 SYNC SAVE 
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyPhotoId 
-        , java.util.Collection<FaceBean> impFlFacebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId );
+        , ImageBean refFlImagebyImageMd5 , StoreBean refFlStorebyFeatureMd5 
+        , java.util.Collection<LogBean> impFlLogbyPersonId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(PersonBean , ImageBean , StoreBean , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyPhotoId 
-        ,final  java.util.Collection<FaceBean> impFlFacebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId );
+        ,final ImageBean refFlImagebyImageMd5 ,final StoreBean refFlStorebyFeatureMd5 
+        ,final  java.util.Collection<LogBean> impFlLogbyPersonId );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the {@link ImageBean} object referenced by {@link PersonBean#getPhotoId}() field.<br>
+     * Retrieves the {@link ImageBean} object referenced by {@link PersonBean#getImageMd5}() field.<br>
      * FK_NAME : fl_person_ibfk_1
      * @param bean the {@link PersonBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET REFERENCED VALUE
-    public ImageBean getReferencedByPhotoId(PersonBean bean);
+    public ImageBean getReferencedByImageMd5(PersonBean bean);
 
     /**
-     * Associates the {@link PersonBean} object to the {@link ImageBean} object by {@link PersonBean#getPhotoId}() field.
+     * Associates the {@link PersonBean} object to the {@link ImageBean} object by {@link PersonBean#getImageMd5}() field.
      *
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
@@ -193,28 +153,64 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet);
+    public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet);
+    /**
+     * Retrieves the {@link StoreBean} object referenced by {@link PersonBean#getFeatureMd5}() field.<br>
+     * FK_NAME : fl_person_ibfk_2
+     * @param bean the {@link PersonBean}
+     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //3.2 GET REFERENCED VALUE
+    public StoreBean getReferencedByFeatureMd5(PersonBean bean);
+
+    /**
+     * Associates the {@link PersonBean} object to the {@link StoreBean} object by {@link PersonBean#getFeatureMd5}() field.
+     *
+     * @param bean the {@link PersonBean} object to use
+     * @param beanToSet the {@link StoreBean} object to associate to the {@link PersonBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public StoreBean setReferencedByFeatureMd5(PersonBean bean, StoreBean beanToSet);
     //_____________________________________________________________________
     //
     // USING INDICES
     //_____________________________________________________________________
 
     /**
-     * Retrieves an unique PersonBean using the face_md5 index.
+     * Retrieves an unique PersonBean using the feature_md5 index.
      *
-     * @param faceMd5 the face_md5 column's value filter. must not be null
+     * @param featureMd5 the feature_md5 column's value filter. must not be null
      * @return an array of PersonBean
      */
-    public PersonBean loadByIndexFaceMd5(String faceMd5);
+    public PersonBean loadByIndexFeatureMd5(String featureMd5);
 
 
     /**
-     * Deletes rows using the face_md5 index.
+     * Deletes rows using the feature_md5 index.
      *
-     * @param faceMd5 the face_md5 column's value filter.
+     * @param featureMd5 the feature_md5 column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByIndexFaceMd5(String faceMd5);
+    public int deleteByIndexFeatureMd5(String featureMd5);
+    
+    /**
+     * Retrieves an unique PersonBean using the image_md5 index.
+     *
+     * @param imageMd5 the image_md5 column's value filter. must not be null
+     * @return an array of PersonBean
+     */
+    public PersonBean loadByIndexImageMd5(String imageMd5);
+
+
+    /**
+     * Deletes rows using the image_md5 index.
+     *
+     * @param imageMd5 the image_md5 column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexImageMd5(String imageMd5);
     
     /**
      * Retrieves an unique PersonBean using the papers_num index.
@@ -232,23 +228,6 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the number of deleted objects
      */
     public int deleteByIndexPapersNum(String papersNum);
-    
-    /**
-     * Retrieves an unique PersonBean using the photo_id index.
-     *
-     * @param photoId the photo_id column's value filter. must not be null
-     * @return an array of PersonBean
-     */
-    public PersonBean loadByIndexPhotoId(String photoId);
-
-
-    /**
-     * Deletes rows using the photo_id index.
-     *
-     * @param photoId the photo_id column's value filter.
-     * @return the number of deleted objects
-     */
-    public int deleteByIndexPhotoId(String photoId);
     
      /**
      * Retrieves an array of PersonBean using the expiry_date index.
@@ -273,5 +252,29 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the number of deleted objects
      */
     public int deleteByIndexExpiryDate(java.util.Date expiryDate);
+    
+     /**
+     * Retrieves an array of PersonBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return an array of PersonBean
+     */
+    public PersonBean[] loadByIndexGroupId(Integer groupId);
+    
+    /**
+     * Retrieves a list of PersonBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return a list of PersonBean
+     */
+    public java.util.List<PersonBean> loadByIndexGroupIdAsList(Integer groupId);
+
+    /**
+     * Deletes rows using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexGroupId(Integer groupId);
     
 }

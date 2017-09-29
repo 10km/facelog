@@ -25,12 +25,10 @@ import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
+import net.gdface.facelog.dborm.image.FlStoreBean;
+import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.
@@ -48,7 +46,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     public static final String[] PRIMARYKEY_NAMES =
     {
-        "md5"
+        "id"
     };
 
     /**
@@ -108,15 +106,15 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     /**
      * Loads a {@link FlFaceBean} from the fl_face using primary key fields.
      *
-     * @param md5 String - PK# 1
+     * @param id Integer - PK# 1
      * @return a unique FlFaceBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
     //1
     @SuppressWarnings("unused")
-    public FlFaceBean loadByPrimaryKey(String md5) throws DAOException
+    public FlFaceBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == md5){
+        if(null == id){
             return null;
         }
         Connection c = null;
@@ -124,12 +122,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + FL_FACE_FIELDS + " FROM fl_face WHERE md5=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_FACE_FIELDS + " FROM fl_face WHERE id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
+            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlFaceBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (0 == pReturn.size()) {
                 return null;
@@ -152,51 +150,51 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean loadByPrimaryKey(FlFaceBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKey( bean.getMd5());
+        return bean==null?null:loadByPrimaryKey( bean.getId());
     }
     
     /**
      * Loads a {@link FlFaceBean} from the fl_face using primary key fields.
      * @param keys primary keys value:<br> 
      * @return a unique {@link FlFaceBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
+     * @see {@link #loadByPrimaryKey(Integer id)}
      */
     //1.3
     @Override
     public FlFaceBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        if(! (keys[0] instanceof String))
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-        return loadByPrimaryKey((String)keys[0]);
+        if(! (keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        return loadByPrimaryKey((Integer)keys[0]);
     }
     
     /**
      * Returns true if this fl_face contains row with primary key fields.
-     * @param md5 String - PK# 1
+     * @param id Integer - PK# 1
      * @throws DAOException
-     * @see #loadByPrimaryKey(String md5)
+     * @see #loadByPrimaryKey(Integer id)
      */
     //1.3
-    public boolean existsPrimaryKey(String md5) throws DAOException
+    public boolean existsPrimaryKey(Integer id) throws DAOException
     {
-        return null!=loadByPrimaryKey(md5 );
+        return null!=loadByPrimaryKey(id );
     }
     
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
      * 
-     * @param md5 String - PK# 1
+     * @param id Integer - PK# 1
      * @return the number of deleted rows
      * @throws DAOException
      * @see {@link #delete(FlFaceBean)}
      */
     //2
-    public int deleteByPrimaryKey(String md5) throws DAOException
+    public int deleteByPrimaryKey(Integer id) throws DAOException
     {
         FlFaceBean bean=createBean();
-        bean.setMd5(md5);
+        bean.setId(id);
         return this.delete(bean);
     }
 
@@ -212,7 +210,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public int delete(FlFaceBean bean) throws DAOException
     {
         if(null == bean) return 0;
-        if(null == bean.getMd5()){
+        if(null == bean.getId()){
             throw new IllegalArgumentException("primary keys must no be null ");
         }
         Connection c = null;
@@ -221,12 +219,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         {
             this.listenerContainer.beforeDelete(bean); // listener callback
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("DELETE FROM fl_face WHERE md5=?");
+            StringBuilder sql = new StringBuilder("DELETE FROM fl_face WHERE id=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (bean.getMd5() == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, bean.getMd5()); }
+            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
             int _rows=ps.executeUpdate();
             if(_rows>0)
                 this.listenerContainer.afterDelete(bean); // listener callback
@@ -256,317 +254,47 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         FlFaceBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof String))
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-        bean.setMd5((String)keys[0]);
+        if(null!= keys[0] && !(keys[0] instanceof Integer))
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+        bean.setId((Integer)keys[0]);
         return delete(bean);
     }
     
  
-    //////////////////////////////////////
-    // IMPORT KEY GENERIC METHOD
-    //////////////////////////////////////
-    
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlLogBean.class,FlLogBean.class};
-
-    /**
-     * @see #getImportedBeansAsList(FlFaceBean,int)
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
-        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
-    }
-    
-    /**
-     * Retrieves imported T objects by ikIndex.<br>
-     * @param <T>
-     * <ul>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlLogBean}</li>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
-     * </ul>
-     * @param bean the {@link FlFaceBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE},{@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
-     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
-        switch(ikIndex){
-        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
-            return (List<T>)this.getFlLogBeansByVerifyFaceAsList(bean);
-        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
-            return (List<T>)this.getFlLogBeansByCompareFaceAsList(bean);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    
-    /**
-     * Set the T objects as imported beans of bean object by ikIndex.<br>
-     * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
-     * @param bean the {@link FlFaceBean} object to use
-     * @param importedBeans the FlLogBean array to associate to the {@link FlFaceBean}
-     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
-     * @return importedBeans always
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
-        switch(ikIndex){
-        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
-            return (T[])setFlLogBeansByVerifyFace(bean,(FlLogBean[])importedBeans);
-        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
-            return (T[])setFlLogBeansByCompareFace(bean,(FlLogBean[])importedBeans);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
-    /**
-     * Set the importedBeans associates to the bean by ikIndex<br>
-     * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
-     * @param bean the {@link FlFaceBean} object to use
-     * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
-     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
-
-     * @return importedBeans always
-     * @throws DAOException
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
-        switch(ikIndex){
-        case FL_FACE_IK_FL_LOG_VERIFY_FACE:
-            return (C)setFlLogBeansByVerifyFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
-        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
-            return (C)setFlLogBeansByCompareFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
-        }
-        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
-    }
- 
-    //////////////////////////////////////
-    // GET/SET IMPORTED KEY BEAN METHOD
-    //////////////////////////////////////
-    /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.verify_face field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByVerifyFace(FlFaceBean bean) throws DAOException
-    {
-        return getFlLogBeansByVerifyFaceAsList(bean).toArray(new FlLogBean[0]);
-    }
-
-    /**
-     * Retrieves the {@link FlLogBean} object from fl_log.verify_face field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByVerifyFaceAsList(FlFaceBean bean) throws DAOException
-    {
-        if(null == bean)return new java.util.ArrayList<FlLogBean>();
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setVerifyFace(bean.getMd5());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
-    }
-
-    /**
-     * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.verify_face field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the referenced {@link FlFaceBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByVerifyFace(FlLogBean, FlFaceBean)
-     */
-    //3.3 SET IMPORTED
-    public FlLogBean[] setFlLogBeansByVerifyFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlLogBean} object collection associate to FlFaceBean by the fl_log.verify_face field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the referenced {@link FlFaceBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByVerifyFace(FlLogBean, FlFaceBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByVerifyFace(FlFaceBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByVerifyFace(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByCompareFace(FlFaceBean bean) throws DAOException
-    {
-        return getFlLogBeansByCompareFaceAsList(bean).toArray(new FlLogBean[0]);
-    }
-
-    /**
-     * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlLogBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByCompareFaceAsList(FlFaceBean bean) throws DAOException
-    {
-        if(null == bean)return new java.util.ArrayList<FlLogBean>();
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setCompareFace(bean.getMd5());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
-    }
-
-    /**
-     * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.compare_face field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the referenced {@link FlFaceBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
-     */
-    //3.3 SET IMPORTED
-    public FlLogBean[] setFlLogBeansByCompareFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlLogBean} object collection associate to FlFaceBean by the fl_log.compare_face field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the referenced {@link FlFaceBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByCompareFace(FlFaceBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
+     /**
      * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
-     * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
-     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFaceBean} 
-     * @param impFlLogbyVerifyFace the {@link FlLogBean} beans refer to {@link FlFaceBean} 
-     * @param impFlLogbyCompareFace the {@link FlLogBean} beans refer to {@link FlFaceBean} 
-     * @return the inserted or updated {@link FlFaceBean} bean
+     * @param refFlImagebyImageMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
+     * @param refFlStorebyFeatureMd5 the {@link FlStoreBean} bean referenced by {@link FlFaceBean} 
+         * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlFaceBean save(FlFaceBean bean
-        , FlImageBean refFlImagebyImgMd5 , FlPersonBean refFlPersonbyPersonId 
-        , FlLogBean[] impFlLogbyVerifyFace , FlLogBean[] impFlLogbyCompareFace ) throws DAOException
+        , FlImageBean refFlImagebyImageMd5 , FlStoreBean refFlStorebyFeatureMd5 
+        ) throws DAOException
     {
         if(null == bean) return null;
-        this.setReferencedByImgMd5(bean,refFlImagebyImgMd5);
-        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        this.setReferencedByFeatureMd5(bean,refFlStorebyFeatureMd5);
         bean = this.save( bean );
-        this.setFlLogBeansByVerifyFace(bean,impFlLogbyVerifyFace);
-        FlLogManager.getInstance().save( impFlLogbyVerifyFace );
-        this.setFlLogBeansByCompareFace(bean,impFlLogbyCompareFace);
-        FlLogManager.getInstance().save( impFlLogbyCompareFace );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , FlLogBean[] , FlLogBean[] )}
+     * @see {@link #save(FlFaceBean , FlImageBean , FlStoreBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
-        ,final FlImageBean refFlImagebyImgMd5 ,final FlPersonBean refFlPersonbyPersonId 
-        ,final FlLogBean[] impFlLogbyVerifyFace ,final FlLogBean[] impFlLogbyCompareFace ) throws DAOException
+        ,final FlImageBean refFlImagebyImageMd5 ,final FlStoreBean refFlStorebyFeatureMd5 
+        ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFaceBean>(){
             @Override
             public FlFaceBean call() throws Exception {
-                return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
-            }});
-    }
-    /**
-     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link FlFaceBean} bean to be saved
-     * @param refFlImagebyImgMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
-     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFaceBean} 
-     * @param impFlLogbyVerifyFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
-     * @param impFlLogbyCompareFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
-     * @return the inserted or updated {@link FlFaceBean} bean
-     * @throws DAOException
-     */
-    //3.7 SYNC SAVE 
-    public FlFaceBean save(FlFaceBean bean
-        , FlImageBean refFlImagebyImgMd5 , FlPersonBean refFlPersonbyPersonId 
-        , java.util.Collection<FlLogBean> impFlLogbyVerifyFace , java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
-    {
-        if(null == bean) return null;
-        this.setReferencedByImgMd5(bean,refFlImagebyImgMd5);
-        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
-        bean = this.save( bean );
-        this.setFlLogBeansByVerifyFace(bean,impFlLogbyVerifyFace);
-        FlLogManager.getInstance().save( impFlLogbyVerifyFace );
-        this.setFlLogBeansByCompareFace(bean,impFlLogbyCompareFace);
-        FlLogManager.getInstance().save( impFlLogbyCompareFace );
-        return bean;
-    }
-
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlImageBean , FlPersonBean , java.util.Collection , java.util.Collection )}
-     */
-    //3.8 SYNC SAVE AS TRANSACTION
-    public FlFaceBean saveAsTransaction(final FlFaceBean bean
-        ,final FlImageBean refFlImagebyImgMd5 ,final FlPersonBean refFlPersonbyPersonId 
-        ,final  java.util.Collection<FlLogBean> impFlLogbyVerifyFace ,final  java.util.Collection<FlLogBean> impFlLogbyCompareFace ) throws DAOException
-    {
-        return this.runAsTransaction(new Callable<FlFaceBean>(){
-            @Override
-            public FlFaceBean call() throws Exception {
-                return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
+                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 );
             }});
     }
     /**
@@ -574,7 +302,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlFaceBean , FlImageBean , FlPersonBean , FlLogBean[] , FlLogBean[] )}
+     *      see also {@link #save(FlFaceBean , FlImageBean , FlStoreBean )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -582,21 +310,15 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlStoreBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlLogBean[]");
-        }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlLogBean[]");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(FlLogBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1]);
     } 
 
     /**
@@ -604,7 +326,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlFaceBean , FlImageBean , FlPersonBean , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(FlFaceBean , FlImageBean , FlStoreBean )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -613,21 +335,15 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlStoreBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlLogBean>");
-        }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlLogBean>");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlLogBean>)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlLogBean>)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -637,12 +353,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_FACE_FK_PERSON_ID}
+     *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_FACE_FK_FEATURE_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -650,10 +366,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
-        case FL_FACE_FK_IMG_MD5:
-            return  (T)this.getReferencedByImgMd5(bean);
-        case FL_FACE_FK_PERSON_ID:
-            return  (T)this.getReferencedByPersonId(bean);
+        case FL_FACE_FK_IMAGE_MD5:
+            return  (T)this.getReferencedByImageMd5(bean);
+        case FL_FACE_FK_FEATURE_MD5:
+            return  (T)this.getReferencedByFeatureMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -672,10 +388,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
-        case FL_FACE_FK_IMG_MD5:
-            return  (T)this.setReferencedByImgMd5(bean, (FlImageBean)beanToSet);
-        case FL_FACE_FK_PERSON_ID:
-            return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
+        case FL_FACE_FK_IMAGE_MD5:
+            return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);
+        case FL_FACE_FK_FEATURE_MD5:
+            return  (T)this.setReferencedByFeatureMd5(bean, (FlStoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -686,24 +402,24 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
 
 
     /**
-     * Retrieves the {@link FlImageBean} object referenced by {@link FlFaceBean#getImgMd5}() field.<br>
+     * Retrieves the {@link FlImageBean} object referenced by {@link FlFaceBean#getImageMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_1
      * @param bean the {@link FlFaceBean}
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public FlImageBean getReferencedByImgMd5(FlFaceBean bean) throws DAOException
+    public FlImageBean getReferencedByImageMd5(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
         FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setMd5(bean.getImgMd5()); 
-        bean.setReferencedByImgMd5(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByImgMd5();
+        other.setMd5(bean.getImageMd5()); 
+        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByImageMd5();
     }
 
     /**
-     * Associates the {@link FlFaceBean} object to the {@link FlImageBean} object by {@link FlFaceBean#getImgMd5}() field.
+     * Associates the {@link FlFaceBean} object to the {@link FlImageBean} object by {@link FlFaceBean#getImageMd5}() field.
      *
      * @param bean the {@link FlFaceBean} object to use
      * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlFaceBean}
@@ -711,55 +427,55 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FlImageBean setReferencedByImgMd5(FlFaceBean bean, FlImageBean beanToSet) throws DAOException
+    public FlImageBean setReferencedByImageMd5(FlFaceBean bean, FlImageBean beanToSet) throws DAOException
     {
         if(null != bean){
             FlImageManager.getInstance().save(beanToSet);
-            bean.setReferencedByImgMd5(beanToSet);
+            bean.setReferencedByImageMd5(beanToSet);
             if( null == beanToSet){
-                bean.setImgMd5(null);
+                bean.setImageMd5(null);
             }else{
-                bean.setImgMd5(beanToSet.getMd5());
+                bean.setImageMd5(beanToSet.getMd5());
             }
         }
         return beanToSet;
     }
 
     /**
-     * Retrieves the {@link FlPersonBean} object referenced by {@link FlFaceBean#getPersonId}() field.<br>
+     * Retrieves the {@link FlStoreBean} object referenced by {@link FlFaceBean#getFeatureMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_2
      * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.2 GET REFERENCED VALUE
-    public FlPersonBean getReferencedByPersonId(FlFaceBean bean) throws DAOException
+    public FlStoreBean getReferencedByFeatureMd5(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setId(bean.getPersonId()); 
-        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByPersonId();
+        FlStoreBean other = FlStoreManager.getInstance().createBean();
+        other.setMd5(bean.getFeatureMd5()); 
+        bean.setReferencedByFeatureMd5(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByFeatureMd5();
     }
 
     /**
-     * Associates the {@link FlFaceBean} object to the {@link FlPersonBean} object by {@link FlFaceBean#getPersonId}() field.
+     * Associates the {@link FlFaceBean} object to the {@link FlStoreBean} object by {@link FlFaceBean#getFeatureMd5}() field.
      *
      * @param bean the {@link FlFaceBean} object to use
-     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFaceBean}
+     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlFaceBean}
      * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FlPersonBean setReferencedByPersonId(FlFaceBean bean, FlPersonBean beanToSet) throws DAOException
+    public FlStoreBean setReferencedByFeatureMd5(FlFaceBean bean, FlStoreBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonManager.getInstance().save(beanToSet);
-            bean.setReferencedByPersonId(beanToSet);
+            FlStoreManager.getInstance().save(beanToSet);
+            bean.setReferencedByFeatureMd5(beanToSet);
             if( null == beanToSet){
-                bean.setPersonId(null);
+                bean.setFeatureMd5(null);
             }else{
-                bean.setPersonId(beanToSet.getId());
+                bean.setFeatureMd5(beanToSet.getMd5());
             }
         }
         return beanToSet;
@@ -836,27 +552,19 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             int _dirtyCount = 0;
             sql = new StringBuilder("INSERT into fl_face (");
 
-            if (bean.checkMd5Modified()) {
+            if (bean.checkIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("md5");
+                sql.append("id");
                 _dirtyCount++;
             }
 
-            if (bean.checkPersonIdModified()) {
+            if (bean.checkImageMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("person_id");
-                _dirtyCount++;
-            }
-
-            if (bean.checkImgMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("img_md5");
+                sql.append("image_md5");
                 _dirtyCount++;
             }
 
@@ -988,11 +696,11 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 _dirtyCount++;
             }
 
-            if (bean.checkFeatureModified()) {
+            if (bean.checkFeatureMd5Modified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("feature");
+                sql.append("feature_md5");
                 _dirtyCount++;
             }
 
@@ -1021,6 +729,23 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
 
             ps.executeUpdate();
+
+            if (!bean.checkIdModified())
+            {
+                PreparedStatement ps2 = null;
+                ResultSet rs = null;
+                try {
+                    ps2 = c.prepareStatement("SELECT last_insert_id()");
+                    rs = ps2.executeQuery();
+                    if(rs.next()) {
+                        bean.setId(Manager.getInteger(rs, 1));
+                    } else {
+                        this.getManager().log("ATTENTION: Could not retrieve generated key!");
+                    }
+                } finally {
+                    this.getManager().close(ps2, rs);
+                }
+            }
 
             bean.isNew(false);
             bean.resetIsModified();
@@ -1063,31 +788,22 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             sql = new StringBuilder("UPDATE fl_face SET ");
             boolean useComma=false;
 
-            if (bean.checkMd5Modified()) {
+            if (bean.checkIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("md5=?");
+                sql.append("id=?");
             }
 
-            if (bean.checkPersonIdModified()) {
+            if (bean.checkImageMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("person_id=?");
-            }
-
-            if (bean.checkImgMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("img_md5=?");
+                sql.append("image_md5=?");
             }
 
             if (bean.checkFaceLeftModified()) {
@@ -1234,13 +950,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("ext_info=?");
             }
 
-            if (bean.checkFeatureModified()) {
+            if (bean.checkFeatureMd5Modified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("feature=?");
+                sql.append("feature_md5=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -1252,7 +968,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 sql.append("create_time=?");
             }
             sql.append(" WHERE ");
-            sql.append("md5=?");
+            sql.append("id=?");
             // System.out.println("update : " + sql.toString());
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -1265,7 +981,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 return bean;
             }
 
-            if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+            if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -1333,8 +1049,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public int deleteUsingTemplate(FlFaceBean bean) throws DAOException
     {
-        if(bean.checkMd5Initialized() && null != bean.getMd5()){
-            return this.deleteByPrimaryKey(bean.getMd5());
+        if(bean.checkIdInitialized() && null != bean.getId()){
+            return this.deleteByPrimaryKey(bean.getId());
         }
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action=new DeleteBeanAction(); 
@@ -1387,80 +1103,80 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //_____________________________________________________________________
 
     /**
-     * Retrieves an array of FlFaceBean using the img_md5 index.
+     * Retrieves an array of FlFaceBean using the feature_md5 index.
      *
-     * @param imgMd5 the img_md5 column's value filter.
+     * @param featureMd5 the feature_md5 column's value filter.
      * @return an array of FlFaceBean
      * @throws DAOException
      */
-    public FlFaceBean[] loadByIndexImgMd5(String imgMd5) throws DAOException
+    public FlFaceBean[] loadByIndexFeatureMd5(String featureMd5) throws DAOException
     {
-        return (FlFaceBean[])this.loadByIndexImgMd5AsList(imgMd5).toArray(new FlFaceBean[0]);
+        return (FlFaceBean[])this.loadByIndexFeatureMd5AsList(featureMd5).toArray(new FlFaceBean[0]);
     }
     
     /**
-     * Retrieves a list of FlFaceBean using the img_md5 index.
+     * Retrieves a list of FlFaceBean using the feature_md5 index.
      *
-     * @param imgMd5 the img_md5 column's value filter.
+     * @param featureMd5 the feature_md5 column's value filter.
      * @return a list of FlFaceBean
      * @throws DAOException
      */
-    public List<FlFaceBean> loadByIndexImgMd5AsList(String imgMd5) throws DAOException
+    public List<FlFaceBean> loadByIndexFeatureMd5AsList(String featureMd5) throws DAOException
     {
         FlFaceBean bean = this.createBean();
-        bean.setImgMd5(imgMd5);
+        bean.setFeatureMd5(featureMd5);
         return loadUsingTemplateAsList(bean);
     }
     /**
-     * Deletes rows using the img_md5 index.
+     * Deletes rows using the feature_md5 index.
      *
-     * @param imgMd5 the img_md5 column's value filter.
+     * @param featureMd5 the feature_md5 column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByIndexImgMd5(String imgMd5) throws DAOException
+    public int deleteByIndexFeatureMd5(String featureMd5) throws DAOException
     {
         FlFaceBean bean = this.createBean();
-        bean.setImgMd5(imgMd5);
+        bean.setFeatureMd5(featureMd5);
         return deleteUsingTemplate(bean);
     }
     
     /**
-     * Retrieves an array of FlFaceBean using the person_id index.
+     * Retrieves an array of FlFaceBean using the image_md5 index.
      *
-     * @param personId the person_id column's value filter.
+     * @param imageMd5 the image_md5 column's value filter.
      * @return an array of FlFaceBean
      * @throws DAOException
      */
-    public FlFaceBean[] loadByIndexPersonId(Integer personId) throws DAOException
+    public FlFaceBean[] loadByIndexImageMd5(String imageMd5) throws DAOException
     {
-        return (FlFaceBean[])this.loadByIndexPersonIdAsList(personId).toArray(new FlFaceBean[0]);
+        return (FlFaceBean[])this.loadByIndexImageMd5AsList(imageMd5).toArray(new FlFaceBean[0]);
     }
     
     /**
-     * Retrieves a list of FlFaceBean using the person_id index.
+     * Retrieves a list of FlFaceBean using the image_md5 index.
      *
-     * @param personId the person_id column's value filter.
+     * @param imageMd5 the image_md5 column's value filter.
      * @return a list of FlFaceBean
      * @throws DAOException
      */
-    public List<FlFaceBean> loadByIndexPersonIdAsList(Integer personId) throws DAOException
+    public List<FlFaceBean> loadByIndexImageMd5AsList(String imageMd5) throws DAOException
     {
         FlFaceBean bean = this.createBean();
-        bean.setPersonId(personId);
+        bean.setImageMd5(imageMd5);
         return loadUsingTemplateAsList(bean);
     }
     /**
-     * Deletes rows using the person_id index.
+     * Deletes rows using the image_md5 index.
      *
-     * @param personId the person_id column's value filter.
+     * @param imageMd5 the image_md5 column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByIndexPersonId(Integer personId) throws DAOException
+    public int deleteByIndexImageMd5(String imageMd5) throws DAOException
     {
         FlFaceBean bean = this.createBean();
-        bean.setPersonId(personId);
+        bean.setImageMd5(imageMd5);
         return deleteUsingTemplate(bean);
     }
     
@@ -1468,7 +1184,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     /**
      * Retrieves a list of FlFaceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}
+     *        {@link Constant#FL_FACE_INDEX_FEATURE_MD5},{@link Constant#FL_FACE_INDEX_IMAGE_MD5}
      * @param keys key values of index
      * @return a list of FlFaceBean
      * @throws DAOException
@@ -1476,19 +1192,19 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public List<FlFaceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
-        case FL_FACE_INDEX_IMG_MD5:{
+        case FL_FACE_INDEX_FEATURE_MD5:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'img_md5' column number");
+                throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByIndexImgMd5AsList((String)keys[0]);        
+            return this.loadByIndexFeatureMd5AsList((String)keys[0]);        
         }
-        case FL_FACE_INDEX_PERSON_ID:{
+        case FL_FACE_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
-            if(null != keys[1] && !(keys[1] instanceof Integer))
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
+                throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.loadByIndexImageMd5AsList((String)keys[0]);        
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1498,7 +1214,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}
+     *        {@link Constant#FL_FACE_INDEX_FEATURE_MD5},{@link Constant#FL_FACE_INDEX_IMAGE_MD5}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1506,19 +1222,19 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
-        case FL_FACE_INDEX_IMG_MD5:{
+        case FL_FACE_INDEX_FEATURE_MD5:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'img_md5' column number");
+                throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByIndexImgMd5((String)keys[0]);
+            return this.deleteByIndexFeatureMd5((String)keys[0]);
         }
-        case FL_FACE_INDEX_PERSON_ID:{
+        case FL_FACE_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
-            if(null != keys[1] && !(keys[1] instanceof Integer))
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-            return this.deleteByIndexPersonId((Integer)keys[0]);
+                throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByIndexImageMd5((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1671,28 +1387,20 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
         try
         {
-            if (bean.checkMd5Modified()) {
+            if (bean.checkIdModified()) {
                 _dirtyCount ++;
-                if (bean.getMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 IS NULL");
+                if (bean.getId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
                 }
             }
-            if (bean.checkPersonIdModified()) {
+            if (bean.checkImageMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getPersonId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
+                if (bean.getImageMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("image_md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
-                }
-            }
-            if (bean.checkImgMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getImgMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("img_md5 ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("image_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkFaceLeftModified()) {
@@ -1823,12 +1531,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("ext_info = ?");
                 }
             }
-            if (bean.checkFeatureModified()) {
+            if (bean.checkFeatureMd5Modified()) {
                 _dirtyCount ++;
-                if (bean.getFeature() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature IS NULL");
+                if (bean.getFeatureMd5() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature_md5 IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkCreateTimeModified()) {
@@ -1863,49 +1571,27 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         int _dirtyCount = 0;
         try
         {
-            if (bean.checkMd5Modified()) {
+            if (bean.checkIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
+                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+            }
+            if (bean.checkImageMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "]");
+                        if (bean.getImageMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "%]");
+                        if ( bean.getImageMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "]");
+                        if ( bean.getImageMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
-            if (bean.checkPersonIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
-            }
-            if (bean.checkImgMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "]");
-                        if (bean.getImgMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImgMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "%]");
-                        if ( bean.getImgMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImgMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImgMd5() + "]");
-                        if ( bean.getImgMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImgMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImgMd5() + "%]");
-                        if (bean.getImgMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImgMd5() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "%]");
+                        if (bean.getImageMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1975,9 +1661,27 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
                 if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getExtInfo()); }
             }
-            if (bean.checkFeatureModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
-                if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getFeature()); }
+            if (bean.checkFeatureMd5Modified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "]");
+                        if (bean.getFeatureMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "%]");
+                        if ( bean.getFeatureMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "]");
+                        if ( bean.getFeatureMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "%]");
+                        if (bean.getFeatureMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
@@ -2088,27 +1792,26 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             bean = this.createBean();
         try
         {
-            bean.setMd5(rs.getString(1));
-            bean.setPersonId(Manager.getInteger(rs, 2));
-            bean.setImgMd5(rs.getString(3));
-            bean.setFaceLeft(Manager.getInteger(rs, 4));
-            bean.setFaceTop(Manager.getInteger(rs, 5));
-            bean.setFaceWidth(Manager.getInteger(rs, 6));
-            bean.setFaceHeight(Manager.getInteger(rs, 7));
-            bean.setEyeLeftx(Manager.getInteger(rs, 8));
-            bean.setEyeLefty(Manager.getInteger(rs, 9));
-            bean.setEyeRightx(Manager.getInteger(rs, 10));
-            bean.setEyeRighty(Manager.getInteger(rs, 11));
-            bean.setMouthX(Manager.getInteger(rs, 12));
-            bean.setMouthY(Manager.getInteger(rs, 13));
-            bean.setNoseX(Manager.getInteger(rs, 14));
-            bean.setNoseY(Manager.getInteger(rs, 15));
-            bean.setAngleYaw(Manager.getInteger(rs, 16));
-            bean.setAnglePitch(Manager.getInteger(rs, 17));
-            bean.setAngleRoll(Manager.getInteger(rs, 18));
-            bean.setExtInfo(rs.getBytes(19));
-            bean.setFeature(rs.getBytes(20));
-            bean.setCreateTime(rs.getTimestamp(21));
+            bean.setId(Manager.getInteger(rs, 1));
+            bean.setImageMd5(rs.getString(2));
+            bean.setFaceLeft(Manager.getInteger(rs, 3));
+            bean.setFaceTop(Manager.getInteger(rs, 4));
+            bean.setFaceWidth(Manager.getInteger(rs, 5));
+            bean.setFaceHeight(Manager.getInteger(rs, 6));
+            bean.setEyeLeftx(Manager.getInteger(rs, 7));
+            bean.setEyeLefty(Manager.getInteger(rs, 8));
+            bean.setEyeRightx(Manager.getInteger(rs, 9));
+            bean.setEyeRighty(Manager.getInteger(rs, 10));
+            bean.setMouthX(Manager.getInteger(rs, 11));
+            bean.setMouthY(Manager.getInteger(rs, 12));
+            bean.setNoseX(Manager.getInteger(rs, 13));
+            bean.setNoseY(Manager.getInteger(rs, 14));
+            bean.setAngleYaw(Manager.getInteger(rs, 15));
+            bean.setAnglePitch(Manager.getInteger(rs, 16));
+            bean.setAngleRoll(Manager.getInteger(rs, 17));
+            bean.setExtInfo(rs.getBytes(18));
+            bean.setFeatureMd5(rs.getString(19));
+            bean.setCreateTime(rs.getTimestamp(20));
         }
         catch(SQLException e)
         {
@@ -2140,17 +1843,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             {
                 switch(fieldList[i])
                 {
-                    case FL_FACE_ID_MD5:
+                    case FL_FACE_ID_ID:
                         ++pos;
-                        bean.setMd5(rs.getString(pos));
+                        bean.setId(Manager.getInteger(rs, pos));
                         break;
-                    case FL_FACE_ID_PERSON_ID:
+                    case FL_FACE_ID_IMAGE_MD5:
                         ++pos;
-                        bean.setPersonId(Manager.getInteger(rs, pos));
-                        break;
-                    case FL_FACE_ID_IMG_MD5:
-                        ++pos;
-                        bean.setImgMd5(rs.getString(pos));
+                        bean.setImageMd5(rs.getString(pos));
                         break;
                     case FL_FACE_ID_FACE_LEFT:
                         ++pos;
@@ -2216,9 +1915,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                         ++pos;
                         bean.setExtInfo(rs.getBytes(pos));
                         break;
-                    case FL_FACE_ID_FEATURE:
+                    case FL_FACE_ID_FEATURE_MD5:
                         ++pos;
-                        bean.setFeature(rs.getBytes(pos));
+                        bean.setFeatureMd5(rs.getString(pos));
                         break;
                     case FL_FACE_ID_CREATE_TIME:
                         ++pos;
@@ -2252,9 +1951,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         FlFaceBean bean = this.createBean();
         try
         {
-            bean.setMd5(rs.getString("md5"));
-            bean.setPersonId(Manager.getInteger(rs, "person_id"));
-            bean.setImgMd5(rs.getString("img_md5"));
+            bean.setId(Manager.getInteger(rs, "id"));
+            bean.setImageMd5(rs.getString("image_md5"));
             bean.setFaceLeft(Manager.getInteger(rs, "face_left"));
             bean.setFaceTop(Manager.getInteger(rs, "face_top"));
             bean.setFaceWidth(Manager.getInteger(rs, "face_width"));
@@ -2271,7 +1969,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             bean.setAnglePitch(Manager.getInteger(rs, "angle_pitch"));
             bean.setAngleRoll(Manager.getInteger(rs, "angle_roll"));
             bean.setExtInfo(rs.getBytes("ext_info"));
-            bean.setFeature(rs.getBytes("feature"));
+            bean.setFeatureMd5(rs.getString("feature_md5"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)

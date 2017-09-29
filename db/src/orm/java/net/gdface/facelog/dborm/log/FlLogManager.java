@@ -27,10 +27,10 @@ import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonManager;
+import net.gdface.facelog.dborm.image.FlStoreBean;
+import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.
@@ -268,39 +268,39 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlLogBean} 
-     * @param refFlFacebyVerifyFace the {@link FlFaceBean} bean referenced by {@link FlLogBean} 
-     * @param refFlFacebyCompareFace the {@link FlFaceBean} bean referenced by {@link FlLogBean} 
      * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlLogBean} 
+     * @param refFlStorebyVerifyFeature the {@link FlStoreBean} bean referenced by {@link FlLogBean} 
+     * @param refFlStorebyCompareFeature the {@link FlStoreBean} bean referenced by {@link FlLogBean} 
          * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlLogBean save(FlLogBean bean
-        , FlDeviceBean refFlDevicebyDeviceId , FlFaceBean refFlFacebyVerifyFace , FlFaceBean refFlFacebyCompareFace , FlPersonBean refFlPersonbyPersonId 
+        , FlDeviceBean refFlDevicebyDeviceId , FlPersonBean refFlPersonbyPersonId , FlStoreBean refFlStorebyVerifyFeature , FlStoreBean refFlStorebyCompareFeature 
         ) throws DAOException
     {
         if(null == bean) return null;
         this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        this.setReferencedByVerifyFace(bean,refFlFacebyVerifyFace);
-        this.setReferencedByCompareFace(bean,refFlFacebyCompareFace);
         this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        this.setReferencedByVerifyFeature(bean,refFlStorebyVerifyFeature);
+        this.setReferencedByCompareFeature(bean,refFlStorebyCompareFeature);
         bean = this.save( bean );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
+     * @see {@link #save(FlLogBean , FlDeviceBean , FlPersonBean , FlStoreBean , FlStoreBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlLogBean saveAsTransaction(final FlLogBean bean
-        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlFaceBean refFlFacebyVerifyFace ,final FlFaceBean refFlFacebyCompareFace ,final FlPersonBean refFlPersonbyPersonId 
+        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlPersonBean refFlPersonbyPersonId ,final FlStoreBean refFlStorebyVerifyFeature ,final FlStoreBean refFlStorebyCompareFeature 
         ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlLogBean>(){
             @Override
             public FlLogBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlFacebyVerifyFace , refFlFacebyCompareFace , refFlPersonbyPersonId );
+                return save(bean , refFlDevicebyDeviceId , refFlPersonbyPersonId , refFlStorebyVerifyFeature , refFlStorebyCompareFeature );
             }});
     }
     /**
@@ -308,7 +308,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
+     *      see also {@link #save(FlLogBean , FlDeviceBean , FlPersonBean , FlStoreBean , FlStoreBean )}
      * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
@@ -321,16 +321,16 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlFaceBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlFaceBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlStoreBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlPersonBean");
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlStoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlStoreBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFaceBean)args[1],(args.length < 3 || null == args[2])?null:(FlFaceBean)args[2],(args.length < 4 || null == args[3])?null:(FlPersonBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(FlStoreBean)args[2],(args.length < 4 || null == args[3])?null:(FlStoreBean)args[3]);
     } 
 
     /**
@@ -338,7 +338,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlLogBean , FlDeviceBean , FlFaceBean , FlFaceBean , FlPersonBean )}
+     *      see also {@link #save(FlLogBean , FlDeviceBean , FlPersonBean , FlStoreBean , FlStoreBean )}
      * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
@@ -352,16 +352,16 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlFaceBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFaceBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlFaceBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlStoreBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlPersonBean");
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlStoreBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlStoreBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFaceBean)args[1],(args.length < 3 || null == args[2])?null:(FlFaceBean)args[2],(args.length < 4 || null == args[3])?null:(FlPersonBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(FlStoreBean)args[2],(args.length < 4 || null == args[3])?null:(FlStoreBean)args[3]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -372,13 +372,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_PERSON_ID}
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_PERSON_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -388,12 +388,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
-        case FL_LOG_FK_VERIFY_FACE:
-            return  (T)this.getReferencedByVerifyFace(bean);
-        case FL_LOG_FK_COMPARE_FACE:
-            return  (T)this.getReferencedByCompareFace(bean);
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.getReferencedByPersonId(bean);
+        case FL_LOG_FK_VERIFY_FEATURE:
+            return  (T)this.getReferencedByVerifyFeature(bean);
+        case FL_LOG_FK_COMPARE_FEATURE:
+            return  (T)this.getReferencedByCompareFeature(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -414,12 +414,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
-        case FL_LOG_FK_VERIFY_FACE:
-            return  (T)this.setReferencedByVerifyFace(bean, (FlFaceBean)beanToSet);
-        case FL_LOG_FK_COMPARE_FACE:
-            return  (T)this.setReferencedByCompareFace(bean, (FlFaceBean)beanToSet);
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
+        case FL_LOG_FK_VERIFY_FEATURE:
+            return  (T)this.setReferencedByVerifyFeature(bean, (FlStoreBean)beanToSet);
+        case FL_LOG_FK_COMPARE_FEATURE:
+            return  (T)this.setReferencedByCompareFeature(bean, (FlStoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -470,86 +470,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
 
     /**
-     * Retrieves the {@link FlFaceBean} object referenced by {@link FlLogBean#getVerifyFace}() field.<br>
-     * FK_NAME : fl_log_ibfk_3
-     * @param bean the {@link FlLogBean}
-     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.2 GET REFERENCED VALUE
-    public FlFaceBean getReferencedByVerifyFace(FlLogBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setMd5(bean.getVerifyFace()); 
-        bean.setReferencedByVerifyFace(FlFaceManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByVerifyFace();
-    }
-
-    /**
-     * Associates the {@link FlLogBean} object to the {@link FlFaceBean} object by {@link FlLogBean#getVerifyFace}() field.
-     *
-     * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlFaceBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlFaceBean setReferencedByVerifyFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlFaceManager.getInstance().save(beanToSet);
-            bean.setReferencedByVerifyFace(beanToSet);
-            if( null == beanToSet){
-                bean.setVerifyFace(null);
-            }else{
-                bean.setVerifyFace(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlFaceBean} object referenced by {@link FlLogBean#getCompareFace}() field.<br>
-     * FK_NAME : fl_log_ibfk_4
-     * @param bean the {@link FlLogBean}
-     * @return the associated {@link FlFaceBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.2 GET REFERENCED VALUE
-    public FlFaceBean getReferencedByCompareFace(FlLogBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setMd5(bean.getCompareFace()); 
-        bean.setReferencedByCompareFace(FlFaceManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByCompareFace();
-    }
-
-    /**
-     * Associates the {@link FlLogBean} object to the {@link FlFaceBean} object by {@link FlLogBean#getCompareFace}() field.
-     *
-     * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlFaceBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlFaceManager.getInstance().save(beanToSet);
-            bean.setReferencedByCompareFace(beanToSet);
-            if( null == beanToSet){
-                bean.setCompareFace(null);
-            }else{
-                bean.setCompareFace(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
      * Retrieves the {@link FlPersonBean} object referenced by {@link FlLogBean#getPersonId}() field.<br>
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link FlLogBean}
@@ -584,6 +504,86 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 bean.setPersonId(null);
             }else{
                 bean.setPersonId(beanToSet.getId());
+            }
+        }
+        return beanToSet;
+    }
+
+    /**
+     * Retrieves the {@link FlStoreBean} object referenced by {@link FlLogBean#getVerifyFeature}() field.<br>
+     * FK_NAME : fl_log_ibfk_3
+     * @param bean the {@link FlLogBean}
+     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.2 GET REFERENCED VALUE
+    public FlStoreBean getReferencedByVerifyFeature(FlLogBean bean) throws DAOException
+    {
+        if(null == bean)return null;
+        FlStoreBean other = FlStoreManager.getInstance().createBean();
+        other.setMd5(bean.getVerifyFeature()); 
+        bean.setReferencedByVerifyFeature(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByVerifyFeature();
+    }
+
+    /**
+     * Associates the {@link FlLogBean} object to the {@link FlStoreBean} object by {@link FlLogBean#getVerifyFeature}() field.
+     *
+     * @param bean the {@link FlLogBean} object to use
+     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlLogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlStoreBean setReferencedByVerifyFeature(FlLogBean bean, FlStoreBean beanToSet) throws DAOException
+    {
+        if(null != bean){
+            FlStoreManager.getInstance().save(beanToSet);
+            bean.setReferencedByVerifyFeature(beanToSet);
+            if( null == beanToSet){
+                bean.setVerifyFeature(null);
+            }else{
+                bean.setVerifyFeature(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
+    }
+
+    /**
+     * Retrieves the {@link FlStoreBean} object referenced by {@link FlLogBean#getCompareFeature}() field.<br>
+     * FK_NAME : fl_log_ibfk_4
+     * @param bean the {@link FlLogBean}
+     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.2 GET REFERENCED VALUE
+    public FlStoreBean getReferencedByCompareFeature(FlLogBean bean) throws DAOException
+    {
+        if(null == bean)return null;
+        FlStoreBean other = FlStoreManager.getInstance().createBean();
+        other.setMd5(bean.getCompareFeature()); 
+        bean.setReferencedByCompareFeature(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
+        return bean.getReferencedByCompareFeature();
+    }
+
+    /**
+     * Associates the {@link FlLogBean} object to the {@link FlStoreBean} object by {@link FlLogBean#getCompareFeature}() field.
+     *
+     * @param bean the {@link FlLogBean} object to use
+     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlLogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlStoreBean setReferencedByCompareFeature(FlLogBean bean, FlStoreBean beanToSet) throws DAOException
+    {
+        if(null != bean){
+            FlStoreManager.getInstance().save(beanToSet);
+            bean.setReferencedByCompareFeature(beanToSet);
+            if( null == beanToSet){
+                bean.setCompareFeature(null);
+            }else{
+                bean.setCompareFeature(beanToSet.getMd5());
             }
         }
         return beanToSet;
@@ -684,19 +684,19 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 _dirtyCount++;
             }
 
-            if (bean.checkVerifyFaceModified()) {
+            if (bean.checkVerifyFeatureModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("verify_face");
+                sql.append("verify_feature");
                 _dirtyCount++;
             }
 
-            if (bean.checkCompareFaceModified()) {
+            if (bean.checkCompareFeatureModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("compare_face");
+                sql.append("compare_feature");
                 _dirtyCount++;
             }
 
@@ -827,22 +827,22 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 sql.append("device_id=?");
             }
 
-            if (bean.checkVerifyFaceModified()) {
+            if (bean.checkVerifyFeatureModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("verify_face=?");
+                sql.append("verify_feature=?");
             }
 
-            if (bean.checkCompareFaceModified()) {
+            if (bean.checkCompareFeatureModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("compare_face=?");
+                sql.append("compare_feature=?");
             }
 
             if (bean.checkSimilartyModified()) {
@@ -1007,41 +1007,41 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     //_____________________________________________________________________
 
     /**
-     * Retrieves an array of FlLogBean using the compare_face index.
+     * Retrieves an array of FlLogBean using the compare_feature index.
      *
-     * @param compareFace the compare_face column's value filter.
+     * @param compareFeature the compare_feature column's value filter.
      * @return an array of FlLogBean
      * @throws DAOException
      */
-    public FlLogBean[] loadByIndexCompareFace(String compareFace) throws DAOException
+    public FlLogBean[] loadByIndexCompareFeature(String compareFeature) throws DAOException
     {
-        return (FlLogBean[])this.loadByIndexCompareFaceAsList(compareFace).toArray(new FlLogBean[0]);
+        return (FlLogBean[])this.loadByIndexCompareFeatureAsList(compareFeature).toArray(new FlLogBean[0]);
     }
     
     /**
-     * Retrieves a list of FlLogBean using the compare_face index.
+     * Retrieves a list of FlLogBean using the compare_feature index.
      *
-     * @param compareFace the compare_face column's value filter.
+     * @param compareFeature the compare_feature column's value filter.
      * @return a list of FlLogBean
      * @throws DAOException
      */
-    public List<FlLogBean> loadByIndexCompareFaceAsList(String compareFace) throws DAOException
+    public List<FlLogBean> loadByIndexCompareFeatureAsList(String compareFeature) throws DAOException
     {
         FlLogBean bean = this.createBean();
-        bean.setCompareFace(compareFace);
+        bean.setCompareFeature(compareFeature);
         return loadUsingTemplateAsList(bean);
     }
     /**
-     * Deletes rows using the compare_face index.
+     * Deletes rows using the compare_feature index.
      *
-     * @param compareFace the compare_face column's value filter.
+     * @param compareFeature the compare_feature column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByIndexCompareFace(String compareFace) throws DAOException
+    public int deleteByIndexCompareFeature(String compareFeature) throws DAOException
     {
         FlLogBean bean = this.createBean();
-        bean.setCompareFace(compareFace);
+        bean.setCompareFeature(compareFeature);
         return deleteUsingTemplate(bean);
     }
     
@@ -1124,41 +1124,41 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
     
     /**
-     * Retrieves an array of FlLogBean using the verify_face index.
+     * Retrieves an array of FlLogBean using the verify_feature index.
      *
-     * @param verifyFace the verify_face column's value filter.
+     * @param verifyFeature the verify_feature column's value filter.
      * @return an array of FlLogBean
      * @throws DAOException
      */
-    public FlLogBean[] loadByIndexVerifyFace(String verifyFace) throws DAOException
+    public FlLogBean[] loadByIndexVerifyFeature(String verifyFeature) throws DAOException
     {
-        return (FlLogBean[])this.loadByIndexVerifyFaceAsList(verifyFace).toArray(new FlLogBean[0]);
+        return (FlLogBean[])this.loadByIndexVerifyFeatureAsList(verifyFeature).toArray(new FlLogBean[0]);
     }
     
     /**
-     * Retrieves a list of FlLogBean using the verify_face index.
+     * Retrieves a list of FlLogBean using the verify_feature index.
      *
-     * @param verifyFace the verify_face column's value filter.
+     * @param verifyFeature the verify_feature column's value filter.
      * @return a list of FlLogBean
      * @throws DAOException
      */
-    public List<FlLogBean> loadByIndexVerifyFaceAsList(String verifyFace) throws DAOException
+    public List<FlLogBean> loadByIndexVerifyFeatureAsList(String verifyFeature) throws DAOException
     {
         FlLogBean bean = this.createBean();
-        bean.setVerifyFace(verifyFace);
+        bean.setVerifyFeature(verifyFeature);
         return loadUsingTemplateAsList(bean);
     }
     /**
-     * Deletes rows using the verify_face index.
+     * Deletes rows using the verify_feature index.
      *
-     * @param verifyFace the verify_face column's value filter.
+     * @param verifyFeature the verify_feature column's value filter.
      * @return the number of deleted objects
      * @throws DAOException
      */
-    public int deleteByIndexVerifyFace(String verifyFace) throws DAOException
+    public int deleteByIndexVerifyFeature(String verifyFeature) throws DAOException
     {
         FlLogBean bean = this.createBean();
-        bean.setVerifyFace(verifyFace);
+        bean.setVerifyFeature(verifyFeature);
         return deleteUsingTemplate(bean);
     }
     
@@ -1166,7 +1166,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     /**
      * Retrieves a list of FlLogBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FEATURE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}
      * @param keys key values of index
      * @return a list of FlLogBean
      * @throws DAOException
@@ -1174,12 +1174,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public List<FlLogBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
-        case FL_LOG_INDEX_COMPARE_FACE:{
+        case FL_LOG_INDEX_COMPARE_FEATURE:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'compare_face' column number");
+                throw new IllegalArgumentException("argument number mismatch with index 'compare_feature' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByIndexCompareFaceAsList((String)keys[0]);        
+            return this.loadByIndexCompareFeatureAsList((String)keys[0]);        
         }
         case FL_LOG_INDEX_DEVICE_ID:{
             if(keys.length != 1)
@@ -1195,12 +1195,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
-        case FL_LOG_INDEX_VERIFY_FACE:{
+        case FL_LOG_INDEX_VERIFY_FEATURE:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'verify_face' column number");
+                throw new IllegalArgumentException("argument number mismatch with index 'verify_feature' column number");
             if(null != keys[3] && !(keys[3] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByIndexVerifyFaceAsList((String)keys[0]);        
+            return this.loadByIndexVerifyFeatureAsList((String)keys[0]);        
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1210,7 +1210,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FEATURE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1218,12 +1218,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
-        case FL_LOG_INDEX_COMPARE_FACE:{
+        case FL_LOG_INDEX_COMPARE_FEATURE:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'compare_face' column number");
+                throw new IllegalArgumentException("argument number mismatch with index 'compare_feature' column number");
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByIndexCompareFace((String)keys[0]);
+            return this.deleteByIndexCompareFeature((String)keys[0]);
         }
         case FL_LOG_INDEX_DEVICE_ID:{
             if(keys.length != 1)
@@ -1239,12 +1239,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexPersonId((Integer)keys[0]);
         }
-        case FL_LOG_INDEX_VERIFY_FACE:{
+        case FL_LOG_INDEX_VERIFY_FEATURE:{
             if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'verify_face' column number");
+                throw new IllegalArgumentException("argument number mismatch with index 'verify_feature' column number");
             if(null != keys[3] && !(keys[3] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByIndexVerifyFace((String)keys[0]);
+            return this.deleteByIndexVerifyFeature((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
@@ -1421,20 +1421,20 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_id = ?");
                 }
             }
-            if (bean.checkVerifyFaceModified()) {
+            if (bean.checkVerifyFeatureModified()) {
                 _dirtyCount ++;
-                if (bean.getVerifyFace() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_face IS NULL");
+                if (bean.getVerifyFeature() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_feature IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_face ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("verify_feature ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkCompareFaceModified()) {
+            if (bean.checkCompareFeatureModified()) {
                 _dirtyCount ++;
-                if (bean.getCompareFace() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_face IS NULL");
+                if (bean.getCompareFeature() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_feature IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_face ").append(sqlEqualsOperation).append("?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("compare_feature ").append(sqlEqualsOperation).append("?");
                 }
             }
             if (bean.checkSimilartyModified()) {
@@ -1497,45 +1497,45 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
                 if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
             }
-            if (bean.checkVerifyFaceModified()) {
+            if (bean.checkVerifyFeatureModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFace() + "]");
-                        if (bean.getVerifyFace() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFace()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFeature() + "]");
+                        if (bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFace() + "%]");
-                        if ( bean.getVerifyFace()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFace() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFeature() + "%]");
+                        if ( bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFace() + "]");
-                        if ( bean.getVerifyFace() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFace()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFeature() + "]");
+                        if ( bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFace() + "%]");
-                        if (bean.getVerifyFace()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFace() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFeature() + "%]");
+                        if (bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.checkCompareFaceModified()) {
+            if (bean.checkCompareFeatureModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCompareFace() + "]");
-                        if (bean.getCompareFace() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getCompareFace()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCompareFeature() + "]");
+                        if (bean.getCompareFeature() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getCompareFeature()); }
                         break;
                     case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getCompareFace() + "%]");
-                        if ( bean.getCompareFace()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getCompareFace() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getCompareFeature() + "%]");
+                        if ( bean.getCompareFeature()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getCompareFeature() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getCompareFace() + "]");
-                        if ( bean.getCompareFace() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getCompareFace()); }
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getCompareFeature() + "]");
+                        if ( bean.getCompareFeature() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getCompareFeature()); }
                         break;
                     case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCompareFace() + "%]");
-                        if (bean.getCompareFace()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getCompareFace() + "%"); }
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCompareFeature() + "%]");
+                        if (bean.getCompareFeature()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getCompareFeature() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1661,8 +1661,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             bean.setId(Manager.getInteger(rs, 1));
             bean.setPersonId(Manager.getInteger(rs, 2));
             bean.setDeviceId(Manager.getInteger(rs, 3));
-            bean.setVerifyFace(rs.getString(4));
-            bean.setCompareFace(rs.getString(5));
+            bean.setVerifyFeature(rs.getString(4));
+            bean.setCompareFeature(rs.getString(5));
             bean.setSimilarty(Manager.getDouble(rs, 6));
             bean.setVerifyTime(rs.getTimestamp(7));
             bean.setCreateTime(rs.getTimestamp(8));
@@ -1709,13 +1709,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                         ++pos;
                         bean.setDeviceId(Manager.getInteger(rs, pos));
                         break;
-                    case FL_LOG_ID_VERIFY_FACE:
+                    case FL_LOG_ID_VERIFY_FEATURE:
                         ++pos;
-                        bean.setVerifyFace(rs.getString(pos));
+                        bean.setVerifyFeature(rs.getString(pos));
                         break;
-                    case FL_LOG_ID_COMPARE_FACE:
+                    case FL_LOG_ID_COMPARE_FEATURE:
                         ++pos;
-                        bean.setCompareFace(rs.getString(pos));
+                        bean.setCompareFeature(rs.getString(pos));
                         break;
                     case FL_LOG_ID_SIMILARTY:
                         ++pos;
@@ -1760,8 +1760,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             bean.setId(Manager.getInteger(rs, "id"));
             bean.setPersonId(Manager.getInteger(rs, "person_id"));
             bean.setDeviceId(Manager.getInteger(rs, "device_id"));
-            bean.setVerifyFace(rs.getString("verify_face"));
-            bean.setCompareFace(rs.getString("compare_face"));
+            bean.setVerifyFeature(rs.getString("verify_feature"));
+            bean.setCompareFeature(rs.getString("compare_feature"));
             bean.setSimilarty(Manager.getDouble(rs, "similarty"));
             bean.setVerifyTime(rs.getTimestamp("verify_time"));
             bean.setCreateTime(rs.getTimestamp("create_time"));

@@ -44,8 +44,8 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE}
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE}
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM}
-     *   <li>{@link Constant#FL_PERSON_ID_PHOTO_ID}
-     *   <li>{@link Constant#FL_PERSON_ID_FACE_MD5}
+     *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5}
+     *   <li>{@link Constant#FL_PERSON_ID_FEATURE_MD5}
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE}
      *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME}
      *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME}
@@ -74,8 +74,8 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE})
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE})
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM})
-     *   <li>{@link Constant#FL_PERSON_ID_PHOTO_ID})
-     *   <li>{@link Constant#FL_PERSON_ID_FACE_MD5})
+     *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5})
+     *   <li>{@link Constant#FL_PERSON_ID_FEATURE_MD5})
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE})
      *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME})
      *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME})
@@ -172,26 +172,26 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = b1.getPapersNum().compareTo(b2.getPapersNum());
                 }
                 break;
-            case FL_PERSON_ID_PHOTO_ID:
-                if (b1.getPhotoId() == null && b2.getPhotoId() != null) {
+            case FL_PERSON_ID_IMAGE_MD5:
+                if (b1.getImageMd5() == null && b2.getImageMd5() != null) {
                     iReturn = -1;
-                } else if (b1.getPhotoId() == null && b2.getPhotoId() == null) {
+                } else if (b1.getImageMd5() == null && b2.getImageMd5() == null) {
                     iReturn = 0;
-                } else if (b1.getPhotoId() != null && b2.getPhotoId() == null) {
+                } else if (b1.getImageMd5() != null && b2.getImageMd5() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getPhotoId().compareTo(b2.getPhotoId());
+                    iReturn = b1.getImageMd5().compareTo(b2.getImageMd5());
                 }
                 break;
-            case FL_PERSON_ID_FACE_MD5:
-                if (b1.getFaceMd5() == null && b2.getFaceMd5() != null) {
+            case FL_PERSON_ID_FEATURE_MD5:
+                if (b1.getFeatureMd5() == null && b2.getFeatureMd5() != null) {
                     iReturn = -1;
-                } else if (b1.getFaceMd5() == null && b2.getFaceMd5() == null) {
+                } else if (b1.getFeatureMd5() == null && b2.getFeatureMd5() == null) {
                     iReturn = 0;
-                } else if (b1.getFaceMd5() != null && b2.getFaceMd5() == null) {
+                } else if (b1.getFeatureMd5() != null && b2.getFeatureMd5() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getFaceMd5().compareTo(b2.getFaceMd5());
+                    iReturn = b1.getFeatureMd5().compareTo(b2.getFeatureMd5());
                 }
                 break;
             case FL_PERSON_ID_EXPIRY_DATE:

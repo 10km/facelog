@@ -519,7 +519,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *      for fl_device table<br>
      *          PK# 1 fl_device.id type Integer<br>
      *      for fl_face table<br>
-     *          PK# 1 fl_face.md5 type String<br>
+     *          PK# 1 fl_face.id type Integer<br>
      *      for fl_image table<br>
      *          PK# 1 fl_image.md5 type String<br>
      *      for fl_log table<br>
@@ -627,7 +627,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *      for fl_device table<br>
      *          PK# 1 fl_device.id type Integer<br>
      *      for fl_face table<br>
-     *          PK# 1 fl_face.md5 type String<br>
+     *          PK# 1 fl_face.id type Integer<br>
      *      for fl_image table<br>
      *          PK# 1 fl_image.md5 type String<br>
      *      for fl_log table<br>
@@ -942,14 +942,16 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     /**
      * Retrieves a list of B bean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
+     *        for fl_device table<br>
+     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}<br>     
      *        for fl_face table<br>
-     *        {@link Constant#FL_FACE_INDEX_IMG_MD5},{@link Constant#FL_FACE_INDEX_PERSON_ID}<br>     
+     *        {@link Constant#FL_FACE_INDEX_FEATURE_MD5},{@link Constant#FL_FACE_INDEX_IMAGE_MD5}<br>     
      *        for fl_image table<br>
      *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}<br>     
      *        for fl_log table<br>
-     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FACE}<br>     
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FEATURE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}<br>     
      *        for fl_person table<br>
-     *        {@link Constant#FL_PERSON_INDEX_FACE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_PHOTO_ID},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
+     *        {@link Constant#FL_PERSON_INDEX_FEATURE_MD5},{@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}<br>     
      * @param keys key values of index
      * @return a list of B bean
      * @throws DAOException
@@ -1044,15 +1046,15 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             for fl_device table:<br>
                 {@code  FlImageBean[] FlLogBean[]}<br>
             for fl_face table:<br>
-                {@code  FlImageBean FlPersonBean FlLogBean[] FlLogBean[]}<br>
+                {@code  FlImageBean FlStoreBean}<br>
             for fl_image table:<br>
                 {@code  FlDeviceBean FlStoreBean FlStoreBean FlFaceBean[] FlPersonBean[]}<br>
             for fl_log table:<br>
-                {@code  FlDeviceBean FlFaceBean FlFaceBean FlPersonBean}<br>
+                {@code  FlDeviceBean FlPersonBean FlStoreBean FlStoreBean}<br>
             for fl_person table:<br>
-                {@code  FlImageBean FlFaceBean[] FlLogBean[]}<br>
+                {@code  FlImageBean FlStoreBean FlLogBean[]}<br>
             for fl_store table:<br>
-                {@code  FlImageBean[] FlImageBean[]}<br>
+                {@code  FlFaceBean[] FlImageBean[] FlImageBean[] FlLogBean[] FlLogBean[] FlPersonBean[]}<br>
      * @return the inserted or updated B bean
       * @throws DAOException
      */
@@ -1067,15 +1069,15 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             for fl_device table:<br>
                 {@code  Collection<FlImageBean> Collection<FlLogBean>}<br>
             for fl_face table:<br>
-                {@code  FlImageBean FlPersonBean Collection<FlLogBean> Collection<FlLogBean>}<br>
+                {@code  FlImageBean FlStoreBean}<br>
             for fl_image table:<br>
                 {@code  FlDeviceBean FlStoreBean FlStoreBean Collection<FlFaceBean> Collection<FlPersonBean>}<br>
             for fl_log table:<br>
-                {@code  FlDeviceBean FlFaceBean FlFaceBean FlPersonBean}<br>
+                {@code  FlDeviceBean FlPersonBean FlStoreBean FlStoreBean}<br>
             for fl_person table:<br>
-                {@code  FlImageBean Collection<FlFaceBean> Collection<FlLogBean>}<br>
+                {@code  FlImageBean FlStoreBean Collection<FlLogBean>}<br>
             for fl_store table:<br>
-                {@code  Collection<FlImageBean> Collection<FlImageBean>}<br>
+                {@code  Collection<FlFaceBean> Collection<FlImageBean> Collection<FlImageBean> Collection<FlLogBean> Collection<FlLogBean> Collection<FlPersonBean>}<br>
      * @return the inserted or updated B bean
      * @throws DAOException
      */
@@ -1161,8 +1163,8 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param <T>
      * <ul>
      *     <li> for fl_face:
-     *     <li> {@link Constant#FL_FACE_FK_IMG_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_image:
@@ -1173,24 +1175,25 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * <ul>
      *     <li> for fl_log:
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FACE} -> {@link FlFaceBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link FlStoreBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_person:
-     *     <li> {@link Constant#FL_PERSON_FK_PHOTO_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_FEATURE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param fkIndex foreign key name.<br>
      *        for for fl_face table:<br>
-     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_FACE_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_FACE_FK_FEATURE_MD5}<br>
      *        for for fl_image table:<br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}<br>
      *        for for fl_log table:<br>
-     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_PERSON_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE}<br>
      *        for for fl_person table:<br>
-     *        {@link Constant#FL_PERSON_FK_PHOTO_ID}<br>
+     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_FEATURE_MD5}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      * @throws DAOException
      */
@@ -1212,41 +1215,37 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param <T>
      * <ul>
      *     <li> for fl_device table:
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlImageBean}</li>
-     * </ul>
-     * <ul>
-     *     <li> for fl_face table:
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_VERIFY_FACE} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlStoreBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_image table:
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMG_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_PHOTO_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_FACE_IMAGE_MD5} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_IMAGE_IK_FL_PERSON_IMAGE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_person table:
-     *     <li> {@link Constant#FL_PERSON_IK_FL_FACE_PERSON_ID} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlStoreBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_store table:
-     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_FACE_FEATURE_MD5} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_LOG_VERIFY_FEATURE} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_LOG_COMPARE_FEATURE} -> {@link FlStoreBean}</li>
+     *     <li> {@link Constant#FL_STORE_IK_FL_PERSON_FEATURE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
      *        for fl_device table:<br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
-     *        for fl_face table:<br>
-     *        {@link Constant#FL_LOG_FK_VERIFY_FACE},{@link Constant#FL_LOG_FK_COMPARE_FACE}<br>
      *        for fl_image table:<br>
-     *        {@link Constant#FL_FACE_FK_IMG_MD5},{@link Constant#FL_PERSON_FK_PHOTO_ID}<br>
+     *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
      *        for fl_person table:<br>
-     *        {@link Constant#FL_FACE_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_LOG_FK_PERSON_ID}<br>
      *        for fl_store table:<br>
-     *        {@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}<br>
+     *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE},{@link Constant#FL_PERSON_FK_FEATURE_MD5}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */

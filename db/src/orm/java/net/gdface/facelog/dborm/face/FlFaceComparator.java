@@ -31,15 +31,14 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>{@link Constant#FL_FACE_ID_MD5}
-     *   <li>{@link Constant#FL_FACE_ID_PERSON_ID}
-     *   <li>{@link Constant#FL_FACE_ID_IMG_MD5}
+     *   <li>{@link Constant#FL_FACE_ID_ID}
+     *   <li>{@link Constant#FL_FACE_ID_IMAGE_MD5}
      *   <li>{@link Constant#FL_FACE_ID_FACE_LEFT}
      *   <li>{@link Constant#FL_FACE_ID_FACE_TOP}
      *   <li>{@link Constant#FL_FACE_ID_FACE_WIDTH}
@@ -55,6 +54,7 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_YAW}
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_PITCH}
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_ROLL}
+     *   <li>{@link Constant#FL_FACE_ID_FEATURE_MD5}
      *   <li>{@link Constant#FL_FACE_ID_CREATE_TIME}
      * </ul>
      */
@@ -68,15 +68,14 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_MD5, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlFaceComparator(Constant.FL_FACE_ID_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>{@link Constant#FL_FACE_ID_MD5})
-     *   <li>{@link Constant#FL_FACE_ID_PERSON_ID})
-     *   <li>{@link Constant#FL_FACE_ID_IMG_MD5})
+     *   <li>{@link Constant#FL_FACE_ID_ID})
+     *   <li>{@link Constant#FL_FACE_ID_IMAGE_MD5})
      *   <li>{@link Constant#FL_FACE_ID_FACE_LEFT})
      *   <li>{@link Constant#FL_FACE_ID_FACE_TOP})
      *   <li>{@link Constant#FL_FACE_ID_FACE_WIDTH})
@@ -93,7 +92,7 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_PITCH})
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_ROLL})
      *   <li>{@link Constant#FL_FACE_ID_EXT_INFO})
-     *   <li>{@link Constant#FL_FACE_ID_FEATURE})
+     *   <li>{@link Constant#FL_FACE_ID_FEATURE_MD5})
      *   <li>{@link Constant#FL_FACE_ID_CREATE_TIME})
      * </ul>
      *
@@ -111,37 +110,26 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
         int iReturn = 0;
         switch(iType)
         {
-            case FL_FACE_ID_MD5:
-                if (b1.getMd5() == null && b2.getMd5() != null) {
+            case FL_FACE_ID_ID:
+                if (b1.getId() == null && b2.getId() != null) {
                     iReturn = -1;
-                } else if (b1.getMd5() == null && b2.getMd5() == null) {
+                } else if (b1.getId() == null && b2.getId() == null) {
                     iReturn = 0;
-                } else if (b1.getMd5() != null && b2.getMd5() == null) {
+                } else if (b1.getId() != null && b2.getId() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getMd5().compareTo(b2.getMd5());
+                    iReturn = b1.getId().compareTo(b2.getId());
                 }
                 break;
-            case FL_FACE_ID_PERSON_ID:
-                if (b1.getPersonId() == null && b2.getPersonId() != null) {
+            case FL_FACE_ID_IMAGE_MD5:
+                if (b1.getImageMd5() == null && b2.getImageMd5() != null) {
                     iReturn = -1;
-                } else if (b1.getPersonId() == null && b2.getPersonId() == null) {
+                } else if (b1.getImageMd5() == null && b2.getImageMd5() == null) {
                     iReturn = 0;
-                } else if (b1.getPersonId() != null && b2.getPersonId() == null) {
+                } else if (b1.getImageMd5() != null && b2.getImageMd5() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getPersonId().compareTo(b2.getPersonId());
-                }
-                break;
-            case FL_FACE_ID_IMG_MD5:
-                if (b1.getImgMd5() == null && b2.getImgMd5() != null) {
-                    iReturn = -1;
-                } else if (b1.getImgMd5() == null && b2.getImgMd5() == null) {
-                    iReturn = 0;
-                } else if (b1.getImgMd5() != null && b2.getImgMd5() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getImgMd5().compareTo(b2.getImgMd5());
+                    iReturn = b1.getImageMd5().compareTo(b2.getImageMd5());
                 }
                 break;
             case FL_FACE_ID_FACE_LEFT:
@@ -307,6 +295,17 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getAngleRoll().compareTo(b2.getAngleRoll());
+                }
+                break;
+            case FL_FACE_ID_FEATURE_MD5:
+                if (b1.getFeatureMd5() == null && b2.getFeatureMd5() != null) {
+                    iReturn = -1;
+                } else if (b1.getFeatureMd5() == null && b2.getFeatureMd5() == null) {
+                    iReturn = 0;
+                } else if (b1.getFeatureMd5() != null && b2.getFeatureMd5() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getFeatureMd5().compareTo(b2.getFeatureMd5());
                 }
                 break;
             case FL_FACE_ID_CREATE_TIME:

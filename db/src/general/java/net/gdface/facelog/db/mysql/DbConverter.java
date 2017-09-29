@@ -17,8 +17,6 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.StoreBean;
-import net.gdface.facelog.db.FaceLightBean;
-import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.LogLightBean;
 
 /**
@@ -26,7 +24,7 @@ import net.gdface.facelog.db.LogLightBean;
  * @author guyadong
  *
  */
-public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
+public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
         @Override
@@ -35,8 +33,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setId(right.getId());
             if(right.checkNameInitialized())
                 left.setName(right.getName());
-            if(right.checkOnlineInitialized())
-                left.setOnline(right.getOnline());
             if(right.checkGroupIdInitialized())
                 left.setGroupId(right.getGroupId());
             if(right.checkVersionInitialized())
@@ -55,8 +51,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setId(left.getId());
             if(left.checkNameInitialized() )
                 right.setName(left.getName());
-            if(left.checkOnlineInitialized() )
-                right.setOnline(left.getOnline());
             if(left.checkGroupIdInitialized() )
                 right.setGroupId(left.getGroupId());
             if(left.checkVersionInitialized() )
@@ -75,12 +69,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 
         @Override
         protected void _fromRight(FaceBean left, net.gdface.facelog.dborm.face.FlFaceBean right) {
-            if(right.checkMd5Initialized())
-                left.setMd5(right.getMd5());
-            if(right.checkPersonIdInitialized())
-                left.setPersonId(right.getPersonId());
-            if(right.checkImgMd5Initialized())
-                left.setImgMd5(right.getImgMd5());
+            if(right.checkIdInitialized())
+                left.setId(right.getId());
+            if(right.checkImageMd5Initialized())
+                left.setImageMd5(right.getImageMd5());
             if(right.checkFaceLeftInitialized())
                 left.setFaceLeft(right.getFaceLeft());
             if(right.checkFaceTopInitialized())
@@ -113,8 +105,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setAngleRoll(right.getAngleRoll());
             if(right.checkExtInfoInitialized())
                 left.setExtInfo(right.getExtInfo());
-            if(right.checkFeatureInitialized())
-                left.setFeature(right.getFeature());
+            if(right.checkFeatureMd5Initialized())
+                left.setFeatureMd5(right.getFeatureMd5());
             if(right.checkCreateTimeInitialized())
                 left.setCreateTime(right.getCreateTime());
             left.isNew(right.isNew());
@@ -123,12 +115,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 
         @Override
         protected void _toRight(FaceBean left, net.gdface.facelog.dborm.face.FlFaceBean right) {
-            if(left.checkMd5Initialized() )
-                right.setMd5(left.getMd5());
-            if(left.checkPersonIdInitialized() )
-                right.setPersonId(left.getPersonId());
-            if(left.checkImgMd5Initialized() )
-                right.setImgMd5(left.getImgMd5());
+            if(left.checkIdInitialized() )
+                right.setId(left.getId());
+            if(left.checkImageMd5Initialized() )
+                right.setImageMd5(left.getImageMd5());
             if(left.checkFaceLeftInitialized() )
                 right.setFaceLeft(left.getFaceLeft());
             if(left.checkFaceTopInitialized() )
@@ -161,8 +151,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setAngleRoll(left.getAngleRoll());
             if(left.checkExtInfoInitialized() )
                 right.setExtInfo(left.getExtInfo());
-            if(left.checkFeatureInitialized() )
-                right.setFeature(left.getFeature());
+            if(left.checkFeatureMd5Initialized() )
+                right.setFeatureMd5(left.getFeatureMd5());
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() )
 //                 right.setCreateTime(left.getCreateTime());
@@ -226,10 +216,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setPersonId(right.getPersonId());
             if(right.checkDeviceIdInitialized())
                 left.setDeviceId(right.getDeviceId());
-            if(right.checkVerifyFaceInitialized())
-                left.setVerifyFace(right.getVerifyFace());
-            if(right.checkCompareFaceInitialized())
-                left.setCompareFace(right.getCompareFace());
+            if(right.checkVerifyFeatureInitialized())
+                left.setVerifyFeature(right.getVerifyFeature());
+            if(right.checkCompareFeatureInitialized())
+                left.setCompareFeature(right.getCompareFeature());
             if(right.checkSimilartyInitialized())
                 left.setSimilarty(right.getSimilarty());
             if(right.checkVerifyTimeInitialized())
@@ -248,10 +238,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setPersonId(left.getPersonId());
             if(left.checkDeviceIdInitialized() )
                 right.setDeviceId(left.getDeviceId());
-            if(left.checkVerifyFaceInitialized() )
-                right.setVerifyFace(left.getVerifyFace());
-            if(left.checkCompareFaceInitialized() )
-                right.setCompareFace(left.getCompareFace());
+            if(left.checkVerifyFeatureInitialized() )
+                right.setVerifyFeature(left.getVerifyFeature());
+            if(left.checkCompareFeatureInitialized() )
+                right.setCompareFeature(left.getCompareFeature());
             if(left.checkSimilartyInitialized() )
                 right.setSimilarty(left.getSimilarty());
             if(left.checkVerifyTimeInitialized() )
@@ -281,10 +271,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setPapersType(right.getPapersType());
             if(right.checkPapersNumInitialized())
                 left.setPapersNum(right.getPapersNum());
-            if(right.checkPhotoIdInitialized())
-                left.setPhotoId(right.getPhotoId());
-            if(right.checkFaceMd5Initialized())
-                left.setFaceMd5(right.getFaceMd5());
+            if(right.checkImageMd5Initialized())
+                left.setImageMd5(right.getImageMd5());
+            if(right.checkFeatureMd5Initialized())
+                left.setFeatureMd5(right.getFeatureMd5());
             if(right.checkExpiryDateInitialized())
                 left.setExpiryDate(right.getExpiryDate());
             if(right.checkCreateTimeInitialized())
@@ -311,10 +301,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setPapersType(left.getPapersType());
             if(left.checkPapersNumInitialized() )
                 right.setPapersNum(left.getPapersNum());
-            if(left.checkPhotoIdInitialized() )
-                right.setPhotoId(left.getPhotoId());
-            if(left.checkFaceMd5Initialized() )
-                right.setFaceMd5(left.getFaceMd5());
+            if(left.checkImageMd5Initialized() )
+                right.setImageMd5(left.getImageMd5());
+            if(left.checkFeatureMd5Initialized() )
+                right.setFeatureMd5(left.getFeatureMd5());
             if(left.checkExpiryDateInitialized() )
                 right.setExpiryDate(left.getExpiryDate());
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -349,136 +339,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setEncoding(left.getEncoding());
             if(left.checkDataInitialized() )
                 right.setData(left.getData());
-            right.isNew(left.isNew());
-            right.setModified(left.getModified());
-        }};
-        
-    public static final IBeanConverter<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean> converterFaceLightBean=new IBeanConverter.AbstractHandle<FaceLightBean,net.gdface.facelog.dborm.face.FlFaceLightBean>(){
-
-        @Override
-        protected void _fromRight(FaceLightBean left, net.gdface.facelog.dborm.face.FlFaceLightBean right) {
-            if(right.checkMd5Initialized())
-                left.setMd5(right.getMd5());
-            if(right.checkPersonIdInitialized())
-                left.setPersonId(right.getPersonId());
-            if(right.checkImgMd5Initialized())
-                left.setImgMd5(right.getImgMd5());
-            if(right.checkFaceLeftInitialized())
-                left.setFaceLeft(right.getFaceLeft());
-            if(right.checkFaceTopInitialized())
-                left.setFaceTop(right.getFaceTop());
-            if(right.checkFaceWidthInitialized())
-                left.setFaceWidth(right.getFaceWidth());
-            if(right.checkFaceHeightInitialized())
-                left.setFaceHeight(right.getFaceHeight());
-            if(right.checkEyeLeftxInitialized())
-                left.setEyeLeftx(right.getEyeLeftx());
-            if(right.checkEyeLeftyInitialized())
-                left.setEyeLefty(right.getEyeLefty());
-            if(right.checkEyeRightxInitialized())
-                left.setEyeRightx(right.getEyeRightx());
-            if(right.checkEyeRightyInitialized())
-                left.setEyeRighty(right.getEyeRighty());
-            if(right.checkMouthXInitialized())
-                left.setMouthX(right.getMouthX());
-            if(right.checkMouthYInitialized())
-                left.setMouthY(right.getMouthY());
-            if(right.checkNoseXInitialized())
-                left.setNoseX(right.getNoseX());
-            if(right.checkNoseYInitialized())
-                left.setNoseY(right.getNoseY());
-            if(right.checkAngleYawInitialized())
-                left.setAngleYaw(right.getAngleYaw());
-            if(right.checkAnglePitchInitialized())
-                left.setAnglePitch(right.getAnglePitch());
-            if(right.checkAngleRollInitialized())
-                left.setAngleRoll(right.getAngleRoll());
-            if(right.checkExtInfoInitialized())
-                left.setExtInfo(right.getExtInfo());
-            if(right.checkCreateTimeInitialized())
-                left.setCreateTime(right.getCreateTime());
-            left.isNew(right.isNew());
-            left.setModified(right.getModified());
-        }
-
-        @Override
-        protected void _toRight(FaceLightBean left, net.gdface.facelog.dborm.face.FlFaceLightBean right) {
-            if(left.checkMd5Initialized() )
-                right.setMd5(left.getMd5());
-            if(left.checkPersonIdInitialized() )
-                right.setPersonId(left.getPersonId());
-            if(left.checkImgMd5Initialized() )
-                right.setImgMd5(left.getImgMd5());
-            if(left.checkFaceLeftInitialized() )
-                right.setFaceLeft(left.getFaceLeft());
-            if(left.checkFaceTopInitialized() )
-                right.setFaceTop(left.getFaceTop());
-            if(left.checkFaceWidthInitialized() )
-                right.setFaceWidth(left.getFaceWidth());
-            if(left.checkFaceHeightInitialized() )
-                right.setFaceHeight(left.getFaceHeight());
-            if(left.checkEyeLeftxInitialized() )
-                right.setEyeLeftx(left.getEyeLeftx());
-            if(left.checkEyeLeftyInitialized() )
-                right.setEyeLefty(left.getEyeLefty());
-            if(left.checkEyeRightxInitialized() )
-                right.setEyeRightx(left.getEyeRightx());
-            if(left.checkEyeRightyInitialized() )
-                right.setEyeRighty(left.getEyeRighty());
-            if(left.checkMouthXInitialized() )
-                right.setMouthX(left.getMouthX());
-            if(left.checkMouthYInitialized() )
-                right.setMouthY(left.getMouthY());
-            if(left.checkNoseXInitialized() )
-                right.setNoseX(left.getNoseX());
-            if(left.checkNoseYInitialized() )
-                right.setNoseY(left.getNoseY());
-            if(left.checkAngleYawInitialized() )
-                right.setAngleYaw(left.getAngleYaw());
-            if(left.checkAnglePitchInitialized() )
-                right.setAnglePitch(left.getAnglePitch());
-            if(left.checkAngleRollInitialized() )
-                right.setAngleRoll(left.getAngleRoll());
-            if(left.checkExtInfoInitialized() )
-                right.setExtInfo(left.getExtInfo());
-// IGNORE field fl_face_light.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(left.checkCreateTimeInitialized() )
-//                 right.setCreateTime(left.getCreateTime());
-            right.isNew(left.isNew());
-            right.setModified(left.getModified());
-        }};
-        
-    public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
-
-        @Override
-        protected void _fromRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
-            if(right.checkMd5Initialized())
-                left.setMd5(right.getMd5());
-            if(right.checkPersonIdInitialized())
-                left.setPersonId(right.getPersonId());
-            if(right.checkImgMd5Initialized())
-                left.setImgMd5(right.getImgMd5());
-            if(right.checkFeatureInitialized())
-                left.setFeature(right.getFeature());
-            if(right.checkCreateTimeInitialized())
-                left.setCreateTime(right.getCreateTime());
-            left.isNew(right.isNew());
-            left.setModified(right.getModified());
-        }
-
-        @Override
-        protected void _toRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
-            if(left.checkMd5Initialized() )
-                right.setMd5(left.getMd5());
-            if(left.checkPersonIdInitialized() )
-                right.setPersonId(left.getPersonId());
-            if(left.checkImgMd5Initialized() )
-                right.setImgMd5(left.getImgMd5());
-            if(left.checkFeatureInitialized() )
-                right.setFeature(left.getFeature());
-// IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(left.checkCreateTimeInitialized() )
-//                 right.setCreateTime(left.getCreateTime());
             right.isNew(left.isNew());
             right.setModified(left.getModified());
         }};
@@ -535,8 +395,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             add(new Object[]{LogBean.class, net.gdface.facelog.dborm.log.FlLogBean.class, converterLogBean});
             add(new Object[]{PersonBean.class, net.gdface.facelog.dborm.person.FlPersonBean.class, converterPersonBean});
             add(new Object[]{StoreBean.class, net.gdface.facelog.dborm.image.FlStoreBean.class, converterStoreBean});
-            add(new Object[]{FaceLightBean.class, net.gdface.facelog.dborm.face.FlFaceLightBean.class, converterFaceLightBean});
-            add(new Object[]{FeatureBean.class, net.gdface.facelog.dborm.face.FlFeatureBean.class, converterFeatureBean});
             add(new Object[]{LogLightBean.class, net.gdface.facelog.dborm.log.FlLogLightBean.class, converterLogLightBean});
         }};
     
@@ -616,14 +474,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
     @Override
     public IBeanConverter<StoreBean, net.gdface.facelog.dborm.image.FlStoreBean> getStoreBeanConverter() {
         return converterStoreBean;
-    }
-    @Override
-    public IBeanConverter<FaceLightBean, net.gdface.facelog.dborm.face.FlFaceLightBean> getFaceLightBeanConverter() {
-        return converterFaceLightBean;
-    }
-    @Override
-    public IBeanConverter<FeatureBean, net.gdface.facelog.dborm.face.FlFeatureBean> getFeatureBeanConverter() {
-        return converterFeatureBean;
     }
     @Override
     public IBeanConverter<LogLightBean, net.gdface.facelog.dborm.log.FlLogLightBean> getLogLightBeanConverter() {

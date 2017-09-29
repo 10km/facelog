@@ -39,7 +39,6 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      * <ul>
      *   <li>{@link Constant#FL_DEVICE_ID_ID}
      *   <li>{@link Constant#FL_DEVICE_ID_NAME}
-     *   <li>{@link Constant#FL_DEVICE_ID_ONLINE}
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID}
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
      *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME}
@@ -64,7 +63,6 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      * <ul>
      *   <li>{@link Constant#FL_DEVICE_ID_ID})
      *   <li>{@link Constant#FL_DEVICE_ID_NAME})
-     *   <li>{@link Constant#FL_DEVICE_ID_ONLINE})
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID})
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
      *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME})
@@ -105,17 +103,6 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getName().compareTo(b2.getName());
-                }
-                break;
-            case FL_DEVICE_ID_ONLINE:
-                if (b1.getOnline() == null && b2.getOnline() != null) {
-                    iReturn = -1;
-                } else if (b1.getOnline() == null && b2.getOnline() == null) {
-                    iReturn = 0;
-                } else if (b1.getOnline() != null && b2.getOnline() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getOnline().compareTo(b2.getOnline());
                 }
                 break;
             case FL_DEVICE_ID_GROUP_ID:

@@ -28,7 +28,7 @@ public class FlLogLightBean
     /** comments:日志id */
     private Integer id;
 
-    /** comments:用户识别码 */
+    /** comments:用户id */
     private Integer personId;
 
     /** comments:姓名 */
@@ -176,7 +176,7 @@ public class FlLogLightBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log_light.person_id</li>
-     * <li>comments: 用户识别码</li>
+     * <li>comments: 用户id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>

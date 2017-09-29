@@ -10,8 +10,8 @@ import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.person.FlPersonBean;
+import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -37,11 +37,11 @@ public class FlLogBean
     /** comments:外键,图像来源设备id */
     private Integer deviceId;
 
-    /** comments:外键,验证人脸信息id */
-    private String verifyFace;
+    /** comments:外键,人脸特征数据MD5 id */
+    private String verifyFeature;
 
-    /** comments:外键,数据库中最相似的对比人脸id */
-    private String compareFace;
+    /** comments:外键,数据库中相似度最高的人脸特征MD5 id */
+    private String compareFeature;
 
     /** comments:验证相似度 */
     private Double similarty;
@@ -315,118 +315,118 @@ public class FlLogBean
         return 0L !=  (initialized & FL_LOG_ID_DEVICE_ID_MASK);
     }
     /**
-     * Getter method for {@link #verifyFace}.<br>
+     * Getter method for {@link #verifyFeature}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.verify_face</li>
-     * <li> foreign key: fl_face.md5</li>
-     * <li>comments: 外键,验证人脸信息id</li>
+     * <li>full name: fl_log.verify_feature</li>
+     * <li> foreign key: fl_store.md5</li>
+     * <li>comments: 外键,人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of verifyFace
+     * @return the value of verifyFeature
      */
-    public String getVerifyFace(){
-        return verifyFace;
+    public String getVerifyFeature(){
+        return verifyFeature;
     }
     /**
-     * Setter method for {@link #verifyFace}.<br>
+     * Setter method for {@link #verifyFeature}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyFace
+     * @param newVal the new value to be assigned to verifyFeature
      */
-    public void setVerifyFace(String newVal)
+    public void setVerifyFeature(String newVal)
     {
-        if ((newVal != null && verifyFace != null && (newVal.compareTo(verifyFace) == 0)) ||
-            (newVal == null && verifyFace == null && checkVerifyFaceInitialized())) {
+        if ((newVal != null && verifyFeature != null && (newVal.compareTo(verifyFeature) == 0)) ||
+            (newVal == null && verifyFeature == null && checkVerifyFeatureInitialized())) {
             return;
         }
-        verifyFace = newVal;
+        verifyFeature = newVal;
 
-        modified |= FL_LOG_ID_VERIFY_FACE_MASK;
-        initialized |= FL_LOG_ID_VERIFY_FACE_MASK;
+        modified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
+        initialized |= FL_LOG_ID_VERIFY_FEATURE_MASK;
     }
 
     /**
-     * Determines if the verifyFace has been modified.
+     * Determines if the verifyFeature has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkVerifyFaceModified()
+    public boolean checkVerifyFeatureModified()
     {
-        return 0L !=  (modified & FL_LOG_ID_VERIFY_FACE_MASK);
+        return 0L !=  (modified & FL_LOG_ID_VERIFY_FEATURE_MASK);
     }
 
     /**
-     * Determines if the verifyFace has been initialized.<br>
+     * Determines if the verifyFeature has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkVerifyFaceInitialized()
+    public boolean checkVerifyFeatureInitialized()
     {
-        return 0L !=  (initialized & FL_LOG_ID_VERIFY_FACE_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_VERIFY_FEATURE_MASK);
     }
     /**
-     * Getter method for {@link #compareFace}.<br>
+     * Getter method for {@link #compareFeature}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.compare_face</li>
-     * <li> foreign key: fl_face.md5</li>
-     * <li>comments: 外键,数据库中最相似的对比人脸id</li>
+     * <li>full name: fl_log.compare_feature</li>
+     * <li> foreign key: fl_store.md5</li>
+     * <li>comments: 外键,数据库中相似度最高的人脸特征MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
-     * @return the value of compareFace
+     * @return the value of compareFeature
      */
-    public String getCompareFace(){
-        return compareFace;
+    public String getCompareFeature(){
+        return compareFeature;
     }
     /**
-     * Setter method for {@link #compareFace}.<br>
+     * Setter method for {@link #compareFeature}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to compareFace
+     * @param newVal the new value to be assigned to compareFeature
      */
-    public void setCompareFace(String newVal)
+    public void setCompareFeature(String newVal)
     {
-        if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
-            (newVal == null && compareFace == null && checkCompareFaceInitialized())) {
+        if ((newVal != null && compareFeature != null && (newVal.compareTo(compareFeature) == 0)) ||
+            (newVal == null && compareFeature == null && checkCompareFeatureInitialized())) {
             return;
         }
-        compareFace = newVal;
+        compareFeature = newVal;
 
-        modified |= FL_LOG_ID_COMPARE_FACE_MASK;
-        initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
+        modified |= FL_LOG_ID_COMPARE_FEATURE_MASK;
+        initialized |= FL_LOG_ID_COMPARE_FEATURE_MASK;
     }
 
     /**
-     * Determines if the compareFace has been modified.
+     * Determines if the compareFeature has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkCompareFaceModified()
+    public boolean checkCompareFeatureModified()
     {
-        return 0L !=  (modified & FL_LOG_ID_COMPARE_FACE_MASK);
+        return 0L !=  (modified & FL_LOG_ID_COMPARE_FEATURE_MASK);
     }
 
     /**
-     * Determines if the compareFace has been initialized.<br>
+     * Determines if the compareFeature has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkCompareFaceInitialized()
+    public boolean checkCompareFeatureInitialized()
     {
-        return 0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_COMPARE_FEATURE_MASK);
     }
     /**
      * Getter method for {@link #similarty}.<br>
@@ -642,32 +642,6 @@ public class FlLogBean
         this.referencedByDeviceId = reference;
     }
     /** 
-     * The referenced {@link FlFaceBean} by {@link #verifyFace} . <br>
-     * FOREIGN KEY (verify_face) REFERENCES fl_face(md5)
-     */
-    private FlFaceBean referencedByVerifyFace;
-    /** Getter method for {@link #referencedByVerifyFace}. */
-    public FlFaceBean getReferencedByVerifyFace() {
-        return this.referencedByVerifyFace;
-    }
-    /** Setter method for {@link #referencedByVerifyFace}. */
-    public void setReferencedByVerifyFace(FlFaceBean reference) {
-        this.referencedByVerifyFace = reference;
-    }
-    /** 
-     * The referenced {@link FlFaceBean} by {@link #compareFace} . <br>
-     * FOREIGN KEY (compare_face) REFERENCES fl_face(md5)
-     */
-    private FlFaceBean referencedByCompareFace;
-    /** Getter method for {@link #referencedByCompareFace}. */
-    public FlFaceBean getReferencedByCompareFace() {
-        return this.referencedByCompareFace;
-    }
-    /** Setter method for {@link #referencedByCompareFace}. */
-    public void setReferencedByCompareFace(FlFaceBean reference) {
-        this.referencedByCompareFace = reference;
-    }
-    /** 
      * The referenced {@link FlPersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
@@ -679,6 +653,32 @@ public class FlLogBean
     /** Setter method for {@link #referencedByPersonId}. */
     public void setReferencedByPersonId(FlPersonBean reference) {
         this.referencedByPersonId = reference;
+    }
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #verifyFeature} . <br>
+     * FOREIGN KEY (verify_feature) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByVerifyFeature;
+    /** Getter method for {@link #referencedByVerifyFeature}. */
+    public FlStoreBean getReferencedByVerifyFeature() {
+        return this.referencedByVerifyFeature;
+    }
+    /** Setter method for {@link #referencedByVerifyFeature}. */
+    public void setReferencedByVerifyFeature(FlStoreBean reference) {
+        this.referencedByVerifyFeature = reference;
+    }
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #compareFeature} . <br>
+     * FOREIGN KEY (compare_feature) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByCompareFeature;
+    /** Getter method for {@link #referencedByCompareFeature}. */
+    public FlStoreBean getReferencedByCompareFeature() {
+        return this.referencedByCompareFeature;
+    }
+    /** Setter method for {@link #referencedByCompareFeature}. */
+    public void setReferencedByCompareFeature(FlStoreBean reference) {
+        this.referencedByCompareFeature = reference;
     }
 
     /**
@@ -707,10 +707,10 @@ public class FlLogBean
             return checkPersonIdModified();
         case FL_LOG_ID_DEVICE_ID:
             return checkDeviceIdModified();
-        case FL_LOG_ID_VERIFY_FACE:
-            return checkVerifyFaceModified();
-        case FL_LOG_ID_COMPARE_FACE:
-            return checkCompareFaceModified();
+        case FL_LOG_ID_VERIFY_FEATURE:
+            return checkVerifyFeatureModified();
+        case FL_LOG_ID_COMPARE_FEATURE:
+            return checkCompareFeatureModified();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyModified();
         case FL_LOG_ID_VERIFY_TIME:
@@ -736,10 +736,10 @@ public class FlLogBean
             return checkPersonIdInitialized();
         case FL_LOG_ID_DEVICE_ID:
             return checkDeviceIdInitialized();
-        case FL_LOG_ID_VERIFY_FACE:
-            return checkVerifyFaceInitialized();
-        case FL_LOG_ID_COMPARE_FACE:
-            return checkCompareFaceInitialized();
+        case FL_LOG_ID_VERIFY_FEATURE:
+            return checkVerifyFeatureInitialized();
+        case FL_LOG_ID_COMPARE_FEATURE:
+            return checkCompareFeatureInitialized();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyInitialized();
         case FL_LOG_ID_VERIFY_TIME:
@@ -798,8 +798,8 @@ public class FlLogBean
             .append(getId(), obj.getId())
             .append(getPersonId(), obj.getPersonId())
             .append(getDeviceId(), obj.getDeviceId())
-            .append(getVerifyFace(), obj.getVerifyFace())
-            .append(getCompareFace(), obj.getCompareFace())
+            .append(getVerifyFeature(), obj.getVerifyFeature())
+            .append(getCompareFeature(), obj.getCompareFeature())
             .append(getSimilarty(), obj.getSimilarty())
             .append(getVerifyTime(), obj.getVerifyTime())
             .append(getCreateTime(), obj.getCreateTime())
@@ -813,8 +813,8 @@ public class FlLogBean
             .append(getId())
             .append(getPersonId())
             .append(getDeviceId())
-            .append(getVerifyFace())
-            .append(getCompareFace())
+            .append(getVerifyFeature())
+            .append(getCompareFeature())
             .append(getSimilarty())
             .append(getVerifyTime())
             .append(getCreateTime())
@@ -827,8 +827,8 @@ public class FlLogBean
             .append("\tid=").append(getId()).append("\n")
             .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\tdevice_id=").append(getDeviceId()).append("\n")
-            .append("\tverify_face=").append(getVerifyFace()).append("\n")
-            .append("\tcompare_face=").append(getCompareFace()).append("\n")
+            .append("\tverify_feature=").append(getVerifyFeature()).append("\n")
+            .append("\tcompare_feature=").append(getCompareFeature()).append("\n")
             .append("\tsimilarty=").append(getSimilarty()).append("\n")
             .append("\tverify_time=").append(getVerifyTime()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
@@ -860,8 +860,8 @@ public class FlLogBean
         setId(null);
         setPersonId(null);
         setDeviceId(null);
-        setVerifyFace(null);
-        setCompareFace(null);
+        setVerifyFeature(null);
+        setCompareFeature(null);
         setSimilarty(null);
         setVerifyTime(null);
         setCreateTime(null);
@@ -924,10 +924,10 @@ public class FlLogBean
             return (T)getPersonId();        
         case FL_LOG_ID_DEVICE_ID: 
             return (T)getDeviceId();        
-        case FL_LOG_ID_VERIFY_FACE: 
-            return (T)getVerifyFace();        
-        case FL_LOG_ID_COMPARE_FACE: 
-            return (T)getCompareFace();        
+        case FL_LOG_ID_VERIFY_FEATURE: 
+            return (T)getVerifyFeature();        
+        case FL_LOG_ID_COMPARE_FEATURE: 
+            return (T)getCompareFeature();        
         case FL_LOG_ID_SIMILARTY: 
             return (T)getSimilarty();        
         case FL_LOG_ID_VERIFY_TIME: 
@@ -950,10 +950,10 @@ public class FlLogBean
             setPersonId((Integer)value);
         case FL_LOG_ID_DEVICE_ID:        
             setDeviceId((Integer)value);
-        case FL_LOG_ID_VERIFY_FACE:        
-            setVerifyFace((String)value);
-        case FL_LOG_ID_COMPARE_FACE:        
-            setCompareFace((String)value);
+        case FL_LOG_ID_VERIFY_FEATURE:        
+            setVerifyFeature((String)value);
+        case FL_LOG_ID_COMPARE_FEATURE:        
+            setCompareFeature((String)value);
         case FL_LOG_ID_SIMILARTY:        
             setSimilarty((Double)value);
         case FL_LOG_ID_VERIFY_TIME:        

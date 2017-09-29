@@ -120,8 +120,8 @@ public class ImageBean
      * <ul>
      * <li>full name: fl_image.md5</li>
      * <li> foreign key: fl_store.md5</li>
-     * <li> imported key: fl_face.img_md5</li>
-     * <li> imported key: fl_person.photo_id</li>
+     * <li> imported key: fl_face.image_md5</li>
+     * <li> imported key: fl_person.image_md5</li>
      * <li>comments: 主键,图像md5检验码,同时也是外键fl_store(md5)</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>

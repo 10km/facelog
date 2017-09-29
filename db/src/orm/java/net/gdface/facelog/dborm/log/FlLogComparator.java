@@ -40,8 +40,8 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_ID}
      *   <li>{@link Constant#FL_LOG_ID_PERSON_ID}
      *   <li>{@link Constant#FL_LOG_ID_DEVICE_ID}
-     *   <li>{@link Constant#FL_LOG_ID_VERIFY_FACE}
-     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE}
+     *   <li>{@link Constant#FL_LOG_ID_VERIFY_FEATURE}
+     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FEATURE}
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME}
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME}
@@ -66,8 +66,8 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_ID})
      *   <li>{@link Constant#FL_LOG_ID_PERSON_ID})
      *   <li>{@link Constant#FL_LOG_ID_DEVICE_ID})
-     *   <li>{@link Constant#FL_LOG_ID_VERIFY_FACE})
-     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE})
+     *   <li>{@link Constant#FL_LOG_ID_VERIFY_FEATURE})
+     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FEATURE})
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME})
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME})
@@ -120,26 +120,26 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
                     iReturn = b1.getDeviceId().compareTo(b2.getDeviceId());
                 }
                 break;
-            case FL_LOG_ID_VERIFY_FACE:
-                if (b1.getVerifyFace() == null && b2.getVerifyFace() != null) {
+            case FL_LOG_ID_VERIFY_FEATURE:
+                if (b1.getVerifyFeature() == null && b2.getVerifyFeature() != null) {
                     iReturn = -1;
-                } else if (b1.getVerifyFace() == null && b2.getVerifyFace() == null) {
+                } else if (b1.getVerifyFeature() == null && b2.getVerifyFeature() == null) {
                     iReturn = 0;
-                } else if (b1.getVerifyFace() != null && b2.getVerifyFace() == null) {
+                } else if (b1.getVerifyFeature() != null && b2.getVerifyFeature() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getVerifyFace().compareTo(b2.getVerifyFace());
+                    iReturn = b1.getVerifyFeature().compareTo(b2.getVerifyFeature());
                 }
                 break;
-            case FL_LOG_ID_COMPARE_FACE:
-                if (b1.getCompareFace() == null && b2.getCompareFace() != null) {
+            case FL_LOG_ID_COMPARE_FEATURE:
+                if (b1.getCompareFeature() == null && b2.getCompareFeature() != null) {
                     iReturn = -1;
-                } else if (b1.getCompareFace() == null && b2.getCompareFace() == null) {
+                } else if (b1.getCompareFeature() == null && b2.getCompareFeature() == null) {
                     iReturn = 0;
-                } else if (b1.getCompareFace() != null && b2.getCompareFace() == null) {
+                } else if (b1.getCompareFeature() != null && b2.getCompareFeature() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getCompareFace().compareTo(b2.getCompareFace());
+                    iReturn = b1.getCompareFeature().compareTo(b2.getCompareFeature());
                 }
                 break;
             case FL_LOG_ID_SIMILARTY:

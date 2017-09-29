@@ -27,9 +27,6 @@ public class DeviceBean
     /** comments:设备名称 */
     private String name;
 
-    /** comments:设备是否在线标记 */
-    private Boolean online;
-
     /** comments:设备所属组id */
     private Integer groupId;
 
@@ -238,74 +235,6 @@ public class DeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_NAME_MASK);
     }
     /**
-     * Getter method for {@link #online}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.online</li>
-     * <li>comments: 设备是否在线标记</li>
-     * <li>column size: 1</li>
-     * <li>jdbc type returned by the driver: Types.BIT</li>
-     * </ul>
-     *
-     * @return the value of online
-     */
-    @com.facebook.swift.codec.ThriftField(6)
-    public Boolean getOnline(){
-        return online;
-    }
-    /**
-     * Setter method for {@link #online}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to online
-     */
-    @com.facebook.swift.codec.ThriftField
-    public void setOnline(Boolean newVal)
-    {
-        if ((newVal != null && online != null && (newVal.compareTo(online) == 0)) ||
-            (newVal == null && online == null && checkOnlineInitialized())) {
-            return;
-        }
-        online = newVal;
-
-        modified |= FL_DEVICE_ID_ONLINE_MASK;
-        initialized |= FL_DEVICE_ID_ONLINE_MASK;
-    }
-
-    /**
-     * Setter method for {@link #online}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to online
-     */
-    public void setOnline(boolean newVal)
-    {
-        setOnline(new Boolean(newVal));
-    }
-    /**
-     * Determines if the online has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkOnlineModified()
-    {
-        return 0L !=  (modified & FL_DEVICE_ID_ONLINE_MASK);
-    }
-
-    /**
-     * Determines if the online has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkOnlineInitialized()
-    {
-        return 0L !=  (initialized & FL_DEVICE_ID_ONLINE_MASK);
-    }
-    /**
      * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -317,7 +246,7 @@ public class DeviceBean
      *
      * @return the value of groupId
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @com.facebook.swift.codec.ThriftField(6)
     public Integer getGroupId(){
         return groupId;
     }
@@ -385,7 +314,7 @@ public class DeviceBean
      *
      * @return the value of version
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @com.facebook.swift.codec.ThriftField(7)
     public String getVersion(){
         return version;
     }
@@ -442,7 +371,7 @@ public class DeviceBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @com.facebook.swift.codec.ThriftField(8)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -509,7 +438,7 @@ public class DeviceBean
      *
      * @return the value of updateTime
      */
-    @com.facebook.swift.codec.ThriftField(10)
+    @com.facebook.swift.codec.ThriftField(9)
     public java.util.Date getUpdateTime(){
         return updateTime;
     }
@@ -590,8 +519,6 @@ public class DeviceBean
             return checkIdModified();
         case FL_DEVICE_ID_NAME:
             return checkNameModified();
-        case FL_DEVICE_ID_ONLINE:
-            return checkOnlineModified();
         case FL_DEVICE_ID_GROUP_ID:
             return checkGroupIdModified();
         case FL_DEVICE_ID_VERSION:
@@ -617,8 +544,6 @@ public class DeviceBean
             return checkIdInitialized();
         case FL_DEVICE_ID_NAME:
             return checkNameInitialized();
-        case FL_DEVICE_ID_ONLINE:
-            return checkOnlineInitialized();
         case FL_DEVICE_ID_GROUP_ID:
             return checkGroupIdInitialized();
         case FL_DEVICE_ID_VERSION:
@@ -678,7 +603,6 @@ public class DeviceBean
         return new EqualsBuilder()
             .append(getId(), obj.getId())
             .append(getName(), obj.getName())
-            .append(getOnline(), obj.getOnline())
             .append(getGroupId(), obj.getGroupId())
             .append(getVersion(), obj.getVersion())
             .append(getCreateTime(), obj.getCreateTime())
@@ -692,7 +616,6 @@ public class DeviceBean
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getId())
             .append(getName())
-            .append(getOnline())
             .append(getGroupId())
             .append(getVersion())
             .append(getCreateTime())
@@ -705,7 +628,6 @@ public class DeviceBean
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tid=").append(getId()).append("\n")
             .append("\tname=").append(getName()).append("\n")
-            .append("\tonline=").append(getOnline()).append("\n")
             .append("\tgroup_id=").append(getGroupId()).append("\n")
             .append("\tversion=").append(getVersion()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
@@ -737,7 +659,6 @@ public class DeviceBean
     {
         setId(null);
         setName(null);
-        setOnline(null);
         setGroupId(null);
         setVersion(null);
         setCreateTime(null);
@@ -757,7 +678,7 @@ public class DeviceBean
     public void copy(DeviceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 7; ++i) {
+            for (int i = 0; i < 6; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -799,8 +720,6 @@ public class DeviceBean
             return (T)getId();        
         case FL_DEVICE_ID_NAME: 
             return (T)getName();        
-        case FL_DEVICE_ID_ONLINE: 
-            return (T)getOnline();        
         case FL_DEVICE_ID_GROUP_ID: 
             return (T)getGroupId();        
         case FL_DEVICE_ID_VERSION: 
@@ -823,8 +742,6 @@ public class DeviceBean
             setId((Integer)value);
         case FL_DEVICE_ID_NAME:        
             setName((String)value);
-        case FL_DEVICE_ID_ONLINE:        
-            setOnline((Boolean)value);
         case FL_DEVICE_ID_GROUP_ID:        
             setGroupId((Integer)value);
         case FL_DEVICE_ID_VERSION:        

@@ -32,7 +32,7 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
 public class DeviceManager extends TableManager.Adapter<DeviceBean> implements IDeviceManager
 {
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
 
@@ -76,7 +76,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         return DeviceBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -539,6 +539,79 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }
     }
 
+
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
+
+     // override IDeviceManager
+    @Override 
+    public DeviceBean[] loadByIndexGroupId(Integer groupId)
+    {
+        return this.loadByIndexGroupIdAsList(groupId).toArray(new DeviceBean[0]);
+    }
+    
+    // override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByIndexGroupIdAsList(Integer groupId)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexGroupIdAsList(groupId));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexGroupId(Integer groupId)
+    {
+        try{
+            return this.nativeManager.deleteByIndexGroupId(groupId);
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    
+    
+    /**
+     * Retrieves a list of DeviceBean using the index specified by keyIndex.
+     * @param keyIndex valid values: <br>
+     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     * @param keys key values of index
+     * @return a list of DeviceBean
+     */
+    @Override
+    public java.util.List<DeviceBean> loadByIndexAsList(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexAsList(keyIndex,keys));
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    
+    /**
+     * Deletes rows using key.
+     * @param keyIndex valid values: <br>
+     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     * @param keys key values of index
+     * @return the number of deleted objects
+     */
+    @Override
+    public int deleteByIndex(int keyIndex,Object ...keys)
+    {
+        try{
+            return this.nativeManager.deleteByIndex(keyIndex,keys);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
 
     //_____________________________________________________________________
     //

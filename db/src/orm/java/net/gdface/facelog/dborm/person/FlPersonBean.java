@@ -10,6 +10,7 @@ import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.image.FlImageBean;
+import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -26,7 +27,7 @@ public class FlPersonBean
 {
     private static final long serialVersionUID = -4314407042657759584L;
     
-    /** comments:用户识别码 */
+    /** comments:用户id */
     private Integer id;
 
     /** comments:用户所属组id */
@@ -48,10 +49,10 @@ public class FlPersonBean
     private String papersNum;
 
     /** comments:用户默认照片(证件照,标准照)的md5校验码,外键 */
-    private String photoId;
+    private String imageMd5;
 
-    /** comments:从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新 */
-    private String faceMd5;
+    /** comments:人脸特征数据MD5 id,外键 */
+    private String featureMd5;
 
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
     private java.util.Date expiryDate;
@@ -128,9 +129,8 @@ public class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.id</li>
-     * <li> imported key: fl_face.person_id</li>
      * <li> imported key: fl_log.person_id</li>
-     * <li>comments: 用户识别码</li>
+     * <li>comments: 用户id</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -568,117 +568,118 @@ public class FlPersonBean
         return 0L !=  (initialized & FL_PERSON_ID_PAPERS_NUM_MASK);
     }
     /**
-     * Getter method for {@link #photoId}.<br>
+     * Getter method for {@link #imageMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.photo_id</li>
+     * <li>full name: fl_person.image_md5</li>
      * <li> foreign key: fl_image.md5</li>
      * <li>comments: 用户默认照片(证件照,标准照)的md5校验码,外键</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of photoId
+     * @return the value of imageMd5
      */
-    public String getPhotoId(){
-        return photoId;
+    public String getImageMd5(){
+        return imageMd5;
     }
     /**
-     * Setter method for {@link #photoId}.<br>
+     * Setter method for {@link #imageMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to photoId
+     * @param newVal the new value to be assigned to imageMd5
      */
-    public void setPhotoId(String newVal)
+    public void setImageMd5(String newVal)
     {
-        if ((newVal != null && photoId != null && (newVal.compareTo(photoId) == 0)) ||
-            (newVal == null && photoId == null && checkPhotoIdInitialized())) {
+        if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
+            (newVal == null && imageMd5 == null && checkImageMd5Initialized())) {
             return;
         }
-        photoId = newVal;
+        imageMd5 = newVal;
 
-        modified |= FL_PERSON_ID_PHOTO_ID_MASK;
-        initialized |= FL_PERSON_ID_PHOTO_ID_MASK;
+        modified |= FL_PERSON_ID_IMAGE_MD5_MASK;
+        initialized |= FL_PERSON_ID_IMAGE_MD5_MASK;
     }
 
     /**
-     * Determines if the photoId has been modified.
+     * Determines if the imageMd5 has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkPhotoIdModified()
+    public boolean checkImageMd5Modified()
     {
-        return 0L !=  (modified & FL_PERSON_ID_PHOTO_ID_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_IMAGE_MD5_MASK);
     }
 
     /**
-     * Determines if the photoId has been initialized.<br>
+     * Determines if the imageMd5 has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkPhotoIdInitialized()
+    public boolean checkImageMd5Initialized()
     {
-        return 0L !=  (initialized & FL_PERSON_ID_PHOTO_ID_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_IMAGE_MD5_MASK);
     }
     /**
-     * Getter method for {@link #faceMd5}.<br>
+     * Getter method for {@link #featureMd5}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_person.face_md5</li>
-     * <li>comments: 从用户默认照片(photo_id)提取的人脸特征md5校验码,引用fl_face(md5),非存储字段,应用程序负责更新</li>
+     * <li>full name: fl_person.feature_md5</li>
+     * <li> foreign key: fl_store.md5</li>
+     * <li>comments: 人脸特征数据MD5 id,外键</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
-     * @return the value of faceMd5
+     * @return the value of featureMd5
      */
-    public String getFaceMd5(){
-        return faceMd5;
+    public String getFeatureMd5(){
+        return featureMd5;
     }
     /**
-     * Setter method for {@link #faceMd5}.<br>
+     * Setter method for {@link #featureMd5}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceMd5
+     * @param newVal the new value to be assigned to featureMd5
      */
-    public void setFaceMd5(String newVal)
+    public void setFeatureMd5(String newVal)
     {
-        if ((newVal != null && faceMd5 != null && (newVal.compareTo(faceMd5) == 0)) ||
-            (newVal == null && faceMd5 == null && checkFaceMd5Initialized())) {
+        if ((newVal != null && featureMd5 != null && (newVal.compareTo(featureMd5) == 0)) ||
+            (newVal == null && featureMd5 == null && checkFeatureMd5Initialized())) {
             return;
         }
-        faceMd5 = newVal;
+        featureMd5 = newVal;
 
-        modified |= FL_PERSON_ID_FACE_MD5_MASK;
-        initialized |= FL_PERSON_ID_FACE_MD5_MASK;
+        modified |= FL_PERSON_ID_FEATURE_MD5_MASK;
+        initialized |= FL_PERSON_ID_FEATURE_MD5_MASK;
     }
 
     /**
-     * Determines if the faceMd5 has been modified.
+     * Determines if the featureMd5 has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkFaceMd5Modified()
+    public boolean checkFeatureMd5Modified()
     {
-        return 0L !=  (modified & FL_PERSON_ID_FACE_MD5_MASK);
+        return 0L !=  (modified & FL_PERSON_ID_FEATURE_MD5_MASK);
     }
 
     /**
-     * Determines if the faceMd5 has been initialized.<br>
+     * Determines if the featureMd5 has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkFaceMd5Initialized()
+    public boolean checkFeatureMd5Initialized()
     {
-        return 0L !=  (initialized & FL_PERSON_ID_FACE_MD5_MASK);
+        return 0L !=  (initialized & FL_PERSON_ID_FEATURE_MD5_MASK);
     }
     /**
      * Getter method for {@link #expiryDate}.<br>
@@ -880,17 +881,30 @@ public class FlPersonBean
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link FlImageBean} by {@link #photoId} . <br>
-     * FOREIGN KEY (photo_id) REFERENCES fl_image(md5)
+     * The referenced {@link FlImageBean} by {@link #imageMd5} . <br>
+     * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
-    private FlImageBean referencedByPhotoId;
-    /** Getter method for {@link #referencedByPhotoId}. */
-    public FlImageBean getReferencedByPhotoId() {
-        return this.referencedByPhotoId;
+    private FlImageBean referencedByImageMd5;
+    /** Getter method for {@link #referencedByImageMd5}. */
+    public FlImageBean getReferencedByImageMd5() {
+        return this.referencedByImageMd5;
     }
-    /** Setter method for {@link #referencedByPhotoId}. */
-    public void setReferencedByPhotoId(FlImageBean reference) {
-        this.referencedByPhotoId = reference;
+    /** Setter method for {@link #referencedByImageMd5}. */
+    public void setReferencedByImageMd5(FlImageBean reference) {
+        this.referencedByImageMd5 = reference;
+    }
+    /** 
+     * The referenced {@link FlStoreBean} by {@link #featureMd5} . <br>
+     * FOREIGN KEY (feature_md5) REFERENCES fl_store(md5)
+     */
+    private FlStoreBean referencedByFeatureMd5;
+    /** Getter method for {@link #referencedByFeatureMd5}. */
+    public FlStoreBean getReferencedByFeatureMd5() {
+        return this.referencedByFeatureMd5;
+    }
+    /** Setter method for {@link #referencedByFeatureMd5}. */
+    public void setReferencedByFeatureMd5(FlStoreBean reference) {
+        this.referencedByFeatureMd5 = reference;
     }
 
     /**
@@ -927,10 +941,10 @@ public class FlPersonBean
             return checkPapersTypeModified();
         case FL_PERSON_ID_PAPERS_NUM:
             return checkPapersNumModified();
-        case FL_PERSON_ID_PHOTO_ID:
-            return checkPhotoIdModified();
-        case FL_PERSON_ID_FACE_MD5:
-            return checkFaceMd5Modified();
+        case FL_PERSON_ID_IMAGE_MD5:
+            return checkImageMd5Modified();
+        case FL_PERSON_ID_FEATURE_MD5:
+            return checkFeatureMd5Modified();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateModified();
         case FL_PERSON_ID_CREATE_TIME:
@@ -964,10 +978,10 @@ public class FlPersonBean
             return checkPapersTypeInitialized();
         case FL_PERSON_ID_PAPERS_NUM:
             return checkPapersNumInitialized();
-        case FL_PERSON_ID_PHOTO_ID:
-            return checkPhotoIdInitialized();
-        case FL_PERSON_ID_FACE_MD5:
-            return checkFaceMd5Initialized();
+        case FL_PERSON_ID_IMAGE_MD5:
+            return checkImageMd5Initialized();
+        case FL_PERSON_ID_FEATURE_MD5:
+            return checkFeatureMd5Initialized();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateInitialized();
         case FL_PERSON_ID_CREATE_TIME:
@@ -1030,8 +1044,8 @@ public class FlPersonBean
             .append(getBirthdate(), obj.getBirthdate())
             .append(getPapersType(), obj.getPapersType())
             .append(getPapersNum(), obj.getPapersNum())
-            .append(getPhotoId(), obj.getPhotoId())
-            .append(getFaceMd5(), obj.getFaceMd5())
+            .append(getImageMd5(), obj.getImageMd5())
+            .append(getFeatureMd5(), obj.getFeatureMd5())
             .append(getExpiryDate(), obj.getExpiryDate())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
@@ -1049,8 +1063,8 @@ public class FlPersonBean
             .append(getBirthdate())
             .append(getPapersType())
             .append(getPapersNum())
-            .append(getPhotoId())
-            .append(getFaceMd5())
+            .append(getImageMd5())
+            .append(getFeatureMd5())
             .append(getExpiryDate())
             .append(getCreateTime())
             .append(getUpdateTime())
@@ -1067,8 +1081,8 @@ public class FlPersonBean
             .append("\tbirthdate=").append(getBirthdate()).append("\n")
             .append("\tpapers_type=").append(getPapersType()).append("\n")
             .append("\tpapers_num=").append(getPapersNum()).append("\n")
-            .append("\tphoto_id=").append(getPhotoId()).append("\n")
-            .append("\tface_md5=").append(getFaceMd5()).append("\n")
+            .append("\timage_md5=").append(getImageMd5()).append("\n")
+            .append("\tfeature_md5=").append(getFeatureMd5()).append("\n")
             .append("\texpiry_date=").append(getExpiryDate()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("\tupdate_time=").append(getUpdateTime()).append("\n")
@@ -1104,8 +1118,8 @@ public class FlPersonBean
         setBirthdate(null);
         setPapersType(null);
         setPapersNum(null);
-        setPhotoId(null);
-        setFaceMd5(null);
+        setImageMd5(null);
+        setFeatureMd5(null);
         setExpiryDate(null);
         setCreateTime(null);
         setUpdateTime(null);
@@ -1176,10 +1190,10 @@ public class FlPersonBean
             return (T)getPapersType();        
         case FL_PERSON_ID_PAPERS_NUM: 
             return (T)getPapersNum();        
-        case FL_PERSON_ID_PHOTO_ID: 
-            return (T)getPhotoId();        
-        case FL_PERSON_ID_FACE_MD5: 
-            return (T)getFaceMd5();        
+        case FL_PERSON_ID_IMAGE_MD5: 
+            return (T)getImageMd5();        
+        case FL_PERSON_ID_FEATURE_MD5: 
+            return (T)getFeatureMd5();        
         case FL_PERSON_ID_EXPIRY_DATE: 
             return (T)getExpiryDate();        
         case FL_PERSON_ID_CREATE_TIME: 
@@ -1210,10 +1224,10 @@ public class FlPersonBean
             setPapersType((Integer)value);
         case FL_PERSON_ID_PAPERS_NUM:        
             setPapersNum((String)value);
-        case FL_PERSON_ID_PHOTO_ID:        
-            setPhotoId((String)value);
-        case FL_PERSON_ID_FACE_MD5:        
-            setFaceMd5((String)value);
+        case FL_PERSON_ID_IMAGE_MD5:        
+            setImageMd5((String)value);
+        case FL_PERSON_ID_FEATURE_MD5:        
+            setFeatureMd5((String)value);
         case FL_PERSON_ID_EXPIRY_DATE:        
             setExpiryDate((java.util.Date)value);
         case FL_PERSON_ID_CREATE_TIME:        

@@ -14,8 +14,6 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.StoreBean;
-import net.gdface.facelog.db.FaceLightBean;
-import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.LogLightBean;
 import java.util.Map;
 import java.util.Hashtable;
@@ -30,8 +28,6 @@ public class TableInstance{
         put(LogBean.class,LogManager.getInstance());
         put(PersonBean.class,PersonManager.getInstance());
         put(StoreBean.class,StoreManager.getInstance());
-        put(FaceLightBean.class,FaceLightManager.getInstance());
-        put(FeatureBean.class,FeatureManager.getInstance());
         put(LogLightBean.class,LogLightManager.getInstance());
     }};
     @SuppressWarnings("unchecked")

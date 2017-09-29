@@ -170,4 +170,33 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
         ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId );
-  }
+      //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
+
+     /**
+     * Retrieves an array of DeviceBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return an array of DeviceBean
+     */
+    public DeviceBean[] loadByIndexGroupId(Integer groupId);
+    
+    /**
+     * Retrieves a list of DeviceBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return a list of DeviceBean
+     */
+    public java.util.List<DeviceBean> loadByIndexGroupIdAsList(Integer groupId);
+
+    /**
+     * Deletes rows using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexGroupId(Integer groupId);
+    
+}
