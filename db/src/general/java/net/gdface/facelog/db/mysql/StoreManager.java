@@ -14,6 +14,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.IStoreManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.WrapDAOException;
@@ -27,7 +28,7 @@ import net.gdface.facelog.dborm.image.FlStoreBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class StoreManager extends TableManager.Adapter<StoreBean>
+public class StoreManager extends TableManager.Adapter<StoreBean> implements IStoreManager
 {
     private FlStoreManager nativeManager = FlStoreManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
@@ -94,13 +95,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    /**
-     * Loads a {@link StoreBean} from the fl_store using primary key fields.
-     *
-     * @param md5 String - PK# 1
-     * @return a unique StoreBean or {@code null} if not found
-     */
-    //1
+    //1 override IStoreManager
+    @Override 
     public StoreBean loadByPrimaryKey(String md5)
     {
         try{
@@ -124,12 +120,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Loads a {@link StoreBean} from the fl_store using primary key fields.
-     * @param keys primary keys value:<br> 
-     * @return a unique {@link StoreBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
-     */
+
     //1.3
     @Override
     public StoreBean loadByPrimaryKey(Object ...keys){
@@ -140,25 +131,15 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         return loadByPrimaryKey((String)keys[0]);
     }
     
-    /**
-     * Returns true if this fl_store contains row with primary key fields.
-     * @param md5 String - PK# 1
-     * @see #loadByPrimaryKey(String md5)
-     */
-    //1.4
+    //1.4 override IStoreManager
+    @Override 
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
     }
     
-    /**
-     * Delete row according to its primary keys.<br>
-     * all keys must not be null
-     *
-     * @param md5 String - PK# 1
-     * @return the number of deleted rows
-     */
-    //2
+    //2 override IStoreManager
+    @Override 
     public int deleteByPrimaryKey(String md5)
     {
         try
@@ -171,13 +152,6 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         }
     }
 
-    /**
-     * Delete row according to its primary keys.
-     *
-     * @param keys primary keys value:<br> 
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(String md5)}
-     */   
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -278,25 +252,15 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves the {@link ImageBean} object from the fl_image.md5 field.<BR>
-     * FK_NAME : fl_image_ibfk_1 
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IStoreManager
+    @Override 
     public ImageBean[] getFlImageBeansByMd5(StoreBean bean)
     {
         return this.getFlImageBeansByMd5AsList(bean).toArray(new ImageBean[0]);
     }
 
-    /**
-     * Retrieves the {@link ImageBean} object from fl_image.md5 field.<BR>
-     * FK_NAME:fl_image_ibfk_1
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IStoreManager
+    @Override 
     public java.util.List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean)
     {
         try {
@@ -308,15 +272,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         }
     }
 
-    /**
-     * set  the {@link ImageBean} object array associate to StoreBean by the fl_image.md5 field.<BR>
-     * FK_NAME : fl_image_ibfk_1 
-     * @param bean the referenced {@link StoreBean}
-     * @param importedBeans imported beans from fl_image
-     * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByMd5(ImageBean, StoreBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IStoreManager
+    @Override 
     public ImageBean[] setFlImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -327,15 +284,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link ImageBean} object java.util.Collection associate to StoreBean by the fl_image.md5 field.<BR>
-     * FK_NAME:fl_image_ibfk_1
-     * @param bean the referenced {@link StoreBean} 
-     * @param importedBeans imported beans from fl_image 
-     * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByMd5(ImageBean, StoreBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IStoreManager
+    @Override 
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -345,26 +295,15 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         }
         return importedBeans;
     }
-
-    /**
-     * Retrieves the {@link ImageBean} object from the fl_image.thumb_md5 field.<BR>
-     * FK_NAME : fl_image_ibfk_2 
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IStoreManager
+    @Override 
     public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean)
     {
         return this.getFlImageBeansByThumbMd5AsList(bean).toArray(new ImageBean[0]);
     }
 
-    /**
-     * Retrieves the {@link ImageBean} object from fl_image.thumb_md5 field.<BR>
-     * FK_NAME:fl_image_ibfk_2
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IStoreManager
+    @Override 
     public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean)
     {
         try {
@@ -376,15 +315,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         }
     }
 
-    /**
-     * set  the {@link ImageBean} object array associate to StoreBean by the fl_image.thumb_md5 field.<BR>
-     * FK_NAME : fl_image_ibfk_2 
-     * @param bean the referenced {@link StoreBean}
-     * @param importedBeans imported beans from fl_image
-     * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IStoreManager
+    @Override 
     public ImageBean[] setFlImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -395,15 +327,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link ImageBean} object java.util.Collection associate to StoreBean by the fl_image.thumb_md5 field.<BR>
-     * FK_NAME:fl_image_ibfk_2
-     * @param bean the referenced {@link StoreBean} 
-     * @param importedBeans imported beans from fl_image 
-     * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IStoreManager
+    @Override 
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -415,16 +340,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
     }
 
 
-
-    /**
-     * Save the StoreBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link StoreBean} bean to be saved
-         * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @param impFlImagebyThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @return the inserted or updated {@link StoreBean} bean
-     */
-    //3.5 SYNC SAVE 
+    //3.5 SYNC SAVE override IStoreManager
+    @Override  
     public StoreBean save(StoreBean bean
         
         , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 )
@@ -438,11 +355,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
             throw new WrapDAOException(e);
         }
     } 
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(StoreBean , ImageBean[] , ImageBean[] )}
-     */
-    //3.6 SYNC SAVE AS TRANSACTION
+
+    //3.6 SYNC SAVE AS TRANSACTION override IStoreManager
+    @Override 
     public StoreBean saveAsTransaction(final StoreBean bean
         
         ,final ImageBean[] impFlImagebyMd5 ,final ImageBean[] impFlImagebyThumbMd5 )
@@ -453,15 +368,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
                 return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
             }});
     }
-    /**
-     * Save the StoreBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link StoreBean} bean to be saved
-         * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @param impFlImagebyThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @return the inserted or updated {@link StoreBean} bean
-     */
-    //3.7 SYNC SAVE 
+    //3.7 SYNC SAVE override IStoreManager
+    @Override 
     public StoreBean save(StoreBean bean
         
         , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 )
@@ -475,11 +383,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean>
             throw new WrapDAOException(e);
         }
     }   
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(StoreBean , java.util.Collection , java.util.Collection )}
-     */
-    //3.8 SYNC SAVE AS TRANSACTION
+
+    //3.8 SYNC SAVE AS TRANSACTION override IStoreManager
+    @Override 
     public StoreBean saveAsTransaction(final StoreBean bean
         
         ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 )

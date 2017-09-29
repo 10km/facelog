@@ -14,6 +14,7 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.IImageManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceBean;
@@ -30,7 +31,7 @@ import net.gdface.facelog.dborm.image.FlImageBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class ImageManager extends TableManager.Adapter<ImageBean>
+public class ImageManager extends TableManager.Adapter<ImageBean> implements IImageManager
 {
     private FlImageManager nativeManager = FlImageManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
@@ -97,13 +98,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    /**
-     * Loads a {@link ImageBean} from the fl_image using primary key fields.
-     *
-     * @param md5 String - PK# 1
-     * @return a unique ImageBean or {@code null} if not found
-     */
-    //1
+    //1 override IImageManager
+    @Override 
     public ImageBean loadByPrimaryKey(String md5)
     {
         try{
@@ -127,12 +123,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Loads a {@link ImageBean} from the fl_image using primary key fields.
-     * @param keys primary keys value:<br> 
-     * @return a unique {@link ImageBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
-     */
+
     //1.3
     @Override
     public ImageBean loadByPrimaryKey(Object ...keys){
@@ -143,25 +134,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         return loadByPrimaryKey((String)keys[0]);
     }
     
-    /**
-     * Returns true if this fl_image contains row with primary key fields.
-     * @param md5 String - PK# 1
-     * @see #loadByPrimaryKey(String md5)
-     */
-    //1.4
+    //1.4 override IImageManager
+    @Override 
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
     }
     
-    /**
-     * Delete row according to its primary keys.<br>
-     * all keys must not be null
-     *
-     * @param md5 String - PK# 1
-     * @return the number of deleted rows
-     */
-    //2
+    //2 override IImageManager
+    @Override 
     public int deleteByPrimaryKey(String md5)
     {
         try
@@ -174,13 +155,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * Delete row according to its primary keys.
-     *
-     * @param keys primary keys value:<br> 
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(String md5)}
-     */   
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -281,25 +255,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves the {@link FaceBean} object from the fl_face.img_md5 field.<BR>
-     * FK_NAME : fl_face_ibfk_1 
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IImageManager
+    @Override 
     public FaceBean[] getFlFaceBeansByImgMd5(ImageBean bean)
     {
         return this.getFlFaceBeansByImgMd5AsList(bean).toArray(new FaceBean[0]);
     }
 
-    /**
-     * Retrieves the {@link FaceBean} object from fl_face.img_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_1
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IImageManager
+    @Override 
     public java.util.List<FaceBean> getFlFaceBeansByImgMd5AsList(ImageBean bean)
     {
         try {
@@ -311,15 +275,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * set  the {@link FaceBean} object array associate to ImageBean by the fl_face.img_md5 field.<BR>
-     * FK_NAME : fl_face_ibfk_1 
-     * @param bean the referenced {@link ImageBean}
-     * @param importedBeans imported beans from fl_face
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IImageManager
+    @Override 
     public FaceBean[] setFlFaceBeansByImgMd5(ImageBean bean , FaceBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -330,15 +287,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link FaceBean} object java.util.Collection associate to ImageBean by the fl_face.img_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_1
-     * @param bean the referenced {@link ImageBean} 
-     * @param importedBeans imported beans from fl_face 
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByImgMd5(FaceBean, ImageBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IImageManager
+    @Override 
     public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByImgMd5(ImageBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -348,26 +298,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
         return importedBeans;
     }
-
-    /**
-     * Retrieves the {@link PersonBean} object from the fl_person.photo_id field.<BR>
-     * FK_NAME : fl_person_ibfk_1 
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IImageManager
+    @Override 
     public PersonBean[] getFlPersonBeansByPhotoId(ImageBean bean)
     {
         return this.getFlPersonBeansByPhotoIdAsList(bean).toArray(new PersonBean[0]);
     }
 
-    /**
-     * Retrieves the {@link PersonBean} object from fl_person.photo_id field.<BR>
-     * FK_NAME:fl_person_ibfk_1
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IImageManager
+    @Override 
     public java.util.List<PersonBean> getFlPersonBeansByPhotoIdAsList(ImageBean bean)
     {
         try {
@@ -379,15 +318,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * set  the {@link PersonBean} object array associate to ImageBean by the fl_person.photo_id field.<BR>
-     * FK_NAME : fl_person_ibfk_1 
-     * @param bean the referenced {@link ImageBean}
-     * @param importedBeans imported beans from fl_person
-     * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IImageManager
+    @Override 
     public PersonBean[] setFlPersonBeansByPhotoId(ImageBean bean , PersonBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -398,15 +330,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link PersonBean} object java.util.Collection associate to ImageBean by the fl_person.photo_id field.<BR>
-     * FK_NAME:fl_person_ibfk_1
-     * @param bean the referenced {@link ImageBean} 
-     * @param importedBeans imported beans from fl_person 
-     * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByPhotoId(PersonBean, ImageBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IImageManager
+    @Override 
     public <C extends java.util.Collection<PersonBean>> C setFlPersonBeansByPhotoId(ImageBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -418,19 +343,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     }
 
 
-
-    /**
-     * Save the ImageBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link ImageBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param impFlFacebyImgMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
-     * @param impFlPersonbyPhotoId the {@link PersonBean} bean refer to {@link ImageBean} 
-     * @return the inserted or updated {@link ImageBean} bean
-     */
-    //3.5 SYNC SAVE 
+    //3.5 SYNC SAVE override IImageManager
+    @Override  
     public ImageBean save(ImageBean bean
         , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
         , FaceBean[] impFlFacebyImgMd5 , PersonBean[] impFlPersonbyPhotoId )
@@ -444,11 +358,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
             throw new WrapDAOException(e);
         }
     } 
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , FaceBean[] , PersonBean[] )}
-     */
-    //3.6 SYNC SAVE AS TRANSACTION
+
+    //3.6 SYNC SAVE AS TRANSACTION override IImageManager
+    @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
         ,final FaceBean[] impFlFacebyImgMd5 ,final PersonBean[] impFlPersonbyPhotoId )
@@ -459,18 +371,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
                 return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImgMd5 , impFlPersonbyPhotoId );
             }});
     }
-    /**
-     * Save the ImageBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link ImageBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param impFlFacebyImgMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
-     * @param impFlPersonbyPhotoId the {@link PersonBean} bean refer to {@link ImageBean} 
-     * @return the inserted or updated {@link ImageBean} bean
-     */
-    //3.7 SYNC SAVE 
+    //3.7 SYNC SAVE override IImageManager
+    @Override 
     public ImageBean save(ImageBean bean
         , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
         , java.util.Collection<FaceBean> impFlFacebyImgMd5 , java.util.Collection<PersonBean> impFlPersonbyPhotoId )
@@ -484,11 +386,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
             throw new WrapDAOException(e);
         }
     }   
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , java.util.Collection , java.util.Collection )}
-     */
-    //3.8 SYNC SAVE AS TRANSACTION
+
+    //3.8 SYNC SAVE AS TRANSACTION override IImageManager
+    @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
         ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
         ,final  java.util.Collection<FaceBean> impFlFacebyImgMd5 ,final  java.util.Collection<PersonBean> impFlPersonbyPhotoId )
@@ -624,13 +524,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     //////////////////////////////////////
 
 
-    /**
-     * Retrieves the {@link DeviceBean} object referenced by {@link ImageBean#getDeviceId}() field.<br>
-     * FK_NAME : fl_image_ibfk_3
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override IImageManager
+    @Override 
     public DeviceBean getReferencedByDeviceId(ImageBean bean)
     {
         try{
@@ -643,15 +538,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         
     }
 
-    /**
-     * Associates the {@link ImageBean} object to the {@link DeviceBean} object by {@link ImageBean#getDeviceId}() field.
-     *
-     * @param bean the {@link ImageBean} object to use
-     * @param beanToSet the {@link DeviceBean} object to associate to the {@link ImageBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override IImageManager
+    @Override 
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet)
     {
         try{
@@ -663,13 +551,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link ImageBean#getMd5}() field.<br>
-     * FK_NAME : fl_image_ibfk_1
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override IImageManager
+    @Override 
     public StoreBean getReferencedByMd5(ImageBean bean)
     {
         try{
@@ -682,15 +565,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         
     }
 
-    /**
-     * Associates the {@link ImageBean} object to the {@link StoreBean} object by {@link ImageBean#getMd5}() field.
-     *
-     * @param bean the {@link ImageBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link ImageBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override IImageManager
+    @Override 
     public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet)
     {
         try{
@@ -702,13 +578,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link ImageBean#getThumbMd5}() field.<br>
-     * FK_NAME : fl_image_ibfk_2
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override IImageManager
+    @Override 
     public StoreBean getReferencedByThumbMd5(ImageBean bean)
     {
         try{
@@ -721,15 +592,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         
     }
 
-    /**
-     * Associates the {@link ImageBean} object to the {@link StoreBean} object by {@link ImageBean#getThumbMd5}() field.
-     *
-     * @param bean the {@link ImageBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link ImageBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override IImageManager
+    @Override 
     public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet)
     {
         try{
@@ -838,23 +702,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
     // USING INDICES
     //_____________________________________________________________________
 
-     /**
-     * Retrieves an array of ImageBean using the device_id index.
-     *
-     * @param deviceId the device_id column's value filter.
-     * @return an array of ImageBean
-     */
+     // override IImageManager
+    @Override 
     public ImageBean[] loadByIndexDeviceId(Integer deviceId)
     {
         return this.loadByIndexDeviceIdAsList(deviceId).toArray(new ImageBean[0]);
     }
     
-    /**
-     * Retrieves a list of ImageBean using the device_id index.
-     *
-     * @param deviceId the device_id column's value filter.
-     * @return a list of ImageBean
-     */
+    // override IImageManager
+    @Override 
     public java.util.List<ImageBean> loadByIndexDeviceIdAsList(Integer deviceId)
     {
         try{
@@ -866,12 +722,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * Deletes rows using the device_id index.
-     *
-     * @param deviceId the device_id column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IImageManager
+    @Override 
     public int deleteByIndexDeviceId(Integer deviceId)
     {
         try{
@@ -883,23 +735,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
     
-     /**
-     * Retrieves an array of ImageBean using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return an array of ImageBean
-     */
+     // override IImageManager
+    @Override 
     public ImageBean[] loadByIndexThumbMd5(String thumbMd5)
     {
         return this.loadByIndexThumbMd5AsList(thumbMd5).toArray(new ImageBean[0]);
     }
     
-    /**
-     * Retrieves a list of ImageBean using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return a list of ImageBean
-     */
+    // override IImageManager
+    @Override 
     public java.util.List<ImageBean> loadByIndexThumbMd5AsList(String thumbMd5)
     {
         try{
@@ -911,12 +755,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean>
         }
     }
 
-    /**
-     * Deletes rows using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IImageManager
+    @Override 
     public int deleteByIndexThumbMd5(String thumbMd5)
     {
         try{

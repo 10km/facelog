@@ -24,7 +24,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlLogBean
-    implements Serializable,BaseBean<FlLogBean>,Comparable<FlLogBean>,Constant
+    implements Serializable,BaseBean<FlLogBean>,Comparable<FlLogBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 7869683986300606649L;
     
@@ -842,7 +842,14 @@ public class FlLogBean
             .append(getId(), object.getId())
             .toComparison();
     }
-
+    @Override
+    public FlLogBean clone(){
+        try {
+            return (FlLogBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

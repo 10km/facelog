@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class FaceLightBean
-    implements Serializable,BaseBean<FaceLightBean>,Comparable<FaceLightBean>,Constant
+    implements Serializable,BaseBean<FaceLightBean>,Comparable<FaceLightBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -990429198278915105L;
     
@@ -1707,7 +1707,14 @@ public class FaceLightBean
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
-
+    @Override
+    public FaceLightBean clone(){
+        try {
+            return (FaceLightBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

@@ -14,6 +14,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
@@ -28,7 +29,7 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class DeviceManager extends TableManager.Adapter<DeviceBean>
+public class DeviceManager extends TableManager.Adapter<DeviceBean> implements IDeviceManager
 {
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
@@ -95,13 +96,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    /**
-     * Loads a {@link DeviceBean} from the fl_device using primary key fields.
-     *
-     * @param id Integer - PK# 1
-     * @return a unique DeviceBean or {@code null} if not found
-     */
-    //1
+    //1 override IDeviceManager
+    @Override 
     public DeviceBean loadByPrimaryKey(Integer id)
     {
         try{
@@ -125,12 +121,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Loads a {@link DeviceBean} from the fl_device using primary key fields.
-     * @param keys primary keys value:<br> 
-     * @return a unique {@link DeviceBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
-     */
+
     //1.3
     @Override
     public DeviceBean loadByPrimaryKey(Object ...keys){
@@ -141,25 +132,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         return loadByPrimaryKey((Integer)keys[0]);
     }
     
-    /**
-     * Returns true if this fl_device contains row with primary key fields.
-     * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey(Integer id)
-     */
-    //1.4
+    //1.4 override IDeviceManager
+    @Override 
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
     }
     
-    /**
-     * Delete row according to its primary keys.<br>
-     * all keys must not be null
-     *
-     * @param id Integer - PK# 1
-     * @return the number of deleted rows
-     */
-    //2
+    //2 override IDeviceManager
+    @Override 
     public int deleteByPrimaryKey(Integer id)
     {
         try
@@ -172,13 +153,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         }
     }
 
-    /**
-     * Delete row according to its primary keys.
-     *
-     * @param keys primary keys value:<br> 
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(Integer id)}
-     */   
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -279,25 +253,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
-     * @param bean the {@link DeviceBean}
-     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IDeviceManager
+    @Override 
     public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean)
     {
         return this.getFlImageBeansByDeviceIdAsList(bean).toArray(new ImageBean[0]);
     }
 
-    /**
-     * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
-     * @param bean the {@link DeviceBean}
-     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IDeviceManager
+    @Override 
     public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {
@@ -309,15 +273,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         }
     }
 
-    /**
-     * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
-     * @param bean the referenced {@link DeviceBean}
-     * @param importedBeans imported beans from fl_image
-     * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IDeviceManager
+    @Override 
     public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -328,15 +285,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link ImageBean} object java.util.Collection associate to DeviceBean by the fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
-     * @param bean the referenced {@link DeviceBean} 
-     * @param importedBeans imported beans from fl_image 
-     * @return importedBeans always
-     * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IDeviceManager
+    @Override 
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -346,26 +296,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         }
         return importedBeans;
     }
-
-    /**
-     * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
-     * FK_NAME : fl_log_ibfk_2 
-     * @param bean the {@link DeviceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IDeviceManager
+    @Override 
     public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean)
     {
         return this.getFlLogBeansByDeviceIdAsList(bean).toArray(new LogBean[0]);
     }
 
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
-     * FK_NAME:fl_log_ibfk_2
-     * @param bean the {@link DeviceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IDeviceManager
+    @Override 
     public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {
@@ -377,15 +316,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         }
     }
 
-    /**
-     * set  the {@link LogBean} object array associate to DeviceBean by the fl_log.device_id field.<BR>
-     * FK_NAME : fl_log_ibfk_2 
-     * @param bean the referenced {@link DeviceBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IDeviceManager
+    @Override 
     public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -396,15 +328,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to DeviceBean by the fl_log.device_id field.<BR>
-     * FK_NAME:fl_log_ibfk_2
-     * @param bean the referenced {@link DeviceBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IDeviceManager
+    @Override 
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -416,16 +341,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
     }
 
 
-
-    /**
-     * Save the DeviceBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link DeviceBean} bean to be saved
-         * @param impFlImagebyDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
-     * @param impFlLogbyDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
-     * @return the inserted or updated {@link DeviceBean} bean
-     */
-    //3.5 SYNC SAVE 
+    //3.5 SYNC SAVE override IDeviceManager
+    @Override  
     public DeviceBean save(DeviceBean bean
         
         , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId )
@@ -439,11 +356,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
             throw new WrapDAOException(e);
         }
     } 
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(DeviceBean , ImageBean[] , LogBean[] )}
-     */
-    //3.6 SYNC SAVE AS TRANSACTION
+
+    //3.6 SYNC SAVE AS TRANSACTION override IDeviceManager
+    @Override 
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
         ,final ImageBean[] impFlImagebyDeviceId ,final LogBean[] impFlLogbyDeviceId )
@@ -454,15 +369,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
                 return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
             }});
     }
-    /**
-     * Save the DeviceBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link DeviceBean} bean to be saved
-         * @param impFlImagebyDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
-     * @param impFlLogbyDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
-     * @return the inserted or updated {@link DeviceBean} bean
-     */
-    //3.7 SYNC SAVE 
+    //3.7 SYNC SAVE override IDeviceManager
+    @Override 
     public DeviceBean save(DeviceBean bean
         
         , java.util.Collection<ImageBean> impFlImagebyDeviceId , java.util.Collection<LogBean> impFlLogbyDeviceId )
@@ -476,11 +384,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean>
             throw new WrapDAOException(e);
         }
     }   
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(DeviceBean , java.util.Collection , java.util.Collection )}
-     */
-    //3.8 SYNC SAVE AS TRANSACTION
+
+    //3.8 SYNC SAVE AS TRANSACTION override IDeviceManager
+    @Override 
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
         ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId )

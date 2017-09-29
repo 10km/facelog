@@ -14,6 +14,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.IFaceManager;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
@@ -29,7 +30,7 @@ import net.gdface.facelog.dborm.face.FlFaceBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FaceManager extends TableManager.Adapter<FaceBean>
+public class FaceManager extends TableManager.Adapter<FaceBean> implements IFaceManager
 {
     private FlFaceManager nativeManager = FlFaceManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
@@ -96,13 +97,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    /**
-     * Loads a {@link FaceBean} from the fl_face using primary key fields.
-     *
-     * @param md5 String - PK# 1
-     * @return a unique FaceBean or {@code null} if not found
-     */
-    //1
+    //1 override IFaceManager
+    @Override 
     public FaceBean loadByPrimaryKey(String md5)
     {
         try{
@@ -126,12 +122,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Loads a {@link FaceBean} from the fl_face using primary key fields.
-     * @param keys primary keys value:<br> 
-     * @return a unique {@link FaceBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(String md5)}
-     */
+
     //1.3
     @Override
     public FaceBean loadByPrimaryKey(Object ...keys){
@@ -142,25 +133,15 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         return loadByPrimaryKey((String)keys[0]);
     }
     
-    /**
-     * Returns true if this fl_face contains row with primary key fields.
-     * @param md5 String - PK# 1
-     * @see #loadByPrimaryKey(String md5)
-     */
-    //1.4
+    //1.4 override IFaceManager
+    @Override 
     public boolean existsPrimaryKey(String md5)
     {
         return null!=loadByPrimaryKey(md5 );
     }
     
-    /**
-     * Delete row according to its primary keys.<br>
-     * all keys must not be null
-     *
-     * @param md5 String - PK# 1
-     * @return the number of deleted rows
-     */
-    //2
+    //2 override IFaceManager
+    @Override 
     public int deleteByPrimaryKey(String md5)
     {
         try
@@ -173,13 +154,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
-    /**
-     * Delete row according to its primary keys.
-     *
-     * @param keys primary keys value:<br> 
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(String md5)}
-     */   
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -280,25 +254,15 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves the {@link LogBean} object from the fl_log.verify_face field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IFaceManager
+    @Override 
     public LogBean[] getFlLogBeansByVerifyFace(FaceBean bean)
     {
         return this.getFlLogBeansByVerifyFaceAsList(bean).toArray(new LogBean[0]);
     }
 
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.verify_face field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IFaceManager
+    @Override 
     public java.util.List<LogBean> getFlLogBeansByVerifyFaceAsList(FaceBean bean)
     {
         try {
@@ -310,15 +274,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
-    /**
-     * set  the {@link LogBean} object array associate to FaceBean by the fl_log.verify_face field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the referenced {@link FaceBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByVerifyFace(LogBean, FaceBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IFaceManager
+    @Override 
     public LogBean[] setFlLogBeansByVerifyFace(FaceBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -329,15 +286,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to FaceBean by the fl_log.verify_face field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the referenced {@link FaceBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByVerifyFace(LogBean, FaceBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IFaceManager
+    @Override 
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByVerifyFace(FaceBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -347,26 +297,15 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
         return importedBeans;
     }
-
-    /**
-     * Retrieves the {@link LogBean} object from the fl_log.compare_face field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IFaceManager
+    @Override 
     public LogBean[] getFlLogBeansByCompareFace(FaceBean bean)
     {
         return this.getFlLogBeansByCompareFaceAsList(bean).toArray(new LogBean[0]);
     }
 
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IFaceManager
+    @Override 
     public java.util.List<LogBean> getFlLogBeansByCompareFaceAsList(FaceBean bean)
     {
         try {
@@ -378,15 +317,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
-    /**
-     * set  the {@link LogBean} object array associate to FaceBean by the fl_log.compare_face field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the referenced {@link FaceBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IFaceManager
+    @Override 
     public LogBean[] setFlLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -397,15 +329,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to FaceBean by the fl_log.compare_face field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the referenced {@link FaceBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IFaceManager
+    @Override 
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByCompareFace(FaceBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -417,18 +342,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     }
 
 
-
-    /**
-     * Save the FaceBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link FaceBean} bean to be saved
-     * @param refFlImagebyImgMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
-     * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link FaceBean} 
-     * @param impFlLogbyVerifyFace the {@link LogBean} bean refer to {@link FaceBean} 
-     * @param impFlLogbyCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
-     * @return the inserted or updated {@link FaceBean} bean
-     */
-    //3.5 SYNC SAVE 
+    //3.5 SYNC SAVE override IFaceManager
+    @Override  
     public FaceBean save(FaceBean bean
         , ImageBean refFlImagebyImgMd5 , PersonBean refFlPersonbyPersonId 
         , LogBean[] impFlLogbyVerifyFace , LogBean[] impFlLogbyCompareFace )
@@ -442,11 +357,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
             throw new WrapDAOException(e);
         }
     } 
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FaceBean , ImageBean , PersonBean , LogBean[] , LogBean[] )}
-     */
-    //3.6 SYNC SAVE AS TRANSACTION
+
+    //3.6 SYNC SAVE AS TRANSACTION override IFaceManager
+    @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final ImageBean refFlImagebyImgMd5 ,final PersonBean refFlPersonbyPersonId 
         ,final LogBean[] impFlLogbyVerifyFace ,final LogBean[] impFlLogbyCompareFace )
@@ -457,17 +370,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
                 return save(bean , refFlImagebyImgMd5 , refFlPersonbyPersonId , impFlLogbyVerifyFace , impFlLogbyCompareFace );
             }});
     }
-    /**
-     * Save the FaceBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link FaceBean} bean to be saved
-     * @param refFlImagebyImgMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
-     * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link FaceBean} 
-     * @param impFlLogbyVerifyFace the {@link LogBean} bean refer to {@link FaceBean} 
-     * @param impFlLogbyCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
-     * @return the inserted or updated {@link FaceBean} bean
-     */
-    //3.7 SYNC SAVE 
+    //3.7 SYNC SAVE override IFaceManager
+    @Override 
     public FaceBean save(FaceBean bean
         , ImageBean refFlImagebyImgMd5 , PersonBean refFlPersonbyPersonId 
         , java.util.Collection<LogBean> impFlLogbyVerifyFace , java.util.Collection<LogBean> impFlLogbyCompareFace )
@@ -481,11 +385,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
             throw new WrapDAOException(e);
         }
     }   
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(FaceBean , ImageBean , PersonBean , java.util.Collection , java.util.Collection )}
-     */
-    //3.8 SYNC SAVE AS TRANSACTION
+
+    //3.8 SYNC SAVE AS TRANSACTION override IFaceManager
+    @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final ImageBean refFlImagebyImgMd5 ,final PersonBean refFlPersonbyPersonId 
         ,final  java.util.Collection<LogBean> impFlLogbyVerifyFace ,final  java.util.Collection<LogBean> impFlLogbyCompareFace )
@@ -610,13 +512,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     //////////////////////////////////////
 
 
-    /**
-     * Retrieves the {@link ImageBean} object referenced by {@link FaceBean#getImgMd5}() field.<br>
-     * FK_NAME : fl_face_ibfk_1
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override IFaceManager
+    @Override 
     public ImageBean getReferencedByImgMd5(FaceBean bean)
     {
         try{
@@ -629,15 +526,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         
     }
 
-    /**
-     * Associates the {@link FaceBean} object to the {@link ImageBean} object by {@link FaceBean#getImgMd5}() field.
-     *
-     * @param bean the {@link FaceBean} object to use
-     * @param beanToSet the {@link ImageBean} object to associate to the {@link FaceBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override IFaceManager
+    @Override 
     public ImageBean setReferencedByImgMd5(FaceBean bean, ImageBean beanToSet)
     {
         try{
@@ -649,13 +539,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
-    /**
-     * Retrieves the {@link PersonBean} object referenced by {@link FaceBean#getPersonId}() field.<br>
-     * FK_NAME : fl_face_ibfk_2
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override IFaceManager
+    @Override 
     public PersonBean getReferencedByPersonId(FaceBean bean)
     {
         try{
@@ -668,15 +553,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         
     }
 
-    /**
-     * Associates the {@link FaceBean} object to the {@link PersonBean} object by {@link FaceBean#getPersonId}() field.
-     *
-     * @param bean the {@link FaceBean} object to use
-     * @param beanToSet the {@link PersonBean} object to associate to the {@link FaceBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override IFaceManager
+    @Override 
     public PersonBean setReferencedByPersonId(FaceBean bean, PersonBean beanToSet)
     {
         try{
@@ -785,23 +663,15 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
     // USING INDICES
     //_____________________________________________________________________
 
-     /**
-     * Retrieves an array of FaceBean using the img_md5 index.
-     *
-     * @param imgMd5 the img_md5 column's value filter.
-     * @return an array of FaceBean
-     */
+     // override IFaceManager
+    @Override 
     public FaceBean[] loadByIndexImgMd5(String imgMd5)
     {
         return this.loadByIndexImgMd5AsList(imgMd5).toArray(new FaceBean[0]);
     }
     
-    /**
-     * Retrieves a list of FaceBean using the img_md5 index.
-     *
-     * @param imgMd5 the img_md5 column's value filter.
-     * @return a list of FaceBean
-     */
+    // override IFaceManager
+    @Override 
     public java.util.List<FaceBean> loadByIndexImgMd5AsList(String imgMd5)
     {
         try{
@@ -813,12 +683,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
-    /**
-     * Deletes rows using the img_md5 index.
-     *
-     * @param imgMd5 the img_md5 column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IFaceManager
+    @Override 
     public int deleteByIndexImgMd5(String imgMd5)
     {
         try{
@@ -830,23 +696,15 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
     
-     /**
-     * Retrieves an array of FaceBean using the person_id index.
-     *
-     * @param personId the person_id column's value filter.
-     * @return an array of FaceBean
-     */
+     // override IFaceManager
+    @Override 
     public FaceBean[] loadByIndexPersonId(Integer personId)
     {
         return this.loadByIndexPersonIdAsList(personId).toArray(new FaceBean[0]);
     }
     
-    /**
-     * Retrieves a list of FaceBean using the person_id index.
-     *
-     * @param personId the person_id column's value filter.
-     * @return a list of FaceBean
-     */
+    // override IFaceManager
+    @Override 
     public java.util.List<FaceBean> loadByIndexPersonIdAsList(Integer personId)
     {
         try{
@@ -858,12 +716,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean>
         }
     }
 
-    /**
-     * Deletes rows using the person_id index.
-     *
-     * @param personId the person_id column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IFaceManager
+    @Override 
     public int deleteByIndexPersonId(Integer personId)
     {
         try{

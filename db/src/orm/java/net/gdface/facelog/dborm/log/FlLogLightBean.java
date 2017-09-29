@@ -21,7 +21,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlLogLightBean
-    implements Serializable,BaseBean<FlLogLightBean>,Comparable<FlLogLightBean>,Constant
+    implements Serializable,BaseBean<FlLogLightBean>,Comparable<FlLogLightBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -8629124492169570652L;
     
@@ -634,7 +634,14 @@ public class FlLogLightBean
             .append(getVerifyTime(), object.getVerifyTime())
             .toComparison();
     }
-
+    @Override
+    public FlLogLightBean clone(){
+        try {
+            return (FlLogLightBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

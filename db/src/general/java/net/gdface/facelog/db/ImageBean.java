@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class ImageBean
-    implements Serializable,BaseBean<ImageBean>,Comparable<ImageBean>,Constant
+    implements Serializable,BaseBean<ImageBean>,Comparable<ImageBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -5491214114261088424L;
     
@@ -843,7 +843,14 @@ public class ImageBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-
+    @Override
+    public ImageBean clone(){
+        try {
+            return (ImageBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

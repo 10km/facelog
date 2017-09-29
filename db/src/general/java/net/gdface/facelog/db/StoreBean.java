@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class StoreBean
-    implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant
+    implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1684185165668832146L;
     
@@ -397,7 +397,14 @@ public class StoreBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-
+    @Override
+    public StoreBean clone(){
+        try {
+            return (StoreBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

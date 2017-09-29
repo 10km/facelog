@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class FeatureBean
-    implements Serializable,BaseBean<FeatureBean>,Comparable<FeatureBean>,Constant
+    implements Serializable,BaseBean<FeatureBean>,Comparable<FeatureBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -2191238184879882524L;
     
@@ -552,7 +552,14 @@ public class FeatureBean
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
-
+    @Override
+    public FeatureBean clone(){
+        try {
+            return (FeatureBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

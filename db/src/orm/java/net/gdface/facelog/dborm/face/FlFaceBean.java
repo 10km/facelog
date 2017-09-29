@@ -23,7 +23,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * @author guyadong
 */
 public class FlFaceBean
-    implements Serializable,BaseBean<FlFaceBean>,Comparable<FlFaceBean>,Constant
+    implements Serializable,BaseBean<FlFaceBean>,Comparable<FlFaceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 2979758335038585995L;
     
@@ -1743,7 +1743,14 @@ public class FlFaceBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-
+    @Override
+    public FlFaceBean clone(){
+        try {
+            return (FlFaceBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

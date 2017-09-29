@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class LogBean
-    implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant
+    implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 46995545005652737L;
     
@@ -865,7 +865,14 @@ public class LogBean
             .append(getId(), object.getId())
             .toComparison();
     }
-
+    @Override
+    public LogBean clone(){
+        try {
+            return (LogBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

@@ -14,6 +14,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.IPersonManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
@@ -29,7 +30,7 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class PersonManager extends TableManager.Adapter<PersonBean>
+public class PersonManager extends TableManager.Adapter<PersonBean> implements IPersonManager
 {
     private FlPersonManager nativeManager = FlPersonManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
@@ -96,13 +97,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    /**
-     * Loads a {@link PersonBean} from the fl_person using primary key fields.
-     *
-     * @param id Integer - PK# 1
-     * @return a unique PersonBean or {@code null} if not found
-     */
-    //1
+    //1 override IPersonManager
+    @Override 
     public PersonBean loadByPrimaryKey(Integer id)
     {
         try{
@@ -126,12 +122,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Loads a {@link PersonBean} from the fl_person using primary key fields.
-     * @param keys primary keys value:<br> 
-     * @return a unique {@link PersonBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
-     */
+
     //1.3
     @Override
     public PersonBean loadByPrimaryKey(Object ...keys){
@@ -142,25 +133,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         return loadByPrimaryKey((Integer)keys[0]);
     }
     
-    /**
-     * Returns true if this fl_person contains row with primary key fields.
-     * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey(Integer id)
-     */
-    //1.4
+    //1.4 override IPersonManager
+    @Override 
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
     }
     
-    /**
-     * Delete row according to its primary keys.<br>
-     * all keys must not be null
-     *
-     * @param id Integer - PK# 1
-     * @return the number of deleted rows
-     */
-    //2
+    //2 override IPersonManager
+    @Override 
     public int deleteByPrimaryKey(Integer id)
     {
         try
@@ -173,13 +154,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
-    /**
-     * Delete row according to its primary keys.
-     *
-     * @param keys primary keys value:<br> 
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(Integer id)}
-     */   
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -280,25 +254,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves the {@link FaceBean} object from the fl_face.person_id field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IPersonManager
+    @Override 
     public FaceBean[] getFlFaceBeansByPersonId(PersonBean bean)
     {
         return this.getFlFaceBeansByPersonIdAsList(bean).toArray(new FaceBean[0]);
     }
 
-    /**
-     * Retrieves the {@link FaceBean} object from fl_face.person_id field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IPersonManager
+    @Override 
     public java.util.List<FaceBean> getFlFaceBeansByPersonIdAsList(PersonBean bean)
     {
         try {
@@ -310,15 +274,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
-    /**
-     * set  the {@link FaceBean} object array associate to PersonBean by the fl_face.person_id field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the referenced {@link PersonBean}
-     * @param importedBeans imported beans from fl_face
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByPersonId(FaceBean, PersonBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IPersonManager
+    @Override 
     public FaceBean[] setFlFaceBeansByPersonId(PersonBean bean , FaceBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -329,15 +286,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link FaceBean} object java.util.Collection associate to PersonBean by the fl_face.person_id field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the referenced {@link PersonBean} 
-     * @param importedBeans imported beans from fl_face 
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByPersonId(FaceBean, PersonBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IPersonManager
+    @Override 
     public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByPersonId(PersonBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -347,26 +297,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
         return importedBeans;
     }
-
-    /**
-     * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
-     * FK_NAME : fl_log_ibfk_1 
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
+    //3.1 GET IMPORTED override IPersonManager
+    @Override 
     public LogBean[] getFlLogBeansByPersonId(PersonBean bean)
     {
         return this.getFlLogBeansByPersonIdAsList(bean).toArray(new LogBean[0]);
     }
 
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
-     * FK_NAME:fl_log_ibfk_1
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
+    //3.2 GET IMPORTED override IPersonManager
+    @Override 
     public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
     {
         try {
@@ -378,15 +317,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
-    /**
-     * set  the {@link LogBean} object array associate to PersonBean by the fl_log.person_id field.<BR>
-     * FK_NAME : fl_log_ibfk_1 
-     * @param bean the referenced {@link PersonBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
-     */
-    //3.3 SET IMPORTED
+    //3.3 SET IMPORTED override IPersonManager
+    @Override 
     public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
@@ -397,15 +329,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         return importedBeans;
     }
 
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to PersonBean by the fl_log.person_id field.<BR>
-     * FK_NAME:fl_log_ibfk_1
-     * @param bean the referenced {@link PersonBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
-     */
-    //3.4 SET IMPORTED
+    //3.4 SET IMPORTED override IPersonManager
+    @Override 
     public <C extends java.util.Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans)
     {
         if(null != importedBeans){
@@ -417,17 +342,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
 
-
-    /**
-     * Save the PersonBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link PersonBean} bean to be saved
-     * @param refFlImagebyPhotoId the {@link ImageBean} bean referenced by {@link PersonBean} 
-     * @param impFlFacebyPersonId the {@link FaceBean} bean refer to {@link PersonBean} 
-     * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
-     * @return the inserted or updated {@link PersonBean} bean
-     */
-    //3.5 SYNC SAVE 
+    //3.5 SYNC SAVE override IPersonManager
+    @Override  
     public PersonBean save(PersonBean bean
         , ImageBean refFlImagebyPhotoId 
         , FaceBean[] impFlFacebyPersonId , LogBean[] impFlLogbyPersonId )
@@ -441,11 +357,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
             throw new WrapDAOException(e);
         }
     } 
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , FaceBean[] , LogBean[] )}
-     */
-    //3.6 SYNC SAVE AS TRANSACTION
+
+    //3.6 SYNC SAVE AS TRANSACTION override IPersonManager
+    @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refFlImagebyPhotoId 
         ,final FaceBean[] impFlFacebyPersonId ,final LogBean[] impFlLogbyPersonId )
@@ -456,16 +370,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
                 return save(bean , refFlImagebyPhotoId , impFlFacebyPersonId , impFlLogbyPersonId );
             }});
     }
-    /**
-     * Save the PersonBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link PersonBean} bean to be saved
-     * @param refFlImagebyPhotoId the {@link ImageBean} bean referenced by {@link PersonBean} 
-     * @param impFlFacebyPersonId the {@link FaceBean} bean refer to {@link PersonBean} 
-     * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
-     * @return the inserted or updated {@link PersonBean} bean
-     */
-    //3.7 SYNC SAVE 
+    //3.7 SYNC SAVE override IPersonManager
+    @Override 
     public PersonBean save(PersonBean bean
         , ImageBean refFlImagebyPhotoId 
         , java.util.Collection<FaceBean> impFlFacebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId )
@@ -479,11 +385,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
             throw new WrapDAOException(e);
         }
     }   
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
-     */
-    //3.8 SYNC SAVE AS TRANSACTION
+
+    //3.8 SYNC SAVE AS TRANSACTION override IPersonManager
+    @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refFlImagebyPhotoId 
         ,final  java.util.Collection<FaceBean> impFlFacebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId )
@@ -597,13 +501,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     //////////////////////////////////////
 
 
-    /**
-     * Retrieves the {@link ImageBean} object referenced by {@link PersonBean#getPhotoId}() field.<br>
-     * FK_NAME : fl_person_ibfk_1
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override IPersonManager
+    @Override 
     public ImageBean getReferencedByPhotoId(PersonBean bean)
     {
         try{
@@ -616,15 +515,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         
     }
 
-    /**
-     * Associates the {@link PersonBean} object to the {@link ImageBean} object by {@link PersonBean#getPhotoId}() field.
-     *
-     * @param bean the {@link PersonBean} object to use
-     * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override IPersonManager
+    @Override 
     public ImageBean setReferencedByPhotoId(PersonBean bean, ImageBean beanToSet)
     {
         try{
@@ -733,12 +625,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     // USING INDICES
     //_____________________________________________________________________
 
-    /**
-     * Retrieves an unique PersonBean using the face_md5 index.
-     *
-     * @param faceMd5 the face_md5 column's value filter. must not be null
-     * @return an array of PersonBean
-     */
+    // override IPersonManager
+    @Override 
     public PersonBean loadByIndexFaceMd5(String faceMd5)
     {
         try{
@@ -751,12 +639,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
 
-    /**
-     * Deletes rows using the face_md5 index.
-     *
-     * @param faceMd5 the face_md5 column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IPersonManager
+    @Override 
     public int deleteByIndexFaceMd5(String faceMd5)
     {
         try{
@@ -768,12 +652,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
-    /**
-     * Retrieves an unique PersonBean using the papers_num index.
-     *
-     * @param papersNum the papers_num column's value filter. must not be null
-     * @return an array of PersonBean
-     */
+    // override IPersonManager
+    @Override 
     public PersonBean loadByIndexPapersNum(String papersNum)
     {
         try{
@@ -786,12 +666,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
 
-    /**
-     * Deletes rows using the papers_num index.
-     *
-     * @param papersNum the papers_num column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IPersonManager
+    @Override 
     public int deleteByIndexPapersNum(String papersNum)
     {
         try{
@@ -803,12 +679,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
-    /**
-     * Retrieves an unique PersonBean using the photo_id index.
-     *
-     * @param photoId the photo_id column's value filter. must not be null
-     * @return an array of PersonBean
-     */
+    // override IPersonManager
+    @Override 
     public PersonBean loadByIndexPhotoId(String photoId)
     {
         try{
@@ -821,12 +693,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
     }
 
 
-    /**
-     * Deletes rows using the photo_id index.
-     *
-     * @param photoId the photo_id column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IPersonManager
+    @Override 
     public int deleteByIndexPhotoId(String photoId)
     {
         try{
@@ -838,23 +706,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
     
-     /**
-     * Retrieves an array of PersonBean using the expiry_date index.
-     *
-     * @param expiryDate the expiry_date column's value filter.
-     * @return an array of PersonBean
-     */
+     // override IPersonManager
+    @Override 
     public PersonBean[] loadByIndexExpiryDate(java.util.Date expiryDate)
     {
         return this.loadByIndexExpiryDateAsList(expiryDate).toArray(new PersonBean[0]);
     }
     
-    /**
-     * Retrieves a list of PersonBean using the expiry_date index.
-     *
-     * @param expiryDate the expiry_date column's value filter.
-     * @return a list of PersonBean
-     */
+    // override IPersonManager
+    @Override 
     public java.util.List<PersonBean> loadByIndexExpiryDateAsList(java.util.Date expiryDate)
     {
         try{
@@ -866,12 +726,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean>
         }
     }
 
-    /**
-     * Deletes rows using the expiry_date index.
-     *
-     * @param expiryDate the expiry_date column's value filter.
-     * @return the number of deleted objects
-     */
+    // override IPersonManager
+    @Override 
     public int deleteByIndexExpiryDate(java.util.Date expiryDate)
     {
         try{

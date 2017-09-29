@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class PersonBean
-    implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant
+    implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 7741617836285025804L;
     
@@ -1109,7 +1109,14 @@ public class PersonBean
             .append(getId(), object.getId())
             .toComparison();
     }
-
+    @Override
+    public PersonBean clone(){
+        try {
+            return (PersonBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

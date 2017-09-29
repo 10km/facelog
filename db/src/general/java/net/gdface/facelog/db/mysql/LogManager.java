@@ -14,6 +14,7 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.ILogManager;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
@@ -29,7 +30,7 @@ import net.gdface.facelog.dborm.log.FlLogBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class LogManager extends TableManager.Adapter<LogBean>
+public class LogManager extends TableManager.Adapter<LogBean> implements ILogManager
 {
     private FlLogManager nativeManager = FlLogManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
@@ -96,13 +97,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    /**
-     * Loads a {@link LogBean} from the fl_log using primary key fields.
-     *
-     * @param id Integer - PK# 1
-     * @return a unique LogBean or {@code null} if not found
-     */
-    //1
+    //1 override ILogManager
+    @Override 
     public LogBean loadByPrimaryKey(Integer id)
     {
         try{
@@ -126,12 +122,7 @@ public class LogManager extends TableManager.Adapter<LogBean>
             throw new WrapDAOException(e);
         }
     }
-    /**
-     * Loads a {@link LogBean} from the fl_log using primary key fields.
-     * @param keys primary keys value:<br> 
-     * @return a unique {@link LogBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer id)}
-     */
+
     //1.3
     @Override
     public LogBean loadByPrimaryKey(Object ...keys){
@@ -142,25 +133,15 @@ public class LogManager extends TableManager.Adapter<LogBean>
         return loadByPrimaryKey((Integer)keys[0]);
     }
     
-    /**
-     * Returns true if this fl_log contains row with primary key fields.
-     * @param id Integer - PK# 1
-     * @see #loadByPrimaryKey(Integer id)
-     */
-    //1.4
+    //1.4 override ILogManager
+    @Override 
     public boolean existsPrimaryKey(Integer id)
     {
         return null!=loadByPrimaryKey(id );
     }
     
-    /**
-     * Delete row according to its primary keys.<br>
-     * all keys must not be null
-     *
-     * @param id Integer - PK# 1
-     * @return the number of deleted rows
-     */
-    //2
+    //2 override ILogManager
+    @Override 
     public int deleteByPrimaryKey(Integer id)
     {
         try
@@ -173,13 +154,6 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Delete row according to its primary keys.
-     *
-     * @param keys primary keys value:<br> 
-     * @return the number of deleted rows
-     * @see {@link #deleteByPrimaryKey(Integer id)}
-     */   
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -194,17 +168,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
  
 
 
-    /**
-     * Save the LogBean bean and referenced beans and imported beans into the database.
-     *
-     * @param bean the {@link LogBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link LogBean} 
-     * @param refFlFacebyVerifyFace the {@link FaceBean} bean referenced by {@link LogBean} 
-     * @param refFlFacebyCompareFace the {@link FaceBean} bean referenced by {@link LogBean} 
-     * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
-         * @return the inserted or updated {@link LogBean} bean
-     */
-    //3.5 SYNC SAVE 
+    //3.5 SYNC SAVE override ILogManager
+    @Override  
     public LogBean save(LogBean bean
         , DeviceBean refFlDevicebyDeviceId , FaceBean refFlFacebyVerifyFace , FaceBean refFlFacebyCompareFace , PersonBean refFlPersonbyPersonId 
         )
@@ -218,11 +183,9 @@ public class LogManager extends TableManager.Adapter<LogBean>
             throw new WrapDAOException(e);
         }
     } 
-    /**
-     * Transaction version for sync save
-     * @see {@link #save(LogBean , DeviceBean , FaceBean , FaceBean , PersonBean )}
-     */
-    //3.6 SYNC SAVE AS TRANSACTION
+
+    //3.6 SYNC SAVE AS TRANSACTION override ILogManager
+    @Override 
     public LogBean saveAsTransaction(final LogBean bean
         ,final DeviceBean refFlDevicebyDeviceId ,final FaceBean refFlFacebyVerifyFace ,final FaceBean refFlFacebyCompareFace ,final PersonBean refFlPersonbyPersonId 
         )
@@ -357,13 +320,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
     //////////////////////////////////////
 
 
-    /**
-     * Retrieves the {@link DeviceBean} object referenced by {@link LogBean#getDeviceId}() field.<br>
-     * FK_NAME : fl_log_ibfk_2
-     * @param bean the {@link LogBean}
-     * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override ILogManager
+    @Override 
     public DeviceBean getReferencedByDeviceId(LogBean bean)
     {
         try{
@@ -376,15 +334,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         
     }
 
-    /**
-     * Associates the {@link LogBean} object to the {@link DeviceBean} object by {@link LogBean#getDeviceId}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link DeviceBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override ILogManager
+    @Override 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet)
     {
         try{
@@ -396,13 +347,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Retrieves the {@link FaceBean} object referenced by {@link LogBean#getVerifyFace}() field.<br>
-     * FK_NAME : fl_log_ibfk_3
-     * @param bean the {@link LogBean}
-     * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override ILogManager
+    @Override 
     public FaceBean getReferencedByVerifyFace(LogBean bean)
     {
         try{
@@ -415,15 +361,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         
     }
 
-    /**
-     * Associates the {@link LogBean} object to the {@link FaceBean} object by {@link LogBean#getVerifyFace}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override ILogManager
+    @Override 
     public FaceBean setReferencedByVerifyFace(LogBean bean, FaceBean beanToSet)
     {
         try{
@@ -435,13 +374,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Retrieves the {@link FaceBean} object referenced by {@link LogBean#getCompareFace}() field.<br>
-     * FK_NAME : fl_log_ibfk_4
-     * @param bean the {@link LogBean}
-     * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override ILogManager
+    @Override 
     public FaceBean getReferencedByCompareFace(LogBean bean)
     {
         try{
@@ -454,15 +388,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         
     }
 
-    /**
-     * Associates the {@link LogBean} object to the {@link FaceBean} object by {@link LogBean#getCompareFace}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override ILogManager
+    @Override 
     public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet)
     {
         try{
@@ -474,13 +401,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Retrieves the {@link PersonBean} object referenced by {@link LogBean#getPersonId}() field.<br>
-     * FK_NAME : fl_log_ibfk_1
-     * @param bean the {@link LogBean}
-     * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
+    //3.2 GET REFERENCED VALUE override ILogManager
+    @Override 
     public PersonBean getReferencedByPersonId(LogBean bean)
     {
         try{
@@ -493,15 +415,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         
     }
 
-    /**
-     * Associates the {@link LogBean} object to the {@link PersonBean} object by {@link LogBean#getPersonId}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link PersonBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
+    //5.2 SET REFERENCED override ILogManager
+    @Override 
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet)
     {
         try{
@@ -610,23 +525,15 @@ public class LogManager extends TableManager.Adapter<LogBean>
     // USING INDICES
     //_____________________________________________________________________
 
-     /**
-     * Retrieves an array of LogBean using the compare_face index.
-     *
-     * @param compareFace the compare_face column's value filter.
-     * @return an array of LogBean
-     */
+     // override ILogManager
+    @Override 
     public LogBean[] loadByIndexCompareFace(String compareFace)
     {
         return this.loadByIndexCompareFaceAsList(compareFace).toArray(new LogBean[0]);
     }
     
-    /**
-     * Retrieves a list of LogBean using the compare_face index.
-     *
-     * @param compareFace the compare_face column's value filter.
-     * @return a list of LogBean
-     */
+    // override ILogManager
+    @Override 
     public java.util.List<LogBean> loadByIndexCompareFaceAsList(String compareFace)
     {
         try{
@@ -638,12 +545,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Deletes rows using the compare_face index.
-     *
-     * @param compareFace the compare_face column's value filter.
-     * @return the number of deleted objects
-     */
+    // override ILogManager
+    @Override 
     public int deleteByIndexCompareFace(String compareFace)
     {
         try{
@@ -655,23 +558,15 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
     
-     /**
-     * Retrieves an array of LogBean using the device_id index.
-     *
-     * @param deviceId the device_id column's value filter.
-     * @return an array of LogBean
-     */
+     // override ILogManager
+    @Override 
     public LogBean[] loadByIndexDeviceId(Integer deviceId)
     {
         return this.loadByIndexDeviceIdAsList(deviceId).toArray(new LogBean[0]);
     }
     
-    /**
-     * Retrieves a list of LogBean using the device_id index.
-     *
-     * @param deviceId the device_id column's value filter.
-     * @return a list of LogBean
-     */
+    // override ILogManager
+    @Override 
     public java.util.List<LogBean> loadByIndexDeviceIdAsList(Integer deviceId)
     {
         try{
@@ -683,12 +578,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Deletes rows using the device_id index.
-     *
-     * @param deviceId the device_id column's value filter.
-     * @return the number of deleted objects
-     */
+    // override ILogManager
+    @Override 
     public int deleteByIndexDeviceId(Integer deviceId)
     {
         try{
@@ -700,23 +591,15 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
     
-     /**
-     * Retrieves an array of LogBean using the person_id index.
-     *
-     * @param personId the person_id column's value filter.
-     * @return an array of LogBean
-     */
+     // override ILogManager
+    @Override 
     public LogBean[] loadByIndexPersonId(Integer personId)
     {
         return this.loadByIndexPersonIdAsList(personId).toArray(new LogBean[0]);
     }
     
-    /**
-     * Retrieves a list of LogBean using the person_id index.
-     *
-     * @param personId the person_id column's value filter.
-     * @return a list of LogBean
-     */
+    // override ILogManager
+    @Override 
     public java.util.List<LogBean> loadByIndexPersonIdAsList(Integer personId)
     {
         try{
@@ -728,12 +611,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Deletes rows using the person_id index.
-     *
-     * @param personId the person_id column's value filter.
-     * @return the number of deleted objects
-     */
+    // override ILogManager
+    @Override 
     public int deleteByIndexPersonId(Integer personId)
     {
         try{
@@ -745,23 +624,15 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
     
-     /**
-     * Retrieves an array of LogBean using the verify_face index.
-     *
-     * @param verifyFace the verify_face column's value filter.
-     * @return an array of LogBean
-     */
+     // override ILogManager
+    @Override 
     public LogBean[] loadByIndexVerifyFace(String verifyFace)
     {
         return this.loadByIndexVerifyFaceAsList(verifyFace).toArray(new LogBean[0]);
     }
     
-    /**
-     * Retrieves a list of LogBean using the verify_face index.
-     *
-     * @param verifyFace the verify_face column's value filter.
-     * @return a list of LogBean
-     */
+    // override ILogManager
+    @Override 
     public java.util.List<LogBean> loadByIndexVerifyFaceAsList(String verifyFace)
     {
         try{
@@ -773,12 +644,8 @@ public class LogManager extends TableManager.Adapter<LogBean>
         }
     }
 
-    /**
-     * Deletes rows using the verify_face index.
-     *
-     * @param verifyFace the verify_face column's value filter.
-     * @return the number of deleted objects
-     */
+    // override ILogManager
+    @Override 
     public int deleteByIndexVerifyFace(String verifyFace)
     {
         try{

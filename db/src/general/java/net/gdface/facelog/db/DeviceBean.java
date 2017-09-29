@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class DeviceBean
-    implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant
+    implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1983784566394161565L;
     
@@ -720,7 +720,14 @@ public class DeviceBean
             .append(getId(), object.getId())
             .toComparison();
     }
-
+    @Override
+    public DeviceBean clone(){
+        try {
+            return (DeviceBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *

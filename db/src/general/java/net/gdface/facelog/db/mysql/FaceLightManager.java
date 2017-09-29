@@ -14,6 +14,7 @@ import net.gdface.facelog.db.FaceLightBean;
 import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
+import net.gdface.facelog.db.IFaceLightManager;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.WrapDAOException;
 
@@ -26,7 +27,7 @@ import net.gdface.facelog.dborm.face.FlFaceLightBean;
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
  * @author guyadong
  */
-public class FaceLightManager extends TableManager.Adapter<FaceLightBean>
+public class FaceLightManager extends TableManager.Adapter<FaceLightBean> implements IFaceLightManager
 {
     private FlFaceLightManager nativeManager = FlFaceLightManager.getInstance();
     private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.face.FlFaceLightBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;

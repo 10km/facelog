@@ -17,7 +17,7 @@ import java.io.Serializable;
 */
 @com.facebook.swift.codec.ThriftStruct
 public class FaceBean
-    implements Serializable,BaseBean<FaceBean>,Comparable<FaceBean>,Constant
+    implements Serializable,BaseBean<FaceBean>,Comparable<FaceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1428389659131258505L;
     
@@ -1789,7 +1789,14 @@ public class FaceBean
             .append(getMd5(), object.getMd5())
             .toComparison();
     }
-
+    @Override
+    public FaceBean clone(){
+        try {
+            return (FaceBean) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
     * set all field to null
     *
