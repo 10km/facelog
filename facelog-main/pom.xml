@@ -42,6 +42,7 @@
 		    <version>1.7.25</version>
 		    <scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
 		<dependency>
 		    <groupId>com.facebook.swift</groupId>
 		    <artifactId>swift-service</artifactId>
