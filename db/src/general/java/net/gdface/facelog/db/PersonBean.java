@@ -45,9 +45,6 @@ public class PersonBean
     /** comments:用户默认照片(证件照,标准照)的md5校验码,外键 */
     private String imageMd5;
 
-    /** comments:人脸特征数据MD5 id,外键 */
-    private String featureMd5;
-
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
     private java.util.Date expiryDate;
 
@@ -129,6 +126,7 @@ public class PersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.id</li>
+     * <li> imported key: fl_feature.person_id</li>
      * <li> imported key: fl_log.person_id</li>
      * <li>comments: 用户id</li>
      * <li>column size: 10</li>
@@ -641,65 +639,6 @@ public class PersonBean
         return 0L !=  (initialized & FL_PERSON_ID_IMAGE_MD5_MASK);
     }
     /**
-     * Getter method for {@link #featureMd5}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_person.feature_md5</li>
-     * <li> foreign key: fl_store.md5</li>
-     * <li>comments: 人脸特征数据MD5 id,外键</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
-     * </ul>
-     *
-     * @return the value of featureMd5
-     */
-    @com.facebook.swift.codec.ThriftField(12)
-    public String getFeatureMd5(){
-        return featureMd5;
-    }
-    /**
-     * Setter method for {@link #featureMd5}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value to be assigned to featureMd5
-     */
-    @com.facebook.swift.codec.ThriftField
-    public void setFeatureMd5(String newVal)
-    {
-        if ((newVal != null && featureMd5 != null && (newVal.compareTo(featureMd5) == 0)) ||
-            (newVal == null && featureMd5 == null && checkFeatureMd5Initialized())) {
-            return;
-        }
-        featureMd5 = newVal;
-
-        modified |= FL_PERSON_ID_FEATURE_MD5_MASK;
-        initialized |= FL_PERSON_ID_FEATURE_MD5_MASK;
-    }
-
-    /**
-     * Determines if the featureMd5 has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkFeatureMd5Modified()
-    {
-        return 0L !=  (modified & FL_PERSON_ID_FEATURE_MD5_MASK);
-    }
-
-    /**
-     * Determines if the featureMd5 has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkFeatureMd5Initialized()
-    {
-        return 0L !=  (initialized & FL_PERSON_ID_FEATURE_MD5_MASK);
-    }
-    /**
      * Getter method for {@link #expiryDate}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -711,7 +650,7 @@ public class PersonBean
      *
      * @return the value of expiryDate
      */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(12)
     public java.util.Date getExpiryDate(){
         return expiryDate;
     }
@@ -778,7 +717,7 @@ public class PersonBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(14)
+    @com.facebook.swift.codec.ThriftField(13)
     public java.util.Date getCreateTime(){
         return createTime;
     }
@@ -845,7 +784,7 @@ public class PersonBean
      *
      * @return the value of updateTime
      */
-    @com.facebook.swift.codec.ThriftField(15)
+    @com.facebook.swift.codec.ThriftField(14)
     public java.util.Date getUpdateTime(){
         return updateTime;
     }
@@ -910,7 +849,7 @@ public class PersonBean
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @com.facebook.swift.codec.ThriftField(16)
+    @com.facebook.swift.codec.ThriftField(15)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
@@ -918,21 +857,6 @@ public class PersonBean
     @com.facebook.swift.codec.ThriftField
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
-    }
-    /** 
-     * The referenced {@link StoreBean} by {@link #featureMd5} . <br>
-     * FOREIGN KEY (feature_md5) REFERENCES fl_store(md5)
-     */
-    private StoreBean referencedByFeatureMd5;
-    /** Getter method for {@link #referencedByFeatureMd5}. */
-    @com.facebook.swift.codec.ThriftField(17)
-    public StoreBean getReferencedByFeatureMd5() {
-        return this.referencedByFeatureMd5;
-    }
-    /** Setter method for {@link #referencedByFeatureMd5}. */
-    @com.facebook.swift.codec.ThriftField
-    public void setReferencedByFeatureMd5(StoreBean reference) {
-        this.referencedByFeatureMd5 = reference;
     }
 
     /**
@@ -971,8 +895,6 @@ public class PersonBean
             return checkPapersNumModified();
         case FL_PERSON_ID_IMAGE_MD5:
             return checkImageMd5Modified();
-        case FL_PERSON_ID_FEATURE_MD5:
-            return checkFeatureMd5Modified();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateModified();
         case FL_PERSON_ID_CREATE_TIME:
@@ -1008,8 +930,6 @@ public class PersonBean
             return checkPapersNumInitialized();
         case FL_PERSON_ID_IMAGE_MD5:
             return checkImageMd5Initialized();
-        case FL_PERSON_ID_FEATURE_MD5:
-            return checkFeatureMd5Initialized();
         case FL_PERSON_ID_EXPIRY_DATE:
             return checkExpiryDateInitialized();
         case FL_PERSON_ID_CREATE_TIME:
@@ -1073,7 +993,6 @@ public class PersonBean
             .append(getPapersType(), obj.getPapersType())
             .append(getPapersNum(), obj.getPapersNum())
             .append(getImageMd5(), obj.getImageMd5())
-            .append(getFeatureMd5(), obj.getFeatureMd5())
             .append(getExpiryDate(), obj.getExpiryDate())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
@@ -1092,7 +1011,6 @@ public class PersonBean
             .append(getPapersType())
             .append(getPapersNum())
             .append(getImageMd5())
-            .append(getFeatureMd5())
             .append(getExpiryDate())
             .append(getCreateTime())
             .append(getUpdateTime())
@@ -1110,7 +1028,6 @@ public class PersonBean
             .append("\tpapers_type=").append(getPapersType()).append("\n")
             .append("\tpapers_num=").append(getPapersNum()).append("\n")
             .append("\timage_md5=").append(getImageMd5()).append("\n")
-            .append("\tfeature_md5=").append(getFeatureMd5()).append("\n")
             .append("\texpiry_date=").append(getExpiryDate()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("\tupdate_time=").append(getUpdateTime()).append("\n")
@@ -1147,7 +1064,6 @@ public class PersonBean
         setPapersType(null);
         setPapersNum(null);
         setImageMd5(null);
-        setFeatureMd5(null);
         setExpiryDate(null);
         setCreateTime(null);
         setUpdateTime(null);
@@ -1166,7 +1082,7 @@ public class PersonBean
     public void copy(PersonBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 12; ++i) {
+            for (int i = 0; i < 11; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -1220,8 +1136,6 @@ public class PersonBean
             return (T)getPapersNum();        
         case FL_PERSON_ID_IMAGE_MD5: 
             return (T)getImageMd5();        
-        case FL_PERSON_ID_FEATURE_MD5: 
-            return (T)getFeatureMd5();        
         case FL_PERSON_ID_EXPIRY_DATE: 
             return (T)getExpiryDate();        
         case FL_PERSON_ID_CREATE_TIME: 
@@ -1254,8 +1168,6 @@ public class PersonBean
             setPapersNum((String)value);
         case FL_PERSON_ID_IMAGE_MD5:        
             setImageMd5((String)value);
-        case FL_PERSON_ID_FEATURE_MD5:        
-            setFeatureMd5((String)value);
         case FL_PERSON_ID_EXPIRY_DATE:        
             setExpiryDate((java.util.Date)value);
         case FL_PERSON_ID_CREATE_TIME:        

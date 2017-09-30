@@ -1324,7 +1324,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.feature_md5</li>
-     * <li> foreign key: fl_store.md5</li>
+     * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -1449,12 +1449,27 @@ public class FaceBean
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
+     * The referenced {@link FeatureBean} by {@link #featureMd5} . <br>
+     * FOREIGN KEY (feature_md5) REFERENCES fl_feature(md5)
+     */
+    private FeatureBean referencedByFeatureMd5;
+    /** Getter method for {@link #referencedByFeatureMd5}. */
+    @com.facebook.swift.codec.ThriftField(24)
+    public FeatureBean getReferencedByFeatureMd5() {
+        return this.referencedByFeatureMd5;
+    }
+    /** Setter method for {@link #referencedByFeatureMd5}. */
+    @com.facebook.swift.codec.ThriftField
+    public void setReferencedByFeatureMd5(FeatureBean reference) {
+        this.referencedByFeatureMd5 = reference;
+    }
+    /** 
      * The referenced {@link ImageBean} by {@link #imageMd5} . <br>
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @com.facebook.swift.codec.ThriftField(24)
+    @com.facebook.swift.codec.ThriftField(25)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
@@ -1462,21 +1477,6 @@ public class FaceBean
     @com.facebook.swift.codec.ThriftField
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
-    }
-    /** 
-     * The referenced {@link StoreBean} by {@link #featureMd5} . <br>
-     * FOREIGN KEY (feature_md5) REFERENCES fl_store(md5)
-     */
-    private StoreBean referencedByFeatureMd5;
-    /** Getter method for {@link #referencedByFeatureMd5}. */
-    @com.facebook.swift.codec.ThriftField(25)
-    public StoreBean getReferencedByFeatureMd5() {
-        return this.referencedByFeatureMd5;
-    }
-    /** Setter method for {@link #referencedByFeatureMd5}. */
-    @com.facebook.swift.codec.ThriftField
-    public void setReferencedByFeatureMd5(StoreBean reference) {
-        this.referencedByFeatureMd5 = reference;
     }
 
     /**

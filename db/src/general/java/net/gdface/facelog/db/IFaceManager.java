@@ -50,32 +50,51 @@ public interface IFaceManager extends TableManager<FaceBean>
      * Save the FaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
+     * @param refFlFeaturebyFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
      * @param refFlImagebyImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
-     * @param refFlStorebyFeatureMd5 the {@link StoreBean} bean referenced by {@link FaceBean} 
          * @return the inserted or updated {@link FaceBean} bean
      */
     //3.5 SYNC SAVE 
     public FaceBean save(FaceBean bean
-        , ImageBean refFlImagebyImageMd5 , StoreBean refFlStorebyFeatureMd5 
+        , FeatureBean refFlFeaturebyFeatureMd5 , ImageBean refFlImagebyImageMd5 
         );
     /**
      * Transaction version for sync save
-     * @see {@link #save(FaceBean , ImageBean , StoreBean )}
+     * @see {@link #save(FaceBean , FeatureBean , ImageBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FaceBean saveAsTransaction(final FaceBean bean
-        ,final ImageBean refFlImagebyImageMd5 ,final StoreBean refFlStorebyFeatureMd5 
+        ,final FeatureBean refFlFeaturebyFeatureMd5 ,final ImageBean refFlImagebyImageMd5 
         );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
+    /**
+     * Retrieves the {@link FeatureBean} object referenced by {@link FaceBean#getFeatureMd5}() field.<br>
+     * FK_NAME : fl_face_ibfk_2
+     * @param bean the {@link FaceBean}
+     * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //5.1 GET REFERENCED VALUE
+    public FeatureBean getReferencedByFeatureMd5(FaceBean bean);
+
+    /**
+     * Associates the {@link FaceBean} object to the {@link FeatureBean} object by {@link FaceBean#getFeatureMd5}() field.
+     *
+     * @param bean the {@link FaceBean} object to use
+     * @param beanToSet the {@link FeatureBean} object to associate to the {@link FaceBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet);
     /**
      * Retrieves the {@link ImageBean} object referenced by {@link FaceBean#getImageMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_1
      * @param bean the {@link FaceBean}
      * @return the associated {@link ImageBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public ImageBean getReferencedByImageMd5(FaceBean bean);
 
     /**
@@ -88,25 +107,6 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //5.2 SET REFERENCED 
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet);
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link FaceBean#getFeatureMd5}() field.<br>
-     * FK_NAME : fl_face_ibfk_2
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
-    public StoreBean getReferencedByFeatureMd5(FaceBean bean);
-
-    /**
-     * Associates the {@link FaceBean} object to the {@link StoreBean} object by {@link FaceBean#getFeatureMd5}() field.
-     *
-     * @param bean the {@link FaceBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link FaceBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public StoreBean setReferencedByFeatureMd5(FaceBean bean, StoreBean beanToSet);
     //_____________________________________________________________________
     //
     // USING INDICES

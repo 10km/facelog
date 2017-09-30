@@ -13,6 +13,7 @@ import net.gdface.facelog.db.IBeanConverter;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
@@ -20,7 +21,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.LogLightBean;
 
 /**
- * generic type converter classes of {@link IBeanConverter} implementation for fl_device,fl_face,fl_image,fl_log,fl_person,fl_store,fl_log_light<br>
+ * generic type converter classes of {@link IBeanConverter} implementation for fl_device,fl_face,fl_feature,fl_image,fl_log,fl_person,fl_store,fl_log_light<br>
  * @author guyadong
  *
  */
@@ -425,6 +426,105 @@ public class BeanConverterUtils {
         }}; 
     /**
      * implementation of {@link IBeanConverter} by reflect<br>
+     * generic type converter for {@link FeatureBean} to N_FEATURE <br>
+     * @author guyadong
+     *
+     */
+    public static class FeatureBeanConverter<N_FEATURE> extends IBeanConverter.AbstractHandle<FeatureBean,N_FEATURE>{
+        final Map<String,Method> methods = new Hashtable<String,Method>();
+        /** usage: <pre>new FeatureBeanConverter&lt;Model&gt;(){};</pre> */
+        public FeatureBeanConverter(){
+            super();
+            init();
+        }
+        public FeatureBeanConverter (Class<FeatureBean> leftClass, Class<N_FEATURE> rightClass){
+            super(leftClass,rightClass);
+            init();
+        }
+        private void init(){
+            try{
+                methods.put("isNew",rightType.getMethod("isNew"));
+                methods.put("setNew",rightType.getMethod("setNew",boolean.class));
+                methods.put("getModified",rightType.getMethod("getModified"));
+                methods.put("setModified",rightType.getMethod("setModified",long.class));
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+            try{         
+                methods.put("getMd5",rightType.getMethod("getMd5"));
+                methods.put("setMd5",rightType.getMethod("setMd5",String.class));
+                methods.put("checkMd5Initialized",rightType.getMethod("checkMd5Initialized"));
+            }catch(Exception e){}
+            try{         
+                methods.put("getPersonId",rightType.getMethod("getPersonId"));
+                methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
+                methods.put("checkPersonIdInitialized",rightType.getMethod("checkPersonIdInitialized"));
+            }catch(Exception e){}
+            try{         
+                methods.put("getFeature",rightType.getMethod("getFeature"));
+                methods.put("setFeature",rightType.getMethod("setFeature",byte[].class));
+                methods.put("checkFeatureInitialized",rightType.getMethod("checkFeatureInitialized"));
+            }catch(Exception e){}
+            try{         
+                methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
+                methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
+                methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
+            }catch(Exception e){}
+        }
+        @Override
+        protected void _fromRight(FeatureBean left, N_FEATURE right) {
+            try{
+                Method initializedMethod,getterMethod;
+                if( null != (initializedMethod = methods.get("checkMd5Initialized")) && null != (getterMethod = methods.get("getMd5"))){
+                    if((boolean)initializedMethod.invoke(right))
+                        left.setMd5((String)getterMethod.invoke(right));
+                }
+                if( null != (initializedMethod = methods.get("checkPersonIdInitialized")) && null != (getterMethod = methods.get("getPersonId"))){
+                    if((boolean)initializedMethod.invoke(right))
+                        left.setPersonId((Integer)getterMethod.invoke(right));
+                }
+                if( null != (initializedMethod = methods.get("checkFeatureInitialized")) && null != (getterMethod = methods.get("getFeature"))){
+                    if((boolean)initializedMethod.invoke(right))
+                        left.setFeature((byte[])getterMethod.invoke(right));
+                }
+                if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
+                    if((boolean)initializedMethod.invoke(right))
+                        left.setCreateTime((java.util.Date)getterMethod.invoke(right));
+                }
+                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.setModified((long)methods.get("getModified").invoke(right));
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        protected void _toRight(FeatureBean left, N_FEATURE right) {
+            try{
+                Method setterMethod;
+                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized() )
+                    setterMethod.invoke(right,left.getMd5());
+                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized() )
+                    setterMethod.invoke(right,left.getPersonId());
+                if(null != (setterMethod = methods.get("setFeature")) && left.checkFeatureInitialized() )
+                    setterMethod.invoke(right,left.getFeature());
+// IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
+//                     setterMethod.invoke(right,left.getCreateTime());
+                methods.get("setNew").invoke(right,left.isNew());
+                methods.get("setModified").invoke(right,left.getModified());
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        }}; 
+    /**
+     * implementation of {@link IBeanConverter} by reflect<br>
      * generic type converter for {@link ImageBean} to N_IMAGE <br>
      * @author guyadong
      *
@@ -777,11 +877,6 @@ public class BeanConverterUtils {
                 methods.put("checkImageMd5Initialized",rightType.getMethod("checkImageMd5Initialized"));
             }catch(Exception e){}
             try{         
-                methods.put("getFeatureMd5",rightType.getMethod("getFeatureMd5"));
-                methods.put("setFeatureMd5",rightType.getMethod("setFeatureMd5",String.class));
-                methods.put("checkFeatureMd5Initialized",rightType.getMethod("checkFeatureMd5Initialized"));
-            }catch(Exception e){}
-            try{         
                 methods.put("getExpiryDate",rightType.getMethod("getExpiryDate"));
                 methods.put("setExpiryDate",rightType.getMethod("setExpiryDate",java.util.Date.class));
                 methods.put("checkExpiryDateInitialized",rightType.getMethod("checkExpiryDateInitialized"));
@@ -833,10 +928,6 @@ public class BeanConverterUtils {
                     if((boolean)initializedMethod.invoke(right))
                         left.setImageMd5((String)getterMethod.invoke(right));
                 }
-                if( null != (initializedMethod = methods.get("checkFeatureMd5Initialized")) && null != (getterMethod = methods.get("getFeatureMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFeatureMd5((String)getterMethod.invoke(right));
-                }
                 if( null != (initializedMethod = methods.get("checkExpiryDateInitialized")) && null != (getterMethod = methods.get("getExpiryDate"))){
                     if((boolean)initializedMethod.invoke(right))
                         left.setExpiryDate((java.util.Date)getterMethod.invoke(right));
@@ -878,8 +969,6 @@ public class BeanConverterUtils {
                     setterMethod.invoke(right,left.getPapersNum());
                 if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized() )
                     setterMethod.invoke(right,left.getImageMd5());
-                if(null != (setterMethod = methods.get("setFeatureMd5")) && left.checkFeatureMd5Initialized() )
-                    setterMethod.invoke(right,left.getFeatureMd5());
                 if(null != (setterMethod = methods.get("setExpiryDate")) && left.checkExpiryDateInitialized() )
                     setterMethod.invoke(right,left.getExpiryDate());
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file

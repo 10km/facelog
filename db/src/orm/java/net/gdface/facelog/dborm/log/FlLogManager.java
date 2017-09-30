@@ -27,10 +27,10 @@ import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
+import net.gdface.facelog.dborm.face.FlFeatureBean;
+import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.
@@ -268,39 +268,43 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlLogBean} 
+     * @param refFlFeaturebyVerifyFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
+     * @param refFlFeaturebyCompareFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
      * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlLogBean} 
-     * @param refFlStorebyVerifyFeature the {@link FlStoreBean} bean referenced by {@link FlLogBean} 
-     * @param refFlStorebyCompareFeature the {@link FlStoreBean} bean referenced by {@link FlLogBean} 
          * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlLogBean save(FlLogBean bean
-        , FlDeviceBean refFlDevicebyDeviceId , FlPersonBean refFlPersonbyPersonId , FlStoreBean refFlStorebyVerifyFeature , FlStoreBean refFlStorebyCompareFeature 
+        , FlDeviceBean refFlDevicebyDeviceId , FlFeatureBean refFlFeaturebyVerifyFeature , FlFeatureBean refFlFeaturebyCompareFeature , FlPersonBean refFlPersonbyPersonId 
         ) throws DAOException
     {
         if(null == bean) return null;
-        this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
-        this.setReferencedByVerifyFeature(bean,refFlStorebyVerifyFeature);
-        this.setReferencedByCompareFeature(bean,refFlStorebyCompareFeature);
+        if(null != refFlDevicebyDeviceId)
+            this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
+        if(null != refFlFeaturebyVerifyFeature)
+            this.setReferencedByVerifyFeature(bean,refFlFeaturebyVerifyFeature);
+        if(null != refFlFeaturebyCompareFeature)
+            this.setReferencedByCompareFeature(bean,refFlFeaturebyCompareFeature);
+        if(null != refFlPersonbyPersonId)
+            this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
         bean = this.save( bean );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlLogBean , FlDeviceBean , FlPersonBean , FlStoreBean , FlStoreBean )}
+     * @see {@link #save(FlLogBean , FlDeviceBean , FlFeatureBean , FlFeatureBean , FlPersonBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlLogBean saveAsTransaction(final FlLogBean bean
-        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlPersonBean refFlPersonbyPersonId ,final FlStoreBean refFlStorebyVerifyFeature ,final FlStoreBean refFlStorebyCompareFeature 
+        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlFeatureBean refFlFeaturebyVerifyFeature ,final FlFeatureBean refFlFeaturebyCompareFeature ,final FlPersonBean refFlPersonbyPersonId 
         ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlLogBean>(){
             @Override
             public FlLogBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlPersonbyPersonId , refFlStorebyVerifyFeature , refFlStorebyCompareFeature );
+                return save(bean , refFlDevicebyDeviceId , refFlFeaturebyVerifyFeature , refFlFeaturebyCompareFeature , refFlPersonbyPersonId );
             }});
     }
     /**
@@ -308,7 +312,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlLogBean , FlDeviceBean , FlPersonBean , FlStoreBean , FlStoreBean )}
+     *      see also {@link #save(FlLogBean , FlDeviceBean , FlFeatureBean , FlFeatureBean , FlPersonBean )}
      * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
@@ -321,16 +325,16 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlFeatureBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlStoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlFeatureBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlStoreBean");
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlPersonBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(FlStoreBean)args[2],(args.length < 4 || null == args[3])?null:(FlStoreBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFeatureBean)args[1],(args.length < 3 || null == args[2])?null:(FlFeatureBean)args[2],(args.length < 4 || null == args[3])?null:(FlPersonBean)args[3]);
     } 
 
     /**
@@ -338,7 +342,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      *
      * @param bean the {@link FlLogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlLogBean , FlDeviceBean , FlPersonBean , FlStoreBean , FlStoreBean )}
+     *      see also {@link #save(FlLogBean , FlDeviceBean , FlFeatureBean , FlFeatureBean , FlPersonBean )}
      * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
@@ -352,16 +356,16 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlFeatureBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlStoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlFeatureBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlStoreBean");
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlPersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FlPersonBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonBean)args[1],(args.length < 3 || null == args[2])?null:(FlStoreBean)args[2],(args.length < 4 || null == args[3])?null:(FlStoreBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFeatureBean)args[1],(args.length < 3 || null == args[2])?null:(FlFeatureBean)args[2],(args.length < 4 || null == args[3])?null:(FlPersonBean)args[3]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -372,13 +376,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FlFeatureBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link FlFeatureBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link FlPersonBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FlStoreBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlLogBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_PERSON_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE}
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -388,12 +392,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
-        case FL_LOG_FK_PERSON_ID:
-            return  (T)this.getReferencedByPersonId(bean);
         case FL_LOG_FK_VERIFY_FEATURE:
             return  (T)this.getReferencedByVerifyFeature(bean);
         case FL_LOG_FK_COMPARE_FEATURE:
             return  (T)this.getReferencedByCompareFeature(bean);
+        case FL_LOG_FK_PERSON_ID:
+            return  (T)this.getReferencedByPersonId(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -414,12 +418,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
+        case FL_LOG_FK_VERIFY_FEATURE:
+            return  (T)this.setReferencedByVerifyFeature(bean, (FlFeatureBean)beanToSet);
+        case FL_LOG_FK_COMPARE_FEATURE:
+            return  (T)this.setReferencedByCompareFeature(bean, (FlFeatureBean)beanToSet);
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
-        case FL_LOG_FK_VERIFY_FEATURE:
-            return  (T)this.setReferencedByVerifyFeature(bean, (FlStoreBean)beanToSet);
-        case FL_LOG_FK_COMPARE_FEATURE:
-            return  (T)this.setReferencedByCompareFeature(bean, (FlStoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -436,13 +440,11 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return the associated {@link FlDeviceBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public FlDeviceBean getReferencedByDeviceId(FlLogBean bean) throws DAOException
     {
         if(null == bean)return null;
-        FlDeviceBean other = FlDeviceManager.getInstance().createBean();
-        other.setId(bean.getDeviceId()); 
-        bean.setReferencedByDeviceId(FlDeviceManager.getInstance().loadUniqueUsingTemplate(other)); 
+        bean.setReferencedByDeviceId(FlDeviceManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
 
@@ -470,19 +472,93 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
 
     /**
+     * Retrieves the {@link FlFeatureBean} object referenced by {@link FlLogBean#getVerifyFeature}() field.<br>
+     * FK_NAME : fl_log_ibfk_3
+     * @param bean the {@link FlLogBean}
+     * @return the associated {@link FlFeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //5.1 GET REFERENCED VALUE
+    public FlFeatureBean getReferencedByVerifyFeature(FlLogBean bean) throws DAOException
+    {
+        if(null == bean)return null;
+        bean.setReferencedByVerifyFeature(FlFeatureManager.getInstance().loadByPrimaryKey(bean.getVerifyFeature())); 
+        return bean.getReferencedByVerifyFeature();
+    }
+
+    /**
+     * Associates the {@link FlLogBean} object to the {@link FlFeatureBean} object by {@link FlLogBean#getVerifyFeature}() field.
+     *
+     * @param bean the {@link FlLogBean} object to use
+     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlFeatureBean setReferencedByVerifyFeature(FlLogBean bean, FlFeatureBean beanToSet) throws DAOException
+    {
+        if(null != bean){
+            FlFeatureManager.getInstance().save(beanToSet);
+            bean.setReferencedByVerifyFeature(beanToSet);
+            if( null == beanToSet){
+                bean.setVerifyFeature(null);
+            }else{
+                bean.setVerifyFeature(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
+    }
+
+    /**
+     * Retrieves the {@link FlFeatureBean} object referenced by {@link FlLogBean#getCompareFeature}() field.<br>
+     * FK_NAME : fl_log_ibfk_4
+     * @param bean the {@link FlLogBean}
+     * @return the associated {@link FlFeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //5.1 GET REFERENCED VALUE
+    public FlFeatureBean getReferencedByCompareFeature(FlLogBean bean) throws DAOException
+    {
+        if(null == bean)return null;
+        bean.setReferencedByCompareFeature(FlFeatureManager.getInstance().loadByPrimaryKey(bean.getCompareFeature())); 
+        return bean.getReferencedByCompareFeature();
+    }
+
+    /**
+     * Associates the {@link FlLogBean} object to the {@link FlFeatureBean} object by {@link FlLogBean#getCompareFeature}() field.
+     *
+     * @param bean the {@link FlLogBean} object to use
+     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlFeatureBean setReferencedByCompareFeature(FlLogBean bean, FlFeatureBean beanToSet) throws DAOException
+    {
+        if(null != bean){
+            FlFeatureManager.getInstance().save(beanToSet);
+            bean.setReferencedByCompareFeature(beanToSet);
+            if( null == beanToSet){
+                bean.setCompareFeature(null);
+            }else{
+                bean.setCompareFeature(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
+    }
+
+    /**
      * Retrieves the {@link FlPersonBean} object referenced by {@link FlLogBean#getPersonId}() field.<br>
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link FlLogBean}
      * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public FlPersonBean getReferencedByPersonId(FlLogBean bean) throws DAOException
     {
         if(null == bean)return null;
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setId(bean.getPersonId()); 
-        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadUniqueUsingTemplate(other)); 
+        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
 
@@ -501,89 +577,9 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             FlPersonManager.getInstance().save(beanToSet);
             bean.setReferencedByPersonId(beanToSet);
             if( null == beanToSet){
-                bean.setPersonId(null);
+               // foreign key ( person_id ) is not nullable , nothing to do
             }else{
                 bean.setPersonId(beanToSet.getId());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlStoreBean} object referenced by {@link FlLogBean#getVerifyFeature}() field.<br>
-     * FK_NAME : fl_log_ibfk_3
-     * @param bean the {@link FlLogBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.2 GET REFERENCED VALUE
-    public FlStoreBean getReferencedByVerifyFeature(FlLogBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getVerifyFeature()); 
-        bean.setReferencedByVerifyFeature(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByVerifyFeature();
-    }
-
-    /**
-     * Associates the {@link FlLogBean} object to the {@link FlStoreBean} object by {@link FlLogBean#getVerifyFeature}() field.
-     *
-     * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlStoreBean setReferencedByVerifyFeature(FlLogBean bean, FlStoreBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlStoreManager.getInstance().save(beanToSet);
-            bean.setReferencedByVerifyFeature(beanToSet);
-            if( null == beanToSet){
-                bean.setVerifyFeature(null);
-            }else{
-                bean.setVerifyFeature(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlStoreBean} object referenced by {@link FlLogBean#getCompareFeature}() field.<br>
-     * FK_NAME : fl_log_ibfk_4
-     * @param bean the {@link FlLogBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.2 GET REFERENCED VALUE
-    public FlStoreBean getReferencedByCompareFeature(FlLogBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getCompareFeature()); 
-        bean.setReferencedByCompareFeature(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByCompareFeature();
-    }
-
-    /**
-     * Associates the {@link FlLogBean} object to the {@link FlStoreBean} object by {@link FlLogBean#getCompareFeature}() field.
-     *
-     * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlLogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlStoreBean setReferencedByCompareFeature(FlLogBean bean, FlStoreBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlStoreManager.getInstance().save(beanToSet);
-            bean.setReferencedByCompareFeature(beanToSet);
-            if( null == beanToSet){
-                bean.setCompareFeature(null);
-            }else{
-                bean.setCompareFeature(beanToSet.getMd5());
             }
         }
         return beanToSet;

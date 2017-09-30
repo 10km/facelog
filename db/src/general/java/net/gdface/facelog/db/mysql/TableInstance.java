@@ -10,6 +10,7 @@ import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
@@ -24,6 +25,7 @@ public class TableInstance{
         {
         put(DeviceBean.class,DeviceManager.getInstance());
         put(FaceBean.class,FaceManager.getInstance());
+        put(FeatureBean.class,FeatureManager.getInstance());
         put(ImageBean.class,ImageManager.getInstance());
         put(LogBean.class,LogManager.getInstance());
         put(PersonBean.class,PersonManager.getInstance());

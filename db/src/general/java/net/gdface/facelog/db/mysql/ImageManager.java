@@ -34,7 +34,7 @@ import net.gdface.facelog.dborm.image.FlImageBean;
 public class ImageManager extends TableManager.Adapter<ImageBean> implements IImageManager
 {
     private FlImageManager nativeManager = FlImageManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<ImageBean,FlImageBean> beanConverter = dbConverter.getImageBeanConverter();
     private static ImageManager singleton = new ImageManager();
 
@@ -78,7 +78,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         return ImageBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -261,7 +261,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         return this.getFlFaceBeansByImageMd5AsList(bean).toArray(new FaceBean[0]);
     }
-
+    //3.1.2 GET IMPORTED override IImageManager
+    @Override
+    public FaceBean[] getFlFaceBeansByImageMd5(String imageMd5)
+    {
+        ImageBean bean = new ImageBean();
+        bean.setMd5(imageMd5);
+        return getFlFaceBeansByImageMd5(bean);
+    }
     //3.2 GET IMPORTED override IImageManager
     @Override 
     public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(ImageBean bean)
@@ -274,7 +281,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             throw new WrapDAOException(e);
         }
     }
-
+    //3.2.2 GET IMPORTED override IImageManager
+    @Override
+    public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(String imageMd5)
+    {
+         ImageBean bean = new ImageBean();
+        bean.setMd5(imageMd5);
+        return getFlFaceBeansByImageMd5AsList(bean);
+    }
     //3.3 SET IMPORTED override IImageManager
     @Override 
     public FaceBean[] setFlFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans)
@@ -304,7 +318,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         return this.getFlPersonBeansByImageMd5AsList(bean).toArray(new PersonBean[0]);
     }
-
+    //3.1.2 GET IMPORTED override IImageManager
+    @Override
+    public PersonBean[] getFlPersonBeansByImageMd5(String imageMd5)
+    {
+        ImageBean bean = new ImageBean();
+        bean.setMd5(imageMd5);
+        return getFlPersonBeansByImageMd5(bean);
+    }
     //3.2 GET IMPORTED override IImageManager
     @Override 
     public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(ImageBean bean)
@@ -317,7 +338,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             throw new WrapDAOException(e);
         }
     }
-
+    //3.2.2 GET IMPORTED override IImageManager
+    @Override
+    public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(String imageMd5)
+    {
+         ImageBean bean = new ImageBean();
+        bean.setMd5(imageMd5);
+        return getFlPersonBeansByImageMd5AsList(bean);
+    }
     //3.3 SET IMPORTED override IImageManager
     @Override 
     public PersonBean[] setFlPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans)
@@ -350,8 +378,23 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         , FaceBean[] impFlFacebyImageMd5 , PersonBean[] impFlPersonbyImageMd5 )
     {
         try{
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyMd5) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyThumbMd5)                 , this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyImageMd5)  , this.dbConverter.getPersonBeanConverter().toRight(impFlPersonbyImageMd5)  ));
+            FlImageBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.device.FlDeviceBean native_refFlDevicebyDeviceId = this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId);
+net.gdface.facelog.dborm.image.FlStoreBean native_refFlStorebyMd5 = this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyMd5);
+net.gdface.facelog.dborm.image.FlStoreBean native_refFlStorebyThumbMd5 = this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyThumbMd5);
+            net.gdface.facelog.dborm.face.FlFaceBean[] native_impFlFacebyImageMd5 = this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyImageMd5);
+net.gdface.facelog.dborm.person.FlPersonBean[] native_impFlPersonbyImageMd5 = this.dbConverter.getPersonBeanConverter().toRight(impFlPersonbyImageMd5);
+            nativeManager.save(nativeBean
+                , native_refFlDevicebyDeviceId , native_refFlStorebyMd5 , native_refFlStorebyThumbMd5 
+                , native_impFlFacebyImageMd5  , native_impFlPersonbyImageMd5  );
+            if(null != bean)
+                this.beanConverter.fromRight(bean,nativeBean);
+            if(null != refFlDevicebyDeviceId) this.dbConverter.getDeviceBeanConverter().fromRight(refFlDevicebyDeviceId,native_refFlDevicebyDeviceId);
+if(null != refFlStorebyMd5) this.dbConverter.getStoreBeanConverter().fromRight(refFlStorebyMd5,native_refFlStorebyMd5);
+if(null != refFlStorebyThumbMd5) this.dbConverter.getStoreBeanConverter().fromRight(refFlStorebyThumbMd5,native_refFlStorebyThumbMd5);
+            if(null != impFlFacebyImageMd5) this.dbConverter.getFaceBeanConverter().fromRight(impFlFacebyImageMd5,native_impFlFacebyImageMd5);
+if(null != impFlPersonbyImageMd5) this.dbConverter.getPersonBeanConverter().fromRight(impFlPersonbyImageMd5,native_impFlPersonbyImageMd5);
+            return bean;
         }
         catch(DAOException e)
         {
@@ -378,6 +421,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         , java.util.Collection<FaceBean> impFlFacebyImageMd5 , java.util.Collection<PersonBean> impFlPersonbyImageMd5 )
     {
         try{
+                    
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
                 , this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyMd5) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyThumbMd5)                 , this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyImageMd5)  , this.dbConverter.getPersonBeanConverter().toRight(impFlPersonbyImageMd5)  ));
         }
@@ -524,7 +568,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //////////////////////////////////////
 
 
-    //3.2 GET REFERENCED VALUE override IImageManager
+    //5.1 GET REFERENCED VALUE override IImageManager
     @Override 
     public DeviceBean getReferencedByDeviceId(ImageBean bean)
     {
@@ -543,7 +587,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet)
     {
         try{
-            return this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByDeviceId(this.beanConverter.toRight(bean),this.dbConverter.getDeviceBeanConverter().toRight(beanToSet)));
+            FlImageBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.device.FlDeviceBean foreignNativeBean = this.dbConverter.getDeviceBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByDeviceId(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {
@@ -551,7 +602,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }
     }
 
-    //3.2 GET REFERENCED VALUE override IImageManager
+    //5.1 GET REFERENCED VALUE override IImageManager
     @Override 
     public StoreBean getReferencedByMd5(ImageBean bean)
     {
@@ -570,7 +621,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet)
     {
         try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByMd5(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
+            FlImageBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = this.dbConverter.getStoreBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByMd5(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {
@@ -578,7 +636,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }
     }
 
-    //3.2 GET REFERENCED VALUE override IImageManager
+    //5.1 GET REFERENCED VALUE override IImageManager
     @Override 
     public StoreBean getReferencedByThumbMd5(ImageBean bean)
     {
@@ -597,7 +655,14 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet)
     {
         try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByThumbMd5(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
+            FlImageBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = this.dbConverter.getStoreBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByThumbMd5(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {

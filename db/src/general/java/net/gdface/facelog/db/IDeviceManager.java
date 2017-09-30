@@ -58,7 +58,17 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean);
-
+    
+    /**
+     * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
+     * FK_NAME : fl_image_ibfk_3 
+     * @param id Integer - PK# 1
+     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public ImageBean[] getFlImageBeansByDeviceId(Integer deviceId);
+    
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_3
@@ -68,6 +78,16 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     //3.2 GET IMPORTED
     public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean);
 
+    /**
+     * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
+     * FK_NAME:fl_image_ibfk_3
+     * @param id Integer - PK# 1
+     * @return the associated {@link ImageBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(Integer deviceId);
+    
     /**
      * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_3 
@@ -98,7 +118,17 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     //3.1 GET IMPORTED
     public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean);
-
+    
+    /**
+     * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
+     * FK_NAME : fl_log_ibfk_2 
+     * @param id Integer - PK# 1
+     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public LogBean[] getFlLogBeansByDeviceId(Integer deviceId);
+    
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
@@ -108,6 +138,16 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     //3.2 GET IMPORTED
     public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean);
 
+    /**
+     * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
+     * FK_NAME:fl_log_ibfk_2
+     * @param id Integer - PK# 1
+     * @return the associated {@link LogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(Integer deviceId);
+    
     /**
      * set  the {@link LogBean} object array associate to DeviceBean by the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 

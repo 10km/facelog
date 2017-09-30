@@ -45,7 +45,6 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE}
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM}
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5}
-     *   <li>{@link Constant#FL_PERSON_ID_FEATURE_MD5}
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE}
      *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME}
      *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME}
@@ -75,7 +74,6 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_TYPE})
      *   <li>{@link Constant#FL_PERSON_ID_PAPERS_NUM})
      *   <li>{@link Constant#FL_PERSON_ID_IMAGE_MD5})
-     *   <li>{@link Constant#FL_PERSON_ID_FEATURE_MD5})
      *   <li>{@link Constant#FL_PERSON_ID_EXPIRY_DATE})
      *   <li>{@link Constant#FL_PERSON_ID_CREATE_TIME})
      *   <li>{@link Constant#FL_PERSON_ID_UPDATE_TIME})
@@ -181,17 +179,6 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getImageMd5().compareTo(b2.getImageMd5());
-                }
-                break;
-            case FL_PERSON_ID_FEATURE_MD5:
-                if (b1.getFeatureMd5() == null && b2.getFeatureMd5() != null) {
-                    iReturn = -1;
-                } else if (b1.getFeatureMd5() == null && b2.getFeatureMd5() == null) {
-                    iReturn = 0;
-                } else if (b1.getFeatureMd5() != null && b2.getFeatureMd5() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getFeatureMd5().compareTo(b2.getFeatureMd5());
                 }
                 break;
             case FL_PERSON_ID_EXPIRY_DATE:

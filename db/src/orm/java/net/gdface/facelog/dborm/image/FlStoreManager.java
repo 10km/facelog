@@ -25,14 +25,8 @@ import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.log.FlLogBean;
-import net.gdface.facelog.dborm.log.FlLogManager;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_store table.
@@ -269,7 +263,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFaceBean.class,FlImageBean.class,FlImageBean.class,FlLogBean.class,FlLogBean.class,FlPersonBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlImageBean.class,FlImageBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlStoreBean,int)
@@ -284,15 +278,11 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_STORE_IK_FL_FACE_FEATURE_MD5} -> {@link FlFaceBean}</li>
      *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_MD5} -> {@link FlImageBean}</li>
      *     <li> {@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_STORE_IK_FL_LOG_VERIFY_FEATURE} -> {@link FlLogBean}</li>
-     *     <li> {@link Constant#FL_STORE_IK_FL_LOG_COMPARE_FEATURE} -> {@link FlLogBean}</li>
-     *     <li> {@link Constant#FL_STORE_IK_FL_PERSON_FEATURE_MD5} -> {@link FlPersonBean}</li>
      * </ul>
      * @param bean the {@link FlStoreBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_STORE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5},{@link Constant#FL_STORE_IK_FL_LOG_VERIFY_FEATURE},{@link Constant#FL_STORE_IK_FL_LOG_COMPARE_FEATURE},{@link Constant#FL_STORE_IK_FL_PERSON_FEATURE_MD5}
+     * @param ikIndex valid values: {@link Constant#FL_STORE_IK_FL_IMAGE_MD5},{@link Constant#FL_STORE_IK_FL_IMAGE_THUMB_MD5}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
@@ -300,18 +290,10 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlStoreBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
-        case FL_STORE_IK_FL_FACE_FEATURE_MD5:
-            return (List<T>)this.getFlFaceBeansByFeatureMd5AsList(bean);
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (List<T>)this.getFlImageBeansByMd5AsList(bean);
         case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
             return (List<T>)this.getFlImageBeansByThumbMd5AsList(bean);
-        case FL_STORE_IK_FL_LOG_VERIFY_FEATURE:
-            return (List<T>)this.getFlLogBeansByVerifyFeatureAsList(bean);
-        case FL_STORE_IK_FL_LOG_COMPARE_FEATURE:
-            return (List<T>)this.getFlLogBeansByCompareFeatureAsList(bean);
-        case FL_STORE_IK_FL_PERSON_FEATURE_MD5:
-            return (List<T>)this.getFlPersonBeansByFeatureMd5AsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -320,7 +302,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      * Set the T objects as imported beans of bean object by ikIndex.<br>
      * @param <T> see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @param bean the {@link FlStoreBean} object to use
-     * @param importedBeans the FlPersonBean array to associate to the {@link FlStoreBean}
+     * @param importedBeans the FlImageBean array to associate to the {@link FlStoreBean}
      * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlStoreBean,int)}
      * @return importedBeans always
      * @throws DAOException
@@ -329,18 +311,10 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlStoreBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
-        case FL_STORE_IK_FL_FACE_FEATURE_MD5:
-            return (T[])setFlFaceBeansByFeatureMd5(bean,(FlFaceBean[])importedBeans);
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (T[])setFlImageBeansByMd5(bean,(FlImageBean[])importedBeans);
         case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
             return (T[])setFlImageBeansByThumbMd5(bean,(FlImageBean[])importedBeans);
-        case FL_STORE_IK_FL_LOG_VERIFY_FEATURE:
-            return (T[])setFlLogBeansByVerifyFeature(bean,(FlLogBean[])importedBeans);
-        case FL_STORE_IK_FL_LOG_COMPARE_FEATURE:
-            return (T[])setFlLogBeansByCompareFeature(bean,(FlLogBean[])importedBeans);
-        case FL_STORE_IK_FL_PERSON_FEATURE_MD5:
-            return (T[])setFlPersonBeansByFeatureMd5(bean,(FlPersonBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -358,18 +332,10 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlStoreBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
-        case FL_STORE_IK_FL_FACE_FEATURE_MD5:
-            return (C)setFlFaceBeansByFeatureMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
         case FL_STORE_IK_FL_IMAGE_MD5:
             return (C)setFlImageBeansByMd5(bean,(java.util.Collection<FlImageBean>)importedBeans);
         case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
             return (C)setFlImageBeansByThumbMd5(bean,(java.util.Collection<FlImageBean>)importedBeans);
-        case FL_STORE_IK_FL_LOG_VERIFY_FEATURE:
-            return (C)setFlLogBeansByVerifyFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
-        case FL_STORE_IK_FL_LOG_COMPARE_FEATURE:
-            return (C)setFlLogBeansByCompareFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
-        case FL_STORE_IK_FL_PERSON_FEATURE_MD5:
-            return (C)setFlPersonBeansByFeatureMd5(bean,(java.util.Collection<FlPersonBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -377,75 +343,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
-    /**
-     * Retrieves the {@link FlFaceBean} object from the fl_face.feature_md5 field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlFaceBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlFaceBean[] getFlFaceBeansByFeatureMd5(FlStoreBean bean) throws DAOException
-    {
-        return getFlFaceBeansByFeatureMd5AsList(bean).toArray(new FlFaceBean[0]);
-    }
-
-    /**
-     * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlFaceBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlFaceBean> getFlFaceBeansByFeatureMd5AsList(FlStoreBean bean) throws DAOException
-    {
-        if(null == bean)return new java.util.ArrayList<FlFaceBean>();
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setFeatureMd5(bean.getMd5());
-        return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
-    }
-
-    /**
-     * set  the {@link FlFaceBean} object array associate to FlStoreBean by the fl_face.feature_md5 field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the referenced {@link FlStoreBean}
-     * @param importedBeans imported beans from fl_face
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlStoreBean)
-     */
-    //3.3 SET IMPORTED
-    public FlFaceBean[] setFlFaceBeansByFeatureMd5(FlStoreBean bean , FlFaceBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlFaceBean importBean : importedBeans ){
-                FlFaceManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlFaceBean} object collection associate to FlStoreBean by the fl_face.feature_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the referenced {@link FlStoreBean} 
-     * @param importedBeans imported beans from fl_face 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlStoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlFaceBean>> C setFlFaceBeansByFeatureMd5(FlStoreBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlFaceBean importBean : importedBeans ){
-                FlFaceManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
     /**
      * Retrieves the {@link FlImageBean} object from the fl_image.md5 field.<BR>
      * FK_NAME : fl_image_ibfk_1 
@@ -458,7 +355,20 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     {
         return getFlImageBeansByMd5AsList(bean).toArray(new FlImageBean[0]);
     }
-
+    /**
+     * Retrieves the {@link FlImageBean} object from the fl_image.md5 field.<BR>
+     * FK_NAME : fl_image_ibfk_1 
+     * @param md5 String - PK# 1
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlImageBean[] getFlImageBeansByMd5(String storeMd5) throws DAOException
+    {
+        FlStoreBean bean = createBean();
+        bean.setMd5(storeMd5);
+        return getFlImageBeansByMd5(bean);
+    }
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.md5 field.<BR>
      * FK_NAME:fl_image_ibfk_1
@@ -474,7 +384,20 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         other.setMd5(bean.getMd5());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
-
+    /**
+     * Retrieves the {@link FlImageBean} object from fl_image.md5 field.<BR>
+     * FK_NAME:fl_image_ibfk_1
+     * @param md5 String - PK# 1
+     * @return the associated {@link FlImageBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlImageBean> getFlImageBeansByMd5AsList(String storeMd5) throws DAOException
+    {
+         FlStoreBean bean = createBean();
+        bean.setMd5(storeMd5);
+        return getFlImageBeansByMd5AsList(bean);
+    }
     /**
      * set  the {@link FlImageBean} object array associate to FlStoreBean by the fl_image.md5 field.<BR>
      * FK_NAME : fl_image_ibfk_1 
@@ -527,7 +450,20 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     {
         return getFlImageBeansByThumbMd5AsList(bean).toArray(new FlImageBean[0]);
     }
-
+    /**
+     * Retrieves the {@link FlImageBean} object from the fl_image.thumb_md5 field.<BR>
+     * FK_NAME : fl_image_ibfk_2 
+     * @param md5 String - PK# 1
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlImageBean[] getFlImageBeansByThumbMd5(String storeMd5) throws DAOException
+    {
+        FlStoreBean bean = createBean();
+        bean.setMd5(storeMd5);
+        return getFlImageBeansByThumbMd5(bean);
+    }
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.thumb_md5 field.<BR>
      * FK_NAME:fl_image_ibfk_2
@@ -543,7 +479,20 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         other.setThumbMd5(bean.getMd5());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
-
+    /**
+     * Retrieves the {@link FlImageBean} object from fl_image.thumb_md5 field.<BR>
+     * FK_NAME:fl_image_ibfk_2
+     * @param md5 String - PK# 1
+     * @return the associated {@link FlImageBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlImageBean> getFlImageBeansByThumbMd5AsList(String storeMd5) throws DAOException
+    {
+         FlStoreBean bean = createBean();
+        bean.setMd5(storeMd5);
+        return getFlImageBeansByThumbMd5AsList(bean);
+    }
     /**
      * set  the {@link FlImageBean} object array associate to FlStoreBean by the fl_image.thumb_md5 field.<BR>
      * FK_NAME : fl_image_ibfk_2 
@@ -585,310 +534,79 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     }
 
     /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.verify_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByVerifyFeature(FlStoreBean bean) throws DAOException
-    {
-        return getFlLogBeansByVerifyFeatureAsList(bean).toArray(new FlLogBean[0]);
-    }
-
-    /**
-     * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlLogBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByVerifyFeatureAsList(FlStoreBean bean) throws DAOException
-    {
-        if(null == bean)return new java.util.ArrayList<FlLogBean>();
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setVerifyFeature(bean.getMd5());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
-    }
-
-    /**
-     * set  the {@link FlLogBean} object array associate to FlStoreBean by the fl_log.verify_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the referenced {@link FlStoreBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlStoreBean)
-     */
-    //3.3 SET IMPORTED
-    public FlLogBean[] setFlLogBeansByVerifyFeature(FlStoreBean bean , FlLogBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByVerifyFeature(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlLogBean} object collection associate to FlStoreBean by the fl_log.verify_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the referenced {@link FlStoreBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlStoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByVerifyFeature(FlStoreBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByVerifyFeature(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * Retrieves the {@link FlLogBean} object from the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByCompareFeature(FlStoreBean bean) throws DAOException
-    {
-        return getFlLogBeansByCompareFeatureAsList(bean).toArray(new FlLogBean[0]);
-    }
-
-    /**
-     * Retrieves the {@link FlLogBean} object from fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlLogBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByCompareFeatureAsList(FlStoreBean bean) throws DAOException
-    {
-        if(null == bean)return new java.util.ArrayList<FlLogBean>();
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setCompareFeature(bean.getMd5());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
-    }
-
-    /**
-     * set  the {@link FlLogBean} object array associate to FlStoreBean by the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the referenced {@link FlStoreBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByCompareFeature(FlLogBean, FlStoreBean)
-     */
-    //3.3 SET IMPORTED
-    public FlLogBean[] setFlLogBeansByCompareFeature(FlStoreBean bean , FlLogBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByCompareFeature(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlLogBean} object collection associate to FlStoreBean by the fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the referenced {@link FlStoreBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlLogManager#setReferencedByCompareFeature(FlLogBean, FlStoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByCompareFeature(FlStoreBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByCompareFeature(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * Retrieves the {@link FlPersonBean} object from the fl_person.feature_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_2 
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlPersonBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlPersonBean[] getFlPersonBeansByFeatureMd5(FlStoreBean bean) throws DAOException
-    {
-        return getFlPersonBeansByFeatureMd5AsList(bean).toArray(new FlPersonBean[0]);
-    }
-
-    /**
-     * Retrieves the {@link FlPersonBean} object from fl_person.feature_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_2
-     * @param bean the {@link FlStoreBean}
-     * @return the associated {@link FlPersonBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlPersonBean> getFlPersonBeansByFeatureMd5AsList(FlStoreBean bean) throws DAOException
-    {
-        if(null == bean)return new java.util.ArrayList<FlPersonBean>();
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setFeatureMd5(bean.getMd5());
-        return FlPersonManager.getInstance().loadUsingTemplateAsList(other);
-    }
-
-    /**
-     * set  the {@link FlPersonBean} object array associate to FlStoreBean by the fl_person.feature_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_2 
-     * @param bean the referenced {@link FlStoreBean}
-     * @param importedBeans imported beans from fl_person
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlPersonManager#setReferencedByFeatureMd5(FlPersonBean, FlStoreBean)
-     */
-    //3.3 SET IMPORTED
-    public FlPersonBean[] setFlPersonBeansByFeatureMd5(FlStoreBean bean , FlPersonBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlPersonBean importBean : importedBeans ){
-                FlPersonManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlPersonBean} object collection associate to FlStoreBean by the fl_person.feature_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_2
-     * @param bean the referenced {@link FlStoreBean} 
-     * @param importedBeans imported beans from fl_person 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlPersonManager#setReferencedByFeatureMd5(FlPersonBean, FlStoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlPersonBean>> C setFlPersonBeansByFeatureMd5(FlStoreBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlPersonBean importBean : importedBeans ){
-                FlPersonManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
      * Save the FlStoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
-         * @param impFlFacebyFeatureMd5 the {@link FlFaceBean} beans refer to {@link FlStoreBean} 
-     * @param impFlImagebyMd5 the {@link FlImageBean} beans refer to {@link FlStoreBean} 
+         * @param impFlImagebyMd5 the {@link FlImageBean} beans refer to {@link FlStoreBean} 
      * @param impFlImagebyThumbMd5 the {@link FlImageBean} beans refer to {@link FlStoreBean} 
-     * @param impFlLogbyVerifyFeature the {@link FlLogBean} beans refer to {@link FlStoreBean} 
-     * @param impFlLogbyCompareFeature the {@link FlLogBean} beans refer to {@link FlStoreBean} 
-     * @param impFlPersonbyFeatureMd5 the {@link FlPersonBean} beans refer to {@link FlStoreBean} 
      * @return the inserted or updated {@link FlStoreBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlStoreBean save(FlStoreBean bean
         
-        , FlFaceBean[] impFlFacebyFeatureMd5 , FlImageBean[] impFlImagebyMd5 , FlImageBean[] impFlImagebyThumbMd5 , FlLogBean[] impFlLogbyVerifyFeature , FlLogBean[] impFlLogbyCompareFeature , FlPersonBean[] impFlPersonbyFeatureMd5 ) throws DAOException
+        , FlImageBean[] impFlImagebyMd5 , FlImageBean[] impFlImagebyThumbMd5 ) throws DAOException
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
-        FlFaceManager.getInstance().save( impFlFacebyFeatureMd5 );
         this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
         FlImageManager.getInstance().save( impFlImagebyMd5 );
         this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
         FlImageManager.getInstance().save( impFlImagebyThumbMd5 );
-        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
-        FlLogManager.getInstance().save( impFlLogbyVerifyFeature );
-        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
-        FlLogManager.getInstance().save( impFlLogbyCompareFeature );
-        this.setFlPersonBeansByFeatureMd5(bean,impFlPersonbyFeatureMd5);
-        FlPersonManager.getInstance().save( impFlPersonbyFeatureMd5 );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlStoreBean , FlFaceBean[] , FlImageBean[] , FlImageBean[] , FlLogBean[] , FlLogBean[] , FlPersonBean[] )}
+     * @see {@link #save(FlStoreBean , FlImageBean[] , FlImageBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlStoreBean saveAsTransaction(final FlStoreBean bean
         
-        ,final FlFaceBean[] impFlFacebyFeatureMd5 ,final FlImageBean[] impFlImagebyMd5 ,final FlImageBean[] impFlImagebyThumbMd5 ,final FlLogBean[] impFlLogbyVerifyFeature ,final FlLogBean[] impFlLogbyCompareFeature ,final FlPersonBean[] impFlPersonbyFeatureMd5 ) throws DAOException
+        ,final FlImageBean[] impFlImagebyMd5 ,final FlImageBean[] impFlImagebyThumbMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlStoreBean>(){
             @Override
             public FlStoreBean call() throws Exception {
-                return save(bean , impFlFacebyFeatureMd5 , impFlImagebyMd5 , impFlImagebyThumbMd5 , impFlLogbyVerifyFeature , impFlLogbyCompareFeature , impFlPersonbyFeatureMd5 );
+                return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
             }});
     }
     /**
      * Save the FlStoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlStoreBean} bean to be saved
-         * @param impFlFacebyFeatureMd5 the {@link FlFaceBean} bean refer to {@link FlStoreBean} 
-     * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
+         * @param impFlImagebyMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
      * @param impFlImagebyThumbMd5 the {@link FlImageBean} bean refer to {@link FlStoreBean} 
-     * @param impFlLogbyVerifyFeature the {@link FlLogBean} bean refer to {@link FlStoreBean} 
-     * @param impFlLogbyCompareFeature the {@link FlLogBean} bean refer to {@link FlStoreBean} 
-     * @param impFlPersonbyFeatureMd5 the {@link FlPersonBean} bean refer to {@link FlStoreBean} 
      * @return the inserted or updated {@link FlStoreBean} bean
      * @throws DAOException
      */
     //3.7 SYNC SAVE 
     public FlStoreBean save(FlStoreBean bean
         
-        , java.util.Collection<FlFaceBean> impFlFacebyFeatureMd5 , java.util.Collection<FlImageBean> impFlImagebyMd5 , java.util.Collection<FlImageBean> impFlImagebyThumbMd5 , java.util.Collection<FlLogBean> impFlLogbyVerifyFeature , java.util.Collection<FlLogBean> impFlLogbyCompareFeature , java.util.Collection<FlPersonBean> impFlPersonbyFeatureMd5 ) throws DAOException
+        , java.util.Collection<FlImageBean> impFlImagebyMd5 , java.util.Collection<FlImageBean> impFlImagebyThumbMd5 ) throws DAOException
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
-        FlFaceManager.getInstance().save( impFlFacebyFeatureMd5 );
         this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
         FlImageManager.getInstance().save( impFlImagebyMd5 );
         this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
         FlImageManager.getInstance().save( impFlImagebyThumbMd5 );
-        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
-        FlLogManager.getInstance().save( impFlLogbyVerifyFeature );
-        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
-        FlLogManager.getInstance().save( impFlLogbyCompareFeature );
-        this.setFlPersonBeansByFeatureMd5(bean,impFlPersonbyFeatureMd5);
-        FlPersonManager.getInstance().save( impFlPersonbyFeatureMd5 );
         return bean;
     }
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlStoreBean , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FlStoreBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlStoreBean saveAsTransaction(final FlStoreBean bean
         
-        ,final  java.util.Collection<FlFaceBean> impFlFacebyFeatureMd5 ,final  java.util.Collection<FlImageBean> impFlImagebyMd5 ,final  java.util.Collection<FlImageBean> impFlImagebyThumbMd5 ,final  java.util.Collection<FlLogBean> impFlLogbyVerifyFeature ,final  java.util.Collection<FlLogBean> impFlLogbyCompareFeature ,final  java.util.Collection<FlPersonBean> impFlPersonbyFeatureMd5 ) throws DAOException
+        ,final  java.util.Collection<FlImageBean> impFlImagebyMd5 ,final  java.util.Collection<FlImageBean> impFlImagebyThumbMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlStoreBean>(){
             @Override
             public FlStoreBean call() throws Exception {
-                return save(bean , impFlFacebyFeatureMd5 , impFlImagebyMd5 , impFlImagebyThumbMd5 , impFlLogbyVerifyFeature , impFlLogbyCompareFeature , impFlPersonbyFeatureMd5 );
+                return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
             }});
     }
     /**
@@ -896,7 +614,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      *
      * @param bean the {@link FlStoreBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlStoreBean , FlFaceBean[] , FlImageBean[] , FlImageBean[] , FlLogBean[] , FlLogBean[] , FlPersonBean[] )}
+     *      see also {@link #save(FlStoreBean , FlImageBean[] , FlImageBean[] )}
      * @return the inserted or updated {@link FlStoreBean} bean
      * @throws DAOException
      */
@@ -904,27 +622,15 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean save(FlStoreBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 6)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 6");
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFaceBean[])){
-            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlFaceBean[]");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean[]");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean[])){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlImageBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlImageBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlImageBean[]");
-        }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlLogBean[]");
-        }
-        if( args.length > 4 && null != args[4] && !(args[4] instanceof FlLogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.5 dynamic argument,expected type:FlLogBean[]");
-        }
-        if( args.length > 5 && null != args[5] && !(args[5] instanceof FlPersonBean[])){
-            throw new IllegalArgumentException("invalid type for the No.6 dynamic argument,expected type:FlPersonBean[]");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlFaceBean[])args[0],(args.length < 2 || null == args[1])?null:(FlImageBean[])args[1],(args.length < 3 || null == args[2])?null:(FlImageBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3],(args.length < 5 || null == args[4])?null:(FlLogBean[])args[4],(args.length < 6 || null == args[5])?null:(FlPersonBean[])args[5]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean[])args[0],(args.length < 2 || null == args[1])?null:(FlImageBean[])args[1]);
     } 
 
     /**
@@ -932,7 +638,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
      *
      * @param bean the {@link FlStoreBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlStoreBean , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(FlStoreBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlStoreBean} bean
      * @throws DAOException
      */
@@ -941,27 +647,15 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean saveCollection(FlStoreBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 6)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 6");
+        if(args.length > 2)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlFaceBean>");
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Collection<FlImageBean>");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlImageBean>");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlImageBean>");
-        }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlLogBean>");
-        }
-        if( args.length > 4 && null != args[4] && !(args[4] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:java.util.Collection<FlLogBean>");
-        }
-        if( args.length > 5 && null != args[5] && !(args[5] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.6 argument,expected type:java.util.Collection<FlPersonBean>");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(java.util.Collection<FlFaceBean>)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlImageBean>)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlImageBean>)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlLogBean>)args[3],(args.length < 5 || null == args[4])?null:(java.util.Collection<FlLogBean>)args[4],(args.length < 6 || null == args[5])?null:(java.util.Collection<FlPersonBean>)args[5]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(java.util.Collection<FlImageBean>)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlImageBean>)args[1]);
     } 
      
 

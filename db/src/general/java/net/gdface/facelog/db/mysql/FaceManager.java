@@ -15,8 +15,8 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IFaceManager;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.WrapDAOException;
 
@@ -32,7 +32,7 @@ import net.gdface.facelog.dborm.face.FlFaceBean;
 public class FaceManager extends TableManager.Adapter<FaceBean> implements IFaceManager
 {
     private FlFaceManager nativeManager = FlFaceManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<FaceBean,FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
     private static FaceManager singleton = new FaceManager();
 
@@ -76,7 +76,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
         return FaceBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -170,12 +170,21 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     //3.5 SYNC SAVE override IFaceManager
     @Override  
     public FaceBean save(FaceBean bean
-        , ImageBean refFlImagebyImageMd5 , StoreBean refFlStorebyFeatureMd5 
+        , FeatureBean refFlFeaturebyFeatureMd5 , ImageBean refFlImagebyImageMd5 
         )
     {
         try{
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyFeatureMd5)                 ));
+            FlFaceBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.face.FlFeatureBean native_refFlFeaturebyFeatureMd5 = this.dbConverter.getFeatureBeanConverter().toRight(refFlFeaturebyFeatureMd5);
+net.gdface.facelog.dborm.image.FlImageBean native_refFlImagebyImageMd5 = this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5);
+                        nativeManager.save(nativeBean
+                , native_refFlFeaturebyFeatureMd5 , native_refFlImagebyImageMd5 
+                );
+            if(null != bean)
+                this.beanConverter.fromRight(bean,nativeBean);
+            if(null != refFlFeaturebyFeatureMd5) this.dbConverter.getFeatureBeanConverter().fromRight(refFlFeaturebyFeatureMd5,native_refFlFeaturebyFeatureMd5);
+if(null != refFlImagebyImageMd5) this.dbConverter.getImageBeanConverter().fromRight(refFlImagebyImageMd5,native_refFlImagebyImageMd5);
+                        return bean;
         }
         catch(DAOException e)
         {
@@ -186,13 +195,13 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     //3.6 SYNC SAVE AS TRANSACTION override IFaceManager
     @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
-        ,final ImageBean refFlImagebyImageMd5 ,final StoreBean refFlStorebyFeatureMd5 
+        ,final FeatureBean refFlFeaturebyFeatureMd5 ,final ImageBean refFlImagebyImageMd5 
         )
     {
         return this.runAsTransaction(new Callable<FaceBean>(){
             @Override
             public FaceBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 );
+                return save(bean , refFlFeaturebyFeatureMd5 , refFlImagebyImageMd5 );
             }});
     }
      /**
@@ -200,7 +209,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FaceBean , ImageBean , StoreBean )}
+     *      see also {@link #save(FaceBean , FeatureBean , ImageBean )}
      * @return the inserted or updated {@link FaceBean} bean
      */
     //3.9 SYNC SAVE 
@@ -209,13 +218,13 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     {
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof ImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:ImageBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean)args[0],(args.length < 2 || null == args[1])?null:(StoreBean)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FeatureBean)args[0],(args.length < 2 || null == args[1])?null:(ImageBean)args[1]);
     } 
 
     /**
@@ -223,7 +232,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FaceBean , ImageBean , StoreBean )}
+     *      see also {@link #save(FaceBean , FeatureBean , ImageBean )}
      * @return the inserted or updated {@link FaceBean} bean
      */
     //3.10 SYNC SAVE 
@@ -235,13 +244,13 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         Object[] args = new Object[2];
         System.arraycopy(inputs,0,args,0,2);
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof ImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:ImageBean");
         }
-        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(StoreBean)args[1]);
+        return save(bean,null == args[0]?null:(FeatureBean)args[0],null == args[1]?null:(ImageBean)args[1]);
     }
 
      //////////////////////////////////////
@@ -252,22 +261,22 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FeatureBean}</li>
      *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link FaceBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_FACE_FK_FEATURE_MD5}
+     *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_FACE_FK_IMAGE_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<?>> T getReferencedBean(FaceBean bean,int fkIndex){
         switch(fkIndex){
-        case FL_FACE_FK_IMAGE_MD5:
-            return  (T)this.getReferencedByImageMd5(bean);
         case FL_FACE_FK_FEATURE_MD5:
             return  (T)this.getReferencedByFeatureMd5(bean);
+        case FL_FACE_FK_IMAGE_MD5:
+            return  (T)this.getReferencedByImageMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -284,10 +293,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<?>> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
+        case FL_FACE_FK_FEATURE_MD5:
+            return  (T)this.setReferencedByFeatureMd5(bean, (FeatureBean)beanToSet);
         case FL_FACE_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (ImageBean)beanToSet);
-        case FL_FACE_FK_FEATURE_MD5:
-            return  (T)this.setReferencedByFeatureMd5(bean, (StoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -297,7 +306,41 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     //////////////////////////////////////
 
 
-    //3.2 GET REFERENCED VALUE override IFaceManager
+    //5.1 GET REFERENCED VALUE override IFaceManager
+    @Override 
+    public FeatureBean getReferencedByFeatureMd5(FaceBean bean)
+    {
+        try{
+            return this.dbConverter.getFeatureBeanConverter().fromRight(this.nativeManager.getReferencedByFeatureMd5(this.beanConverter.toRight(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+        
+    }
+
+    //5.2 SET REFERENCED override IFaceManager
+    @Override 
+    public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet)
+    {
+        try{
+            FlFaceBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.face.FlFeatureBean foreignNativeBean = this.dbConverter.getFeatureBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByFeatureMd5(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getFeatureBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+
+    //5.1 GET REFERENCED VALUE override IFaceManager
     @Override 
     public ImageBean getReferencedByImageMd5(FaceBean bean)
     {
@@ -316,34 +359,14 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet)
     {
         try{
-            return this.dbConverter.getImageBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByImageMd5(this.beanConverter.toRight(bean),this.dbConverter.getImageBeanConverter().toRight(beanToSet)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    //3.2 GET REFERENCED VALUE override IFaceManager
-    @Override 
-    public StoreBean getReferencedByFeatureMd5(FaceBean bean)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(this.nativeManager.getReferencedByFeatureMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
-    }
-
-    //5.2 SET REFERENCED override IFaceManager
-    @Override 
-    public StoreBean setReferencedByFeatureMd5(FaceBean bean, StoreBean beanToSet)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByFeatureMd5(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
+            FlFaceBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = this.dbConverter.getImageBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByImageMd5(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getImageBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {

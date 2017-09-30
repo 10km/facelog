@@ -25,10 +25,10 @@ import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
+import net.gdface.facelog.dborm.face.FlFeatureBean;
+import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.
@@ -265,36 +265,38 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
+     * @param refFlFeaturebyFeatureMd5 the {@link FlFeatureBean} bean referenced by {@link FlFaceBean} 
      * @param refFlImagebyImageMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
-     * @param refFlStorebyFeatureMd5 the {@link FlStoreBean} bean referenced by {@link FlFaceBean} 
          * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlFaceBean save(FlFaceBean bean
-        , FlImageBean refFlImagebyImageMd5 , FlStoreBean refFlStorebyFeatureMd5 
+        , FlFeatureBean refFlFeaturebyFeatureMd5 , FlImageBean refFlImagebyImageMd5 
         ) throws DAOException
     {
         if(null == bean) return null;
-        this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
-        this.setReferencedByFeatureMd5(bean,refFlStorebyFeatureMd5);
+        if(null != refFlFeaturebyFeatureMd5)
+            this.setReferencedByFeatureMd5(bean,refFlFeaturebyFeatureMd5);
+        if(null != refFlImagebyImageMd5)
+            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
         bean = this.save( bean );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlImageBean , FlStoreBean )}
+     * @see {@link #save(FlFaceBean , FlFeatureBean , FlImageBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
-        ,final FlImageBean refFlImagebyImageMd5 ,final FlStoreBean refFlStorebyFeatureMd5 
+        ,final FlFeatureBean refFlFeaturebyFeatureMd5 ,final FlImageBean refFlImagebyImageMd5 
         ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFaceBean>(){
             @Override
             public FlFaceBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 );
+                return save(bean , refFlFeaturebyFeatureMd5 , refFlImagebyImageMd5 );
             }});
     }
     /**
@@ -302,7 +304,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlFaceBean , FlImageBean , FlStoreBean )}
+     *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -312,13 +314,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     {
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlFeatureBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlStoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlImageBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlFeatureBean)args[0],(args.length < 2 || null == args[1])?null:(FlImageBean)args[1]);
     } 
 
     /**
@@ -326,7 +328,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlFaceBean , FlImageBean , FlStoreBean )}
+     *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -337,13 +339,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     {
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlFeatureBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlStoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlImageBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlFeatureBean)args[0],(args.length < 2 || null == args[1])?null:(FlImageBean)args[1]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -353,12 +355,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FlFeatureBean}</li>
      *     <li> {@link Constant#FL_FACE_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_FACE_FK_FEATURE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlFaceBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_FACE_FK_FEATURE_MD5}
+     *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_FACE_FK_IMAGE_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -366,10 +368,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
-        case FL_FACE_FK_IMAGE_MD5:
-            return  (T)this.getReferencedByImageMd5(bean);
         case FL_FACE_FK_FEATURE_MD5:
             return  (T)this.getReferencedByFeatureMd5(bean);
+        case FL_FACE_FK_IMAGE_MD5:
+            return  (T)this.getReferencedByImageMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -388,10 +390,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
+        case FL_FACE_FK_FEATURE_MD5:
+            return  (T)this.setReferencedByFeatureMd5(bean, (FlFeatureBean)beanToSet);
         case FL_FACE_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);
-        case FL_FACE_FK_FEATURE_MD5:
-            return  (T)this.setReferencedByFeatureMd5(bean, (FlStoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -402,19 +404,55 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
 
 
     /**
+     * Retrieves the {@link FlFeatureBean} object referenced by {@link FlFaceBean#getFeatureMd5}() field.<br>
+     * FK_NAME : fl_face_ibfk_2
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlFeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //5.1 GET REFERENCED VALUE
+    public FlFeatureBean getReferencedByFeatureMd5(FlFaceBean bean) throws DAOException
+    {
+        if(null == bean)return null;
+        bean.setReferencedByFeatureMd5(FlFeatureManager.getInstance().loadByPrimaryKey(bean.getFeatureMd5())); 
+        return bean.getReferencedByFeatureMd5();
+    }
+
+    /**
+     * Associates the {@link FlFaceBean} object to the {@link FlFeatureBean} object by {@link FlFaceBean#getFeatureMd5}() field.
+     *
+     * @param bean the {@link FlFaceBean} object to use
+     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlFaceBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlFeatureBean setReferencedByFeatureMd5(FlFaceBean bean, FlFeatureBean beanToSet) throws DAOException
+    {
+        if(null != bean){
+            FlFeatureManager.getInstance().save(beanToSet);
+            bean.setReferencedByFeatureMd5(beanToSet);
+            if( null == beanToSet){
+                bean.setFeatureMd5(null);
+            }else{
+                bean.setFeatureMd5(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
+    }
+
+    /**
      * Retrieves the {@link FlImageBean} object referenced by {@link FlFaceBean#getImageMd5}() field.<br>
      * FK_NAME : fl_face_ibfk_1
      * @param bean the {@link FlFaceBean}
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public FlImageBean getReferencedByImageMd5(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
-        FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setMd5(bean.getImageMd5()); 
-        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
+        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
 
@@ -433,49 +471,9 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             FlImageManager.getInstance().save(beanToSet);
             bean.setReferencedByImageMd5(beanToSet);
             if( null == beanToSet){
-                bean.setImageMd5(null);
+               // foreign key ( image_md5 ) is not nullable , nothing to do
             }else{
                 bean.setImageMd5(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlStoreBean} object referenced by {@link FlFaceBean#getFeatureMd5}() field.<br>
-     * FK_NAME : fl_face_ibfk_2
-     * @param bean the {@link FlFaceBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.2 GET REFERENCED VALUE
-    public FlStoreBean getReferencedByFeatureMd5(FlFaceBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getFeatureMd5()); 
-        bean.setReferencedByFeatureMd5(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByFeatureMd5();
-    }
-
-    /**
-     * Associates the {@link FlFaceBean} object to the {@link FlStoreBean} object by {@link FlFaceBean#getFeatureMd5}() field.
-     *
-     * @param bean the {@link FlFaceBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlFaceBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlStoreBean setReferencedByFeatureMd5(FlFaceBean bean, FlStoreBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlStoreManager.getInstance().save(beanToSet);
-            bean.setReferencedByFeatureMd5(beanToSet);
-            if( null == beanToSet){
-                bean.setFeatureMd5(null);
-            }else{
-                bean.setFeatureMd5(beanToSet.getMd5());
             }
         }
         return beanToSet;

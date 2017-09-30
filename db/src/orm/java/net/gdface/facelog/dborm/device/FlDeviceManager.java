@@ -357,7 +357,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         return getFlImageBeansByDeviceIdAsList(bean).toArray(new FlImageBean[0]);
     }
-
+    /**
+     * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.<BR>
+     * FK_NAME : fl_image_ibfk_3 
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlImageBean[] getFlImageBeansByDeviceId(Integer deviceId) throws DAOException
+    {
+        FlDeviceBean bean = createBean();
+        bean.setId(deviceId);
+        return getFlImageBeansByDeviceId(bean);
+    }
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_3
@@ -373,7 +386,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         other.setDeviceId(bean.getId());
         return FlImageManager.getInstance().loadUsingTemplateAsList(other);
     }
-
+    /**
+     * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
+     * FK_NAME:fl_image_ibfk_3
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlImageBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlImageBean> getFlImageBeansByDeviceIdAsList(Integer deviceId) throws DAOException
+    {
+         FlDeviceBean bean = createBean();
+        bean.setId(deviceId);
+        return getFlImageBeansByDeviceIdAsList(bean);
+    }
     /**
      * set  the {@link FlImageBean} object array associate to FlDeviceBean by the fl_image.device_id field.<BR>
      * FK_NAME : fl_image_ibfk_3 
@@ -426,7 +452,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         return getFlLogBeansByDeviceIdAsList(bean).toArray(new FlLogBean[0]);
     }
-
+    /**
+     * Retrieves the {@link FlLogBean} object from the fl_log.device_id field.<BR>
+     * FK_NAME : fl_log_ibfk_2 
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlLogBean[] getFlLogBeansByDeviceId(Integer deviceId) throws DAOException
+    {
+        FlDeviceBean bean = createBean();
+        bean.setId(deviceId);
+        return getFlLogBeansByDeviceId(bean);
+    }
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
@@ -442,7 +481,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         other.setDeviceId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
-
+    /**
+     * Retrieves the {@link FlLogBean} object from fl_log.device_id field.<BR>
+     * FK_NAME:fl_log_ibfk_2
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlLogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlLogBean> getFlLogBeansByDeviceIdAsList(Integer deviceId) throws DAOException
+    {
+         FlDeviceBean bean = createBean();
+        bean.setId(deviceId);
+        return getFlLogBeansByDeviceIdAsList(bean);
+    }
     /**
      * set  the {@link FlLogBean} object array associate to FlDeviceBean by the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 

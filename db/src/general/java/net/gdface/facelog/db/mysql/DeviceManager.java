@@ -32,7 +32,7 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
 public class DeviceManager extends TableManager.Adapter<DeviceBean> implements IDeviceManager
 {
     private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
 
@@ -76,7 +76,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         return DeviceBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -259,7 +259,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         return this.getFlImageBeansByDeviceIdAsList(bean).toArray(new ImageBean[0]);
     }
-
+    //3.1.2 GET IMPORTED override IDeviceManager
+    @Override
+    public ImageBean[] getFlImageBeansByDeviceId(Integer deviceId)
+    {
+        DeviceBean bean = new DeviceBean();
+        bean.setId(deviceId);
+        return getFlImageBeansByDeviceId(bean);
+    }
     //3.2 GET IMPORTED override IDeviceManager
     @Override 
     public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
@@ -272,7 +279,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    //3.2.2 GET IMPORTED override IDeviceManager
+    @Override
+    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(Integer deviceId)
+    {
+         DeviceBean bean = new DeviceBean();
+        bean.setId(deviceId);
+        return getFlImageBeansByDeviceIdAsList(bean);
+    }
     //3.3 SET IMPORTED override IDeviceManager
     @Override 
     public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
@@ -302,7 +316,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         return this.getFlLogBeansByDeviceIdAsList(bean).toArray(new LogBean[0]);
     }
-
+    //3.1.2 GET IMPORTED override IDeviceManager
+    @Override
+    public LogBean[] getFlLogBeansByDeviceId(Integer deviceId)
+    {
+        DeviceBean bean = new DeviceBean();
+        bean.setId(deviceId);
+        return getFlLogBeansByDeviceId(bean);
+    }
     //3.2 GET IMPORTED override IDeviceManager
     @Override 
     public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
@@ -315,7 +336,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    //3.2.2 GET IMPORTED override IDeviceManager
+    @Override
+    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(Integer deviceId)
+    {
+         DeviceBean bean = new DeviceBean();
+        bean.setId(deviceId);
+        return getFlLogBeansByDeviceIdAsList(bean);
+    }
     //3.3 SET IMPORTED override IDeviceManager
     @Override 
     public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
@@ -348,8 +376,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId )
     {
         try{
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                                , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
+            FlDeviceBean nativeBean = this.beanConverter.toRight(bean);
+                        net.gdface.facelog.dborm.image.FlImageBean[] native_impFlImagebyDeviceId = this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId);
+net.gdface.facelog.dborm.log.FlLogBean[] native_impFlLogbyDeviceId = this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId);
+            nativeManager.save(nativeBean
+                
+                , native_impFlImagebyDeviceId  , native_impFlLogbyDeviceId  );
+            if(null != bean)
+                this.beanConverter.fromRight(bean,nativeBean);
+                        if(null != impFlImagebyDeviceId) this.dbConverter.getImageBeanConverter().fromRight(impFlImagebyDeviceId,native_impFlImagebyDeviceId);
+if(null != impFlLogbyDeviceId) this.dbConverter.getLogBeanConverter().fromRight(impFlLogbyDeviceId,native_impFlLogbyDeviceId);
+            return bean;
         }
         catch(DAOException e)
         {
@@ -376,6 +413,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         , java.util.Collection<ImageBean> impFlImagebyDeviceId , java.util.Collection<LogBean> impFlLogbyDeviceId )
     {
         try{
+                    
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
                                 , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
         }

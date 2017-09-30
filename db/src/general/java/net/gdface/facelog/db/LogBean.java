@@ -324,7 +324,7 @@ public class LogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.verify_feature</li>
-     * <li> foreign key: fl_store.md5</li>
+     * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
@@ -383,7 +383,7 @@ public class LogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.compare_feature</li>
-     * <li> foreign key: fl_store.md5</li>
+     * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,数据库中相似度最高的人脸特征MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
@@ -659,12 +659,42 @@ public class LogBean
         this.referencedByDeviceId = reference;
     }
     /** 
+     * The referenced {@link FeatureBean} by {@link #verifyFeature} . <br>
+     * FOREIGN KEY (verify_feature) REFERENCES fl_feature(md5)
+     */
+    private FeatureBean referencedByVerifyFeature;
+    /** Getter method for {@link #referencedByVerifyFeature}. */
+    @com.facebook.swift.codec.ThriftField(13)
+    public FeatureBean getReferencedByVerifyFeature() {
+        return this.referencedByVerifyFeature;
+    }
+    /** Setter method for {@link #referencedByVerifyFeature}. */
+    @com.facebook.swift.codec.ThriftField
+    public void setReferencedByVerifyFeature(FeatureBean reference) {
+        this.referencedByVerifyFeature = reference;
+    }
+    /** 
+     * The referenced {@link FeatureBean} by {@link #compareFeature} . <br>
+     * FOREIGN KEY (compare_feature) REFERENCES fl_feature(md5)
+     */
+    private FeatureBean referencedByCompareFeature;
+    /** Getter method for {@link #referencedByCompareFeature}. */
+    @com.facebook.swift.codec.ThriftField(14)
+    public FeatureBean getReferencedByCompareFeature() {
+        return this.referencedByCompareFeature;
+    }
+    /** Setter method for {@link #referencedByCompareFeature}. */
+    @com.facebook.swift.codec.ThriftField
+    public void setReferencedByCompareFeature(FeatureBean reference) {
+        this.referencedByCompareFeature = reference;
+    }
+    /** 
      * The referenced {@link PersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(15)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
@@ -672,36 +702,6 @@ public class LogBean
     @com.facebook.swift.codec.ThriftField
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
-    }
-    /** 
-     * The referenced {@link StoreBean} by {@link #verifyFeature} . <br>
-     * FOREIGN KEY (verify_feature) REFERENCES fl_store(md5)
-     */
-    private StoreBean referencedByVerifyFeature;
-    /** Getter method for {@link #referencedByVerifyFeature}. */
-    @com.facebook.swift.codec.ThriftField(14)
-    public StoreBean getReferencedByVerifyFeature() {
-        return this.referencedByVerifyFeature;
-    }
-    /** Setter method for {@link #referencedByVerifyFeature}. */
-    @com.facebook.swift.codec.ThriftField
-    public void setReferencedByVerifyFeature(StoreBean reference) {
-        this.referencedByVerifyFeature = reference;
-    }
-    /** 
-     * The referenced {@link StoreBean} by {@link #compareFeature} . <br>
-     * FOREIGN KEY (compare_feature) REFERENCES fl_store(md5)
-     */
-    private StoreBean referencedByCompareFeature;
-    /** Getter method for {@link #referencedByCompareFeature}. */
-    @com.facebook.swift.codec.ThriftField(15)
-    public StoreBean getReferencedByCompareFeature() {
-        return this.referencedByCompareFeature;
-    }
-    /** Setter method for {@link #referencedByCompareFeature}. */
-    @com.facebook.swift.codec.ThriftField
-    public void setReferencedByCompareFeature(StoreBean reference) {
-        this.referencedByCompareFeature = reference;
     }
 
     /**

@@ -15,9 +15,9 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IPersonManager;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.WrapDAOException;
 
@@ -33,7 +33,7 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 public class PersonManager extends TableManager.Adapter<PersonBean> implements IPersonManager
 {
     private FlPersonManager nativeManager = FlPersonManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<PersonBean,FlPersonBean> beanConverter = dbConverter.getPersonBeanConverter();
     private static PersonManager singleton = new PersonManager();
 
@@ -77,7 +77,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         return PersonBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -169,7 +169,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{LogBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FeatureBean.class,LogBean.class};
 
     /**
      * @see #getImportedBeansAsList(PersonBean,int)
@@ -184,16 +184,19 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FeatureBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
         switch(ikIndex){
+        case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
+            return (java.util.List<T>)this.getFlFeatureBeansByPersonIdAsList(bean);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (java.util.List<T>)this.getFlLogBeansByPersonIdAsList(bean);
         }
@@ -204,17 +207,20 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      * @param <T>
      * 
      * <ul>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FeatureBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link PersonBean}
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
+        case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
+            return (T[])setFlFeatureBeansByPersonId(bean,(FeatureBean[])importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (T[])setFlLogBeansByPersonId(bean,(LogBean[])importedBeans);
         }
@@ -224,17 +230,20 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FeatureBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param importedBeans the <T> object to associate to the {@link PersonBean}
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
+        case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
+            return (C)setFlFeatureBeansByPersonId(bean,(java.util.Collection<FeatureBean>)importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (C)setFlLogBeansByPersonId(bean,(java.util.Collection<LogBean>)importedBeans);
         }
@@ -247,11 +256,75 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //////////////////////////////////////
     //3.1 GET IMPORTED override IPersonManager
     @Override 
+    public FeatureBean[] getFlFeatureBeansByPersonId(PersonBean bean)
+    {
+        return this.getFlFeatureBeansByPersonIdAsList(bean).toArray(new FeatureBean[0]);
+    }
+    //3.1.2 GET IMPORTED override IPersonManager
+    @Override
+    public FeatureBean[] getFlFeatureBeansByPersonId(Integer personId)
+    {
+        PersonBean bean = new PersonBean();
+        bean.setId(personId);
+        return getFlFeatureBeansByPersonId(bean);
+    }
+    //3.2 GET IMPORTED override IPersonManager
+    @Override 
+    public java.util.List<FeatureBean> getFlFeatureBeansByPersonIdAsList(PersonBean bean)
+    {
+        try {
+            return this.dbConverter.getFeatureBeanConverter().fromRight(nativeManager.getFlFeatureBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    //3.2.2 GET IMPORTED override IPersonManager
+    @Override
+    public java.util.List<FeatureBean> getFlFeatureBeansByPersonIdAsList(Integer personId)
+    {
+         PersonBean bean = new PersonBean();
+        bean.setId(personId);
+        return getFlFeatureBeansByPersonIdAsList(bean);
+    }
+    //3.3 SET IMPORTED override IPersonManager
+    @Override 
+    public FeatureBean[] setFlFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans)
+    {
+        if(null != importedBeans){
+            for( FeatureBean importBean : importedBeans ){
+                FeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    //3.4 SET IMPORTED override IPersonManager
+    @Override 
+    public <C extends java.util.Collection<FeatureBean>> C setFlFeatureBeansByPersonId(PersonBean bean , C importedBeans)
+    {
+        if(null != importedBeans){
+            for( FeatureBean importBean : importedBeans ){
+                FeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+    //3.1 GET IMPORTED override IPersonManager
+    @Override 
     public LogBean[] getFlLogBeansByPersonId(PersonBean bean)
     {
         return this.getFlLogBeansByPersonIdAsList(bean).toArray(new LogBean[0]);
     }
-
+    //3.1.2 GET IMPORTED override IPersonManager
+    @Override
+    public LogBean[] getFlLogBeansByPersonId(Integer personId)
+    {
+        PersonBean bean = new PersonBean();
+        bean.setId(personId);
+        return getFlLogBeansByPersonId(bean);
+    }
     //3.2 GET IMPORTED override IPersonManager
     @Override 
     public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
@@ -264,7 +337,14 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    //3.2.2 GET IMPORTED override IPersonManager
+    @Override
+    public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(Integer personId)
+    {
+         PersonBean bean = new PersonBean();
+        bean.setId(personId);
+        return getFlLogBeansByPersonIdAsList(bean);
+    }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
     public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
@@ -293,12 +373,23 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //3.5 SYNC SAVE override IPersonManager
     @Override  
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyImageMd5 , StoreBean refFlStorebyFeatureMd5 
-        , LogBean[] impFlLogbyPersonId )
+        , ImageBean refFlImagebyImageMd5 
+        , FeatureBean[] impFlFeaturebyPersonId , LogBean[] impFlLogbyPersonId )
     {
         try{
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyFeatureMd5)                 , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId)  ));
+            FlPersonBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.image.FlImageBean native_refFlImagebyImageMd5 = this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5);
+            net.gdface.facelog.dborm.face.FlFeatureBean[] native_impFlFeaturebyPersonId = this.dbConverter.getFeatureBeanConverter().toRight(impFlFeaturebyPersonId);
+net.gdface.facelog.dborm.log.FlLogBean[] native_impFlLogbyPersonId = this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId);
+            nativeManager.save(nativeBean
+                , native_refFlImagebyImageMd5 
+                , native_impFlFeaturebyPersonId  , native_impFlLogbyPersonId  );
+            if(null != bean)
+                this.beanConverter.fromRight(bean,nativeBean);
+            if(null != refFlImagebyImageMd5) this.dbConverter.getImageBeanConverter().fromRight(refFlImagebyImageMd5,native_refFlImagebyImageMd5);
+            if(null != impFlFeaturebyPersonId) this.dbConverter.getFeatureBeanConverter().fromRight(impFlFeaturebyPersonId,native_impFlFeaturebyPersonId);
+if(null != impFlLogbyPersonId) this.dbConverter.getLogBeanConverter().fromRight(impFlLogbyPersonId,native_impFlLogbyPersonId);
+            return bean;
         }
         catch(DAOException e)
         {
@@ -309,24 +400,25 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //3.6 SYNC SAVE AS TRANSACTION override IPersonManager
     @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyImageMd5 ,final StoreBean refFlStorebyFeatureMd5 
-        ,final LogBean[] impFlLogbyPersonId )
+        ,final ImageBean refFlImagebyImageMd5 
+        ,final FeatureBean[] impFlFeaturebyPersonId ,final LogBean[] impFlLogbyPersonId )
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
             public PersonBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 , impFlLogbyPersonId );
+                return save(bean , refFlImagebyImageMd5 , impFlFeaturebyPersonId , impFlLogbyPersonId );
             }});
     }
     //3.7 SYNC SAVE override IPersonManager
     @Override 
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyImageMd5 , StoreBean refFlStorebyFeatureMd5 
-        , java.util.Collection<LogBean> impFlLogbyPersonId )
+        , ImageBean refFlImagebyImageMd5 
+        , java.util.Collection<FeatureBean> impFlFeaturebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId )
     {
         try{
+                    
             return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyFeatureMd5)                 , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId)  ));
+                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5)                 , this.dbConverter.getFeatureBeanConverter().toRight(impFlFeaturebyPersonId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId)  ));
         }
         catch(DAOException e)
         {
@@ -337,13 +429,13 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //3.8 SYNC SAVE AS TRANSACTION override IPersonManager
     @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyImageMd5 ,final StoreBean refFlStorebyFeatureMd5 
-        ,final  java.util.Collection<LogBean> impFlLogbyPersonId )
+        ,final ImageBean refFlImagebyImageMd5 
+        ,final  java.util.Collection<FeatureBean> impFlFeaturebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId )
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
             public PersonBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 , impFlLogbyPersonId );
+                return save(bean , refFlImagebyImageMd5 , impFlFeaturebyPersonId , impFlLogbyPersonId );
             }});
     }
      /**
@@ -351,7 +443,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      *
      * @param bean the {@link PersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(PersonBean , ImageBean , StoreBean , LogBean[] )}
+     *      see also {@link #save(PersonBean , ImageBean , FeatureBean[] , LogBean[] )}
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.9 SYNC SAVE 
@@ -363,13 +455,13 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FeatureBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FeatureBean[]");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean)args[0],(args.length < 2 || null == args[1])?null:(StoreBean)args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(ImageBean)args[0],(args.length < 2 || null == args[1])?null:(FeatureBean[])args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
     /**
@@ -377,7 +469,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      *
      * @param bean the {@link PersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(PersonBean , ImageBean , StoreBean , java.util.Collection )}
+     *      see also {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.10 SYNC SAVE 
@@ -392,13 +484,13 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:ImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FeatureBean>");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");
         }
-        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(StoreBean)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2]);
+        return save(bean,null == args[0]?null:(ImageBean)args[0],null == args[1]?null:(java.util.Collection<FeatureBean>)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2]);
     }
 
      //////////////////////////////////////
@@ -410,11 +502,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_PERSON_FK_FEATURE_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link PersonBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_FEATURE_MD5}
+     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
@@ -423,8 +514,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.getReferencedByImageMd5(bean);
-        case FL_PERSON_FK_FEATURE_MD5:
-            return  (T)this.getReferencedByFeatureMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -443,8 +532,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (ImageBean)beanToSet);
-        case FL_PERSON_FK_FEATURE_MD5:
-            return  (T)this.setReferencedByFeatureMd5(bean, (StoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -454,7 +541,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //////////////////////////////////////
 
 
-    //3.2 GET REFERENCED VALUE override IPersonManager
+    //5.1 GET REFERENCED VALUE override IPersonManager
     @Override 
     public ImageBean getReferencedByImageMd5(PersonBean bean)
     {
@@ -473,34 +560,14 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet)
     {
         try{
-            return this.dbConverter.getImageBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByImageMd5(this.beanConverter.toRight(bean),this.dbConverter.getImageBeanConverter().toRight(beanToSet)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    //3.2 GET REFERENCED VALUE override IPersonManager
-    @Override 
-    public StoreBean getReferencedByFeatureMd5(PersonBean bean)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(this.nativeManager.getReferencedByFeatureMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
-    }
-
-    //5.2 SET REFERENCED override IPersonManager
-    @Override 
-    public StoreBean setReferencedByFeatureMd5(PersonBean bean, StoreBean beanToSet)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByFeatureMd5(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
+            FlPersonBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = this.dbConverter.getImageBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByImageMd5(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getImageBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {
@@ -605,33 +672,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // USING INDICES
     //_____________________________________________________________________
 
-    // override IPersonManager
-    @Override 
-    public PersonBean loadByIndexFeatureMd5(String featureMd5)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexFeatureMd5(featureMd5));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-
-    // override IPersonManager
-    @Override 
-    public int deleteByIndexFeatureMd5(String featureMd5)
-    {
-        try{
-            return this.nativeManager.deleteByIndexFeatureMd5(featureMd5);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexImageMd5(String imageMd5)
@@ -756,7 +796,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     /**
      * Retrieves a list of PersonBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_FEATURE_MD5},{@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of PersonBean
      */
@@ -773,7 +813,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_FEATURE_MD5},{@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */

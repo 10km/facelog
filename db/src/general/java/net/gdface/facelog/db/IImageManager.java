@@ -58,7 +58,17 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //3.1 GET IMPORTED
     public FaceBean[] getFlFaceBeansByImageMd5(ImageBean bean);
-
+    
+    /**
+     * Retrieves the {@link FaceBean} object from the fl_face.image_md5 field.<BR>
+     * FK_NAME : fl_face_ibfk_1 
+     * @param md5 String - PK# 1
+     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FaceBean[] getFlFaceBeansByImageMd5(String imageMd5);
+    
     /**
      * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
@@ -68,6 +78,16 @@ public interface IImageManager extends TableManager<ImageBean>
     //3.2 GET IMPORTED
     public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(ImageBean bean);
 
+    /**
+     * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
+     * FK_NAME:fl_face_ibfk_1
+     * @param md5 String - PK# 1
+     * @return the associated {@link FaceBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(String imageMd5);
+    
     /**
      * set  the {@link FaceBean} object array associate to ImageBean by the fl_face.image_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
@@ -98,7 +118,17 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //3.1 GET IMPORTED
     public PersonBean[] getFlPersonBeansByImageMd5(ImageBean bean);
-
+    
+    /**
+     * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
+     * FK_NAME : fl_person_ibfk_1 
+     * @param md5 String - PK# 1
+     * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public PersonBean[] getFlPersonBeansByImageMd5(String imageMd5);
+    
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_1
@@ -108,6 +138,16 @@ public interface IImageManager extends TableManager<ImageBean>
     //3.2 GET IMPORTED
     public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(ImageBean bean);
 
+    /**
+     * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
+     * FK_NAME:fl_person_ibfk_1
+     * @param md5 String - PK# 1
+     * @return the associated {@link PersonBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(String imageMd5);
+    
     /**
      * set  the {@link PersonBean} object array associate to ImageBean by the fl_person.image_md5 field.<BR>
      * FK_NAME : fl_person_ibfk_1 
@@ -185,7 +225,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the {@link ImageBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public DeviceBean getReferencedByDeviceId(ImageBean bean);
 
     /**
@@ -204,7 +244,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the {@link ImageBean}
      * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public StoreBean getReferencedByMd5(ImageBean bean);
 
     /**
@@ -223,7 +263,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the {@link ImageBean}
      * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public StoreBean getReferencedByThumbMd5(ImageBean bean);
 
     /**

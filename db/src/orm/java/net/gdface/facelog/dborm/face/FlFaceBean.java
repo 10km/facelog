@@ -9,8 +9,8 @@ package net.gdface.facelog.dborm.face;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
+import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.image.FlImageBean;
-import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -1288,7 +1288,7 @@ public class FlFaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.feature_md5</li>
-     * <li> foreign key: fl_store.md5</li>
+     * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -1409,6 +1409,19 @@ public class FlFaceBean
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
+     * The referenced {@link FlFeatureBean} by {@link #featureMd5} . <br>
+     * FOREIGN KEY (feature_md5) REFERENCES fl_feature(md5)
+     */
+    private FlFeatureBean referencedByFeatureMd5;
+    /** Getter method for {@link #referencedByFeatureMd5}. */
+    public FlFeatureBean getReferencedByFeatureMd5() {
+        return this.referencedByFeatureMd5;
+    }
+    /** Setter method for {@link #referencedByFeatureMd5}. */
+    public void setReferencedByFeatureMd5(FlFeatureBean reference) {
+        this.referencedByFeatureMd5 = reference;
+    }
+    /** 
      * The referenced {@link FlImageBean} by {@link #imageMd5} . <br>
      * FOREIGN KEY (image_md5) REFERENCES fl_image(md5)
      */
@@ -1420,19 +1433,6 @@ public class FlFaceBean
     /** Setter method for {@link #referencedByImageMd5}. */
     public void setReferencedByImageMd5(FlImageBean reference) {
         this.referencedByImageMd5 = reference;
-    }
-    /** 
-     * The referenced {@link FlStoreBean} by {@link #featureMd5} . <br>
-     * FOREIGN KEY (feature_md5) REFERENCES fl_store(md5)
-     */
-    private FlStoreBean referencedByFeatureMd5;
-    /** Getter method for {@link #referencedByFeatureMd5}. */
-    public FlStoreBean getReferencedByFeatureMd5() {
-        return this.referencedByFeatureMd5;
-    }
-    /** Setter method for {@link #referencedByFeatureMd5}. */
-    public void setReferencedByFeatureMd5(FlStoreBean reference) {
-        this.referencedByFeatureMd5 = reference;
     }
 
     /**

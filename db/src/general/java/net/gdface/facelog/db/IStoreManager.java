@@ -51,46 +51,6 @@ public interface IStoreManager extends TableManager<StoreBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
-     * Retrieves the {@link FaceBean} object from the fl_face.feature_md5 field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
-    public FaceBean[] getFlFaceBeansByFeatureMd5(StoreBean bean);
-
-    /**
-     * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
-    public java.util.List<FaceBean> getFlFaceBeansByFeatureMd5AsList(StoreBean bean);
-
-    /**
-     * set  the {@link FaceBean} object array associate to StoreBean by the fl_face.feature_md5 field.<BR>
-     * FK_NAME : fl_face_ibfk_2 
-     * @param bean the referenced {@link StoreBean}
-     * @param importedBeans imported beans from fl_face
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, StoreBean)
-     */
-    //3.3 SET IMPORTED
-    public FaceBean[] setFlFaceBeansByFeatureMd5(StoreBean bean , FaceBean[] importedBeans);
-
-    /**
-     * set  the {@link FaceBean} object java.util.Collection associate to StoreBean by the fl_face.feature_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the referenced {@link StoreBean} 
-     * @param importedBeans imported beans from fl_face 
-     * @return importedBeans always
-     * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, StoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByFeatureMd5(StoreBean bean , C importedBeans);
-
-    /**
      * Retrieves the {@link ImageBean} object from the fl_image.md5 field.<BR>
      * FK_NAME : fl_image_ibfk_1 
      * @param bean the {@link StoreBean}
@@ -98,7 +58,17 @@ public interface IStoreManager extends TableManager<StoreBean>
      */
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByMd5(StoreBean bean);
-
+    
+    /**
+     * Retrieves the {@link ImageBean} object from the fl_image.md5 field.<BR>
+     * FK_NAME : fl_image_ibfk_1 
+     * @param md5 String - PK# 1
+     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public ImageBean[] getFlImageBeansByMd5(String storeMd5);
+    
     /**
      * Retrieves the {@link ImageBean} object from fl_image.md5 field.<BR>
      * FK_NAME:fl_image_ibfk_1
@@ -108,6 +78,16 @@ public interface IStoreManager extends TableManager<StoreBean>
     //3.2 GET IMPORTED
     public java.util.List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean);
 
+    /**
+     * Retrieves the {@link ImageBean} object from fl_image.md5 field.<BR>
+     * FK_NAME:fl_image_ibfk_1
+     * @param md5 String - PK# 1
+     * @return the associated {@link ImageBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<ImageBean> getFlImageBeansByMd5AsList(String storeMd5);
+    
     /**
      * set  the {@link ImageBean} object array associate to StoreBean by the fl_image.md5 field.<BR>
      * FK_NAME : fl_image_ibfk_1 
@@ -138,7 +118,17 @@ public interface IStoreManager extends TableManager<StoreBean>
      */
     //3.1 GET IMPORTED
     public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean);
-
+    
+    /**
+     * Retrieves the {@link ImageBean} object from the fl_image.thumb_md5 field.<BR>
+     * FK_NAME : fl_image_ibfk_2 
+     * @param md5 String - PK# 1
+     * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public ImageBean[] getFlImageBeansByThumbMd5(String storeMd5);
+    
     /**
      * Retrieves the {@link ImageBean} object from fl_image.thumb_md5 field.<BR>
      * FK_NAME:fl_image_ibfk_2
@@ -148,6 +138,16 @@ public interface IStoreManager extends TableManager<StoreBean>
     //3.2 GET IMPORTED
     public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean);
 
+    /**
+     * Retrieves the {@link ImageBean} object from fl_image.thumb_md5 field.<BR>
+     * FK_NAME:fl_image_ibfk_2
+     * @param md5 String - PK# 1
+     * @return the associated {@link ImageBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(String storeMd5);
+    
     /**
      * set  the {@link ImageBean} object array associate to StoreBean by the fl_image.thumb_md5 field.<BR>
      * FK_NAME : fl_image_ibfk_2 
@@ -171,171 +171,43 @@ public interface IStoreManager extends TableManager<StoreBean>
     public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans);
 
     /**
-     * Retrieves the {@link LogBean} object from the fl_log.verify_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
-    public LogBean[] getFlLogBeansByVerifyFeature(StoreBean bean);
-
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByVerifyFeatureAsList(StoreBean bean);
-
-    /**
-     * set  the {@link LogBean} object array associate to StoreBean by the fl_log.verify_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_3 
-     * @param bean the referenced {@link StoreBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, StoreBean)
-     */
-    //3.3 SET IMPORTED
-    public LogBean[] setFlLogBeansByVerifyFeature(StoreBean bean , LogBean[] importedBeans);
-
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to StoreBean by the fl_log.verify_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the referenced {@link StoreBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, StoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByVerifyFeature(StoreBean bean , C importedBeans);
-
-    /**
-     * Retrieves the {@link LogBean} object from the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
-    public LogBean[] getFlLogBeansByCompareFeature(StoreBean bean);
-
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByCompareFeatureAsList(StoreBean bean);
-
-    /**
-     * set  the {@link LogBean} object array associate to StoreBean by the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the referenced {@link StoreBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFeature(LogBean, StoreBean)
-     */
-    //3.3 SET IMPORTED
-    public LogBean[] setFlLogBeansByCompareFeature(StoreBean bean , LogBean[] importedBeans);
-
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to StoreBean by the fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the referenced {@link StoreBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFeature(LogBean, StoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByCompareFeature(StoreBean bean , C importedBeans);
-
-    /**
-     * Retrieves the {@link PersonBean} object from the fl_person.feature_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_2 
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
-    public PersonBean[] getFlPersonBeansByFeatureMd5(StoreBean bean);
-
-    /**
-     * Retrieves the {@link PersonBean} object from fl_person.feature_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_2
-     * @param bean the {@link StoreBean}
-     * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
-    public java.util.List<PersonBean> getFlPersonBeansByFeatureMd5AsList(StoreBean bean);
-
-    /**
-     * set  the {@link PersonBean} object array associate to StoreBean by the fl_person.feature_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_2 
-     * @param bean the referenced {@link StoreBean}
-     * @param importedBeans imported beans from fl_person
-     * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByFeatureMd5(PersonBean, StoreBean)
-     */
-    //3.3 SET IMPORTED
-    public PersonBean[] setFlPersonBeansByFeatureMd5(StoreBean bean , PersonBean[] importedBeans);
-
-    /**
-     * set  the {@link PersonBean} object java.util.Collection associate to StoreBean by the fl_person.feature_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_2
-     * @param bean the referenced {@link StoreBean} 
-     * @param importedBeans imported beans from fl_person 
-     * @return importedBeans always
-     * @see {@link PersonManager#setReferencedByFeatureMd5(PersonBean, StoreBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<PersonBean>> C setFlPersonBeansByFeatureMd5(StoreBean bean , C importedBeans);
-
-    /**
      * Save the StoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link StoreBean} bean to be saved
-         * @param impFlFacebyFeatureMd5 the {@link FaceBean} bean refer to {@link StoreBean} 
-     * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
+         * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
      * @param impFlImagebyThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @param impFlLogbyVerifyFeature the {@link LogBean} bean refer to {@link StoreBean} 
-     * @param impFlLogbyCompareFeature the {@link LogBean} bean refer to {@link StoreBean} 
-     * @param impFlPersonbyFeatureMd5 the {@link PersonBean} bean refer to {@link StoreBean} 
      * @return the inserted or updated {@link StoreBean} bean
      */
     //3.5 SYNC SAVE 
     public StoreBean save(StoreBean bean
         
-        , FaceBean[] impFlFacebyFeatureMd5 , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 , LogBean[] impFlLogbyVerifyFeature , LogBean[] impFlLogbyCompareFeature , PersonBean[] impFlPersonbyFeatureMd5 );
+        , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 );
     /**
      * Transaction version for sync save
-     * @see {@link #save(StoreBean , FaceBean[] , ImageBean[] , ImageBean[] , LogBean[] , LogBean[] , PersonBean[] )}
+     * @see {@link #save(StoreBean , ImageBean[] , ImageBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final FaceBean[] impFlFacebyFeatureMd5 ,final ImageBean[] impFlImagebyMd5 ,final ImageBean[] impFlImagebyThumbMd5 ,final LogBean[] impFlLogbyVerifyFeature ,final LogBean[] impFlLogbyCompareFeature ,final PersonBean[] impFlPersonbyFeatureMd5 );
+        ,final ImageBean[] impFlImagebyMd5 ,final ImageBean[] impFlImagebyThumbMd5 );
     /**
      * Save the StoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link StoreBean} bean to be saved
-         * @param impFlFacebyFeatureMd5 the {@link FaceBean} bean refer to {@link StoreBean} 
-     * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
+         * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
      * @param impFlImagebyThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @param impFlLogbyVerifyFeature the {@link LogBean} bean refer to {@link StoreBean} 
-     * @param impFlLogbyCompareFeature the {@link LogBean} bean refer to {@link StoreBean} 
-     * @param impFlPersonbyFeatureMd5 the {@link PersonBean} bean refer to {@link StoreBean} 
      * @return the inserted or updated {@link StoreBean} bean
      */
     //3.7 SYNC SAVE 
     public StoreBean save(StoreBean bean
         
-        , java.util.Collection<FaceBean> impFlFacebyFeatureMd5 , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 , java.util.Collection<LogBean> impFlLogbyVerifyFeature , java.util.Collection<LogBean> impFlLogbyCompareFeature , java.util.Collection<PersonBean> impFlPersonbyFeatureMd5 );
+        , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 );
     /**
      * Transaction version for sync save
-     * @see {@link #save(StoreBean , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(StoreBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final  java.util.Collection<FaceBean> impFlFacebyFeatureMd5 ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 ,final  java.util.Collection<LogBean> impFlLogbyVerifyFeature ,final  java.util.Collection<LogBean> impFlLogbyCompareFeature ,final  java.util.Collection<PersonBean> impFlPersonbyFeatureMd5 );
+        ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 );
   }

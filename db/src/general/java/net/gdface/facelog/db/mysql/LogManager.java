@@ -16,8 +16,8 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ILogManager;
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.PersonBean;
-import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.WrapDAOException;
 
@@ -33,7 +33,7 @@ import net.gdface.facelog.dborm.log.FlLogBean;
 public class LogManager extends TableManager.Adapter<LogBean> implements ILogManager
 {
     private FlLogManager nativeManager = FlLogManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
     private IBeanConverter<LogBean,FlLogBean> beanConverter = dbConverter.getLogBeanConverter();
     private static LogManager singleton = new LogManager();
 
@@ -77,7 +77,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         return LogBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -171,12 +171,25 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //3.5 SYNC SAVE override ILogManager
     @Override  
     public LogBean save(LogBean bean
-        , DeviceBean refFlDevicebyDeviceId , PersonBean refFlPersonbyPersonId , StoreBean refFlStorebyVerifyFeature , StoreBean refFlStorebyCompareFeature 
+        , DeviceBean refFlDevicebyDeviceId , FeatureBean refFlFeaturebyVerifyFeature , FeatureBean refFlFeaturebyCompareFeature , PersonBean refFlPersonbyPersonId 
         )
     {
         try{
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId) , this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyVerifyFeature) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyCompareFeature)                 ));
+            FlLogBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.device.FlDeviceBean native_refFlDevicebyDeviceId = this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId);
+net.gdface.facelog.dborm.face.FlFeatureBean native_refFlFeaturebyVerifyFeature = this.dbConverter.getFeatureBeanConverter().toRight(refFlFeaturebyVerifyFeature);
+net.gdface.facelog.dborm.face.FlFeatureBean native_refFlFeaturebyCompareFeature = this.dbConverter.getFeatureBeanConverter().toRight(refFlFeaturebyCompareFeature);
+net.gdface.facelog.dborm.person.FlPersonBean native_refFlPersonbyPersonId = this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId);
+                        nativeManager.save(nativeBean
+                , native_refFlDevicebyDeviceId , native_refFlFeaturebyVerifyFeature , native_refFlFeaturebyCompareFeature , native_refFlPersonbyPersonId 
+                );
+            if(null != bean)
+                this.beanConverter.fromRight(bean,nativeBean);
+            if(null != refFlDevicebyDeviceId) this.dbConverter.getDeviceBeanConverter().fromRight(refFlDevicebyDeviceId,native_refFlDevicebyDeviceId);
+if(null != refFlFeaturebyVerifyFeature) this.dbConverter.getFeatureBeanConverter().fromRight(refFlFeaturebyVerifyFeature,native_refFlFeaturebyVerifyFeature);
+if(null != refFlFeaturebyCompareFeature) this.dbConverter.getFeatureBeanConverter().fromRight(refFlFeaturebyCompareFeature,native_refFlFeaturebyCompareFeature);
+if(null != refFlPersonbyPersonId) this.dbConverter.getPersonBeanConverter().fromRight(refFlPersonbyPersonId,native_refFlPersonbyPersonId);
+                        return bean;
         }
         catch(DAOException e)
         {
@@ -187,13 +200,13 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //3.6 SYNC SAVE AS TRANSACTION override ILogManager
     @Override 
     public LogBean saveAsTransaction(final LogBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final PersonBean refFlPersonbyPersonId ,final StoreBean refFlStorebyVerifyFeature ,final StoreBean refFlStorebyCompareFeature 
+        ,final DeviceBean refFlDevicebyDeviceId ,final FeatureBean refFlFeaturebyVerifyFeature ,final FeatureBean refFlFeaturebyCompareFeature ,final PersonBean refFlPersonbyPersonId 
         )
     {
         return this.runAsTransaction(new Callable<LogBean>(){
             @Override
             public LogBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlPersonbyPersonId , refFlStorebyVerifyFeature , refFlStorebyCompareFeature );
+                return save(bean , refFlDevicebyDeviceId , refFlFeaturebyVerifyFeature , refFlFeaturebyCompareFeature , refFlPersonbyPersonId );
             }});
     }
      /**
@@ -201,7 +214,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
      *
      * @param bean the {@link LogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(LogBean , DeviceBean , PersonBean , StoreBean , StoreBean )}
+     *      see also {@link #save(LogBean , DeviceBean , FeatureBean , FeatureBean , PersonBean )}
      * @return the inserted or updated {@link LogBean} bean
      */
     //3.9 SYNC SAVE 
@@ -213,16 +226,16 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:PersonBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:StoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:StoreBean");
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(PersonBean)args[1],(args.length < 3 || null == args[2])?null:(StoreBean)args[2],(args.length < 4 || null == args[3])?null:(StoreBean)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FeatureBean)args[1],(args.length < 3 || null == args[2])?null:(FeatureBean)args[2],(args.length < 4 || null == args[3])?null:(PersonBean)args[3]);
     } 
 
     /**
@@ -230,7 +243,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
      *
      * @param bean the {@link LogBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(LogBean , DeviceBean , PersonBean , StoreBean , StoreBean )}
+     *      see also {@link #save(LogBean , DeviceBean , FeatureBean , FeatureBean , PersonBean )}
      * @return the inserted or updated {@link LogBean} bean
      */
     //3.10 SYNC SAVE 
@@ -245,16 +258,16 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof PersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:PersonBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:StoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FeatureBean)){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FeatureBean");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:StoreBean");
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonBean)){
+            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:PersonBean");
         }
-        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(PersonBean)args[1],null == args[2]?null:(StoreBean)args[2],null == args[3]?null:(StoreBean)args[3]);
+        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(FeatureBean)args[1],null == args[2]?null:(FeatureBean)args[2],null == args[3]?null:(PersonBean)args[3]);
     }
 
      //////////////////////////////////////
@@ -266,13 +279,13 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FeatureBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link FeatureBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link StoreBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link LogBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_PERSON_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE}
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
@@ -281,12 +294,12 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
-        case FL_LOG_FK_PERSON_ID:
-            return  (T)this.getReferencedByPersonId(bean);
         case FL_LOG_FK_VERIFY_FEATURE:
             return  (T)this.getReferencedByVerifyFeature(bean);
         case FL_LOG_FK_COMPARE_FEATURE:
             return  (T)this.getReferencedByCompareFeature(bean);
+        case FL_LOG_FK_PERSON_ID:
+            return  (T)this.getReferencedByPersonId(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -305,12 +318,12 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
+        case FL_LOG_FK_VERIFY_FEATURE:
+            return  (T)this.setReferencedByVerifyFeature(bean, (FeatureBean)beanToSet);
+        case FL_LOG_FK_COMPARE_FEATURE:
+            return  (T)this.setReferencedByCompareFeature(bean, (FeatureBean)beanToSet);
         case FL_LOG_FK_PERSON_ID:
             return  (T)this.setReferencedByPersonId(bean, (PersonBean)beanToSet);
-        case FL_LOG_FK_VERIFY_FEATURE:
-            return  (T)this.setReferencedByVerifyFeature(bean, (StoreBean)beanToSet);
-        case FL_LOG_FK_COMPARE_FEATURE:
-            return  (T)this.setReferencedByCompareFeature(bean, (StoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -320,7 +333,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //////////////////////////////////////
 
 
-    //3.2 GET REFERENCED VALUE override ILogManager
+    //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
     public DeviceBean getReferencedByDeviceId(LogBean bean)
     {
@@ -339,7 +352,14 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet)
     {
         try{
-            return this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByDeviceId(this.beanConverter.toRight(bean),this.dbConverter.getDeviceBeanConverter().toRight(beanToSet)));
+            FlLogBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.device.FlDeviceBean foreignNativeBean = this.dbConverter.getDeviceBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByDeviceId(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {
@@ -347,7 +367,75 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         }
     }
 
-    //3.2 GET REFERENCED VALUE override ILogManager
+    //5.1 GET REFERENCED VALUE override ILogManager
+    @Override 
+    public FeatureBean getReferencedByVerifyFeature(LogBean bean)
+    {
+        try{
+            return this.dbConverter.getFeatureBeanConverter().fromRight(this.nativeManager.getReferencedByVerifyFeature(this.beanConverter.toRight(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+        
+    }
+
+    //5.2 SET REFERENCED override ILogManager
+    @Override 
+    public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet)
+    {
+        try{
+            FlLogBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.face.FlFeatureBean foreignNativeBean = this.dbConverter.getFeatureBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByVerifyFeature(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getFeatureBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+
+    //5.1 GET REFERENCED VALUE override ILogManager
+    @Override 
+    public FeatureBean getReferencedByCompareFeature(LogBean bean)
+    {
+        try{
+            return this.dbConverter.getFeatureBeanConverter().fromRight(this.nativeManager.getReferencedByCompareFeature(this.beanConverter.toRight(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+        
+    }
+
+    //5.2 SET REFERENCED override ILogManager
+    @Override 
+    public FeatureBean setReferencedByCompareFeature(LogBean bean, FeatureBean beanToSet)
+    {
+        try{
+            FlLogBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.face.FlFeatureBean foreignNativeBean = this.dbConverter.getFeatureBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByCompareFeature(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getFeatureBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+
+    //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
     public PersonBean getReferencedByPersonId(LogBean bean)
     {
@@ -366,61 +454,14 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet)
     {
         try{
-            return this.dbConverter.getPersonBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByPersonId(this.beanConverter.toRight(bean),this.dbConverter.getPersonBeanConverter().toRight(beanToSet)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    //3.2 GET REFERENCED VALUE override ILogManager
-    @Override 
-    public StoreBean getReferencedByVerifyFeature(LogBean bean)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(this.nativeManager.getReferencedByVerifyFeature(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
-    }
-
-    //5.2 SET REFERENCED override ILogManager
-    @Override 
-    public StoreBean setReferencedByVerifyFeature(LogBean bean, StoreBean beanToSet)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByVerifyFeature(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    //3.2 GET REFERENCED VALUE override ILogManager
-    @Override 
-    public StoreBean getReferencedByCompareFeature(LogBean bean)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(this.nativeManager.getReferencedByCompareFeature(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
-    }
-
-    //5.2 SET REFERENCED override ILogManager
-    @Override 
-    public StoreBean setReferencedByCompareFeature(LogBean bean, StoreBean beanToSet)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,this.nativeManager.setReferencedByCompareFeature(this.beanConverter.toRight(bean),this.dbConverter.getStoreBeanConverter().toRight(beanToSet)));
+            FlLogBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.person.FlPersonBean foreignNativeBean = this.dbConverter.getPersonBeanConverter().toRight(beanToSet);
+            this.nativeManager.setReferencedByPersonId(nativeBean,foreignNativeBean);
+            if(null != bean)
+                this.beanConverter.fromRight(bean, nativeBean);
+            if(null != beanToSet)
+                this.dbConverter.getPersonBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            return beanToSet;
         }
         catch(DAOException e)
         {

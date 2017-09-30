@@ -13,6 +13,7 @@ import net.gdface.facelog.db.IDbConverter;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
@@ -20,11 +21,12 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.LogLightBean;
 /**
  * generic type converter of {@link IDbConverter} implementation<br>
- * usage:<pre>new DbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7&gt;(){};</pre>
+ * usage:<pre>new DbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7,Model8&gt;(){};</pre>
  * @author guyadong
  *
  * @param <N_DEVICE> native type for fl_device
  * @param <N_FACE> native type for fl_face
+ * @param <N_FEATURE> native type for fl_feature
  * @param <N_IMAGE> native type for fl_image
  * @param <N_LOG> native type for fl_log
  * @param <N_PERSON> native type for fl_person
@@ -32,10 +34,11 @@ import net.gdface.facelog.db.LogLightBean;
  * @param <N_LOGLIGHT> native type for fl_log_light
  *
  */
-public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_LOGLIGHT> 
-    implements IDbConverter<N_DEVICE,N_FACE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_LOGLIGHT> {
+public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_FEATURE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_LOGLIGHT> 
+    implements IDbConverter<N_DEVICE,N_FACE,N_FEATURE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_LOGLIGHT> {
     private final IBeanConverter<DeviceBean,N_DEVICE> converterDeviceBean;
     private final IBeanConverter<FaceBean,N_FACE> converterFaceBean;
+    private final IBeanConverter<FeatureBean,N_FEATURE> converterFeatureBean;
     private final IBeanConverter<ImageBean,N_IMAGE> converterImageBean;
     private final IBeanConverter<LogBean,N_LOG> converterLogBean;
     private final IBeanConverter<PersonBean,N_PERSON> converterPersonBean;
@@ -57,16 +60,18 @@ public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_IMAGE,N_LOG,N_PERSON,
             (Class<N_DEVICE>)getRawClass(typeArguments[0]));            
         this.converterFaceBean = new BeanConverterUtils.FaceBeanConverter<N_FACE>(FaceBean.class,
             (Class<N_FACE>)getRawClass(typeArguments[1]));            
+        this.converterFeatureBean = new BeanConverterUtils.FeatureBeanConverter<N_FEATURE>(FeatureBean.class,
+            (Class<N_FEATURE>)getRawClass(typeArguments[2]));            
         this.converterImageBean = new BeanConverterUtils.ImageBeanConverter<N_IMAGE>(ImageBean.class,
-            (Class<N_IMAGE>)getRawClass(typeArguments[2]));            
+            (Class<N_IMAGE>)getRawClass(typeArguments[3]));            
         this.converterLogBean = new BeanConverterUtils.LogBeanConverter<N_LOG>(LogBean.class,
-            (Class<N_LOG>)getRawClass(typeArguments[3]));            
+            (Class<N_LOG>)getRawClass(typeArguments[4]));            
         this.converterPersonBean = new BeanConverterUtils.PersonBeanConverter<N_PERSON>(PersonBean.class,
-            (Class<N_PERSON>)getRawClass(typeArguments[4]));            
+            (Class<N_PERSON>)getRawClass(typeArguments[5]));            
         this.converterStoreBean = new BeanConverterUtils.StoreBeanConverter<N_STORE>(StoreBean.class,
-            (Class<N_STORE>)getRawClass(typeArguments[5]));            
+            (Class<N_STORE>)getRawClass(typeArguments[6]));            
         this.converterLogLightBean = new BeanConverterUtils.LogLightBeanConverter<N_LOGLIGHT>(LogLightBean.class,
-            (Class<N_LOGLIGHT>)getRawClass(typeArguments[6]));            
+            (Class<N_LOGLIGHT>)getRawClass(typeArguments[7]));            
     }
     @Override
     public <L,R>IBeanConverter<L,R>getBeanConverter(Class<L> lClass,Class<R> rClass){
@@ -85,6 +90,10 @@ public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_IMAGE,N_LOG,N_PERSON,
     @Override
     public IBeanConverter<FaceBean, N_FACE> getFaceBeanConverter() {
         return converterFaceBean;
+    }
+    @Override
+    public IBeanConverter<FeatureBean, N_FEATURE> getFeatureBeanConverter() {
+        return converterFeatureBean;
     }
     @Override
     public IBeanConverter<ImageBean, N_IMAGE> getImageBeanConverter() {

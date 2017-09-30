@@ -18,7 +18,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * FlImageBean is a mapping of fl_image Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 图像存储表,用于存储系统中所有用到的图像数据 </li>
+ *    <li>comments: 图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应) </li>
  * </ul>
  * @author guyadong
 */

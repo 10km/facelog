@@ -25,12 +25,12 @@ import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
+import net.gdface.facelog.dborm.face.FlFeatureBean;
+import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person table.
@@ -267,7 +267,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlLogBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFeatureBean.class,FlLogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlPersonBean,int)
@@ -282,10 +282,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FlFeatureBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
@@ -293,6 +294,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
+        case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
+            return (List<T>)this.getFlFeatureBeansByPersonIdAsList(bean);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (List<T>)this.getFlLogBeansByPersonIdAsList(bean);
         }
@@ -312,6 +315,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
+        case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
+            return (T[])setFlFeatureBeansByPersonId(bean,(FlFeatureBean[])importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (T[])setFlLogBeansByPersonId(bean,(FlLogBean[])importedBeans);
         }
@@ -331,6 +336,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
+        case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
+            return (C)setFlFeatureBeansByPersonId(bean,(java.util.Collection<FlFeatureBean>)importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (C)setFlLogBeansByPersonId(bean,(java.util.Collection<FlLogBean>)importedBeans);
         }
@@ -340,6 +347,101 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    /**
+     * Retrieves the {@link FlFeatureBean} object from the fl_feature.person_id field.<BR>
+     * FK_NAME : fl_feature_ibfk_1 
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlFeatureBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1 GET IMPORTED
+    public FlFeatureBean[] getFlFeatureBeansByPersonId(FlPersonBean bean) throws DAOException
+    {
+        return getFlFeatureBeansByPersonIdAsList(bean).toArray(new FlFeatureBean[0]);
+    }
+    /**
+     * Retrieves the {@link FlFeatureBean} object from the fl_feature.person_id field.<BR>
+     * FK_NAME : fl_feature_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlFeatureBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlFeatureBean[] getFlFeatureBeansByPersonId(Integer personId) throws DAOException
+    {
+        FlPersonBean bean = createBean();
+        bean.setId(personId);
+        return getFlFeatureBeansByPersonId(bean);
+    }
+    /**
+     * Retrieves the {@link FlFeatureBean} object from fl_feature.person_id field.<BR>
+     * FK_NAME:fl_feature_ibfk_1
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlFeatureBean} beans 
+     * @throws DAOException
+     */
+    //3.2 GET IMPORTED
+    public List<FlFeatureBean> getFlFeatureBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
+    {
+        if(null == bean)return new java.util.ArrayList<FlFeatureBean>();
+        FlFeatureBean other = FlFeatureManager.getInstance().createBean();
+        other.setPersonId(bean.getId());
+        return FlFeatureManager.getInstance().loadUsingTemplateAsList(other);
+    }
+    /**
+     * Retrieves the {@link FlFeatureBean} object from fl_feature.person_id field.<BR>
+     * FK_NAME:fl_feature_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlFeatureBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlFeatureBean> getFlFeatureBeansByPersonIdAsList(Integer personId) throws DAOException
+    {
+         FlPersonBean bean = createBean();
+        bean.setId(personId);
+        return getFlFeatureBeansByPersonIdAsList(bean);
+    }
+    /**
+     * set  the {@link FlFeatureBean} object array associate to FlPersonBean by the fl_feature.person_id field.<BR>
+     * FK_NAME : fl_feature_ibfk_1 
+     * @param bean the referenced {@link FlPersonBean}
+     * @param importedBeans imported beans from fl_feature
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
+     */
+    //3.3 SET IMPORTED
+    public FlFeatureBean[] setFlFeatureBeansByPersonId(FlPersonBean bean , FlFeatureBean[] importedBeans) throws DAOException
+    {
+        if(null != importedBeans){
+            for( FlFeatureBean importBean : importedBeans ){
+                FlFeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
+     * set  the {@link FlFeatureBean} object collection associate to FlPersonBean by the fl_feature.person_id field.<BR>
+     * FK_NAME:fl_feature_ibfk_1
+     * @param bean the referenced {@link FlPersonBean} 
+     * @param importedBeans imported beans from fl_feature 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlFeatureManager#setReferencedByPersonId(FlFeatureBean, FlPersonBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<FlFeatureBean>> C setFlFeatureBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
+    {
+        if(null != importedBeans){
+            for( FlFeatureBean importBean : importedBeans ){
+                FlFeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -352,7 +454,20 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         return getFlLogBeansByPersonIdAsList(bean).toArray(new FlLogBean[0]);
     }
-
+    /**
+     * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
+     * FK_NAME : fl_log_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlLogBean[] getFlLogBeansByPersonId(Integer personId) throws DAOException
+    {
+        FlPersonBean bean = createBean();
+        bean.setId(personId);
+        return getFlLogBeansByPersonId(bean);
+    }
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -368,7 +483,20 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         other.setPersonId(bean.getId());
         return FlLogManager.getInstance().loadUsingTemplateAsList(other);
     }
-
+    /**
+     * Retrieves the {@link FlLogBean} object from fl_log.person_id field.<BR>
+     * FK_NAME:fl_log_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlLogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlLogBean> getFlLogBeansByPersonIdAsList(Integer personId) throws DAOException
+    {
+         FlPersonBean bean = createBean();
+        bean.setId(personId);
+        return getFlLogBeansByPersonIdAsList(bean);
+    }
     /**
      * set  the {@link FlLogBean} object array associate to FlPersonBean by the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -414,20 +542,22 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param refFlImagebyImageMd5 the {@link FlImageBean} bean referenced by {@link FlPersonBean} 
-     * @param refFlStorebyFeatureMd5 the {@link FlStoreBean} bean referenced by {@link FlPersonBean} 
+     * @param impFlFeaturebyPersonId the {@link FlFeatureBean} beans refer to {@link FlPersonBean} 
      * @param impFlLogbyPersonId the {@link FlLogBean} beans refer to {@link FlPersonBean} 
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
-        , FlImageBean refFlImagebyImageMd5 , FlStoreBean refFlStorebyFeatureMd5 
-        , FlLogBean[] impFlLogbyPersonId ) throws DAOException
+        , FlImageBean refFlImagebyImageMd5 
+        , FlFeatureBean[] impFlFeaturebyPersonId , FlLogBean[] impFlLogbyPersonId ) throws DAOException
     {
         if(null == bean) return null;
-        this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
-        this.setReferencedByFeatureMd5(bean,refFlStorebyFeatureMd5);
+        if(null != refFlImagebyImageMd5)
+            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
         bean = this.save( bean );
+        this.setFlFeatureBeansByPersonId(bean,impFlFeaturebyPersonId);
+        FlFeatureManager.getInstance().save( impFlFeaturebyPersonId );
         this.setFlLogBeansByPersonId(bean,impFlLogbyPersonId);
         FlLogManager.getInstance().save( impFlLogbyPersonId );
         return bean;
@@ -435,17 +565,17 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , FlStoreBean , FlLogBean[] )}
+     * @see {@link #save(FlPersonBean , FlImageBean , FlFeatureBean[] , FlLogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
-        ,final FlImageBean refFlImagebyImageMd5 ,final FlStoreBean refFlStorebyFeatureMd5 
-        ,final FlLogBean[] impFlLogbyPersonId ) throws DAOException
+        ,final FlImageBean refFlImagebyImageMd5 
+        ,final FlFeatureBean[] impFlFeaturebyPersonId ,final FlLogBean[] impFlLogbyPersonId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlPersonBean>(){
             @Override
             public FlPersonBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 , impFlLogbyPersonId );
+                return save(bean , refFlImagebyImageMd5 , impFlFeaturebyPersonId , impFlLogbyPersonId );
             }});
     }
     /**
@@ -453,20 +583,21 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param refFlImagebyImageMd5 the {@link FlImageBean} bean referenced by {@link FlPersonBean} 
-     * @param refFlStorebyFeatureMd5 the {@link FlStoreBean} bean referenced by {@link FlPersonBean} 
+     * @param impFlFeaturebyPersonId the {@link FlFeatureBean} bean refer to {@link FlPersonBean} 
      * @param impFlLogbyPersonId the {@link FlLogBean} bean refer to {@link FlPersonBean} 
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
     //3.7 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
-        , FlImageBean refFlImagebyImageMd5 , FlStoreBean refFlStorebyFeatureMd5 
-        , java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
+        , FlImageBean refFlImagebyImageMd5 
+        , java.util.Collection<FlFeatureBean> impFlFeaturebyPersonId , java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
     {
         if(null == bean) return null;
         this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
-        this.setReferencedByFeatureMd5(bean,refFlStorebyFeatureMd5);
         bean = this.save( bean );
+        this.setFlFeatureBeansByPersonId(bean,impFlFeaturebyPersonId);
+        FlFeatureManager.getInstance().save( impFlFeaturebyPersonId );
         this.setFlLogBeansByPersonId(bean,impFlLogbyPersonId);
         FlLogManager.getInstance().save( impFlLogbyPersonId );
         return bean;
@@ -474,17 +605,17 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , FlStoreBean , java.util.Collection )}
+     * @see {@link #save(FlPersonBean , FlImageBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
-        ,final FlImageBean refFlImagebyImageMd5 ,final FlStoreBean refFlStorebyFeatureMd5 
-        ,final  java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
+        ,final FlImageBean refFlImagebyImageMd5 
+        ,final  java.util.Collection<FlFeatureBean> impFlFeaturebyPersonId ,final  java.util.Collection<FlLogBean> impFlLogbyPersonId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlPersonBean>(){
             @Override
             public FlPersonBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , refFlStorebyFeatureMd5 , impFlLogbyPersonId );
+                return save(bean , refFlImagebyImageMd5 , impFlFeaturebyPersonId , impFlLogbyPersonId );
             }});
     }
     /**
@@ -492,7 +623,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlPersonBean , FlImageBean , FlStoreBean , FlLogBean[] )}
+     *      see also {@link #save(FlPersonBean , FlImageBean , FlFeatureBean[] , FlLogBean[] )}
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
@@ -505,13 +636,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlStoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFeatureBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlFeatureBean[]");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof FlLogBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlLogBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1],(args.length < 3 || null == args[2])?null:(FlLogBean[])args[2]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlFeatureBean[])args[1],(args.length < 3 || null == args[2])?null:(FlLogBean[])args[2]);
     } 
 
     /**
@@ -519,7 +650,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlPersonBean , FlImageBean , FlStoreBean , java.util.Collection )}
+     *      see also {@link #save(FlPersonBean , FlImageBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
@@ -533,13 +664,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlStoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlFeatureBean>");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlLogBean>");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlLogBean>)args[2]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlFeatureBean>)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlLogBean>)args[2]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -550,11 +681,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
-     *     <li> {@link Constant#FL_PERSON_FK_FEATURE_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_FEATURE_MD5}
+     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -564,8 +694,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.getReferencedByImageMd5(bean);
-        case FL_PERSON_FK_FEATURE_MD5:
-            return  (T)this.getReferencedByFeatureMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -586,8 +714,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);
-        case FL_PERSON_FK_FEATURE_MD5:
-            return  (T)this.setReferencedByFeatureMd5(bean, (FlStoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -604,13 +730,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public FlImageBean getReferencedByImageMd5(FlPersonBean bean) throws DAOException
     {
         if(null == bean)return null;
-        FlImageBean other = FlImageManager.getInstance().createBean();
-        other.setMd5(bean.getImageMd5()); 
-        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadUniqueUsingTemplate(other)); 
+        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
 
@@ -632,46 +756,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 bean.setImageMd5(null);
             }else{
                 bean.setImageMd5(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlStoreBean} object referenced by {@link FlPersonBean#getFeatureMd5}() field.<br>
-     * FK_NAME : fl_person_ibfk_2
-     * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.2 GET REFERENCED VALUE
-    public FlStoreBean getReferencedByFeatureMd5(FlPersonBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        FlStoreBean other = FlStoreManager.getInstance().createBean();
-        other.setMd5(bean.getFeatureMd5()); 
-        bean.setReferencedByFeatureMd5(FlStoreManager.getInstance().loadUniqueUsingTemplate(other)); 
-        return bean.getReferencedByFeatureMd5();
-    }
-
-    /**
-     * Associates the {@link FlPersonBean} object to the {@link FlStoreBean} object by {@link FlPersonBean#getFeatureMd5}() field.
-     *
-     * @param bean the {@link FlPersonBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlPersonBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlStoreBean setReferencedByFeatureMd5(FlPersonBean bean, FlStoreBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlStoreManager.getInstance().save(beanToSet);
-            bean.setReferencedByFeatureMd5(beanToSet);
-            if( null == beanToSet){
-                bean.setFeatureMd5(null);
-            }else{
-                bean.setFeatureMd5(beanToSet.getMd5());
             }
         }
         return beanToSet;
@@ -809,14 +893,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sql.append(",");
                 }
                 sql.append("image_md5");
-                _dirtyCount++;
-            }
-
-            if (bean.checkFeatureMd5Modified()) {
-                if (_dirtyCount>0) {
-                    sql.append(",");
-                }
-                sql.append("feature_md5");
                 _dirtyCount++;
             }
 
@@ -992,15 +1068,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 sql.append("image_md5=?");
             }
 
-            if (bean.checkFeatureMd5Modified()) {
-                if (useComma) {
-                    sql.append(", ");
-                } else {
-                    useComma=true;
-                }
-                sql.append("feature_md5=?");
-            }
-
             if (bean.checkExpiryDateModified()) {
                 if (useComma) {
                     sql.append(", ");
@@ -1163,35 +1230,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //_____________________________________________________________________
 
     /**
-     * Retrieves an unique FlPersonBean using the feature_md5 index.
-     *
-     * @param featureMd5 the feature_md5 column's value filter. must not be null
-     * @return a list of FlPersonBean
-     * @throws DAOException
-     */
-    public FlPersonBean loadByIndexFeatureMd5(String featureMd5) throws DAOException
-    {
-        FlPersonBean bean = this.createBean();
-        if( null == featureMd5)
-            throw new IllegalArgumentException("the key 'featureMd5'  must not be null");
-        bean.setFeatureMd5(featureMd5);
-        return loadUniqueUsingTemplate(bean);
-    }
-    /**
-     * Deletes rows using the feature_md5 index.
-     *
-     * @param featureMd5 the feature_md5 column's value filter.
-     * @return the number of deleted objects
-     * @throws DAOException
-     */
-    public int deleteByIndexFeatureMd5(String featureMd5) throws DAOException
-    {
-        FlPersonBean bean = this.createBean();
-        bean.setFeatureMd5(featureMd5);
-        return deleteUsingTemplate(bean);
-    }
-    
-    /**
      * Retrieves an unique FlPersonBean using the image_md5 index.
      *
      * @param imageMd5 the image_md5 column's value filter. must not be null
@@ -1331,7 +1369,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     /**
      * Retrieves a list of FlPersonBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_FEATURE_MD5},{@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of FlPersonBean
      * @throws DAOException
@@ -1339,18 +1377,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public List<FlPersonBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
-        case FL_PERSON_INDEX_FEATURE_MD5:{
-            if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
-            if(null != keys[0] && !(keys[0] instanceof String))
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            FlPersonBean bean= this.loadByIndexFeatureMd5((String)keys[0]);
-            return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
-        }
         case FL_PERSON_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             FlPersonBean bean= this.loadByIndexImageMd5((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
@@ -1358,7 +1388,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
-            if(null != keys[2] && !(keys[2] instanceof String))
+            if(null != keys[1] && !(keys[1] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             FlPersonBean bean= this.loadByIndexPapersNum((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
@@ -1366,14 +1396,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         case FL_PERSON_INDEX_EXPIRY_DATE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
-            if(null != keys[3] && !(keys[3] instanceof java.util.Date))
+            if(null != keys[2] && !(keys[2] instanceof java.util.Date))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
             return this.loadByIndexExpiryDateAsList((java.util.Date)keys[0]);        
         }
         case FL_PERSON_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[4] && !(keys[4] instanceof Integer))
+            if(null != keys[3] && !(keys[3] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
@@ -1385,7 +1415,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_FEATURE_MD5},{@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1393,38 +1423,31 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
-        case FL_PERSON_INDEX_FEATURE_MD5:{
-            if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
-            if(null != keys[0] && !(keys[0] instanceof String))
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByIndexFeatureMd5((String)keys[0]);
-        }
         case FL_PERSON_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexImageMd5((String)keys[0]);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
-            if(null != keys[2] && !(keys[2] instanceof String))
+            if(null != keys[1] && !(keys[1] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexPapersNum((String)keys[0]);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
-            if(null != keys[3] && !(keys[3] instanceof java.util.Date))
+            if(null != keys[2] && !(keys[2] instanceof java.util.Date))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
             return this.deleteByIndexExpiryDate((java.util.Date)keys[0]);
         }
         case FL_PERSON_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[4] && !(keys[4] instanceof Integer))
+            if(null != keys[3] && !(keys[3] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexGroupId((Integer)keys[0]);
         }
@@ -1643,14 +1666,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("image_md5 ").append(sqlEqualsOperation).append("?");
                 }
             }
-            if (bean.checkFeatureMd5Modified()) {
-                _dirtyCount ++;
-                if (bean.getFeatureMd5() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature_md5 IS NULL");
-                } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature_md5 ").append(sqlEqualsOperation).append("?");
-                }
-            }
             if (bean.checkExpiryDateModified()) {
                 _dirtyCount ++;
                 if (bean.getExpiryDate() == null) {
@@ -1785,28 +1800,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                         throw new DAOException("Unknown search type " + searchType);
                 }
             }
-            if (bean.checkFeatureMd5Modified()) {
-                switch (searchType) {
-                    case SEARCH_EXACT:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "]");
-                        if (bean.getFeatureMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5()); }
-                        break;
-                    case SEARCH_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "%]");
-                        if ( bean.getFeatureMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
-                        break;
-                    case SEARCH_STARTING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "]");
-                        if ( bean.getFeatureMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5()); }
-                        break;
-                    case SEARCH_ENDING_LIKE:
-                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "%]");
-                        if (bean.getFeatureMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5() + "%"); }
-                        break;
-                    default:
-                        throw new DAOException("Unknown search type " + searchType);
-                }
-            }
             if (bean.checkExpiryDateModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExpiryDate() + "]");
                 if (bean.getExpiryDate() == null) { ps.setNull(++_dirtyCount, Types.DATE); } else { ps.setDate(++_dirtyCount, new java.sql.Date(bean.getExpiryDate().getTime())); }
@@ -1932,10 +1925,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             bean.setPapersType(Manager.getInteger(rs, 6));
             bean.setPapersNum(rs.getString(7));
             bean.setImageMd5(rs.getString(8));
-            bean.setFeatureMd5(rs.getString(9));
-            bean.setExpiryDate(rs.getDate(10));
-            bean.setCreateTime(rs.getTimestamp(11));
-            bean.setUpdateTime(rs.getTimestamp(12));
+            bean.setExpiryDate(rs.getDate(9));
+            bean.setCreateTime(rs.getTimestamp(10));
+            bean.setUpdateTime(rs.getTimestamp(11));
         }
         catch(SQLException e)
         {
@@ -1999,10 +1991,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                         ++pos;
                         bean.setImageMd5(rs.getString(pos));
                         break;
-                    case FL_PERSON_ID_FEATURE_MD5:
-                        ++pos;
-                        bean.setFeatureMd5(rs.getString(pos));
-                        break;
                     case FL_PERSON_ID_EXPIRY_DATE:
                         ++pos;
                         bean.setExpiryDate(rs.getDate(pos));
@@ -2051,7 +2039,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             bean.setPapersType(Manager.getInteger(rs, "papers_type"));
             bean.setPapersNum(rs.getString("papers_num"));
             bean.setImageMd5(rs.getString("image_md5"));
-            bean.setFeatureMd5(rs.getString("feature_md5"));
             bean.setExpiryDate(rs.getDate("expiry_date"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
             bean.setUpdateTime(rs.getTimestamp("update_time"));

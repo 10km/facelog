@@ -51,22 +51,22 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param bean the {@link LogBean} bean to be saved
      * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link LogBean} 
+     * @param refFlFeaturebyVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
+     * @param refFlFeaturebyCompareFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
      * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
-     * @param refFlStorebyVerifyFeature the {@link StoreBean} bean referenced by {@link LogBean} 
-     * @param refFlStorebyCompareFeature the {@link StoreBean} bean referenced by {@link LogBean} 
          * @return the inserted or updated {@link LogBean} bean
      */
     //3.5 SYNC SAVE 
     public LogBean save(LogBean bean
-        , DeviceBean refFlDevicebyDeviceId , PersonBean refFlPersonbyPersonId , StoreBean refFlStorebyVerifyFeature , StoreBean refFlStorebyCompareFeature 
+        , DeviceBean refFlDevicebyDeviceId , FeatureBean refFlFeaturebyVerifyFeature , FeatureBean refFlFeaturebyCompareFeature , PersonBean refFlPersonbyPersonId 
         );
     /**
      * Transaction version for sync save
-     * @see {@link #save(LogBean , DeviceBean , PersonBean , StoreBean , StoreBean )}
+     * @see {@link #save(LogBean , DeviceBean , FeatureBean , FeatureBean , PersonBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public LogBean saveAsTransaction(final LogBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final PersonBean refFlPersonbyPersonId ,final StoreBean refFlStorebyVerifyFeature ,final StoreBean refFlStorebyCompareFeature 
+        ,final DeviceBean refFlDevicebyDeviceId ,final FeatureBean refFlFeaturebyVerifyFeature ,final FeatureBean refFlFeaturebyCompareFeature ,final PersonBean refFlPersonbyPersonId 
         );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -77,7 +77,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public DeviceBean getReferencedByDeviceId(LogBean bean);
 
     /**
@@ -91,12 +91,50 @@ public interface ILogManager extends TableManager<LogBean>
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet);
     /**
+     * Retrieves the {@link FeatureBean} object referenced by {@link LogBean#getVerifyFeature}() field.<br>
+     * FK_NAME : fl_log_ibfk_3
+     * @param bean the {@link LogBean}
+     * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //5.1 GET REFERENCED VALUE
+    public FeatureBean getReferencedByVerifyFeature(LogBean bean);
+
+    /**
+     * Associates the {@link LogBean} object to the {@link FeatureBean} object by {@link LogBean#getVerifyFeature}() field.
+     *
+     * @param bean the {@link LogBean} object to use
+     * @param beanToSet the {@link FeatureBean} object to associate to the {@link LogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet);
+    /**
+     * Retrieves the {@link FeatureBean} object referenced by {@link LogBean#getCompareFeature}() field.<br>
+     * FK_NAME : fl_log_ibfk_4
+     * @param bean the {@link LogBean}
+     * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //5.1 GET REFERENCED VALUE
+    public FeatureBean getReferencedByCompareFeature(LogBean bean);
+
+    /**
+     * Associates the {@link LogBean} object to the {@link FeatureBean} object by {@link LogBean#getCompareFeature}() field.
+     *
+     * @param bean the {@link LogBean} object to use
+     * @param beanToSet the {@link FeatureBean} object to associate to the {@link LogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FeatureBean setReferencedByCompareFeature(LogBean bean, FeatureBean beanToSet);
+    /**
      * Retrieves the {@link PersonBean} object referenced by {@link LogBean#getPersonId}() field.<br>
      * FK_NAME : fl_log_ibfk_1
      * @param bean the {@link LogBean}
      * @return the associated {@link PersonBean} bean or {@code null} if {@code bean} is {@code null}
      */
-    //3.2 GET REFERENCED VALUE
+    //5.1 GET REFERENCED VALUE
     public PersonBean getReferencedByPersonId(LogBean bean);
 
     /**
@@ -109,44 +147,6 @@ public interface ILogManager extends TableManager<LogBean>
      */
     //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet);
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link LogBean#getVerifyFeature}() field.<br>
-     * FK_NAME : fl_log_ibfk_3
-     * @param bean the {@link LogBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
-    public StoreBean getReferencedByVerifyFeature(LogBean bean);
-
-    /**
-     * Associates the {@link LogBean} object to the {@link StoreBean} object by {@link LogBean#getVerifyFeature}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public StoreBean setReferencedByVerifyFeature(LogBean bean, StoreBean beanToSet);
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link LogBean#getCompareFeature}() field.<br>
-     * FK_NAME : fl_log_ibfk_4
-     * @param bean the {@link LogBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET REFERENCED VALUE
-    public StoreBean getReferencedByCompareFeature(LogBean bean);
-
-    /**
-     * Associates the {@link LogBean} object to the {@link StoreBean} object by {@link LogBean#getCompareFeature}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public StoreBean setReferencedByCompareFeature(LogBean bean, StoreBean beanToSet);
     //_____________________________________________________________________
     //
     // USING INDICES

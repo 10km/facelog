@@ -10,8 +10,8 @@ import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
+import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -319,7 +319,7 @@ public class FlLogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.verify_feature</li>
-     * <li> foreign key: fl_store.md5</li>
+     * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
@@ -376,7 +376,7 @@ public class FlLogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.compare_feature</li>
-     * <li> foreign key: fl_store.md5</li>
+     * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,数据库中相似度最高的人脸特征MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
@@ -642,6 +642,32 @@ public class FlLogBean
         this.referencedByDeviceId = reference;
     }
     /** 
+     * The referenced {@link FlFeatureBean} by {@link #verifyFeature} . <br>
+     * FOREIGN KEY (verify_feature) REFERENCES fl_feature(md5)
+     */
+    private FlFeatureBean referencedByVerifyFeature;
+    /** Getter method for {@link #referencedByVerifyFeature}. */
+    public FlFeatureBean getReferencedByVerifyFeature() {
+        return this.referencedByVerifyFeature;
+    }
+    /** Setter method for {@link #referencedByVerifyFeature}. */
+    public void setReferencedByVerifyFeature(FlFeatureBean reference) {
+        this.referencedByVerifyFeature = reference;
+    }
+    /** 
+     * The referenced {@link FlFeatureBean} by {@link #compareFeature} . <br>
+     * FOREIGN KEY (compare_feature) REFERENCES fl_feature(md5)
+     */
+    private FlFeatureBean referencedByCompareFeature;
+    /** Getter method for {@link #referencedByCompareFeature}. */
+    public FlFeatureBean getReferencedByCompareFeature() {
+        return this.referencedByCompareFeature;
+    }
+    /** Setter method for {@link #referencedByCompareFeature}. */
+    public void setReferencedByCompareFeature(FlFeatureBean reference) {
+        this.referencedByCompareFeature = reference;
+    }
+    /** 
      * The referenced {@link FlPersonBean} by {@link #personId} . <br>
      * FOREIGN KEY (person_id) REFERENCES fl_person(id)
      */
@@ -653,32 +679,6 @@ public class FlLogBean
     /** Setter method for {@link #referencedByPersonId}. */
     public void setReferencedByPersonId(FlPersonBean reference) {
         this.referencedByPersonId = reference;
-    }
-    /** 
-     * The referenced {@link FlStoreBean} by {@link #verifyFeature} . <br>
-     * FOREIGN KEY (verify_feature) REFERENCES fl_store(md5)
-     */
-    private FlStoreBean referencedByVerifyFeature;
-    /** Getter method for {@link #referencedByVerifyFeature}. */
-    public FlStoreBean getReferencedByVerifyFeature() {
-        return this.referencedByVerifyFeature;
-    }
-    /** Setter method for {@link #referencedByVerifyFeature}. */
-    public void setReferencedByVerifyFeature(FlStoreBean reference) {
-        this.referencedByVerifyFeature = reference;
-    }
-    /** 
-     * The referenced {@link FlStoreBean} by {@link #compareFeature} . <br>
-     * FOREIGN KEY (compare_feature) REFERENCES fl_store(md5)
-     */
-    private FlStoreBean referencedByCompareFeature;
-    /** Getter method for {@link #referencedByCompareFeature}. */
-    public FlStoreBean getReferencedByCompareFeature() {
-        return this.referencedByCompareFeature;
-    }
-    /** Setter method for {@link #referencedByCompareFeature}. */
-    public void setReferencedByCompareFeature(FlStoreBean reference) {
-        this.referencedByCompareFeature = reference;
     }
 
     /**

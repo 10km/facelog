@@ -24,10 +24,12 @@ public interface Constant {
     //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
+    /** foreign key fl_face(feature_md5) -> fl_feature */
+    public static final int FL_FACE_FK_FEATURE_MD5 = 0;
     /** foreign key fl_face(image_md5) -> fl_image */
-    public static final int FL_FACE_FK_IMAGE_MD5 = 0;
-    /** foreign key fl_face(feature_md5) -> fl_store */
-    public static final int FL_FACE_FK_FEATURE_MD5 = 1;
+    public static final int FL_FACE_FK_IMAGE_MD5 = 1;
+    /** foreign key fl_feature(person_id) -> fl_person */
+    public static final int FL_FEATURE_FK_PERSON_ID = 0;
     /** foreign key fl_image(device_id) -> fl_device */
     public static final int FL_IMAGE_FK_DEVICE_ID = 0;
     /** foreign key fl_image(md5) -> fl_store */
@@ -36,16 +38,14 @@ public interface Constant {
     public static final int FL_IMAGE_FK_THUMB_MD5 = 2;
     /** foreign key fl_log(device_id) -> fl_device */
     public static final int FL_LOG_FK_DEVICE_ID = 0;
+    /** foreign key fl_log(verify_feature) -> fl_feature */
+    public static final int FL_LOG_FK_VERIFY_FEATURE = 1;
+    /** foreign key fl_log(compare_feature) -> fl_feature */
+    public static final int FL_LOG_FK_COMPARE_FEATURE = 2;
     /** foreign key fl_log(person_id) -> fl_person */
-    public static final int FL_LOG_FK_PERSON_ID = 1;
-    /** foreign key fl_log(verify_feature) -> fl_store */
-    public static final int FL_LOG_FK_VERIFY_FEATURE = 2;
-    /** foreign key fl_log(compare_feature) -> fl_store */
-    public static final int FL_LOG_FK_COMPARE_FEATURE = 3;
+    public static final int FL_LOG_FK_PERSON_ID = 3;
     /** foreign key fl_person(image_md5) -> fl_image */
     public static final int FL_PERSON_FK_IMAGE_MD5 = 0;
-    /** foreign key fl_person(feature_md5) -> fl_store */
-    public static final int FL_PERSON_FK_FEATURE_MD5 = 1;
     //////////////////////////////////////
     // IMPORTED KEY INDEX DECLARE
     //////////////////////////////////////    
@@ -53,24 +53,24 @@ public interface Constant {
     public static final int FL_DEVICE_IK_FL_IMAGE_DEVICE_ID = 0;
     /** imported key fl_log(device_id) -> fl_device */
     public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID = 1;
+    /** imported key fl_face(feature_md5) -> fl_feature */
+    public static final int FL_FEATURE_IK_FL_FACE_FEATURE_MD5 = 0;
+    /** imported key fl_log(verify_feature) -> fl_feature */
+    public static final int FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE = 1;
+    /** imported key fl_log(compare_feature) -> fl_feature */
+    public static final int FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE = 2;
     /** imported key fl_face(image_md5) -> fl_image */
     public static final int FL_IMAGE_IK_FL_FACE_IMAGE_MD5 = 0;
     /** imported key fl_person(image_md5) -> fl_image */
     public static final int FL_IMAGE_IK_FL_PERSON_IMAGE_MD5 = 1;
+    /** imported key fl_feature(person_id) -> fl_person */
+    public static final int FL_PERSON_IK_FL_FEATURE_PERSON_ID = 0;
     /** imported key fl_log(person_id) -> fl_person */
-    public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 0;
-    /** imported key fl_face(feature_md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_FACE_FEATURE_MD5 = 0;
+    public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 1;
     /** imported key fl_image(md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_MD5 = 1;
+    public static final int FL_STORE_IK_FL_IMAGE_MD5 = 0;
     /** imported key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_THUMB_MD5 = 2;
-    /** imported key fl_log(verify_feature) -> fl_store */
-    public static final int FL_STORE_IK_FL_LOG_VERIFY_FEATURE = 3;
-    /** imported key fl_log(compare_feature) -> fl_store */
-    public static final int FL_STORE_IK_FL_LOG_COMPARE_FEATURE = 4;
-    /** imported key fl_person(feature_md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_PERSON_FEATURE_MD5 = 5;
+    public static final int FL_STORE_IK_FL_IMAGE_THUMB_MD5 = 1;
     //////////////////////////////////////
     // INDEX INDEX DECLARE
     //////////////////////////////////////    
@@ -80,6 +80,8 @@ public interface Constant {
     public static final int FL_FACE_INDEX_FEATURE_MD5 = 0;
     /** fl_face index (image_md5) */
     public static final int FL_FACE_INDEX_IMAGE_MD5 = 1;
+    /** fl_feature index (person_id) */
+    public static final int FL_FEATURE_INDEX_PERSON_ID = 0;
     /** fl_image index (device_id) */
     public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
     /** fl_image index (thumb_md5) */
@@ -92,16 +94,14 @@ public interface Constant {
     public static final int FL_LOG_INDEX_PERSON_ID = 2;
     /** fl_log index (verify_feature) */
     public static final int FL_LOG_INDEX_VERIFY_FEATURE = 3;
-    /** fl_person index (feature_md5) */
-    public static final int FL_PERSON_INDEX_FEATURE_MD5 = 0;
     /** fl_person index (image_md5) */
-    public static final int FL_PERSON_INDEX_IMAGE_MD5 = 1;
+    public static final int FL_PERSON_INDEX_IMAGE_MD5 = 0;
     /** fl_person index (papers_num) */
-    public static final int FL_PERSON_INDEX_PAPERS_NUM = 2;
+    public static final int FL_PERSON_INDEX_PAPERS_NUM = 1;
     /** fl_person index (expiry_date) */
-    public static final int FL_PERSON_INDEX_EXPIRY_DATE = 3;
+    public static final int FL_PERSON_INDEX_EXPIRY_DATE = 2;
     /** fl_person index (group_id) */
-    public static final int FL_PERSON_INDEX_GROUP_ID = 4;
+    public static final int FL_PERSON_INDEX_GROUP_ID = 3;
     //////////////////////////////////////
     // COLUMN ID DECLARE
     //////////////////////////////////////    
@@ -183,6 +183,18 @@ public interface Constant {
     /** Identify the fl_face.create_time field (ordinal:20). */
     public static final int FL_FACE_ID_CREATE_TIME = 19;
     public static final long FL_FACE_ID_CREATE_TIME_MASK = 1L << 19;
+    /** Identify the fl_feature.md5 field (ordinal:1). */
+    public static final int FL_FEATURE_ID_MD5 = 0;
+    public static final long FL_FEATURE_ID_MD5_MASK = 1L << 0;
+    /** Identify the fl_feature.person_id field (ordinal:2). */
+    public static final int FL_FEATURE_ID_PERSON_ID = 1;
+    public static final long FL_FEATURE_ID_PERSON_ID_MASK = 1L << 1;
+    /** Identify the fl_feature.feature field (ordinal:3). */
+    public static final int FL_FEATURE_ID_FEATURE = 2;
+    public static final long FL_FEATURE_ID_FEATURE_MASK = 1L << 2;
+    /** Identify the fl_feature.create_time field (ordinal:4). */
+    public static final int FL_FEATURE_ID_CREATE_TIME = 3;
+    public static final long FL_FEATURE_ID_CREATE_TIME_MASK = 1L << 3;
     /** Identify the fl_image.md5 field (ordinal:1). */
     public static final int FL_IMAGE_ID_MD5 = 0;
     public static final long FL_IMAGE_ID_MD5_MASK = 1L << 0;
@@ -255,18 +267,15 @@ public interface Constant {
     /** Identify the fl_person.image_md5 field (ordinal:8). */
     public static final int FL_PERSON_ID_IMAGE_MD5 = 7;
     public static final long FL_PERSON_ID_IMAGE_MD5_MASK = 1L << 7;
-    /** Identify the fl_person.feature_md5 field (ordinal:9). */
-    public static final int FL_PERSON_ID_FEATURE_MD5 = 8;
-    public static final long FL_PERSON_ID_FEATURE_MD5_MASK = 1L << 8;
-    /** Identify the fl_person.expiry_date field (ordinal:10). */
-    public static final int FL_PERSON_ID_EXPIRY_DATE = 9;
-    public static final long FL_PERSON_ID_EXPIRY_DATE_MASK = 1L << 9;
-    /** Identify the fl_person.create_time field (ordinal:11). */
-    public static final int FL_PERSON_ID_CREATE_TIME = 10;
-    public static final long FL_PERSON_ID_CREATE_TIME_MASK = 1L << 10;
-    /** Identify the fl_person.update_time field (ordinal:12). */
-    public static final int FL_PERSON_ID_UPDATE_TIME = 11;
-    public static final long FL_PERSON_ID_UPDATE_TIME_MASK = 1L << 11;
+    /** Identify the fl_person.expiry_date field (ordinal:9). */
+    public static final int FL_PERSON_ID_EXPIRY_DATE = 8;
+    public static final long FL_PERSON_ID_EXPIRY_DATE_MASK = 1L << 8;
+    /** Identify the fl_person.create_time field (ordinal:10). */
+    public static final int FL_PERSON_ID_CREATE_TIME = 9;
+    public static final long FL_PERSON_ID_CREATE_TIME_MASK = 1L << 9;
+    /** Identify the fl_person.update_time field (ordinal:11). */
+    public static final int FL_PERSON_ID_UPDATE_TIME = 10;
+    public static final long FL_PERSON_ID_UPDATE_TIME_MASK = 1L << 10;
     /** Identify the fl_store.md5 field (ordinal:1). */
     public static final int FL_STORE_ID_MD5 = 0;
     public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
@@ -325,6 +334,11 @@ public interface Constant {
                             + ",fl_face.ext_info"
                             + ",fl_face.feature_md5"
                             + ",fl_face.create_time";
+    /** Contains all the full fields of the fl_feature table.*/
+    public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
+                            + ",fl_feature.person_id"
+                            + ",fl_feature.feature"
+                            + ",fl_feature.create_time";
     /** Contains all the full fields of the fl_image table.*/
     public static final String FL_IMAGE_FULL_FIELDS ="fl_image.md5"
                             + ",fl_image.format"
@@ -352,7 +366,6 @@ public interface Constant {
                             + ",fl_person.papers_type"
                             + ",fl_person.papers_num"
                             + ",fl_person.image_md5"
-                            + ",fl_person.feature_md5"
                             + ",fl_person.expiry_date"
                             + ",fl_person.create_time"
                             + ",fl_person.update_time";
@@ -427,6 +440,18 @@ public interface Constant {
                             + ",featureMd5"
                             + ",createTime";
     public static final java.util.List<String> FL_FACE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_JAVA_FIELDS.split(","));
+    /** Field that contains the comma separated fields of the fl_feature table. */
+    public static final String FL_FEATURE_FIELDS = "md5"
+                            + ",person_id"
+                            + ",feature"
+                            + ",create_time";
+    public static final java.util.List<String> FL_FEATURE_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_feature table. */
+    public static final String FL_FEATURE_JAVA_FIELDS = "md5"
+                            + ",personId"
+                            + ",feature"
+                            + ",createTime";
+    public static final java.util.List<String> FL_FEATURE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_image table. */
     public static final String FL_IMAGE_FIELDS = "md5"
                             + ",format"
@@ -476,7 +501,6 @@ public interface Constant {
                             + ",papers_type"
                             + ",papers_num"
                             + ",image_md5"
-                            + ",feature_md5"
                             + ",expiry_date"
                             + ",create_time"
                             + ",update_time";
@@ -490,7 +514,6 @@ public interface Constant {
                             + ",papersType"
                             + ",papersNum"
                             + ",imageMd5"
-                            + ",featureMd5"
                             + ",expiryDate"
                             + ",createTime"
                             + ",updateTime";

@@ -13,6 +13,7 @@ import net.gdface.facelog.db.IDbConverter;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
+import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
@@ -24,7 +25,7 @@ import net.gdface.facelog.db.LogLightBean;
  * @author guyadong
  *
  */
-public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
+public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
         @Override
@@ -160,6 +161,37 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
+    public static final IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> converterFeatureBean=new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean>(){
+
+        @Override
+        protected void _fromRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
+            if(right.checkMd5Initialized())
+                left.setMd5(right.getMd5());
+            if(right.checkPersonIdInitialized())
+                left.setPersonId(right.getPersonId());
+            if(right.checkFeatureInitialized())
+                left.setFeature(right.getFeature());
+            if(right.checkCreateTimeInitialized())
+                left.setCreateTime(right.getCreateTime());
+            left.isNew(right.isNew());
+            left.setModified(right.getModified());
+        }
+
+        @Override
+        protected void _toRight(FeatureBean left, net.gdface.facelog.dborm.face.FlFeatureBean right) {
+            if(left.checkMd5Initialized() )
+                right.setMd5(left.getMd5());
+            if(left.checkPersonIdInitialized() )
+                right.setPersonId(left.getPersonId());
+            if(left.checkFeatureInitialized() )
+                right.setFeature(left.getFeature());
+// IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkCreateTimeInitialized() )
+//                 right.setCreateTime(left.getCreateTime());
+            right.isNew(left.isNew());
+            right.setModified(left.getModified());
+        }};
+        
     public static final IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> converterImageBean=new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.dborm.image.FlImageBean>(){
 
         @Override
@@ -273,8 +305,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setPapersNum(right.getPapersNum());
             if(right.checkImageMd5Initialized())
                 left.setImageMd5(right.getImageMd5());
-            if(right.checkFeatureMd5Initialized())
-                left.setFeatureMd5(right.getFeatureMd5());
             if(right.checkExpiryDateInitialized())
                 left.setExpiryDate(right.getExpiryDate());
             if(right.checkCreateTimeInitialized())
@@ -303,8 +333,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setPapersNum(left.getPapersNum());
             if(left.checkImageMd5Initialized() )
                 right.setImageMd5(left.getImageMd5());
-            if(left.checkFeatureMd5Initialized() )
-                right.setFeatureMd5(left.getFeatureMd5());
             if(left.checkExpiryDateInitialized() )
                 right.setExpiryDate(left.getExpiryDate());
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
@@ -391,6 +419,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         {
             add(new Object[]{DeviceBean.class, net.gdface.facelog.dborm.device.FlDeviceBean.class, converterDeviceBean});
             add(new Object[]{FaceBean.class, net.gdface.facelog.dborm.face.FlFaceBean.class, converterFaceBean});
+            add(new Object[]{FeatureBean.class, net.gdface.facelog.dborm.face.FlFeatureBean.class, converterFeatureBean});
             add(new Object[]{ImageBean.class, net.gdface.facelog.dborm.image.FlImageBean.class, converterImageBean});
             add(new Object[]{LogBean.class, net.gdface.facelog.dborm.log.FlLogBean.class, converterLogBean});
             add(new Object[]{PersonBean.class, net.gdface.facelog.dborm.person.FlPersonBean.class, converterPersonBean});
@@ -458,6 +487,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
     @Override
     public IBeanConverter<FaceBean, net.gdface.facelog.dborm.face.FlFaceBean> getFaceBeanConverter() {
         return converterFaceBean;
+    }
+    @Override
+    public IBeanConverter<FeatureBean, net.gdface.facelog.dborm.face.FlFeatureBean> getFeatureBeanConverter() {
+        return converterFeatureBean;
     }
     @Override
     public IBeanConverter<ImageBean, net.gdface.facelog.dborm.image.FlImageBean> getImageBeanConverter() {

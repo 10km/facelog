@@ -105,11 +105,7 @@ public class StoreBean
      * <ul>
      * <li>full name: fl_store.md5</li>
      * <li> imported key: fl_image.md5</li>
-     * <li> imported key: fl_log.verify_feature</li>
-     * <li> imported key: fl_log.compare_feature</li>
      * <li> imported key: fl_image.thumb_md5</li>
-     * <li> imported key: fl_person.feature_md5</li>
-     * <li> imported key: fl_face.feature_md5</li>
      * <li>comments: 主键,md5检验码</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
