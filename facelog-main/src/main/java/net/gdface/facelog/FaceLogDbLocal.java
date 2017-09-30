@@ -333,22 +333,21 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	protected static FeatureBean _saveFeature(byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
-		try{
-			Assert.notEmpty(faceInfo, "faceInfo");
-			for(Entry<FaceBean, byte[]> entry:faceInfo.entrySet()){
-				 byte[] imageBytes = entry.getValue();
-				 FaceBean faceBean = entry.getKey();
-				Assert.notEmpty(imageBytes, "imageBytes");
-				Assert.notNull(faceBean, "faceBean");
-				_saveImage(imageBytes, deviceId, new FaceBean[]{faceBean}, null);
-			}
-			return featureManager.save(makeFeature(feature), null, faceInfo.keySet(), null, null);
-		} catch (ServiceRuntime e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		} 
+	protected static FeatureBean _saveFeature(PersonBean personBean,byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
+		Assert.notEmpty(faceInfo, "faceInfo");
+		for(Entry<FaceBean, byte[]> entry:faceInfo.entrySet()){
+			 byte[] imageBytes = entry.getValue();
+			 FaceBean faceBean = entry.getKey();
+			Assert.notEmpty(imageBytes, "imageBytes");
+			Assert.notNull(faceBean, "faceBean");
+			_saveImage(imageBytes, deviceId, new FaceBean[]{faceBean}, null);
+		}
+		return featureManager.save(makeFeature(feature), personBean, faceInfo.keySet(), null, null);
+	}
+	protected static FeatureBean _saveFeature(int personId,byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
+		PersonBean personBean = personManager.loadByPrimaryKey(personId);
+		Assert.notNull(personBean, "personBean");
+		return _saveFeature(personBean, feature, faceInfo, deviceId);
 	}
 	public FeatureBean saveFeature(byte[] feature,FaceBean[] faceBeans)throws ServiceRuntime{
 		try{
