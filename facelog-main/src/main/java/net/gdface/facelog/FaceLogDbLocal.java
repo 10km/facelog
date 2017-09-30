@@ -54,12 +54,26 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	public int deletePerson(int id)throws ServiceRuntime {
-		try{		
-			return personManager.deleteByPrimaryKey(id);
-		}catch (Exception e) {
+	protected static int _deletePerson(int personId) {
+		PersonBean personBean = personManager.loadByPrimaryKey(personId);
+		if(null != personBean){
+			imageManager.deleteByPrimaryKey(personBean.getImageMd5());
+			return personManager.deleteByPrimaryKey(personId);
+		}
+		return 0;
+	}
+	public int deletePerson(final int personId)throws ServiceRuntime {
+		try{
+			return personManager.runAsTransaction(new Callable<Integer>(){
+				@Override
+				public Integer call() throws Exception {
+					return _deletePerson(personId);
+				}});
+		}catch(ServiceRuntime e){
+			throw e;
+		}catch(Exception e){
 			throw new ServiceRuntime(e);
-		} 
+		}
 	}
 	public boolean existsPerson(int id)throws ServiceRuntime {
 		try{
@@ -122,14 +136,14 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public FeatureBean[] getFlFeatureBeansByPersonId(int personId)throws ServiceRuntime {
+	public FeatureBean[] getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
 			return personManager.getFlFeatureBeansByPersonId(personId);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public LogBean[] getFlLogBeansByPersonId(int personId)throws ServiceRuntime {
+	public LogBean[] getLogBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
 			return personManager.getFlLogBeansByPersonId(personId);
 		}catch (Exception e) {
@@ -321,10 +335,17 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	}
 	protected static FeatureBean _saveFeature(byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
 		try{
+			Assert.notEmpty(faceInfo, "faceInfo");
 			for(Entry<FaceBean, byte[]> entry:faceInfo.entrySet()){
-				_saveImage(entry.getValue(), deviceId, new FaceBean[]{entry.getKey()}, null);
+				 byte[] imageBytes = entry.getValue();
+				 FaceBean faceBean = entry.getKey();
+				Assert.notEmpty(imageBytes, "imageBytes");
+				Assert.notNull(faceBean, "faceBean");
+				_saveImage(imageBytes, deviceId, new FaceBean[]{faceBean}, null);
 			}
 			return featureManager.save(makeFeature(feature), null, faceInfo.keySet(), null, null);
+		} catch (ServiceRuntime e) {
+			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
