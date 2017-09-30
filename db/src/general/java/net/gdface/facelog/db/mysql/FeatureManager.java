@@ -442,27 +442,17 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         , PersonBean refFlPersonbyPersonId 
         , FaceBean[] impFlFacebyFeatureMd5 , LogBean[] impFlLogbyVerifyFeature , LogBean[] impFlLogbyCompareFeature )
     {
-        try{
-            FlFeatureBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.person.FlPersonBean native_refFlPersonbyPersonId = this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId);
-            net.gdface.facelog.dborm.face.FlFaceBean[] native_impFlFacebyFeatureMd5 = this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyFeatureMd5);
-net.gdface.facelog.dborm.log.FlLogBean[] native_impFlLogbyVerifyFeature = this.dbConverter.getLogBeanConverter().toRight(impFlLogbyVerifyFeature);
-net.gdface.facelog.dborm.log.FlLogBean[] native_impFlLogbyCompareFeature = this.dbConverter.getLogBeanConverter().toRight(impFlLogbyCompareFeature);
-            nativeManager.save(nativeBean
-                , native_refFlPersonbyPersonId 
-                , native_impFlFacebyFeatureMd5  , native_impFlLogbyVerifyFeature  , native_impFlLogbyCompareFeature  );
-            if(null != bean)
-                this.beanConverter.fromRight(bean,nativeBean);
-            if(null != refFlPersonbyPersonId) this.dbConverter.getPersonBeanConverter().fromRight(refFlPersonbyPersonId,native_refFlPersonbyPersonId);
-            if(null != impFlFacebyFeatureMd5) this.dbConverter.getFaceBeanConverter().fromRight(impFlFacebyFeatureMd5,native_impFlFacebyFeatureMd5);
-if(null != impFlLogbyVerifyFeature) this.dbConverter.getLogBeanConverter().fromRight(impFlLogbyVerifyFeature,native_impFlLogbyVerifyFeature);
-if(null != impFlLogbyCompareFeature) this.dbConverter.getLogBeanConverter().fromRight(impFlLogbyCompareFeature,native_impFlLogbyCompareFeature);
-            return bean;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        if(null != refFlPersonbyPersonId)
+            this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        bean = this.save( bean );
+        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
+        FaceManager.getInstance().save( impFlFacebyFeatureMd5 );
+        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
+        LogManager.getInstance().save( impFlLogbyVerifyFeature );
+        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
+        LogManager.getInstance().save( impFlLogbyCompareFeature );
+        return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IFeatureManager
@@ -483,15 +473,16 @@ if(null != impFlLogbyCompareFeature) this.dbConverter.getLogBeanConverter().from
         , PersonBean refFlPersonbyPersonId 
         , java.util.Collection<FaceBean> impFlFacebyFeatureMd5 , java.util.Collection<LogBean> impFlLogbyVerifyFeature , java.util.Collection<LogBean> impFlLogbyCompareFeature )
     {
-        try{
-                    
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getPersonBeanConverter().toRight(refFlPersonbyPersonId)                 , this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyFeatureMd5)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyVerifyFeature)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyCompareFeature)  ));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        bean = this.save( bean );
+        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
+        FaceManager.getInstance().save( impFlFacebyFeatureMd5 );
+        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
+        LogManager.getInstance().save( impFlLogbyVerifyFeature );
+        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
+        LogManager.getInstance().save( impFlLogbyCompareFeature );
+        return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IFeatureManager
@@ -635,12 +626,11 @@ if(null != impFlLogbyCompareFeature) this.dbConverter.getLogBeanConverter().from
     {
         try{
             FlFeatureBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.person.FlPersonBean foreignNativeBean = this.dbConverter.getPersonBeanConverter().toRight(beanToSet);
+            IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> foreignConverter = this.dbConverter.getPersonBeanConverter();
+            net.gdface.facelog.dborm.person.FlPersonBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByPersonId(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getPersonBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)

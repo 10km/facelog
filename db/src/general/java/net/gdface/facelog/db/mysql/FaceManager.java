@@ -173,23 +173,13 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
         , FeatureBean refFlFeaturebyFeatureMd5 , ImageBean refFlImagebyImageMd5 
         )
     {
-        try{
-            FlFaceBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.face.FlFeatureBean native_refFlFeaturebyFeatureMd5 = this.dbConverter.getFeatureBeanConverter().toRight(refFlFeaturebyFeatureMd5);
-net.gdface.facelog.dborm.image.FlImageBean native_refFlImagebyImageMd5 = this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5);
-                        nativeManager.save(nativeBean
-                , native_refFlFeaturebyFeatureMd5 , native_refFlImagebyImageMd5 
-                );
-            if(null != bean)
-                this.beanConverter.fromRight(bean,nativeBean);
-            if(null != refFlFeaturebyFeatureMd5) this.dbConverter.getFeatureBeanConverter().fromRight(refFlFeaturebyFeatureMd5,native_refFlFeaturebyFeatureMd5);
-if(null != refFlImagebyImageMd5) this.dbConverter.getImageBeanConverter().fromRight(refFlImagebyImageMd5,native_refFlImagebyImageMd5);
-                        return bean;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        if(null != refFlFeaturebyFeatureMd5)
+            this.setReferencedByFeatureMd5(bean,refFlFeaturebyFeatureMd5);
+        if(null != refFlImagebyImageMd5)
+            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        bean = this.save( bean );
+        return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IFaceManager
@@ -326,12 +316,11 @@ if(null != refFlImagebyImageMd5) this.dbConverter.getImageBeanConverter().fromRi
     {
         try{
             FlFaceBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.face.FlFeatureBean foreignNativeBean = this.dbConverter.getFeatureBeanConverter().toRight(beanToSet);
+            IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> foreignConverter = this.dbConverter.getFeatureBeanConverter();
+            net.gdface.facelog.dborm.face.FlFeatureBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByFeatureMd5(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getFeatureBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)
@@ -360,12 +349,11 @@ if(null != refFlImagebyImageMd5) this.dbConverter.getImageBeanConverter().fromRi
     {
         try{
             FlFaceBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = this.dbConverter.getImageBeanConverter().toRight(beanToSet);
+            IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> foreignConverter = this.dbConverter.getImageBeanConverter();
+            net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByImageMd5(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getImageBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)

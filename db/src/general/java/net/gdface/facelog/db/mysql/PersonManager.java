@@ -376,25 +376,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         , ImageBean refFlImagebyImageMd5 
         , FeatureBean[] impFlFeaturebyPersonId , LogBean[] impFlLogbyPersonId )
     {
-        try{
-            FlPersonBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.image.FlImageBean native_refFlImagebyImageMd5 = this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5);
-            net.gdface.facelog.dborm.face.FlFeatureBean[] native_impFlFeaturebyPersonId = this.dbConverter.getFeatureBeanConverter().toRight(impFlFeaturebyPersonId);
-net.gdface.facelog.dborm.log.FlLogBean[] native_impFlLogbyPersonId = this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId);
-            nativeManager.save(nativeBean
-                , native_refFlImagebyImageMd5 
-                , native_impFlFeaturebyPersonId  , native_impFlLogbyPersonId  );
-            if(null != bean)
-                this.beanConverter.fromRight(bean,nativeBean);
-            if(null != refFlImagebyImageMd5) this.dbConverter.getImageBeanConverter().fromRight(refFlImagebyImageMd5,native_refFlImagebyImageMd5);
-            if(null != impFlFeaturebyPersonId) this.dbConverter.getFeatureBeanConverter().fromRight(impFlFeaturebyPersonId,native_impFlFeaturebyPersonId);
-if(null != impFlLogbyPersonId) this.dbConverter.getLogBeanConverter().fromRight(impFlLogbyPersonId,native_impFlLogbyPersonId);
-            return bean;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        if(null != refFlImagebyImageMd5)
+            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        bean = this.save( bean );
+        this.setFlFeatureBeansByPersonId(bean,impFlFeaturebyPersonId);
+        FeatureManager.getInstance().save( impFlFeaturebyPersonId );
+        this.setFlLogBeansByPersonId(bean,impFlLogbyPersonId);
+        LogManager.getInstance().save( impFlLogbyPersonId );
+        return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IPersonManager
@@ -415,15 +405,14 @@ if(null != impFlLogbyPersonId) this.dbConverter.getLogBeanConverter().fromRight(
         , ImageBean refFlImagebyImageMd5 
         , java.util.Collection<FeatureBean> impFlFeaturebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId )
     {
-        try{
-                    
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getImageBeanConverter().toRight(refFlImagebyImageMd5)                 , this.dbConverter.getFeatureBeanConverter().toRight(impFlFeaturebyPersonId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyPersonId)  ));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        bean = this.save( bean );
+        this.setFlFeatureBeansByPersonId(bean,impFlFeaturebyPersonId);
+        FeatureManager.getInstance().save( impFlFeaturebyPersonId );
+        this.setFlLogBeansByPersonId(bean,impFlLogbyPersonId);
+        LogManager.getInstance().save( impFlLogbyPersonId );
+        return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IPersonManager
@@ -561,12 +550,11 @@ if(null != impFlLogbyPersonId) this.dbConverter.getLogBeanConverter().fromRight(
     {
         try{
             FlPersonBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = this.dbConverter.getImageBeanConverter().toRight(beanToSet);
+            IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> foreignConverter = this.dbConverter.getImageBeanConverter();
+            net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByImageMd5(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getImageBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)

@@ -377,29 +377,19 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
         , FaceBean[] impFlFacebyImageMd5 , PersonBean[] impFlPersonbyImageMd5 )
     {
-        try{
-            FlImageBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.device.FlDeviceBean native_refFlDevicebyDeviceId = this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId);
-net.gdface.facelog.dborm.image.FlStoreBean native_refFlStorebyMd5 = this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyMd5);
-net.gdface.facelog.dborm.image.FlStoreBean native_refFlStorebyThumbMd5 = this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyThumbMd5);
-            net.gdface.facelog.dborm.face.FlFaceBean[] native_impFlFacebyImageMd5 = this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyImageMd5);
-net.gdface.facelog.dborm.person.FlPersonBean[] native_impFlPersonbyImageMd5 = this.dbConverter.getPersonBeanConverter().toRight(impFlPersonbyImageMd5);
-            nativeManager.save(nativeBean
-                , native_refFlDevicebyDeviceId , native_refFlStorebyMd5 , native_refFlStorebyThumbMd5 
-                , native_impFlFacebyImageMd5  , native_impFlPersonbyImageMd5  );
-            if(null != bean)
-                this.beanConverter.fromRight(bean,nativeBean);
-            if(null != refFlDevicebyDeviceId) this.dbConverter.getDeviceBeanConverter().fromRight(refFlDevicebyDeviceId,native_refFlDevicebyDeviceId);
-if(null != refFlStorebyMd5) this.dbConverter.getStoreBeanConverter().fromRight(refFlStorebyMd5,native_refFlStorebyMd5);
-if(null != refFlStorebyThumbMd5) this.dbConverter.getStoreBeanConverter().fromRight(refFlStorebyThumbMd5,native_refFlStorebyThumbMd5);
-            if(null != impFlFacebyImageMd5) this.dbConverter.getFaceBeanConverter().fromRight(impFlFacebyImageMd5,native_impFlFacebyImageMd5);
-if(null != impFlPersonbyImageMd5) this.dbConverter.getPersonBeanConverter().fromRight(impFlPersonbyImageMd5,native_impFlPersonbyImageMd5);
-            return bean;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        if(null != refFlDevicebyDeviceId)
+            this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
+        if(null != refFlStorebyMd5)
+            this.setReferencedByMd5(bean,refFlStorebyMd5);
+        if(null != refFlStorebyThumbMd5)
+            this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
+        bean = this.save( bean );
+        this.setFlFaceBeansByImageMd5(bean,impFlFacebyImageMd5);
+        FaceManager.getInstance().save( impFlFacebyImageMd5 );
+        this.setFlPersonBeansByImageMd5(bean,impFlPersonbyImageMd5);
+        PersonManager.getInstance().save( impFlPersonbyImageMd5 );
+        return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IImageManager
@@ -420,15 +410,16 @@ if(null != impFlPersonbyImageMd5) this.dbConverter.getPersonBeanConverter().from
         , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
         , java.util.Collection<FaceBean> impFlFacebyImageMd5 , java.util.Collection<PersonBean> impFlPersonbyImageMd5 )
     {
-        try{
-                    
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                , this.dbConverter.getDeviceBeanConverter().toRight(refFlDevicebyDeviceId) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyMd5) , this.dbConverter.getStoreBeanConverter().toRight(refFlStorebyThumbMd5)                 , this.dbConverter.getFaceBeanConverter().toRight(impFlFacebyImageMd5)  , this.dbConverter.getPersonBeanConverter().toRight(impFlPersonbyImageMd5)  ));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
+        this.setReferencedByMd5(bean,refFlStorebyMd5);
+        this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
+        bean = this.save( bean );
+        this.setFlFaceBeansByImageMd5(bean,impFlFacebyImageMd5);
+        FaceManager.getInstance().save( impFlFacebyImageMd5 );
+        this.setFlPersonBeansByImageMd5(bean,impFlPersonbyImageMd5);
+        PersonManager.getInstance().save( impFlPersonbyImageMd5 );
+        return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IImageManager
@@ -588,12 +579,11 @@ if(null != impFlPersonbyImageMd5) this.dbConverter.getPersonBeanConverter().from
     {
         try{
             FlImageBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.device.FlDeviceBean foreignNativeBean = this.dbConverter.getDeviceBeanConverter().toRight(beanToSet);
+            IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> foreignConverter = this.dbConverter.getDeviceBeanConverter();
+            net.gdface.facelog.dborm.device.FlDeviceBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByDeviceId(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getDeviceBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)
@@ -622,12 +612,11 @@ if(null != impFlPersonbyImageMd5) this.dbConverter.getPersonBeanConverter().from
     {
         try{
             FlImageBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = this.dbConverter.getStoreBeanConverter().toRight(beanToSet);
+            IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> foreignConverter = this.dbConverter.getStoreBeanConverter();
+            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByMd5(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)
@@ -656,12 +645,11 @@ if(null != impFlPersonbyImageMd5) this.dbConverter.getPersonBeanConverter().from
     {
         try{
             FlImageBean nativeBean = this.beanConverter.toRight(bean);
-            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = this.dbConverter.getStoreBeanConverter().toRight(beanToSet);
+            IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> foreignConverter = this.dbConverter.getStoreBeanConverter();
+            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByThumbMd5(nativeBean,foreignNativeBean);
-            if(null != bean)
-                this.beanConverter.fromRight(bean, nativeBean);
-            if(null != beanToSet)
-                this.dbConverter.getStoreBeanConverter().fromRight(beanToSet,foreignNativeBean);
+            this.beanConverter.fromRight(bean, nativeBean);
+            foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
         }
         catch(DAOException e)

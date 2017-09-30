@@ -322,8 +322,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static FeatureBean _saveFeature(byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
 		try{
 			for(Entry<FaceBean, byte[]> entry:faceInfo.entrySet()){
-				ImageBean imageBean = _saveImage(entry.getValue(), deviceId, null, null);
-				faceManager.setReferencedByImageMd5(faceManager.save(entry.getKey()), imageBean);
+				_saveImage(entry.getValue(), deviceId, new FaceBean[]{entry.getKey()}, null);
 			}
 			return featureManager.save(makeFeature(feature), null, faceInfo.keySet(), null, null);
 		} catch (Exception e) {

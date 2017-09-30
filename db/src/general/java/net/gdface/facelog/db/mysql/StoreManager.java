@@ -374,23 +374,13 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
         
         , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 )
     {
-        try{
-            FlStoreBean nativeBean = this.beanConverter.toRight(bean);
-                        net.gdface.facelog.dborm.image.FlImageBean[] native_impFlImagebyMd5 = this.dbConverter.getImageBeanConverter().toRight(impFlImagebyMd5);
-net.gdface.facelog.dborm.image.FlImageBean[] native_impFlImagebyThumbMd5 = this.dbConverter.getImageBeanConverter().toRight(impFlImagebyThumbMd5);
-            nativeManager.save(nativeBean
-                
-                , native_impFlImagebyMd5  , native_impFlImagebyThumbMd5  );
-            if(null != bean)
-                this.beanConverter.fromRight(bean,nativeBean);
-                        if(null != impFlImagebyMd5) this.dbConverter.getImageBeanConverter().fromRight(impFlImagebyMd5,native_impFlImagebyMd5);
-if(null != impFlImagebyThumbMd5) this.dbConverter.getImageBeanConverter().fromRight(impFlImagebyThumbMd5,native_impFlImagebyThumbMd5);
-            return bean;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        bean = this.save( bean );
+        this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
+        ImageManager.getInstance().save( impFlImagebyMd5 );
+        this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
+        ImageManager.getInstance().save( impFlImagebyThumbMd5 );
+        return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IStoreManager
@@ -411,15 +401,13 @@ if(null != impFlImagebyThumbMd5) this.dbConverter.getImageBeanConverter().fromRi
         
         , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 )
     {
-        try{
-                    
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                                , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyMd5)  , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyThumbMd5)  ));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        bean = this.save( bean );
+        this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
+        ImageManager.getInstance().save( impFlImagebyMd5 );
+        this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
+        ImageManager.getInstance().save( impFlImagebyThumbMd5 );
+        return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IStoreManager

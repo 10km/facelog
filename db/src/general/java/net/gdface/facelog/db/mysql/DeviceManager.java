@@ -375,23 +375,13 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         
         , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId )
     {
-        try{
-            FlDeviceBean nativeBean = this.beanConverter.toRight(bean);
-                        net.gdface.facelog.dborm.image.FlImageBean[] native_impFlImagebyDeviceId = this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId);
-net.gdface.facelog.dborm.log.FlLogBean[] native_impFlLogbyDeviceId = this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId);
-            nativeManager.save(nativeBean
-                
-                , native_impFlImagebyDeviceId  , native_impFlLogbyDeviceId  );
-            if(null != bean)
-                this.beanConverter.fromRight(bean,nativeBean);
-                        if(null != impFlImagebyDeviceId) this.dbConverter.getImageBeanConverter().fromRight(impFlImagebyDeviceId,native_impFlImagebyDeviceId);
-if(null != impFlLogbyDeviceId) this.dbConverter.getLogBeanConverter().fromRight(impFlLogbyDeviceId,native_impFlLogbyDeviceId);
-            return bean;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        bean = this.save( bean );
+        this.setFlImageBeansByDeviceId(bean,impFlImagebyDeviceId);
+        ImageManager.getInstance().save( impFlImagebyDeviceId );
+        this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
+        LogManager.getInstance().save( impFlLogbyDeviceId );
+        return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IDeviceManager
@@ -412,15 +402,13 @@ if(null != impFlLogbyDeviceId) this.dbConverter.getLogBeanConverter().fromRight(
         
         , java.util.Collection<ImageBean> impFlImagebyDeviceId , java.util.Collection<LogBean> impFlLogbyDeviceId )
     {
-        try{
-                    
-            return this.beanConverter.fromRight(bean,nativeManager.save(this.beanConverter.toRight(bean)
-                                , this.dbConverter.getImageBeanConverter().toRight(impFlImagebyDeviceId)  , this.dbConverter.getLogBeanConverter().toRight(impFlLogbyDeviceId)  ));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        if(null == bean) return null;
+        bean = this.save( bean );
+        this.setFlImageBeansByDeviceId(bean,impFlImagebyDeviceId);
+        ImageManager.getInstance().save( impFlImagebyDeviceId );
+        this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
+        LogManager.getInstance().save( impFlLogbyDeviceId );
+        return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IDeviceManager
