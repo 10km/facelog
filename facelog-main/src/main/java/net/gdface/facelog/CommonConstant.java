@@ -34,6 +34,9 @@ public interface CommonConstant {
 	public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){};
 	public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
 	public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){};
+	public static final Channel<String> PUBSUB_FEATURE_INSERT = new Channel<String>("FeatureInsert"){};
+	public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){};
+	public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){};
 	public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("logQueue"){};
 	public static final IDeviceManager deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
 	public static final IFaceManager faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);

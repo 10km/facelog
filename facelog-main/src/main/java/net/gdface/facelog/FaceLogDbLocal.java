@@ -1,7 +1,9 @@
 package net.gdface.facelog;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,6 +30,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	private final  RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
 	private final RedisStoreListener redisStoreListener = new RedisStoreListener(redisImageListener);
+	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
 	public FaceLogDbLocal() {
 		init();
@@ -36,6 +39,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		personManager.registerListener(redisPersonListener);
 		imageManager.registerListener(redisImageListener);
 		storeManager.registerListener(redisStoreListener);
+		featureManager.registerListener(redisFeatureListener);
 	}
 	public PersonBean getPerson(int id)throws ServiceRuntime {
 		try{
@@ -155,9 +159,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		} 
 	}
 	
-	public PersonBean savePerson(PersonBean bean, ImageBean refImagebyPhotoId,FaceBean[] impFacebyPersonId)throws ServiceRuntime {
+	public PersonBean savePerson(PersonBean bean, ImageBean refImageByImageMd5,FeatureBean impFeatureByPersonId)throws ServiceRuntime {
 		try{
-			return personManager.saveAsTransaction(bean, refImagebyPhotoId,impFacebyPersonId,null);
+			return personManager.saveAsTransaction(bean, refImageByImageMd5,new FeatureBean[]{impFeatureByPersonId},null);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -184,7 +188,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,imageData,_addFeature(feature, faceBeans));
+					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans));
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -192,15 +196,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public PersonBean savePerson(final PersonBean bean, final byte[] imageData,final byte[] feature,final FaceBean[] faceBeans,final List<byte[]>images,final DeviceBean deviceId)throws ServiceRuntime {
+	public PersonBean savePerson(final PersonBean bean, final byte[] imageData,final byte[] feature,final Map<FaceBean,byte[]>faceInfo,final DeviceBean deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					for(byte[] imageBytes:images){
-						_addImage(imageBytes, deviceId, null, null);
-					}
-					return _savePerson(bean,imageData,_addFeature(feature, faceBeans));
+					return _savePerson(bean,imageData,_addFeature(feature,bean, faceInfo,deviceId.getId()));
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -319,46 +320,67 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		featureBean.setFeature(feature);
 		return featureBean;
 	}
-	protected static FeatureBean _addFeature(byte[] feature,FaceBean[] faceBeans)throws ServiceRuntime{
-		try{
-			return featureManager.save(makeFeature(feature), null, faceBeans, null, null);
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		} 
+	protected static FeatureBean _addFeature(byte[] feature,PersonBean refPersonByPersonId, FaceBean[] impFaceByFeatureMd5)throws ServiceRuntime{
+		return featureManager.save(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null, null);
 	}
-	protected static FeatureBean _addFeature(PersonBean personBean,byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(byte[] feature,PersonBean personBean,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
 		Assert.notEmpty(faceInfo, "faceInfo");
 		for(Entry<FaceBean, byte[]> entry:faceInfo.entrySet()){
 			 byte[] imageBytes = entry.getValue();
 			 FaceBean faceBean = entry.getKey();
 			Assert.notEmpty(imageBytes, "imageBytes");
 			Assert.notNull(faceBean, "faceBean");
-			_addImage(imageBytes, deviceId, new FaceBean[]{faceBean}, null);
+			_addImage(imageBytes, deviceId, new FaceBean[]{faceBean}, new PersonBean[]{personBean});
 		}
-		return featureManager.save(makeFeature(feature), personBean, faceInfo.keySet(), null, null);
+		return _addFeature(feature, personBean, faceInfo.keySet().toArray(new FaceBean[0]));
 	}
-	protected static FeatureBean _addFeature(int personId,byte[] feature,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(byte[] feature,int personId,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
 		PersonBean personBean = personManager.loadByPrimaryKey(personId);
 		Assert.notNull(personBean, "personBean");
-		return _addFeature(personBean, feature, faceInfo, deviceId);
+		return _addFeature(feature, personBean, faceInfo, deviceId);
 	}
-	public FeatureBean addFeature(byte[] feature,FaceBean[] faceBeans)throws ServiceRuntime{
+	protected static void _setRefPersonOfFeature(String featureMd5,int personId){
+		PersonBean personBean = personManager.loadByPrimaryKey(personId);
+		FeatureBean featureBean = featureManager.loadByPrimaryKey(featureMd5);
+		if(null == personBean || null == featureBean)return;
+		featureManager.setReferencedByPersonId(featureBean,personBean);
+	}
+
+	public FeatureBean addFeature(byte[] feature,PersonBean refPersonByPersonId,FaceBean[] impFaceByFeatureMd5)throws ServiceRuntime{
 		try{
-			return featureManager.saveAsTransaction(makeFeature(feature), null, faceBeans, null, null);
+			return featureManager.saveAsTransaction(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null, null);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-	protected static void _deleteBeansRefByFeatureMd5(String featureMd5){
+	protected static ArrayList<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
+		ArrayList<String> imageBeans = new ArrayList<String>();
 		for(FaceBean faceBean:featureManager.getFaceBeansByFeatureMd5AsList(featureMd5)){
-			ImageBean imageBean = faceManager.getReferencedByImageMd5(faceBean);
-			_deleteImage(imageBean.getMd5());
+			imageBeans.add(faceBean.getImageMd5());
 		}
+		return imageBeans;
 	}
-	protected static void _deleteFeature(String featureMd5,boolean deleteFace){
-		if(deleteFace)
-			_deleteBeansRefByFeatureMd5(featureMd5);
+	protected static List<String> _deleteFeature(String featureMd5,boolean deleteImage){
+		List<String> imageKeys = _getImageKeysImportedByFeatureMd5(featureMd5);
+		if(deleteImage){
+			for(Iterator<String> itor = imageKeys.iterator();itor.hasNext();){
+				String md5 = itor.next();
+				imageManager.deleteByPrimaryKey(md5);
+				itor.remove();
+			}
+		}else{
+			for(FaceBean faceBean:featureManager.getFaceBeansByFeatureMd5AsList(featureMd5)){
+				imageManager.deleteByPrimaryKey(faceBean.getImageMd5());
+			}
+		}
 		featureManager.deleteByPrimaryKey(featureMd5);
+		return imageKeys;
+	}	
+	protected static void _replaceFeature(int personId,String featureMd5,boolean deleteImage)throws ServiceRuntime{		
+		for(FeatureBean featureBean: personManager.getFeatureBeansByPersonIdAsList(personId)){
+			_deleteFeature(featureBean.getMd5(),deleteImage);
+		}
+		_setRefPersonOfFeature(featureMd5,personId);
 	}
 	/**
 	 * @param imageBytes
