@@ -120,6 +120,8 @@ public class FlLogBean
      * <ul>
      * <li>full name: fl_log.id</li>
      * <li>comments: 日志id</li>
+     * <li>AUTO_INCREMENT</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -135,7 +137,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value (NOT NULL) to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -187,6 +189,7 @@ public class FlLogBean
      * <li>full name: fl_log.person_id</li>
      * <li> foreign key: fl_person.id</li>
      * <li>comments: 外键,用户id</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -202,7 +205,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value (NOT NULL) to be assigned to personId
      */
     public void setPersonId(Integer newVal)
     {
@@ -269,7 +272,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value  to be assigned to deviceId
      */
     public void setDeviceId(Integer newVal)
     {
@@ -336,7 +339,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyFeature
+     * @param newVal the new value  to be assigned to verifyFeature
      */
     public void setVerifyFeature(String newVal)
     {
@@ -393,7 +396,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to compareFeature
+     * @param newVal the new value  to be assigned to compareFeature
      */
     public void setCompareFeature(String newVal)
     {
@@ -449,7 +452,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to similarty
+     * @param newVal the new value  to be assigned to similarty
      */
     public void setSimilarty(Double newVal)
     {
@@ -500,6 +503,7 @@ public class FlLogBean
      * <ul>
      * <li>full name: fl_log.verify_time</li>
      * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -515,7 +519,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value (NOT NULL) to be assigned to verifyTime
      */
     public void setVerifyTime(java.util.Date newVal)
     {
@@ -565,6 +569,7 @@ public class FlLogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.create_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -580,7 +585,7 @@ public class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -778,6 +783,13 @@ public class FlLogBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #id} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_LOG_ID_ID_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

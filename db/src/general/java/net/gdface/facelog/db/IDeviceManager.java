@@ -57,7 +57,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean);
+    public ImageBean[] getImageBeansByDeviceId(DeviceBean bean);
     
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
@@ -67,7 +67,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public ImageBean[] getFlImageBeansByDeviceId(Integer deviceId);
+    public ImageBean[] getImageBeansByDeviceId(Integer deviceId);
     
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
@@ -76,7 +76,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean);
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean);
 
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
@@ -86,7 +86,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(Integer deviceId);
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer deviceId);
     
     /**
      * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
@@ -97,7 +97,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.3 SET IMPORTED
-    public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans);
+    public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans);
 
     /**
      * set  the {@link ImageBean} object java.util.Collection associate to DeviceBean by the fl_image.device_id field.<BR>
@@ -108,7 +108,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @see {@link ImageManager#setReferencedByDeviceId(ImageBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans);
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans);
 
     /**
      * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
@@ -117,7 +117,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean);
+    public LogBean[] getLogBeansByDeviceId(DeviceBean bean);
     
     /**
      * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
@@ -127,7 +127,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getFlLogBeansByDeviceId(Integer deviceId);
+    public LogBean[] getLogBeansByDeviceId(Integer deviceId);
     
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
@@ -136,7 +136,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean);
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean);
 
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
@@ -146,7 +146,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(Integer deviceId);
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer deviceId);
     
     /**
      * set  the {@link LogBean} object array associate to DeviceBean by the fl_log.device_id field.<BR>
@@ -157,7 +157,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.3 SET IMPORTED
-    public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans);
 
     /**
      * set  the {@link LogBean} object java.util.Collection associate to DeviceBean by the fl_log.device_id field.<BR>
@@ -168,20 +168,20 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @see {@link LogManager#setReferencedByDeviceId(LogBean, DeviceBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans);
 
     /**
      * Save the DeviceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceBean} bean to be saved
-         * @param impFlImagebyDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
-     * @param impFlLogbyDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
+         * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
+     * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
      */
     //3.5 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         
-        , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId );
+        , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId );
     /**
      * Transaction version for sync save
      * @see {@link #save(DeviceBean , ImageBean[] , LogBean[] )}
@@ -189,19 +189,19 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     //3.6 SYNC SAVE AS TRANSACTION
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final ImageBean[] impFlImagebyDeviceId ,final LogBean[] impFlLogbyDeviceId );
+        ,final ImageBean[] impImageByDeviceId ,final LogBean[] impLogByDeviceId );
     /**
      * Save the DeviceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceBean} bean to be saved
-         * @param impFlImagebyDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
-     * @param impFlLogbyDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
+         * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
+     * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
      */
     //3.7 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         
-        , java.util.Collection<ImageBean> impFlImagebyDeviceId , java.util.Collection<LogBean> impFlLogbyDeviceId );
+        , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId );
     /**
      * Transaction version for sync save
      * @see {@link #save(DeviceBean , java.util.Collection , java.util.Collection )}
@@ -209,7 +209,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     //3.8 SYNC SAVE AS TRANSACTION
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId );
+        ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId );
       //_____________________________________________________________________
     //
     // USING INDICES

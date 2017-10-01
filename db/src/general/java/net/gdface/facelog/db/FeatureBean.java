@@ -110,6 +110,7 @@ public class FeatureBean
      * <li> imported key: fl_log.compare_feature</li>
      * <li> imported key: fl_face.feature_md5</li>
      * <li>comments: 主键,特征码md5校验码</li>
+     * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -126,7 +127,7 @@ public class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to md5
+     * @param newVal the new value (NOT NULL) to be assigned to md5
      */
     @com.facebook.swift.codec.ThriftField
     public void setMd5(String newVal)
@@ -169,6 +170,7 @@ public class FeatureBean
      * <li>full name: fl_feature.person_id</li>
      * <li> foreign key: fl_person.id</li>
      * <li>comments: 外键,所属用户id</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -185,7 +187,7 @@ public class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value (NOT NULL) to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal)
@@ -237,6 +239,7 @@ public class FeatureBean
      * <ul>
      * <li>full name: fl_feature.feature</li>
      * <li>comments: 二进制特征数据</li>
+     * <li>NOT NULL</li>
      * <li>column size: 65535</li>
      * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
@@ -252,7 +255,7 @@ public class FeatureBean
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value to be assigned to feature
+     * @param newVal the new value (NOT NULL) to be assigned to feature
      */
     @com.facebook.swift.codec.ThriftField
     public void setFeature(byte[] newVal)
@@ -289,6 +292,7 @@ public class FeatureBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.create_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -305,7 +309,7 @@ public class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
@@ -451,6 +455,13 @@ public class FeatureBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #md5} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_FEATURE_ID_MD5_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

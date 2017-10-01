@@ -140,6 +140,8 @@ public class FaceBean
      * <ul>
      * <li>full name: fl_face.id</li>
      * <li>comments: 主键</li>
+     * <li>AUTO_INCREMENT</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -156,7 +158,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value (NOT NULL) to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal)
@@ -209,6 +211,7 @@ public class FaceBean
      * <li>full name: fl_face.image_md5</li>
      * <li> foreign key: fl_image.md5</li>
      * <li>comments: 外键,所属图像id</li>
+     * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -225,7 +228,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to imageMd5
+     * @param newVal the new value (NOT NULL) to be assigned to imageMd5
      */
     @com.facebook.swift.codec.ThriftField
     public void setImageMd5(String newVal)
@@ -266,6 +269,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_left</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -282,7 +286,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceLeft
+     * @param newVal the new value (NOT NULL) to be assigned to faceLeft
      */
     @com.facebook.swift.codec.ThriftField
     public void setFaceLeft(Integer newVal)
@@ -333,6 +337,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_top</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -349,7 +354,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceTop
+     * @param newVal the new value (NOT NULL) to be assigned to faceTop
      */
     @com.facebook.swift.codec.ThriftField
     public void setFaceTop(Integer newVal)
@@ -400,6 +405,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_width</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -416,7 +422,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceWidth
+     * @param newVal the new value (NOT NULL) to be assigned to faceWidth
      */
     @com.facebook.swift.codec.ThriftField
     public void setFaceWidth(Integer newVal)
@@ -467,6 +473,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.face_height</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -483,7 +490,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceHeight
+     * @param newVal the new value (NOT NULL) to be assigned to faceHeight
      */
     @com.facebook.swift.codec.ThriftField
     public void setFaceHeight(Integer newVal)
@@ -550,7 +557,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to eyeLeftx
+     * @param newVal the new value  to be assigned to eyeLeftx
      */
     @com.facebook.swift.codec.ThriftField
     public void setEyeLeftx(Integer newVal)
@@ -617,7 +624,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to eyeLefty
+     * @param newVal the new value  to be assigned to eyeLefty
      */
     @com.facebook.swift.codec.ThriftField
     public void setEyeLefty(Integer newVal)
@@ -684,7 +691,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to eyeRightx
+     * @param newVal the new value  to be assigned to eyeRightx
      */
     @com.facebook.swift.codec.ThriftField
     public void setEyeRightx(Integer newVal)
@@ -751,7 +758,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to eyeRighty
+     * @param newVal the new value  to be assigned to eyeRighty
      */
     @com.facebook.swift.codec.ThriftField
     public void setEyeRighty(Integer newVal)
@@ -818,7 +825,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to mouthX
+     * @param newVal the new value  to be assigned to mouthX
      */
     @com.facebook.swift.codec.ThriftField
     public void setMouthX(Integer newVal)
@@ -885,7 +892,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to mouthY
+     * @param newVal the new value  to be assigned to mouthY
      */
     @com.facebook.swift.codec.ThriftField
     public void setMouthY(Integer newVal)
@@ -952,7 +959,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to noseX
+     * @param newVal the new value  to be assigned to noseX
      */
     @com.facebook.swift.codec.ThriftField
     public void setNoseX(Integer newVal)
@@ -1019,7 +1026,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to noseY
+     * @param newVal the new value  to be assigned to noseY
      */
     @com.facebook.swift.codec.ThriftField
     public void setNoseY(Integer newVal)
@@ -1086,7 +1093,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to angleYaw
+     * @param newVal the new value  to be assigned to angleYaw
      */
     @com.facebook.swift.codec.ThriftField
     public void setAngleYaw(Integer newVal)
@@ -1153,7 +1160,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to anglePitch
+     * @param newVal the new value  to be assigned to anglePitch
      */
     @com.facebook.swift.codec.ThriftField
     public void setAnglePitch(Integer newVal)
@@ -1220,7 +1227,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to angleRoll
+     * @param newVal the new value  to be assigned to angleRoll
      */
     @com.facebook.swift.codec.ThriftField
     public void setAngleRoll(Integer newVal)
@@ -1287,7 +1294,7 @@ public class FaceBean
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value to be assigned to extInfo
+     * @param newVal the new value  to be assigned to extInfo
      */
     @com.facebook.swift.codec.ThriftField
     public void setExtInfo(byte[] newVal)
@@ -1342,7 +1349,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to featureMd5
+     * @param newVal the new value  to be assigned to featureMd5
      */
     @com.facebook.swift.codec.ThriftField
     public void setFeatureMd5(String newVal)
@@ -1383,6 +1390,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.create_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -1399,7 +1407,7 @@ public class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
@@ -1624,6 +1632,13 @@ public class FaceBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #id} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_FACE_ID_ID_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

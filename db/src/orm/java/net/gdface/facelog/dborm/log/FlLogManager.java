@@ -267,27 +267,27 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Save the FlLogBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlLogBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlLogBean} 
-     * @param refFlFeaturebyVerifyFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
-     * @param refFlFeaturebyCompareFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
-     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlLogBean} 
+     * @param refDeviceByDeviceId the {@link FlDeviceBean} bean referenced by {@link FlLogBean} 
+     * @param refFeatureByVerifyFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
+     * @param refFeatureByCompareFeature the {@link FlFeatureBean} bean referenced by {@link FlLogBean} 
+     * @param refPersonByPersonId the {@link FlPersonBean} bean referenced by {@link FlLogBean} 
          * @return the inserted or updated {@link FlLogBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlLogBean save(FlLogBean bean
-        , FlDeviceBean refFlDevicebyDeviceId , FlFeatureBean refFlFeaturebyVerifyFeature , FlFeatureBean refFlFeaturebyCompareFeature , FlPersonBean refFlPersonbyPersonId 
+        , FlDeviceBean refDeviceByDeviceId , FlFeatureBean refFeatureByVerifyFeature , FlFeatureBean refFeatureByCompareFeature , FlPersonBean refPersonByPersonId 
         ) throws DAOException
     {
         if(null == bean) return null;
-        if(null != refFlDevicebyDeviceId)
-            this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        if(null != refFlFeaturebyVerifyFeature)
-            this.setReferencedByVerifyFeature(bean,refFlFeaturebyVerifyFeature);
-        if(null != refFlFeaturebyCompareFeature)
-            this.setReferencedByCompareFeature(bean,refFlFeaturebyCompareFeature);
-        if(null != refFlPersonbyPersonId)
-            this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        if(null != refDeviceByDeviceId)
+            this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        if(null != refFeatureByVerifyFeature)
+            this.setReferencedByVerifyFeature(bean,refFeatureByVerifyFeature);
+        if(null != refFeatureByCompareFeature)
+            this.setReferencedByCompareFeature(bean,refFeatureByCompareFeature);
+        if(null != refPersonByPersonId)
+            this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         return bean;
     } 
@@ -298,13 +298,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlLogBean saveAsTransaction(final FlLogBean bean
-        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlFeatureBean refFlFeaturebyVerifyFeature ,final FlFeatureBean refFlFeaturebyCompareFeature ,final FlPersonBean refFlPersonbyPersonId 
+        ,final FlDeviceBean refDeviceByDeviceId ,final FlFeatureBean refFeatureByVerifyFeature ,final FlFeatureBean refFeatureByCompareFeature ,final FlPersonBean refPersonByPersonId 
         ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlLogBean>(){
             @Override
             public FlLogBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlFeaturebyVerifyFeature , refFlFeaturebyCompareFeature , refFlPersonbyPersonId );
+                return save(bean , refDeviceByDeviceId , refFeatureByVerifyFeature , refFeatureByCompareFeature , refPersonByPersonId );
             }});
     }
     /**
@@ -452,7 +452,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Associates the {@link FlLogBean} object to the {@link FlDeviceBean} object by {@link FlLogBean#getDeviceId}() field.
      *
      * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlLogBean}
+     * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlLogBean} .
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -490,7 +490,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Associates the {@link FlLogBean} object to the {@link FlFeatureBean} object by {@link FlLogBean#getVerifyFeature}() field.
      *
      * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean}
+     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean} .
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -528,7 +528,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Associates the {@link FlLogBean} object to the {@link FlFeatureBean} object by {@link FlLogBean#getCompareFeature}() field.
      *
      * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean}
+     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlLogBean} .
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -566,7 +566,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * Associates the {@link FlLogBean} object to the {@link FlPersonBean} object by {@link FlLogBean#getPersonId}() field.
      *
      * @param bean the {@link FlLogBean} object to use
-     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlLogBean}
+     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlLogBean} (NOT NULL).
      * @return always beanToSet saved
      * @throws Exception
      */

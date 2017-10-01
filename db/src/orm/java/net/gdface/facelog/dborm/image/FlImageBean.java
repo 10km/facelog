@@ -123,6 +123,7 @@ public class FlImageBean
      * <li> imported key: fl_face.image_md5</li>
      * <li> imported key: fl_person.image_md5</li>
      * <li>comments: 主键,图像md5检验码,同时也是外键fl_store(md5)</li>
+     * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -138,7 +139,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to md5
+     * @param newVal the new value (NOT NULL) to be assigned to md5
      */
     public void setMd5(String newVal)
     {
@@ -194,7 +195,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to format
+     * @param newVal the new value  to be assigned to format
      */
     public void setFormat(String newVal)
     {
@@ -235,6 +236,7 @@ public class FlImageBean
      * <ul>
      * <li>full name: fl_image.width</li>
      * <li>comments: 图像宽度</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -250,7 +252,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to width
+     * @param newVal the new value (NOT NULL) to be assigned to width
      */
     public void setWidth(Integer newVal)
     {
@@ -301,6 +303,7 @@ public class FlImageBean
      * <ul>
      * <li>full name: fl_image.height</li>
      * <li>comments: 图像高度</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -316,7 +319,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to height
+     * @param newVal the new value (NOT NULL) to be assigned to height
      */
     public void setHeight(Integer newVal)
     {
@@ -367,6 +370,7 @@ public class FlImageBean
      * <ul>
      * <li>full name: fl_image.depth</li>
      * <li>comments: 通道数</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -382,7 +386,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to depth
+     * @param newVal the new value (NOT NULL) to be assigned to depth
      */
     public void setDepth(Integer newVal)
     {
@@ -433,6 +437,7 @@ public class FlImageBean
      * <ul>
      * <li>full name: fl_image.face_num</li>
      * <li>comments: 图像中的人脸数目</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -448,7 +453,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to faceNum
+     * @param newVal the new value (NOT NULL) to be assigned to faceNum
      */
     public void setFaceNum(Integer newVal)
     {
@@ -515,7 +520,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to thumbMd5
+     * @param newVal the new value  to be assigned to thumbMd5
      */
     public void setThumbMd5(String newVal)
     {
@@ -572,7 +577,7 @@ public class FlImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value  to be assigned to deviceId
      */
     public void setDeviceId(Integer newVal)
     {
@@ -757,6 +762,13 @@ public class FlImageBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #md5} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_IMAGE_ID_MD5_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

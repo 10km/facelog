@@ -57,7 +57,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public FeatureBean[] getFlFeatureBeansByPersonId(PersonBean bean);
+    public FeatureBean[] getFeatureBeansByPersonId(PersonBean bean);
     
     /**
      * Retrieves the {@link FeatureBean} object from the fl_feature.person_id field.<BR>
@@ -67,7 +67,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FeatureBean[] getFlFeatureBeansByPersonId(Integer personId);
+    public FeatureBean[] getFeatureBeansByPersonId(Integer personId);
     
     /**
      * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
@@ -76,7 +76,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<FeatureBean> getFlFeatureBeansByPersonIdAsList(PersonBean bean);
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean);
 
     /**
      * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
@@ -86,7 +86,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<FeatureBean> getFlFeatureBeansByPersonIdAsList(Integer personId);
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer personId);
     
     /**
      * set  the {@link FeatureBean} object array associate to PersonBean by the fl_feature.person_id field.<BR>
@@ -97,7 +97,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @see {@link FeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
      */
     //3.3 SET IMPORTED
-    public FeatureBean[] setFlFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans);
+    public FeatureBean[] setFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans);
 
     /**
      * set  the {@link FeatureBean} object java.util.Collection associate to PersonBean by the fl_feature.person_id field.<BR>
@@ -108,7 +108,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @see {@link FeatureManager#setReferencedByPersonId(FeatureBean, PersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FeatureBean>> C setFlFeatureBeansByPersonId(PersonBean bean , C importedBeans);
+    public <C extends java.util.Collection<FeatureBean>> C setFeatureBeansByPersonId(PersonBean bean , C importedBeans);
 
     /**
      * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
@@ -117,7 +117,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public LogBean[] getFlLogBeansByPersonId(PersonBean bean);
+    public LogBean[] getLogBeansByPersonId(PersonBean bean);
     
     /**
      * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
@@ -127,7 +127,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getFlLogBeansByPersonId(Integer personId);
+    public LogBean[] getLogBeansByPersonId(Integer personId);
     
     /**
      * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
@@ -136,7 +136,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean);
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean);
 
     /**
      * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
@@ -146,7 +146,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(Integer personId);
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer personId);
     
     /**
      * set  the {@link LogBean} object array associate to PersonBean by the fl_log.person_id field.<BR>
@@ -157,7 +157,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
     //3.3 SET IMPORTED
-    public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans);
 
     /**
      * set  the {@link LogBean} object java.util.Collection associate to PersonBean by the fl_log.person_id field.<BR>
@@ -168,50 +168,50 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @see {@link LogManager#setReferencedByPersonId(LogBean, PersonBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByPersonId(PersonBean bean , C importedBeans);
 
     /**
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
-     * @param refFlImagebyImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
-     * @param impFlFeaturebyPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
-     * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
+     * @param impFeatureByPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
+     * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.5 SYNC SAVE 
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyImageMd5 
-        , FeatureBean[] impFlFeaturebyPersonId , LogBean[] impFlLogbyPersonId );
+        , ImageBean refImageByImageMd5 
+        , FeatureBean[] impFeatureByPersonId , LogBean[] impLogByPersonId );
     /**
      * Transaction version for sync save
      * @see {@link #save(PersonBean , ImageBean , FeatureBean[] , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyImageMd5 
-        ,final FeatureBean[] impFlFeaturebyPersonId ,final LogBean[] impFlLogbyPersonId );
+        ,final ImageBean refImageByImageMd5 
+        ,final FeatureBean[] impFeatureByPersonId ,final LogBean[] impLogByPersonId );
     /**
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
-     * @param refFlImagebyImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
-     * @param impFlFeaturebyPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
-     * @param impFlLogbyPersonId the {@link LogBean} bean refer to {@link PersonBean} 
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
+     * @param impFeatureByPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
+     * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.7 SYNC SAVE 
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyImageMd5 
-        , java.util.Collection<FeatureBean> impFlFeaturebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId );
+        , ImageBean refImageByImageMd5 
+        , java.util.Collection<FeatureBean> impFeatureByPersonId , java.util.Collection<LogBean> impLogByPersonId );
     /**
      * Transaction version for sync save
      * @see {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyImageMd5 
-        ,final  java.util.Collection<FeatureBean> impFlFeaturebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId );
+        ,final ImageBean refImageByImageMd5 
+        ,final  java.util.Collection<FeatureBean> impFeatureByPersonId ,final  java.util.Collection<LogBean> impLogByPersonId );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

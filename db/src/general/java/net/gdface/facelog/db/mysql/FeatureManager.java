@@ -197,11 +197,11 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(FeatureBean bean,int ikIndex){
         switch(ikIndex){
         case FL_FEATURE_IK_FL_FACE_FEATURE_MD5:
-            return (java.util.List<T>)this.getFlFaceBeansByFeatureMd5AsList(bean);
+            return (java.util.List<T>)this.getFaceBeansByFeatureMd5AsList(bean);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
-            return (java.util.List<T>)this.getFlLogBeansByVerifyFeatureAsList(bean);
+            return (java.util.List<T>)this.getLogBeansByVerifyFeatureAsList(bean);
         case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (java.util.List<T>)this.getFlLogBeansByCompareFeatureAsList(bean);
+            return (java.util.List<T>)this.getLogBeansByCompareFeatureAsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -224,11 +224,11 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(FeatureBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FEATURE_IK_FL_FACE_FEATURE_MD5:
-            return (T[])setFlFaceBeansByFeatureMd5(bean,(FaceBean[])importedBeans);
+            return (T[])setFaceBeansByFeatureMd5(bean,(FaceBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
-            return (T[])setFlLogBeansByVerifyFeature(bean,(LogBean[])importedBeans);
+            return (T[])setLogBeansByVerifyFeature(bean,(LogBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (T[])setFlLogBeansByCompareFeature(bean,(LogBean[])importedBeans);
+            return (T[])setLogBeansByCompareFeature(bean,(LogBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -250,11 +250,11 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FeatureBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FEATURE_IK_FL_FACE_FEATURE_MD5:
-            return (C)setFlFaceBeansByFeatureMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
+            return (C)setFaceBeansByFeatureMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
-            return (C)setFlLogBeansByVerifyFeature(bean,(java.util.Collection<LogBean>)importedBeans);
+            return (C)setLogBeansByVerifyFeature(bean,(java.util.Collection<LogBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (C)setFlLogBeansByCompareFeature(bean,(java.util.Collection<LogBean>)importedBeans);
+            return (C)setLogBeansByCompareFeature(bean,(java.util.Collection<LogBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -265,24 +265,24 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //////////////////////////////////////
     //3.1 GET IMPORTED override IFeatureManager
     @Override 
-    public FaceBean[] getFlFaceBeansByFeatureMd5(FeatureBean bean)
+    public FaceBean[] getFaceBeansByFeatureMd5(FeatureBean bean)
     {
-        return this.getFlFaceBeansByFeatureMd5AsList(bean).toArray(new FaceBean[0]);
+        return this.getFaceBeansByFeatureMd5AsList(bean).toArray(new FaceBean[0]);
     }
     //3.1.2 GET IMPORTED override IFeatureManager
     @Override
-    public FaceBean[] getFlFaceBeansByFeatureMd5(String featureMd5)
+    public FaceBean[] getFaceBeansByFeatureMd5(String featureMd5)
     {
         FeatureBean bean = new FeatureBean();
         bean.setMd5(featureMd5);
-        return getFlFaceBeansByFeatureMd5(bean);
+        return getFaceBeansByFeatureMd5(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
     @Override 
-    public java.util.List<FaceBean> getFlFaceBeansByFeatureMd5AsList(FeatureBean bean)
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean)
     {
         try {
-            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByFeatureMd5AsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByFeatureMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -291,15 +291,15 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
-    public java.util.List<FaceBean> getFlFaceBeansByFeatureMd5AsList(String featureMd5)
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5)
     {
          FeatureBean bean = new FeatureBean();
         bean.setMd5(featureMd5);
-        return getFlFaceBeansByFeatureMd5AsList(bean);
+        return getFaceBeansByFeatureMd5AsList(bean);
     }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 
-    public FaceBean[] setFlFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans)
+    public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans)
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
@@ -311,7 +311,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
 
     //3.4 SET IMPORTED override IFeatureManager
     @Override 
-    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans)
+    public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
@@ -322,24 +322,24 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.1 GET IMPORTED override IFeatureManager
     @Override 
-    public LogBean[] getFlLogBeansByVerifyFeature(FeatureBean bean)
+    public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean)
     {
-        return this.getFlLogBeansByVerifyFeatureAsList(bean).toArray(new LogBean[0]);
+        return this.getLogBeansByVerifyFeatureAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IFeatureManager
     @Override
-    public LogBean[] getFlLogBeansByVerifyFeature(String featureMd5)
+    public LogBean[] getLogBeansByVerifyFeature(String featureMd5)
     {
         FeatureBean bean = new FeatureBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByVerifyFeature(bean);
+        return getLogBeansByVerifyFeature(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
     @Override 
-    public java.util.List<LogBean> getFlLogBeansByVerifyFeatureAsList(FeatureBean bean)
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByVerifyFeatureAsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByVerifyFeatureAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -348,15 +348,15 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
-    public java.util.List<LogBean> getFlLogBeansByVerifyFeatureAsList(String featureMd5)
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String featureMd5)
     {
          FeatureBean bean = new FeatureBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByVerifyFeatureAsList(bean);
+        return getLogBeansByVerifyFeatureAsList(bean);
     }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 
-    public LogBean[] setFlLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans)
+    public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -368,7 +368,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
 
     //3.4 SET IMPORTED override IFeatureManager
     @Override 
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByVerifyFeature(FeatureBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -379,24 +379,24 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.1 GET IMPORTED override IFeatureManager
     @Override 
-    public LogBean[] getFlLogBeansByCompareFeature(FeatureBean bean)
+    public LogBean[] getLogBeansByCompareFeature(FeatureBean bean)
     {
-        return this.getFlLogBeansByCompareFeatureAsList(bean).toArray(new LogBean[0]);
+        return this.getLogBeansByCompareFeatureAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IFeatureManager
     @Override
-    public LogBean[] getFlLogBeansByCompareFeature(String featureMd5)
+    public LogBean[] getLogBeansByCompareFeature(String featureMd5)
     {
         FeatureBean bean = new FeatureBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByCompareFeature(bean);
+        return getLogBeansByCompareFeature(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
     @Override 
-    public java.util.List<LogBean> getFlLogBeansByCompareFeatureAsList(FeatureBean bean)
+    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(FeatureBean bean)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByCompareFeatureAsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByCompareFeatureAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -405,15 +405,15 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
-    public java.util.List<LogBean> getFlLogBeansByCompareFeatureAsList(String featureMd5)
+    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(String featureMd5)
     {
          FeatureBean bean = new FeatureBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByCompareFeatureAsList(bean);
+        return getLogBeansByCompareFeatureAsList(bean);
     }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 
-    public LogBean[] setFlLogBeansByCompareFeature(FeatureBean bean , LogBean[] importedBeans)
+    public LogBean[] setLogBeansByCompareFeature(FeatureBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -425,7 +425,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
 
     //3.4 SET IMPORTED override IFeatureManager
     @Override 
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByCompareFeature(FeatureBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFeature(FeatureBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -439,62 +439,62 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //3.5 SYNC SAVE override IFeatureManager
     @Override  
     public FeatureBean save(FeatureBean bean
-        , PersonBean refFlPersonbyPersonId 
-        , FaceBean[] impFlFacebyFeatureMd5 , LogBean[] impFlLogbyVerifyFeature , LogBean[] impFlLogbyCompareFeature )
+        , PersonBean refPersonByPersonId 
+        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature , LogBean[] impLogByCompareFeature )
     {
         if(null == bean) return null;
-        if(null != refFlPersonbyPersonId)
-            this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        if(null != refPersonByPersonId)
+            this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
-        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
-        FaceManager.getInstance().save( impFlFacebyFeatureMd5 );
-        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
-        LogManager.getInstance().save( impFlLogbyVerifyFeature );
-        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
-        LogManager.getInstance().save( impFlLogbyCompareFeature );
+        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+        FaceManager.getInstance().save( impFaceByFeatureMd5 );
+        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+        LogManager.getInstance().save( impLogByVerifyFeature );
+        this.setLogBeansByCompareFeature(bean,impLogByCompareFeature);
+        LogManager.getInstance().save( impLogByCompareFeature );
         return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IFeatureManager
     @Override 
     public FeatureBean saveAsTransaction(final FeatureBean bean
-        ,final PersonBean refFlPersonbyPersonId 
-        ,final FaceBean[] impFlFacebyFeatureMd5 ,final LogBean[] impFlLogbyVerifyFeature ,final LogBean[] impFlLogbyCompareFeature )
+        ,final PersonBean refPersonByPersonId 
+        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature ,final LogBean[] impLogByCompareFeature )
     {
         return this.runAsTransaction(new Callable<FeatureBean>(){
             @Override
             public FeatureBean call() throws Exception {
-                return save(bean , refFlPersonbyPersonId , impFlFacebyFeatureMd5 , impFlLogbyVerifyFeature , impFlLogbyCompareFeature );
+                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature , impLogByCompareFeature );
             }});
     }
     //3.7 SYNC SAVE override IFeatureManager
     @Override 
     public FeatureBean save(FeatureBean bean
-        , PersonBean refFlPersonbyPersonId 
-        , java.util.Collection<FaceBean> impFlFacebyFeatureMd5 , java.util.Collection<LogBean> impFlLogbyVerifyFeature , java.util.Collection<LogBean> impFlLogbyCompareFeature )
+        , PersonBean refPersonByPersonId 
+        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature , java.util.Collection<LogBean> impLogByCompareFeature )
     {
         if(null == bean) return null;
-        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
-        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
-        FaceManager.getInstance().save( impFlFacebyFeatureMd5 );
-        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
-        LogManager.getInstance().save( impFlLogbyVerifyFeature );
-        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
-        LogManager.getInstance().save( impFlLogbyCompareFeature );
+        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+        FaceManager.getInstance().save( impFaceByFeatureMd5 );
+        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+        LogManager.getInstance().save( impLogByVerifyFeature );
+        this.setLogBeansByCompareFeature(bean,impLogByCompareFeature);
+        LogManager.getInstance().save( impLogByCompareFeature );
         return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IFeatureManager
     @Override 
     public FeatureBean saveAsTransaction(final FeatureBean bean
-        ,final PersonBean refFlPersonbyPersonId 
-        ,final  java.util.Collection<FaceBean> impFlFacebyFeatureMd5 ,final  java.util.Collection<LogBean> impFlLogbyVerifyFeature ,final  java.util.Collection<LogBean> impFlLogbyCompareFeature )
+        ,final PersonBean refPersonByPersonId 
+        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature ,final  java.util.Collection<LogBean> impLogByCompareFeature )
     {
         return this.runAsTransaction(new Callable<FeatureBean>(){
             @Override
             public FeatureBean call() throws Exception {
-                return save(bean , refFlPersonbyPersonId , impFlFacebyFeatureMd5 , impFlLogbyVerifyFeature , impFlLogbyCompareFeature );
+                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature , impLogByCompareFeature );
             }});
     }
      /**

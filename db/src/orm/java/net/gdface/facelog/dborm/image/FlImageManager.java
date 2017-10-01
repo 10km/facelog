@@ -297,9 +297,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlImageBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
-            return (List<T>)this.getFlFaceBeansByImageMd5AsList(bean);
+            return (List<T>)this.getFaceBeansByImageMd5AsList(bean);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
-            return (List<T>)this.getFlPersonBeansByImageMd5AsList(bean);
+            return (List<T>)this.getPersonBeansByImageMd5AsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -318,9 +318,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlImageBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
-            return (T[])setFlFaceBeansByImageMd5(bean,(FlFaceBean[])importedBeans);
+            return (T[])setFaceBeansByImageMd5(bean,(FlFaceBean[])importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
-            return (T[])setFlPersonBeansByImageMd5(bean,(FlPersonBean[])importedBeans);
+            return (T[])setPersonBeansByImageMd5(bean,(FlPersonBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -339,9 +339,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlImageBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
-            return (C)setFlFaceBeansByImageMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
+            return (C)setFaceBeansByImageMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
-            return (C)setFlPersonBeansByImageMd5(bean,(java.util.Collection<FlPersonBean>)importedBeans);
+            return (C)setPersonBeansByImageMd5(bean,(java.util.Collection<FlPersonBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -357,9 +357,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlFaceBean[] getFlFaceBeansByImageMd5(FlImageBean bean) throws DAOException
+    public FlFaceBean[] getFaceBeansByImageMd5(FlImageBean bean) throws DAOException
     {
-        return getFlFaceBeansByImageMd5AsList(bean).toArray(new FlFaceBean[0]);
+        return getFaceBeansByImageMd5AsList(bean).toArray(new FlFaceBean[0]);
     }
     /**
      * Retrieves the {@link FlFaceBean} object from the fl_face.image_md5 field.<BR>
@@ -369,11 +369,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlFaceBean[] getFlFaceBeansByImageMd5(String imageMd5) throws DAOException
+    public FlFaceBean[] getFaceBeansByImageMd5(String imageMd5) throws DAOException
     {
         FlImageBean bean = createBean();
         bean.setMd5(imageMd5);
-        return getFlFaceBeansByImageMd5(bean);
+        return getFaceBeansByImageMd5(bean);
     }
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.image_md5 field.<BR>
@@ -383,7 +383,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.2 GET IMPORTED
-    public List<FlFaceBean> getFlFaceBeansByImageMd5AsList(FlImageBean bean) throws DAOException
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean) throws DAOException
     {
         if(null == bean)return new java.util.ArrayList<FlFaceBean>();
         FlFaceBean other = FlFaceManager.getInstance().createBean();
@@ -398,11 +398,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlFaceBean> getFlFaceBeansByImageMd5AsList(String imageMd5) throws DAOException
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(String imageMd5) throws DAOException
     {
          FlImageBean bean = createBean();
         bean.setMd5(imageMd5);
-        return getFlFaceBeansByImageMd5AsList(bean);
+        return getFaceBeansByImageMd5AsList(bean);
     }
     /**
      * set  the {@link FlFaceBean} object array associate to FlImageBean by the fl_face.image_md5 field.<BR>
@@ -414,7 +414,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @see {@link FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
      */
     //3.3 SET IMPORTED
-    public FlFaceBean[] setFlFaceBeansByImageMd5(FlImageBean bean , FlFaceBean[] importedBeans) throws DAOException
+    public FlFaceBean[] setFaceBeansByImageMd5(FlImageBean bean , FlFaceBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -434,7 +434,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @see {@link FlFaceManager#setReferencedByImageMd5(FlFaceBean, FlImageBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlFaceBean>> C setFlFaceBeansByImageMd5(FlImageBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByImageMd5(FlImageBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -452,9 +452,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlPersonBean[] getFlPersonBeansByImageMd5(FlImageBean bean) throws DAOException
+    public FlPersonBean[] getPersonBeansByImageMd5(FlImageBean bean) throws DAOException
     {
-        return getFlPersonBeansByImageMd5AsList(bean).toArray(new FlPersonBean[0]);
+        return getPersonBeansByImageMd5AsList(bean).toArray(new FlPersonBean[0]);
     }
     /**
      * Retrieves the {@link FlPersonBean} object from the fl_person.image_md5 field.<BR>
@@ -464,11 +464,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlPersonBean[] getFlPersonBeansByImageMd5(String imageMd5) throws DAOException
+    public FlPersonBean[] getPersonBeansByImageMd5(String imageMd5) throws DAOException
     {
         FlImageBean bean = createBean();
         bean.setMd5(imageMd5);
-        return getFlPersonBeansByImageMd5(bean);
+        return getPersonBeansByImageMd5(bean);
     }
     /**
      * Retrieves the {@link FlPersonBean} object from fl_person.image_md5 field.<BR>
@@ -478,7 +478,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.2 GET IMPORTED
-    public List<FlPersonBean> getFlPersonBeansByImageMd5AsList(FlImageBean bean) throws DAOException
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean) throws DAOException
     {
         if(null == bean)return new java.util.ArrayList<FlPersonBean>();
         FlPersonBean other = FlPersonManager.getInstance().createBean();
@@ -493,11 +493,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlPersonBean> getFlPersonBeansByImageMd5AsList(String imageMd5) throws DAOException
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(String imageMd5) throws DAOException
     {
          FlImageBean bean = createBean();
         bean.setMd5(imageMd5);
-        return getFlPersonBeansByImageMd5AsList(bean);
+        return getPersonBeansByImageMd5AsList(bean);
     }
     /**
      * set  the {@link FlPersonBean} object array associate to FlImageBean by the fl_person.image_md5 field.<BR>
@@ -509,7 +509,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @see {@link FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
      */
     //3.3 SET IMPORTED
-    public FlPersonBean[] setFlPersonBeansByImageMd5(FlImageBean bean , FlPersonBean[] importedBeans) throws DAOException
+    public FlPersonBean[] setPersonBeansByImageMd5(FlImageBean bean , FlPersonBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -529,7 +529,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @see {@link FlPersonManager#setReferencedByImageMd5(FlPersonBean, FlImageBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlPersonBean>> C setFlPersonBeansByImageMd5(FlImageBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlPersonBean>> C setPersonBeansByImageMd5(FlImageBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
@@ -543,31 +543,31 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * Save the FlImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
-     * @param refFlStorebyMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
-     * @param refFlStorebyThumbMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
-     * @param impFlFacebyImageMd5 the {@link FlFaceBean} beans refer to {@link FlImageBean} 
-     * @param impFlPersonbyImageMd5 the {@link FlPersonBean} beans refer to {@link FlImageBean} 
+     * @param refDeviceByDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
+     * @param refStoreByMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
+     * @param refStoreByThumbMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
+     * @param impFaceByImageMd5 the {@link FlFaceBean} beans refer to {@link FlImageBean} 
+     * @param impPersonByImageMd5 the {@link FlPersonBean} beans refer to {@link FlImageBean} 
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlImageBean save(FlImageBean bean
-        , FlDeviceBean refFlDevicebyDeviceId , FlStoreBean refFlStorebyMd5 , FlStoreBean refFlStorebyThumbMd5 
-        , FlFaceBean[] impFlFacebyImageMd5 , FlPersonBean[] impFlPersonbyImageMd5 ) throws DAOException
+        , FlDeviceBean refDeviceByDeviceId , FlStoreBean refStoreByMd5 , FlStoreBean refStoreByThumbMd5 
+        , FlFaceBean[] impFaceByImageMd5 , FlPersonBean[] impPersonByImageMd5 ) throws DAOException
     {
         if(null == bean) return null;
-        if(null != refFlDevicebyDeviceId)
-            this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        if(null != refFlStorebyMd5)
-            this.setReferencedByMd5(bean,refFlStorebyMd5);
-        if(null != refFlStorebyThumbMd5)
-            this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
+        if(null != refDeviceByDeviceId)
+            this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        if(null != refStoreByMd5)
+            this.setReferencedByMd5(bean,refStoreByMd5);
+        if(null != refStoreByThumbMd5)
+            this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
-        this.setFlFaceBeansByImageMd5(bean,impFlFacebyImageMd5);
-        FlFaceManager.getInstance().save( impFlFacebyImageMd5 );
-        this.setFlPersonBeansByImageMd5(bean,impFlPersonbyImageMd5);
-        FlPersonManager.getInstance().save( impFlPersonbyImageMd5 );
+        this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
+        FlFaceManager.getInstance().save( impFaceByImageMd5 );
+        this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
+        FlPersonManager.getInstance().save( impPersonByImageMd5 );
         return bean;
     } 
 
@@ -577,41 +577,41 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlImageBean saveAsTransaction(final FlImageBean bean
-        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlStoreBean refFlStorebyMd5 ,final FlStoreBean refFlStorebyThumbMd5 
-        ,final FlFaceBean[] impFlFacebyImageMd5 ,final FlPersonBean[] impFlPersonbyImageMd5 ) throws DAOException
+        ,final FlDeviceBean refDeviceByDeviceId ,final FlStoreBean refStoreByMd5 ,final FlStoreBean refStoreByThumbMd5 
+        ,final FlFaceBean[] impFaceByImageMd5 ,final FlPersonBean[] impPersonByImageMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
             public FlImageBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImageMd5 , impFlPersonbyImageMd5 );
+                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
     /**
      * Save the FlImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlImageBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
-     * @param refFlStorebyMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
-     * @param refFlStorebyThumbMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
-     * @param impFlFacebyImageMd5 the {@link FlFaceBean} bean refer to {@link FlImageBean} 
-     * @param impFlPersonbyImageMd5 the {@link FlPersonBean} bean refer to {@link FlImageBean} 
+     * @param refDeviceByDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
+     * @param refStoreByMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
+     * @param refStoreByThumbMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
+     * @param impFaceByImageMd5 the {@link FlFaceBean} bean refer to {@link FlImageBean} 
+     * @param impPersonByImageMd5 the {@link FlPersonBean} bean refer to {@link FlImageBean} 
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DAOException
      */
     //3.7 SYNC SAVE 
     public FlImageBean save(FlImageBean bean
-        , FlDeviceBean refFlDevicebyDeviceId , FlStoreBean refFlStorebyMd5 , FlStoreBean refFlStorebyThumbMd5 
-        , java.util.Collection<FlFaceBean> impFlFacebyImageMd5 , java.util.Collection<FlPersonBean> impFlPersonbyImageMd5 ) throws DAOException
+        , FlDeviceBean refDeviceByDeviceId , FlStoreBean refStoreByMd5 , FlStoreBean refStoreByThumbMd5 
+        , java.util.Collection<FlFaceBean> impFaceByImageMd5 , java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
     {
         if(null == bean) return null;
-        this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        this.setReferencedByMd5(bean,refFlStorebyMd5);
-        this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
+        this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        this.setReferencedByMd5(bean,refStoreByMd5);
+        this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
-        this.setFlFaceBeansByImageMd5(bean,impFlFacebyImageMd5);
-        FlFaceManager.getInstance().save( impFlFacebyImageMd5 );
-        this.setFlPersonBeansByImageMd5(bean,impFlPersonbyImageMd5);
-        FlPersonManager.getInstance().save( impFlPersonbyImageMd5 );
+        this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
+        FlFaceManager.getInstance().save( impFaceByImageMd5 );
+        this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
+        FlPersonManager.getInstance().save( impPersonByImageMd5 );
         return bean;
     }
 
@@ -621,13 +621,13 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlImageBean saveAsTransaction(final FlImageBean bean
-        ,final FlDeviceBean refFlDevicebyDeviceId ,final FlStoreBean refFlStorebyMd5 ,final FlStoreBean refFlStorebyThumbMd5 
-        ,final  java.util.Collection<FlFaceBean> impFlFacebyImageMd5 ,final  java.util.Collection<FlPersonBean> impFlPersonbyImageMd5 ) throws DAOException
+        ,final FlDeviceBean refDeviceByDeviceId ,final FlStoreBean refStoreByMd5 ,final FlStoreBean refStoreByThumbMd5 
+        ,final  java.util.Collection<FlFaceBean> impFaceByImageMd5 ,final  java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
             public FlImageBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImageMd5 , impFlPersonbyImageMd5 );
+                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
     /**
@@ -776,7 +776,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * Associates the {@link FlImageBean} object to the {@link FlDeviceBean} object by {@link FlImageBean#getDeviceId}() field.
      *
      * @param bean the {@link FlImageBean} object to use
-     * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlImageBean}
+     * @param beanToSet the {@link FlDeviceBean} object to associate to the {@link FlImageBean} .
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -814,7 +814,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * Associates the {@link FlImageBean} object to the {@link FlStoreBean} object by {@link FlImageBean#getMd5}() field.
      *
      * @param bean the {@link FlImageBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean}
+     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean} (NOT NULL).
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -852,7 +852,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * Associates the {@link FlImageBean} object to the {@link FlStoreBean} object by {@link FlImageBean#getThumbMd5}() field.
      *
      * @param bean the {@link FlImageBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean}
+     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean} .
      * @return always beanToSet saved
      * @throws Exception
      */

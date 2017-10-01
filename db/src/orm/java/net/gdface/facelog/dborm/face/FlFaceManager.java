@@ -265,21 +265,21 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
-     * @param refFlFeaturebyFeatureMd5 the {@link FlFeatureBean} bean referenced by {@link FlFaceBean} 
-     * @param refFlImagebyImageMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
+     * @param refFeatureByFeatureMd5 the {@link FlFeatureBean} bean referenced by {@link FlFaceBean} 
+     * @param refImageByImageMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
          * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlFaceBean save(FlFaceBean bean
-        , FlFeatureBean refFlFeaturebyFeatureMd5 , FlImageBean refFlImagebyImageMd5 
+        , FlFeatureBean refFeatureByFeatureMd5 , FlImageBean refImageByImageMd5 
         ) throws DAOException
     {
         if(null == bean) return null;
-        if(null != refFlFeaturebyFeatureMd5)
-            this.setReferencedByFeatureMd5(bean,refFlFeaturebyFeatureMd5);
-        if(null != refFlImagebyImageMd5)
-            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        if(null != refFeatureByFeatureMd5)
+            this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
+        if(null != refImageByImageMd5)
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
         return bean;
     } 
@@ -290,13 +290,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
-        ,final FlFeatureBean refFlFeaturebyFeatureMd5 ,final FlImageBean refFlImagebyImageMd5 
+        ,final FlFeatureBean refFeatureByFeatureMd5 ,final FlImageBean refImageByImageMd5 
         ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFaceBean>(){
             @Override
             public FlFaceBean call() throws Exception {
-                return save(bean , refFlFeaturebyFeatureMd5 , refFlImagebyImageMd5 );
+                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 );
             }});
     }
     /**
@@ -422,7 +422,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Associates the {@link FlFaceBean} object to the {@link FlFeatureBean} object by {@link FlFaceBean#getFeatureMd5}() field.
      *
      * @param bean the {@link FlFaceBean} object to use
-     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlFaceBean}
+     * @param beanToSet the {@link FlFeatureBean} object to associate to the {@link FlFaceBean} .
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -460,7 +460,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * Associates the {@link FlFaceBean} object to the {@link FlImageBean} object by {@link FlFaceBean#getImageMd5}() field.
      *
      * @param bean the {@link FlFaceBean} object to use
-     * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlFaceBean}
+     * @param beanToSet the {@link FlImageBean} object to associate to the {@link FlFaceBean} (NOT NULL).
      * @return always beanToSet saved
      * @throws Exception
      */

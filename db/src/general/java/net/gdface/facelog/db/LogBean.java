@@ -119,6 +119,8 @@ public class LogBean
      * <ul>
      * <li>full name: fl_log.id</li>
      * <li>comments: 日志id</li>
+     * <li>AUTO_INCREMENT</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -135,7 +137,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value (NOT NULL) to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal)
@@ -188,6 +190,7 @@ public class LogBean
      * <li>full name: fl_log.person_id</li>
      * <li> foreign key: fl_person.id</li>
      * <li>comments: 外键,用户id</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -204,7 +207,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value (NOT NULL) to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal)
@@ -273,7 +276,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to deviceId
+     * @param newVal the new value  to be assigned to deviceId
      */
     @com.facebook.swift.codec.ThriftField
     public void setDeviceId(Integer newVal)
@@ -342,7 +345,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyFeature
+     * @param newVal the new value  to be assigned to verifyFeature
      */
     @com.facebook.swift.codec.ThriftField
     public void setVerifyFeature(String newVal)
@@ -401,7 +404,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to compareFeature
+     * @param newVal the new value  to be assigned to compareFeature
      */
     @com.facebook.swift.codec.ThriftField
     public void setCompareFeature(String newVal)
@@ -459,7 +462,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to similarty
+     * @param newVal the new value  to be assigned to similarty
      */
     @com.facebook.swift.codec.ThriftField
     public void setSimilarty(Double newVal)
@@ -511,6 +514,7 @@ public class LogBean
      * <ul>
      * <li>full name: fl_log.verify_time</li>
      * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -527,7 +531,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value (NOT NULL) to be assigned to verifyTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setVerifyTime(java.util.Date newVal)
@@ -578,6 +582,7 @@ public class LogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.create_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -594,7 +599,7 @@ public class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
@@ -801,6 +806,13 @@ public class LogBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #id} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_LOG_ID_ID_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

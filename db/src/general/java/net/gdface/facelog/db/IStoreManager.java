@@ -57,7 +57,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public ImageBean[] getFlImageBeansByMd5(StoreBean bean);
+    public ImageBean[] getImageBeansByMd5(StoreBean bean);
     
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.md5 field.<BR>
@@ -67,7 +67,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public ImageBean[] getFlImageBeansByMd5(String storeMd5);
+    public ImageBean[] getImageBeansByMd5(String storeMd5);
     
     /**
      * Retrieves the {@link ImageBean} object from fl_image.md5 field.<BR>
@@ -76,7 +76,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean);
+    public java.util.List<ImageBean> getImageBeansByMd5AsList(StoreBean bean);
 
     /**
      * Retrieves the {@link ImageBean} object from fl_image.md5 field.<BR>
@@ -86,7 +86,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<ImageBean> getFlImageBeansByMd5AsList(String storeMd5);
+    public java.util.List<ImageBean> getImageBeansByMd5AsList(String storeMd5);
     
     /**
      * set  the {@link ImageBean} object array associate to StoreBean by the fl_image.md5 field.<BR>
@@ -97,7 +97,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @see {@link ImageManager#setReferencedByMd5(ImageBean, StoreBean)
      */
     //3.3 SET IMPORTED
-    public ImageBean[] setFlImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans);
+    public ImageBean[] setImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans);
 
     /**
      * set  the {@link ImageBean} object java.util.Collection associate to StoreBean by the fl_image.md5 field.<BR>
@@ -108,7 +108,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @see {@link ImageManager#setReferencedByMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans);
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByMd5(StoreBean bean , C importedBeans);
 
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.thumb_md5 field.<BR>
@@ -117,7 +117,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean);
+    public ImageBean[] getImageBeansByThumbMd5(StoreBean bean);
     
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.thumb_md5 field.<BR>
@@ -127,7 +127,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public ImageBean[] getFlImageBeansByThumbMd5(String storeMd5);
+    public ImageBean[] getImageBeansByThumbMd5(String storeMd5);
     
     /**
      * Retrieves the {@link ImageBean} object from fl_image.thumb_md5 field.<BR>
@@ -136,7 +136,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean);
+    public java.util.List<ImageBean> getImageBeansByThumbMd5AsList(StoreBean bean);
 
     /**
      * Retrieves the {@link ImageBean} object from fl_image.thumb_md5 field.<BR>
@@ -146,7 +146,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(String storeMd5);
+    public java.util.List<ImageBean> getImageBeansByThumbMd5AsList(String storeMd5);
     
     /**
      * set  the {@link ImageBean} object array associate to StoreBean by the fl_image.thumb_md5 field.<BR>
@@ -157,7 +157,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @see {@link ImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
      */
     //3.3 SET IMPORTED
-    public ImageBean[] setFlImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans);
+    public ImageBean[] setImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans);
 
     /**
      * set  the {@link ImageBean} object java.util.Collection associate to StoreBean by the fl_image.thumb_md5 field.<BR>
@@ -168,20 +168,20 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @see {@link ImageManager#setReferencedByThumbMd5(ImageBean, StoreBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans);
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByThumbMd5(StoreBean bean , C importedBeans);
 
     /**
      * Save the StoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link StoreBean} bean to be saved
-         * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @param impFlImagebyThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
+         * @param impImageByMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
+     * @param impImageByThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
      * @return the inserted or updated {@link StoreBean} bean
      */
     //3.5 SYNC SAVE 
     public StoreBean save(StoreBean bean
         
-        , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 );
+        , ImageBean[] impImageByMd5 , ImageBean[] impImageByThumbMd5 );
     /**
      * Transaction version for sync save
      * @see {@link #save(StoreBean , ImageBean[] , ImageBean[] )}
@@ -189,19 +189,19 @@ public interface IStoreManager extends TableManager<StoreBean>
     //3.6 SYNC SAVE AS TRANSACTION
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final ImageBean[] impFlImagebyMd5 ,final ImageBean[] impFlImagebyThumbMd5 );
+        ,final ImageBean[] impImageByMd5 ,final ImageBean[] impImageByThumbMd5 );
     /**
      * Save the StoreBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link StoreBean} bean to be saved
-         * @param impFlImagebyMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
-     * @param impFlImagebyThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
+         * @param impImageByMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
+     * @param impImageByThumbMd5 the {@link ImageBean} bean refer to {@link StoreBean} 
      * @return the inserted or updated {@link StoreBean} bean
      */
     //3.7 SYNC SAVE 
     public StoreBean save(StoreBean bean
         
-        , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 );
+        , java.util.Collection<ImageBean> impImageByMd5 , java.util.Collection<ImageBean> impImageByThumbMd5 );
     /**
      * Transaction version for sync save
      * @see {@link #save(StoreBean , java.util.Collection , java.util.Collection )}
@@ -209,5 +209,5 @@ public interface IStoreManager extends TableManager<StoreBean>
     //3.8 SYNC SAVE AS TRANSACTION
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 );
+        ,final  java.util.Collection<ImageBean> impImageByMd5 ,final  java.util.Collection<ImageBean> impImageByThumbMd5 );
   }

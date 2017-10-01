@@ -113,6 +113,7 @@ public class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.id</li>
      * <li>comments: 日志id</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -129,7 +130,7 @@ public class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value (NOT NULL) to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal)
@@ -181,6 +182,7 @@ public class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.person_id</li>
      * <li>comments: 用户id</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -197,7 +199,7 @@ public class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to personId
+     * @param newVal the new value (NOT NULL) to be assigned to personId
      */
     @com.facebook.swift.codec.ThriftField
     public void setPersonId(Integer newVal)
@@ -249,6 +251,7 @@ public class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.name</li>
      * <li>comments: 姓名</li>
+     * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
@@ -265,7 +268,7 @@ public class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to name
+     * @param newVal the new value (NOT NULL) to be assigned to name
      */
     @com.facebook.swift.codec.ThriftField
     public void setName(String newVal)
@@ -323,7 +326,7 @@ public class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersType
+     * @param newVal the new value  to be assigned to papersType
      */
     @com.facebook.swift.codec.ThriftField
     public void setPapersType(Integer newVal)
@@ -391,7 +394,7 @@ public class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersNum
+     * @param newVal the new value  to be assigned to papersNum
      */
     @com.facebook.swift.codec.ThriftField
     public void setPapersNum(String newVal)
@@ -433,6 +436,7 @@ public class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.verify_time</li>
      * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -449,7 +453,7 @@ public class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to verifyTime
+     * @param newVal the new value (NOT NULL) to be assigned to verifyTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setVerifyTime(java.util.Date newVal)
@@ -585,6 +589,12 @@ public class LogLightBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys (  ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
     }
     /**
      * Resets the object initialization status to 'not initialized'.

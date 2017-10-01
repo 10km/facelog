@@ -50,15 +50,15 @@ public interface ILogManager extends TableManager<LogBean>
      * Save the LogBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link LogBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link LogBean} 
-     * @param refFlFeaturebyVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
-     * @param refFlFeaturebyCompareFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
-     * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
+     * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link LogBean} 
+     * @param refFeatureByVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
+     * @param refFeatureByCompareFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
+     * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
          * @return the inserted or updated {@link LogBean} bean
      */
     //3.5 SYNC SAVE 
     public LogBean save(LogBean bean
-        , DeviceBean refFlDevicebyDeviceId , FeatureBean refFlFeaturebyVerifyFeature , FeatureBean refFlFeaturebyCompareFeature , PersonBean refFlPersonbyPersonId 
+        , DeviceBean refDeviceByDeviceId , FeatureBean refFeatureByVerifyFeature , FeatureBean refFeatureByCompareFeature , PersonBean refPersonByPersonId 
         );
     /**
      * Transaction version for sync save
@@ -66,7 +66,7 @@ public interface ILogManager extends TableManager<LogBean>
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public LogBean saveAsTransaction(final LogBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final FeatureBean refFlFeaturebyVerifyFeature ,final FeatureBean refFlFeaturebyCompareFeature ,final PersonBean refFlPersonbyPersonId 
+        ,final DeviceBean refDeviceByDeviceId ,final FeatureBean refFeatureByVerifyFeature ,final FeatureBean refFeatureByCompareFeature ,final PersonBean refPersonByPersonId 
         );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD

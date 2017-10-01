@@ -171,18 +171,18 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //3.5 SYNC SAVE override ILogManager
     @Override  
     public LogBean save(LogBean bean
-        , DeviceBean refFlDevicebyDeviceId , FeatureBean refFlFeaturebyVerifyFeature , FeatureBean refFlFeaturebyCompareFeature , PersonBean refFlPersonbyPersonId 
+        , DeviceBean refDeviceByDeviceId , FeatureBean refFeatureByVerifyFeature , FeatureBean refFeatureByCompareFeature , PersonBean refPersonByPersonId 
         )
     {
         if(null == bean) return null;
-        if(null != refFlDevicebyDeviceId)
-            this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        if(null != refFlFeaturebyVerifyFeature)
-            this.setReferencedByVerifyFeature(bean,refFlFeaturebyVerifyFeature);
-        if(null != refFlFeaturebyCompareFeature)
-            this.setReferencedByCompareFeature(bean,refFlFeaturebyCompareFeature);
-        if(null != refFlPersonbyPersonId)
-            this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        if(null != refDeviceByDeviceId)
+            this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        if(null != refFeatureByVerifyFeature)
+            this.setReferencedByVerifyFeature(bean,refFeatureByVerifyFeature);
+        if(null != refFeatureByCompareFeature)
+            this.setReferencedByCompareFeature(bean,refFeatureByCompareFeature);
+        if(null != refPersonByPersonId)
+            this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         return bean;
     } 
@@ -190,13 +190,13 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //3.6 SYNC SAVE AS TRANSACTION override ILogManager
     @Override 
     public LogBean saveAsTransaction(final LogBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final FeatureBean refFlFeaturebyVerifyFeature ,final FeatureBean refFlFeaturebyCompareFeature ,final PersonBean refFlPersonbyPersonId 
+        ,final DeviceBean refDeviceByDeviceId ,final FeatureBean refFeatureByVerifyFeature ,final FeatureBean refFeatureByCompareFeature ,final PersonBean refPersonByPersonId 
         )
     {
         return this.runAsTransaction(new Callable<LogBean>(){
             @Override
             public LogBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlFeaturebyVerifyFeature , refFlFeaturebyCompareFeature , refFlPersonbyPersonId );
+                return save(bean , refDeviceByDeviceId , refFeatureByVerifyFeature , refFeatureByCompareFeature , refPersonByPersonId );
             }});
     }
      /**

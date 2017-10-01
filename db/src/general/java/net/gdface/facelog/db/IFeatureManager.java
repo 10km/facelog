@@ -57,7 +57,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public FaceBean[] getFlFaceBeansByFeatureMd5(FeatureBean bean);
+    public FaceBean[] getFaceBeansByFeatureMd5(FeatureBean bean);
     
     /**
      * Retrieves the {@link FaceBean} object from the fl_face.feature_md5 field.<BR>
@@ -67,7 +67,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FaceBean[] getFlFaceBeansByFeatureMd5(String featureMd5);
+    public FaceBean[] getFaceBeansByFeatureMd5(String featureMd5);
     
     /**
      * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
@@ -76,7 +76,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<FaceBean> getFlFaceBeansByFeatureMd5AsList(FeatureBean bean);
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean);
 
     /**
      * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
@@ -86,7 +86,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<FaceBean> getFlFaceBeansByFeatureMd5AsList(String featureMd5);
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5);
     
     /**
      * set  the {@link FaceBean} object array associate to FeatureBean by the fl_face.feature_md5 field.<BR>
@@ -97,7 +97,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
      */
     //3.3 SET IMPORTED
-    public FaceBean[] setFlFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans);
+    public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans);
 
     /**
      * set  the {@link FaceBean} object java.util.Collection associate to FeatureBean by the fl_face.feature_md5 field.<BR>
@@ -108,7 +108,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @see {@link FaceManager#setReferencedByFeatureMd5(FaceBean, FeatureBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans);
+    public <C extends java.util.Collection<FaceBean>> C setFaceBeansByFeatureMd5(FeatureBean bean , C importedBeans);
 
     /**
      * Retrieves the {@link LogBean} object from the fl_log.verify_feature field.<BR>
@@ -117,7 +117,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public LogBean[] getFlLogBeansByVerifyFeature(FeatureBean bean);
+    public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean);
     
     /**
      * Retrieves the {@link LogBean} object from the fl_log.verify_feature field.<BR>
@@ -127,7 +127,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getFlLogBeansByVerifyFeature(String featureMd5);
+    public LogBean[] getLogBeansByVerifyFeature(String featureMd5);
     
     /**
      * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
@@ -136,7 +136,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByVerifyFeatureAsList(FeatureBean bean);
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean);
 
     /**
      * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
@@ -146,7 +146,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByVerifyFeatureAsList(String featureMd5);
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String featureMd5);
     
     /**
      * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.verify_feature field.<BR>
@@ -157,7 +157,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
      */
     //3.3 SET IMPORTED
-    public LogBean[] setFlLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans);
 
     /**
      * set  the {@link LogBean} object java.util.Collection associate to FeatureBean by the fl_log.verify_feature field.<BR>
@@ -168,7 +168,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @see {@link LogManager#setReferencedByVerifyFeature(LogBean, FeatureBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByVerifyFeature(FeatureBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans);
 
     /**
      * Retrieves the {@link LogBean} object from the fl_log.compare_feature field.<BR>
@@ -177,7 +177,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public LogBean[] getFlLogBeansByCompareFeature(FeatureBean bean);
+    public LogBean[] getLogBeansByCompareFeature(FeatureBean bean);
     
     /**
      * Retrieves the {@link LogBean} object from the fl_log.compare_feature field.<BR>
@@ -187,7 +187,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getFlLogBeansByCompareFeature(String featureMd5);
+    public LogBean[] getLogBeansByCompareFeature(String featureMd5);
     
     /**
      * Retrieves the {@link LogBean} object from fl_log.compare_feature field.<BR>
@@ -196,7 +196,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByCompareFeatureAsList(FeatureBean bean);
+    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(FeatureBean bean);
 
     /**
      * Retrieves the {@link LogBean} object from fl_log.compare_feature field.<BR>
@@ -206,7 +206,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getFlLogBeansByCompareFeatureAsList(String featureMd5);
+    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(String featureMd5);
     
     /**
      * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.compare_feature field.<BR>
@@ -217,7 +217,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @see {@link LogManager#setReferencedByCompareFeature(LogBean, FeatureBean)
      */
     //3.3 SET IMPORTED
-    public LogBean[] setFlLogBeansByCompareFeature(FeatureBean bean , LogBean[] importedBeans);
+    public LogBean[] setLogBeansByCompareFeature(FeatureBean bean , LogBean[] importedBeans);
 
     /**
      * set  the {@link LogBean} object java.util.Collection associate to FeatureBean by the fl_log.compare_feature field.<BR>
@@ -228,52 +228,52 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @see {@link LogManager#setReferencedByCompareFeature(LogBean, FeatureBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByCompareFeature(FeatureBean bean , C importedBeans);
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFeature(FeatureBean bean , C importedBeans);
 
     /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FeatureBean} bean to be saved
-     * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
-     * @param impFlFacebyFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
-     * @param impFlLogbyVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
-     * @param impFlLogbyCompareFeature the {@link LogBean} bean refer to {@link FeatureBean} 
+     * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
+     * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
+     * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
+     * @param impLogByCompareFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
      */
     //3.5 SYNC SAVE 
     public FeatureBean save(FeatureBean bean
-        , PersonBean refFlPersonbyPersonId 
-        , FaceBean[] impFlFacebyFeatureMd5 , LogBean[] impFlLogbyVerifyFeature , LogBean[] impFlLogbyCompareFeature );
+        , PersonBean refPersonByPersonId 
+        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature , LogBean[] impLogByCompareFeature );
     /**
      * Transaction version for sync save
      * @see {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FeatureBean saveAsTransaction(final FeatureBean bean
-        ,final PersonBean refFlPersonbyPersonId 
-        ,final FaceBean[] impFlFacebyFeatureMd5 ,final LogBean[] impFlLogbyVerifyFeature ,final LogBean[] impFlLogbyCompareFeature );
+        ,final PersonBean refPersonByPersonId 
+        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature ,final LogBean[] impLogByCompareFeature );
     /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FeatureBean} bean to be saved
-     * @param refFlPersonbyPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
-     * @param impFlFacebyFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
-     * @param impFlLogbyVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
-     * @param impFlLogbyCompareFeature the {@link LogBean} bean refer to {@link FeatureBean} 
+     * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
+     * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
+     * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
+     * @param impLogByCompareFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
      */
     //3.7 SYNC SAVE 
     public FeatureBean save(FeatureBean bean
-        , PersonBean refFlPersonbyPersonId 
-        , java.util.Collection<FaceBean> impFlFacebyFeatureMd5 , java.util.Collection<LogBean> impFlLogbyVerifyFeature , java.util.Collection<LogBean> impFlLogbyCompareFeature );
+        , PersonBean refPersonByPersonId 
+        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature , java.util.Collection<LogBean> impLogByCompareFeature );
     /**
      * Transaction version for sync save
      * @see {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FeatureBean saveAsTransaction(final FeatureBean bean
-        ,final PersonBean refFlPersonbyPersonId 
-        ,final  java.util.Collection<FaceBean> impFlFacebyFeatureMd5 ,final  java.util.Collection<LogBean> impFlLogbyVerifyFeature ,final  java.util.Collection<LogBean> impFlLogbyCompareFeature );
+        ,final PersonBean refPersonByPersonId 
+        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature ,final  java.util.Collection<LogBean> impLogByCompareFeature );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

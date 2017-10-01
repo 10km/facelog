@@ -50,13 +50,13 @@ public interface IFaceManager extends TableManager<FaceBean>
      * Save the FaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
-     * @param refFlFeaturebyFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
-     * @param refFlImagebyImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
+     * @param refFeatureByFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
          * @return the inserted or updated {@link FaceBean} bean
      */
     //3.5 SYNC SAVE 
     public FaceBean save(FaceBean bean
-        , FeatureBean refFlFeaturebyFeatureMd5 , ImageBean refFlImagebyImageMd5 
+        , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
         );
     /**
      * Transaction version for sync save
@@ -64,7 +64,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FaceBean saveAsTransaction(final FaceBean bean
-        ,final FeatureBean refFlFeaturebyFeatureMd5 ,final ImageBean refFlImagebyImageMd5 
+        ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
         );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD

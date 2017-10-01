@@ -195,9 +195,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(DeviceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
-            return (java.util.List<T>)this.getFlImageBeansByDeviceIdAsList(bean);
+            return (java.util.List<T>)this.getImageBeansByDeviceIdAsList(bean);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
-            return (java.util.List<T>)this.getFlLogBeansByDeviceIdAsList(bean);
+            return (java.util.List<T>)this.getLogBeansByDeviceIdAsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -219,9 +219,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(DeviceBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
-            return (T[])setFlImageBeansByDeviceId(bean,(ImageBean[])importedBeans);
+            return (T[])setImageBeansByDeviceId(bean,(ImageBean[])importedBeans);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
-            return (T[])setFlLogBeansByDeviceId(bean,(LogBean[])importedBeans);
+            return (T[])setLogBeansByDeviceId(bean,(LogBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -242,9 +242,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(DeviceBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
-            return (C)setFlImageBeansByDeviceId(bean,(java.util.Collection<ImageBean>)importedBeans);
+            return (C)setImageBeansByDeviceId(bean,(java.util.Collection<ImageBean>)importedBeans);
         case FL_DEVICE_IK_FL_LOG_DEVICE_ID:
-            return (C)setFlLogBeansByDeviceId(bean,(java.util.Collection<LogBean>)importedBeans);
+            return (C)setLogBeansByDeviceId(bean,(java.util.Collection<LogBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -255,24 +255,24 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //////////////////////////////////////
     //3.1 GET IMPORTED override IDeviceManager
     @Override 
-    public ImageBean[] getFlImageBeansByDeviceId(DeviceBean bean)
+    public ImageBean[] getImageBeansByDeviceId(DeviceBean bean)
     {
-        return this.getFlImageBeansByDeviceIdAsList(bean).toArray(new ImageBean[0]);
+        return this.getImageBeansByDeviceIdAsList(bean).toArray(new ImageBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceManager
     @Override
-    public ImageBean[] getFlImageBeansByDeviceId(Integer deviceId)
+    public ImageBean[] getImageBeansByDeviceId(Integer deviceId)
     {
         DeviceBean bean = new DeviceBean();
         bean.setId(deviceId);
-        return getFlImageBeansByDeviceId(bean);
+        return getImageBeansByDeviceId(bean);
     }
     //3.2 GET IMPORTED override IDeviceManager
     @Override 
-    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(DeviceBean bean)
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByDeviceIdAsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getImageBeansByDeviceIdAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -281,15 +281,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.2.2 GET IMPORTED override IDeviceManager
     @Override
-    public java.util.List<ImageBean> getFlImageBeansByDeviceIdAsList(Integer deviceId)
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer deviceId)
     {
          DeviceBean bean = new DeviceBean();
         bean.setId(deviceId);
-        return getFlImageBeansByDeviceIdAsList(bean);
+        return getImageBeansByDeviceIdAsList(bean);
     }
     //3.3 SET IMPORTED override IDeviceManager
     @Override 
-    public ImageBean[] setFlImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
+    public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
@@ -301,7 +301,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
 
     //3.4 SET IMPORTED override IDeviceManager
     @Override 
-    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByDeviceId(DeviceBean bean , C importedBeans)
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
@@ -312,24 +312,24 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.1 GET IMPORTED override IDeviceManager
     @Override 
-    public LogBean[] getFlLogBeansByDeviceId(DeviceBean bean)
+    public LogBean[] getLogBeansByDeviceId(DeviceBean bean)
     {
-        return this.getFlLogBeansByDeviceIdAsList(bean).toArray(new LogBean[0]);
+        return this.getLogBeansByDeviceIdAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceManager
     @Override
-    public LogBean[] getFlLogBeansByDeviceId(Integer deviceId)
+    public LogBean[] getLogBeansByDeviceId(Integer deviceId)
     {
         DeviceBean bean = new DeviceBean();
         bean.setId(deviceId);
-        return getFlLogBeansByDeviceId(bean);
+        return getLogBeansByDeviceId(bean);
     }
     //3.2 GET IMPORTED override IDeviceManager
     @Override 
-    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(DeviceBean bean)
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByDeviceIdAsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByDeviceIdAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -338,15 +338,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.2.2 GET IMPORTED override IDeviceManager
     @Override
-    public java.util.List<LogBean> getFlLogBeansByDeviceIdAsList(Integer deviceId)
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer deviceId)
     {
          DeviceBean bean = new DeviceBean();
         bean.setId(deviceId);
-        return getFlLogBeansByDeviceIdAsList(bean);
+        return getLogBeansByDeviceIdAsList(bean);
     }
     //3.3 SET IMPORTED override IDeviceManager
     @Override 
-    public LogBean[] setFlLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
+    public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -358,7 +358,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
 
     //3.4 SET IMPORTED override IDeviceManager
     @Override 
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByDeviceId(DeviceBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByDeviceId(DeviceBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -373,14 +373,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override  
     public DeviceBean save(DeviceBean bean
         
-        , ImageBean[] impFlImagebyDeviceId , LogBean[] impFlLogbyDeviceId )
+        , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId )
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlImageBeansByDeviceId(bean,impFlImagebyDeviceId);
-        ImageManager.getInstance().save( impFlImagebyDeviceId );
-        this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
-        LogManager.getInstance().save( impFlLogbyDeviceId );
+        this.setImageBeansByDeviceId(bean,impImageByDeviceId);
+        ImageManager.getInstance().save( impImageByDeviceId );
+        this.setLogBeansByDeviceId(bean,impLogByDeviceId);
+        LogManager.getInstance().save( impLogByDeviceId );
         return bean;
     } 
 
@@ -388,26 +388,26 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final ImageBean[] impFlImagebyDeviceId ,final LogBean[] impFlLogbyDeviceId )
+        ,final ImageBean[] impImageByDeviceId ,final LogBean[] impLogByDeviceId )
     {
         return this.runAsTransaction(new Callable<DeviceBean>(){
             @Override
             public DeviceBean call() throws Exception {
-                return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
+                return save(bean , impImageByDeviceId , impLogByDeviceId );
             }});
     }
     //3.7 SYNC SAVE override IDeviceManager
     @Override 
     public DeviceBean save(DeviceBean bean
         
-        , java.util.Collection<ImageBean> impFlImagebyDeviceId , java.util.Collection<LogBean> impFlLogbyDeviceId )
+        , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId )
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlImageBeansByDeviceId(bean,impFlImagebyDeviceId);
-        ImageManager.getInstance().save( impFlImagebyDeviceId );
-        this.setFlLogBeansByDeviceId(bean,impFlLogbyDeviceId);
-        LogManager.getInstance().save( impFlLogbyDeviceId );
+        this.setImageBeansByDeviceId(bean,impImageByDeviceId);
+        ImageManager.getInstance().save( impImageByDeviceId );
+        this.setLogBeansByDeviceId(bean,impLogByDeviceId);
+        LogManager.getInstance().save( impLogByDeviceId );
         return bean;
     }   
 
@@ -415,12 +415,12 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final  java.util.Collection<ImageBean> impFlImagebyDeviceId ,final  java.util.Collection<LogBean> impFlLogbyDeviceId )
+        ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId )
     {
         return this.runAsTransaction(new Callable<DeviceBean>(){
             @Override
             public DeviceBean call() throws Exception {
-                return save(bean , impFlImagebyDeviceId , impFlLogbyDeviceId );
+                return save(bean , impImageByDeviceId , impLogByDeviceId );
             }});
     }
      /**

@@ -107,6 +107,7 @@ public class StoreBean
      * <li> imported key: fl_image.md5</li>
      * <li> imported key: fl_image.thumb_md5</li>
      * <li>comments: 主键,md5检验码</li>
+     * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -123,7 +124,7 @@ public class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to md5
+     * @param newVal the new value (NOT NULL) to be assigned to md5
      */
     @com.facebook.swift.codec.ThriftField
     public void setMd5(String newVal)
@@ -181,7 +182,7 @@ public class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to encoding
+     * @param newVal the new value  to be assigned to encoding
      */
     @com.facebook.swift.codec.ThriftField
     public void setEncoding(String newVal)
@@ -238,7 +239,7 @@ public class StoreBean
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value to be assigned to data
+     * @param newVal the new value  to be assigned to data
      */
     @com.facebook.swift.codec.ThriftField
     public void setData(byte[] newVal)
@@ -348,6 +349,13 @@ public class StoreBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #md5} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_STORE_ID_MD5_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

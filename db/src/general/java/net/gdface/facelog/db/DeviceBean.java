@@ -114,6 +114,8 @@ public class DeviceBean
      * <li> imported key: fl_log.device_id</li>
      * <li> imported key: fl_image.device_id</li>
      * <li>comments: 设备id</li>
+     * <li>AUTO_INCREMENT</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -130,7 +132,7 @@ public class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value (NOT NULL) to be assigned to id
      */
     @com.facebook.swift.codec.ThriftField
     public void setId(Integer newVal)
@@ -198,7 +200,7 @@ public class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to name
+     * @param newVal the new value  to be assigned to name
      */
     @com.facebook.swift.codec.ThriftField
     public void setName(String newVal)
@@ -256,7 +258,7 @@ public class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value  to be assigned to groupId
      */
     @com.facebook.swift.codec.ThriftField
     public void setGroupId(Integer newVal)
@@ -324,7 +326,7 @@ public class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to version
+     * @param newVal the new value  to be assigned to version
      */
     @com.facebook.swift.codec.ThriftField
     public void setVersion(String newVal)
@@ -365,6 +367,7 @@ public class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.create_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -381,7 +384,7 @@ public class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
@@ -432,6 +435,7 @@ public class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.update_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -448,7 +452,7 @@ public class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to updateTime
+     * @param newVal the new value (NOT NULL) to be assigned to updateTime
      */
     @com.facebook.swift.codec.ThriftField
     public void setUpdateTime(java.util.Date newVal)
@@ -584,6 +588,13 @@ public class DeviceBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #id} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_DEVICE_ID_ID_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

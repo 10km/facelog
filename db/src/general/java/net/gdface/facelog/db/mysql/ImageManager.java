@@ -197,9 +197,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
-            return (java.util.List<T>)this.getFlFaceBeansByImageMd5AsList(bean);
+            return (java.util.List<T>)this.getFaceBeansByImageMd5AsList(bean);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
-            return (java.util.List<T>)this.getFlPersonBeansByImageMd5AsList(bean);
+            return (java.util.List<T>)this.getPersonBeansByImageMd5AsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -221,9 +221,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(ImageBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
-            return (T[])setFlFaceBeansByImageMd5(bean,(FaceBean[])importedBeans);
+            return (T[])setFaceBeansByImageMd5(bean,(FaceBean[])importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
-            return (T[])setFlPersonBeansByImageMd5(bean,(PersonBean[])importedBeans);
+            return (T[])setPersonBeansByImageMd5(bean,(PersonBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -244,9 +244,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
-            return (C)setFlFaceBeansByImageMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
+            return (C)setFaceBeansByImageMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
         case FL_IMAGE_IK_FL_PERSON_IMAGE_MD5:
-            return (C)setFlPersonBeansByImageMd5(bean,(java.util.Collection<PersonBean>)importedBeans);
+            return (C)setPersonBeansByImageMd5(bean,(java.util.Collection<PersonBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -257,24 +257,24 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //////////////////////////////////////
     //3.1 GET IMPORTED override IImageManager
     @Override 
-    public FaceBean[] getFlFaceBeansByImageMd5(ImageBean bean)
+    public FaceBean[] getFaceBeansByImageMd5(ImageBean bean)
     {
-        return this.getFlFaceBeansByImageMd5AsList(bean).toArray(new FaceBean[0]);
+        return this.getFaceBeansByImageMd5AsList(bean).toArray(new FaceBean[0]);
     }
     //3.1.2 GET IMPORTED override IImageManager
     @Override
-    public FaceBean[] getFlFaceBeansByImageMd5(String imageMd5)
+    public FaceBean[] getFaceBeansByImageMd5(String imageMd5)
     {
         ImageBean bean = new ImageBean();
         bean.setMd5(imageMd5);
-        return getFlFaceBeansByImageMd5(bean);
+        return getFaceBeansByImageMd5(bean);
     }
     //3.2 GET IMPORTED override IImageManager
     @Override 
-    public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(ImageBean bean)
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean)
     {
         try {
-            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFlFaceBeansByImageMd5AsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByImageMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -283,15 +283,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.2.2 GET IMPORTED override IImageManager
     @Override
-    public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(String imageMd5)
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String imageMd5)
     {
          ImageBean bean = new ImageBean();
         bean.setMd5(imageMd5);
-        return getFlFaceBeansByImageMd5AsList(bean);
+        return getFaceBeansByImageMd5AsList(bean);
     }
     //3.3 SET IMPORTED override IImageManager
     @Override 
-    public FaceBean[] setFlFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans)
+    public FaceBean[] setFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans)
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
@@ -303,7 +303,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
 
     //3.4 SET IMPORTED override IImageManager
     @Override 
-    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByImageMd5(ImageBean bean , C importedBeans)
+    public <C extends java.util.Collection<FaceBean>> C setFaceBeansByImageMd5(ImageBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
@@ -314,24 +314,24 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.1 GET IMPORTED override IImageManager
     @Override 
-    public PersonBean[] getFlPersonBeansByImageMd5(ImageBean bean)
+    public PersonBean[] getPersonBeansByImageMd5(ImageBean bean)
     {
-        return this.getFlPersonBeansByImageMd5AsList(bean).toArray(new PersonBean[0]);
+        return this.getPersonBeansByImageMd5AsList(bean).toArray(new PersonBean[0]);
     }
     //3.1.2 GET IMPORTED override IImageManager
     @Override
-    public PersonBean[] getFlPersonBeansByImageMd5(String imageMd5)
+    public PersonBean[] getPersonBeansByImageMd5(String imageMd5)
     {
         ImageBean bean = new ImageBean();
         bean.setMd5(imageMd5);
-        return getFlPersonBeansByImageMd5(bean);
+        return getPersonBeansByImageMd5(bean);
     }
     //3.2 GET IMPORTED override IImageManager
     @Override 
-    public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(ImageBean bean)
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean)
     {
         try {
-            return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getFlPersonBeansByImageMd5AsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getPersonBeansByImageMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -340,15 +340,15 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.2.2 GET IMPORTED override IImageManager
     @Override
-    public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(String imageMd5)
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String imageMd5)
     {
          ImageBean bean = new ImageBean();
         bean.setMd5(imageMd5);
-        return getFlPersonBeansByImageMd5AsList(bean);
+        return getPersonBeansByImageMd5AsList(bean);
     }
     //3.3 SET IMPORTED override IImageManager
     @Override 
-    public PersonBean[] setFlPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans)
+    public PersonBean[] setPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans)
     {
         if(null != importedBeans){
             for( PersonBean importBean : importedBeans ){
@@ -360,7 +360,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
 
     //3.4 SET IMPORTED override IImageManager
     @Override 
-    public <C extends java.util.Collection<PersonBean>> C setFlPersonBeansByImageMd5(ImageBean bean , C importedBeans)
+    public <C extends java.util.Collection<PersonBean>> C setPersonBeansByImageMd5(ImageBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( PersonBean importBean : importedBeans ){
@@ -374,64 +374,64 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //3.5 SYNC SAVE override IImageManager
     @Override  
     public ImageBean save(ImageBean bean
-        , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
-        , FaceBean[] impFlFacebyImageMd5 , PersonBean[] impFlPersonbyImageMd5 )
+        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , FaceBean[] impFaceByImageMd5 , PersonBean[] impPersonByImageMd5 )
     {
         if(null == bean) return null;
-        if(null != refFlDevicebyDeviceId)
-            this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        if(null != refFlStorebyMd5)
-            this.setReferencedByMd5(bean,refFlStorebyMd5);
-        if(null != refFlStorebyThumbMd5)
-            this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
+        if(null != refDeviceByDeviceId)
+            this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        if(null != refStoreByMd5)
+            this.setReferencedByMd5(bean,refStoreByMd5);
+        if(null != refStoreByThumbMd5)
+            this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
-        this.setFlFaceBeansByImageMd5(bean,impFlFacebyImageMd5);
-        FaceManager.getInstance().save( impFlFacebyImageMd5 );
-        this.setFlPersonBeansByImageMd5(bean,impFlPersonbyImageMd5);
-        PersonManager.getInstance().save( impFlPersonbyImageMd5 );
+        this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
+        FaceManager.getInstance().save( impFaceByImageMd5 );
+        this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
+        PersonManager.getInstance().save( impPersonByImageMd5 );
         return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IImageManager
     @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
-        ,final FaceBean[] impFlFacebyImageMd5 ,final PersonBean[] impFlPersonbyImageMd5 )
+        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final FaceBean[] impFaceByImageMd5 ,final PersonBean[] impPersonByImageMd5 )
     {
         return this.runAsTransaction(new Callable<ImageBean>(){
             @Override
             public ImageBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImageMd5 , impFlPersonbyImageMd5 );
+                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
     //3.7 SYNC SAVE override IImageManager
     @Override 
     public ImageBean save(ImageBean bean
-        , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
-        , java.util.Collection<FaceBean> impFlFacebyImageMd5 , java.util.Collection<PersonBean> impFlPersonbyImageMd5 )
+        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , java.util.Collection<FaceBean> impFaceByImageMd5 , java.util.Collection<PersonBean> impPersonByImageMd5 )
     {
         if(null == bean) return null;
-        this.setReferencedByDeviceId(bean,refFlDevicebyDeviceId);
-        this.setReferencedByMd5(bean,refFlStorebyMd5);
-        this.setReferencedByThumbMd5(bean,refFlStorebyThumbMd5);
+        this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
+        this.setReferencedByMd5(bean,refStoreByMd5);
+        this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
-        this.setFlFaceBeansByImageMd5(bean,impFlFacebyImageMd5);
-        FaceManager.getInstance().save( impFlFacebyImageMd5 );
-        this.setFlPersonBeansByImageMd5(bean,impFlPersonbyImageMd5);
-        PersonManager.getInstance().save( impFlPersonbyImageMd5 );
+        this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
+        FaceManager.getInstance().save( impFaceByImageMd5 );
+        this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
+        PersonManager.getInstance().save( impPersonByImageMd5 );
         return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IImageManager
     @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
-        ,final  java.util.Collection<FaceBean> impFlFacebyImageMd5 ,final  java.util.Collection<PersonBean> impFlPersonbyImageMd5 )
+        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final  java.util.Collection<FaceBean> impFaceByImageMd5 ,final  java.util.Collection<PersonBean> impPersonByImageMd5 )
     {
         return this.runAsTransaction(new Callable<ImageBean>(){
             @Override
             public ImageBean call() throws Exception {
-                return save(bean , refFlDevicebyDeviceId , refFlStorebyMd5 , refFlStorebyThumbMd5 , impFlFacebyImageMd5 , impFlPersonbyImageMd5 );
+                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
      /**

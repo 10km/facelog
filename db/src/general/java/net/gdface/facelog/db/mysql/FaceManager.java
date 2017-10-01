@@ -170,14 +170,14 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     //3.5 SYNC SAVE override IFaceManager
     @Override  
     public FaceBean save(FaceBean bean
-        , FeatureBean refFlFeaturebyFeatureMd5 , ImageBean refFlImagebyImageMd5 
+        , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
         )
     {
         if(null == bean) return null;
-        if(null != refFlFeaturebyFeatureMd5)
-            this.setReferencedByFeatureMd5(bean,refFlFeaturebyFeatureMd5);
-        if(null != refFlImagebyImageMd5)
-            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        if(null != refFeatureByFeatureMd5)
+            this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
+        if(null != refImageByImageMd5)
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
         return bean;
     } 
@@ -185,13 +185,13 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     //3.6 SYNC SAVE AS TRANSACTION override IFaceManager
     @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
-        ,final FeatureBean refFlFeaturebyFeatureMd5 ,final ImageBean refFlImagebyImageMd5 
+        ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
         )
     {
         return this.runAsTransaction(new Callable<FaceBean>(){
             @Override
             public FaceBean call() throws Exception {
-                return save(bean , refFlFeaturebyFeatureMd5 , refFlImagebyImageMd5 );
+                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 );
             }});
     }
      /**

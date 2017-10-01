@@ -57,7 +57,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public FaceBean[] getFlFaceBeansByImageMd5(ImageBean bean);
+    public FaceBean[] getFaceBeansByImageMd5(ImageBean bean);
     
     /**
      * Retrieves the {@link FaceBean} object from the fl_face.image_md5 field.<BR>
@@ -67,7 +67,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FaceBean[] getFlFaceBeansByImageMd5(String imageMd5);
+    public FaceBean[] getFaceBeansByImageMd5(String imageMd5);
     
     /**
      * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
@@ -76,7 +76,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(ImageBean bean);
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean);
 
     /**
      * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
@@ -86,7 +86,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<FaceBean> getFlFaceBeansByImageMd5AsList(String imageMd5);
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String imageMd5);
     
     /**
      * set  the {@link FaceBean} object array associate to ImageBean by the fl_face.image_md5 field.<BR>
@@ -97,7 +97,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @see {@link FaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
      */
     //3.3 SET IMPORTED
-    public FaceBean[] setFlFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans);
+    public FaceBean[] setFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans);
 
     /**
      * set  the {@link FaceBean} object java.util.Collection associate to ImageBean by the fl_face.image_md5 field.<BR>
@@ -108,7 +108,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @see {@link FaceManager#setReferencedByImageMd5(FaceBean, ImageBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FaceBean>> C setFlFaceBeansByImageMd5(ImageBean bean , C importedBeans);
+    public <C extends java.util.Collection<FaceBean>> C setFaceBeansByImageMd5(ImageBean bean , C importedBeans);
 
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
@@ -117,7 +117,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public PersonBean[] getFlPersonBeansByImageMd5(ImageBean bean);
+    public PersonBean[] getPersonBeansByImageMd5(ImageBean bean);
     
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
@@ -127,7 +127,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public PersonBean[] getFlPersonBeansByImageMd5(String imageMd5);
+    public PersonBean[] getPersonBeansByImageMd5(String imageMd5);
     
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
@@ -136,7 +136,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.2 GET IMPORTED
-    public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(ImageBean bean);
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean);
 
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
@@ -146,7 +146,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<PersonBean> getFlPersonBeansByImageMd5AsList(String imageMd5);
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String imageMd5);
     
     /**
      * set  the {@link PersonBean} object array associate to ImageBean by the fl_person.image_md5 field.<BR>
@@ -157,7 +157,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @see {@link PersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
      */
     //3.3 SET IMPORTED
-    public PersonBean[] setFlPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans);
+    public PersonBean[] setPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans);
 
     /**
      * set  the {@link PersonBean} object java.util.Collection associate to ImageBean by the fl_person.image_md5 field.<BR>
@@ -168,54 +168,54 @@ public interface IImageManager extends TableManager<ImageBean>
      * @see {@link PersonManager#setReferencedByImageMd5(PersonBean, ImageBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<PersonBean>> C setFlPersonBeansByImageMd5(ImageBean bean , C importedBeans);
+    public <C extends java.util.Collection<PersonBean>> C setPersonBeansByImageMd5(ImageBean bean , C importedBeans);
 
     /**
      * Save the ImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param impFlFacebyImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
-     * @param impFlPersonbyImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
+     * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
+     * @param refStoreByMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
+     * @param refStoreByThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
+     * @param impFaceByImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
+     * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
      * @return the inserted or updated {@link ImageBean} bean
      */
     //3.5 SYNC SAVE 
     public ImageBean save(ImageBean bean
-        , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
-        , FaceBean[] impFlFacebyImageMd5 , PersonBean[] impFlPersonbyImageMd5 );
+        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , FaceBean[] impFaceByImageMd5 , PersonBean[] impPersonByImageMd5 );
     /**
      * Transaction version for sync save
      * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , FaceBean[] , PersonBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
-        ,final FaceBean[] impFlFacebyImageMd5 ,final PersonBean[] impFlPersonbyImageMd5 );
+        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final FaceBean[] impFaceByImageMd5 ,final PersonBean[] impPersonByImageMd5 );
     /**
      * Save the ImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
-     * @param refFlDevicebyDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param refFlStorebyThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param impFlFacebyImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
-     * @param impFlPersonbyImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
+     * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
+     * @param refStoreByMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
+     * @param refStoreByThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
+     * @param impFaceByImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
+     * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
      * @return the inserted or updated {@link ImageBean} bean
      */
     //3.7 SYNC SAVE 
     public ImageBean save(ImageBean bean
-        , DeviceBean refFlDevicebyDeviceId , StoreBean refFlStorebyMd5 , StoreBean refFlStorebyThumbMd5 
-        , java.util.Collection<FaceBean> impFlFacebyImageMd5 , java.util.Collection<PersonBean> impFlPersonbyImageMd5 );
+        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , java.util.Collection<FaceBean> impFaceByImageMd5 , java.util.Collection<PersonBean> impPersonByImageMd5 );
     /**
      * Transaction version for sync save
      * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refFlDevicebyDeviceId ,final StoreBean refFlStorebyMd5 ,final StoreBean refFlStorebyThumbMd5 
-        ,final  java.util.Collection<FaceBean> impFlFacebyImageMd5 ,final  java.util.Collection<PersonBean> impFlPersonbyImageMd5 );
+        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final  java.util.Collection<FaceBean> impFaceByImageMd5 ,final  java.util.Collection<PersonBean> impPersonByImageMd5 );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

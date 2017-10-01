@@ -296,11 +296,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlFeatureBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FEATURE_IK_FL_FACE_FEATURE_MD5:
-            return (List<T>)this.getFlFaceBeansByFeatureMd5AsList(bean);
+            return (List<T>)this.getFaceBeansByFeatureMd5AsList(bean);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
-            return (List<T>)this.getFlLogBeansByVerifyFeatureAsList(bean);
+            return (List<T>)this.getLogBeansByVerifyFeatureAsList(bean);
         case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (List<T>)this.getFlLogBeansByCompareFeatureAsList(bean);
+            return (List<T>)this.getLogBeansByCompareFeatureAsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -319,11 +319,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlFeatureBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FEATURE_IK_FL_FACE_FEATURE_MD5:
-            return (T[])setFlFaceBeansByFeatureMd5(bean,(FlFaceBean[])importedBeans);
+            return (T[])setFaceBeansByFeatureMd5(bean,(FlFaceBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
-            return (T[])setFlLogBeansByVerifyFeature(bean,(FlLogBean[])importedBeans);
+            return (T[])setLogBeansByVerifyFeature(bean,(FlLogBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (T[])setFlLogBeansByCompareFeature(bean,(FlLogBean[])importedBeans);
+            return (T[])setLogBeansByCompareFeature(bean,(FlLogBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -342,11 +342,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFeatureBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FEATURE_IK_FL_FACE_FEATURE_MD5:
-            return (C)setFlFaceBeansByFeatureMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
+            return (C)setFaceBeansByFeatureMd5(bean,(java.util.Collection<FlFaceBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
-            return (C)setFlLogBeansByVerifyFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
+            return (C)setLogBeansByVerifyFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (C)setFlLogBeansByCompareFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
+            return (C)setLogBeansByCompareFeature(bean,(java.util.Collection<FlLogBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -362,9 +362,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlFaceBean[] getFlFaceBeansByFeatureMd5(FlFeatureBean bean) throws DAOException
+    public FlFaceBean[] getFaceBeansByFeatureMd5(FlFeatureBean bean) throws DAOException
     {
-        return getFlFaceBeansByFeatureMd5AsList(bean).toArray(new FlFaceBean[0]);
+        return getFaceBeansByFeatureMd5AsList(bean).toArray(new FlFaceBean[0]);
     }
     /**
      * Retrieves the {@link FlFaceBean} object from the fl_face.feature_md5 field.<BR>
@@ -374,11 +374,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlFaceBean[] getFlFaceBeansByFeatureMd5(String featureMd5) throws DAOException
+    public FlFaceBean[] getFaceBeansByFeatureMd5(String featureMd5) throws DAOException
     {
         FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
-        return getFlFaceBeansByFeatureMd5(bean);
+        return getFaceBeansByFeatureMd5(bean);
     }
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field.<BR>
@@ -388,7 +388,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2 GET IMPORTED
-    public List<FlFaceBean> getFlFaceBeansByFeatureMd5AsList(FlFeatureBean bean) throws DAOException
+    public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(FlFeatureBean bean) throws DAOException
     {
         if(null == bean)return new java.util.ArrayList<FlFaceBean>();
         FlFaceBean other = FlFaceManager.getInstance().createBean();
@@ -403,11 +403,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlFaceBean> getFlFaceBeansByFeatureMd5AsList(String featureMd5) throws DAOException
+    public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5) throws DAOException
     {
          FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
-        return getFlFaceBeansByFeatureMd5AsList(bean);
+        return getFaceBeansByFeatureMd5AsList(bean);
     }
     /**
      * set  the {@link FlFaceBean} object array associate to FlFeatureBean by the fl_face.feature_md5 field.<BR>
@@ -419,7 +419,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
      */
     //3.3 SET IMPORTED
-    public FlFaceBean[] setFlFaceBeansByFeatureMd5(FlFeatureBean bean , FlFaceBean[] importedBeans) throws DAOException
+    public FlFaceBean[] setFaceBeansByFeatureMd5(FlFeatureBean bean , FlFaceBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -439,7 +439,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @see {@link FlFaceManager#setReferencedByFeatureMd5(FlFaceBean, FlFeatureBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlFaceBean>> C setFlFaceBeansByFeatureMd5(FlFeatureBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlFaceBean>> C setFaceBeansByFeatureMd5(FlFeatureBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
@@ -457,9 +457,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByVerifyFeature(FlFeatureBean bean) throws DAOException
+    public FlLogBean[] getLogBeansByVerifyFeature(FlFeatureBean bean) throws DAOException
     {
-        return getFlLogBeansByVerifyFeatureAsList(bean).toArray(new FlLogBean[0]);
+        return getLogBeansByVerifyFeatureAsList(bean).toArray(new FlLogBean[0]);
     }
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.verify_feature field.<BR>
@@ -469,11 +469,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByVerifyFeature(String featureMd5) throws DAOException
+    public FlLogBean[] getLogBeansByVerifyFeature(String featureMd5) throws DAOException
     {
         FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByVerifyFeature(bean);
+        return getLogBeansByVerifyFeature(bean);
     }
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field.<BR>
@@ -483,7 +483,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByVerifyFeatureAsList(FlFeatureBean bean) throws DAOException
+    public List<FlLogBean> getLogBeansByVerifyFeatureAsList(FlFeatureBean bean) throws DAOException
     {
         if(null == bean)return new java.util.ArrayList<FlLogBean>();
         FlLogBean other = FlLogManager.getInstance().createBean();
@@ -498,11 +498,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByVerifyFeatureAsList(String featureMd5) throws DAOException
+    public List<FlLogBean> getLogBeansByVerifyFeatureAsList(String featureMd5) throws DAOException
     {
          FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByVerifyFeatureAsList(bean);
+        return getLogBeansByVerifyFeatureAsList(bean);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlFeatureBean by the fl_log.verify_feature field.<BR>
@@ -514,7 +514,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
      */
     //3.3 SET IMPORTED
-    public FlLogBean[] setFlLogBeansByVerifyFeature(FlFeatureBean bean , FlLogBean[] importedBeans) throws DAOException
+    public FlLogBean[] setLogBeansByVerifyFeature(FlFeatureBean bean , FlLogBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -534,7 +534,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @see {@link FlLogManager#setReferencedByVerifyFeature(FlLogBean, FlFeatureBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByVerifyFeature(FlFeatureBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlLogBean>> C setLogBeansByVerifyFeature(FlFeatureBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -552,9 +552,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByCompareFeature(FlFeatureBean bean) throws DAOException
+    public FlLogBean[] getLogBeansByCompareFeature(FlFeatureBean bean) throws DAOException
     {
-        return getFlLogBeansByCompareFeatureAsList(bean).toArray(new FlLogBean[0]);
+        return getLogBeansByCompareFeatureAsList(bean).toArray(new FlLogBean[0]);
     }
     /**
      * Retrieves the {@link FlLogBean} object from the fl_log.compare_feature field.<BR>
@@ -564,11 +564,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlLogBean[] getFlLogBeansByCompareFeature(String featureMd5) throws DAOException
+    public FlLogBean[] getLogBeansByCompareFeature(String featureMd5) throws DAOException
     {
         FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByCompareFeature(bean);
+        return getLogBeansByCompareFeature(bean);
     }
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.compare_feature field.<BR>
@@ -578,7 +578,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByCompareFeatureAsList(FlFeatureBean bean) throws DAOException
+    public List<FlLogBean> getLogBeansByCompareFeatureAsList(FlFeatureBean bean) throws DAOException
     {
         if(null == bean)return new java.util.ArrayList<FlLogBean>();
         FlLogBean other = FlLogManager.getInstance().createBean();
@@ -593,11 +593,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlLogBean> getFlLogBeansByCompareFeatureAsList(String featureMd5) throws DAOException
+    public List<FlLogBean> getLogBeansByCompareFeatureAsList(String featureMd5) throws DAOException
     {
          FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
-        return getFlLogBeansByCompareFeatureAsList(bean);
+        return getLogBeansByCompareFeatureAsList(bean);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlFeatureBean by the fl_log.compare_feature field.<BR>
@@ -609,7 +609,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @see {@link FlLogManager#setReferencedByCompareFeature(FlLogBean, FlFeatureBean)
      */
     //3.3 SET IMPORTED
-    public FlLogBean[] setFlLogBeansByCompareFeature(FlFeatureBean bean , FlLogBean[] importedBeans) throws DAOException
+    public FlLogBean[] setLogBeansByCompareFeature(FlFeatureBean bean , FlLogBean[] importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -629,7 +629,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @see {@link FlLogManager#setReferencedByCompareFeature(FlLogBean, FlFeatureBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlLogBean>> C setFlLogBeansByCompareFeature(FlFeatureBean bean , C importedBeans) throws DAOException
+    public <C extends java.util.Collection<FlLogBean>> C setLogBeansByCompareFeature(FlFeatureBean bean , C importedBeans) throws DAOException
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
@@ -643,28 +643,28 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * Save the FlFeatureBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFeatureBean} bean to be saved
-     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFeatureBean} 
-     * @param impFlFacebyFeatureMd5 the {@link FlFaceBean} beans refer to {@link FlFeatureBean} 
-     * @param impFlLogbyVerifyFeature the {@link FlLogBean} beans refer to {@link FlFeatureBean} 
-     * @param impFlLogbyCompareFeature the {@link FlLogBean} beans refer to {@link FlFeatureBean} 
+     * @param refPersonByPersonId the {@link FlPersonBean} bean referenced by {@link FlFeatureBean} 
+     * @param impFaceByFeatureMd5 the {@link FlFaceBean} beans refer to {@link FlFeatureBean} 
+     * @param impLogByVerifyFeature the {@link FlLogBean} beans refer to {@link FlFeatureBean} 
+     * @param impLogByCompareFeature the {@link FlLogBean} beans refer to {@link FlFeatureBean} 
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlFeatureBean save(FlFeatureBean bean
-        , FlPersonBean refFlPersonbyPersonId 
-        , FlFaceBean[] impFlFacebyFeatureMd5 , FlLogBean[] impFlLogbyVerifyFeature , FlLogBean[] impFlLogbyCompareFeature ) throws DAOException
+        , FlPersonBean refPersonByPersonId 
+        , FlFaceBean[] impFaceByFeatureMd5 , FlLogBean[] impLogByVerifyFeature , FlLogBean[] impLogByCompareFeature ) throws DAOException
     {
         if(null == bean) return null;
-        if(null != refFlPersonbyPersonId)
-            this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        if(null != refPersonByPersonId)
+            this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
-        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
-        FlFaceManager.getInstance().save( impFlFacebyFeatureMd5 );
-        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
-        FlLogManager.getInstance().save( impFlLogbyVerifyFeature );
-        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
-        FlLogManager.getInstance().save( impFlLogbyCompareFeature );
+        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+        FlFaceManager.getInstance().save( impFaceByFeatureMd5 );
+        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+        FlLogManager.getInstance().save( impLogByVerifyFeature );
+        this.setLogBeansByCompareFeature(bean,impLogByCompareFeature);
+        FlLogManager.getInstance().save( impLogByCompareFeature );
         return bean;
     } 
 
@@ -674,40 +674,40 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlFeatureBean saveAsTransaction(final FlFeatureBean bean
-        ,final FlPersonBean refFlPersonbyPersonId 
-        ,final FlFaceBean[] impFlFacebyFeatureMd5 ,final FlLogBean[] impFlLogbyVerifyFeature ,final FlLogBean[] impFlLogbyCompareFeature ) throws DAOException
+        ,final FlPersonBean refPersonByPersonId 
+        ,final FlFaceBean[] impFaceByFeatureMd5 ,final FlLogBean[] impLogByVerifyFeature ,final FlLogBean[] impLogByCompareFeature ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFeatureBean>(){
             @Override
             public FlFeatureBean call() throws Exception {
-                return save(bean , refFlPersonbyPersonId , impFlFacebyFeatureMd5 , impFlLogbyVerifyFeature , impFlLogbyCompareFeature );
+                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature , impLogByCompareFeature );
             }});
     }
     /**
      * Save the FlFeatureBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFeatureBean} bean to be saved
-     * @param refFlPersonbyPersonId the {@link FlPersonBean} bean referenced by {@link FlFeatureBean} 
-     * @param impFlFacebyFeatureMd5 the {@link FlFaceBean} bean refer to {@link FlFeatureBean} 
-     * @param impFlLogbyVerifyFeature the {@link FlLogBean} bean refer to {@link FlFeatureBean} 
-     * @param impFlLogbyCompareFeature the {@link FlLogBean} bean refer to {@link FlFeatureBean} 
+     * @param refPersonByPersonId the {@link FlPersonBean} bean referenced by {@link FlFeatureBean} 
+     * @param impFaceByFeatureMd5 the {@link FlFaceBean} bean refer to {@link FlFeatureBean} 
+     * @param impLogByVerifyFeature the {@link FlLogBean} bean refer to {@link FlFeatureBean} 
+     * @param impLogByCompareFeature the {@link FlLogBean} bean refer to {@link FlFeatureBean} 
      * @return the inserted or updated {@link FlFeatureBean} bean
      * @throws DAOException
      */
     //3.7 SYNC SAVE 
     public FlFeatureBean save(FlFeatureBean bean
-        , FlPersonBean refFlPersonbyPersonId 
-        , java.util.Collection<FlFaceBean> impFlFacebyFeatureMd5 , java.util.Collection<FlLogBean> impFlLogbyVerifyFeature , java.util.Collection<FlLogBean> impFlLogbyCompareFeature ) throws DAOException
+        , FlPersonBean refPersonByPersonId 
+        , java.util.Collection<FlFaceBean> impFaceByFeatureMd5 , java.util.Collection<FlLogBean> impLogByVerifyFeature , java.util.Collection<FlLogBean> impLogByCompareFeature ) throws DAOException
     {
         if(null == bean) return null;
-        this.setReferencedByPersonId(bean,refFlPersonbyPersonId);
+        this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
-        this.setFlFaceBeansByFeatureMd5(bean,impFlFacebyFeatureMd5);
-        FlFaceManager.getInstance().save( impFlFacebyFeatureMd5 );
-        this.setFlLogBeansByVerifyFeature(bean,impFlLogbyVerifyFeature);
-        FlLogManager.getInstance().save( impFlLogbyVerifyFeature );
-        this.setFlLogBeansByCompareFeature(bean,impFlLogbyCompareFeature);
-        FlLogManager.getInstance().save( impFlLogbyCompareFeature );
+        this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
+        FlFaceManager.getInstance().save( impFaceByFeatureMd5 );
+        this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
+        FlLogManager.getInstance().save( impLogByVerifyFeature );
+        this.setLogBeansByCompareFeature(bean,impLogByCompareFeature);
+        FlLogManager.getInstance().save( impLogByCompareFeature );
         return bean;
     }
 
@@ -717,13 +717,13 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlFeatureBean saveAsTransaction(final FlFeatureBean bean
-        ,final FlPersonBean refFlPersonbyPersonId 
-        ,final  java.util.Collection<FlFaceBean> impFlFacebyFeatureMd5 ,final  java.util.Collection<FlLogBean> impFlLogbyVerifyFeature ,final  java.util.Collection<FlLogBean> impFlLogbyCompareFeature ) throws DAOException
+        ,final FlPersonBean refPersonByPersonId 
+        ,final  java.util.Collection<FlFaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<FlLogBean> impLogByVerifyFeature ,final  java.util.Collection<FlLogBean> impLogByCompareFeature ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFeatureBean>(){
             @Override
             public FlFeatureBean call() throws Exception {
-                return save(bean , refFlPersonbyPersonId , impFlFacebyFeatureMd5 , impFlLogbyVerifyFeature , impFlLogbyCompareFeature );
+                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature , impLogByCompareFeature );
             }});
     }
     /**
@@ -856,7 +856,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * Associates the {@link FlFeatureBean} object to the {@link FlPersonBean} object by {@link FlFeatureBean#getPersonId}() field.
      *
      * @param bean the {@link FlFeatureBean} object to use
-     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFeatureBean}
+     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFeatureBean} (NOT NULL).
      * @return always beanToSet saved
      * @throws Exception
      */

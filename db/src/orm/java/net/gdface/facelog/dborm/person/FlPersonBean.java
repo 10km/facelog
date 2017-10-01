@@ -128,6 +128,8 @@ public class FlPersonBean
      * <li> imported key: fl_feature.person_id</li>
      * <li> imported key: fl_log.person_id</li>
      * <li>comments: 用户id</li>
+     * <li>AUTO_INCREMENT</li>
+     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -143,7 +145,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to id
+     * @param newVal the new value (NOT NULL) to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -209,7 +211,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value  to be assigned to groupId
      */
     public void setGroupId(Integer newVal)
     {
@@ -260,6 +262,7 @@ public class FlPersonBean
      * <ul>
      * <li>full name: fl_person.name</li>
      * <li>comments: 姓名</li>
+     * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
@@ -275,7 +278,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to name
+     * @param newVal the new value (NOT NULL) to be assigned to name
      */
     public void setName(String newVal)
     {
@@ -331,7 +334,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to sex
+     * @param newVal the new value  to be assigned to sex
      */
     public void setSex(Integer newVal)
     {
@@ -397,7 +400,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to birthdate
+     * @param newVal the new value  to be assigned to birthdate
      */
     public void setBirthdate(java.util.Date newVal)
     {
@@ -463,7 +466,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersType
+     * @param newVal the new value  to be assigned to papersType
      */
     public void setPapersType(Integer newVal)
     {
@@ -529,7 +532,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to papersNum
+     * @param newVal the new value  to be assigned to papersNum
      */
     public void setPapersNum(String newVal)
     {
@@ -586,7 +589,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to imageMd5
+     * @param newVal the new value  to be assigned to imageMd5
      */
     public void setImageMd5(String newVal)
     {
@@ -642,7 +645,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to expiryDate
+     * @param newVal the new value  to be assigned to expiryDate
      */
     public void setExpiryDate(java.util.Date newVal)
     {
@@ -692,6 +695,7 @@ public class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.create_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -707,7 +711,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -757,6 +761,7 @@ public class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.update_time</li>
+     * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
@@ -772,7 +777,7 @@ public class FlPersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value to be assigned to updateTime
+     * @param newVal the new value (NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -943,6 +948,13 @@ public class FlPersonBean
     public void resetIsModified()
     {
         modified = 0L;
+    }
+    /**
+     * Resets the primary keys ( {@link #id} ) modification status to 'not modified'.
+     */
+    public void resetPrimaryKeysModified()
+    {
+        modified &= (~FL_PERSON_ID_ID_MASK);
     }
     /**
      * Resets the object initialization status to 'not initialized'.

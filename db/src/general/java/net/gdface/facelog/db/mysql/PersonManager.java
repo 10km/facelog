@@ -196,9 +196,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
-            return (java.util.List<T>)this.getFlFeatureBeansByPersonIdAsList(bean);
+            return (java.util.List<T>)this.getFeatureBeansByPersonIdAsList(bean);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
-            return (java.util.List<T>)this.getFlLogBeansByPersonIdAsList(bean);
+            return (java.util.List<T>)this.getLogBeansByPersonIdAsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -220,9 +220,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
-            return (T[])setFlFeatureBeansByPersonId(bean,(FeatureBean[])importedBeans);
+            return (T[])setFeatureBeansByPersonId(bean,(FeatureBean[])importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
-            return (T[])setFlLogBeansByPersonId(bean,(LogBean[])importedBeans);
+            return (T[])setLogBeansByPersonId(bean,(LogBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -243,9 +243,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
-            return (C)setFlFeatureBeansByPersonId(bean,(java.util.Collection<FeatureBean>)importedBeans);
+            return (C)setFeatureBeansByPersonId(bean,(java.util.Collection<FeatureBean>)importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
-            return (C)setFlLogBeansByPersonId(bean,(java.util.Collection<LogBean>)importedBeans);
+            return (C)setLogBeansByPersonId(bean,(java.util.Collection<LogBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -256,24 +256,24 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //////////////////////////////////////
     //3.1 GET IMPORTED override IPersonManager
     @Override 
-    public FeatureBean[] getFlFeatureBeansByPersonId(PersonBean bean)
+    public FeatureBean[] getFeatureBeansByPersonId(PersonBean bean)
     {
-        return this.getFlFeatureBeansByPersonIdAsList(bean).toArray(new FeatureBean[0]);
+        return this.getFeatureBeansByPersonIdAsList(bean).toArray(new FeatureBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonManager
     @Override
-    public FeatureBean[] getFlFeatureBeansByPersonId(Integer personId)
+    public FeatureBean[] getFeatureBeansByPersonId(Integer personId)
     {
         PersonBean bean = new PersonBean();
         bean.setId(personId);
-        return getFlFeatureBeansByPersonId(bean);
+        return getFeatureBeansByPersonId(bean);
     }
     //3.2 GET IMPORTED override IPersonManager
     @Override 
-    public java.util.List<FeatureBean> getFlFeatureBeansByPersonIdAsList(PersonBean bean)
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean)
     {
         try {
-            return this.dbConverter.getFeatureBeanConverter().fromRight(nativeManager.getFlFeatureBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getFeatureBeanConverter().fromRight(nativeManager.getFeatureBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -282,15 +282,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
-    public java.util.List<FeatureBean> getFlFeatureBeansByPersonIdAsList(Integer personId)
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer personId)
     {
          PersonBean bean = new PersonBean();
         bean.setId(personId);
-        return getFlFeatureBeansByPersonIdAsList(bean);
+        return getFeatureBeansByPersonIdAsList(bean);
     }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
-    public FeatureBean[] setFlFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans)
+    public FeatureBean[] setFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans)
     {
         if(null != importedBeans){
             for( FeatureBean importBean : importedBeans ){
@@ -302,7 +302,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
 
     //3.4 SET IMPORTED override IPersonManager
     @Override 
-    public <C extends java.util.Collection<FeatureBean>> C setFlFeatureBeansByPersonId(PersonBean bean , C importedBeans)
+    public <C extends java.util.Collection<FeatureBean>> C setFeatureBeansByPersonId(PersonBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( FeatureBean importBean : importedBeans ){
@@ -313,24 +313,24 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.1 GET IMPORTED override IPersonManager
     @Override 
-    public LogBean[] getFlLogBeansByPersonId(PersonBean bean)
+    public LogBean[] getLogBeansByPersonId(PersonBean bean)
     {
-        return this.getFlLogBeansByPersonIdAsList(bean).toArray(new LogBean[0]);
+        return this.getLogBeansByPersonIdAsList(bean).toArray(new LogBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonManager
     @Override
-    public LogBean[] getFlLogBeansByPersonId(Integer personId)
+    public LogBean[] getLogBeansByPersonId(Integer personId)
     {
         PersonBean bean = new PersonBean();
         bean.setId(personId);
-        return getFlLogBeansByPersonId(bean);
+        return getLogBeansByPersonId(bean);
     }
     //3.2 GET IMPORTED override IPersonManager
     @Override 
-    public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(PersonBean bean)
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean)
     {
         try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getFlLogBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -339,15 +339,15 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
-    public java.util.List<LogBean> getFlLogBeansByPersonIdAsList(Integer personId)
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer personId)
     {
          PersonBean bean = new PersonBean();
         bean.setId(personId);
-        return getFlLogBeansByPersonIdAsList(bean);
+        return getLogBeansByPersonIdAsList(bean);
     }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
-    public LogBean[] setFlLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
+    public LogBean[] setLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -359,7 +359,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
 
     //3.4 SET IMPORTED override IPersonManager
     @Override 
-    public <C extends java.util.Collection<LogBean>> C setFlLogBeansByPersonId(PersonBean bean , C importedBeans)
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByPersonId(PersonBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
@@ -373,58 +373,58 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //3.5 SYNC SAVE override IPersonManager
     @Override  
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyImageMd5 
-        , FeatureBean[] impFlFeaturebyPersonId , LogBean[] impFlLogbyPersonId )
+        , ImageBean refImageByImageMd5 
+        , FeatureBean[] impFeatureByPersonId , LogBean[] impLogByPersonId )
     {
         if(null == bean) return null;
-        if(null != refFlImagebyImageMd5)
-            this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        if(null != refImageByImageMd5)
+            this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
-        this.setFlFeatureBeansByPersonId(bean,impFlFeaturebyPersonId);
-        FeatureManager.getInstance().save( impFlFeaturebyPersonId );
-        this.setFlLogBeansByPersonId(bean,impFlLogbyPersonId);
-        LogManager.getInstance().save( impFlLogbyPersonId );
+        this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
+        FeatureManager.getInstance().save( impFeatureByPersonId );
+        this.setLogBeansByPersonId(bean,impLogByPersonId);
+        LogManager.getInstance().save( impLogByPersonId );
         return bean;
     } 
 
     //3.6 SYNC SAVE AS TRANSACTION override IPersonManager
     @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyImageMd5 
-        ,final FeatureBean[] impFlFeaturebyPersonId ,final LogBean[] impFlLogbyPersonId )
+        ,final ImageBean refImageByImageMd5 
+        ,final FeatureBean[] impFeatureByPersonId ,final LogBean[] impLogByPersonId )
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
             public PersonBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , impFlFeaturebyPersonId , impFlLogbyPersonId );
+                return save(bean , refImageByImageMd5 , impFeatureByPersonId , impLogByPersonId );
             }});
     }
     //3.7 SYNC SAVE override IPersonManager
     @Override 
     public PersonBean save(PersonBean bean
-        , ImageBean refFlImagebyImageMd5 
-        , java.util.Collection<FeatureBean> impFlFeaturebyPersonId , java.util.Collection<LogBean> impFlLogbyPersonId )
+        , ImageBean refImageByImageMd5 
+        , java.util.Collection<FeatureBean> impFeatureByPersonId , java.util.Collection<LogBean> impLogByPersonId )
     {
         if(null == bean) return null;
-        this.setReferencedByImageMd5(bean,refFlImagebyImageMd5);
+        this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
-        this.setFlFeatureBeansByPersonId(bean,impFlFeaturebyPersonId);
-        FeatureManager.getInstance().save( impFlFeaturebyPersonId );
-        this.setFlLogBeansByPersonId(bean,impFlLogbyPersonId);
-        LogManager.getInstance().save( impFlLogbyPersonId );
+        this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
+        FeatureManager.getInstance().save( impFeatureByPersonId );
+        this.setLogBeansByPersonId(bean,impLogByPersonId);
+        LogManager.getInstance().save( impLogByPersonId );
         return bean;
     }   
 
     //3.8 SYNC SAVE AS TRANSACTION override IPersonManager
     @Override 
     public PersonBean saveAsTransaction(final PersonBean bean
-        ,final ImageBean refFlImagebyImageMd5 
-        ,final  java.util.Collection<FeatureBean> impFlFeaturebyPersonId ,final  java.util.Collection<LogBean> impFlLogbyPersonId )
+        ,final ImageBean refImageByImageMd5 
+        ,final  java.util.Collection<FeatureBean> impFeatureByPersonId ,final  java.util.Collection<LogBean> impLogByPersonId )
     {
         return this.runAsTransaction(new Callable<PersonBean>(){
             @Override
             public PersonBean call() throws Exception {
-                return save(bean , refFlImagebyImageMd5 , impFlFeaturebyPersonId , impFlLogbyPersonId );
+                return save(bean , refImageByImageMd5 , impFeatureByPersonId , impLogByPersonId );
             }});
     }
      /**

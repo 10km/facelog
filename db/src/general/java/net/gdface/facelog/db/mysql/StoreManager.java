@@ -194,9 +194,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(StoreBean bean,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
-            return (java.util.List<T>)this.getFlImageBeansByMd5AsList(bean);
+            return (java.util.List<T>)this.getImageBeansByMd5AsList(bean);
         case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
-            return (java.util.List<T>)this.getFlImageBeansByThumbMd5AsList(bean);
+            return (java.util.List<T>)this.getImageBeansByThumbMd5AsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -218,9 +218,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(StoreBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
-            return (T[])setFlImageBeansByMd5(bean,(ImageBean[])importedBeans);
+            return (T[])setImageBeansByMd5(bean,(ImageBean[])importedBeans);
         case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
-            return (T[])setFlImageBeansByThumbMd5(bean,(ImageBean[])importedBeans);
+            return (T[])setImageBeansByThumbMd5(bean,(ImageBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -241,9 +241,9 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(StoreBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_STORE_IK_FL_IMAGE_MD5:
-            return (C)setFlImageBeansByMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
+            return (C)setImageBeansByMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
         case FL_STORE_IK_FL_IMAGE_THUMB_MD5:
-            return (C)setFlImageBeansByThumbMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
+            return (C)setImageBeansByThumbMd5(bean,(java.util.Collection<ImageBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -254,24 +254,24 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //////////////////////////////////////
     //3.1 GET IMPORTED override IStoreManager
     @Override 
-    public ImageBean[] getFlImageBeansByMd5(StoreBean bean)
+    public ImageBean[] getImageBeansByMd5(StoreBean bean)
     {
-        return this.getFlImageBeansByMd5AsList(bean).toArray(new ImageBean[0]);
+        return this.getImageBeansByMd5AsList(bean).toArray(new ImageBean[0]);
     }
     //3.1.2 GET IMPORTED override IStoreManager
     @Override
-    public ImageBean[] getFlImageBeansByMd5(String storeMd5)
+    public ImageBean[] getImageBeansByMd5(String storeMd5)
     {
         StoreBean bean = new StoreBean();
         bean.setMd5(storeMd5);
-        return getFlImageBeansByMd5(bean);
+        return getImageBeansByMd5(bean);
     }
     //3.2 GET IMPORTED override IStoreManager
     @Override 
-    public java.util.List<ImageBean> getFlImageBeansByMd5AsList(StoreBean bean)
+    public java.util.List<ImageBean> getImageBeansByMd5AsList(StoreBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByMd5AsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getImageBeansByMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -280,15 +280,15 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
     //3.2.2 GET IMPORTED override IStoreManager
     @Override
-    public java.util.List<ImageBean> getFlImageBeansByMd5AsList(String storeMd5)
+    public java.util.List<ImageBean> getImageBeansByMd5AsList(String storeMd5)
     {
          StoreBean bean = new StoreBean();
         bean.setMd5(storeMd5);
-        return getFlImageBeansByMd5AsList(bean);
+        return getImageBeansByMd5AsList(bean);
     }
     //3.3 SET IMPORTED override IStoreManager
     @Override 
-    public ImageBean[] setFlImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans)
+    public ImageBean[] setImageBeansByMd5(StoreBean bean , ImageBean[] importedBeans)
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
@@ -300,7 +300,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
 
     //3.4 SET IMPORTED override IStoreManager
     @Override 
-    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByMd5(StoreBean bean , C importedBeans)
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByMd5(StoreBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
@@ -311,24 +311,24 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
     //3.1 GET IMPORTED override IStoreManager
     @Override 
-    public ImageBean[] getFlImageBeansByThumbMd5(StoreBean bean)
+    public ImageBean[] getImageBeansByThumbMd5(StoreBean bean)
     {
-        return this.getFlImageBeansByThumbMd5AsList(bean).toArray(new ImageBean[0]);
+        return this.getImageBeansByThumbMd5AsList(bean).toArray(new ImageBean[0]);
     }
     //3.1.2 GET IMPORTED override IStoreManager
     @Override
-    public ImageBean[] getFlImageBeansByThumbMd5(String storeMd5)
+    public ImageBean[] getImageBeansByThumbMd5(String storeMd5)
     {
         StoreBean bean = new StoreBean();
         bean.setMd5(storeMd5);
-        return getFlImageBeansByThumbMd5(bean);
+        return getImageBeansByThumbMd5(bean);
     }
     //3.2 GET IMPORTED override IStoreManager
     @Override 
-    public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(StoreBean bean)
+    public java.util.List<ImageBean> getImageBeansByThumbMd5AsList(StoreBean bean)
     {
         try {
-            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getFlImageBeansByThumbMd5AsList( this.beanConverter.toRight(bean)));
+            return this.dbConverter.getImageBeanConverter().fromRight(nativeManager.getImageBeansByThumbMd5AsList( this.beanConverter.toRight(bean)));
         }
         catch(DAOException e)
         {
@@ -337,15 +337,15 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
     //3.2.2 GET IMPORTED override IStoreManager
     @Override
-    public java.util.List<ImageBean> getFlImageBeansByThumbMd5AsList(String storeMd5)
+    public java.util.List<ImageBean> getImageBeansByThumbMd5AsList(String storeMd5)
     {
          StoreBean bean = new StoreBean();
         bean.setMd5(storeMd5);
-        return getFlImageBeansByThumbMd5AsList(bean);
+        return getImageBeansByThumbMd5AsList(bean);
     }
     //3.3 SET IMPORTED override IStoreManager
     @Override 
-    public ImageBean[] setFlImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans)
+    public ImageBean[] setImageBeansByThumbMd5(StoreBean bean , ImageBean[] importedBeans)
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
@@ -357,7 +357,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
 
     //3.4 SET IMPORTED override IStoreManager
     @Override 
-    public <C extends java.util.Collection<ImageBean>> C setFlImageBeansByThumbMd5(StoreBean bean , C importedBeans)
+    public <C extends java.util.Collection<ImageBean>> C setImageBeansByThumbMd5(StoreBean bean , C importedBeans)
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
@@ -372,14 +372,14 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override  
     public StoreBean save(StoreBean bean
         
-        , ImageBean[] impFlImagebyMd5 , ImageBean[] impFlImagebyThumbMd5 )
+        , ImageBean[] impImageByMd5 , ImageBean[] impImageByThumbMd5 )
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
-        ImageManager.getInstance().save( impFlImagebyMd5 );
-        this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
-        ImageManager.getInstance().save( impFlImagebyThumbMd5 );
+        this.setImageBeansByMd5(bean,impImageByMd5);
+        ImageManager.getInstance().save( impImageByMd5 );
+        this.setImageBeansByThumbMd5(bean,impImageByThumbMd5);
+        ImageManager.getInstance().save( impImageByThumbMd5 );
         return bean;
     } 
 
@@ -387,26 +387,26 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override 
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final ImageBean[] impFlImagebyMd5 ,final ImageBean[] impFlImagebyThumbMd5 )
+        ,final ImageBean[] impImageByMd5 ,final ImageBean[] impImageByThumbMd5 )
     {
         return this.runAsTransaction(new Callable<StoreBean>(){
             @Override
             public StoreBean call() throws Exception {
-                return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
+                return save(bean , impImageByMd5 , impImageByThumbMd5 );
             }});
     }
     //3.7 SYNC SAVE override IStoreManager
     @Override 
     public StoreBean save(StoreBean bean
         
-        , java.util.Collection<ImageBean> impFlImagebyMd5 , java.util.Collection<ImageBean> impFlImagebyThumbMd5 )
+        , java.util.Collection<ImageBean> impImageByMd5 , java.util.Collection<ImageBean> impImageByThumbMd5 )
     {
         if(null == bean) return null;
         bean = this.save( bean );
-        this.setFlImageBeansByMd5(bean,impFlImagebyMd5);
-        ImageManager.getInstance().save( impFlImagebyMd5 );
-        this.setFlImageBeansByThumbMd5(bean,impFlImagebyThumbMd5);
-        ImageManager.getInstance().save( impFlImagebyThumbMd5 );
+        this.setImageBeansByMd5(bean,impImageByMd5);
+        ImageManager.getInstance().save( impImageByMd5 );
+        this.setImageBeansByThumbMd5(bean,impImageByThumbMd5);
+        ImageManager.getInstance().save( impImageByThumbMd5 );
         return bean;
     }   
 
@@ -414,12 +414,12 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override 
     public StoreBean saveAsTransaction(final StoreBean bean
         
-        ,final  java.util.Collection<ImageBean> impFlImagebyMd5 ,final  java.util.Collection<ImageBean> impFlImagebyThumbMd5 )
+        ,final  java.util.Collection<ImageBean> impImageByMd5 ,final  java.util.Collection<ImageBean> impImageByThumbMd5 )
     {
         return this.runAsTransaction(new Callable<StoreBean>(){
             @Override
             public StoreBean call() throws Exception {
-                return save(bean , impFlImagebyMd5 , impFlImagebyThumbMd5 );
+                return save(bean , impImageByMd5 , impImageByThumbMd5 );
             }});
     }
      /**
