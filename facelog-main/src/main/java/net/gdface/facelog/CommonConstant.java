@@ -6,7 +6,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gu.simplemq.Channel;
+import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.FaceBean;
+import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.IDeviceManager;
+import net.gdface.facelog.db.IFaceManager;
+import net.gdface.facelog.db.IFeatureManager;
+import net.gdface.facelog.db.IImageManager;
+import net.gdface.facelog.db.ILogManager;
+import net.gdface.facelog.db.IPersonManager;
+import net.gdface.facelog.db.IStoreManager;
+import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.StoreBean;
+import net.gdface.facelog.db.mysql.TableInstance;
 
 public interface CommonConstant {
 	public static final Logger logger = LoggerFactory.getLogger(CommonConstant.class);
@@ -21,5 +35,11 @@ public interface CommonConstant {
 	public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
 	public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){};
 	public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("logQueue"){};
-
+	public static final IDeviceManager deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
+	public static final IFaceManager faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);
+	public static final IImageManager imageManager = (IImageManager) TableInstance.getInstance(ImageBean.class);
+	public static final ILogManager logManager = (ILogManager) TableInstance.getInstance(LogBean.class);
+	public static final IPersonManager personManager = (IPersonManager) TableInstance.getInstance(PersonBean.class);
+	public static final IStoreManager storeManager = (IStoreManager) TableInstance.getInstance(StoreBean.class);
+	public static final IFeatureManager featureManager = (IFeatureManager) TableInstance.getInstance(FeatureBean.class);
 }
