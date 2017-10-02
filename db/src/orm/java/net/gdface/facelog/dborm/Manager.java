@@ -518,12 +518,9 @@ public final class Manager
      */
     public static void  setBlob(PreparedStatement ps, int pos, java.nio.ByteBuffer blob) throws SQLException
     {
-        if (blob==null)
-        {
+        if (blob == null || !blob.hasArray()){
             ps.setNull(pos, Types.BLOB);
-        }
-        else
-        {
+        }else{
             ps.setBlob(pos, new java.io.ByteArrayInputStream(blob.array()));
         }
     }
@@ -551,12 +548,9 @@ public final class Manager
      */
     public static void  setClob(PreparedStatement ps, int pos, String clob) throws SQLException
     {
-        if (clob==null)
-        {
+        if (clob==null){
             ps.setNull(pos, Types.CLOB);
-        }
-        else
-        {
+        }else{
             ps.setClob(pos, new java.io.StringReader(clob));
         }
     }
@@ -580,15 +574,12 @@ public final class Manager
     /**
      * Set a byte array to the passed prepared statement as a java.nio.ByteBuffer or as null.
      */
-    public static void  setBytes(int type,PreparedStatement ps, int pos, java.nio.ByteBuffer binary) throws SQLException
+    public static void  setBytes(int sqlType,PreparedStatement ps, int pos, java.nio.ByteBuffer bytes) throws SQLException
     {
-        if (binary==null)
-        {
-            ps.setNull(pos, type);
-        }
-        else
-        {
-            ps.setBytes(pos, binary.array());
+        if (null == bytes || !bytes.hasArray()){
+            ps.setNull(pos, sqlType);
+        }else{
+            ps.setBytes(pos, bytes.array());
         }
     }
     

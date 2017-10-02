@@ -264,7 +264,7 @@ public class BeanConverterUtils {
             }catch(Exception e){}
             try{         
                 methods.put("getExtInfo",rightType.getMethod("getExtInfo"));
-                methods.put("setExtInfo",rightType.getMethod("setExtInfo",byte[].class));
+                methods.put("setExtInfo",rightType.getMethod("setExtInfo",java.nio.ByteBuffer.class));
                 methods.put("checkExtInfoInitialized",rightType.getMethod("checkExtInfoInitialized"));
             }catch(Exception e){}
             try{         
@@ -352,7 +352,7 @@ public class BeanConverterUtils {
                 }
                 if( null != (initializedMethod = methods.get("checkExtInfoInitialized")) && null != (getterMethod = methods.get("getExtInfo"))){
                     if((boolean)initializedMethod.invoke(right))
-                        left.setExtInfo((byte[])getterMethod.invoke(right));
+                        left.setExtInfo((java.nio.ByteBuffer)getterMethod.invoke(right));
                 }
                 if( null != (initializedMethod = methods.get("checkFeatureMd5Initialized")) && null != (getterMethod = methods.get("getFeatureMd5"))){
                     if((boolean)initializedMethod.invoke(right))
@@ -464,7 +464,7 @@ public class BeanConverterUtils {
             }catch(Exception e){}
             try{         
                 methods.put("getFeature",rightType.getMethod("getFeature"));
-                methods.put("setFeature",rightType.getMethod("setFeature",byte[].class));
+                methods.put("setFeature",rightType.getMethod("setFeature",java.nio.ByteBuffer.class));
                 methods.put("checkFeatureInitialized",rightType.getMethod("checkFeatureInitialized"));
             }catch(Exception e){}
             try{         
@@ -487,7 +487,7 @@ public class BeanConverterUtils {
                 }
                 if( null != (initializedMethod = methods.get("checkFeatureInitialized")) && null != (getterMethod = methods.get("getFeature"))){
                     if((boolean)initializedMethod.invoke(right))
-                        left.setFeature((byte[])getterMethod.invoke(right));
+                        left.setFeature((java.nio.ByteBuffer)getterMethod.invoke(right));
                 }
                 if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
                     if((boolean)initializedMethod.invoke(right))
@@ -1025,7 +1025,7 @@ public class BeanConverterUtils {
             }catch(Exception e){}
             try{         
                 methods.put("getData",rightType.getMethod("getData"));
-                methods.put("setData",rightType.getMethod("setData",byte[].class));
+                methods.put("setData",rightType.getMethod("setData",java.nio.ByteBuffer.class));
                 methods.put("checkDataInitialized",rightType.getMethod("checkDataInitialized"));
             }catch(Exception e){}
         }
@@ -1043,7 +1043,7 @@ public class BeanConverterUtils {
                 }
                 if( null != (initializedMethod = methods.get("checkDataInitialized")) && null != (getterMethod = methods.get("getData"))){
                     if((boolean)initializedMethod.invoke(right))
-                        left.setData((byte[])getterMethod.invoke(right));
+                        left.setData((java.nio.ByteBuffer)getterMethod.invoke(right));
                 }
                 left.isNew((boolean)methods.get("isNew").invoke(right));
                 left.setModified((long)methods.get("getModified").invoke(right));
