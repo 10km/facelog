@@ -2,6 +2,7 @@ package gu.simplemq;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,9 +17,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializeBeanInfo;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.util.FieldInfo;
 
+import gu.simplemq.json.ByteBufferCodec;
 import gu.simplemq.utils.TypeUtils;
 
 public class TestFastjson {
@@ -56,6 +59,7 @@ public class TestFastjson {
 	    public Date date=new Date();
 	    public java.sql.Date sqldate=new java.sql.Date(date.getTime());
 	    public byte[] array=new byte[]{22,33,3,2,3,1,5,-1};
+	    public ByteBuffer byteBuffer =ByteBuffer.wrap(array);
 	    public String nullStr=null;
 	    private String privString="private string";
 	    public Long getId() {
@@ -106,7 +110,13 @@ public class TestFastjson {
 
 		group.addUser(guestUser);
 		group.addUser(rootUser);
+		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
+		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
 
+		String serString = JSON.toJSONString(group.byteBuffer);
+		System.out.println(serString);
+		ByteBuffer deserialedByteBuffer = JSON.parseObject(serString,ByteBuffer.class);
+		System.out.println(JSON.toJSONString(deserialedByteBuffer));
 		String jsonString = JSON.toJSONString(group,SerializerFeature.UseISO8601DateFormat);
 
 		System.out.println(jsonString);

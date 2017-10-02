@@ -1,12 +1,15 @@
 package gu.simplemq.json;
 
 import java.lang.reflect.Type;
+import java.nio.ByteBuffer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import gu.simplemq.exceptions.SmqNotBeanException;
@@ -20,16 +23,19 @@ import gu.simplemq.utils.TypeUtils;
  */
 class FastjsonEncoder extends JsonEncoder {
 	private static final FastjsonEncoder instance = new FastjsonEncoder();
-	
+	static {
+		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
+		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
+	}
 	public static FastjsonEncoder getInstance(){
-		return instance;		
+		return instance;
 	}
 	
 	protected FastjsonEncoder() {}
 	
 	protected JSONObject _toJSONObject(Object bean){
 		// 先序列化再解析成JSONObject对象
-		return (JSONObject) JSON.parse(this.toJsonString(bean));//
+		return (JSONObject) JSON.parse(this.toJsonString(bean));
 	}
 	
 	@Override
