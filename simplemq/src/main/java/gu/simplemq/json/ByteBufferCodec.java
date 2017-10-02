@@ -46,10 +46,11 @@ public class ByteBufferCodec implements ObjectSerializer, ObjectDeserializer {
 	@Override
 	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features)
 			throws IOException {
-        if (object == null) {
-        	serializer.out.writeNull(SerializerFeature.WriteNullListAsEmpty);
+		ByteBuffer buffer;
+        if ( (object instanceof ByteBuffer) && (buffer = (ByteBuffer)object).hasArray()) {
+        	PrimitiveArraySerializer.instance.write(serializer, buffer.array(), fieldName, fieldType, features);
         }else{
-        	PrimitiveArraySerializer.instance.write(serializer, ((ByteBuffer)object).array(), fieldName, fieldType, features);
+        	serializer.out.writeNull(SerializerFeature.WriteNullListAsEmpty);
         }
 	}
 
