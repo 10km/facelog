@@ -1,5 +1,6 @@
 package net.gdface.facelog;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -196,7 +197,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public PersonBean savePerson(final PersonBean bean, final byte[] imageData,final byte[] feature,final Map<FaceBean,byte[]>faceInfo,final DeviceBean deviceId)throws ServiceRuntime {
+	public PersonBean savePerson(final PersonBean bean, final byte[] imageData,final byte[] feature,final Map<ByteBuffer, FaceBean> faceInfo,final DeviceBean deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
@@ -323,18 +324,18 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static FeatureBean _addFeature(byte[] feature,PersonBean refPersonByPersonId, FaceBean[] impFaceByFeatureMd5)throws ServiceRuntime{
 		return featureManager.save(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null, null);
 	}
-	protected static FeatureBean _addFeature(byte[] feature,PersonBean personBean,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(byte[] feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
 		Assert.notEmpty(faceInfo, "faceInfo");
-		for(Entry<FaceBean, byte[]> entry:faceInfo.entrySet()){
-			 byte[] imageBytes = entry.getValue();
-			 FaceBean faceBean = entry.getKey();
+		for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
+			 byte[] imageBytes = entry.getKey().array();
+			 FaceBean faceBean = entry.getValue();
 			Assert.notEmpty(imageBytes, "imageBytes");
 			Assert.notNull(faceBean, "faceBean");
 			_addImage(imageBytes, deviceId, new FaceBean[]{faceBean}, new PersonBean[]{personBean});
 		}
 		return _addFeature(feature, personBean, faceInfo.keySet().toArray(new FaceBean[0]));
 	}
-	protected static FeatureBean _addFeature(byte[] feature,int personId,Map<FaceBean,byte[]>faceInfo,Integer deviceId)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
 		PersonBean personBean = personManager.loadByPrimaryKey(personId);
 		Assert.notNull(personBean, "personBean");
 		return _addFeature(feature, personBean, faceInfo, deviceId);
