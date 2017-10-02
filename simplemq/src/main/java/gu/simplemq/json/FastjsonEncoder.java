@@ -24,6 +24,7 @@ import gu.simplemq.utils.TypeUtils;
 class FastjsonEncoder extends JsonEncoder {
 	private static final FastjsonEncoder instance = new FastjsonEncoder();
 	static {
+		// 增加对 ByteBuffer 序列化支持
 		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
 		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
 	}
