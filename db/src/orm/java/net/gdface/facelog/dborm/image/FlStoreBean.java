@@ -32,7 +32,7 @@ public class FlStoreBean
     private String encoding;
 
     /** comments:二进制数据 */
-    private byte[] data;
+    private java.nio.ByteBuffer data;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -224,18 +224,23 @@ public class FlStoreBean
      *
      * @return the value of data
      */
-    public byte[] getData(){
+    public java.nio.ByteBuffer getData(){
         return data;
     }
     /**
      * Setter method for {@link #data}.<br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value  to be assigned to data
      */
-    public void setData(byte[] newVal)
+    public void setData(java.nio.ByteBuffer newVal)
     {
+        if ((newVal != null && data != null && (newVal.compareTo(data) == 0)) ||
+            (newVal == null && data == null && checkDataInitialized())) {
+            return;
+        }
         data = newVal;
 
         modified |= FL_STORE_ID_DATA_MASK;
@@ -386,7 +391,7 @@ public class FlStoreBean
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tmd5=").append(getMd5()).append("\n")
             .append("\tencoding=").append(getEncoding()).append("\n")
-            .append("\tdata=").append(getData().length).append(" bytes\n")
+            .append("\tdata=").append(getData()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -489,7 +494,7 @@ public class FlStoreBean
         case FL_STORE_ID_ENCODING:        
             setEncoding((String)value);
         case FL_STORE_ID_DATA:        
-            setData((byte[])value);
+            setData((java.nio.ByteBuffer)value);
         }
     }
     

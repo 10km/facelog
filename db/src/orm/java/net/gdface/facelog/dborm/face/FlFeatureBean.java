@@ -33,7 +33,7 @@ public class FlFeatureBean
     private Integer personId;
 
     /** comments:二进制特征数据 */
-    private byte[] feature;
+    private java.nio.ByteBuffer feature;
 
     private java.util.Date createTime;
 
@@ -241,18 +241,23 @@ public class FlFeatureBean
      *
      * @return the value of feature
      */
-    public byte[] getFeature(){
+    public java.nio.ByteBuffer getFeature(){
         return feature;
     }
     /**
      * Setter method for {@link #feature}.<br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value (NOT NULL) to be assigned to feature
      */
-    public void setFeature(byte[] newVal)
+    public void setFeature(java.nio.ByteBuffer newVal)
     {
+        if ((newVal != null && feature != null && (newVal.compareTo(feature) == 0)) ||
+            (newVal == null && feature == null && checkFeatureInitialized())) {
+            return;
+        }
         feature = newVal;
 
         modified |= FL_FEATURE_ID_FEATURE_MASK;
@@ -491,7 +496,7 @@ public class FlFeatureBean
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tmd5=").append(getMd5()).append("\n")
             .append("\tperson_id=").append(getPersonId()).append("\n")
-            .append("\tfeature=").append(getFeature().length).append(" bytes\n")
+            .append("\tfeature=").append(getFeature()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
@@ -598,7 +603,7 @@ public class FlFeatureBean
         case FL_FEATURE_ID_PERSON_ID:        
             setPersonId((Integer)value);
         case FL_FEATURE_ID_FEATURE:        
-            setFeature((byte[])value);
+            setFeature((java.nio.ByteBuffer)value);
         case FL_FEATURE_ID_CREATE_TIME:        
             setCreateTime((java.util.Date)value);
         }

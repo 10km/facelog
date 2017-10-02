@@ -1523,7 +1523,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             }
             if (bean.checkFeatureModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
-                if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getFeature()); }
+                if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getFeature()); }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
@@ -1636,7 +1636,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         {
             bean.setMd5(rs.getString(1));
             bean.setPersonId(Manager.getInteger(rs, 2));
-            bean.setFeature(rs.getBytes(3));
+            bean.setFeature(Manager.getBytes(rs, 3));
             bean.setCreateTime(rs.getTimestamp(4));
         }
         catch(SQLException e)
@@ -1679,7 +1679,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                         break;
                     case FL_FEATURE_ID_FEATURE:
                         ++pos;
-                        bean.setFeature(rs.getBytes(pos));
+                        bean.setFeature(Manager.getBytes(rs, pos));
                         break;
                     case FL_FEATURE_ID_CREATE_TIME:
                         ++pos;
@@ -1715,7 +1715,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         {
             bean.setMd5(rs.getString("md5"));
             bean.setPersonId(Manager.getInteger(rs, "person_id"));
-            bean.setFeature(rs.getBytes("feature"));
+            bean.setFeature(Manager.getBytes(rs, "feature"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)

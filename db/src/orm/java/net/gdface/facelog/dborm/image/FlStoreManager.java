@@ -1209,7 +1209,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             }
             if (bean.checkDataModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getData() + "]");
-                if (bean.getData() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getData()); }
+                if (bean.getData() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getData()); }
             }
         }
         catch(SQLException e)
@@ -1318,7 +1318,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         {
             bean.setMd5(rs.getString(1));
             bean.setEncoding(rs.getString(2));
-            bean.setData(rs.getBytes(3));
+            bean.setData(Manager.getBytes(rs, 3));
         }
         catch(SQLException e)
         {
@@ -1360,7 +1360,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                         break;
                     case FL_STORE_ID_DATA:
                         ++pos;
-                        bean.setData(rs.getBytes(pos));
+                        bean.setData(Manager.getBytes(rs, pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -1392,7 +1392,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         {
             bean.setMd5(rs.getString("md5"));
             bean.setEncoding(rs.getString("encoding"));
-            bean.setData(rs.getBytes("data"));
+            bean.setData(Manager.getBytes(rs, "data"));
         }
         catch(SQLException e)
         {

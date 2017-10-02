@@ -1657,7 +1657,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             }
             if (bean.checkExtInfoModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
-                if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { ps.setBytes(++_dirtyCount, bean.getExtInfo()); }
+                if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getExtInfo()); }
             }
             if (bean.checkFeatureMd5Modified()) {
                 switch (searchType) {
@@ -1807,7 +1807,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             bean.setAngleYaw(Manager.getInteger(rs, 15));
             bean.setAnglePitch(Manager.getInteger(rs, 16));
             bean.setAngleRoll(Manager.getInteger(rs, 17));
-            bean.setExtInfo(rs.getBytes(18));
+            bean.setExtInfo(Manager.getBytes(rs, 18));
             bean.setFeatureMd5(rs.getString(19));
             bean.setCreateTime(rs.getTimestamp(20));
         }
@@ -1911,7 +1911,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                         break;
                     case FL_FACE_ID_EXT_INFO:
                         ++pos;
-                        bean.setExtInfo(rs.getBytes(pos));
+                        bean.setExtInfo(Manager.getBytes(rs, pos));
                         break;
                     case FL_FACE_ID_FEATURE_MD5:
                         ++pos;
@@ -1966,7 +1966,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             bean.setAngleYaw(Manager.getInteger(rs, "angle_yaw"));
             bean.setAnglePitch(Manager.getInteger(rs, "angle_pitch"));
             bean.setAngleRoll(Manager.getInteger(rs, "angle_roll"));
-            bean.setExtInfo(rs.getBytes("ext_info"));
+            bean.setExtInfo(Manager.getBytes(rs, "ext_info"));
             bean.setFeatureMd5(rs.getString("feature_md5"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
         }

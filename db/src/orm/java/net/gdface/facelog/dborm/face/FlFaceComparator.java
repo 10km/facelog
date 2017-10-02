@@ -54,6 +54,7 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_YAW}
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_PITCH}
      *   <li>{@link Constant#FL_FACE_ID_ANGLE_ROLL}
+     *   <li>{@link Constant#FL_FACE_ID_EXT_INFO}
      *   <li>{@link Constant#FL_FACE_ID_FEATURE_MD5}
      *   <li>{@link Constant#FL_FACE_ID_CREATE_TIME}
      * </ul>
@@ -295,6 +296,17 @@ public class FlFaceComparator implements Comparator<FlFaceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getAngleRoll().compareTo(b2.getAngleRoll());
+                }
+                break;
+            case FL_FACE_ID_EXT_INFO:
+                if (b1.getExtInfo() == null && b2.getExtInfo() != null) {
+                    iReturn = -1;
+                } else if (b1.getExtInfo() == null && b2.getExtInfo() == null) {
+                    iReturn = 0;
+                } else if (b1.getExtInfo() != null && b2.getExtInfo() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getExtInfo().compareTo(b2.getExtInfo());
                 }
                 break;
             case FL_FACE_ID_FEATURE_MD5:

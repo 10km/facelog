@@ -64,7 +64,7 @@ public class FlFaceBean
     private Integer angleRoll;
 
     /** comments:扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析 */
-    private byte[] extInfo;
+    private java.nio.ByteBuffer extInfo;
 
     /** comments:外键,人脸特征数据MD5 id */
     private String featureMd5;
@@ -1251,18 +1251,23 @@ public class FlFaceBean
      *
      * @return the value of extInfo
      */
-    public byte[] getExtInfo(){
+    public java.nio.ByteBuffer getExtInfo(){
         return extInfo;
     }
     /**
      * Setter method for {@link #extInfo}.<br>
-     * Attention, there will be no comparison with current value which
-     * means calling this method will mark the field as 'modified' in all cases.
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
      *
      * @param newVal the new value  to be assigned to extInfo
      */
-    public void setExtInfo(byte[] newVal)
+    public void setExtInfo(java.nio.ByteBuffer newVal)
     {
+        if ((newVal != null && extInfo != null && (newVal.compareTo(extInfo) == 0)) ||
+            (newVal == null && extInfo == null && checkExtInfoInitialized())) {
+            return;
+        }
         extInfo = newVal;
 
         modified |= FL_FACE_ID_EXT_INFO_MASK;
@@ -1682,7 +1687,7 @@ public class FlFaceBean
             .append("\tangle_yaw=").append(getAngleYaw()).append("\n")
             .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
             .append("\tangle_roll=").append(getAngleRoll()).append("\n")
-            .append("\text_info=").append(getExtInfo().length).append(" bytes\n")
+            .append("\text_info=").append(getExtInfo()).append("\n")
             .append("\tfeature_md5=").append(getFeatureMd5()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
@@ -1868,7 +1873,7 @@ public class FlFaceBean
         case FL_FACE_ID_ANGLE_ROLL:        
             setAngleRoll((Integer)value);
         case FL_FACE_ID_EXT_INFO:        
-            setExtInfo((byte[])value);
+            setExtInfo((java.nio.ByteBuffer)value);
         case FL_FACE_ID_FEATURE_MD5:        
             setFeatureMd5((String)value);
         case FL_FACE_ID_CREATE_TIME:        

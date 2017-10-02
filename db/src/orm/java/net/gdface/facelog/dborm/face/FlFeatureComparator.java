@@ -39,6 +39,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      * <ul>
      *   <li>{@link Constant#FL_FEATURE_ID_MD5}
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID}
+     *   <li>{@link Constant#FL_FEATURE_ID_FEATURE}
      *   <li>{@link Constant#FL_FEATURE_ID_CREATE_TIME}
      * </ul>
      */
@@ -98,6 +99,17 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getPersonId().compareTo(b2.getPersonId());
+                }
+                break;
+            case FL_FEATURE_ID_FEATURE:
+                if (b1.getFeature() == null && b2.getFeature() != null) {
+                    iReturn = -1;
+                } else if (b1.getFeature() == null && b2.getFeature() == null) {
+                    iReturn = 0;
+                } else if (b1.getFeature() != null && b2.getFeature() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getFeature().compareTo(b2.getFeature());
                 }
                 break;
             case FL_FEATURE_ID_CREATE_TIME:

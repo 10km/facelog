@@ -498,25 +498,25 @@ public final class Manager
     /**
      * Retrieves a java.sql.Blob object from the passed result set as a byte array.
      */
-    public static byte[] getBlob(ResultSet rs, int pos) throws SQLException
+    public static java.nio.ByteBuffer getBlob(ResultSet rs, int pos) throws SQLException
     {
         java.sql.Blob blob = rs.getBlob(pos);
-        return rs.wasNull()?(byte[])null:blob.getBytes(1L,(int)blob.length());
+        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(blob.getBytes(1L,(int)blob.length()));
     }
 
     /**
      * Retrieves a java.sql.Blob object from the passed result set as a byte array.
      */
-    public static byte[] getBlob(ResultSet rs, String column) throws SQLException
+    public static java.nio.ByteBuffer getBlob(ResultSet rs, String column) throws SQLException
     {
         java.sql.Blob blob = rs.getBlob(column);
-        return rs.wasNull()?(byte[])null:blob.getBytes(1L,(int)blob.length());
+        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(blob.getBytes(1L,(int)blob.length()));
     }
 
     /**
      * Set a byte array to the passed prepared statement as a java.sql.Blob or as null.
      */
-    public static void  setBlob(PreparedStatement ps, int pos, byte[] blob) throws SQLException
+    public static void  setBlob(PreparedStatement ps, int pos, java.nio.ByteBuffer blob) throws SQLException
     {
         if (blob==null)
         {
@@ -524,7 +524,7 @@ public final class Manager
         }
         else
         {
-            ps.setBlob(pos, new java.io.ByteArrayInputStream(blob));
+            ps.setBlob(pos, new java.io.ByteArrayInputStream(blob.array()));
         }
     }
 
@@ -561,6 +561,37 @@ public final class Manager
         }
     }
 
+    /**
+     * Retrieves a binary object from the passed result set as a byte array.
+     */
+    public static java.nio.ByteBuffer getBytes(ResultSet rs, int pos) throws SQLException
+    {
+        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(rs.getBytes(pos));
+    }
+
+    /**
+     * Retrieves a byte array from the passed result set as java.nio.ByteBuffer.
+     */
+    public static java.nio.ByteBuffer getBytes(ResultSet rs, String column) throws SQLException
+    {
+        return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(rs.getBytes(column));
+    }
+
+    /**
+     * Set a byte array to the passed prepared statement as a java.nio.ByteBuffer or as null.
+     */
+    public static void  setBytes(int type,PreparedStatement ps, int pos, java.nio.ByteBuffer binary) throws SQLException
+    {
+        if (binary==null)
+        {
+            ps.setNull(pos, type);
+        }
+        else
+        {
+            ps.setBytes(pos, binary.array());
+        }
+    }
+    
     /**
      * Retrieves a boolean value from the passed result set as a Boolean object.
      */

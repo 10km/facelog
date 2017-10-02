@@ -39,6 +39,7 @@ public class FlStoreComparator implements Comparator<FlStoreBean>,Constant
      * <ul>
      *   <li>{@link Constant#FL_STORE_ID_MD5}
      *   <li>{@link Constant#FL_STORE_ID_ENCODING}
+     *   <li>{@link Constant#FL_STORE_ID_DATA}
      * </ul>
      */
     public FlStoreComparator(int iType)
@@ -96,6 +97,17 @@ public class FlStoreComparator implements Comparator<FlStoreBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getEncoding().compareTo(b2.getEncoding());
+                }
+                break;
+            case FL_STORE_ID_DATA:
+                if (b1.getData() == null && b2.getData() != null) {
+                    iReturn = -1;
+                } else if (b1.getData() == null && b2.getData() == null) {
+                    iReturn = 0;
+                } else if (b1.getData() != null && b2.getData() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getData().compareTo(b2.getData());
                 }
                 break;
             default:
