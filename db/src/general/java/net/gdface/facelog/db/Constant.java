@@ -39,10 +39,10 @@ public interface Constant {
     public static final int FL_IMAGE_FK_THUMB_MD5 = 2;
     /** foreign key fl_log(device_id) -> fl_device */
     public static final int FL_LOG_FK_DEVICE_ID = 0;
+    /** foreign key fl_log(compare_face) -> fl_face */
+    public static final int FL_LOG_FK_COMPARE_FACE = 1;
     /** foreign key fl_log(verify_feature) -> fl_feature */
-    public static final int FL_LOG_FK_VERIFY_FEATURE = 1;
-    /** foreign key fl_log(compare_feature) -> fl_feature */
-    public static final int FL_LOG_FK_COMPARE_FEATURE = 2;
+    public static final int FL_LOG_FK_VERIFY_FEATURE = 2;
     /** foreign key fl_log(person_id) -> fl_person */
     public static final int FL_LOG_FK_PERSON_ID = 3;
     /** foreign key fl_person(image_md5) -> fl_image */
@@ -54,12 +54,12 @@ public interface Constant {
     public static final int FL_DEVICE_IK_FL_IMAGE_DEVICE_ID = 0;
     /** imported key fl_log(device_id) -> fl_device */
     public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID = 1;
+    /** imported key fl_log(compare_face) -> fl_face */
+    public static final int FL_FACE_IK_FL_LOG_COMPARE_FACE = 0;
     /** imported key fl_face(feature_md5) -> fl_feature */
     public static final int FL_FEATURE_IK_FL_FACE_FEATURE_MD5 = 0;
     /** imported key fl_log(verify_feature) -> fl_feature */
     public static final int FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE = 1;
-    /** imported key fl_log(compare_feature) -> fl_feature */
-    public static final int FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE = 2;
     /** imported key fl_face(image_md5) -> fl_image */
     public static final int FL_IMAGE_IK_FL_FACE_IMAGE_MD5 = 0;
     /** imported key fl_person(image_md5) -> fl_image */
@@ -87,8 +87,8 @@ public interface Constant {
     public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
     /** fl_image index (thumb_md5) */
     public static final int FL_IMAGE_INDEX_THUMB_MD5 = 1;
-    /** fl_log index (compare_feature) */
-    public static final int FL_LOG_INDEX_COMPARE_FEATURE = 0;
+    /** fl_log index (compare_face) */
+    public static final int FL_LOG_INDEX_COMPARE_FACE = 0;
     /** fl_log index (device_id) */
     public static final int FL_LOG_INDEX_DEVICE_ID = 1;
     /** fl_log index (person_id) */
@@ -232,9 +232,9 @@ public interface Constant {
     /** Identify the fl_log.verify_feature field (ordinal:4). */
     public static final int FL_LOG_ID_VERIFY_FEATURE = 3;
     public static final long FL_LOG_ID_VERIFY_FEATURE_MASK = 1L << 3;
-    /** Identify the fl_log.compare_feature field (ordinal:5). */
-    public static final int FL_LOG_ID_COMPARE_FEATURE = 4;
-    public static final long FL_LOG_ID_COMPARE_FEATURE_MASK = 1L << 4;
+    /** Identify the fl_log.compare_face field (ordinal:5). */
+    public static final int FL_LOG_ID_COMPARE_FACE = 4;
+    public static final long FL_LOG_ID_COMPARE_FACE_MASK = 1L << 4;
     /** Identify the fl_log.similarty field (ordinal:6). */
     public static final int FL_LOG_ID_SIMILARTY = 5;
     public static final long FL_LOG_ID_SIMILARTY_MASK = 1L << 5;
@@ -354,7 +354,7 @@ public interface Constant {
                             + ",fl_log.person_id"
                             + ",fl_log.device_id"
                             + ",fl_log.verify_feature"
-                            + ",fl_log.compare_feature"
+                            + ",fl_log.compare_face"
                             + ",fl_log.similarty"
                             + ",fl_log.verify_time"
                             + ",fl_log.create_time";
@@ -478,7 +478,7 @@ public interface Constant {
                             + ",person_id"
                             + ",device_id"
                             + ",verify_feature"
-                            + ",compare_feature"
+                            + ",compare_face"
                             + ",similarty"
                             + ",verify_time"
                             + ",create_time";
@@ -488,7 +488,7 @@ public interface Constant {
                             + ",personId"
                             + ",deviceId"
                             + ",verifyFeature"
-                            + ",compareFeature"
+                            + ",compareFace"
                             + ",similarty"
                             + ",verifyTime"
                             + ",createTime";

@@ -46,26 +46,112 @@ public interface IFaceManager extends TableManager<FaceBean>
     public int deleteByPrimaryKey(Integer id);
 
  
+
+    //////////////////////////////////////
+    // GET/SET IMPORTED KEY BEAN METHOD
+    //////////////////////////////////////
+    /**
+     * Retrieves the {@link LogBean} object from the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param bean the {@link FaceBean}
+     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.1 GET IMPORTED
+    public LogBean[] getLogBeansByCompareFace(FaceBean bean);
+    
+    /**
+     * Retrieves the {@link LogBean} object from the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param id Integer - PK# 1
+     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public LogBean[] getLogBeansByCompareFace(Integer faceId);
+    
+    /**
+     * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the {@link FaceBean}
+     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.2 GET IMPORTED
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean);
+
+    /**
+     * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param id Integer - PK# 1
+     * @return the associated {@link LogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer faceId);
+    
+    /**
+     * set  the {@link LogBean} object array associate to FaceBean by the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param bean the referenced {@link FaceBean}
+     * @param importedBeans imported beans from fl_log
+     * @return importedBeans always
+     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     */
+    //3.3 SET IMPORTED
+    public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans);
+
+    /**
+     * set  the {@link LogBean} object java.util.Collection associate to FaceBean by the fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the referenced {@link FaceBean} 
+     * @param importedBeans imported beans from fl_log 
+     * @return importedBeans always
+     * @see {@link LogManager#setReferencedByCompareFace(LogBean, FaceBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans);
+
     /**
      * Save the FaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param refFeatureByFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
-         * @return the inserted or updated {@link FaceBean} bean
+     * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
+     * @return the inserted or updated {@link FaceBean} bean
      */
     //3.5 SYNC SAVE 
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
-        );
+        , LogBean[] impLogByCompareFace );
     /**
      * Transaction version for sync save
-     * @see {@link #save(FaceBean , FeatureBean , ImageBean )}
+     * @see {@link #save(FaceBean , FeatureBean , ImageBean , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
-        );
+        ,final LogBean[] impLogByCompareFace );
+    /**
+     * Save the FaceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FaceBean} bean to be saved
+     * @param refFeatureByFeatureMd5 the {@link FeatureBean} bean referenced by {@link FaceBean} 
+     * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link FaceBean} 
+     * @param impLogByCompareFace the {@link LogBean} bean refer to {@link FaceBean} 
+     * @return the inserted or updated {@link FaceBean} bean
+     */
+    //3.7 SYNC SAVE 
+    public FaceBean save(FaceBean bean
+        , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
+        , java.util.Collection<LogBean> impLogByCompareFace );
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FaceBean , FeatureBean , ImageBean , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FaceBean saveAsTransaction(final FaceBean bean
+        ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
+        ,final  java.util.Collection<LogBean> impLogByCompareFace );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

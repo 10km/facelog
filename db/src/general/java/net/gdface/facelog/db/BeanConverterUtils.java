@@ -714,9 +714,9 @@ public class BeanConverterUtils {
                 methods.put("checkVerifyFeatureInitialized",rightType.getMethod("checkVerifyFeatureInitialized"));
             }catch(Exception e){}
             try{         
-                methods.put("getCompareFeature",rightType.getMethod("getCompareFeature"));
-                methods.put("setCompareFeature",rightType.getMethod("setCompareFeature",String.class));
-                methods.put("checkCompareFeatureInitialized",rightType.getMethod("checkCompareFeatureInitialized"));
+                methods.put("getCompareFace",rightType.getMethod("getCompareFace"));
+                methods.put("setCompareFace",rightType.getMethod("setCompareFace",Integer.class));
+                methods.put("checkCompareFaceInitialized",rightType.getMethod("checkCompareFaceInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getSimilarty",rightType.getMethod("getSimilarty"));
@@ -754,9 +754,9 @@ public class BeanConverterUtils {
                     if((boolean)initializedMethod.invoke(right))
                         left.setVerifyFeature((String)getterMethod.invoke(right));
                 }
-                if( null != (initializedMethod = methods.get("checkCompareFeatureInitialized")) && null != (getterMethod = methods.get("getCompareFeature"))){
+                if( null != (initializedMethod = methods.get("checkCompareFaceInitialized")) && null != (getterMethod = methods.get("getCompareFace"))){
                     if((boolean)initializedMethod.invoke(right))
-                        left.setCompareFeature((String)getterMethod.invoke(right));
+                        left.setCompareFace((Integer)getterMethod.invoke(right));
                 }
                 if( null != (initializedMethod = methods.get("checkSimilartyInitialized")) && null != (getterMethod = methods.get("getSimilarty"))){
                     if((boolean)initializedMethod.invoke(right))
@@ -791,8 +791,8 @@ public class BeanConverterUtils {
                     setterMethod.invoke(right,left.getDeviceId());
                 if(null != (setterMethod = methods.get("setVerifyFeature")) && left.checkVerifyFeatureInitialized() )
                     setterMethod.invoke(right,left.getVerifyFeature());
-                if(null != (setterMethod = methods.get("setCompareFeature")) && left.checkCompareFeatureInitialized() )
-                    setterMethod.invoke(right,left.getCompareFeature());
+                if(null != (setterMethod = methods.get("setCompareFace")) && left.checkCompareFaceInitialized() )
+                    setterMethod.invoke(right,left.getCompareFace());
                 if(null != (setterMethod = methods.get("setSimilarty")) && left.checkSimilartyInitialized() )
                     setterMethod.invoke(right,left.getSimilarty());
                 if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized() )

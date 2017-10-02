@@ -15,6 +15,7 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IFaceManager;
+import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
@@ -164,14 +165,150 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     }
 
  
+    //////////////////////////////////////
+    // IMPORT KEY GENERIC METHOD
+    //////////////////////////////////////
+    
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{LogBean.class};
+
+    /**
+     * @see #getImportedBeansAsList(FaceBean,int)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(FaceBean bean, int ikIndex){
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+    }
+    
+    /**
+     * Retrieves imported T objects by ikIndex.<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     * </ul>
+     * @param bean the {@link FaceBean} object to use
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (java.util.List<T>)this.getLogBeansByCompareFaceAsList(bean);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
+     * @param <T>
+     * 
+     * <ul>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     * </ul>
+     * @param bean the {@link FaceBean} object to use
+     * @param importedBeans the FlLogBean array to associate to the {@link FaceBean}
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @return importedBeans always
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (T[])setLogBeansByCompareFace(bean,(LogBean[])importedBeans);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the importedBeans associates to the bean by ikIndex<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link LogBean}</li>
+     * </ul>
+     * @param bean the {@link FaceBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link FaceBean}
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @return importedBeans always
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (C)setLogBeansByCompareFace(bean,(java.util.Collection<LogBean>)importedBeans);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
  
+
+    //////////////////////////////////////
+    // GET/SET IMPORTED KEY BEAN METHOD
+    //////////////////////////////////////
+    //3.1 GET IMPORTED override IFaceManager
+    @Override 
+    public LogBean[] getLogBeansByCompareFace(FaceBean bean)
+    {
+        return this.getLogBeansByCompareFaceAsList(bean).toArray(new LogBean[0]);
+    }
+    //3.1.2 GET IMPORTED override IFaceManager
+    @Override
+    public LogBean[] getLogBeansByCompareFace(Integer faceId)
+    {
+        FaceBean bean = new FaceBean();
+        bean.setId(faceId);
+        return getLogBeansByCompareFace(bean);
+    }
+    //3.2 GET IMPORTED override IFaceManager
+    @Override 
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean)
+    {
+        try {
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByCompareFaceAsList( this.beanConverter.toRight(bean)));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    //3.2.2 GET IMPORTED override IFaceManager
+    @Override
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer faceId)
+    {
+         FaceBean bean = new FaceBean();
+        bean.setId(faceId);
+        return getLogBeansByCompareFaceAsList(bean);
+    }
+    //3.3 SET IMPORTED override IFaceManager
+    @Override 
+    public LogBean[] setLogBeansByCompareFace(FaceBean bean , LogBean[] importedBeans)
+    {
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    //3.4 SET IMPORTED override IFaceManager
+    @Override 
+    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFace(FaceBean bean , C importedBeans)
+    {
+        if(null != importedBeans){
+            for( LogBean importBean : importedBeans ){
+                LogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
 
 
     //3.5 SYNC SAVE override IFaceManager
     @Override  
     public FaceBean save(FaceBean bean
         , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
-        )
+        , LogBean[] impLogByCompareFace )
     {
         if(null == bean) return null;
         if(null != refFeatureByFeatureMd5)
@@ -179,6 +316,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
         if(null != refImageByImageMd5)
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
+        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+        LogManager.getInstance().save( impLogByCompareFace );
         return bean;
     } 
 
@@ -186,12 +325,39 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override 
     public FaceBean saveAsTransaction(final FaceBean bean
         ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
-        )
+        ,final LogBean[] impLogByCompareFace )
     {
         return this.runAsTransaction(new Callable<FaceBean>(){
             @Override
             public FaceBean call() throws Exception {
-                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 );
+                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 , impLogByCompareFace );
+            }});
+    }
+    //3.7 SYNC SAVE override IFaceManager
+    @Override 
+    public FaceBean save(FaceBean bean
+        , FeatureBean refFeatureByFeatureMd5 , ImageBean refImageByImageMd5 
+        , java.util.Collection<LogBean> impLogByCompareFace )
+    {
+        if(null == bean) return null;
+        this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
+        this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        bean = this.save( bean );
+        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+        LogManager.getInstance().save( impLogByCompareFace );
+        return bean;
+    }   
+
+    //3.8 SYNC SAVE AS TRANSACTION override IFaceManager
+    @Override 
+    public FaceBean saveAsTransaction(final FaceBean bean
+        ,final FeatureBean refFeatureByFeatureMd5 ,final ImageBean refImageByImageMd5 
+        ,final  java.util.Collection<LogBean> impLogByCompareFace )
+    {
+        return this.runAsTransaction(new Callable<FaceBean>(){
+            @Override
+            public FaceBean call() throws Exception {
+                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 , impLogByCompareFace );
             }});
     }
      /**
@@ -199,22 +365,25 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FaceBean , FeatureBean , ImageBean )}
+     *      see also {@link #save(FaceBean , FeatureBean , ImageBean , LogBean[] )}
      * @return the inserted or updated {@link FaceBean} bean
      */
     //3.9 SYNC SAVE 
     @Override
     public FaceBean save(FaceBean bean,Object ...args) 
     {
-        if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FeatureBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:ImageBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FeatureBean)args[0],(args.length < 2 || null == args[1])?null:(ImageBean)args[1]);
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
+        }
+        return save(bean,(args.length < 1 || null == args[0])?null:(FeatureBean)args[0],(args.length < 2 || null == args[1])?null:(ImageBean)args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
     /**
@@ -222,7 +391,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      *
      * @param bean the {@link FaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FaceBean , FeatureBean , ImageBean )}
+     *      see also {@link #save(FaceBean , FeatureBean , ImageBean , java.util.Collection )}
      * @return the inserted or updated {@link FaceBean} bean
      */
     //3.10 SYNC SAVE 
@@ -230,17 +399,20 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override
     public FaceBean saveCollection(FaceBean bean,Object ...inputs)
     {
-        if(inputs.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
-        Object[] args = new Object[2];
-        System.arraycopy(inputs,0,args,0,2);
+        if(inputs.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        Object[] args = new Object[3];
+        System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FeatureBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof ImageBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:ImageBean");
         }
-        return save(bean,null == args[0]?null:(FeatureBean)args[0],null == args[1]?null:(ImageBean)args[1]);
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");
+        }
+        return save(bean,null == args[0]?null:(FeatureBean)args[0],null == args[1]?null:(ImageBean)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2]);
     }
 
      //////////////////////////////////////

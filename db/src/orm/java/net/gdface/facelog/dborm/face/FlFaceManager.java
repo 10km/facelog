@@ -25,6 +25,8 @@ import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
+import net.gdface.facelog.dborm.log.FlLogBean;
+import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
@@ -261,19 +263,192 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     }
     
  
-     /**
+    //////////////////////////////////////
+    // IMPORT KEY GENERIC METHOD
+    //////////////////////////////////////
+    
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlLogBean.class};
+
+    /**
+     * @see #getImportedBeansAsList(FlFaceBean,int)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
+        return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
+    }
+    
+    /**
+     * Retrieves imported T objects by ikIndex.<br>
+     * @param <T>
+     * <ul>
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link FlLogBean}</li>
+     * </ul>
+     * @param bean the {@link FlFaceBean} object to use
+     * @param ikIndex valid values: {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE}
+     * @return the associated T beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (List<T>)this.getLogBeansByCompareFaceAsList(bean);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    
+    /**
+     * Set the T objects as imported beans of bean object by ikIndex.<br>
+     * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
+     * @param bean the {@link FlFaceBean} object to use
+     * @param importedBeans the FlLogBean array to associate to the {@link FlFaceBean}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (T[])setLogBeansByCompareFace(bean,(FlLogBean[])importedBeans);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+    /**
+     * Set the importedBeans associates to the bean by ikIndex<br>
+     * @param <T> see also {@link #getImportedBeansAsList(FlFaceBean,int)}
+     * @param bean the {@link FlFaceBean} object to use
+     * @param importedBeans the <T> object to associate to the {@link FlFaceBean}
+     * @param ikIndex valid values: see also {@link #getImportedBeansAsList(FlFaceBean,int)}
+
+     * @return importedBeans always
+     * @throws DAOException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
+        switch(ikIndex){
+        case FL_FACE_IK_FL_LOG_COMPARE_FACE:
+            return (C)setLogBeansByCompareFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
+        }
+        throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
+    }
+ 
+    //////////////////////////////////////
+    // GET/SET IMPORTED KEY BEAN METHOD
+    //////////////////////////////////////
+    /**
+     * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1 GET IMPORTED
+    public FlLogBean[] getLogBeansByCompareFace(FlFaceBean bean) throws DAOException
+    {
+        return getLogBeansByCompareFaceAsList(bean).toArray(new FlLogBean[0]);
+    }
+    /**
+     * Retrieves the {@link FlLogBean} object from the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlLogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public FlLogBean[] getLogBeansByCompareFace(Integer faceId) throws DAOException
+    {
+        FlFaceBean bean = createBean();
+        bean.setId(faceId);
+        return getLogBeansByCompareFace(bean);
+    }
+    /**
+     * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the {@link FlFaceBean}
+     * @return the associated {@link FlLogBean} beans 
+     * @throws DAOException
+     */
+    //3.2 GET IMPORTED
+    public List<FlLogBean> getLogBeansByCompareFaceAsList(FlFaceBean bean) throws DAOException
+    {
+        if(null == bean)return new java.util.ArrayList<FlLogBean>();
+        FlLogBean other = FlLogManager.getInstance().createBean();
+        other.setCompareFace(bean.getId());
+        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
+    }
+    /**
+     * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param id Integer - PK# 1
+     * @return the associated {@link FlLogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public List<FlLogBean> getLogBeansByCompareFaceAsList(Integer faceId) throws DAOException
+    {
+         FlFaceBean bean = createBean();
+        bean.setId(faceId);
+        return getLogBeansByCompareFaceAsList(bean);
+    }
+    /**
+     * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.compare_face field.<BR>
+     * FK_NAME : fl_log_ibfk_4 
+     * @param bean the referenced {@link FlFaceBean}
+     * @param importedBeans imported beans from fl_log
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
+     */
+    //3.3 SET IMPORTED
+    public FlLogBean[] setLogBeansByCompareFace(FlFaceBean bean , FlLogBean[] importedBeans) throws DAOException
+    {
+        if(null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
+     * set  the {@link FlLogBean} object collection associate to FlFaceBean by the fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the referenced {@link FlFaceBean} 
+     * @param importedBeans imported beans from fl_log 
+     * @return importedBeans always
+     * @throws DAOException
+     * @see {@link FlLogManager#setReferencedByCompareFace(FlLogBean, FlFaceBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<FlLogBean>> C setLogBeansByCompareFace(FlFaceBean bean , C importedBeans) throws DAOException
+    {
+        if(null != importedBeans){
+            for( FlLogBean importBean : importedBeans ){
+                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    /**
      * Save the FlFaceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param refFeatureByFeatureMd5 the {@link FlFeatureBean} bean referenced by {@link FlFaceBean} 
      * @param refImageByImageMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
-         * @return the inserted or updated {@link FlFaceBean} bean
+     * @param impLogByCompareFace the {@link FlLogBean} beans refer to {@link FlFaceBean} 
+     * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlFaceBean save(FlFaceBean bean
         , FlFeatureBean refFeatureByFeatureMd5 , FlImageBean refImageByImageMd5 
-        ) throws DAOException
+        , FlLogBean[] impLogByCompareFace ) throws DAOException
     {
         if(null == bean) return null;
         if(null != refFeatureByFeatureMd5)
@@ -281,22 +456,63 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         if(null != refImageByImageMd5)
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
+        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+        FlLogManager.getInstance().save( impLogByCompareFace );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlFaceBean , FlFeatureBean , FlImageBean )}
+     * @see {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , FlLogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlFaceBean saveAsTransaction(final FlFaceBean bean
         ,final FlFeatureBean refFeatureByFeatureMd5 ,final FlImageBean refImageByImageMd5 
-        ) throws DAOException
+        ,final FlLogBean[] impLogByCompareFace ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlFaceBean>(){
             @Override
             public FlFaceBean call() throws Exception {
-                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 );
+                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 , impLogByCompareFace );
+            }});
+    }
+    /**
+     * Save the FlFaceBean bean and referenced beans and imported beans into the database.
+     *
+     * @param bean the {@link FlFaceBean} bean to be saved
+     * @param refFeatureByFeatureMd5 the {@link FlFeatureBean} bean referenced by {@link FlFaceBean} 
+     * @param refImageByImageMd5 the {@link FlImageBean} bean referenced by {@link FlFaceBean} 
+     * @param impLogByCompareFace the {@link FlLogBean} bean refer to {@link FlFaceBean} 
+     * @return the inserted or updated {@link FlFaceBean} bean
+     * @throws DAOException
+     */
+    //3.7 SYNC SAVE 
+    public FlFaceBean save(FlFaceBean bean
+        , FlFeatureBean refFeatureByFeatureMd5 , FlImageBean refImageByImageMd5 
+        , java.util.Collection<FlLogBean> impLogByCompareFace ) throws DAOException
+    {
+        if(null == bean) return null;
+        this.setReferencedByFeatureMd5(bean,refFeatureByFeatureMd5);
+        this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        bean = this.save( bean );
+        this.setLogBeansByCompareFace(bean,impLogByCompareFace);
+        FlLogManager.getInstance().save( impLogByCompareFace );
+        return bean;
+    }
+
+    /**
+     * Transaction version for sync save
+     * @see {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , java.util.Collection )}
+     */
+    //3.8 SYNC SAVE AS TRANSACTION
+    public FlFaceBean saveAsTransaction(final FlFaceBean bean
+        ,final FlFeatureBean refFeatureByFeatureMd5 ,final FlImageBean refImageByImageMd5 
+        ,final  java.util.Collection<FlLogBean> impLogByCompareFace ) throws DAOException
+    {
+        return this.runAsTransaction(new Callable<FlFaceBean>(){
+            @Override
+            public FlFaceBean call() throws Exception {
+                return save(bean , refFeatureByFeatureMd5 , refImageByImageMd5 , impLogByCompareFace );
             }});
     }
     /**
@@ -304,7 +520,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean )}
+     *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , FlLogBean[] )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -312,15 +528,18 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlFeatureBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlImageBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlFeatureBean)args[0],(args.length < 2 || null == args[1])?null:(FlImageBean)args[1]);
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlLogBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlLogBean[]");
+        }
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlFeatureBean)args[0],(args.length < 2 || null == args[1])?null:(FlImageBean)args[1],(args.length < 3 || null == args[2])?null:(FlLogBean[])args[2]);
     } 
 
     /**
@@ -328,7 +547,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      *
      * @param bean the {@link FlFaceBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean )}
+     *      see also {@link #save(FlFaceBean , FlFeatureBean , FlImageBean , java.util.Collection )}
      * @return the inserted or updated {@link FlFaceBean} bean
      * @throws DAOException
      */
@@ -337,15 +556,18 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 2)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlFeatureBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlImageBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlFeatureBean)args[0],(args.length < 2 || null == args[1])?null:(FlImageBean)args[1]);
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlLogBean>");
+        }
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlFeatureBean)args[0],(args.length < 2 || null == args[1])?null:(FlImageBean)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlLogBean>)args[2]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD

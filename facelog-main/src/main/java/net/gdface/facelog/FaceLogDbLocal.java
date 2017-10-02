@@ -323,7 +323,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		return featureBean;
 	}
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, FaceBean[] impFaceByFeatureMd5)throws ServiceRuntime{
-		return featureManager.save(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null, null);
+		return featureManager.save(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
 		Assert.notEmpty(faceInfo, "faceInfo");
@@ -350,7 +350,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 
 	public FeatureBean addFeature(ByteBuffer feature,PersonBean refPersonByPersonId,FaceBean[] impFaceByFeatureMd5)throws ServiceRuntime{
 		try{
-			return featureManager.saveAsTransaction(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null, null);
+			return featureManager.saveAsTransaction(makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 

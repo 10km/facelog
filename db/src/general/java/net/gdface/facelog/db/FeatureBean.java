@@ -11,7 +11,7 @@ import java.io.Serializable;
  * FeatureBean is a mapping of fl_feature Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 人脸特征数据表 </li>
+ *    <li>comments: 用于验证身份的人脸特征数据表 </li>
  * </ul>
  * @author guyadong
 */
@@ -107,7 +107,6 @@ public class FeatureBean
      * <ul>
      * <li>full name: fl_feature.md5</li>
      * <li> imported key: fl_log.verify_feature</li>
-     * <li> imported key: fl_log.compare_feature</li>
      * <li> imported key: fl_face.feature_md5</li>
      * <li>comments: 主键,特征码md5校验码</li>
      * <li>NOT NULL</li>

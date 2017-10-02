@@ -51,22 +51,22 @@ public interface ILogManager extends TableManager<LogBean>
      *
      * @param bean the {@link LogBean} bean to be saved
      * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link LogBean} 
+     * @param refFaceByCompareFace the {@link FaceBean} bean referenced by {@link LogBean} 
      * @param refFeatureByVerifyFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
-     * @param refFeatureByCompareFeature the {@link FeatureBean} bean referenced by {@link LogBean} 
      * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link LogBean} 
          * @return the inserted or updated {@link LogBean} bean
      */
     //3.5 SYNC SAVE 
     public LogBean save(LogBean bean
-        , DeviceBean refDeviceByDeviceId , FeatureBean refFeatureByVerifyFeature , FeatureBean refFeatureByCompareFeature , PersonBean refPersonByPersonId 
+        , DeviceBean refDeviceByDeviceId , FaceBean refFaceByCompareFace , FeatureBean refFeatureByVerifyFeature , PersonBean refPersonByPersonId 
         );
     /**
      * Transaction version for sync save
-     * @see {@link #save(LogBean , DeviceBean , FeatureBean , FeatureBean , PersonBean )}
+     * @see {@link #save(LogBean , DeviceBean , FaceBean , FeatureBean , PersonBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public LogBean saveAsTransaction(final LogBean bean
-        ,final DeviceBean refDeviceByDeviceId ,final FeatureBean refFeatureByVerifyFeature ,final FeatureBean refFeatureByCompareFeature ,final PersonBean refPersonByPersonId 
+        ,final DeviceBean refDeviceByDeviceId ,final FaceBean refFaceByCompareFace ,final FeatureBean refFeatureByVerifyFeature ,final PersonBean refPersonByPersonId 
         );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -91,6 +91,25 @@ public interface ILogManager extends TableManager<LogBean>
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet);
     /**
+     * Retrieves the {@link FaceBean} object referenced by {@link LogBean#getCompareFace}() field.<br>
+     * FK_NAME : fl_log_ibfk_4
+     * @param bean the {@link LogBean}
+     * @return the associated {@link FaceBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //5.1 GET REFERENCED VALUE
+    public FaceBean getReferencedByCompareFace(LogBean bean);
+
+    /**
+     * Associates the {@link LogBean} object to the {@link FaceBean} object by {@link LogBean#getCompareFace}() field.
+     *
+     * @param bean the {@link LogBean} object to use
+     * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet);
+    /**
      * Retrieves the {@link FeatureBean} object referenced by {@link LogBean#getVerifyFeature}() field.<br>
      * FK_NAME : fl_log_ibfk_3
      * @param bean the {@link LogBean}
@@ -109,25 +128,6 @@ public interface ILogManager extends TableManager<LogBean>
      */
     //5.2 SET REFERENCED 
     public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet);
-    /**
-     * Retrieves the {@link FeatureBean} object referenced by {@link LogBean#getCompareFeature}() field.<br>
-     * FK_NAME : fl_log_ibfk_4
-     * @param bean the {@link LogBean}
-     * @return the associated {@link FeatureBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //5.1 GET REFERENCED VALUE
-    public FeatureBean getReferencedByCompareFeature(LogBean bean);
-
-    /**
-     * Associates the {@link LogBean} object to the {@link FeatureBean} object by {@link LogBean#getCompareFeature}() field.
-     *
-     * @param bean the {@link LogBean} object to use
-     * @param beanToSet the {@link FeatureBean} object to associate to the {@link LogBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FeatureBean setReferencedByCompareFeature(LogBean bean, FeatureBean beanToSet);
     /**
      * Retrieves the {@link PersonBean} object referenced by {@link LogBean#getPersonId}() field.<br>
      * FK_NAME : fl_log_ibfk_1
@@ -153,28 +153,28 @@ public interface ILogManager extends TableManager<LogBean>
     //_____________________________________________________________________
 
      /**
-     * Retrieves an array of LogBean using the compare_feature index.
+     * Retrieves an array of LogBean using the compare_face index.
      *
-     * @param compareFeature the compare_feature column's value filter.
+     * @param compareFace the compare_face column's value filter.
      * @return an array of LogBean
      */
-    public LogBean[] loadByIndexCompareFeature(String compareFeature);
+    public LogBean[] loadByIndexCompareFace(Integer compareFace);
     
     /**
-     * Retrieves a list of LogBean using the compare_feature index.
+     * Retrieves a list of LogBean using the compare_face index.
      *
-     * @param compareFeature the compare_feature column's value filter.
+     * @param compareFace the compare_face column's value filter.
      * @return a list of LogBean
      */
-    public java.util.List<LogBean> loadByIndexCompareFeatureAsList(String compareFeature);
+    public java.util.List<LogBean> loadByIndexCompareFaceAsList(Integer compareFace);
 
     /**
-     * Deletes rows using the compare_feature index.
+     * Deletes rows using the compare_face index.
      *
-     * @param compareFeature the compare_feature column's value filter.
+     * @param compareFace the compare_face column's value filter.
      * @return the number of deleted objects
      */
-    public int deleteByIndexCompareFeature(String compareFeature);
+    public int deleteByIndexCompareFace(Integer compareFace);
     
      /**
      * Retrieves an array of LogBean using the device_id index.

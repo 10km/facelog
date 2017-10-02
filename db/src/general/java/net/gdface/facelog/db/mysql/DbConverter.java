@@ -250,8 +250,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setDeviceId(right.getDeviceId());
             if(right.checkVerifyFeatureInitialized())
                 left.setVerifyFeature(right.getVerifyFeature());
-            if(right.checkCompareFeatureInitialized())
-                left.setCompareFeature(right.getCompareFeature());
+            if(right.checkCompareFaceInitialized())
+                left.setCompareFace(right.getCompareFace());
             if(right.checkSimilartyInitialized())
                 left.setSimilarty(right.getSimilarty());
             if(right.checkVerifyTimeInitialized())
@@ -272,8 +272,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setDeviceId(left.getDeviceId());
             if(left.checkVerifyFeatureInitialized() )
                 right.setVerifyFeature(left.getVerifyFeature());
-            if(left.checkCompareFeatureInitialized() )
-                right.setCompareFeature(left.getCompareFeature());
+            if(left.checkCompareFaceInitialized() )
+                right.setCompareFace(left.getCompareFace());
             if(left.checkSimilartyInitialized() )
                 right.setSimilarty(left.getSimilarty());
             if(left.checkVerifyTimeInitialized() )

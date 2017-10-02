@@ -914,7 +914,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        for fl_image table<br>
      *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}<br>     
      *        for fl_log table<br>
-     *        {@link Constant#FL_LOG_INDEX_COMPARE_FEATURE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}<br>     
+     *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}<br>     
      *        for fl_person table<br>
      *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}<br>     
      * @param keys key values of index
@@ -1004,13 +1004,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             for fl_device table:<br>
                 {@code  ImageBean[] LogBean[]}<br>
             for fl_face table:<br>
-                {@code  FeatureBean ImageBean}<br>
+                {@code  FeatureBean ImageBean LogBean[]}<br>
             for fl_feature table:<br>
-                {@code  PersonBean FaceBean[] LogBean[] LogBean[]}<br>
+                {@code  PersonBean FaceBean[] LogBean[]}<br>
             for fl_image table:<br>
                 {@code  DeviceBean StoreBean StoreBean FaceBean[] PersonBean[]}<br>
             for fl_log table:<br>
-                {@code  DeviceBean FeatureBean FeatureBean PersonBean}<br>
+                {@code  DeviceBean FaceBean FeatureBean PersonBean}<br>
             for fl_person table:<br>
                 {@code  ImageBean FeatureBean[] LogBean[]}<br>
             for fl_store table:<br>
@@ -1028,13 +1028,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             for fl_device table:<br>
                 {@code  Collection<ImageBean> Collection<LogBean>}<br>
             for fl_face table:<br>
-                {@code  FeatureBean ImageBean}<br>
+                {@code  FeatureBean ImageBean Collection<LogBean>}<br>
             for fl_feature table:<br>
-                {@code  PersonBean Collection<FaceBean> Collection<LogBean> Collection<LogBean>}<br>
+                {@code  PersonBean Collection<FaceBean> Collection<LogBean>}<br>
             for fl_image table:<br>
                 {@code  DeviceBean StoreBean StoreBean Collection<FaceBean> Collection<PersonBean>}<br>
             for fl_log table:<br>
-                {@code  DeviceBean FeatureBean FeatureBean PersonBean}<br>
+                {@code  DeviceBean FaceBean FeatureBean PersonBean}<br>
             for fl_person table:<br>
                 {@code  ImageBean Collection<FeatureBean> Collection<LogBean>}<br>
             for fl_store table:<br>
@@ -1132,8 +1132,8 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * <ul>
      *     <li> for fl_log:
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
+     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_VERIFY_FEATURE} -> {@link FeatureBean}</li>
-     *     <li> {@link Constant#FL_LOG_FK_COMPARE_FEATURE} -> {@link FeatureBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * <ul>
@@ -1149,7 +1149,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        for for fl_image table:<br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}<br>
      *        for for fl_log table:<br>
-     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
      *        for for fl_person table:<br>
      *        {@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
@@ -1175,10 +1175,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
+     *     <li> for fl_face table:
+     *     <li> {@link Constant#FL_FACE_IK_FL_LOG_COMPARE_FACE} -> {@link ImageBean}</li>
+     * </ul>
+     * <ul>
      *     <li> for fl_feature table:
      *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link ImageBean}</li>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link ImageBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE} -> {@link ImageBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_image table:
@@ -1199,8 +1202,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param ikIndex foreign key name.<br>
      *        for fl_device table:<br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
+     *        for fl_face table:<br>
+     *        {@link Constant#FL_LOG_FK_COMPARE_FACE}<br>
      *        for fl_feature table:<br>
-     *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_COMPARE_FEATURE}<br>
+     *        {@link Constant#FL_FACE_FK_FEATURE_MD5},{@link Constant#FL_LOG_FK_VERIFY_FEATURE}<br>
      *        for fl_image table:<br>
      *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
      *        for fl_person table:<br>

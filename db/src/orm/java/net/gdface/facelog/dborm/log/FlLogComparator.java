@@ -41,7 +41,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_PERSON_ID}
      *   <li>{@link Constant#FL_LOG_ID_DEVICE_ID}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_FEATURE}
-     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FEATURE}
+     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE}
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY}
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME}
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME}
@@ -67,7 +67,7 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
      *   <li>{@link Constant#FL_LOG_ID_PERSON_ID})
      *   <li>{@link Constant#FL_LOG_ID_DEVICE_ID})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_FEATURE})
-     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FEATURE})
+     *   <li>{@link Constant#FL_LOG_ID_COMPARE_FACE})
      *   <li>{@link Constant#FL_LOG_ID_SIMILARTY})
      *   <li>{@link Constant#FL_LOG_ID_VERIFY_TIME})
      *   <li>{@link Constant#FL_LOG_ID_CREATE_TIME})
@@ -131,15 +131,15 @@ public class FlLogComparator implements Comparator<FlLogBean>,Constant
                     iReturn = b1.getVerifyFeature().compareTo(b2.getVerifyFeature());
                 }
                 break;
-            case FL_LOG_ID_COMPARE_FEATURE:
-                if (b1.getCompareFeature() == null && b2.getCompareFeature() != null) {
+            case FL_LOG_ID_COMPARE_FACE:
+                if (b1.getCompareFace() == null && b2.getCompareFace() != null) {
                     iReturn = -1;
-                } else if (b1.getCompareFeature() == null && b2.getCompareFeature() == null) {
+                } else if (b1.getCompareFace() == null && b2.getCompareFace() == null) {
                     iReturn = 0;
-                } else if (b1.getCompareFeature() != null && b2.getCompareFeature() == null) {
+                } else if (b1.getCompareFace() != null && b2.getCompareFace() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getCompareFeature().compareTo(b2.getCompareFeature());
+                    iReturn = b1.getCompareFace().compareTo(b2.getCompareFace());
                 }
                 break;
             case FL_LOG_ID_SIMILARTY:

@@ -139,6 +139,7 @@ public class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.id</li>
+     * <li> imported key: fl_log.compare_face</li>
      * <li>comments: 主键</li>
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>

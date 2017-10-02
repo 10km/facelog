@@ -171,87 +171,26 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     public <C extends java.util.Collection<LogBean>> C setLogBeansByVerifyFeature(FeatureBean bean , C importedBeans);
 
     /**
-     * Retrieves the {@link LogBean} object from the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the {@link FeatureBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.1 GET IMPORTED
-    public LogBean[] getLogBeansByCompareFeature(FeatureBean bean);
-    
-    /**
-     * Retrieves the {@link LogBean} object from the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param md5 String - PK# 1
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1.2 GET IMPORTED
-    public LogBean[] getLogBeansByCompareFeature(String featureMd5);
-    
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the {@link FeatureBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
-     */
-    //3.2 GET IMPORTED
-    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(FeatureBean bean);
-
-    /**
-     * Retrieves the {@link LogBean} object from fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param md5 String - PK# 1
-     * @return the associated {@link LogBean} beans 
-     * @throws DAOException
-     */
-    //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(String featureMd5);
-    
-    /**
-     * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.compare_feature field.<BR>
-     * FK_NAME : fl_log_ibfk_4 
-     * @param bean the referenced {@link FeatureBean}
-     * @param importedBeans imported beans from fl_log
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFeature(LogBean, FeatureBean)
-     */
-    //3.3 SET IMPORTED
-    public LogBean[] setLogBeansByCompareFeature(FeatureBean bean , LogBean[] importedBeans);
-
-    /**
-     * set  the {@link LogBean} object java.util.Collection associate to FeatureBean by the fl_log.compare_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the referenced {@link FeatureBean} 
-     * @param importedBeans imported beans from fl_log 
-     * @return importedBeans always
-     * @see {@link LogManager#setReferencedByCompareFeature(LogBean, FeatureBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFeature(FeatureBean bean , C importedBeans);
-
-    /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link FeatureBean} bean to be saved
      * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
      * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
-     * @param impLogByCompareFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
      */
     //3.5 SYNC SAVE 
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
-        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature , LogBean[] impLogByCompareFeature );
+        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature );
     /**
      * Transaction version for sync save
-     * @see {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] , LogBean[] )}
+     * @see {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
-        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature ,final LogBean[] impLogByCompareFeature );
+        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature );
     /**
      * Save the FeatureBean bean and referenced beans and imported beans into the database.
      *
@@ -259,21 +198,20 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param refPersonByPersonId the {@link PersonBean} bean referenced by {@link FeatureBean} 
      * @param impFaceByFeatureMd5 the {@link FaceBean} bean refer to {@link FeatureBean} 
      * @param impLogByVerifyFeature the {@link LogBean} bean refer to {@link FeatureBean} 
-     * @param impLogByCompareFeature the {@link LogBean} bean refer to {@link FeatureBean} 
      * @return the inserted or updated {@link FeatureBean} bean
      */
     //3.7 SYNC SAVE 
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
-        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature , java.util.Collection<LogBean> impLogByCompareFeature );
+        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature );
     /**
      * Transaction version for sync save
-     * @see {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
-        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature ,final  java.util.Collection<LogBean> impLogByCompareFeature );
+        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////

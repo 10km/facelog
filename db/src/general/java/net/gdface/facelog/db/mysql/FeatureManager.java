@@ -169,7 +169,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FaceBean.class,LogBean.class,LogBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FaceBean.class,LogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FeatureBean,int)
@@ -186,10 +186,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
      * <ul>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FaceBean}</li>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link LogBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE},{@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE}
+     * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
@@ -200,8 +199,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return (java.util.List<T>)this.getFaceBeansByFeatureMd5AsList(bean);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (java.util.List<T>)this.getLogBeansByVerifyFeatureAsList(bean);
-        case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (java.util.List<T>)this.getLogBeansByCompareFeatureAsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -212,11 +209,10 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
      * <ul>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FaceBean}</li>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link LogBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
      * @param importedBeans the FlLogBean array to associate to the {@link FeatureBean}
-     * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE},{@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE}
+     * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
@@ -227,8 +223,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return (T[])setFaceBeansByFeatureMd5(bean,(FaceBean[])importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (T[])setLogBeansByVerifyFeature(bean,(LogBean[])importedBeans);
-        case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (T[])setLogBeansByCompareFeature(bean,(LogBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -238,11 +232,10 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
      * <ul>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5} -> {@link FaceBean}</li>
      *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE} -> {@link LogBean}</li>
-     *     <li> {@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE} -> {@link LogBean}</li>
      * </ul>
      * @param bean the {@link FeatureBean} object to use
      * @param importedBeans the <T> object to associate to the {@link FeatureBean}
-     * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE},{@link Constant#FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE}
+     * @param ikIndex valid values: {@link Constant#FL_FEATURE_IK_FL_FACE_FEATURE_MD5},{@link Constant#FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
@@ -253,8 +246,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return (C)setFaceBeansByFeatureMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
         case FL_FEATURE_IK_FL_LOG_VERIFY_FEATURE:
             return (C)setLogBeansByVerifyFeature(bean,(java.util.Collection<LogBean>)importedBeans);
-        case FL_FEATURE_IK_FL_LOG_COMPARE_FEATURE:
-            return (C)setLogBeansByCompareFeature(bean,(java.util.Collection<LogBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -377,70 +368,13 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         }
         return importedBeans;
     }
-    //3.1 GET IMPORTED override IFeatureManager
-    @Override 
-    public LogBean[] getLogBeansByCompareFeature(FeatureBean bean)
-    {
-        return this.getLogBeansByCompareFeatureAsList(bean).toArray(new LogBean[0]);
-    }
-    //3.1.2 GET IMPORTED override IFeatureManager
-    @Override
-    public LogBean[] getLogBeansByCompareFeature(String featureMd5)
-    {
-        FeatureBean bean = new FeatureBean();
-        bean.setMd5(featureMd5);
-        return getLogBeansByCompareFeature(bean);
-    }
-    //3.2 GET IMPORTED override IFeatureManager
-    @Override 
-    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(FeatureBean bean)
-    {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByCompareFeatureAsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    //3.2.2 GET IMPORTED override IFeatureManager
-    @Override
-    public java.util.List<LogBean> getLogBeansByCompareFeatureAsList(String featureMd5)
-    {
-         FeatureBean bean = new FeatureBean();
-        bean.setMd5(featureMd5);
-        return getLogBeansByCompareFeatureAsList(bean);
-    }
-    //3.3 SET IMPORTED override IFeatureManager
-    @Override 
-    public LogBean[] setLogBeansByCompareFeature(FeatureBean bean , LogBean[] importedBeans)
-    {
-        if(null != importedBeans){
-            for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByCompareFeature(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    //3.4 SET IMPORTED override IFeatureManager
-    @Override 
-    public <C extends java.util.Collection<LogBean>> C setLogBeansByCompareFeature(FeatureBean bean , C importedBeans)
-    {
-        if(null != importedBeans){
-            for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByCompareFeature(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
 
 
     //3.5 SYNC SAVE override IFeatureManager
     @Override  
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
-        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature , LogBean[] impLogByCompareFeature )
+        , FaceBean[] impFaceByFeatureMd5 , LogBean[] impLogByVerifyFeature )
     {
         if(null == bean) return null;
         if(null != refPersonByPersonId)
@@ -450,8 +384,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         FaceManager.getInstance().save( impFaceByFeatureMd5 );
         this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
         LogManager.getInstance().save( impLogByVerifyFeature );
-        this.setLogBeansByCompareFeature(bean,impLogByCompareFeature);
-        LogManager.getInstance().save( impLogByCompareFeature );
         return bean;
     } 
 
@@ -459,19 +391,19 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
-        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature ,final LogBean[] impLogByCompareFeature )
+        ,final FaceBean[] impFaceByFeatureMd5 ,final LogBean[] impLogByVerifyFeature )
     {
         return this.runAsTransaction(new Callable<FeatureBean>(){
             @Override
             public FeatureBean call() throws Exception {
-                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature , impLogByCompareFeature );
+                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature );
             }});
     }
     //3.7 SYNC SAVE override IFeatureManager
     @Override 
     public FeatureBean save(FeatureBean bean
         , PersonBean refPersonByPersonId 
-        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature , java.util.Collection<LogBean> impLogByCompareFeature )
+        , java.util.Collection<FaceBean> impFaceByFeatureMd5 , java.util.Collection<LogBean> impLogByVerifyFeature )
     {
         if(null == bean) return null;
         this.setReferencedByPersonId(bean,refPersonByPersonId);
@@ -480,8 +412,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         FaceManager.getInstance().save( impFaceByFeatureMd5 );
         this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
         LogManager.getInstance().save( impLogByVerifyFeature );
-        this.setLogBeansByCompareFeature(bean,impLogByCompareFeature);
-        LogManager.getInstance().save( impLogByCompareFeature );
         return bean;
     }   
 
@@ -489,12 +419,12 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public FeatureBean saveAsTransaction(final FeatureBean bean
         ,final PersonBean refPersonByPersonId 
-        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature ,final  java.util.Collection<LogBean> impLogByCompareFeature )
+        ,final  java.util.Collection<FaceBean> impFaceByFeatureMd5 ,final  java.util.Collection<LogBean> impLogByVerifyFeature )
     {
         return this.runAsTransaction(new Callable<FeatureBean>(){
             @Override
             public FeatureBean call() throws Exception {
-                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature , impLogByCompareFeature );
+                return save(bean , refPersonByPersonId , impFaceByFeatureMd5 , impLogByVerifyFeature );
             }});
     }
      /**
@@ -502,15 +432,15 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
      *
      * @param bean the {@link FeatureBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] , LogBean[] )}
+     *      see also {@link #save(FeatureBean , PersonBean , FaceBean[] , LogBean[] )}
      * @return the inserted or updated {@link FeatureBean} bean
      */
     //3.9 SYNC SAVE 
     @Override
     public FeatureBean save(FeatureBean bean,Object ...args) 
     {
-        if(args.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonBean");
         }
@@ -520,10 +450,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         if( args.length > 2 && null != args[2] && !(args[2] instanceof LogBean[])){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:LogBean[]");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof LogBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:LogBean[]");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(PersonBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean[])args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2],(args.length < 4 || null == args[3])?null:(LogBean[])args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(PersonBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean[])args[1],(args.length < 3 || null == args[2])?null:(LogBean[])args[2]);
     } 
 
     /**
@@ -531,7 +458,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
      *
      * @param bean the {@link FeatureBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(FeatureBean , PersonBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FeatureBean} bean
      */
     //3.10 SYNC SAVE 
@@ -539,10 +466,10 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public FeatureBean saveCollection(FeatureBean bean,Object ...inputs)
     {
-        if(inputs.length > 4)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
-        Object[] args = new Object[4];
-        System.arraycopy(inputs,0,args,0,4);
+        if(inputs.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        Object[] args = new Object[3];
+        System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonBean");
         }
@@ -552,10 +479,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<LogBean>");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<LogBean>");
-        }
-        return save(bean,null == args[0]?null:(PersonBean)args[0],null == args[1]?null:(java.util.Collection<FaceBean>)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2],null == args[3]?null:(java.util.Collection<LogBean>)args[3]);
+        return save(bean,null == args[0]?null:(PersonBean)args[0],null == args[1]?null:(java.util.Collection<FaceBean>)args[1],null == args[2]?null:(java.util.Collection<LogBean>)args[2]);
     }
 
      //////////////////////////////////////

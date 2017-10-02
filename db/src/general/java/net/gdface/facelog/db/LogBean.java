@@ -30,11 +30,11 @@ public class LogBean
     /** comments:外键,图像来源设备id */
     private Integer deviceId;
 
-    /** comments:外键,人脸特征数据MD5 id */
+    /** comments:外键,用于验证身份的人脸特征数据MD5 id */
     private String verifyFeature;
 
-    /** comments:外键,数据库中相似度最高的人脸特征MD5 id */
-    private String compareFeature;
+    /** comments:外键,数据库中相似度最高的人脸 id */
+    private Integer compareFace;
 
     /** comments:验证相似度 */
     private Double similarty;
@@ -328,7 +328,7 @@ public class LogBean
      * <ul>
      * <li>full name: fl_log.verify_feature</li>
      * <li> foreign key: fl_feature.md5</li>
-     * <li>comments: 外键,人脸特征数据MD5 id</li>
+     * <li>comments: 外键,用于验证身份的人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.VARCHAR</li>
      * </ul>
@@ -382,63 +382,73 @@ public class LogBean
         return 0L !=  (initialized & FL_LOG_ID_VERIFY_FEATURE_MASK);
     }
     /**
-     * Getter method for {@link #compareFeature}.<br>
+     * Getter method for {@link #compareFace}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_log.compare_feature</li>
-     * <li> foreign key: fl_feature.md5</li>
-     * <li>comments: 外键,数据库中相似度最高的人脸特征MD5 id</li>
-     * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>full name: fl_log.compare_face</li>
+     * <li> foreign key: fl_face.id</li>
+     * <li>comments: 外键,数据库中相似度最高的人脸 id</li>
+     * <li>column size: 10</li>
+     * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of compareFeature
+     * @return the value of compareFace
      */
     @com.facebook.swift.codec.ThriftField(8)
-    public String getCompareFeature(){
-        return compareFeature;
+    public Integer getCompareFace(){
+        return compareFace;
     }
     /**
-     * Setter method for {@link #compareFeature}.<br>
+     * Setter method for {@link #compareFace}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to compareFeature
+     * @param newVal the new value  to be assigned to compareFace
      */
     @com.facebook.swift.codec.ThriftField
-    public void setCompareFeature(String newVal)
+    public void setCompareFace(Integer newVal)
     {
-        if ((newVal != null && compareFeature != null && (newVal.compareTo(compareFeature) == 0)) ||
-            (newVal == null && compareFeature == null && checkCompareFeatureInitialized())) {
+        if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
+            (newVal == null && compareFace == null && checkCompareFaceInitialized())) {
             return;
         }
-        compareFeature = newVal;
+        compareFace = newVal;
 
-        modified |= FL_LOG_ID_COMPARE_FEATURE_MASK;
-        initialized |= FL_LOG_ID_COMPARE_FEATURE_MASK;
+        modified |= FL_LOG_ID_COMPARE_FACE_MASK;
+        initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
     }
 
     /**
-     * Determines if the compareFeature has been modified.
+     * Setter method for {@link #compareFace}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to compareFace
+     */
+    public void setCompareFace(int newVal)
+    {
+        setCompareFace(new Integer(newVal));
+    }
+    /**
+     * Determines if the compareFace has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkCompareFeatureModified()
+    public boolean checkCompareFaceModified()
     {
-        return 0L !=  (modified & FL_LOG_ID_COMPARE_FEATURE_MASK);
+        return 0L !=  (modified & FL_LOG_ID_COMPARE_FACE_MASK);
     }
 
     /**
-     * Determines if the compareFeature has been initialized.<br>
+     * Determines if the compareFace has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkCompareFeatureInitialized()
+    public boolean checkCompareFaceInitialized()
     {
-        return 0L !=  (initialized & FL_LOG_ID_COMPARE_FEATURE_MASK);
+        return 0L !=  (initialized & FL_LOG_ID_COMPARE_FACE_MASK);
     }
     /**
      * Getter method for {@link #similarty}.<br>
@@ -664,12 +674,27 @@ public class LogBean
         this.referencedByDeviceId = reference;
     }
     /** 
+     * The referenced {@link FaceBean} by {@link #compareFace} . <br>
+     * FOREIGN KEY (compare_face) REFERENCES fl_face(id)
+     */
+    private FaceBean referencedByCompareFace;
+    /** Getter method for {@link #referencedByCompareFace}. */
+    @com.facebook.swift.codec.ThriftField(13)
+    public FaceBean getReferencedByCompareFace() {
+        return this.referencedByCompareFace;
+    }
+    /** Setter method for {@link #referencedByCompareFace}. */
+    @com.facebook.swift.codec.ThriftField
+    public void setReferencedByCompareFace(FaceBean reference) {
+        this.referencedByCompareFace = reference;
+    }
+    /** 
      * The referenced {@link FeatureBean} by {@link #verifyFeature} . <br>
      * FOREIGN KEY (verify_feature) REFERENCES fl_feature(md5)
      */
     private FeatureBean referencedByVerifyFeature;
     /** Getter method for {@link #referencedByVerifyFeature}. */
-    @com.facebook.swift.codec.ThriftField(13)
+    @com.facebook.swift.codec.ThriftField(14)
     public FeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
@@ -677,21 +702,6 @@ public class LogBean
     @com.facebook.swift.codec.ThriftField
     public void setReferencedByVerifyFeature(FeatureBean reference) {
         this.referencedByVerifyFeature = reference;
-    }
-    /** 
-     * The referenced {@link FeatureBean} by {@link #compareFeature} . <br>
-     * FOREIGN KEY (compare_feature) REFERENCES fl_feature(md5)
-     */
-    private FeatureBean referencedByCompareFeature;
-    /** Getter method for {@link #referencedByCompareFeature}. */
-    @com.facebook.swift.codec.ThriftField(14)
-    public FeatureBean getReferencedByCompareFeature() {
-        return this.referencedByCompareFeature;
-    }
-    /** Setter method for {@link #referencedByCompareFeature}. */
-    @com.facebook.swift.codec.ThriftField
-    public void setReferencedByCompareFeature(FeatureBean reference) {
-        this.referencedByCompareFeature = reference;
     }
     /** 
      * The referenced {@link PersonBean} by {@link #personId} . <br>
@@ -737,8 +747,8 @@ public class LogBean
             return checkDeviceIdModified();
         case FL_LOG_ID_VERIFY_FEATURE:
             return checkVerifyFeatureModified();
-        case FL_LOG_ID_COMPARE_FEATURE:
-            return checkCompareFeatureModified();
+        case FL_LOG_ID_COMPARE_FACE:
+            return checkCompareFaceModified();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyModified();
         case FL_LOG_ID_VERIFY_TIME:
@@ -766,8 +776,8 @@ public class LogBean
             return checkDeviceIdInitialized();
         case FL_LOG_ID_VERIFY_FEATURE:
             return checkVerifyFeatureInitialized();
-        case FL_LOG_ID_COMPARE_FEATURE:
-            return checkCompareFeatureInitialized();
+        case FL_LOG_ID_COMPARE_FACE:
+            return checkCompareFaceInitialized();
         case FL_LOG_ID_SIMILARTY:
             return checkSimilartyInitialized();
         case FL_LOG_ID_VERIFY_TIME:
@@ -834,7 +844,7 @@ public class LogBean
             .append(getPersonId(), obj.getPersonId())
             .append(getDeviceId(), obj.getDeviceId())
             .append(getVerifyFeature(), obj.getVerifyFeature())
-            .append(getCompareFeature(), obj.getCompareFeature())
+            .append(getCompareFace(), obj.getCompareFace())
             .append(getSimilarty(), obj.getSimilarty())
             .append(getVerifyTime(), obj.getVerifyTime())
             .append(getCreateTime(), obj.getCreateTime())
@@ -849,7 +859,7 @@ public class LogBean
             .append(getPersonId())
             .append(getDeviceId())
             .append(getVerifyFeature())
-            .append(getCompareFeature())
+            .append(getCompareFace())
             .append(getSimilarty())
             .append(getVerifyTime())
             .append(getCreateTime())
@@ -863,7 +873,7 @@ public class LogBean
             .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\tdevice_id=").append(getDeviceId()).append("\n")
             .append("\tverify_feature=").append(getVerifyFeature()).append("\n")
-            .append("\tcompare_feature=").append(getCompareFeature()).append("\n")
+            .append("\tcompare_face=").append(getCompareFace()).append("\n")
             .append("\tsimilarty=").append(getSimilarty()).append("\n")
             .append("\tverify_time=").append(getVerifyTime()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
@@ -896,7 +906,7 @@ public class LogBean
         setPersonId(null);
         setDeviceId(null);
         setVerifyFeature(null);
-        setCompareFeature(null);
+        setCompareFace(null);
         setSimilarty(null);
         setVerifyTime(null);
         setCreateTime(null);
@@ -961,8 +971,8 @@ public class LogBean
             return (T)getDeviceId();        
         case FL_LOG_ID_VERIFY_FEATURE: 
             return (T)getVerifyFeature();        
-        case FL_LOG_ID_COMPARE_FEATURE: 
-            return (T)getCompareFeature();        
+        case FL_LOG_ID_COMPARE_FACE: 
+            return (T)getCompareFace();        
         case FL_LOG_ID_SIMILARTY: 
             return (T)getSimilarty();        
         case FL_LOG_ID_VERIFY_TIME: 
@@ -987,8 +997,8 @@ public class LogBean
             setDeviceId((Integer)value);
         case FL_LOG_ID_VERIFY_FEATURE:        
             setVerifyFeature((String)value);
-        case FL_LOG_ID_COMPARE_FEATURE:        
-            setCompareFeature((String)value);
+        case FL_LOG_ID_COMPARE_FACE:        
+            setCompareFace((Integer)value);
         case FL_LOG_ID_SIMILARTY:        
             setSimilarty((Double)value);
         case FL_LOG_ID_VERIFY_TIME:        
