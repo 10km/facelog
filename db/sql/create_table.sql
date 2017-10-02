@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS fl_feature (
   `feature`     blob     NOT NULL COMMENT '二进制特征数据',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE CASCADE
-) COMMENT '人脸特征数据表' ;
+) COMMENT '用于验证身份的人脸特征数据表' ;
 
 
 CREATE TABLE IF NOT EXISTS fl_face (
@@ -126,17 +126,15 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `id`              int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '日志id',
   `person_id`       int(11) NOT NULL COMMENT '外键,用户id',
   `device_id`       int(11) DEFAULT NULL COMMENT '外键,图像来源设备id',
-  `verify_feature`  varchar(32) DEFAULT NULL COMMENT '外键,人脸特征数据MD5 id',
-  `compare_feature` varchar(32) DEFAULT NULL COMMENT '外键,数据库中相似度最高的人脸特征MD5 id',
-  `similarty`	    double DEFAULT NULL COMMENT '验证相似度',
+  `verify_feature`  varchar(32) DEFAULT NULL COMMENT '外键,用于验证身份的人脸特征数据MD5 id',
+  `compare_face`    int(11) DEFAULT NULL COMMENT '外键,数据库中相似度最高的人脸 id',
+  `similarty`	    double  DEFAULT NULL COMMENT '验证相似度',
   `verify_time`     timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
   `create_time`     timestamp DEFAULT CURRENT_TIMESTAMP,
-  INDEX `person_id` (`person_id` ASC),
-  INDEX `device_id` (`device_id` ASC),
   FOREIGN KEY (person_id)       REFERENCES fl_person(id)   ON DELETE CASCADE,
   FOREIGN KEY (device_id)       REFERENCES fl_device(id)   ON DELETE SET NULL,
   FOREIGN KEY (verify_feature)  REFERENCES fl_feature(md5) ON DELETE SET NULL,
-  FOREIGN KEY (compare_feature) REFERENCES fl_feature(md5) ON DELETE SET NULL
+  FOREIGN KEY (compare_face)    REFERENCES fl_face(id)     ON DELETE SET NULL
 ) COMMENT '人脸验证日志,记录所有通过验证的人员' ;
 
 
