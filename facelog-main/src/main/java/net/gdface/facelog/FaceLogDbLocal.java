@@ -57,13 +57,11 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static StoreBean _addStore(StoreBean storeBean){
 		return storeManager.save(storeBean);
 	}
-	protected static int _deleteStore(String... md5Array){
-		int count = 0 ;
-		for(String md5:md5Array){
-			if(!Judge.isEmpty(md5))
-				count +=storeManager.deleteByPrimaryKey(md5);
-		}
-		return count;
+	protected static StoreBean _getStore(String md5){
+		return storeManager.loadByPrimaryKey(md5);
+	}
+	protected static DeviceBean _getDevice(Integer deviceId){
+		return deviceManager.loadByPrimaryKey(deviceId); 
 	}
 	protected static Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
 		if(Judge.isEmpty(imageBytes))return null;
@@ -92,7 +90,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5){
 		if(Judge.isEmpty(imageBytes))return null;
 		String md5 = FaceUtilits.getMD5String(imageBytes);
-		ImageBean imageBean = imageManager.loadByPrimaryKey(md5);
+		ImageBean imageBean = _getImage(md5);
 		if(null != imageBean){
 			throw new DuplicateReord();
 		}
@@ -105,11 +103,6 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		_addStore(pair.getValue1());
 		return imageManager.save(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
 	}
-	protected static ImageBean _addImage(ByteBuffer imageBytes,Integer refFlDevicebyDeviceId
-	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws ServiceRuntime{
-		DeviceBean deviceBean = null == refFlDevicebyDeviceId? null : deviceManager.loadByPrimaryKey(refFlDevicebyDeviceId);
-		return _addImage(imageBytes,deviceBean,impFlFacebyImgMd5,impFlPersonbyImageMd5);
-	}
 	/**
 	 * (递归)删除imageMd5指定图像及其缩略图
 	 * @param imageMd5
@@ -117,30 +110,11 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	protected static int _deleteImage(String imageMd5){
 		if(Judge.isEmpty(imageMd5))return 0;
-		_deleteStore(imageMd5);
-		ImageBean imageBean = imageManager.loadByPrimaryKey(imageMd5);
+		storeManager.deleteByPrimaryKey(imageMd5);
+		ImageBean imageBean = _getImage(imageMd5);
 		if(null == imageBean)return 0;
 		_deleteImage(imageBean.getThumbMd5());
 		return imageManager.deleteByPrimaryKey(imageMd5);
-	}
-	protected static int _deleteFace(int...idArray){
-		int count = 0;
-		for(int id:idArray){
-			count += faceManager.deleteByPrimaryKey(id);
-		}
-		return count;
-	}
-	protected static int _deleteFace(Collection<FaceBean> faceBeans){
-		int count = 0;
-		for(FaceBean faceBean:faceBeans){
-			count += faceManager.deleteByPrimaryKey(faceBean.getId());
-		}
-		return count;
-	}
-	protected static int _deleteImage(String ...md5Array){
-		int count = 0;
-		for(String md5:md5Array)count +=_deleteImage(md5);
-		return count;
 	}
 	protected static FeatureBean _makeFeature(ByteBuffer feature){
 		Assert.notEmpty(feature, "feature");
@@ -152,21 +126,24 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5)throws ServiceRuntime{
 		return featureManager.save(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean)throws ServiceRuntime{
 		Assert.notEmpty(faceInfo, "faceInfo");
 		for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 			 ByteBuffer imageBytes = entry.getKey();
 			 FaceBean faceBean = entry.getValue();
 			Assert.notEmpty(imageBytes, "imageBytes");
 			Assert.notNull(faceBean, "faceBean");
-			_addImage(imageBytes, deviceId, Arrays.asList(faceBean), Arrays.asList(personBean));
+			_addImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
 		}
 		return _addFeature(feature, personBean, faceInfo.values());
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
-		PersonBean personBean = personManager.loadByPrimaryKey(personId);
+	protected static FeatureBean _addFeature(ByteBuffer feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean)throws ServiceRuntime{
+		PersonBean personBean = _getPerson(personId);
 		Assert.notNull(personBean, "personBean");
-		return _addFeature(feature, personBean, faceInfo, deviceId);
+		return _addFeature(feature, personBean, faceInfo, deviceBean);
+	}
+	protected static FeatureBean _getFeature(String md5){
+		return featureManager.loadByPrimaryKey(md5);
 	}
 	protected static List<String> _deleteFeature(String featureMd5,boolean deleteImage){
 		List<String> imageKeys = _getImageKeysImportedByFeatureMd5(featureMd5);
@@ -177,16 +154,27 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 				itor.remove();
 			}
 		}else{
-			_deleteFace(featureManager.getFaceBeansByFeatureMd5AsList(featureMd5));
+			featureManager.deleteFaceBeansByFeatureMd5(featureMd5);
 		}
 		featureManager.deleteByPrimaryKey(featureMd5);
 		return imageKeys;
 	}
-	protected static void _setRefPersonOfFeature(String featureMd5,int personId){
-		PersonBean personBean = personManager.loadByPrimaryKey(personId);
-		FeatureBean featureBean = featureManager.loadByPrimaryKey(featureMd5);
-		if(null == personBean || null == featureBean)return;
-		featureManager.setReferencedByPersonId(featureBean,personBean);
+	protected static int _deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
+		int count = 0;
+		for(FeatureBean featureBean: personManager.getFeatureBeansByPersonIdAsList(personId)){
+			_deleteFeature(featureBean.getMd5(),deleteImage);
+			++count;
+		}
+		return count;
+	}
+	protected static PersonBean _setRefPersonOfFeature(String featureMd5,int personId){
+		PersonBean personBean = _getPerson(personId);
+		FeatureBean featureBean = _getFeature(featureMd5);
+		if(null == personBean || null == featureBean)return null;
+		return featureManager.setReferencedByPersonId(featureBean,personBean);
+	}
+	protected static ImageBean _getImage(String md5){
+		return imageManager.loadByPrimaryKey(md5);
 	}
 	protected static ArrayList<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
 		ArrayList<String> imageBeans = new ArrayList<String>();
@@ -196,34 +184,66 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		return imageBeans;
 	}
 	protected static void _replaceFeature(int personId,String featureMd5,boolean deleteImage)throws ServiceRuntime{		
-		for(FeatureBean featureBean: personManager.getFeatureBeansByPersonIdAsList(personId)){
-			_deleteFeature(featureBean.getMd5(),deleteImage);
-		}
+		_deleteAllFeaturesByPersonId(personId, deleteImage);
 		_setRefPersonOfFeature(featureMd5,personId);
 	}
-	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer imageData,FeatureBean featureBean)throws ServiceRuntime {
-		ImageBean imageBean = _addImage(imageData,(DeviceBean)null,null,null);
-		return personManager.save(bean, imageBean, new FeatureBean[]{featureBean}, null);
+	protected static PersonBean _getPerson(Integer id){
+		return personManager.loadByPrimaryKey(id); 
 	}
-	protected static int _deletePerson(int... personIdArray) {
+	protected static List<PersonBean> _getPerson(Collection<Integer> collection){
+		return personManager.loadByPrimaryKey(collection); 
+	}
+	protected static PersonBean _savePerson(PersonBean bean, ImageBean imageBean,Collection<FeatureBean> featureBean)throws ServiceRuntime {
+		return personManager.save(bean, imageBean, featureBean, null);
+	}
+	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer imageData,FeatureBean featureBean, DeviceBean deviceBean)throws ServiceRuntime {
+		ImageBean imageBean = _addImage(imageData,deviceBean,null,null);
+		return _savePerson(bean, imageBean, Arrays.asList(featureBean));
+	}
+	protected static int _deletePerson(int personId) {
+		PersonBean personBean = _getPerson(personId);
+		if(null == personBean)return 0;
+		_deleteImage(personBean.getImageMd5());
+		return personManager.deleteByPrimaryKey(personId);
+	}
+	protected static int _deletePerson(Collection<Integer> collection) {
+		if(null == collection)return 0;
 		int count =0;
-		for(int personId:personIdArray){
-			PersonBean personBean = personManager.loadByPrimaryKey(personId);
-			if(null != personBean){
-				_deleteImage(personBean.getImageMd5());
-				count += personManager.deleteByPrimaryKey(personId);
-			}
+		for(Integer personId:collection){
+			count += _deletePerson(personId);
 		}
 		return count;
 	}
 	public PersonBean getPerson(int id)throws ServiceRuntime {
 		try{
-			return personManager.loadByPrimaryKey(id);
+			return _getPerson(id);
+		}catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public List<PersonBean> getPerson(List<Integer> id)throws ServiceRuntime {
+		try{
+			return _getPerson(id);
+		}catch(ServiceRuntime e){
+			throw e;
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
 	public int deletePerson(final int personId)throws ServiceRuntime {
+		try{
+			return personManager.runAsTransaction(new Callable<Integer>(){
+				@Override
+				public Integer call() throws Exception {
+					return _deletePerson(personId);
+				}});
+		}catch(ServiceRuntime e){
+			throw e;
+		}catch(Exception e){
+			throw new ServiceRuntime(e);
+		}
+	}
+	public int deletePerson(final List<Integer> personId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<Integer>(){
 				@Override
@@ -338,7 +358,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, imageData, featureBean);
+					return _savePerson(bean, imageData, featureBean, null);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -351,7 +371,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans));
+					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans), null);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -359,12 +379,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final Map<ByteBuffer, FaceBean> faceInfo,final DeviceBean deviceId)throws ServiceRuntime {
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final Map<ByteBuffer, FaceBean> faceInfo,final Integer deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,imageData,_addFeature(feature,bean, faceInfo,deviceId.getId()));
+					return _savePerson(bean,imageData,_addFeature(feature,bean, faceInfo,_getDevice(deviceId)), null);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -436,7 +456,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	public ImageBean saveImage(ByteBuffer imageBytes,Integer deviceId
 			, List<FaceBean> impFlFacebyImgMd5 , List<PersonBean> impFlPersonbyPhotoId) throws ServiceRuntime{
 		try{
-			return _addImage(imageBytes,deviceId,impFlFacebyImgMd5,impFlPersonbyPhotoId);		
+			return _addImage(imageBytes,_getDevice(deviceId),impFlFacebyImgMd5,impFlPersonbyPhotoId);		
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
@@ -452,7 +472,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	public ByteBuffer getImageBytes(String imageMD5)throws ServiceRuntime{
 		try{
-			StoreBean storeBean = storeManager.loadByPrimaryKey(imageMD5);
+			StoreBean storeBean = _getStore(imageMD5);
 			return null ==storeBean?null:storeBean.getData();
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
@@ -466,7 +486,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	public ImageBean getImageBean(String imageMD5)throws ServiceRuntime{
 		try{
-			return imageManager.loadByPrimaryKey(imageMD5);
+			return _getImage(imageMD5);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
@@ -479,7 +499,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	public ByteBuffer getFeature(String md5)throws ServiceRuntime{
 		try{
-			FeatureBean featureBean = featureManager.loadByPrimaryKey(md5);
+			FeatureBean featureBean = _getFeature(md5);
 			return null ==featureBean?null:featureBean.getFeature();
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
