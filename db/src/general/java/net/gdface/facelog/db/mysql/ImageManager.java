@@ -139,7 +139,30 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         return null!=loadByPrimaryKey(md5 );
     }
-    
+    //1.5 override IImageManager
+    @Override 
+    public java.util.List<ImageBean> loadByPrimaryKey(String... keys){
+        if(null == keys)return new java.util.ArrayList<ImageBean>();
+        java.util.ArrayList<ImageBean> list = new java.util.ArrayList<ImageBean>(keys.length);
+        ImageBean bean;
+        for(int i = 0 ;i< keys.length;++i){
+            if(null != (bean = loadByPrimaryKey(keys[i])))
+                list.add(bean);
+        }
+        return list;
+    }
+    //1.6 override IImageManager
+    @Override 
+    public java.util.List<ImageBean> loadByPrimaryKey(java.util.Collection<String> keys){
+        if(null == keys )return new java.util.ArrayList<ImageBean>();
+        java.util.ArrayList<ImageBean> list = new java.util.ArrayList<ImageBean>(keys.size());
+        ImageBean bean;
+        for(String key: keys){
+            if(null != (bean = loadByPrimaryKey(key)))
+                list.add(bean);
+        }
+        return list;
+    }
     //2 override IImageManager
     @Override 
     public int deleteByPrimaryKey(String md5)
@@ -153,7 +176,18 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             throw new WrapDAOException(e);
         }
     }
-
+    //2
+    @Override
+    public int delete(ImageBean bean){
+        try
+        {
+            return nativeManager.delete(this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }   
+    }
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -163,7 +197,46 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return deleteByPrimaryKey((String)keys[0]);
     }
-
+    //2.2 override IImageManager
+    @Override 
+    public int deleteByPrimaryKey(String... keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(String key:keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.3 override IImageManager
+    @Override 
+    public int deleteByPrimaryKey(java.util.Collection<String> keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(String key :keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.4 override IImageManager
+    @Override 
+    public int delete(ImageBean... beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(ImageBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
+    //2.5 override IImageManager
+    @Override 
+    public int delete(java.util.Collection<ImageBean> beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(ImageBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

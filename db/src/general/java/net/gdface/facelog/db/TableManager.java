@@ -308,7 +308,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
 
         @Override
         public int delete(B bean){
-            return deleteByPrimaryKey(bean);
+            throw new UnsupportedOperationException();
         }
         
         @Override

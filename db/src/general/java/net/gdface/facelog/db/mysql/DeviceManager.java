@@ -138,7 +138,30 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         return null!=loadByPrimaryKey(id );
     }
-    
+    //1.5 override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByPrimaryKey(int... keys){
+        if(null == keys)return new java.util.ArrayList<DeviceBean>();
+        java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(keys.length);
+        DeviceBean bean;
+        for(int i = 0 ;i< keys.length;++i){
+            if(null != (bean = loadByPrimaryKey(keys[i])))
+                list.add(bean);
+        }
+        return list;
+    }
+    //1.6 override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
+        if(null == keys )return new java.util.ArrayList<DeviceBean>();
+        java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(keys.size());
+        DeviceBean bean;
+        for(Integer key: keys){
+            if(null != (bean = loadByPrimaryKey(key)))
+                list.add(bean);
+        }
+        return list;
+    }
     //2 override IDeviceManager
     @Override 
     public int deleteByPrimaryKey(Integer id)
@@ -152,7 +175,18 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    //2
+    @Override
+    public int delete(DeviceBean bean){
+        try
+        {
+            return nativeManager.delete(this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }   
+    }
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -162,7 +196,46 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return deleteByPrimaryKey((Integer)keys[0]);
     }
-
+    //2.2 override IDeviceManager
+    @Override 
+    public int deleteByPrimaryKey(int... keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(int key:keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.3 override IDeviceManager
+    @Override 
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(Integer key :keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.4 override IDeviceManager
+    @Override 
+    public int delete(DeviceBean... beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(DeviceBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
+    //2.5 override IDeviceManager
+    @Override 
+    public int delete(java.util.Collection<DeviceBean> beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(DeviceBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

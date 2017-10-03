@@ -34,7 +34,22 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //1.4
     public boolean existsPrimaryKey(Integer id);
-    
+    /**
+     * Loads {@link PersonBean} from the fl_person using primary key fields.
+     *
+     * @param keys primary keys array
+     * @return list of PersonBean
+     */
+    //1.5
+    public java.util.List<PersonBean> loadByPrimaryKey(int... keys);
+    /**
+     * Loads {@link PersonBean} from the fl_person using primary key fields.
+     *
+     * @param keys primary keys collection
+     * @return list of PersonBean
+     */
+    //1.6
+    public java.util.List<PersonBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -44,7 +59,38 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //2
     public int deleteByPrimaryKey(Integer id);
-
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys array
+     * @return the number of deleted rows
+     */
+    //2.2
+    public int deleteByPrimaryKey(int... keys);
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys collection
+     * @return the number of deleted rows
+     */
+    //2.3
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans PersonBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.4
+    public int delete(PersonBean... beans);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans PersonBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.5
+    public int delete(java.util.Collection<PersonBean> beans);
  
 
     //////////////////////////////////////

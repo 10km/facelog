@@ -139,7 +139,30 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         return null!=loadByPrimaryKey(id );
     }
-    
+    //1.5 override IPersonManager
+    @Override 
+    public java.util.List<PersonBean> loadByPrimaryKey(int... keys){
+        if(null == keys)return new java.util.ArrayList<PersonBean>();
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(keys.length);
+        PersonBean bean;
+        for(int i = 0 ;i< keys.length;++i){
+            if(null != (bean = loadByPrimaryKey(keys[i])))
+                list.add(bean);
+        }
+        return list;
+    }
+    //1.6 override IPersonManager
+    @Override 
+    public java.util.List<PersonBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
+        if(null == keys )return new java.util.ArrayList<PersonBean>();
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(keys.size());
+        PersonBean bean;
+        for(Integer key: keys){
+            if(null != (bean = loadByPrimaryKey(key)))
+                list.add(bean);
+        }
+        return list;
+    }
     //2 override IPersonManager
     @Override 
     public int deleteByPrimaryKey(Integer id)
@@ -153,7 +176,18 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    //2
+    @Override
+    public int delete(PersonBean bean){
+        try
+        {
+            return nativeManager.delete(this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }   
+    }
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -163,7 +197,46 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return deleteByPrimaryKey((Integer)keys[0]);
     }
-
+    //2.2 override IPersonManager
+    @Override 
+    public int deleteByPrimaryKey(int... keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(int key:keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.3 override IPersonManager
+    @Override 
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(Integer key :keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.4 override IPersonManager
+    @Override 
+    public int delete(PersonBean... beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(PersonBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
+    //2.5 override IPersonManager
+    @Override 
+    public int delete(java.util.Collection<PersonBean> beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(PersonBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

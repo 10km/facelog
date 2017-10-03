@@ -34,7 +34,22 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //1.4
     public boolean existsPrimaryKey(Integer id);
-    
+    /**
+     * Loads {@link FaceBean} from the fl_face using primary key fields.
+     *
+     * @param keys primary keys array
+     * @return list of FaceBean
+     */
+    //1.5
+    public java.util.List<FaceBean> loadByPrimaryKey(int... keys);
+    /**
+     * Loads {@link FaceBean} from the fl_face using primary key fields.
+     *
+     * @param keys primary keys collection
+     * @return list of FaceBean
+     */
+    //1.6
+    public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -44,7 +59,38 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //2
     public int deleteByPrimaryKey(Integer id);
-
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys array
+     * @return the number of deleted rows
+     */
+    //2.2
+    public int deleteByPrimaryKey(int... keys);
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys collection
+     * @return the number of deleted rows
+     */
+    //2.3
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans FaceBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.4
+    public int delete(FaceBean... beans);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans FaceBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.5
+    public int delete(java.util.Collection<FaceBean> beans);
  
 
     //////////////////////////////////////

@@ -140,7 +140,30 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     {
         return null!=loadByPrimaryKey(id );
     }
-    
+    //1.5 override ILogManager
+    @Override 
+    public java.util.List<LogBean> loadByPrimaryKey(int... keys){
+        if(null == keys)return new java.util.ArrayList<LogBean>();
+        java.util.ArrayList<LogBean> list = new java.util.ArrayList<LogBean>(keys.length);
+        LogBean bean;
+        for(int i = 0 ;i< keys.length;++i){
+            if(null != (bean = loadByPrimaryKey(keys[i])))
+                list.add(bean);
+        }
+        return list;
+    }
+    //1.6 override ILogManager
+    @Override 
+    public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
+        if(null == keys )return new java.util.ArrayList<LogBean>();
+        java.util.ArrayList<LogBean> list = new java.util.ArrayList<LogBean>(keys.size());
+        LogBean bean;
+        for(Integer key: keys){
+            if(null != (bean = loadByPrimaryKey(key)))
+                list.add(bean);
+        }
+        return list;
+    }
     //2 override ILogManager
     @Override 
     public int deleteByPrimaryKey(Integer id)
@@ -154,7 +177,18 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             throw new WrapDAOException(e);
         }
     }
-
+    //2
+    @Override
+    public int delete(LogBean bean){
+        try
+        {
+            return nativeManager.delete(this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }   
+    }
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -164,7 +198,46 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return deleteByPrimaryKey((Integer)keys[0]);
     }
-
+    //2.2 override ILogManager
+    @Override 
+    public int deleteByPrimaryKey(int... keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(int key:keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.3 override ILogManager
+    @Override 
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(Integer key :keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.4 override ILogManager
+    @Override 
+    public int delete(LogBean... beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(LogBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
+    //2.5 override ILogManager
+    @Override 
+    public int delete(java.util.Collection<LogBean> beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(LogBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
  
  
 

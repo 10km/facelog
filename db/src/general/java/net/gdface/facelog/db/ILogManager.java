@@ -34,7 +34,22 @@ public interface ILogManager extends TableManager<LogBean>
      */
     //1.4
     public boolean existsPrimaryKey(Integer id);
-    
+    /**
+     * Loads {@link LogBean} from the fl_log using primary key fields.
+     *
+     * @param keys primary keys array
+     * @return list of LogBean
+     */
+    //1.5
+    public java.util.List<LogBean> loadByPrimaryKey(int... keys);
+    /**
+     * Loads {@link LogBean} from the fl_log using primary key fields.
+     *
+     * @param keys primary keys collection
+     * @return list of LogBean
+     */
+    //1.6
+    public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -44,7 +59,38 @@ public interface ILogManager extends TableManager<LogBean>
      */
     //2
     public int deleteByPrimaryKey(Integer id);
-
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys array
+     * @return the number of deleted rows
+     */
+    //2.2
+    public int deleteByPrimaryKey(int... keys);
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys collection
+     * @return the number of deleted rows
+     */
+    //2.3
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans LogBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.4
+    public int delete(LogBean... beans);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans LogBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.5
+    public int delete(java.util.Collection<LogBean> beans);
  
     /**
      * Save the LogBean bean and referenced beans and imported beans into the database.

@@ -139,7 +139,30 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         return null!=loadByPrimaryKey(md5 );
     }
-    
+    //1.5 override IFeatureManager
+    @Override 
+    public java.util.List<FeatureBean> loadByPrimaryKey(String... keys){
+        if(null == keys)return new java.util.ArrayList<FeatureBean>();
+        java.util.ArrayList<FeatureBean> list = new java.util.ArrayList<FeatureBean>(keys.length);
+        FeatureBean bean;
+        for(int i = 0 ;i< keys.length;++i){
+            if(null != (bean = loadByPrimaryKey(keys[i])))
+                list.add(bean);
+        }
+        return list;
+    }
+    //1.6 override IFeatureManager
+    @Override 
+    public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys){
+        if(null == keys )return new java.util.ArrayList<FeatureBean>();
+        java.util.ArrayList<FeatureBean> list = new java.util.ArrayList<FeatureBean>(keys.size());
+        FeatureBean bean;
+        for(String key: keys){
+            if(null != (bean = loadByPrimaryKey(key)))
+                list.add(bean);
+        }
+        return list;
+    }
     //2 override IFeatureManager
     @Override 
     public int deleteByPrimaryKey(String md5)
@@ -153,7 +176,18 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             throw new WrapDAOException(e);
         }
     }
-
+    //2
+    @Override
+    public int delete(FeatureBean bean){
+        try
+        {
+            return nativeManager.delete(this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }   
+    }
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
@@ -163,7 +197,46 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return deleteByPrimaryKey((String)keys[0]);
     }
-
+    //2.2 override IFeatureManager
+    @Override 
+    public int deleteByPrimaryKey(String... keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(String key:keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.3 override IFeatureManager
+    @Override 
+    public int deleteByPrimaryKey(java.util.Collection<String> keys){
+        if(null == keys)return 0;
+        int count = 0;
+        for(String key :keys){
+            count += deleteByPrimaryKey(key);
+        }
+        return count;
+    }
+    //2.4 override IFeatureManager
+    @Override 
+    public int delete(FeatureBean... beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(FeatureBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
+    //2.5 override IFeatureManager
+    @Override 
+    public int delete(java.util.Collection<FeatureBean> beans){
+        if(null == beans)return 0;
+        int count = 0;
+        for(FeatureBean bean :beans){
+            count += delete(bean);
+        }
+        return count;
+    }
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

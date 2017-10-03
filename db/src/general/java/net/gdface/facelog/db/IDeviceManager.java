@@ -34,7 +34,22 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     //1.4
     public boolean existsPrimaryKey(Integer id);
-    
+    /**
+     * Loads {@link DeviceBean} from the fl_device using primary key fields.
+     *
+     * @param keys primary keys array
+     * @return list of DeviceBean
+     */
+    //1.5
+    public java.util.List<DeviceBean> loadByPrimaryKey(int... keys);
+    /**
+     * Loads {@link DeviceBean} from the fl_device using primary key fields.
+     *
+     * @param keys primary keys collection
+     * @return list of DeviceBean
+     */
+    //1.6
+    public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -44,7 +59,38 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     //2
     public int deleteByPrimaryKey(Integer id);
-
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys array
+     * @return the number of deleted rows
+     */
+    //2.2
+    public int deleteByPrimaryKey(int... keys);
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys collection
+     * @return the number of deleted rows
+     */
+    //2.3
+    public int deleteByPrimaryKey(java.util.Collection<Integer> keys);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans DeviceBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.4
+    public int delete(DeviceBean... beans);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans DeviceBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.5
+    public int delete(java.util.Collection<DeviceBean> beans);
  
 
     //////////////////////////////////////

@@ -34,7 +34,22 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //1.4
     public boolean existsPrimaryKey(String md5);
-    
+    /**
+     * Loads {@link ImageBean} from the fl_image using primary key fields.
+     *
+     * @param keys primary keys array
+     * @return list of ImageBean
+     */
+    //1.5
+    public java.util.List<ImageBean> loadByPrimaryKey(String... keys);
+    /**
+     * Loads {@link ImageBean} from the fl_image using primary key fields.
+     *
+     * @param keys primary keys collection
+     * @return list of ImageBean
+     */
+    //1.6
+    public java.util.List<ImageBean> loadByPrimaryKey(java.util.Collection<String> keys);
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -44,7 +59,38 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //2
     public int deleteByPrimaryKey(String md5);
-
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys array
+     * @return the number of deleted rows
+     */
+    //2.2
+    public int deleteByPrimaryKey(String... keys);
+    /**
+     * Delete rows according to primary key.<br>
+     *
+     * @param keys primary keys collection
+     * @return the number of deleted rows
+     */
+    //2.3
+    public int deleteByPrimaryKey(java.util.Collection<String> keys);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans ImageBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.4
+    public int delete(ImageBean... beans);
+    /**
+     * Delete beans.<br>
+     *
+     * @param beans ImageBean collection wille be deleted
+     * @return the number of deleted rows
+     */
+    //2.5
+    public int delete(java.util.Collection<ImageBean> beans);
  
 
     //////////////////////////////////////
