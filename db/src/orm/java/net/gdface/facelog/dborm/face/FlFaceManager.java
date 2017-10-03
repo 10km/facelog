@@ -211,9 +211,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public int delete(FlFaceBean bean) throws DAOException
     {
-        if(null == bean) return 0;
-        if(null == bean.getId()){
-            throw new IllegalArgumentException("primary keys must no be null ");
+        if(null == bean  || null == bean.getId()){
+            return 0;
         }
         Connection c = null;
         PreparedStatement ps = null;

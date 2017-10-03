@@ -211,9 +211,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public int delete(FlPersonBean bean) throws DAOException
     {
-        if(null == bean) return 0;
-        if(null == bean.getId()){
-            throw new IllegalArgumentException("primary keys must no be null ");
+        if(null == bean  || null == bean.getId()){
+            return 0;
         }
         Connection c = null;
         PreparedStatement ps = null;

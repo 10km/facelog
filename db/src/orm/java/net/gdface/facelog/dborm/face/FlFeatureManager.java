@@ -211,9 +211,8 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public int delete(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean) return 0;
-        if(null == bean.getMd5()){
-            throw new IllegalArgumentException("primary keys must no be null ");
+        if(null == bean  || null == bean.getMd5()){
+            return 0;
         }
         Connection c = null;
         PreparedStatement ps = null;

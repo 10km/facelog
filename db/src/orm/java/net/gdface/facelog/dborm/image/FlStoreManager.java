@@ -205,9 +205,8 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public int delete(FlStoreBean bean) throws DAOException
     {
-        if(null == bean) return 0;
-        if(null == bean.getMd5()){
-            throw new IllegalArgumentException("primary keys must no be null ");
+        if(null == bean  || null == bean.getMd5()){
+            return 0;
         }
         Connection c = null;
         PreparedStatement ps = null;
