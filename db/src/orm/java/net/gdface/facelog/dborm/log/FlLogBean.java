@@ -834,13 +834,6 @@ public class FlLogBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getId())
-            .append(getPersonId())
-            .append(getDeviceId())
-            .append(getVerifyFeature())
-            .append(getCompareFace())
-            .append(getSimilarty())
-            .append(getVerifyTime())
-            .append(getCreateTime())
             .toHashCode();
     }
 

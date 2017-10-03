@@ -1074,16 +1074,6 @@ public class PersonBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getId())
-            .append(getGroupId())
-            .append(getName())
-            .append(getSex())
-            .append(getBirthdate())
-            .append(getPapersType())
-            .append(getPapersNum())
-            .append(getImageMd5())
-            .append(getExpiryDate())
-            .append(getCreateTime())
-            .append(getUpdateTime())
             .toHashCode();
     }
 

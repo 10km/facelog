@@ -511,9 +511,6 @@ public class FeatureBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getMd5())
-            .append(getPersonId())
-            .append(getFeature())
-            .append(getCreateTime())
             .toHashCode();
     }
 

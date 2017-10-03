@@ -381,8 +381,6 @@ public class FlStoreBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getMd5())
-            .append(getEncoding())
-            .append(getData())
             .toHashCode();
     }
 

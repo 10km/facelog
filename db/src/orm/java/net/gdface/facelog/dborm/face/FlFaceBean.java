@@ -1646,25 +1646,6 @@ public class FlFaceBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getId())
-            .append(getImageMd5())
-            .append(getFaceLeft())
-            .append(getFaceTop())
-            .append(getFaceWidth())
-            .append(getFaceHeight())
-            .append(getEyeLeftx())
-            .append(getEyeLefty())
-            .append(getEyeRightx())
-            .append(getEyeRighty())
-            .append(getMouthX())
-            .append(getMouthY())
-            .append(getNoseX())
-            .append(getNoseY())
-            .append(getAngleYaw())
-            .append(getAnglePitch())
-            .append(getAngleRoll())
-            .append(getExtInfo())
-            .append(getFeatureMd5())
-            .append(getCreateTime())
             .toHashCode();
     }
 

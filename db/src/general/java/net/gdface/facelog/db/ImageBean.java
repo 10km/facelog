@@ -826,13 +826,6 @@ public class ImageBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getMd5())
-            .append(getFormat())
-            .append(getWidth())
-            .append(getHeight())
-            .append(getDepth())
-            .append(getFaceNum())
-            .append(getThumbMd5())
-            .append(getDeviceId())
             .toHashCode();
     }
 

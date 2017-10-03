@@ -612,11 +612,6 @@ public class FlDeviceBean
     {
         return new HashCodeBuilder(-82280557, -700257973)
             .append(getId())
-            .append(getName())
-            .append(getGroupId())
-            .append(getVersion())
-            .append(getCreateTime())
-            .append(getUpdateTime())
             .toHashCode();
     }
 
