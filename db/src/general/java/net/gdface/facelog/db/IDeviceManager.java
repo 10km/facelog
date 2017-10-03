@@ -133,6 +133,14 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer deviceId);
+    /**
+     * delete the associated {@link ImageBean} objects from fl_image.device_id field.<BR>
+     * FK_NAME:fl_image_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteImageBeansByDeviceId(Integer deviceId);
     
     /**
      * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
@@ -193,6 +201,14 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer deviceId);
+    /**
+     * delete the associated {@link LogBean} objects from fl_log.device_id field.<BR>
+     * FK_NAME:fl_log_ibfk_2
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteLogBeansByDeviceId(Integer deviceId);
     
     /**
      * set  the {@link LogBean} object array associate to DeviceBean by the fl_log.device_id field.<BR>

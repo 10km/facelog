@@ -133,6 +133,14 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer personId);
+    /**
+     * delete the associated {@link FeatureBean} objects from fl_feature.person_id field.<BR>
+     * FK_NAME:fl_feature_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteFeatureBeansByPersonId(Integer personId);
     
     /**
      * set  the {@link FeatureBean} object array associate to PersonBean by the fl_feature.person_id field.<BR>
@@ -193,6 +201,14 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer personId);
+    /**
+     * delete the associated {@link LogBean} objects from fl_log.person_id field.<BR>
+     * FK_NAME:fl_log_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteLogBeansByPersonId(Integer personId);
     
     /**
      * set  the {@link LogBean} object array associate to PersonBean by the fl_log.person_id field.<BR>

@@ -360,6 +360,13 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         bean.setId(deviceId);
         return getImageBeansByDeviceIdAsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IDeviceManager
+    @Override
+    public int deleteImageBeansByDeviceId(Integer deviceId)
+    {
+        java.util.List<ImageBean> list =getImageBeansByDeviceIdAsList(deviceId);
+        return ImageManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IDeviceManager
     @Override 
     public ImageBean[] setImageBeansByDeviceId(DeviceBean bean , ImageBean[] importedBeans)
@@ -383,6 +390,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }
         return importedBeans;
     }
+
     //3.1 GET IMPORTED override IDeviceManager
     @Override 
     public LogBean[] getLogBeansByDeviceId(DeviceBean bean)
@@ -417,6 +425,13 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         bean.setId(deviceId);
         return getLogBeansByDeviceIdAsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IDeviceManager
+    @Override
+    public int deleteLogBeansByDeviceId(Integer deviceId)
+    {
+        java.util.List<LogBean> list =getLogBeansByDeviceIdAsList(deviceId);
+        return LogManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IDeviceManager
     @Override 
     public LogBean[] setLogBeansByDeviceId(DeviceBean bean , LogBean[] importedBeans)
@@ -440,6 +455,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }
         return importedBeans;
     }
+
 
 
     //3.5 SYNC SAVE override IDeviceManager

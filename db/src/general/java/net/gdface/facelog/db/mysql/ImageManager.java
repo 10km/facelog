@@ -361,6 +361,13 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         bean.setMd5(imageMd5);
         return getFaceBeansByImageMd5AsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IImageManager
+    @Override
+    public int deleteFaceBeansByImageMd5(String imageMd5)
+    {
+        java.util.List<FaceBean> list =getFaceBeansByImageMd5AsList(imageMd5);
+        return FaceManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IImageManager
     @Override 
     public FaceBean[] setFaceBeansByImageMd5(ImageBean bean , FaceBean[] importedBeans)
@@ -384,6 +391,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }
         return importedBeans;
     }
+
     //3.1 GET IMPORTED override IImageManager
     @Override 
     public PersonBean[] getPersonBeansByImageMd5(ImageBean bean)
@@ -418,6 +426,13 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         bean.setMd5(imageMd5);
         return getPersonBeansByImageMd5AsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IImageManager
+    @Override
+    public int deletePersonBeansByImageMd5(String imageMd5)
+    {
+        java.util.List<PersonBean> list =getPersonBeansByImageMd5AsList(imageMd5);
+        return PersonManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IImageManager
     @Override 
     public PersonBean[] setPersonBeansByImageMd5(ImageBean bean , PersonBean[] importedBeans)
@@ -441,6 +456,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }
         return importedBeans;
     }
+
 
 
     //3.5 SYNC SAVE override IImageManager

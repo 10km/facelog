@@ -133,6 +133,14 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5);
+    /**
+     * delete the associated {@link FaceBean} objects from fl_face.feature_md5 field.<BR>
+     * FK_NAME:fl_face_ibfk_2
+     * @param md5 String - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteFaceBeansByFeatureMd5(String featureMd5);
     
     /**
      * set  the {@link FaceBean} object array associate to FeatureBean by the fl_face.feature_md5 field.<BR>
@@ -193,6 +201,14 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String featureMd5);
+    /**
+     * delete the associated {@link LogBean} objects from fl_log.verify_feature field.<BR>
+     * FK_NAME:fl_log_ibfk_3
+     * @param md5 String - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteLogBeansByVerifyFeature(String featureMd5);
     
     /**
      * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.verify_feature field.<BR>

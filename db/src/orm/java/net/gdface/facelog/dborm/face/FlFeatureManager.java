@@ -741,7 +741,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * Associates the {@link FlFeatureBean} object to the {@link FlPersonBean} object by {@link FlFeatureBean#getPersonId}() field.
      *
      * @param bean the {@link FlFeatureBean} object to use
-     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFeatureBean} (NOT NULL).
+     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlFeatureBean} .
      * @return always beanToSet saved
      * @throws Exception
      */
@@ -752,7 +752,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             FlPersonManager.getInstance().save(beanToSet);
             bean.setReferencedByPersonId(beanToSet);
             if( null == beanToSet){
-               // foreign key ( person_id ) is not nullable , nothing to do
+                bean.setPersonId(null);
             }else{
                 bean.setPersonId(beanToSet.getId());
             }

@@ -361,6 +361,13 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         bean.setId(personId);
         return getFeatureBeansByPersonIdAsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IPersonManager
+    @Override
+    public int deleteFeatureBeansByPersonId(Integer personId)
+    {
+        java.util.List<FeatureBean> list =getFeatureBeansByPersonIdAsList(personId);
+        return FeatureManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
     public FeatureBean[] setFeatureBeansByPersonId(PersonBean bean , FeatureBean[] importedBeans)
@@ -384,6 +391,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         }
         return importedBeans;
     }
+
     //3.1 GET IMPORTED override IPersonManager
     @Override 
     public LogBean[] getLogBeansByPersonId(PersonBean bean)
@@ -418,6 +426,13 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         bean.setId(personId);
         return getLogBeansByPersonIdAsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IPersonManager
+    @Override
+    public int deleteLogBeansByPersonId(Integer personId)
+    {
+        java.util.List<LogBean> list =getLogBeansByPersonIdAsList(personId);
+        return LogManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
     public LogBean[] setLogBeansByPersonId(PersonBean bean , LogBean[] importedBeans)
@@ -441,6 +456,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         }
         return importedBeans;
     }
+
 
 
     //3.5 SYNC SAVE override IPersonManager

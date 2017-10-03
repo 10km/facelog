@@ -361,6 +361,13 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         bean.setMd5(featureMd5);
         return getFaceBeansByFeatureMd5AsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IFeatureManager
+    @Override
+    public int deleteFaceBeansByFeatureMd5(String featureMd5)
+    {
+        java.util.List<FaceBean> list =getFaceBeansByFeatureMd5AsList(featureMd5);
+        return FaceManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 
     public FaceBean[] setFaceBeansByFeatureMd5(FeatureBean bean , FaceBean[] importedBeans)
@@ -384,6 +391,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         }
         return importedBeans;
     }
+
     //3.1 GET IMPORTED override IFeatureManager
     @Override 
     public LogBean[] getLogBeansByVerifyFeature(FeatureBean bean)
@@ -418,6 +426,13 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         bean.setMd5(featureMd5);
         return getLogBeansByVerifyFeatureAsList(bean);
     }
+    //3.2.3 DELETE IMPORTED override IFeatureManager
+    @Override
+    public int deleteLogBeansByVerifyFeature(String featureMd5)
+    {
+        java.util.List<LogBean> list =getLogBeansByVerifyFeatureAsList(featureMd5);
+        return LogManager.getInstance().delete(list);
+    }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 
     public LogBean[] setLogBeansByVerifyFeature(FeatureBean bean , LogBean[] importedBeans)
@@ -441,6 +456,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         }
         return importedBeans;
     }
+
 
 
     //3.5 SYNC SAVE override IFeatureManager

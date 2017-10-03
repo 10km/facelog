@@ -133,6 +133,14 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //3.2.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer faceId);
+    /**
+     * delete the associated {@link LogBean} objects from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteLogBeansByCompareFace(Integer faceId);
     
     /**
      * set  the {@link LogBean} object array associate to FaceBean by the fl_log.compare_face field.<BR>

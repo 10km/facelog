@@ -171,7 +171,6 @@ public class FeatureBean
      * <li>full name: fl_feature.person_id</li>
      * <li> foreign key: fl_person.id</li>
      * <li>comments: 外键,所属用户id</li>
-     * <li>NOT NULL</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -188,7 +187,7 @@ public class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to personId
+     * @param newVal the new value  to be assigned to personId
      */
     @ThriftField
     public void setPersonId(Integer newVal)
