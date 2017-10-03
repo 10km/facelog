@@ -41,6 +41,8 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_NAME}
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID}
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
+     *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
+     *   <li>{@link Constant#FL_DEVICE_ID_MAC}
      *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME}
      *   <li>{@link Constant#FL_DEVICE_ID_UPDATE_TIME}
      * </ul>
@@ -65,6 +67,8 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      *   <li>{@link Constant#FL_DEVICE_ID_NAME})
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID})
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
+     *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
+     *   <li>{@link Constant#FL_DEVICE_ID_MAC})
      *   <li>{@link Constant#FL_DEVICE_ID_CREATE_TIME})
      *   <li>{@link Constant#FL_DEVICE_ID_UPDATE_TIME})
      * </ul>
@@ -125,6 +129,28 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getVersion().compareTo(b2.getVersion());
+                }
+                break;
+            case FL_DEVICE_ID_SERIAL_NO:
+                if (b1.getSerialNo() == null && b2.getSerialNo() != null) {
+                    iReturn = -1;
+                } else if (b1.getSerialNo() == null && b2.getSerialNo() == null) {
+                    iReturn = 0;
+                } else if (b1.getSerialNo() != null && b2.getSerialNo() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getSerialNo().compareTo(b2.getSerialNo());
+                }
+                break;
+            case FL_DEVICE_ID_MAC:
+                if (b1.getMac() == null && b2.getMac() != null) {
+                    iReturn = -1;
+                } else if (b1.getMac() == null && b2.getMac() == null) {
+                    iReturn = 0;
+                } else if (b1.getMac() != null && b2.getMac() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getMac().compareTo(b2.getMac());
                 }
                 break;
             case FL_DEVICE_ID_CREATE_TIME:

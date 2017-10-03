@@ -23,7 +23,7 @@ public class ImageBean
 {
     private static final long serialVersionUID = -5491214114261088424L;
     
-    /** comments:主键,图像md5检验码,同时也是外键fl_store(md5) */
+    /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
     private String md5;
 
     /** comments:图像格式 */
@@ -41,7 +41,7 @@ public class ImageBean
     /** comments:图像中的人脸数目 */
     private Integer faceNum;
 
-    /** comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5) */
+    /** comments:缩略图md5,图像数据存储在 fl_imae_store(md5) */
     private String thumbMd5;
 
     /** comments:外键,图像来源设备 */
@@ -121,10 +121,9 @@ public class ImageBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.md5</li>
-     * <li> foreign key: fl_store.md5</li>
      * <li> imported key: fl_face.image_md5</li>
      * <li> imported key: fl_person.image_md5</li>
-     * <li>comments: 主键,图像md5检验码,同时也是外键fl_store(md5)</li>
+     * <li>comments: 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -517,8 +516,7 @@ public class ImageBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.thumb_md5</li>
-     * <li> foreign key: fl_store.md5</li>
-     * <li>comments: 外键,缩略图md5,图像数据存储在fl_imae_store(md5)</li>
+     * <li>comments: 缩略图md5,图像数据存储在 fl_imae_store(md5)</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -657,36 +655,6 @@ public class ImageBean
     @ThriftField
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
-    }
-    /** 
-     * The referenced {@link StoreBean} by {@link #md5} . <br>
-     * FOREIGN KEY (md5) REFERENCES fl_store(md5)
-     */
-    private StoreBean referencedByMd5;
-    /** Getter method for {@link #referencedByMd5}. */
-    @ThriftField(13)
-    public StoreBean getReferencedByMd5() {
-        return this.referencedByMd5;
-    }
-    /** Setter method for {@link #referencedByMd5}. */
-    @ThriftField
-    public void setReferencedByMd5(StoreBean reference) {
-        this.referencedByMd5 = reference;
-    }
-    /** 
-     * The referenced {@link StoreBean} by {@link #thumbMd5} . <br>
-     * FOREIGN KEY (thumb_md5) REFERENCES fl_store(md5)
-     */
-    private StoreBean referencedByThumbMd5;
-    /** Getter method for {@link #referencedByThumbMd5}. */
-    @ThriftField(14)
-    public StoreBean getReferencedByThumbMd5() {
-        return this.referencedByThumbMd5;
-    }
-    /** Setter method for {@link #referencedByThumbMd5}. */
-    @ThriftField
-    public void setReferencedByThumbMd5(StoreBean reference) {
-        this.referencedByThumbMd5 = reference;
     }
 
     /**

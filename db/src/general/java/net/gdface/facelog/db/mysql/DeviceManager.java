@@ -571,6 +571,60 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // USING INDICES
     //_____________________________________________________________________
 
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexMac(String mac)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexMac(mac));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+
+
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexMac(String mac)
+    {
+        try{
+            return this.nativeManager.deleteByIndexMac(mac);
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexSerialNo(String serialNo)
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadByIndexSerialNo(serialNo));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+
+
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexSerialNo(String serialNo)
+    {
+        try{
+            return this.nativeManager.deleteByIndexSerialNo(serialNo);
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    
      // override IDeviceManager
     @Override 
     public DeviceBean[] loadByIndexGroupId(Integer groupId)
@@ -608,7 +662,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     /**
      * Retrieves a list of DeviceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of DeviceBean
      */
@@ -625,7 +679,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */

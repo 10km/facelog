@@ -18,7 +18,6 @@ import net.gdface.facelog.db.IImageManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.WrapDAOException;
 
@@ -374,16 +373,12 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //3.5 SYNC SAVE override IImageManager
     @Override  
     public ImageBean save(ImageBean bean
-        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , DeviceBean refDeviceByDeviceId 
         , FaceBean[] impFaceByImageMd5 , PersonBean[] impPersonByImageMd5 )
     {
         if(null == bean) return null;
         if(null != refDeviceByDeviceId)
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
-        if(null != refStoreByMd5)
-            this.setReferencedByMd5(bean,refStoreByMd5);
-        if(null != refStoreByThumbMd5)
-            this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
         FaceManager.getInstance().save( impFaceByImageMd5 );
@@ -395,25 +390,23 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //3.6 SYNC SAVE AS TRANSACTION override IImageManager
     @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final DeviceBean refDeviceByDeviceId 
         ,final FaceBean[] impFaceByImageMd5 ,final PersonBean[] impPersonByImageMd5 )
     {
         return this.runAsTransaction(new Callable<ImageBean>(){
             @Override
             public ImageBean call() throws Exception {
-                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
+                return save(bean , refDeviceByDeviceId , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
     //3.7 SYNC SAVE override IImageManager
     @Override 
     public ImageBean save(ImageBean bean
-        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , DeviceBean refDeviceByDeviceId 
         , java.util.Collection<FaceBean> impFaceByImageMd5 , java.util.Collection<PersonBean> impPersonByImageMd5 )
     {
         if(null == bean) return null;
         this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
-        this.setReferencedByMd5(bean,refStoreByMd5);
-        this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
         FaceManager.getInstance().save( impFaceByImageMd5 );
@@ -425,13 +418,13 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     //3.8 SYNC SAVE AS TRANSACTION override IImageManager
     @Override 
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final DeviceBean refDeviceByDeviceId 
         ,final  java.util.Collection<FaceBean> impFaceByImageMd5 ,final  java.util.Collection<PersonBean> impPersonByImageMd5 )
     {
         return this.runAsTransaction(new Callable<ImageBean>(){
             @Override
             public ImageBean call() throws Exception {
-                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
+                return save(bean , refDeviceByDeviceId , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
      /**
@@ -439,31 +432,25 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      *
      * @param bean the {@link ImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , FaceBean[] , PersonBean[] )}
+     *      see also {@link #save(ImageBean , DeviceBean , FaceBean[] , PersonBean[] )}
      * @return the inserted or updated {@link ImageBean} bean
      */
     //3.9 SYNC SAVE 
     @Override
     public ImageBean save(ImageBean bean,Object ...args) 
     {
-        if(args.length > 5)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 5");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FaceBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FaceBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:StoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof PersonBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:PersonBean[]");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FaceBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:FaceBean[]");
-        }
-        if( args.length > 4 && null != args[4] && !(args[4] instanceof PersonBean[])){
-            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:PersonBean[]");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(StoreBean)args[1],(args.length < 3 || null == args[2])?null:(StoreBean)args[2],(args.length < 4 || null == args[3])?null:(FaceBean[])args[3],(args.length < 5 || null == args[4])?null:(PersonBean[])args[4]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FaceBean[])args[1],(args.length < 3 || null == args[2])?null:(PersonBean[])args[2]);
     } 
 
     /**
@@ -471,7 +458,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      *
      * @param bean the {@link ImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(ImageBean , DeviceBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link ImageBean} bean
      */
     //3.10 SYNC SAVE 
@@ -479,26 +466,20 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override
     public ImageBean saveCollection(ImageBean bean,Object ...inputs)
     {
-        if(inputs.length > 5)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 5");
-        Object[] args = new Object[5];
-        System.arraycopy(inputs,0,args,0,5);
+        if(inputs.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        Object[] args = new Object[3];
+        System.arraycopy(inputs,0,args,0,3);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:StoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FaceBean>");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof StoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:StoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<PersonBean>");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FaceBean>");
-        }
-        if( args.length > 4 && null != args[4] && !(args[4] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:java.util.Collection<PersonBean>");
-        }
-        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(StoreBean)args[1],null == args[2]?null:(StoreBean)args[2],null == args[3]?null:(java.util.Collection<FaceBean>)args[3],null == args[4]?null:(java.util.Collection<PersonBean>)args[4]);
+        return save(bean,null == args[0]?null:(DeviceBean)args[0],null == args[1]?null:(java.util.Collection<FaceBean>)args[1],null == args[2]?null:(java.util.Collection<PersonBean>)args[2]);
     }
 
      //////////////////////////////////////
@@ -510,12 +491,10 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_FK_MD5} -> {@link StoreBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_FK_THUMB_MD5} -> {@link StoreBean}</li>
      * </ul>
      * @param bean the {@link ImageBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      */
     @SuppressWarnings("unchecked")
@@ -524,10 +503,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
-        case FL_IMAGE_FK_MD5:
-            return  (T)this.getReferencedByMd5(bean);
-        case FL_IMAGE_FK_THUMB_MD5:
-            return  (T)this.getReferencedByThumbMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -546,10 +521,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);
-        case FL_IMAGE_FK_MD5:
-            return  (T)this.setReferencedByMd5(bean, (StoreBean)beanToSet);
-        case FL_IMAGE_FK_THUMB_MD5:
-            return  (T)this.setReferencedByThumbMd5(bean, (StoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -582,72 +553,6 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> foreignConverter = this.dbConverter.getDeviceBeanConverter();
             net.gdface.facelog.dborm.device.FlDeviceBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByDeviceId(nativeBean,foreignNativeBean);
-            this.beanConverter.fromRight(bean, nativeBean);
-            foreignConverter.fromRight(beanToSet,foreignNativeBean);
-            return beanToSet;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    //5.1 GET REFERENCED VALUE override IImageManager
-    @Override 
-    public StoreBean getReferencedByMd5(ImageBean bean)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(this.nativeManager.getReferencedByMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
-    }
-
-    //5.2 SET REFERENCED override IImageManager
-    @Override 
-    public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet)
-    {
-        try{
-            FlImageBean nativeBean = this.beanConverter.toRight(bean);
-            IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> foreignConverter = this.dbConverter.getStoreBeanConverter();
-            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = foreignConverter.toRight(beanToSet);
-            this.nativeManager.setReferencedByMd5(nativeBean,foreignNativeBean);
-            this.beanConverter.fromRight(bean, nativeBean);
-            foreignConverter.fromRight(beanToSet,foreignNativeBean);
-            return beanToSet;
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    //5.1 GET REFERENCED VALUE override IImageManager
-    @Override 
-    public StoreBean getReferencedByThumbMd5(ImageBean bean)
-    {
-        try{
-            return this.dbConverter.getStoreBeanConverter().fromRight(this.nativeManager.getReferencedByThumbMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
-    }
-
-    //5.2 SET REFERENCED override IImageManager
-    @Override 
-    public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet)
-    {
-        try{
-            FlImageBean nativeBean = this.beanConverter.toRight(bean);
-            IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> foreignConverter = this.dbConverter.getStoreBeanConverter();
-            net.gdface.facelog.dborm.image.FlStoreBean foreignNativeBean = foreignConverter.toRight(beanToSet);
-            this.nativeManager.setReferencedByThumbMd5(nativeBean,foreignNativeBean);
             this.beanConverter.fromRight(bean, nativeBean);
             foreignConverter.fromRight(beanToSet,foreignNativeBean);
             return beanToSet;
@@ -788,44 +693,11 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }
     }
     
-     // override IImageManager
-    @Override 
-    public ImageBean[] loadByIndexThumbMd5(String thumbMd5)
-    {
-        return this.loadByIndexThumbMd5AsList(thumbMd5).toArray(new ImageBean[0]);
-    }
-    
-    // override IImageManager
-    @Override 
-    public java.util.List<ImageBean> loadByIndexThumbMd5AsList(String thumbMd5)
-    {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexThumbMd5AsList(thumbMd5));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-
-    // override IImageManager
-    @Override 
-    public int deleteByIndexThumbMd5(String thumbMd5)
-    {
-        try{
-            return this.nativeManager.deleteByIndexThumbMd5(thumbMd5);
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-    }
-    
     
     /**
      * Retrieves a list of ImageBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}
      * @param keys key values of index
      * @return a list of ImageBean
      */
@@ -842,7 +714,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      */

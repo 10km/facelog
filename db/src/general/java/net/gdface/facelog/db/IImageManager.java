@@ -175,53 +175,49 @@ public interface IImageManager extends TableManager<ImageBean>
      *
      * @param bean the {@link ImageBean} bean to be saved
      * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
-     * @param refStoreByMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param refStoreByThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
      * @param impFaceByImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
      * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
      * @return the inserted or updated {@link ImageBean} bean
      */
     //3.5 SYNC SAVE 
     public ImageBean save(ImageBean bean
-        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , DeviceBean refDeviceByDeviceId 
         , FaceBean[] impFaceByImageMd5 , PersonBean[] impPersonByImageMd5 );
     /**
      * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , FaceBean[] , PersonBean[] )}
+     * @see {@link #save(ImageBean , DeviceBean , FaceBean[] , PersonBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final DeviceBean refDeviceByDeviceId 
         ,final FaceBean[] impFaceByImageMd5 ,final PersonBean[] impPersonByImageMd5 );
     /**
      * Save the ImageBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link ImageBean} bean to be saved
      * @param refDeviceByDeviceId the {@link DeviceBean} bean referenced by {@link ImageBean} 
-     * @param refStoreByMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
-     * @param refStoreByThumbMd5 the {@link StoreBean} bean referenced by {@link ImageBean} 
      * @param impFaceByImageMd5 the {@link FaceBean} bean refer to {@link ImageBean} 
      * @param impPersonByImageMd5 the {@link PersonBean} bean refer to {@link ImageBean} 
      * @return the inserted or updated {@link ImageBean} bean
      */
     //3.7 SYNC SAVE 
     public ImageBean save(ImageBean bean
-        , DeviceBean refDeviceByDeviceId , StoreBean refStoreByMd5 , StoreBean refStoreByThumbMd5 
+        , DeviceBean refDeviceByDeviceId 
         , java.util.Collection<FaceBean> impFaceByImageMd5 , java.util.Collection<PersonBean> impPersonByImageMd5 );
     /**
      * Transaction version for sync save
-     * @see {@link #save(ImageBean , DeviceBean , StoreBean , StoreBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(ImageBean , DeviceBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public ImageBean saveAsTransaction(final ImageBean bean
-        ,final DeviceBean refDeviceByDeviceId ,final StoreBean refStoreByMd5 ,final StoreBean refStoreByThumbMd5 
+        ,final DeviceBean refDeviceByDeviceId 
         ,final  java.util.Collection<FaceBean> impFaceByImageMd5 ,final  java.util.Collection<PersonBean> impPersonByImageMd5 );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
     /**
      * Retrieves the {@link DeviceBean} object referenced by {@link ImageBean#getDeviceId}() field.<br>
-     * FK_NAME : fl_image_ibfk_3
+     * FK_NAME : fl_image_ibfk_1
      * @param bean the {@link ImageBean}
      * @return the associated {@link DeviceBean} bean or {@code null} if {@code bean} is {@code null}
      */
@@ -238,44 +234,6 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet);
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link ImageBean#getMd5}() field.<br>
-     * FK_NAME : fl_image_ibfk_1
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //5.1 GET REFERENCED VALUE
-    public StoreBean getReferencedByMd5(ImageBean bean);
-
-    /**
-     * Associates the {@link ImageBean} object to the {@link StoreBean} object by {@link ImageBean#getMd5}() field.
-     *
-     * @param bean the {@link ImageBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link ImageBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public StoreBean setReferencedByMd5(ImageBean bean, StoreBean beanToSet);
-    /**
-     * Retrieves the {@link StoreBean} object referenced by {@link ImageBean#getThumbMd5}() field.<br>
-     * FK_NAME : fl_image_ibfk_2
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link StoreBean} bean or {@code null} if {@code bean} is {@code null}
-     */
-    //5.1 GET REFERENCED VALUE
-    public StoreBean getReferencedByThumbMd5(ImageBean bean);
-
-    /**
-     * Associates the {@link ImageBean} object to the {@link StoreBean} object by {@link ImageBean#getThumbMd5}() field.
-     *
-     * @param bean the {@link ImageBean} object to use
-     * @param beanToSet the {@link StoreBean} object to associate to the {@link ImageBean}
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public StoreBean setReferencedByThumbMd5(ImageBean bean, StoreBean beanToSet);
     //_____________________________________________________________________
     //
     // USING INDICES
@@ -304,29 +262,5 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the number of deleted objects
      */
     public int deleteByIndexDeviceId(Integer deviceId);
-    
-     /**
-     * Retrieves an array of ImageBean using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return an array of ImageBean
-     */
-    public ImageBean[] loadByIndexThumbMd5(String thumbMd5);
-    
-    /**
-     * Retrieves a list of ImageBean using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return a list of ImageBean
-     */
-    public java.util.List<ImageBean> loadByIndexThumbMd5AsList(String thumbMd5);
-
-    /**
-     * Deletes rows using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return the number of deleted objects
-     */
-    public int deleteByIndexThumbMd5(String thumbMd5);
     
 }

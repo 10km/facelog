@@ -52,7 +52,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     //////////////////////////////////////
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
+     * FK_NAME : fl_image_ibfk_1 
      * @param bean the {@link DeviceBean}
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
@@ -61,7 +61,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     
     /**
      * Retrieves the {@link ImageBean} object from the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
+     * FK_NAME : fl_image_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
@@ -71,7 +71,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
+     * FK_NAME:fl_image_ibfk_1
      * @param bean the {@link DeviceBean}
      * @return the associated {@link ImageBean} beans or {@code null} if {@code bean} is {@code null}
      */
@@ -80,7 +80,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
 
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
+     * FK_NAME:fl_image_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link ImageBean} beans 
      * @throws DAOException
@@ -90,7 +90,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     
     /**
      * set  the {@link ImageBean} object array associate to DeviceBean by the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
+     * FK_NAME : fl_image_ibfk_1 
      * @param bean the referenced {@link DeviceBean}
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
@@ -101,7 +101,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
 
     /**
      * set  the {@link ImageBean} object java.util.Collection associate to DeviceBean by the fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
+     * FK_NAME:fl_image_ibfk_1
      * @param bean the referenced {@link DeviceBean} 
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
@@ -215,6 +215,40 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     // USING INDICES
     //_____________________________________________________________________
 
+    /**
+     * Retrieves an unique DeviceBean using the mac index.
+     *
+     * @param mac the mac column's value filter. must not be null
+     * @return an array of DeviceBean
+     */
+    public DeviceBean loadByIndexMac(String mac);
+
+
+    /**
+     * Deletes rows using the mac index.
+     *
+     * @param mac the mac column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexMac(String mac);
+    
+    /**
+     * Retrieves an unique DeviceBean using the serial_no index.
+     *
+     * @param serialNo the serial_no column's value filter. must not be null
+     * @return an array of DeviceBean
+     */
+    public DeviceBean loadByIndexSerialNo(String serialNo);
+
+
+    /**
+     * Deletes rows using the serial_no index.
+     *
+     * @param serialNo the serial_no column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexSerialNo(String serialNo);
+    
      /**
      * Retrieves an array of DeviceBean using the group_id index.
      *

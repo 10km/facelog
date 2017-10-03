@@ -76,6 +76,16 @@ public class BeanConverterUtils {
                 methods.put("checkVersionInitialized",rightType.getMethod("checkVersionInitialized"));
             }catch(Exception e){}
             try{         
+                methods.put("getSerialNo",rightType.getMethod("getSerialNo"));
+                methods.put("setSerialNo",rightType.getMethod("setSerialNo",String.class));
+                methods.put("checkSerialNoInitialized",rightType.getMethod("checkSerialNoInitialized"));
+            }catch(Exception e){}
+            try{         
+                methods.put("getMac",rightType.getMethod("getMac"));
+                methods.put("setMac",rightType.getMethod("setMac",String.class));
+                methods.put("checkMacInitialized",rightType.getMethod("checkMacInitialized"));
+            }catch(Exception e){}
+            try{         
                 methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
                 methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
                 methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
@@ -106,6 +116,14 @@ public class BeanConverterUtils {
                     if((boolean)initializedMethod.invoke(right))
                         left.setVersion((String)getterMethod.invoke(right));
                 }
+                if( null != (initializedMethod = methods.get("checkSerialNoInitialized")) && null != (getterMethod = methods.get("getSerialNo"))){
+                    if((boolean)initializedMethod.invoke(right))
+                        left.setSerialNo((String)getterMethod.invoke(right));
+                }
+                if( null != (initializedMethod = methods.get("checkMacInitialized")) && null != (getterMethod = methods.get("getMac"))){
+                    if((boolean)initializedMethod.invoke(right))
+                        left.setMac((String)getterMethod.invoke(right));
+                }
                 if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
                     if((boolean)initializedMethod.invoke(right))
                         left.setCreateTime((java.util.Date)getterMethod.invoke(right));
@@ -135,6 +153,10 @@ public class BeanConverterUtils {
                     setterMethod.invoke(right,left.getGroupId());
                 if(null != (setterMethod = methods.get("setVersion")) && left.checkVersionInitialized() )
                     setterMethod.invoke(right,left.getVersion());
+                if(null != (setterMethod = methods.get("setSerialNo")) && left.checkSerialNoInitialized() )
+                    setterMethod.invoke(right,left.getSerialNo());
+                if(null != (setterMethod = methods.get("setMac")) && left.checkMacInitialized() )
+                    setterMethod.invoke(right,left.getMac());
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
 //                     setterMethod.invoke(right,left.getCreateTime());

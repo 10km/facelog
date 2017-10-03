@@ -332,7 +332,7 @@ public class LogBean
      * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,用于验证身份的人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of verifyFeature

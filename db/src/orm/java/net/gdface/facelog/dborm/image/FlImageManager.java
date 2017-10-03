@@ -31,8 +31,6 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
-import net.gdface.facelog.dborm.image.FlStoreManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_image table.
@@ -544,8 +542,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param refDeviceByDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
-     * @param refStoreByMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
-     * @param refStoreByThumbMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
      * @param impFaceByImageMd5 the {@link FlFaceBean} beans refer to {@link FlImageBean} 
      * @param impPersonByImageMd5 the {@link FlPersonBean} beans refer to {@link FlImageBean} 
      * @return the inserted or updated {@link FlImageBean} bean
@@ -553,16 +549,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //3.5 SYNC SAVE 
     public FlImageBean save(FlImageBean bean
-        , FlDeviceBean refDeviceByDeviceId , FlStoreBean refStoreByMd5 , FlStoreBean refStoreByThumbMd5 
+        , FlDeviceBean refDeviceByDeviceId 
         , FlFaceBean[] impFaceByImageMd5 , FlPersonBean[] impPersonByImageMd5 ) throws DAOException
     {
         if(null == bean) return null;
         if(null != refDeviceByDeviceId)
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
-        if(null != refStoreByMd5)
-            this.setReferencedByMd5(bean,refStoreByMd5);
-        if(null != refStoreByThumbMd5)
-            this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
         FlFaceManager.getInstance().save( impFaceByImageMd5 );
@@ -573,17 +565,17 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , FlFaceBean[] , FlPersonBean[] )}
+     * @see {@link #save(FlImageBean , FlDeviceBean , FlFaceBean[] , FlPersonBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlImageBean saveAsTransaction(final FlImageBean bean
-        ,final FlDeviceBean refDeviceByDeviceId ,final FlStoreBean refStoreByMd5 ,final FlStoreBean refStoreByThumbMd5 
+        ,final FlDeviceBean refDeviceByDeviceId 
         ,final FlFaceBean[] impFaceByImageMd5 ,final FlPersonBean[] impPersonByImageMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
             public FlImageBean call() throws Exception {
-                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
+                return save(bean , refDeviceByDeviceId , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
     /**
@@ -591,8 +583,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param refDeviceByDeviceId the {@link FlDeviceBean} bean referenced by {@link FlImageBean} 
-     * @param refStoreByMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
-     * @param refStoreByThumbMd5 the {@link FlStoreBean} bean referenced by {@link FlImageBean} 
      * @param impFaceByImageMd5 the {@link FlFaceBean} bean refer to {@link FlImageBean} 
      * @param impPersonByImageMd5 the {@link FlPersonBean} bean refer to {@link FlImageBean} 
      * @return the inserted or updated {@link FlImageBean} bean
@@ -600,13 +590,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //3.7 SYNC SAVE 
     public FlImageBean save(FlImageBean bean
-        , FlDeviceBean refDeviceByDeviceId , FlStoreBean refStoreByMd5 , FlStoreBean refStoreByThumbMd5 
+        , FlDeviceBean refDeviceByDeviceId 
         , java.util.Collection<FlFaceBean> impFaceByImageMd5 , java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
     {
         if(null == bean) return null;
         this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
-        this.setReferencedByMd5(bean,refStoreByMd5);
-        this.setReferencedByThumbMd5(bean,refStoreByThumbMd5);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
         FlFaceManager.getInstance().save( impFaceByImageMd5 );
@@ -617,17 +605,17 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FlImageBean , FlDeviceBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlImageBean saveAsTransaction(final FlImageBean bean
-        ,final FlDeviceBean refDeviceByDeviceId ,final FlStoreBean refStoreByMd5 ,final FlStoreBean refStoreByThumbMd5 
+        ,final FlDeviceBean refDeviceByDeviceId 
         ,final  java.util.Collection<FlFaceBean> impFaceByImageMd5 ,final  java.util.Collection<FlPersonBean> impPersonByImageMd5 ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlImageBean>(){
             @Override
             public FlImageBean call() throws Exception {
-                return save(bean , refDeviceByDeviceId , refStoreByMd5 , refStoreByThumbMd5 , impFaceByImageMd5 , impPersonByImageMd5 );
+                return save(bean , refDeviceByDeviceId , impFaceByImageMd5 , impPersonByImageMd5 );
             }});
     }
     /**
@@ -635,7 +623,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , FlFaceBean[] , FlPersonBean[] )}
+     *      see also {@link #save(FlImageBean , FlDeviceBean , FlFaceBean[] , FlPersonBean[] )}
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DAOException
      */
@@ -643,24 +631,18 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public FlImageBean save(FlImageBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 5)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 5");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlStoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFaceBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlFaceBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlStoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlPersonBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlPersonBean[]");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof FlFaceBean[])){
-            throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlFaceBean[]");
-        }
-        if( args.length > 4 && null != args[4] && !(args[4] instanceof FlPersonBean[])){
-            throw new IllegalArgumentException("invalid type for the No.5 dynamic argument,expected type:FlPersonBean[]");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1],(args.length < 3 || null == args[2])?null:(FlStoreBean)args[2],(args.length < 4 || null == args[3])?null:(FlFaceBean[])args[3],(args.length < 5 || null == args[4])?null:(FlPersonBean[])args[4]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlFaceBean[])args[1],(args.length < 3 || null == args[2])?null:(FlPersonBean[])args[2]);
     } 
 
     /**
@@ -668,7 +650,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      *
      * @param bean the {@link FlImageBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlImageBean , FlDeviceBean , FlStoreBean , FlStoreBean , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(FlImageBean , FlDeviceBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlImageBean} bean
      * @throws DAOException
      */
@@ -677,24 +659,18 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public FlImageBean saveCollection(FlImageBean bean,Object ...args) throws DAOException
     {
-        if(args.length > 5)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 5");
+        if(args.length > 3)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlStoreBean");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlFaceBean>");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlStoreBean)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:FlStoreBean");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlPersonBean>");
         }
-        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlFaceBean>");
-        }
-        if( args.length > 4 && null != args[4] && !(args[4] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.5 argument,expected type:java.util.Collection<FlPersonBean>");
-        }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(FlStoreBean)args[1],(args.length < 3 || null == args[2])?null:(FlStoreBean)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlFaceBean>)args[3],(args.length < 5 || null == args[4])?null:(java.util.Collection<FlPersonBean>)args[4]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceBean)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlFaceBean>)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlPersonBean>)args[2]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -705,12 +681,10 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_FK_MD5} -> {@link FlStoreBean}</li>
-     *     <li> {@link Constant#FL_IMAGE_FK_THUMB_MD5} -> {@link FlStoreBean}</li>
      * </ul>
      * @param bean the {@link FlImageBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_IMAGE_FK_MD5},{@link Constant#FL_IMAGE_FK_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -720,10 +694,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
-        case FL_IMAGE_FK_MD5:
-            return  (T)this.getReferencedByMd5(bean);
-        case FL_IMAGE_FK_THUMB_MD5:
-            return  (T)this.getReferencedByThumbMd5(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -744,10 +714,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);
-        case FL_IMAGE_FK_MD5:
-            return  (T)this.setReferencedByMd5(bean, (FlStoreBean)beanToSet);
-        case FL_IMAGE_FK_THUMB_MD5:
-            return  (T)this.setReferencedByThumbMd5(bean, (FlStoreBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -759,7 +725,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
 
     /**
      * Retrieves the {@link FlDeviceBean} object referenced by {@link FlImageBean#getDeviceId}() field.<br>
-     * FK_NAME : fl_image_ibfk_3
+     * FK_NAME : fl_image_ibfk_1
      * @param bean the {@link FlImageBean}
      * @return the associated {@link FlDeviceBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
@@ -790,82 +756,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 bean.setDeviceId(null);
             }else{
                 bean.setDeviceId(beanToSet.getId());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlStoreBean} object referenced by {@link FlImageBean#getMd5}() field.<br>
-     * FK_NAME : fl_image_ibfk_1
-     * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //5.1 GET REFERENCED VALUE
-    public FlStoreBean getReferencedByMd5(FlImageBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        bean.setReferencedByMd5(FlStoreManager.getInstance().loadByPrimaryKey(bean.getMd5())); 
-        return bean.getReferencedByMd5();
-    }
-
-    /**
-     * Associates the {@link FlImageBean} object to the {@link FlStoreBean} object by {@link FlImageBean#getMd5}() field.
-     *
-     * @param bean the {@link FlImageBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean} (NOT NULL).
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlStoreBean setReferencedByMd5(FlImageBean bean, FlStoreBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlStoreManager.getInstance().save(beanToSet);
-            bean.setReferencedByMd5(beanToSet);
-            if( null == beanToSet){
-               // foreign key ( md5 ) is not nullable , nothing to do
-            }else{
-                bean.setMd5(beanToSet.getMd5());
-            }
-        }
-        return beanToSet;
-    }
-
-    /**
-     * Retrieves the {@link FlStoreBean} object referenced by {@link FlImageBean#getThumbMd5}() field.<br>
-     * FK_NAME : fl_image_ibfk_2
-     * @param bean the {@link FlImageBean}
-     * @return the associated {@link FlStoreBean} bean or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //5.1 GET REFERENCED VALUE
-    public FlStoreBean getReferencedByThumbMd5(FlImageBean bean) throws DAOException
-    {
-        if(null == bean)return null;
-        bean.setReferencedByThumbMd5(FlStoreManager.getInstance().loadByPrimaryKey(bean.getThumbMd5())); 
-        return bean.getReferencedByThumbMd5();
-    }
-
-    /**
-     * Associates the {@link FlImageBean} object to the {@link FlStoreBean} object by {@link FlImageBean#getThumbMd5}() field.
-     *
-     * @param bean the {@link FlImageBean} object to use
-     * @param beanToSet the {@link FlStoreBean} object to associate to the {@link FlImageBean} .
-     * @return always beanToSet saved
-     * @throws Exception
-     */
-    //5.2 SET REFERENCED 
-    public FlStoreBean setReferencedByThumbMd5(FlImageBean bean, FlStoreBean beanToSet) throws DAOException
-    {
-        if(null != bean){
-            FlStoreManager.getInstance().save(beanToSet);
-            bean.setReferencedByThumbMd5(beanToSet);
-            if( null == beanToSet){
-                bean.setThumbMd5(null);
-            }else{
-                bean.setThumbMd5(beanToSet.getMd5());
             }
         }
         return beanToSet;
@@ -1310,50 +1200,11 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         return deleteUsingTemplate(bean);
     }
     
-    /**
-     * Retrieves an array of FlImageBean using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return an array of FlImageBean
-     * @throws DAOException
-     */
-    public FlImageBean[] loadByIndexThumbMd5(String thumbMd5) throws DAOException
-    {
-        return (FlImageBean[])this.loadByIndexThumbMd5AsList(thumbMd5).toArray(new FlImageBean[0]);
-    }
-    
-    /**
-     * Retrieves a list of FlImageBean using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return a list of FlImageBean
-     * @throws DAOException
-     */
-    public List<FlImageBean> loadByIndexThumbMd5AsList(String thumbMd5) throws DAOException
-    {
-        FlImageBean bean = this.createBean();
-        bean.setThumbMd5(thumbMd5);
-        return loadUsingTemplateAsList(bean);
-    }
-    /**
-     * Deletes rows using the thumb_md5 index.
-     *
-     * @param thumbMd5 the thumb_md5 column's value filter.
-     * @return the number of deleted objects
-     * @throws DAOException
-     */
-    public int deleteByIndexThumbMd5(String thumbMd5) throws DAOException
-    {
-        FlImageBean bean = this.createBean();
-        bean.setThumbMd5(thumbMd5);
-        return deleteUsingTemplate(bean);
-    }
-    
     
     /**
      * Retrieves a list of FlImageBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}
      * @param keys key values of index
      * @return a list of FlImageBean
      * @throws DAOException
@@ -1368,13 +1219,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.loadByIndexDeviceIdAsList((Integer)keys[0]);        
         }
-        case FL_IMAGE_INDEX_THUMB_MD5:{
-            if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'thumb_md5' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.loadByIndexThumbMd5AsList((String)keys[0]);        
-        }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
         }
@@ -1383,7 +1227,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID},{@link Constant#FL_IMAGE_INDEX_THUMB_MD5}
+     *        {@link Constant#FL_IMAGE_INDEX_DEVICE_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1397,13 +1241,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexDeviceId((Integer)keys[0]);
-        }
-        case FL_IMAGE_INDEX_THUMB_MD5:{
-            if(keys.length != 1)
-                throw new IllegalArgumentException("argument number mismatch with index 'thumb_md5' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
-                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-            return this.deleteByIndexThumbMd5((String)keys[0]);
         }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));

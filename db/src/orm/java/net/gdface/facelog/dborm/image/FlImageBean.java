@@ -10,7 +10,6 @@ import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.image.FlStoreBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
@@ -27,7 +26,7 @@ public class FlImageBean
 {
     private static final long serialVersionUID = 646979810912117585L;
     
-    /** comments:主键,图像md5检验码,同时也是外键fl_store(md5) */
+    /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
     private String md5;
 
     /** comments:图像格式 */
@@ -45,7 +44,7 @@ public class FlImageBean
     /** comments:图像中的人脸数目 */
     private Integer faceNum;
 
-    /** comments:外键,缩略图md5,图像数据存储在fl_imae_store(md5) */
+    /** comments:缩略图md5,图像数据存储在 fl_imae_store(md5) */
     private String thumbMd5;
 
     /** comments:外键,图像来源设备 */
@@ -119,10 +118,9 @@ public class FlImageBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.md5</li>
-     * <li> foreign key: fl_store.md5</li>
      * <li> imported key: fl_face.image_md5</li>
      * <li> imported key: fl_person.image_md5</li>
-     * <li>comments: 主键,图像md5检验码,同时也是外键fl_store(md5)</li>
+     * <li>comments: 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
@@ -503,8 +501,7 @@ public class FlImageBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_image.thumb_md5</li>
-     * <li> foreign key: fl_store.md5</li>
-     * <li>comments: 外键,缩略图md5,图像数据存储在fl_imae_store(md5)</li>
+     * <li>comments: 缩略图md5,图像数据存储在 fl_imae_store(md5)</li>
      * <li>column size: 32</li>
      * <li>jdbc type returned by the driver: Types.CHAR</li>
      * </ul>
@@ -637,32 +634,6 @@ public class FlImageBean
     /** Setter method for {@link #referencedByDeviceId}. */
     public void setReferencedByDeviceId(FlDeviceBean reference) {
         this.referencedByDeviceId = reference;
-    }
-    /** 
-     * The referenced {@link FlStoreBean} by {@link #md5} . <br>
-     * FOREIGN KEY (md5) REFERENCES fl_store(md5)
-     */
-    private FlStoreBean referencedByMd5;
-    /** Getter method for {@link #referencedByMd5}. */
-    public FlStoreBean getReferencedByMd5() {
-        return this.referencedByMd5;
-    }
-    /** Setter method for {@link #referencedByMd5}. */
-    public void setReferencedByMd5(FlStoreBean reference) {
-        this.referencedByMd5 = reference;
-    }
-    /** 
-     * The referenced {@link FlStoreBean} by {@link #thumbMd5} . <br>
-     * FOREIGN KEY (thumb_md5) REFERENCES fl_store(md5)
-     */
-    private FlStoreBean referencedByThumbMd5;
-    /** Getter method for {@link #referencedByThumbMd5}. */
-    public FlStoreBean getReferencedByThumbMd5() {
-        return this.referencedByThumbMd5;
-    }
-    /** Setter method for {@link #referencedByThumbMd5}. */
-    public void setReferencedByThumbMd5(FlStoreBean reference) {
-        this.referencedByThumbMd5 = reference;
     }
 
     /**

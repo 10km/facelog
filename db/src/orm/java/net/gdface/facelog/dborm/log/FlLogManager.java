@@ -1499,19 +1499,19 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFeature() + "]");
-                        if (bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature()); }
+                        if (bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFeature() + "%]");
-                        if ( bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature() + "%"); }
+                        if ( bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFeature() + "]");
-                        if ( bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature()); }
+                        if ( bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFeature() + "%]");
-                        if (bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature() + "%"); }
+                        if (bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);

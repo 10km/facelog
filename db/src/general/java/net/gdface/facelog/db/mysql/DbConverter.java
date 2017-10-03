@@ -38,6 +38,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setGroupId(right.getGroupId());
             if(right.checkVersionInitialized())
                 left.setVersion(right.getVersion());
+            if(right.checkSerialNoInitialized())
+                left.setSerialNo(right.getSerialNo());
+            if(right.checkMacInitialized())
+                left.setMac(right.getMac());
             if(right.checkCreateTimeInitialized())
                 left.setCreateTime(right.getCreateTime());
             if(right.checkUpdateTimeInitialized())
@@ -56,6 +60,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setGroupId(left.getGroupId());
             if(left.checkVersionInitialized() )
                 right.setVersion(left.getVersion());
+            if(left.checkSerialNoInitialized() )
+                right.setSerialNo(left.getSerialNo());
+            if(left.checkMacInitialized() )
+                right.setMac(left.getMac());
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() )
 //                 right.setCreateTime(left.getCreateTime());

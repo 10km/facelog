@@ -37,6 +37,12 @@ public class FlDeviceBean
     /** comments:设备版本号 */
     private String version;
 
+    /** comments:设备序列号 */
+    private String serialNo;
+
+    /** comments:6字节MAC地址(HEX) */
+    private String mac;
+
     private java.util.Date createTime;
 
     private java.util.Date updateTime;
@@ -353,6 +359,118 @@ public class FlDeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_VERSION_MASK);
     }
     /**
+     * Getter method for {@link #serialNo}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.serial_no</li>
+     * <li>comments: 设备序列号</li>
+     * <li>column size: 32</li>
+     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of serialNo
+     */
+    public String getSerialNo(){
+        return serialNo;
+    }
+    /**
+     * Setter method for {@link #serialNo}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value  to be assigned to serialNo
+     */
+    public void setSerialNo(String newVal)
+    {
+        if ((newVal != null && serialNo != null && (newVal.compareTo(serialNo) == 0)) ||
+            (newVal == null && serialNo == null && checkSerialNoInitialized())) {
+            return;
+        }
+        serialNo = newVal;
+
+        modified |= FL_DEVICE_ID_SERIAL_NO_MASK;
+        initialized |= FL_DEVICE_ID_SERIAL_NO_MASK;
+    }
+
+    /**
+     * Determines if the serialNo has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkSerialNoModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_SERIAL_NO_MASK);
+    }
+
+    /**
+     * Determines if the serialNo has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkSerialNoInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_SERIAL_NO_MASK);
+    }
+    /**
+     * Getter method for {@link #mac}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.mac</li>
+     * <li>comments: 6字节MAC地址(HEX)</li>
+     * <li>column size: 12</li>
+     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * </ul>
+     *
+     * @return the value of mac
+     */
+    public String getMac(){
+        return mac;
+    }
+    /**
+     * Setter method for {@link #mac}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value  to be assigned to mac
+     */
+    public void setMac(String newVal)
+    {
+        if ((newVal != null && mac != null && (newVal.compareTo(mac) == 0)) ||
+            (newVal == null && mac == null && checkMacInitialized())) {
+            return;
+        }
+        mac = newVal;
+
+        modified |= FL_DEVICE_ID_MAC_MASK;
+        initialized |= FL_DEVICE_ID_MAC_MASK;
+    }
+
+    /**
+     * Determines if the mac has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkMacModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_MAC_MASK);
+    }
+
+    /**
+     * Determines if the mac has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkMacInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_MAC_MASK);
+    }
+    /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -513,6 +631,10 @@ public class FlDeviceBean
             return checkGroupIdModified();
         case FL_DEVICE_ID_VERSION:
             return checkVersionModified();
+        case FL_DEVICE_ID_SERIAL_NO:
+            return checkSerialNoModified();
+        case FL_DEVICE_ID_MAC:
+            return checkMacModified();
         case FL_DEVICE_ID_CREATE_TIME:
             return checkCreateTimeModified();
         case FL_DEVICE_ID_UPDATE_TIME:
@@ -538,6 +660,10 @@ public class FlDeviceBean
             return checkGroupIdInitialized();
         case FL_DEVICE_ID_VERSION:
             return checkVersionInitialized();
+        case FL_DEVICE_ID_SERIAL_NO:
+            return checkSerialNoInitialized();
+        case FL_DEVICE_ID_MAC:
+            return checkMacInitialized();
         case FL_DEVICE_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         case FL_DEVICE_ID_UPDATE_TIME:
@@ -602,6 +728,8 @@ public class FlDeviceBean
             .append(getName(), obj.getName())
             .append(getGroupId(), obj.getGroupId())
             .append(getVersion(), obj.getVersion())
+            .append(getSerialNo(), obj.getSerialNo())
+            .append(getMac(), obj.getMac())
             .append(getCreateTime(), obj.getCreateTime())
             .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
@@ -622,6 +750,8 @@ public class FlDeviceBean
             .append("\tname=").append(getName()).append("\n")
             .append("\tgroup_id=").append(getGroupId()).append("\n")
             .append("\tversion=").append(getVersion()).append("\n")
+            .append("\tserial_no=").append(getSerialNo()).append("\n")
+            .append("\tmac=").append(getMac()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("\tupdate_time=").append(getUpdateTime()).append("\n")
             .append("]\n")
@@ -653,6 +783,8 @@ public class FlDeviceBean
         setName(null);
         setGroupId(null);
         setVersion(null);
+        setSerialNo(null);
+        setMac(null);
         setCreateTime(null);
         setUpdateTime(null);
         isNew(true);
@@ -670,7 +802,7 @@ public class FlDeviceBean
     public void copy(FlDeviceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 8; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -716,6 +848,10 @@ public class FlDeviceBean
             return (T)getGroupId();        
         case FL_DEVICE_ID_VERSION: 
             return (T)getVersion();        
+        case FL_DEVICE_ID_SERIAL_NO: 
+            return (T)getSerialNo();        
+        case FL_DEVICE_ID_MAC: 
+            return (T)getMac();        
         case FL_DEVICE_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         case FL_DEVICE_ID_UPDATE_TIME: 
@@ -738,6 +874,10 @@ public class FlDeviceBean
             setGroupId((Integer)value);
         case FL_DEVICE_ID_VERSION:        
             setVersion((String)value);
+        case FL_DEVICE_ID_SERIAL_NO:        
+            setSerialNo((String)value);
+        case FL_DEVICE_ID_MAC:        
+            setMac((String)value);
         case FL_DEVICE_ID_CREATE_TIME:        
             setCreateTime((java.util.Date)value);
         case FL_DEVICE_ID_UPDATE_TIME:        

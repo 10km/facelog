@@ -347,7 +347,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //////////////////////////////////////
     /**
      * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
+     * FK_NAME : fl_image_ibfk_1 
      * @param bean the {@link FlDeviceBean}
      * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
@@ -359,7 +359,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
     /**
      * Retrieves the {@link FlImageBean} object from the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
+     * FK_NAME : fl_image_ibfk_1 
      * @param id Integer - PK# 1
      * @return the associated {@link FlImageBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
@@ -373,7 +373,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
+     * FK_NAME:fl_image_ibfk_1
      * @param bean the {@link FlDeviceBean}
      * @return the associated {@link FlImageBean} beans 
      * @throws DAOException
@@ -388,7 +388,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
     /**
      * Retrieves the {@link FlImageBean} object from fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
+     * FK_NAME:fl_image_ibfk_1
      * @param id Integer - PK# 1
      * @return the associated {@link FlImageBean} beans 
      * @throws DAOException
@@ -402,7 +402,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
     /**
      * set  the {@link FlImageBean} object array associate to FlDeviceBean by the fl_image.device_id field.<BR>
-     * FK_NAME : fl_image_ibfk_3 
+     * FK_NAME : fl_image_ibfk_1 
      * @param bean the referenced {@link FlDeviceBean}
      * @param importedBeans imported beans from fl_image
      * @return importedBeans always
@@ -422,7 +422,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
 
     /**
      * set  the {@link FlImageBean} object collection associate to FlDeviceBean by the fl_image.device_id field.<BR>
-     * FK_NAME:fl_image_ibfk_3
+     * FK_NAME:fl_image_ibfk_1
      * @param bean the referenced {@link FlDeviceBean} 
      * @param importedBeans imported beans from fl_image 
      * @return importedBeans always
@@ -764,6 +764,22 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                 _dirtyCount++;
             }
 
+            if (bean.checkSerialNoModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("serial_no");
+                _dirtyCount++;
+            }
+
+            if (bean.checkMacModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("mac");
+                _dirtyCount++;
+            }
+
             if (bean.checkCreateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
@@ -890,6 +906,24 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     useComma=true;
                 }
                 sql.append("version=?");
+            }
+
+            if (bean.checkSerialNoModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("serial_no=?");
+            }
+
+            if (bean.checkMacModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("mac=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -1045,6 +1079,64 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //_____________________________________________________________________
 
     /**
+     * Retrieves an unique FlDeviceBean using the mac index.
+     *
+     * @param mac the mac column's value filter. must not be null
+     * @return a list of FlDeviceBean
+     * @throws DAOException
+     */
+    public FlDeviceBean loadByIndexMac(String mac) throws DAOException
+    {
+        FlDeviceBean bean = this.createBean();
+        if( null == mac)
+            throw new IllegalArgumentException("the key 'mac'  must not be null");
+        bean.setMac(mac);
+        return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Deletes rows using the mac index.
+     *
+     * @param mac the mac column's value filter.
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndexMac(String mac) throws DAOException
+    {
+        FlDeviceBean bean = this.createBean();
+        bean.setMac(mac);
+        return deleteUsingTemplate(bean);
+    }
+    
+    /**
+     * Retrieves an unique FlDeviceBean using the serial_no index.
+     *
+     * @param serialNo the serial_no column's value filter. must not be null
+     * @return a list of FlDeviceBean
+     * @throws DAOException
+     */
+    public FlDeviceBean loadByIndexSerialNo(String serialNo) throws DAOException
+    {
+        FlDeviceBean bean = this.createBean();
+        if( null == serialNo)
+            throw new IllegalArgumentException("the key 'serialNo'  must not be null");
+        bean.setSerialNo(serialNo);
+        return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Deletes rows using the serial_no index.
+     *
+     * @param serialNo the serial_no column's value filter.
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndexSerialNo(String serialNo) throws DAOException
+    {
+        FlDeviceBean bean = this.createBean();
+        bean.setSerialNo(serialNo);
+        return deleteUsingTemplate(bean);
+    }
+    
+    /**
      * Retrieves an array of FlDeviceBean using the group_id index.
      *
      * @param groupId the group_id column's value filter.
@@ -1087,7 +1179,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     /**
      * Retrieves a list of FlDeviceBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of FlDeviceBean
      * @throws DAOException
@@ -1095,10 +1187,26 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public List<FlDeviceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
+        case FL_DEVICE_INDEX_MAC:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'mac' column number");
+            if(null != keys[0] && !(keys[0] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            FlDeviceBean bean= this.loadByIndexMac((String)keys[0]);
+            return null == bean ? new java.util.ArrayList<FlDeviceBean>() : java.util.Arrays.asList(bean);
+        }
+        case FL_DEVICE_INDEX_SERIAL_NO:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'serial_no' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            FlDeviceBean bean= this.loadByIndexSerialNo((String)keys[0]);
+            return null == bean ? new java.util.ArrayList<FlDeviceBean>() : java.util.Arrays.asList(bean);
+        }
         case FL_DEVICE_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[2] && !(keys[2] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
@@ -1110,7 +1218,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_DEVICE_INDEX_GROUP_ID}
+     *        {@link Constant#FL_DEVICE_INDEX_MAC},{@link Constant#FL_DEVICE_INDEX_SERIAL_NO},{@link Constant#FL_DEVICE_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1118,10 +1226,24 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
         switch(keyIndex){
+        case FL_DEVICE_INDEX_MAC:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'mac' column number");
+            if(null != keys[0] && !(keys[0] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByIndexMac((String)keys[0]);
+        }
+        case FL_DEVICE_INDEX_SERIAL_NO:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'serial_no' column number");
+            if(null != keys[1] && !(keys[1] instanceof String))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+            return this.deleteByIndexSerialNo((String)keys[0]);
+        }
         case FL_DEVICE_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[0] && !(keys[0] instanceof Integer))
+            if(null != keys[2] && !(keys[2] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexGroupId((Integer)keys[0]);
         }
@@ -1308,6 +1430,22 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("version ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkSerialNoModified()) {
+                _dirtyCount ++;
+                if (bean.getSerialNo() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("serial_no IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("serial_no ").append(sqlEqualsOperation).append("?");
+                }
+            }
+            if (bean.checkMacModified()) {
+                _dirtyCount ++;
+                if (bean.getMac() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mac IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("mac ").append(sqlEqualsOperation).append("?");
+                }
+            }
             if (bean.checkCreateTimeModified()) {
                 _dirtyCount ++;
                 if (bean.getCreateTime() == null) {
@@ -1395,6 +1533,50 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVersion() + "%]");
                         if (bean.getVersion()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getVersion() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkSerialNoModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSerialNo() + "]");
+                        if (bean.getSerialNo() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSerialNo()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSerialNo() + "%]");
+                        if ( bean.getSerialNo()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getSerialNo() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getSerialNo() + "]");
+                        if ( bean.getSerialNo() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getSerialNo()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSerialNo() + "%]");
+                        if (bean.getSerialNo()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getSerialNo() + "%"); }
+                        break;
+                    default:
+                        throw new DAOException("Unknown search type " + searchType);
+                }
+            }
+            if (bean.checkMacModified()) {
+                switch (searchType) {
+                    case SEARCH_EXACT:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMac() + "]");
+                        if (bean.getMac() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMac()); }
+                        break;
+                    case SEARCH_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMac() + "%]");
+                        if ( bean.getMac()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMac() + "%"); }
+                        break;
+                    case SEARCH_STARTING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMac() + "]");
+                        if ( bean.getMac() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMac()); }
+                        break;
+                    case SEARCH_ENDING_LIKE:
+                        // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMac() + "%]");
+                        if (bean.getMac()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMac() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1517,8 +1699,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             bean.setName(rs.getString(2));
             bean.setGroupId(Manager.getInteger(rs, 3));
             bean.setVersion(rs.getString(4));
-            bean.setCreateTime(rs.getTimestamp(5));
-            bean.setUpdateTime(rs.getTimestamp(6));
+            bean.setSerialNo(rs.getString(5));
+            bean.setMac(rs.getString(6));
+            bean.setCreateTime(rs.getTimestamp(7));
+            bean.setUpdateTime(rs.getTimestamp(8));
         }
         catch(SQLException e)
         {
@@ -1566,6 +1750,14 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                         ++pos;
                         bean.setVersion(rs.getString(pos));
                         break;
+                    case FL_DEVICE_ID_SERIAL_NO:
+                        ++pos;
+                        bean.setSerialNo(rs.getString(pos));
+                        break;
+                    case FL_DEVICE_ID_MAC:
+                        ++pos;
+                        bean.setMac(rs.getString(pos));
+                        break;
                     case FL_DEVICE_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
@@ -1606,6 +1798,8 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             bean.setName(rs.getString("name"));
             bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setVersion(rs.getString("version"));
+            bean.setSerialNo(rs.getString("serial_no"));
+            bean.setMac(rs.getString("mac"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
             bean.setUpdateTime(rs.getTimestamp("update_time"));
         }

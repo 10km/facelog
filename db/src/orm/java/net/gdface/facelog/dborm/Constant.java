@@ -32,10 +32,6 @@ public interface Constant {
     public static final int FL_FEATURE_FK_PERSON_ID = 0;
     /** foreign key fl_image(device_id) -> fl_device */
     public static final int FL_IMAGE_FK_DEVICE_ID = 0;
-    /** foreign key fl_image(md5) -> fl_store */
-    public static final int FL_IMAGE_FK_MD5 = 1;
-    /** foreign key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_IMAGE_FK_THUMB_MD5 = 2;
     /** foreign key fl_log(device_id) -> fl_device */
     public static final int FL_LOG_FK_DEVICE_ID = 0;
     /** foreign key fl_log(compare_face) -> fl_face */
@@ -67,15 +63,15 @@ public interface Constant {
     public static final int FL_PERSON_IK_FL_FEATURE_PERSON_ID = 0;
     /** imported key fl_log(person_id) -> fl_person */
     public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 1;
-    /** imported key fl_image(md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_MD5 = 0;
-    /** imported key fl_image(thumb_md5) -> fl_store */
-    public static final int FL_STORE_IK_FL_IMAGE_THUMB_MD5 = 1;
     //////////////////////////////////////
     // INDEX INDEX DECLARE
     //////////////////////////////////////    
+    /** fl_device index (mac) */
+    public static final int FL_DEVICE_INDEX_MAC = 0;
+    /** fl_device index (serial_no) */
+    public static final int FL_DEVICE_INDEX_SERIAL_NO = 1;
     /** fl_device index (group_id) */
-    public static final int FL_DEVICE_INDEX_GROUP_ID = 0;
+    public static final int FL_DEVICE_INDEX_GROUP_ID = 2;
     /** fl_face index (feature_md5) */
     public static final int FL_FACE_INDEX_FEATURE_MD5 = 0;
     /** fl_face index (image_md5) */
@@ -84,8 +80,6 @@ public interface Constant {
     public static final int FL_FEATURE_INDEX_PERSON_ID = 0;
     /** fl_image index (device_id) */
     public static final int FL_IMAGE_INDEX_DEVICE_ID = 0;
-    /** fl_image index (thumb_md5) */
-    public static final int FL_IMAGE_INDEX_THUMB_MD5 = 1;
     /** fl_log index (compare_face) */
     public static final int FL_LOG_INDEX_COMPARE_FACE = 0;
     /** fl_log index (device_id) */
@@ -117,12 +111,18 @@ public interface Constant {
     /** Identify the fl_device.version field (ordinal:4). */
     public static final int FL_DEVICE_ID_VERSION = 3;
     public static final long FL_DEVICE_ID_VERSION_MASK = 1L << 3;
-    /** Identify the fl_device.create_time field (ordinal:5). */
-    public static final int FL_DEVICE_ID_CREATE_TIME = 4;
-    public static final long FL_DEVICE_ID_CREATE_TIME_MASK = 1L << 4;
-    /** Identify the fl_device.update_time field (ordinal:6). */
-    public static final int FL_DEVICE_ID_UPDATE_TIME = 5;
-    public static final long FL_DEVICE_ID_UPDATE_TIME_MASK = 1L << 5;
+    /** Identify the fl_device.serial_no field (ordinal:5). */
+    public static final int FL_DEVICE_ID_SERIAL_NO = 4;
+    public static final long FL_DEVICE_ID_SERIAL_NO_MASK = 1L << 4;
+    /** Identify the fl_device.mac field (ordinal:6). */
+    public static final int FL_DEVICE_ID_MAC = 5;
+    public static final long FL_DEVICE_ID_MAC_MASK = 1L << 5;
+    /** Identify the fl_device.create_time field (ordinal:7). */
+    public static final int FL_DEVICE_ID_CREATE_TIME = 6;
+    public static final long FL_DEVICE_ID_CREATE_TIME_MASK = 1L << 6;
+    /** Identify the fl_device.update_time field (ordinal:8). */
+    public static final int FL_DEVICE_ID_UPDATE_TIME = 7;
+    public static final long FL_DEVICE_ID_UPDATE_TIME_MASK = 1L << 7;
     /** Identify the fl_face.id field (ordinal:1). */
     public static final int FL_FACE_ID_ID = 0;
     public static final long FL_FACE_ID_ID_MASK = 1L << 0;
@@ -311,6 +311,8 @@ public interface Constant {
                             + ",fl_device.name"
                             + ",fl_device.group_id"
                             + ",fl_device.version"
+                            + ",fl_device.serial_no"
+                            + ",fl_device.mac"
                             + ",fl_device.create_time"
                             + ",fl_device.update_time";
     /** Contains all the full fields of the fl_face table.*/
@@ -385,6 +387,8 @@ public interface Constant {
                             + ",name"
                             + ",group_id"
                             + ",version"
+                            + ",serial_no"
+                            + ",mac"
                             + ",create_time"
                             + ",update_time";
     public static final java.util.List<String> FL_DEVICE_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_FIELDS.split(","));
@@ -393,6 +397,8 @@ public interface Constant {
                             + ",name"
                             + ",groupId"
                             + ",version"
+                            + ",serialNo"
+                            + ",mac"
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_DEVICE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_JAVA_FIELDS.split(","));
