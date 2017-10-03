@@ -435,7 +435,7 @@ public class PersonBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeBirthdate(java.util.Date)  
+     * @see #setBirthdate(java.util.Date)  
      */
     @ThriftField(name = "birthdate",value = 8)
     public void writeBirthdate(Long newVal){
@@ -702,7 +702,7 @@ public class PersonBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeExpiryDate(java.util.Date)  
+     * @see #setExpiryDate(java.util.Date)  
      */
     @ThriftField(name = "expiryDate",value = 12)
     public void writeExpiryDate(Long newVal){
@@ -784,7 +784,7 @@ public class PersonBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeCreateTime(java.util.Date)  
+     * @see #setCreateTime(java.util.Date)  
      */
     @ThriftField(name = "createTime",value = 13)
     public void writeCreateTime(Long newVal){
@@ -866,7 +866,7 @@ public class PersonBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeUpdateTime(java.util.Date)  
+     * @see #setUpdateTime(java.util.Date)  
      */
     @ThriftField(name = "updateTime",value = 14)
     public void writeUpdateTime(Long newVal){

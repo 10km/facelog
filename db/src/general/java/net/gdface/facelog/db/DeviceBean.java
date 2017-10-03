@@ -409,7 +409,7 @@ public class DeviceBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeCreateTime(java.util.Date)  
+     * @see #setCreateTime(java.util.Date)  
      */
     @ThriftField(name = "createTime",value = 8)
     public void writeCreateTime(Long newVal){
@@ -491,7 +491,7 @@ public class DeviceBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeUpdateTime(java.util.Date)  
+     * @see #setUpdateTime(java.util.Date)  
      */
     @ThriftField(name = "updateTime",value = 9)
     public void writeUpdateTime(Long newVal){

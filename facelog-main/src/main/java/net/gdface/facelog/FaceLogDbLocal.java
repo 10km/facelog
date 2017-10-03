@@ -252,7 +252,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	}
 	
 	protected static Pair<ImageBean, StoreBean> makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
-		if(null == imageBytes)return null;
+		if(Judge.isEmpty(imageBytes))return null;
 		LazyImage image = LazyImage.create(imageBytes);
 		if(null == md5)
 			md5 = FaceUtilits.getMD5String(imageBytes);
@@ -267,7 +267,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		return Pair.with(imageBean, storeBean);
 	}
 	/**
-	 * 保存图像数据,如果图像数据已经存在，则直接返回对应的{@link ImageBean} 
+	 * 保存图像数据,如果图像数据已经存在，则抛出异常 
 	 * @param imageBytes 图像数据
 	 * @param refFlDevicebyDeviceId 图像来源的设备对象，可为null
 	 * @param impFlFacebyImgMd5 图像中检测到的人脸信息对象，可为null
@@ -277,12 +277,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 * @see {@link IImageManager#save(ImageBean, DeviceBean, StoreBean, StoreBean, FaceBean[], PersonBean[])}
 	 */
 	protected static ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
-	        , FaceBean[] impFlFacebyImgMd5 , PersonBean[] impFlPersonbyImageMd5) throws ServiceRuntime{
+	        , FaceBean[] impFlFacebyImgMd5 , PersonBean[] impFlPersonbyImageMd5){
 		if(Judge.isEmpty(imageBytes))return null;
 		String md5 = FaceUtilits.getMD5String(imageBytes);
 		ImageBean imageBean = imageManager.loadByPrimaryKey(md5);
 		if(null != imageBean){
-			return imageBean;
+			throw new DuplicateReord();
 		}
 		Pair<ImageBean, StoreBean> pair;
 		try {

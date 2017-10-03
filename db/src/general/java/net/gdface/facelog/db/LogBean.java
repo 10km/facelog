@@ -566,7 +566,7 @@ public class LogBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeVerifyTime(java.util.Date)  
+     * @see #setVerifyTime(java.util.Date)  
      */
     @ThriftField(name = "verifyTime",value = 10)
     public void writeVerifyTime(Long newVal){
@@ -648,7 +648,7 @@ public class LogBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeCreateTime(java.util.Date)  
+     * @see #setCreateTime(java.util.Date)  
      */
     @ThriftField(name = "createTime",value = 11)
     public void writeCreateTime(Long newVal){

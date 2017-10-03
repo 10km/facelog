@@ -478,7 +478,7 @@ public class LogLightBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeVerifyTime(java.util.Date)  
+     * @see #setVerifyTime(java.util.Date)  
      */
     @ThriftField(name = "verifyTime",value = 9)
     public void writeVerifyTime(Long newVal){

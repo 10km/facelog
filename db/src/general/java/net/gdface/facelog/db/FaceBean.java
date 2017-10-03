@@ -1438,7 +1438,7 @@ public class FaceBean
 
     /** 
      * use Long to represent date type for thrift:swift support
-     * @see #writeCreateTime(java.util.Date)  
+     * @see #setCreateTime(java.util.Date)  
      */
     @ThriftField(name = "createTime",value = 23)
     public void writeCreateTime(Long newVal){
