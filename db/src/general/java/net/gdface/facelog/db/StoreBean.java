@@ -7,6 +7,8 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import com.facebook.swift.codec.ThriftStruct;
+import com.facebook.swift.codec.ThriftField;
 /**
  * StoreBean is a mapping of fl_store Table.
  * <br>Meta Data Information (in progress):
@@ -15,7 +17,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
-@com.facebook.swift.codec.ThriftStruct
+@ThriftStruct
 public class StoreBean
     implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant,Cloneable
 {
@@ -40,7 +42,7 @@ public class StoreBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @com.facebook.swift.codec.ThriftField(1)
+    @ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -60,7 +62,7 @@ public class StoreBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -68,7 +70,7 @@ public class StoreBean
     /**
      * @return the modified status of columns
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @ThriftField(2)
     public long getModified(){
         return modified;
     }
@@ -76,14 +78,14 @@ public class StoreBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @ThriftField(3)
     public long getInitialized(){
         return initialized;
     }
@@ -91,7 +93,7 @@ public class StoreBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -114,7 +116,7 @@ public class StoreBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -126,7 +128,7 @@ public class StoreBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to md5
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
@@ -172,7 +174,7 @@ public class StoreBean
      *
      * @return the value of encoding
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @ThriftField(5)
     public String getEncoding(){
         return encoding;
     }
@@ -184,7 +186,7 @@ public class StoreBean
      *
      * @param newVal the new value  to be assigned to encoding
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setEncoding(String newVal)
     {
         if ((newVal != null && encoding != null && (newVal.compareTo(encoding) == 0)) ||
@@ -230,7 +232,7 @@ public class StoreBean
      *
      * @return the value of data
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @ThriftField(6)
     public java.nio.ByteBuffer getData(){
         return data;
     }
@@ -242,7 +244,7 @@ public class StoreBean
      *
      * @param newVal the new value  to be assigned to data
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setData(java.nio.ByteBuffer newVal)
     {
         if ((newVal != null && data != null && (newVal.compareTo(data) == 0)) ||

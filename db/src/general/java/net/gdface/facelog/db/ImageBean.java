@@ -7,6 +7,8 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import com.facebook.swift.codec.ThriftStruct;
+import com.facebook.swift.codec.ThriftField;
 /**
  * ImageBean is a mapping of fl_image Table.
  * <br>Meta Data Information (in progress):
@@ -15,7 +17,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
-@com.facebook.swift.codec.ThriftStruct
+@ThriftStruct
 public class ImageBean
     implements Serializable,BaseBean<ImageBean>,Comparable<ImageBean>,Constant,Cloneable
 {
@@ -55,7 +57,7 @@ public class ImageBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @com.facebook.swift.codec.ThriftField(1)
+    @ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -75,7 +77,7 @@ public class ImageBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -83,7 +85,7 @@ public class ImageBean
     /**
      * @return the modified status of columns
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @ThriftField(2)
     public long getModified(){
         return modified;
     }
@@ -91,14 +93,14 @@ public class ImageBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @ThriftField(3)
     public long getInitialized(){
         return initialized;
     }
@@ -106,7 +108,7 @@ public class ImageBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -130,7 +132,7 @@ public class ImageBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -142,7 +144,7 @@ public class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to md5
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
@@ -188,7 +190,7 @@ public class ImageBean
      *
      * @return the value of format
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @ThriftField(5)
     public String getFormat(){
         return format;
     }
@@ -200,7 +202,7 @@ public class ImageBean
      *
      * @param newVal the new value  to be assigned to format
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setFormat(String newVal)
     {
         if ((newVal != null && format != null && (newVal.compareTo(format) == 0)) ||
@@ -247,7 +249,7 @@ public class ImageBean
      *
      * @return the value of width
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @ThriftField(6)
     public Integer getWidth(){
         return width;
     }
@@ -259,7 +261,7 @@ public class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to width
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setWidth(Integer newVal)
     {
         if ((newVal != null && width != null && (newVal.compareTo(width) == 0)) ||
@@ -316,7 +318,7 @@ public class ImageBean
      *
      * @return the value of height
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @ThriftField(7)
     public Integer getHeight(){
         return height;
     }
@@ -328,7 +330,7 @@ public class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to height
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setHeight(Integer newVal)
     {
         if ((newVal != null && height != null && (newVal.compareTo(height) == 0)) ||
@@ -385,7 +387,7 @@ public class ImageBean
      *
      * @return the value of depth
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @ThriftField(8)
     public Integer getDepth(){
         return depth;
     }
@@ -397,7 +399,7 @@ public class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to depth
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setDepth(Integer newVal)
     {
         if ((newVal != null && depth != null && (newVal.compareTo(depth) == 0)) ||
@@ -454,7 +456,7 @@ public class ImageBean
      *
      * @return the value of faceNum
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @ThriftField(9)
     public Integer getFaceNum(){
         return faceNum;
     }
@@ -466,7 +468,7 @@ public class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to faceNum
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setFaceNum(Integer newVal)
     {
         if ((newVal != null && faceNum != null && (newVal.compareTo(faceNum) == 0)) ||
@@ -523,7 +525,7 @@ public class ImageBean
      *
      * @return the value of thumbMd5
      */
-    @com.facebook.swift.codec.ThriftField(10)
+    @ThriftField(10)
     public String getThumbMd5(){
         return thumbMd5;
     }
@@ -535,7 +537,7 @@ public class ImageBean
      *
      * @param newVal the new value  to be assigned to thumbMd5
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setThumbMd5(String newVal)
     {
         if ((newVal != null && thumbMd5 != null && (newVal.compareTo(thumbMd5) == 0)) ||
@@ -582,7 +584,7 @@ public class ImageBean
      *
      * @return the value of deviceId
      */
-    @com.facebook.swift.codec.ThriftField(11)
+    @ThriftField(11)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -594,7 +596,7 @@ public class ImageBean
      *
      * @param newVal the new value  to be assigned to deviceId
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
@@ -647,12 +649,12 @@ public class ImageBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @com.facebook.swift.codec.ThriftField(12)
+    @ThriftField(12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -662,12 +664,12 @@ public class ImageBean
      */
     private StoreBean referencedByMd5;
     /** Getter method for {@link #referencedByMd5}. */
-    @com.facebook.swift.codec.ThriftField(13)
+    @ThriftField(13)
     public StoreBean getReferencedByMd5() {
         return this.referencedByMd5;
     }
     /** Setter method for {@link #referencedByMd5}. */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setReferencedByMd5(StoreBean reference) {
         this.referencedByMd5 = reference;
     }
@@ -677,12 +679,12 @@ public class ImageBean
      */
     private StoreBean referencedByThumbMd5;
     /** Getter method for {@link #referencedByThumbMd5}. */
-    @com.facebook.swift.codec.ThriftField(14)
+    @ThriftField(14)
     public StoreBean getReferencedByThumbMd5() {
         return this.referencedByThumbMd5;
     }
     /** Setter method for {@link #referencedByThumbMd5}. */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setReferencedByThumbMd5(StoreBean reference) {
         this.referencedByThumbMd5 = reference;
     }

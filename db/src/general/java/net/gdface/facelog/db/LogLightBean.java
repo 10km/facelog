@@ -7,6 +7,8 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import com.facebook.swift.codec.ThriftStruct;
+import com.facebook.swift.codec.ThriftField;
 /**
  * LogLightBean is a mapping of fl_log_light Table.
  * <br>Meta Data Information (in progress):
@@ -15,7 +17,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
-@com.facebook.swift.codec.ThriftStruct
+@ThriftStruct
 public class LogLightBean
     implements Serializable,BaseBean<LogLightBean>,Comparable<LogLightBean>,Constant,Cloneable
 {
@@ -49,7 +51,7 @@ public class LogLightBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @com.facebook.swift.codec.ThriftField(1)
+    @ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -69,7 +71,7 @@ public class LogLightBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -77,7 +79,7 @@ public class LogLightBean
     /**
      * @return the modified status of columns
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @ThriftField(2)
     public long getModified(){
         return modified;
     }
@@ -85,14 +87,14 @@ public class LogLightBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @ThriftField(3)
     public long getInitialized(){
         return initialized;
     }
@@ -100,7 +102,7 @@ public class LogLightBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -120,7 +122,7 @@ public class LogLightBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -132,7 +134,7 @@ public class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -189,7 +191,7 @@ public class LogLightBean
      *
      * @return the value of personId
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @ThriftField(5)
     public Integer getPersonId(){
         return personId;
     }
@@ -201,7 +203,7 @@ public class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to personId
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
@@ -258,7 +260,7 @@ public class LogLightBean
      *
      * @return the value of name
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @ThriftField(6)
     public String getName(){
         return name;
     }
@@ -270,7 +272,7 @@ public class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to name
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -316,7 +318,7 @@ public class LogLightBean
      *
      * @return the value of papersType
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @ThriftField(7)
     public Integer getPapersType(){
         return papersType;
     }
@@ -328,7 +330,7 @@ public class LogLightBean
      *
      * @param newVal the new value  to be assigned to papersType
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
@@ -384,7 +386,7 @@ public class LogLightBean
      *
      * @return the value of papersNum
      */
-    @com.facebook.swift.codec.ThriftField(8)
+    @ThriftField(8)
     public String getPapersNum(){
         return papersNum;
     }
@@ -396,7 +398,7 @@ public class LogLightBean
      *
      * @param newVal the new value  to be assigned to papersNum
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
@@ -443,9 +445,16 @@ public class LogLightBean
      *
      * @return the value of verifyTime
      */
-    @com.facebook.swift.codec.ThriftField(9)
     public java.util.Date getVerifyTime(){
         return verifyTime;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getVerifyTime()
+     */
+    @ThriftField(name = "verifyTime",value = 9)
+    public Long readVerifyTime(){
+        return null == verifyTime ? null:verifyTime.getTime();
     }
     /**
      * Setter method for {@link #verifyTime}.<br>
@@ -455,7 +464,6 @@ public class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to verifyTime
      */
-    @com.facebook.swift.codec.ThriftField
     public void setVerifyTime(java.util.Date newVal)
     {
         if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
@@ -468,6 +476,14 @@ public class LogLightBean
         initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeVerifyTime(java.util.Date)  
+     */
+    @ThriftField(name = "verifyTime",value = 9)
+    public void writeVerifyTime(Long newVal){
+        setVerifyTime(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

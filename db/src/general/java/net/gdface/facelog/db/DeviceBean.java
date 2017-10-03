@@ -7,6 +7,8 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import com.facebook.swift.codec.ThriftStruct;
+import com.facebook.swift.codec.ThriftField;
 /**
  * DeviceBean is a mapping of fl_device Table.
  * <br>Meta Data Information (in progress):
@@ -15,7 +17,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
-@com.facebook.swift.codec.ThriftStruct
+@ThriftStruct
 public class DeviceBean
     implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant,Cloneable
 {
@@ -47,7 +49,7 @@ public class DeviceBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @com.facebook.swift.codec.ThriftField(1)
+    @ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -67,7 +69,7 @@ public class DeviceBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -75,7 +77,7 @@ public class DeviceBean
     /**
      * @return the modified status of columns
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @ThriftField(2)
     public long getModified(){
         return modified;
     }
@@ -83,14 +85,14 @@ public class DeviceBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @ThriftField(3)
     public long getInitialized(){
         return initialized;
     }
@@ -98,7 +100,7 @@ public class DeviceBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -122,7 +124,7 @@ public class DeviceBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -134,7 +136,7 @@ public class DeviceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -190,7 +192,7 @@ public class DeviceBean
      *
      * @return the value of name
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @ThriftField(5)
     public String getName(){
         return name;
     }
@@ -202,7 +204,7 @@ public class DeviceBean
      *
      * @param newVal the new value  to be assigned to name
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -248,7 +250,7 @@ public class DeviceBean
      *
      * @return the value of groupId
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @ThriftField(6)
     public Integer getGroupId(){
         return groupId;
     }
@@ -260,7 +262,7 @@ public class DeviceBean
      *
      * @param newVal the new value  to be assigned to groupId
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
@@ -316,7 +318,7 @@ public class DeviceBean
      *
      * @return the value of version
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @ThriftField(7)
     public String getVersion(){
         return version;
     }
@@ -328,7 +330,7 @@ public class DeviceBean
      *
      * @param newVal the new value  to be assigned to version
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setVersion(String newVal)
     {
         if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
@@ -374,9 +376,16 @@ public class DeviceBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(8)
     public java.util.Date getCreateTime(){
         return createTime;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getCreateTime()
+     */
+    @ThriftField(name = "createTime",value = 8)
+    public Long readCreateTime(){
+        return null == createTime ? null:createTime.getTime();
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -386,7 +395,6 @@ public class DeviceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
-    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
@@ -399,6 +407,14 @@ public class DeviceBean
         initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeCreateTime(java.util.Date)  
+     */
+    @ThriftField(name = "createTime",value = 8)
+    public void writeCreateTime(Long newVal){
+        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -442,9 +458,16 @@ public class DeviceBean
      *
      * @return the value of updateTime
      */
-    @com.facebook.swift.codec.ThriftField(9)
     public java.util.Date getUpdateTime(){
         return updateTime;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getUpdateTime()
+     */
+    @ThriftField(name = "updateTime",value = 9)
+    public Long readUpdateTime(){
+        return null == updateTime ? null:updateTime.getTime();
     }
     /**
      * Setter method for {@link #updateTime}.<br>
@@ -454,7 +477,6 @@ public class DeviceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to updateTime
      */
-    @com.facebook.swift.codec.ThriftField
     public void setUpdateTime(java.util.Date newVal)
     {
         if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
@@ -467,6 +489,14 @@ public class DeviceBean
         initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeUpdateTime(java.util.Date)  
+     */
+    @ThriftField(name = "updateTime",value = 9)
+    public void writeUpdateTime(Long newVal){
+        setUpdateTime(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

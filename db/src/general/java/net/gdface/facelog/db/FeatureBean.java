@@ -7,6 +7,8 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import com.facebook.swift.codec.ThriftStruct;
+import com.facebook.swift.codec.ThriftField;
 /**
  * FeatureBean is a mapping of fl_feature Table.
  * <br>Meta Data Information (in progress):
@@ -15,7 +17,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
-@com.facebook.swift.codec.ThriftStruct
+@ThriftStruct
 public class FeatureBean
     implements Serializable,BaseBean<FeatureBean>,Comparable<FeatureBean>,Constant,Cloneable
 {
@@ -42,7 +44,7 @@ public class FeatureBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @com.facebook.swift.codec.ThriftField(1)
+    @ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -62,7 +64,7 @@ public class FeatureBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -70,7 +72,7 @@ public class FeatureBean
     /**
      * @return the modified status of columns
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @ThriftField(2)
     public long getModified(){
         return modified;
     }
@@ -78,14 +80,14 @@ public class FeatureBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @ThriftField(3)
     public long getInitialized(){
         return initialized;
     }
@@ -93,7 +95,7 @@ public class FeatureBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -116,7 +118,7 @@ public class FeatureBean
      *
      * @return the value of md5
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @ThriftField(4)
     public String getMd5(){
         return md5;
     }
@@ -128,7 +130,7 @@ public class FeatureBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to md5
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
@@ -176,7 +178,7 @@ public class FeatureBean
      *
      * @return the value of personId
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @ThriftField(5)
     public Integer getPersonId(){
         return personId;
     }
@@ -188,7 +190,7 @@ public class FeatureBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to personId
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
@@ -245,7 +247,7 @@ public class FeatureBean
      *
      * @return the value of feature
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @ThriftField(6)
     public java.nio.ByteBuffer getFeature(){
         return feature;
     }
@@ -257,7 +259,7 @@ public class FeatureBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to feature
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setFeature(java.nio.ByteBuffer newVal)
     {
         if ((newVal != null && feature != null && (newVal.compareTo(feature) == 0)) ||
@@ -303,9 +305,16 @@ public class FeatureBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(7)
     public java.util.Date getCreateTime(){
         return createTime;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getCreateTime()
+     */
+    @ThriftField(name = "createTime",value = 7)
+    public Long readCreateTime(){
+        return null == createTime ? null:createTime.getTime();
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -315,7 +324,6 @@ public class FeatureBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
-    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
@@ -328,6 +336,14 @@ public class FeatureBean
         initialized |= FL_FEATURE_ID_CREATE_TIME_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeCreateTime(java.util.Date)  
+     */
+    @ThriftField(name = "createTime",value = 7)
+    public void writeCreateTime(Long newVal){
+        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -368,12 +384,12 @@ public class FeatureBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @com.facebook.swift.codec.ThriftField(8)
+    @ThriftField(8)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }

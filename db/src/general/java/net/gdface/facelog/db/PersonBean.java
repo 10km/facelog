@@ -7,6 +7,8 @@
 
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import com.facebook.swift.codec.ThriftStruct;
+import com.facebook.swift.codec.ThriftField;
 /**
  * PersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
@@ -15,7 +17,7 @@ import java.io.Serializable;
  * </ul>
  * @author guyadong
 */
-@com.facebook.swift.codec.ThriftStruct
+@ThriftStruct
 public class PersonBean
     implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant,Cloneable
 {
@@ -62,7 +64,7 @@ public class PersonBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @com.facebook.swift.codec.ThriftField(1)
+    @ThriftField(1)
     public boolean isNew()
     {
         return _isNew;
@@ -82,7 +84,7 @@ public class PersonBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -90,7 +92,7 @@ public class PersonBean
     /**
      * @return the modified status of columns
      */
-    @com.facebook.swift.codec.ThriftField(2)
+    @ThriftField(2)
     public long getModified(){
         return modified;
     }
@@ -98,14 +100,14 @@ public class PersonBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @com.facebook.swift.codec.ThriftField(3)
+    @ThriftField(3)
     public long getInitialized(){
         return initialized;
     }
@@ -113,7 +115,7 @@ public class PersonBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -137,7 +139,7 @@ public class PersonBean
      *
      * @return the value of id
      */
-    @com.facebook.swift.codec.ThriftField(4)
+    @ThriftField(4)
     public Integer getId(){
         return id;
     }
@@ -149,7 +151,7 @@ public class PersonBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -205,7 +207,7 @@ public class PersonBean
      *
      * @return the value of groupId
      */
-    @com.facebook.swift.codec.ThriftField(5)
+    @ThriftField(5)
     public Integer getGroupId(){
         return groupId;
     }
@@ -217,7 +219,7 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to groupId
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
@@ -274,7 +276,7 @@ public class PersonBean
      *
      * @return the value of name
      */
-    @com.facebook.swift.codec.ThriftField(6)
+    @ThriftField(6)
     public String getName(){
         return name;
     }
@@ -286,7 +288,7 @@ public class PersonBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to name
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -332,7 +334,7 @@ public class PersonBean
      *
      * @return the value of sex
      */
-    @com.facebook.swift.codec.ThriftField(7)
+    @ThriftField(7)
     public Integer getSex(){
         return sex;
     }
@@ -344,7 +346,7 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to sex
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setSex(Integer newVal)
     {
         if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
@@ -400,9 +402,16 @@ public class PersonBean
      *
      * @return the value of birthdate
      */
-    @com.facebook.swift.codec.ThriftField(8)
     public java.util.Date getBirthdate(){
         return birthdate;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getBirthdate()
+     */
+    @ThriftField(name = "birthdate",value = 8)
+    public Long readBirthdate(){
+        return null == birthdate ? null:birthdate.getTime();
     }
     /**
      * Setter method for {@link #birthdate}.<br>
@@ -412,7 +421,6 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to birthdate
      */
-    @com.facebook.swift.codec.ThriftField
     public void setBirthdate(java.util.Date newVal)
     {
         if ((newVal != null && birthdate != null && (newVal.compareTo(birthdate) == 0)) ||
@@ -425,6 +433,14 @@ public class PersonBean
         initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeBirthdate(java.util.Date)  
+     */
+    @ThriftField(name = "birthdate",value = 8)
+    public void writeBirthdate(Long newVal){
+        setBirthdate(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #birthdate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -468,7 +484,7 @@ public class PersonBean
      *
      * @return the value of papersType
      */
-    @com.facebook.swift.codec.ThriftField(9)
+    @ThriftField(9)
     public Integer getPapersType(){
         return papersType;
     }
@@ -480,7 +496,7 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to papersType
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
@@ -536,7 +552,7 @@ public class PersonBean
      *
      * @return the value of papersNum
      */
-    @com.facebook.swift.codec.ThriftField(10)
+    @ThriftField(10)
     public String getPapersNum(){
         return papersNum;
     }
@@ -548,7 +564,7 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to papersNum
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
@@ -595,7 +611,7 @@ public class PersonBean
      *
      * @return the value of imageMd5
      */
-    @com.facebook.swift.codec.ThriftField(11)
+    @ThriftField(11)
     public String getImageMd5(){
         return imageMd5;
     }
@@ -607,7 +623,7 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to imageMd5
      */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setImageMd5(String newVal)
     {
         if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
@@ -653,9 +669,16 @@ public class PersonBean
      *
      * @return the value of expiryDate
      */
-    @com.facebook.swift.codec.ThriftField(12)
     public java.util.Date getExpiryDate(){
         return expiryDate;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getExpiryDate()
+     */
+    @ThriftField(name = "expiryDate",value = 12)
+    public Long readExpiryDate(){
+        return null == expiryDate ? null:expiryDate.getTime();
     }
     /**
      * Setter method for {@link #expiryDate}.<br>
@@ -665,7 +688,6 @@ public class PersonBean
      *
      * @param newVal the new value  to be assigned to expiryDate
      */
-    @com.facebook.swift.codec.ThriftField
     public void setExpiryDate(java.util.Date newVal)
     {
         if ((newVal != null && expiryDate != null && (newVal.compareTo(expiryDate) == 0)) ||
@@ -678,6 +700,14 @@ public class PersonBean
         initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeExpiryDate(java.util.Date)  
+     */
+    @ThriftField(name = "expiryDate",value = 12)
+    public void writeExpiryDate(Long newVal){
+        setExpiryDate(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #expiryDate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -721,9 +751,16 @@ public class PersonBean
      *
      * @return the value of createTime
      */
-    @com.facebook.swift.codec.ThriftField(13)
     public java.util.Date getCreateTime(){
         return createTime;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getCreateTime()
+     */
+    @ThriftField(name = "createTime",value = 13)
+    public Long readCreateTime(){
+        return null == createTime ? null:createTime.getTime();
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -733,7 +770,6 @@ public class PersonBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to createTime
      */
-    @com.facebook.swift.codec.ThriftField
     public void setCreateTime(java.util.Date newVal)
     {
         if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
@@ -746,6 +782,14 @@ public class PersonBean
         initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeCreateTime(java.util.Date)  
+     */
+    @ThriftField(name = "createTime",value = 13)
+    public void writeCreateTime(Long newVal){
+        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -789,9 +833,16 @@ public class PersonBean
      *
      * @return the value of updateTime
      */
-    @com.facebook.swift.codec.ThriftField(14)
     public java.util.Date getUpdateTime(){
         return updateTime;
+    }
+    /** 
+     * use Long to represent date type for thrift:swift support 
+     * @see #getUpdateTime()
+     */
+    @ThriftField(name = "updateTime",value = 14)
+    public Long readUpdateTime(){
+        return null == updateTime ? null:updateTime.getTime();
     }
     /**
      * Setter method for {@link #updateTime}.<br>
@@ -801,7 +852,6 @@ public class PersonBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to updateTime
      */
-    @com.facebook.swift.codec.ThriftField
     public void setUpdateTime(java.util.Date newVal)
     {
         if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
@@ -814,6 +864,14 @@ public class PersonBean
         initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
     }
 
+    /** 
+     * use Long to represent date type for thrift:swift support
+     * @see #writeUpdateTime(java.util.Date)  
+     */
+    @ThriftField(name = "updateTime",value = 14)
+    public void writeUpdateTime(Long newVal){
+        setUpdateTime(null == newVal?null:new java.util.Date(newVal));
+    }
     /**
      * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -854,12 +912,12 @@ public class PersonBean
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @com.facebook.swift.codec.ThriftField(15)
+    @ThriftField(15)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
     /** Setter method for {@link #referencedByImageMd5}. */
-    @com.facebook.swift.codec.ThriftField
+    @ThriftField
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
     }
