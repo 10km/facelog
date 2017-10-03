@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS fl_device (
   `name`        varchar(32) DEFAULT NULL COMMENT '设备名称',
   `group_id`    int(11) DEFAULT NULL COMMENT '设备所属组id',
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
+  `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
+  `mac`         char(12) DEFAULT NULL UNIQUE COMMENT '6字节MAC地址(HEX)',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `group_id` (`group_id` ASC)
@@ -37,18 +39,17 @@ CREATE TABLE IF NOT EXISTS fl_device (
  md5外键引用fl_store(md5),所以删除 fl_store 中对应的md5,会导致 fl_image 中的记录同步删除(ON DELETE CASCADE),
  所以删除图像最方便的方式是删除 fl_store 中对应的md5
  删除 fl_image 中记录时会同步级联删除 fl_face 中 image_md5 关联的所有记录
+ thumb_md5,md5不做外键引用,以与 fl_store 解藕
 */
 CREATE TABLE IF NOT EXISTS fl_image (
-  `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,同时也是外键fl_store(md5)',
+  `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key',
   `format`      varchar(32)  COMMENT '图像格式', 
   `width`       int NOT NULL COMMENT '图像宽度',
   `height`      int NOT NULL COMMENT '图像高度',
-  `depth`       int default 0 NOT NULL COMMENT '通道数',
-  `face_num`    int default 0 NOT NULL COMMENT '图像中的人脸数目',
-  `thumb_md5`   char(32)   DEFAULT NULL COMMENT '外键,缩略图md5,图像数据存储在fl_imae_store(md5)',
+  `depth`       int DEFAULT 0 NOT NULL  COMMENT '通道数',
+  `face_num`    int DEFAULT 0 NOT NULL  COMMENT '图像中的人脸数目',
+  `thumb_md5`   char(32)   DEFAULT NULL COMMENT '缩略图md5,图像数据存储在 fl_imae_store(md5)',
   `device_id`   int(11)    DEFAULT NULL COMMENT '外键,图像来源设备',
-  FOREIGN KEY (md5)        REFERENCES fl_store(md5) ON DELETE CASCADE, 
-  FOREIGN KEY (thumb_md5)  REFERENCES fl_store(md5) ON DELETE SET NULL,
   FOREIGN KEY (device_id)  REFERENCES fl_device(id) ON DELETE SET NULL
 ) COMMENT '图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)' ;
 
@@ -126,7 +127,7 @@ CREATE TABLE IF NOT EXISTS fl_log (
   `id`              int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '日志id',
   `person_id`       int(11) NOT NULL COMMENT '外键,用户id',
   `device_id`       int(11) DEFAULT NULL COMMENT '外键,图像来源设备id',
-  `verify_feature`  varchar(32) DEFAULT NULL COMMENT '外键,用于验证身份的人脸特征数据MD5 id',
+  `verify_feature`  char(32)DEFAULT NULL COMMENT '外键,用于验证身份的人脸特征数据MD5 id',
   `compare_face`    int(11) DEFAULT NULL COMMENT '外键,数据库中相似度最高的人脸 id',
   `similarty`	    double  DEFAULT NULL COMMENT '验证相似度',
   `verify_time`     timestamp NOT NULL COMMENT '验证时间(可能由前端设备提供时间)',
