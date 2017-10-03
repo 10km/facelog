@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS fl_person (
 */
 CREATE TABLE IF NOT EXISTS fl_feature (
   `md5`         char(32) NOT NULL PRIMARY KEY COMMENT '主键,特征码md5校验码',
-  `person_id`   int(11)  NOT NULL COMMENT '外键,所属用户id',
+  `person_id`   int(11)  DEFAULT NULL COMMENT '外键,所属用户id',
   `feature`     blob     NOT NULL COMMENT '二进制特征数据',
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE CASCADE
