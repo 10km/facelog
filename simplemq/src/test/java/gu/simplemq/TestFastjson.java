@@ -112,7 +112,7 @@ public class TestFastjson {
 		group.addUser(rootUser);
 		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
 		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
-
+		
 		String serString = JSON.toJSONString(group.byteBuffer);
 		System.out.println(serString);
 		ByteBuffer deserialedByteBuffer = JSON.parseObject(serString,ByteBuffer.class);

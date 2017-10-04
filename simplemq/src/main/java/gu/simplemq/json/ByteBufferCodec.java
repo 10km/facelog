@@ -39,11 +39,23 @@ public class ByteBufferCodec implements ObjectSerializer, ObjectDeserializer {
 	public int getFastMatchToken() {
 		return JSONToken.LITERAL_STRING;
 	}
-    private static final byte[] getBytes(ByteBuffer buffer){
-    	byte[] bytes = new byte[buffer.remaining()];
-    	buffer.get(bytes);
-    	return bytes;
-    }
+	/**
+	 * 返回buffer中所有字节(0~limit)
+	 * @param buffer
+	 * @return
+	 */
+	private static final byte[] getAllBytesInBuffer(ByteBuffer buffer){
+		if(buffer.hasArray())return buffer.array();
+		int pos = buffer.position();
+		try{
+			buffer.position(0);
+			byte[] bytes = new byte[buffer.remaining()];
+			buffer.get(bytes);
+			return bytes;
+		}finally{
+			buffer.position(pos);
+		}
+	}
 	/** 
 	 * 直接引用{@link PrimitiveArraySerializer}实现序列化
 	 */
@@ -51,7 +63,7 @@ public class ByteBufferCodec implements ObjectSerializer, ObjectDeserializer {
 	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features)
 			throws IOException {
         if ( (object instanceof ByteBuffer) ) {
-        	PrimitiveArraySerializer.instance.write(serializer, getBytes((ByteBuffer)object), fieldName, fieldType, features);
+        	PrimitiveArraySerializer.instance.write(serializer, getAllBytesInBuffer((ByteBuffer)object), fieldName, fieldType, features);
         }else{
         	serializer.out.writeNull(SerializerFeature.WriteNullListAsEmpty);
         }
