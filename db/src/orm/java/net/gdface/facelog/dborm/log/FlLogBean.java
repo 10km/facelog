@@ -856,6 +856,13 @@ public class FlLogBean
     public int compareTo(FlLogBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
+            .append(getPersonId(), object.getPersonId())
+            .append(getDeviceId(), object.getDeviceId())
+            .append(getVerifyFeature(), object.getVerifyFeature())
+            .append(getCompareFace(), object.getCompareFace())
+            .append(getSimilarty(), object.getSimilarty())
+            .append(getVerifyTime(), object.getVerifyTime())
+            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     @Override

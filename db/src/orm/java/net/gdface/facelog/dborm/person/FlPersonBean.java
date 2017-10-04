@@ -1016,6 +1016,16 @@ public class FlPersonBean
     public int compareTo(FlPersonBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
+            .append(getGroupId(), object.getGroupId())
+            .append(getName(), object.getName())
+            .append(getSex(), object.getSex())
+            .append(getBirthdate(), object.getBirthdate())
+            .append(getPapersType(), object.getPapersType())
+            .append(getPapersNum(), object.getPapersNum())
+            .append(getImageMd5(), object.getImageMd5())
+            .append(getExpiryDate(), object.getExpiryDate())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     @Override

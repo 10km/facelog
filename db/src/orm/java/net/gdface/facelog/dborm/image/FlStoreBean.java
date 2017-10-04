@@ -396,6 +396,8 @@ public class FlStoreBean
     public int compareTo(FlStoreBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
+            .append(getEncoding(), object.getEncoding())
+            .append(getData(), object.getData())
             .toComparison();
     }
     @Override

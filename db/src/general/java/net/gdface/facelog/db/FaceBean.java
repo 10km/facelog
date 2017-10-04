@@ -1740,6 +1740,25 @@ public class FaceBean
     public int compareTo(FaceBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
+            .append(getImageMd5(), object.getImageMd5())
+            .append(getFaceLeft(), object.getFaceLeft())
+            .append(getFaceTop(), object.getFaceTop())
+            .append(getFaceWidth(), object.getFaceWidth())
+            .append(getFaceHeight(), object.getFaceHeight())
+            .append(getEyeLeftx(), object.getEyeLeftx())
+            .append(getEyeLefty(), object.getEyeLefty())
+            .append(getEyeRightx(), object.getEyeRightx())
+            .append(getEyeRighty(), object.getEyeRighty())
+            .append(getMouthX(), object.getMouthX())
+            .append(getMouthY(), object.getMouthY())
+            .append(getNoseX(), object.getNoseX())
+            .append(getNoseY(), object.getNoseY())
+            .append(getAngleYaw(), object.getAngleYaw())
+            .append(getAnglePitch(), object.getAnglePitch())
+            .append(getAngleRoll(), object.getAngleRoll())
+            .append(getExtInfo(), object.getExtInfo())
+            .append(getFeatureMd5(), object.getFeatureMd5())
+            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     @Override

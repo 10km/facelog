@@ -762,6 +762,13 @@ public class FlDeviceBean
     public int compareTo(FlDeviceBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
+            .append(getName(), object.getName())
+            .append(getGroupId(), object.getGroupId())
+            .append(getVersion(), object.getVersion())
+            .append(getSerialNo(), object.getSerialNo())
+            .append(getMac(), object.getMac())
+            .append(getCreateTime(), object.getCreateTime())
+            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     @Override

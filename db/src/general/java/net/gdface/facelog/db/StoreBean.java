@@ -406,6 +406,8 @@ public class StoreBean
     public int compareTo(StoreBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
+            .append(getEncoding(), object.getEncoding())
+            .append(getData(), object.getData())
             .toComparison();
     }
     @Override

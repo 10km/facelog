@@ -528,6 +528,9 @@ public class FeatureBean
     public int compareTo(FeatureBean object){
         return new CompareToBuilder()
             .append(getMd5(), object.getMd5())
+            .append(getPersonId(), object.getPersonId())
+            .append(getFeature(), object.getFeature())
+            .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     @Override
