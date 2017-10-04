@@ -60,8 +60,14 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static StoreBean _getStore(String md5){
 		return storeManager.loadByPrimaryKey(md5);
 	}
+	protected static DeviceBean _saveDevice(DeviceBean deviceBean){
+		return deviceManager.save(deviceBean);
+	}
 	protected static DeviceBean _getDevice(Integer deviceId){
 		return deviceManager.loadByPrimaryKey(deviceId); 
+	}
+	protected static int _deleteDevice(Integer deviceId){
+		return deviceManager.deleteByPrimaryKey(deviceId);
 	}
 	protected static Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
 		if(Judge.isEmpty(imageBytes))return null;
@@ -123,10 +129,10 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		featureBean.setFeature(feature);
 		return featureBean;
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5){
 		return featureManager.save(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean)throws ServiceRuntime{
+	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean){
 		Assert.notEmpty(faceInfo, "faceInfo");
 		for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 			 ByteBuffer imageBytes = entry.getKey();
@@ -137,14 +143,15 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 		return _addFeature(feature, personBean, faceInfo.values());
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean)throws ServiceRuntime{
-		PersonBean personBean = _getPerson(personId);
-		Assert.notNull(personBean, "personBean");
-		return _addFeature(feature, personBean, faceInfo, deviceBean);
-	}
 	protected static FeatureBean _getFeature(String md5){
 		return featureManager.loadByPrimaryKey(md5);
 	}
+	/**
+	 * 删除featureMd5指定的特征记录及关联的face记录
+	 * @param featureMd5
+	 * @param deleteImage 是否删除关联的 image记录
+	 * @return
+	 */
 	protected static List<String> _deleteFeature(String featureMd5,boolean deleteImage){
 		List<String> imageKeys = _getImageKeysImportedByFeatureMd5(featureMd5);
 		if(deleteImage){
@@ -159,7 +166,14 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		featureManager.deleteByPrimaryKey(featureMd5);
 		return imageKeys;
 	}
-	protected static int _deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
+	/**
+	 * 删除 personId 关联的所有特征(feature)记录
+	 * @param personId
+	 * @param deleteImage 是否删除关联的 image记录
+	 * @return
+	 * @see #_deleteFeature(String, boolean)
+	 */
+	protected static int _deleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
 		int count = 0;
 		for(FeatureBean featureBean: personManager.getFeatureBeansByPersonIdAsList(personId)){
 			_deleteFeature(featureBean.getMd5(),deleteImage);
@@ -167,7 +181,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 		return count;
 	}
-	protected static PersonBean _setRefPersonOfFeature(String featureMd5,int personId){
+	protected static PersonBean _setRefPersonOfFeature(String featureMd5,Integer personId){
 		PersonBean personBean = _getPerson(personId);
 		FeatureBean featureBean = _getFeature(featureMd5);
 		if(null == personBean || null == featureBean)return null;
@@ -183,29 +197,50 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 		return imageBeans;
 	}
-	protected static void _replaceFeature(int personId,String featureMd5,boolean deleteImage)throws ServiceRuntime{		
+	protected static void _replaceFeature(Integer personId,String featureMd5,boolean deleteImage){		
 		_deleteAllFeaturesByPersonId(personId, deleteImage);
 		_setRefPersonOfFeature(featureMd5,personId);
 	}
-	protected static PersonBean _getPerson(Integer id){
-		return personManager.loadByPrimaryKey(id); 
+	protected static PersonBean _getPerson(Integer personId){
+		return personManager.loadByPrimaryKey(personId); 
 	}
 	protected static List<PersonBean> _getPerson(Collection<Integer> collection){
 		return personManager.loadByPrimaryKey(collection); 
 	}
-	protected static PersonBean _savePerson(PersonBean bean, ImageBean imageBean,Collection<FeatureBean> featureBean)throws ServiceRuntime {
+	protected static PersonBean _savePerson(PersonBean bean, ImageBean imageBean,Collection<FeatureBean> featureBean){
 		return personManager.save(bean, imageBean, featureBean, null);
 	}
+	/**
+	 * 保存指定的人员记录
+	 * @param bean
+	 * @param imageData 人员标准照
+	 * @param featureBean 人脸特征对象 
+	 * @param deviceBean
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer imageData,FeatureBean featureBean, DeviceBean deviceBean)throws ServiceRuntime {
 		ImageBean imageBean = _addImage(imageData,deviceBean,null,null);
 		return _savePerson(bean, imageBean, Arrays.asList(featureBean));
 	}
-	protected static int _deletePerson(int personId) {
+	/**
+	 * 删除personId指定的人员(person)记录及关联的所有记录
+	 * @param personId
+	 * @return 返回删除的记录数量
+	 */
+	protected static int _deletePerson(Integer personId) {
 		PersonBean personBean = _getPerson(personId);
 		if(null == personBean)return 0;
+		// 删除标准照
 		_deleteImage(personBean.getImageMd5());
+		_deleteAllFeaturesByPersonId(personId,true);
 		return personManager.deleteByPrimaryKey(personId);
 	}
+	/**
+	 *  删除collection指定的人员(person)记录及关联的所有记录
+	 * @param collection personId集合
+	 * @return 返回删除的 person 记录数量
+	 */
 	protected static int _deletePerson(Collection<Integer> collection) {
 		if(null == collection)return 0;
 		int count =0;
@@ -214,22 +249,40 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 		return count;
 	}
-	public PersonBean getPerson(int id)throws ServiceRuntime {
+	/**
+	 * 返回personId指定的人员记录
+	 * @param personId
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public PersonBean getPerson(int personId)throws ServiceRuntime {
 		try{
-			return _getPerson(id);
+			return _getPerson(personId);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
-	public List<PersonBean> getPerson(List<Integer> id)throws ServiceRuntime {
+	/**
+	 * 返回 list 指定的人员记录
+	 * @param list 人员id列表
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public List<PersonBean> getPerson(List<Integer> list)throws ServiceRuntime {
 		try{
-			return _getPerson(id);
+			return _getPerson(list);
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
+	/**
+	 * 删除personId指定的人员记录
+	 * @param personId
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public int deletePerson(final int personId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<Integer>(){
@@ -243,12 +296,18 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	public int deletePerson(final List<Integer> personId)throws ServiceRuntime {
+	/**
+	 * 删除 list 指定的人员记录
+	 * @param list 人员id列表
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public int deletePerson(final List<Integer> list)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePerson(personId);
+					return _deletePerson(list);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -256,16 +315,28 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	public boolean existsPerson(int id)throws ServiceRuntime {
+	/**
+	 * 判断是否存在personId指定的人员记录
+	 * @param persionId
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public boolean existsPerson(int persionId)throws ServiceRuntime {
 		try{
-			return personManager.existsPrimaryKey(id);
+			return personManager.existsPrimaryKey(persionId);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public boolean isDisable(int id)throws ServiceRuntime{
+	/**
+	 * 判断 personId 指定的人员记录是否过期
+	 * @param personId
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public boolean isDisable(int personId)throws ServiceRuntime{
 		try{
-			PersonBean personBean = getPerson(id);
+			PersonBean personBean = getPerson(personId);
 			if(null == personBean)
 				return true;
 			Date expiryDate = personBean.getExpiryDate();
@@ -276,12 +347,19 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	public void disablePerson(int id)throws ServiceRuntime{
-		setPersonExpiryDate(id,new Date());
+	/** @see #_setRefPersonOfFeature(String, Integer) */
+	public void disablePerson(int personId)throws ServiceRuntime{
+		setPersonExpiryDate(personId,new Date());
 	}
-	public void setPersonExpiryDate(int id,Date expiryDate)throws ServiceRuntime{
+	/**
+	 * 修改 personId 指定的人员记录的有效期
+	 * @param personId
+	 * @param expiryDate
+	 * @throws ServiceRuntime
+	 */
+	public void setPersonExpiryDate(int personId,Date expiryDate)throws ServiceRuntime{
 		try{
-			PersonBean personBean = getPerson(id);
+			PersonBean personBean = getPerson(personId);
 			if(null == personBean)
 				return ;
 			personBean.setExpiryDate(expiryDate);
@@ -292,6 +370,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
+	/**
+	 * 保存人员(person)记录
+	 * @param bean
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public PersonBean savePerson(PersonBean bean)throws ServiceRuntime {
 		try{
 			return personManager.save(bean);
@@ -299,6 +383,11 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}	
+	/**
+	 * 保存人员(person)记录
+	 * @param beans 
+	 * @throws ServiceRuntime
+	 */
 	public void savePerson(List<PersonBean> beans)throws ServiceRuntime  {
 		try{
 			personManager.saveAsTransaction(beans);
@@ -307,16 +396,26 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		} 
 	}
 	
+	/**
+	 * 根据证件号码返回人员记录
+	 * @param papersNum
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
 		try{
 			Assert.notEmpty(papersNum, "papersNum");
-			PersonBean bean = new PersonBean();
-			bean.setPapersNum(papersNum);
-			return personManager.loadUniqueUsingTemplate(bean);
+			return personManager.loadByIndexPapersNum(papersNum);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
+	/**
+	 * 返回 persionId 关联的所有人脸特征记录
+	 * @param personId fl_person.id
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public List<FeatureBean> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
 			return personManager.getFeatureBeansByPersonIdAsList(personId);
@@ -324,6 +423,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
+	/**
+	 * 返回 persionId 关联的所有日志记录
+	 * @param personId fl_person.id
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public List<LogBean> getLogBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
 			return personManager.getLogBeansByPersonIdAsList(personId);
@@ -331,6 +436,11 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
+	/**
+	 * 返回所有人员记录
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public List<PersonBean> loadAllPerson()throws ServiceRuntime {
 		try{
 			return personManager.loadAllAsList();
@@ -338,6 +448,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
+	/**
+	 * 返回 where 指定的所有人员记录
+	 * @param where SQL条件语句
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public List<PersonBean> loadPersonByWhere(String where)throws ServiceRuntime {
 		try{
 			return personManager.loadByWhereAsList(where);
@@ -348,17 +464,18 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	
 	public PersonBean savePerson(PersonBean bean, ImageBean refImageByImageMd5,FeatureBean impFeatureByPersonId)throws ServiceRuntime {
 		try{
-			return personManager.saveAsTransaction(bean, refImageByImageMd5,new FeatureBean[]{impFeatureByPersonId},null);
+			return _savePerson(bean, refImageByImageMd5,Arrays.asList(impFeatureByPersonId));
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final FeatureBean featureBean)throws ServiceRuntime {
+	
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final FeatureBean featureBean, final Integer deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, imageData, featureBean, null);
+					return _savePerson(bean, imageData, featureBean, _getDevice(deviceId));
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -366,12 +483,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final List<FaceBean> faceBeans)throws ServiceRuntime {
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final List<FaceBean> faceBeans, final Integer deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans), null);
+					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans), _getDevice(deviceId));
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -437,9 +554,20 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public FeatureBean addFeature(ByteBuffer feature,PersonBean refPersonByPersonId,List<FaceBean> impFaceByFeatureMd5)throws ServiceRuntime{
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> impFaceByFeatureMd5)throws ServiceRuntime{
 		try{
-			return featureManager.saveAsTransaction(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
+			return _addFeature(feature, _getPerson(personId), impFaceByFeatureMd5);
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean)throws ServiceRuntime{
+		try{
+			return _addFeature(feature, _getPerson(personId), faceInfo, deviceBean);
+		} catch (RuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -484,7 +612,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 * @return {@link ImageBean} ,如果没有对应记录则返回null
 	 * @throws ServiceRuntime
 	 */
-	public ImageBean getImageBean(String imageMD5)throws ServiceRuntime{
+	public ImageBean getImage(String imageMD5)throws ServiceRuntime{
 		try{
 			return _getImage(imageMD5);
 		}catch (Exception e) {
