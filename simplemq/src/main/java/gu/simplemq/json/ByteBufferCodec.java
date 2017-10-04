@@ -39,16 +39,19 @@ public class ByteBufferCodec implements ObjectSerializer, ObjectDeserializer {
 	public int getFastMatchToken() {
 		return JSONToken.LITERAL_STRING;
 	}
-
+    private static final byte[] getBytes(ByteBuffer buffer){
+    	byte[] bytes = new byte[buffer.remaining()];
+    	buffer.get(bytes);
+    	return bytes;
+    }
 	/** 
 	 * 直接引用{@link PrimitiveArraySerializer}实现序列化
 	 */
 	@Override
 	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features)
 			throws IOException {
-		ByteBuffer buffer;
-        if ( (object instanceof ByteBuffer) && (buffer = (ByteBuffer)object).hasArray()) {
-        	PrimitiveArraySerializer.instance.write(serializer, buffer.array(), fieldName, fieldType, features);
+        if ( (object instanceof ByteBuffer) ) {
+        	PrimitiveArraySerializer.instance.write(serializer, getBytes((ByteBuffer)object), fieldName, fieldType, features);
         }else{
         	serializer.out.writeNull(SerializerFeature.WriteNullListAsEmpty);
         }
