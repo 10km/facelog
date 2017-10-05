@@ -17,7 +17,6 @@ import org.weakref.jmx.com.google.common.primitives.Ints;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.IImageManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
@@ -82,16 +81,6 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		StoreBean storeBean = _makeStoreBean(imageBytes, md5, null);
 		return Pair.with(imageBean, storeBean);
 	}
-	/**
-	 * 保存图像数据,如果图像数据已经存在，则抛出异常 
-	 * @param imageBytes 图像数据
-	 * @param refFlDevicebyDeviceId 图像来源的设备对象，可为null
-	 * @param impFlFacebyImgMd5 图像中检测到的人脸信息对象，可为null
-	 * @param impFlPersonbyImageMd5 图像对应的 {@link PersonBean}对象,可为null
-	 * @return 返回保存的{@link ImageBean}对象
-	 * @throws ServiceRuntime
-	 * @see {@link IImageManager#save(ImageBean, DeviceBean, StoreBean, StoreBean, FaceBean[], PersonBean[])}
-	 */
 	protected static ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
 	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5){
 		if(Judge.isEmpty(imageBytes))return null;
@@ -130,18 +119,19 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		return featureBean;
 	}
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5){
-		return featureManager.save(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
+		return featureManager.save(featureManager.checkDuplicate(_makeFeature(feature)), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean){
-		Assert.notEmpty(faceInfo, "faceInfo");
-		for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
-			 ByteBuffer imageBytes = entry.getKey();
-			 FaceBean faceBean = entry.getValue();
-			Assert.notEmpty(imageBytes, "imageBytes");
-			Assert.notNull(faceBean, "faceBean");
-			_addImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
+		if(null != faceInfo){
+			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
+				ByteBuffer imageBytes = entry.getKey();
+				FaceBean faceBean = entry.getValue();
+				Assert.notEmpty(imageBytes, "imageBytes");
+				Assert.notNull(faceBean, "faceBean");
+				_addImage(imageBytes, deviceBean, Arrays.asList(faceBean), Arrays.asList(personBean));
+			}
 		}
-		return _addFeature(feature, personBean, faceInfo.values());
+		return _addFeature(feature, personBean, null == faceInfo?null:faceInfo.values());
 	}
 	protected static FeatureBean _getFeature(String md5){
 		return featureManager.loadByPrimaryKey(md5);
@@ -206,6 +196,17 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	}
 	protected static List<PersonBean> _getPerson(Collection<Integer> collection){
 		return personManager.loadByPrimaryKey(collection); 
+	}
+	protected static PersonBean _getPersonByPapersNum(String papersNum){
+		return personManager.loadByIndexPapersNum(papersNum);
+	}
+	protected static List<PersonBean> _getPersonByPapersNum(List<String> collection){
+		if(null == collection)return null;
+		ArrayList<PersonBean> beans = new ArrayList<PersonBean>(collection.size());
+		for(String num: collection){
+			beans.add(_getPersonByPapersNum(num));
+		}
+		return beans;
 	}
 	protected static PersonBean _savePerson(PersonBean bean, ImageBean imageBean,Collection<FeatureBean> featureBean){
 		return personManager.save(bean, imageBean, featureBean, null);
@@ -404,7 +405,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
 		try{
-			Assert.notEmpty(papersNum, "papersNum");
+			if(Judge.isEmpty(papersNum))return null;
 			return personManager.loadByIndexPapersNum(papersNum);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
@@ -462,14 +463,37 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		} 
 	}
 	
-	public PersonBean savePerson(PersonBean bean, ImageBean refImageByImageMd5,FeatureBean impFeatureByPersonId)throws ServiceRuntime {
+	/**
+	 * 保存人员信息记录
+	 * @param bean
+	 * @param imageBean 标准照图像对象,可为null
+	 * @param featureBean 用于验证的人脸特征数据对象,可为null
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public PersonBean savePerson(final PersonBean bean, final ImageBean imageBean,final FeatureBean featureBean)throws ServiceRuntime {
 		try{
-			return _savePerson(bean, refImageByImageMd5,Arrays.asList(impFeatureByPersonId));
+			return personManager.runAsTransaction(new Callable<PersonBean>(){
+				@Override
+				public PersonBean call() throws Exception {
+					return _savePerson(bean, imageBean, Arrays.asList(featureBean));
+				}});
+		}catch(ServiceRuntime e){
+			throw e;
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
 	
+	/**
+	 * 保存人员信息记录
+	 * @param bean
+	 * @param imageData 标准照图像,可为null
+	 * @param featureBean 用于验证的人脸特征数据对象,可为null
+	 * @param deviceId 标准照图像来源设备id,可为null
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final FeatureBean featureBean, final Integer deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
@@ -483,12 +507,21 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final List<FaceBean> faceBeans, final Integer deviceId)throws ServiceRuntime {
+	/**
+	 * 保存人员信息记录
+	 * @param bean
+	 * @param imageData 标准照图像,可为null
+	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final List<FaceBean> faceBeans)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans), _getDevice(deviceId));
+					return _savePerson(bean,imageData,_addFeature(feature, bean, faceBeans), null);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -496,12 +529,22 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
+	/**
+	 * 保存人员信息记录
+	 * @param bean 
+	 * @param imageData 标准照图像,可为null
+	 * @param feature 用于验证的人脸特征数据,可为null 
+	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+	 * @param deviceId faceInfo 图像来源设备id,可为null 
+	 * @return bean 保存的{@link PersonBean}对象
+	 * @throws ServiceRuntime
+	 */
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData,final ByteBuffer feature,final Map<ByteBuffer, FaceBean> faceInfo,final Integer deviceId)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean,imageData,_addFeature(feature,bean, faceInfo,_getDevice(deviceId)), null);
+					return _savePerson(bean,imageData,_addFeature(feature,bean, faceInfo,_getDevice(deviceId)), _getDevice(deviceId));
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -509,9 +552,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public LogBean saveLog(LogBean bean)throws ServiceRuntime {
+	public LogBean addLog(LogBean bean)throws ServiceRuntime {
 		try{
-			return logManager.save(bean);		
+			return logManager.save(bean);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -539,33 +582,38 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/** @see #_addImage(ByteBuffer, DeviceBean, List, List) */
-	public ImageBean addImage(final ByteBuffer imageBytes,final DeviceBean refFlDevicebyDeviceId
-	        , final List<FaceBean> impFlFacebyImgMd5 , final List<PersonBean> impFlPersonbyPhotoId) throws ServiceRuntime{
+
+	/**
+	 * 保存图像数据,如果图像数据已经存在，则抛出异常
+	 * @param imageData 图像数据
+	 * @param deviceId 图像来源设备id,可为null
+	 * @param faceBean 关联的人脸信息对象,可为null
+	 * @param personId 关联的人员id(fl_person.id),可为null
+	 * @return
+	 * @throws ServiceRuntime
+	 * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
+	 */
+	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
+			, FaceBean faceBean , Integer personId) throws ServiceRuntime{
 		try{
-			return imageManager.runAsTransaction(new Callable<ImageBean>(){
-				@Override
-				public ImageBean call() throws Exception {
-					return _addImage(imageBytes, refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyPhotoId);
-				}});			
-		} catch (RuntimeException e) {
+			return _addImage(imageData,_getDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(_getPerson(personId)));		
+		}catch(ServiceRuntime e){
 			throw e;
-		} catch (Exception e) {
+		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> impFaceByFeatureMd5)throws ServiceRuntime{
+	/**
+	 * 增加一个人脸特征记录，如果记录已经存在则抛出异常
+	 * @param feature 特征数据
+	 * @param personId 关联的人员id(fl_person.id),可为null
+	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+	 * @return 保存的人脸特征记录{@link FeatureBean}
+	 * @throws ServiceRuntime
+	 */
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntime{
 		try{
-			return _addFeature(feature, _getPerson(personId), impFaceByFeatureMd5);
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		} 
-	}
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean)throws ServiceRuntime{
-		try{
-			return _addFeature(feature, _getPerson(personId), faceInfo, deviceBean);
+			return _addFeature(feature, _getPerson(personId), faecBeans);
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
@@ -573,24 +621,24 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		} 
 	}
 	/**
-	 * @param imageBytes
-	 * @param deviceId 设备id
-	 * @param impFlFacebyImgMd5
-	 * @param impFlPersonbyPhotoId
-	 * @return
+	 * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+	 * @param feature 特征数据
+	 * @param personId 关联的人员id(fl_person.id),可为null
+	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
+	 * @param deviceId 图像来源设备id,可为null
+	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntime
-	 * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
 	 */
-	public ImageBean saveImage(ByteBuffer imageBytes,Integer deviceId
-			, List<FaceBean> impFlFacebyImgMd5 , List<PersonBean> impFlPersonbyPhotoId) throws ServiceRuntime{
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
 		try{
-			return _addImage(imageBytes,_getDevice(deviceId),impFlFacebyImgMd5,impFlPersonbyPhotoId);		
-		}catch(ServiceRuntime e){
+			return _addFeature(feature, _getPerson(personId), faceInfo, _getDevice(deviceId));
+		} catch (RuntimeException e) {
 			throw e;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
+	
 	/**
 	 * 根据图像的MD5校验码返回图像数据
 	 * @param imageMD5
