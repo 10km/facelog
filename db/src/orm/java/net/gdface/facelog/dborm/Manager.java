@@ -513,15 +513,13 @@ public final class Manager
         return rs.wasNull()?(java.nio.ByteBuffer)null:java.nio.ByteBuffer.wrap(blob.getBytes(1L,(int)blob.length()));
     }
     /**
-     * return all bytes in buffer (0~limit)
+     * return all bytes in buffer (position~limit),no change status of buffer
      * @param buffer
      * @return
      */
-    private static final byte[] getAllBytesInBuffer(java.nio.ByteBuffer buffer){
-        if(buffer.hasArray())return buffer.array();
+    private static final byte[] getBytesInBuffer(java.nio.ByteBuffer buffer){
         int pos = buffer.position();
         try{
-            buffer.position(0);
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
             return bytes;
@@ -537,7 +535,7 @@ public final class Manager
         if (blob == null){
             ps.setNull(pos, Types.BLOB);
         }else{
-            ps.setBlob(pos, new java.io.ByteArrayInputStream(getAllBytesInBuffer(blob)));
+            ps.setBlob(pos, new java.io.ByteArrayInputStream(getBytesInBuffer(blob)));
         }
     }
 
@@ -595,7 +593,7 @@ public final class Manager
         if (null == bytes){
             ps.setNull(pos, sqlType);
         }else{
-            ps.setBytes(pos, getAllBytesInBuffer(bytes));
+            ps.setBytes(pos, getBytesInBuffer(bytes));
         }
     }
     
