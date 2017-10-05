@@ -35,12 +35,18 @@ public interface IFaceManager extends TableManager<FaceBean>
     //1.4
     public boolean existsPrimaryKey(Integer id);
     /**
+     * Check duplicated row by primary keys,if row exists throw exception
+     * @param id Integer
+     */
+    //1.4.1
+    public Integer checkDuplicate(Integer id);
+    /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
      *
      * @param keys primary keys array
      * @return list of FaceBean
      */
-    //1.5
+    //1.8
     public java.util.List<FaceBean> loadByPrimaryKey(int... keys);
     /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
@@ -48,7 +54,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param keys primary keys collection
      * @return list of FaceBean
      */
-    //1.6
+    //1.9
     public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
     /**
      * Delete row according to its primary keys.<br>

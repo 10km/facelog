@@ -170,19 +170,76 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return loadByPrimaryKey((String)keys[0]);
     }
-    
     /**
      * Returns true if this fl_image contains row with primary key fields.
      * @param md5 String - PK# 1
      * @throws DAOException
-     * @see #loadByPrimaryKey(String md5)
      */
-    //1.3
+    //1.4
     public boolean existsPrimaryKey(String md5) throws DAOException
     {
-        return null!=loadByPrimaryKey(md5 );
+        if(null == md5){
+            return false;
+        }
+        Connection c = null;
+        PreparedStatement ps = null;
+        try{
+            c = this.getConnection();
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_image WHERE md5=?");
+            // System.out.println("loadByPrimaryKey: " + sql);
+            ps = c.prepareStatement(sql.toString(),
+                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                    ResultSet.CONCUR_READ_ONLY);
+            if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
+            return 1 == this.countByPreparedStatement(ps);
+        }catch(SQLException e){
+            throw new ObjectRetrievalException(e);
+        }finally{
+            this.getManager().close(ps);
+            this.freeConnection(c);
+        }
     }
-    
+    /**
+     * Return true if this fl_image contains row with primary key fields.
+     * @param bean  
+     * @throws DAOException
+     * @return false if primary kes has null
+     * @see #countUsingTemplate(FlImageBean)
+     */
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(FlImageBean bean) throws DAOException
+    {
+        if(null == bean  || null == bean.getMd5())
+            return false;
+        long modified = bean.getModified();
+        try{
+            bean.resetModifiedExceptPrimaryKeys();
+            return 1 == countUsingTemplate(bean);
+        }finally{
+            bean.setModified(modified);
+        }
+    }
+    //1.7
+    @Override
+    public FlImageBean checkDuplicate(FlImageBean bean) throws DAOException{
+        if(!existsByPrimaryKey(bean))
+            throw new ObjectRetrievalException("Duplicate entry ("+ bean.getMd5() +") for key 'PRIMARY'");
+        return bean;
+    }
+    /**
+     * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
+     * @param md5 String
+     * @throws DAOException
+     * @see #existsPrimaryKey(String md5)
+     */
+    //1.4.1
+    public String checkDuplicate(String md5) throws DAOException
+    {
+        if(existsPrimaryKey(md5))
+            throw new ObjectRetrievalException("Duplicate entry '"+ md5 +"' for key 'PRIMARY'");
+        return md5;
+    }    
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null

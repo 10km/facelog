@@ -35,12 +35,18 @@ public interface IPersonManager extends TableManager<PersonBean>
     //1.4
     public boolean existsPrimaryKey(Integer id);
     /**
+     * Check duplicated row by primary keys,if row exists throw exception
+     * @param id Integer
+     */
+    //1.4.1
+    public Integer checkDuplicate(Integer id);
+    /**
      * Loads {@link PersonBean} from the fl_person using primary key fields.
      *
      * @param keys primary keys array
      * @return list of PersonBean
      */
-    //1.5
+    //1.8
     public java.util.List<PersonBean> loadByPrimaryKey(int... keys);
     /**
      * Loads {@link PersonBean} from the fl_person using primary key fields.
@@ -48,7 +54,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param keys primary keys collection
      * @return list of PersonBean
      */
-    //1.6
+    //1.9
     public java.util.List<PersonBean> loadByPrimaryKey(java.util.Collection<Integer> keys);
     /**
      * Delete row according to its primary keys.<br>

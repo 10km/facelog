@@ -168,19 +168,76 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return loadByPrimaryKey((Integer)keys[0]);
     }
-    
     /**
      * Returns true if this fl_device contains row with primary key fields.
      * @param id Integer - PK# 1
      * @throws DAOException
-     * @see #loadByPrimaryKey(Integer id)
      */
-    //1.3
+    //1.4
     public boolean existsPrimaryKey(Integer id) throws DAOException
     {
-        return null!=loadByPrimaryKey(id );
+        if(null == id){
+            return false;
+        }
+        Connection c = null;
+        PreparedStatement ps = null;
+        try{
+            c = this.getConnection();
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_device WHERE id=?");
+            // System.out.println("loadByPrimaryKey: " + sql);
+            ps = c.prepareStatement(sql.toString(),
+                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                    ResultSet.CONCUR_READ_ONLY);
+            if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
+            return 1 == this.countByPreparedStatement(ps);
+        }catch(SQLException e){
+            throw new ObjectRetrievalException(e);
+        }finally{
+            this.getManager().close(ps);
+            this.freeConnection(c);
+        }
     }
-    
+    /**
+     * Return true if this fl_device contains row with primary key fields.
+     * @param bean  
+     * @throws DAOException
+     * @return false if primary kes has null
+     * @see #countUsingTemplate(FlDeviceBean)
+     */
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(FlDeviceBean bean) throws DAOException
+    {
+        if(null == bean  || null == bean.getId())
+            return false;
+        long modified = bean.getModified();
+        try{
+            bean.resetModifiedExceptPrimaryKeys();
+            return 1 == countUsingTemplate(bean);
+        }finally{
+            bean.setModified(modified);
+        }
+    }
+    //1.7
+    @Override
+    public FlDeviceBean checkDuplicate(FlDeviceBean bean) throws DAOException{
+        if(!existsByPrimaryKey(bean))
+            throw new ObjectRetrievalException("Duplicate entry ("+ bean.getId() +") for key 'PRIMARY'");
+        return bean;
+    }
+    /**
+     * Check duplicated row by primary keys,if row exists throw {@link ObjectRetrievalException}
+     * @param id Integer
+     * @throws DAOException
+     * @see #existsPrimaryKey(Integer id)
+     */
+    //1.4.1
+    public Integer checkDuplicate(Integer id) throws DAOException
+    {
+        if(existsPrimaryKey(id))
+            throw new ObjectRetrievalException("Duplicate entry '"+ id +"' for key 'PRIMARY'");
+        return id;
+    }    
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
@@ -1088,7 +1145,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         FlDeviceBean bean = this.createBean();
         if( null == mac)
-            throw new IllegalArgumentException("the key 'mac'  must not be null");
+            return null;
         bean.setMac(mac);
         return loadUniqueUsingTemplate(bean);
     }
@@ -1117,7 +1174,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         FlDeviceBean bean = this.createBean();
         if( null == serialNo)
-            throw new IllegalArgumentException("the key 'serialNo'  must not be null");
+            return null;
         bean.setSerialNo(serialNo);
         return loadUniqueUsingTemplate(bean);
     }

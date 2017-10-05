@@ -800,7 +800,20 @@ public class FlLogBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_LOG_ID_ID_MASK);
+        modified &= (~(FL_LOG_ID_ID_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_LOG_ID_PERSON_ID_MASK |
+            FL_LOG_ID_DEVICE_ID_MASK |
+            FL_LOG_ID_VERIFY_FEATURE_MASK |
+            FL_LOG_ID_COMPARE_FACE_MASK |
+            FL_LOG_ID_SIMILARTY_MASK |
+            FL_LOG_ID_VERIFY_TIME_MASK |
+            FL_LOG_ID_CREATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

@@ -137,9 +137,37 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
-        return null!=loadByPrimaryKey(id );
+        try{
+            return nativeManager.existsPrimaryKey(id );
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
-    //1.5 override IFaceManager
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(FaceBean bean)
+    {
+        return null == bean ? false : existsPrimaryKey(bean.getId());
+    }
+    //1.7
+    @Override
+    public FaceBean checkDuplicate(FaceBean bean){
+        if(null != bean)
+            checkDuplicate(bean.getId());            
+        return bean;   
+    }
+    //1.4.1 override IFaceManager
+    @Override 
+    public Integer checkDuplicate(Integer id){
+        try{
+            return this.nativeManager.checkDuplicate(id);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //1.8 override IFaceManager
     @Override 
     public java.util.List<FaceBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<FaceBean>();
@@ -151,15 +179,21 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
         }
         return list;
     }
-    //1.6 override IFaceManager
+    //1.9 override IFaceManager
     @Override 
     public java.util.List<FaceBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys )return new java.util.ArrayList<FaceBean>();
         java.util.ArrayList<FaceBean> list = new java.util.ArrayList<FaceBean>(keys.size());
-        FaceBean bean;
-        for(Integer key: keys){
-            if(null != (bean = loadByPrimaryKey(key)))
-                list.add(bean);
+        if(keys instanceof java.util.List){
+            for(Integer key: keys){
+                list.add(loadByPrimaryKey(key));
+            }
+        }else{
+            FaceBean bean;
+            for(Integer key: keys){
+                if(null != (bean = loadByPrimaryKey(key)))
+                    list.add(bean);
+            }
         }
         return list;
     }

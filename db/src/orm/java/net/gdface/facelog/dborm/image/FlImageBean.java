@@ -739,7 +739,20 @@ public class FlImageBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_IMAGE_ID_MD5_MASK);
+        modified &= (~(FL_IMAGE_ID_MD5_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_IMAGE_ID_FORMAT_MASK |
+            FL_IMAGE_ID_WIDTH_MASK |
+            FL_IMAGE_ID_HEIGHT_MASK |
+            FL_IMAGE_ID_DEPTH_MASK |
+            FL_IMAGE_ID_FACE_NUM_MASK |
+            FL_IMAGE_ID_THUMB_MD5_MASK |
+            FL_IMAGE_ID_DEVICE_ID_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

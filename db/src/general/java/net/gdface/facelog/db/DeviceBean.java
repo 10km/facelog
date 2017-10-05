@@ -754,7 +754,20 @@ public class DeviceBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_DEVICE_ID_ID_MASK);
+        modified &= (~(FL_DEVICE_ID_ID_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_DEVICE_ID_NAME_MASK |
+            FL_DEVICE_ID_GROUP_ID_MASK |
+            FL_DEVICE_ID_VERSION_MASK |
+            FL_DEVICE_ID_SERIAL_NO_MASK |
+            FL_DEVICE_ID_MAC_MASK |
+            FL_DEVICE_ID_CREATE_TIME_MASK |
+            FL_DEVICE_ID_UPDATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

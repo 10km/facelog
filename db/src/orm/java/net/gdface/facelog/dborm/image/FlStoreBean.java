@@ -350,7 +350,15 @@ public class FlStoreBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_STORE_ID_MD5_MASK);
+        modified &= (~(FL_STORE_ID_MD5_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_STORE_ID_ENCODING_MASK |
+            FL_STORE_ID_DATA_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

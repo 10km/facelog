@@ -137,9 +137,37 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public boolean existsPrimaryKey(String md5)
     {
-        return null!=loadByPrimaryKey(md5 );
+        try{
+            return nativeManager.existsPrimaryKey(md5 );
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
-    //1.5 override IFeatureManager
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(FeatureBean bean)
+    {
+        return null == bean ? false : existsPrimaryKey(bean.getMd5());
+    }
+    //1.7
+    @Override
+    public FeatureBean checkDuplicate(FeatureBean bean){
+        if(null != bean)
+            checkDuplicate(bean.getMd5());            
+        return bean;   
+    }
+    //1.4.1 override IFeatureManager
+    @Override 
+    public String checkDuplicate(String md5){
+        try{
+            return this.nativeManager.checkDuplicate(md5);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //1.8 override IFeatureManager
     @Override 
     public java.util.List<FeatureBean> loadByPrimaryKey(String... keys){
         if(null == keys)return new java.util.ArrayList<FeatureBean>();
@@ -151,15 +179,21 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         }
         return list;
     }
-    //1.6 override IFeatureManager
+    //1.9 override IFeatureManager
     @Override 
     public java.util.List<FeatureBean> loadByPrimaryKey(java.util.Collection<String> keys){
         if(null == keys )return new java.util.ArrayList<FeatureBean>();
         java.util.ArrayList<FeatureBean> list = new java.util.ArrayList<FeatureBean>(keys.size());
-        FeatureBean bean;
-        for(String key: keys){
-            if(null != (bean = loadByPrimaryKey(key)))
-                list.add(bean);
+        if(keys instanceof java.util.List){
+            for(String key: keys){
+                list.add(loadByPrimaryKey(key));
+            }
+        }else{
+            FeatureBean bean;
+            for(String key: keys){
+                if(null != (bean = loadByPrimaryKey(key)))
+                    list.add(bean);
+            }
         }
         return list;
     }

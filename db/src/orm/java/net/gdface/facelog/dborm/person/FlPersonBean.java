@@ -954,7 +954,23 @@ public class FlPersonBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_PERSON_ID_ID_MASK);
+        modified &= (~(FL_PERSON_ID_ID_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_PERSON_ID_GROUP_ID_MASK |
+            FL_PERSON_ID_NAME_MASK |
+            FL_PERSON_ID_SEX_MASK |
+            FL_PERSON_ID_BIRTHDATE_MASK |
+            FL_PERSON_ID_PAPERS_TYPE_MASK |
+            FL_PERSON_ID_PAPERS_NUM_MASK |
+            FL_PERSON_ID_IMAGE_MD5_MASK |
+            FL_PERSON_ID_EXPIRY_DATE_MASK |
+            FL_PERSON_ID_CREATE_TIME_MASK |
+            FL_PERSON_ID_UPDATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

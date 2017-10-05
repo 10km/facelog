@@ -35,12 +35,18 @@ public interface IStoreManager extends TableManager<StoreBean>
     //1.4
     public boolean existsPrimaryKey(String md5);
     /**
+     * Check duplicated row by primary keys,if row exists throw exception
+     * @param md5 String
+     */
+    //1.4.1
+    public String checkDuplicate(String md5);
+    /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
      *
      * @param keys primary keys array
      * @return list of StoreBean
      */
-    //1.5
+    //1.8
     public java.util.List<StoreBean> loadByPrimaryKey(String... keys);
     /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
@@ -48,7 +54,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @param keys primary keys collection
      * @return list of StoreBean
      */
-    //1.6
+    //1.9
     public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys);
     /**
      * Delete row according to its primary keys.<br>

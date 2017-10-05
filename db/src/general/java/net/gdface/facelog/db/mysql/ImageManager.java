@@ -137,9 +137,37 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override 
     public boolean existsPrimaryKey(String md5)
     {
-        return null!=loadByPrimaryKey(md5 );
+        try{
+            return nativeManager.existsPrimaryKey(md5 );
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
-    //1.5 override IImageManager
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(ImageBean bean)
+    {
+        return null == bean ? false : existsPrimaryKey(bean.getMd5());
+    }
+    //1.7
+    @Override
+    public ImageBean checkDuplicate(ImageBean bean){
+        if(null != bean)
+            checkDuplicate(bean.getMd5());            
+        return bean;   
+    }
+    //1.4.1 override IImageManager
+    @Override 
+    public String checkDuplicate(String md5){
+        try{
+            return this.nativeManager.checkDuplicate(md5);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //1.8 override IImageManager
     @Override 
     public java.util.List<ImageBean> loadByPrimaryKey(String... keys){
         if(null == keys)return new java.util.ArrayList<ImageBean>();
@@ -151,15 +179,21 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         }
         return list;
     }
-    //1.6 override IImageManager
+    //1.9 override IImageManager
     @Override 
     public java.util.List<ImageBean> loadByPrimaryKey(java.util.Collection<String> keys){
         if(null == keys )return new java.util.ArrayList<ImageBean>();
         java.util.ArrayList<ImageBean> list = new java.util.ArrayList<ImageBean>(keys.size());
-        ImageBean bean;
-        for(String key: keys){
-            if(null != (bean = loadByPrimaryKey(key)))
-                list.add(bean);
+        if(keys instanceof java.util.List){
+            for(String key: keys){
+                list.add(loadByPrimaryKey(key));
+            }
+        }else{
+            ImageBean bean;
+            for(String key: keys){
+                if(null != (bean = loadByPrimaryKey(key)))
+                    list.add(bean);
+            }
         }
         return list;
     }

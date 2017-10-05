@@ -136,9 +136,37 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
-        return null!=loadByPrimaryKey(id );
+        try{
+            return nativeManager.existsPrimaryKey(id );
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
-    //1.5 override IDeviceManager
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(DeviceBean bean)
+    {
+        return null == bean ? false : existsPrimaryKey(bean.getId());
+    }
+    //1.7
+    @Override
+    public DeviceBean checkDuplicate(DeviceBean bean){
+        if(null != bean)
+            checkDuplicate(bean.getId());            
+        return bean;   
+    }
+    //1.4.1 override IDeviceManager
+    @Override 
+    public Integer checkDuplicate(Integer id){
+        try{
+            return this.nativeManager.checkDuplicate(id);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //1.8 override IDeviceManager
     @Override 
     public java.util.List<DeviceBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<DeviceBean>();
@@ -150,15 +178,21 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }
         return list;
     }
-    //1.6 override IDeviceManager
+    //1.9 override IDeviceManager
     @Override 
     public java.util.List<DeviceBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys )return new java.util.ArrayList<DeviceBean>();
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(keys.size());
-        DeviceBean bean;
-        for(Integer key: keys){
-            if(null != (bean = loadByPrimaryKey(key)))
-                list.add(bean);
+        if(keys instanceof java.util.List){
+            for(Integer key: keys){
+                list.add(loadByPrimaryKey(key));
+            }
+        }else{
+            DeviceBean bean;
+            for(Integer key: keys){
+                if(null != (bean = loadByPrimaryKey(key)))
+                    list.add(bean);
+            }
         }
         return list;
     }

@@ -134,9 +134,37 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override 
     public boolean existsPrimaryKey(String md5)
     {
-        return null!=loadByPrimaryKey(md5 );
+        try{
+            return nativeManager.existsPrimaryKey(md5 );
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
-    //1.5 override IStoreManager
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(StoreBean bean)
+    {
+        return null == bean ? false : existsPrimaryKey(bean.getMd5());
+    }
+    //1.7
+    @Override
+    public StoreBean checkDuplicate(StoreBean bean){
+        if(null != bean)
+            checkDuplicate(bean.getMd5());            
+        return bean;   
+    }
+    //1.4.1 override IStoreManager
+    @Override 
+    public String checkDuplicate(String md5){
+        try{
+            return this.nativeManager.checkDuplicate(md5);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //1.8 override IStoreManager
     @Override 
     public java.util.List<StoreBean> loadByPrimaryKey(String... keys){
         if(null == keys)return new java.util.ArrayList<StoreBean>();
@@ -148,15 +176,21 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
         }
         return list;
     }
-    //1.6 override IStoreManager
+    //1.9 override IStoreManager
     @Override 
     public java.util.List<StoreBean> loadByPrimaryKey(java.util.Collection<String> keys){
         if(null == keys )return new java.util.ArrayList<StoreBean>();
         java.util.ArrayList<StoreBean> list = new java.util.ArrayList<StoreBean>(keys.size());
-        StoreBean bean;
-        for(String key: keys){
-            if(null != (bean = loadByPrimaryKey(key)))
-                list.add(bean);
+        if(keys instanceof java.util.List){
+            for(String key: keys){
+                list.add(loadByPrimaryKey(key));
+            }
+        }else{
+            StoreBean bean;
+            for(String key: keys){
+                if(null != (bean = loadByPrimaryKey(key)))
+                    list.add(bean);
+            }
         }
         return list;
     }

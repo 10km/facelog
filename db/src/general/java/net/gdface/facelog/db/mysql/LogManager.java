@@ -138,9 +138,37 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public boolean existsPrimaryKey(Integer id)
     {
-        return null!=loadByPrimaryKey(id );
+        try{
+            return nativeManager.existsPrimaryKey(id );
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
-    //1.5 override ILogManager
+    //1.6
+    @Override
+    public boolean existsByPrimaryKey(LogBean bean)
+    {
+        return null == bean ? false : existsPrimaryKey(bean.getId());
+    }
+    //1.7
+    @Override
+    public LogBean checkDuplicate(LogBean bean){
+        if(null != bean)
+            checkDuplicate(bean.getId());            
+        return bean;   
+    }
+    //1.4.1 override ILogManager
+    @Override 
+    public Integer checkDuplicate(Integer id){
+        try{
+            return this.nativeManager.checkDuplicate(id);
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //1.8 override ILogManager
     @Override 
     public java.util.List<LogBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<LogBean>();
@@ -152,15 +180,21 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         }
         return list;
     }
-    //1.6 override ILogManager
+    //1.9 override ILogManager
     @Override 
     public java.util.List<LogBean> loadByPrimaryKey(java.util.Collection<Integer> keys){
         if(null == keys )return new java.util.ArrayList<LogBean>();
         java.util.ArrayList<LogBean> list = new java.util.ArrayList<LogBean>(keys.size());
-        LogBean bean;
-        for(Integer key: keys){
-            if(null != (bean = loadByPrimaryKey(key)))
-                list.add(bean);
+        if(keys instanceof java.util.List){
+            for(Integer key: keys){
+                list.add(loadByPrimaryKey(key));
+            }
+        }else{
+            LogBean bean;
+            for(Integer key: keys){
+                if(null != (bean = loadByPrimaryKey(key)))
+                    list.add(bean);
+            }
         }
         return list;
     }

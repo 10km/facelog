@@ -611,6 +611,19 @@ public class LogLightBean
      */
     public void resetPrimaryKeysModified()
     {
+        // columns is null or empty;
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_LOG_LIGHT_ID_ID_MASK |
+            FL_LOG_LIGHT_ID_PERSON_ID_MASK |
+            FL_LOG_LIGHT_ID_NAME_MASK |
+            FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK |
+            FL_LOG_LIGHT_ID_PAPERS_NUM_MASK |
+            FL_LOG_LIGHT_ID_VERIFY_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

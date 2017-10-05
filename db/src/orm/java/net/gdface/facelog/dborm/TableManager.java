@@ -113,10 +113,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
 
         @Override
-        public boolean existsPrimaryKey(B bean)throws DAOException{
+        public boolean existsByPrimaryKey(B bean)throws DAOException{
             return null!=loadByPrimaryKey(bean);
         }
-        
+        @Override
+        public B checkDuplicate(B bean)throws DAOException{
+            throw new UnsupportedOperationException();
+        }
         @Override
         public boolean existsPrimaryKey(Object ...keys)throws DAOException{
             return null!=loadByPrimaryKey(keys);
@@ -664,7 +667,16 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @throws DAOException
      */
     //1.6
-    public boolean existsPrimaryKey(B bean)throws DAOException;
+    public boolean existsByPrimaryKey(B bean)throws DAOException;
+    /**
+     * Check duplicated row by primary keys,if row exists throw exception
+     * @param bean the B bean with primary key fields
+     * @return always bean
+     * @see {@link #existsPrimaryKey(B bean)}
+     * @throws DAOException
+     */
+    //1.7
+    public B checkDuplicate(B bean)throws DAOException;
    
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

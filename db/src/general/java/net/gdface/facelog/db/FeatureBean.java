@@ -480,7 +480,16 @@ public class FeatureBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_FEATURE_ID_MD5_MASK);
+        modified &= (~(FL_FEATURE_ID_MD5_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_FEATURE_ID_PERSON_ID_MASK |
+            FL_FEATURE_ID_FEATURE_MASK |
+            FL_FEATURE_ID_CREATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.

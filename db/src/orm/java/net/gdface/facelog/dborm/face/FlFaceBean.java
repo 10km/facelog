@@ -1600,7 +1600,32 @@ public class FlFaceBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~FL_FACE_ID_ID_MASK);
+        modified &= (~(FL_FACE_ID_ID_MASK));
+    }
+    /**
+     * Resets columns modification status except primary keys to 'not modified'.
+     */
+    public void resetModifiedExceptPrimaryKeys()
+    {
+        modified &= (~(FL_FACE_ID_IMAGE_MD5_MASK |
+            FL_FACE_ID_FACE_LEFT_MASK |
+            FL_FACE_ID_FACE_TOP_MASK |
+            FL_FACE_ID_FACE_WIDTH_MASK |
+            FL_FACE_ID_FACE_HEIGHT_MASK |
+            FL_FACE_ID_EYE_LEFTX_MASK |
+            FL_FACE_ID_EYE_LEFTY_MASK |
+            FL_FACE_ID_EYE_RIGHTX_MASK |
+            FL_FACE_ID_EYE_RIGHTY_MASK |
+            FL_FACE_ID_MOUTH_X_MASK |
+            FL_FACE_ID_MOUTH_Y_MASK |
+            FL_FACE_ID_NOSE_X_MASK |
+            FL_FACE_ID_NOSE_Y_MASK |
+            FL_FACE_ID_ANGLE_YAW_MASK |
+            FL_FACE_ID_ANGLE_PITCH_MASK |
+            FL_FACE_ID_ANGLE_ROLL_MASK |
+            FL_FACE_ID_EXT_INFO_MASK |
+            FL_FACE_ID_FEATURE_MD5_MASK |
+            FL_FACE_ID_CREATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
