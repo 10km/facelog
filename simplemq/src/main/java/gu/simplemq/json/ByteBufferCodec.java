@@ -40,15 +40,13 @@ public class ByteBufferCodec implements ObjectSerializer, ObjectDeserializer {
 		return JSONToken.LITERAL_STRING;
 	}
 	/**
-	 * 返回buffer中所有字节(0~limit)
+	 * 返回buffer中所有字节(position~limit),不改变buffer状态
 	 * @param buffer
 	 * @return
 	 */
-	private static final byte[] getAllBytesInBuffer(ByteBuffer buffer){
-		if(buffer.hasArray())return buffer.array();
+	private static final byte[] getBytesInBuffer(ByteBuffer buffer){
 		int pos = buffer.position();
 		try{
-			buffer.position(0);
 			byte[] bytes = new byte[buffer.remaining()];
 			buffer.get(bytes);
 			return bytes;
@@ -63,7 +61,7 @@ public class ByteBufferCodec implements ObjectSerializer, ObjectDeserializer {
 	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features)
 			throws IOException {
         if ( (object instanceof ByteBuffer) ) {
-        	PrimitiveArraySerializer.instance.write(serializer, getAllBytesInBuffer((ByteBuffer)object), fieldName, fieldType, features);
+        	PrimitiveArraySerializer.instance.write(serializer, getBytesInBuffer((ByteBuffer)object), fieldName, fieldType, features);
         }else{
         	serializer.out.writeNull(SerializerFeature.WriteNullListAsEmpty);
         }
