@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.javatuples.Pair;
 import org.weakref.jmx.com.google.common.primitives.Ints;
@@ -20,6 +21,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.image.LazyImage;
@@ -138,12 +140,10 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static FeatureBean _getFeature(String md5){
 		return featureManager.loadByPrimaryKey(md5);
 	}
-	/**
-	 * 删除featureMd5指定的特征记录及关联的face记录
-	 * @param featureMd5
-	 * @param deleteImage 是否删除关联的 image记录
-	 * @return
-	 */
+	protected static List<FeatureBean> _getFeatureBeansByPersonId(Integer personId){
+		return personManager.getFeatureBeansByPersonIdAsList(personId);
+	}
+
 	protected static List<String> _deleteFeature(String featureMd5,boolean deleteImage){
 		List<String> imageKeys = _getImageKeysImportedByFeatureMd5(featureMd5);
 		if(deleteImage){
@@ -158,16 +158,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		featureManager.deleteByPrimaryKey(featureMd5);
 		return imageKeys;
 	}
-	/**
-	 * 删除 personId 关联的所有特征(feature)记录
-	 * @param personId
-	 * @param deleteImage 是否删除关联的 image记录
-	 * @return
-	 * @see #_deleteFeature(String, boolean)
-	 */
 	protected static int _deleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
 		int count = 0;
-		for(FeatureBean featureBean: personManager.getFeatureBeansByPersonIdAsList(personId)){
+		for(FeatureBean featureBean: _getFeatureBeansByPersonId(personId)){
 			_deleteFeature(featureBean.getMd5(),deleteImage);
 			++count;
 		}
@@ -202,13 +195,8 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static PersonBean _getPersonByPapersNum(String papersNum){
 		return personManager.loadByIndexPapersNum(papersNum);
 	}
-	protected static List<PersonBean> _getPersonByPapersNum(List<String> collection){
-		if(null == collection)return null;
-		ArrayList<PersonBean> beans = new ArrayList<PersonBean>(collection.size());
-		for(String num: collection){
-			beans.add(_getPersonByPapersNum(num));
-		}
-		return beans;
+	protected static List<PersonBean> _getPersonByPapersNum(Collection<String> collection){
+		return personManager.loadByIndexPapersNum(collection);
 	}
 	protected static int _savePerson(Map<ByteBuffer,PersonBean> persons) {
 		if(null == persons )return 0;
@@ -286,10 +274,65 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 		return count;
 	}
-
-/*	protected static List<PersonBean> loadPersonByUpdate(Date timeStamp)throws ServiceRuntime {
-			//return personManager.loadByWhereAsList(where);
-	}*/
+	protected static int _deletePersonByPapersNum(String papersNum) {
+		PersonBean personBean = _getPersonByPapersNum(papersNum);
+		return null == personBean ? 0 : _deletePerson(personBean.getId());
+	}
+	protected static int _deletePersonByPapersNum(Collection<String> collection) {
+		if(null == collection)return 0;
+		int count =0;
+		for(String papersNum:collection){
+			count += _deletePersonByPapersNum(papersNum);
+		}
+		return count;
+	}
+	protected static boolean _isDisable(int personId){
+		PersonBean personBean = _getPerson(personId);
+		if(null == personBean)
+			return true;
+		Date expiryDate = personBean.getExpiryDate();
+		return null== expiryDate?false:expiryDate.before(new Date());
+	}
+	protected static  void _setPersonExpiryDate(PersonBean personBean,Date expiryDate){
+		if(null == personBean)
+			return ;
+		personBean.setExpiryDate(expiryDate);
+		personManager.save(personBean);
+	}
+	protected static  void _setPersonExpiryDate(Collection<Integer> personIdList,Date expiryDate){
+		if(null == personIdList)return;
+		for(Integer personId : personIdList){
+			_setPersonExpiryDate(_getPerson(personId),expiryDate);
+		}
+	}
+	protected static List<PersonBean> _loadUpdatePersons(Date timestamp) {
+			List<PersonBean> persons =_loadPersonByUpdate(timestamp);
+			ConcurrentHashMap<Integer, PersonBean> m = new ConcurrentHashMap<Integer,PersonBean>(persons.size());
+			for(PersonBean person:persons){
+				m.put(person.getId(), person);
+			}
+			Integer refPerson;
+			for(FeatureBean feature:_loadFeatureByUpdate(timestamp)){
+				refPerson = feature.getPersonId();
+				if(null != refPerson)
+					m.putIfAbsent(refPerson, _getPerson(refPerson));
+			}
+			return new ArrayList<PersonBean>(m.values());
+	}
+	protected static List<PersonBean> _loadPersonByUpdate(Date timestamp) {
+		String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));		
+		return _loadPersonByWhere(where);
+	}
+	protected static List<FeatureBean> _loadFeatureByUpdate(Date timestamp) {
+		String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));
+		return _loadFeatureByWhere(where);
+	}
+	protected static List<FeatureBean> _loadFeatureByWhere(String where) {
+		return featureManager.loadByWhereAsList(where);
+}
+	protected static  List<PersonBean> _loadPersonByWhere(String where){
+			return personManager.loadByWhereAsList(where);
+	}
 	/**
 	 * 返回personId指定的人员记录
 	 * @param personId
@@ -309,7 +352,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 * @return
 	 * @throws ServiceRuntime
 	 */
-	public List<PersonBean> getPerson(List<Integer> list)throws ServiceRuntime {
+	public List<PersonBean> getPersons(List<Integer> list)throws ServiceRuntime {
 		try{
 			return _getPerson(list);
 		}catch(ServiceRuntime e){
@@ -319,7 +362,34 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 	}
 	/**
-	 * 删除personId指定的人员记录
+	 * 根据证件号码返回人员记录
+	 * @param papersNum
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
+		try{
+			if(Judge.isEmpty(papersNum))return null;
+			return _getPersonByPapersNum(papersNum);
+		}catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	/**
+	 * 返回 persionId 关联的所有人脸特征记录
+	 * @param personId fl_person.id
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public List<FeatureBean> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
+		try{
+			return _getFeatureBeansByPersonId(personId);
+		}catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	/**
+	 * 删除personId指定的人员(person)记录及关联的所有记录
 	 * @param personId
 	 * @return
 	 * @throws ServiceRuntime
@@ -338,17 +408,56 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 	}
 	/**
-	 * 删除 list 指定的人员记录
-	 * @param list 人员id列表
-	 * @return
+	 * 删除personIdList指定的人员(person)记录及关联的所有记录
+	 * @param personIdList 人员id列表
+	 * @return 返回删除的 person 记录数量
 	 * @throws ServiceRuntime
 	 */
-	public int deletePerson(final List<Integer> list)throws ServiceRuntime {
+	public int deletePersons(final List<Integer> personIdList)throws ServiceRuntime {
 		try{
 			return personManager.runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePerson(list);
+					return _deletePerson(personIdList);
+				}});
+		}catch(ServiceRuntime e){
+			throw e;
+		}catch(Exception e){
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 删除papersNum指定的人员(person)记录及关联的所有记录
+	 * @param papersNum 证件号码
+	 * @return 返回删除的 person 记录数量
+	 * @throws ServiceRuntime
+	 * @see {@link #deletePerson(int)}
+	 */
+	public int deletePersonByPapersNum(final String papersNum)throws ServiceRuntime  {
+		try{	
+			return personManager.runAsTransaction(new Callable<Integer>(){
+				@Override
+				public Integer call() throws Exception {
+					return _deletePersonByPapersNum(papersNum);
+				}});
+		}catch(ServiceRuntime e){
+			throw e;
+		}catch(Exception e){
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 删除papersNum指定的人员(person)记录及关联的所有记录
+	 * @param papersNumlist 证件号码列表
+	 * @return 返回删除的 person 记录数量
+	 * @throws ServiceRuntime
+	 */
+	public  int deletePersonsByPapersNum(final List<String> papersNumlist)throws ServiceRuntime {
+		try{		
+			return personManager.runAsTransaction(new Callable<Integer>(){
+				@Override
+				public Integer call() throws Exception {
+					return _deletePersonByPapersNum(papersNumlist);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -377,34 +486,37 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	public boolean isDisable(int personId)throws ServiceRuntime{
 		try{
-			PersonBean personBean = getPerson(personId);
-			if(null == personBean)
-				return true;
-			Date expiryDate = personBean.getExpiryDate();
-			return null== expiryDate?false:expiryDate.before(new Date());
+			return _isDisable(personId);
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
-	/** @see #_setRefPersonOfFeature(String, Integer) */
+	/**
+	 * 设置 personId 指定的人员为禁止状态
+	 * @param personId
+	 * @throws ServiceRuntime
+	 * @see #setPersonExpiryDate(int, Date)
+	 */
 	public void disablePerson(int personId)throws ServiceRuntime{
-		setPersonExpiryDate(personId,new Date());
+		try{
+			_setPersonExpiryDate(_getPerson(personId),new Date());
+		}catch(ServiceRuntime e){
+			throw e;
+		}catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
 	}
 	/**
 	 * 修改 personId 指定的人员记录的有效期
 	 * @param personId
-	 * @param expiryDate
+	 * @param expiryDate 失效日期
 	 * @throws ServiceRuntime
 	 */
 	public void setPersonExpiryDate(int personId,Date expiryDate)throws ServiceRuntime{
 		try{
-			PersonBean personBean = getPerson(personId);
-			if(null == personBean)
-				return ;
-			personBean.setExpiryDate(expiryDate);
-			personManager.save(personBean);
+			_setPersonExpiryDate(_getPerson(personId),expiryDate);
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
@@ -412,31 +524,31 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 	}
 	/**
-	 * 根据证件号码返回人员记录
-	 * @param papersNum
-	 * @return
+	 * 修改 personIdList 指定的人员记录的有效期
+	 * @param personIdList 人员id列表
+	 * @param expiryDate 失效日期 
 	 * @throws ServiceRuntime
 	 */
-	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
-		try{
-			if(Judge.isEmpty(papersNum))return null;
-			return personManager.loadByIndexPapersNum(papersNum);
+	public  void setPersonExpiryDate(final List<Integer> personIdList,final Date expiryDate)throws ServiceRuntime{
+		try{		
+			personManager.runAsTransaction(new Runnable(){
+				@Override
+				public void run() {
+					_setPersonExpiryDate(personIdList,expiryDate);
+				}});			
+		}catch(ServiceRuntime e){
+			throw e;
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
-		} 
+		}
 	}
 	/**
-	 * 返回 persionId 关联的所有人脸特征记录
-	 * @param personId fl_person.id
-	 * @return
+	 * 设置 personIdList 指定的人员为禁止状态
+	 * @param personIdList 人员id列表
 	 * @throws ServiceRuntime
 	 */
-	public List<FeatureBean> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
-		try{
-			return personManager.getFeatureBeansByPersonIdAsList(personId);
-		}catch (Exception e) {
-			throw new ServiceRuntime(e);
-		} 
+	public  void disablePerson(final List<Integer> personIdList)throws ServiceRuntime{
+		setPersonExpiryDate(personIdList,new Date());
 	}
 	/**
 	 * 返回 persionId 关联的所有日志记录
@@ -458,7 +570,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 */
 	public List<PersonBean> loadAllPerson()throws ServiceRuntime {
 		try{
-			return personManager.loadAllAsList();
+			return _loadPersonByWhere(null);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -684,6 +796,105 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回fl_person.update_time字段大于指定时间戳( timestamp )的所有fl_person记录<br>
+	 * 同时包含fl_feature更新记录引用的fl_person记录
+	 * @param timestamp
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public List<PersonBean> loadUpdatePersons(long timestamp)throws ServiceRuntime {
+		try{
+			return _loadUpdatePersons(new Date(timestamp));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 参见 {@link #loadUpdatePersons(long)}<br>
+	 * @param timestamp
+	 * @return 返回fl_person.id 列表
+	 * @throws ServiceRuntime
+	 */
+	public List<Integer> loadUpdatePersonIds(long timestamp)throws ServiceRuntime {
+		try{
+			return personManager.toPrimaryKeyList(_loadUpdatePersons(new Date(timestamp)));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回 fl_person.update_time 字段大于指定时间戳( timestamp )的所有fl_person记录
+	 * @param timestamp
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public List<PersonBean> loadPersonByUpdate(long timestamp)throws ServiceRuntime {
+		try{
+			return _loadPersonByUpdate(new Date(timestamp));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 参见 {@link #loadPersonByUpdate(long)}
+	 * @param timestamp
+	 * @return 返回fl_person.id 列表
+	 * @throws ServiceRuntime
+	 */
+	public List<Integer> loadPersonIdByUpdate(long timestamp)throws ServiceRuntime {
+		try{
+			return personManager.toPrimaryKeyList(_loadPersonByUpdate(new Date(timestamp)));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回 fl_feature.update_time 字段大于指定时间戳( timestamp )的所有fl_feature记录
+	 * @param timestamp
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public List<FeatureBean> loadFeatureByUpdate(long timestamp)throws ServiceRuntime {
+		try{
+			return _loadFeatureByUpdate(new Date(timestamp));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 参见 {@link #loadFeatureByUpdate(long)}
+	 * @param timestamp
+	 * @return 返回 fl_feature.md5 列表
+	 * @throws ServiceRuntime
+	 */
+	public List<String> loadFeatureMd5ByUpdate(long timestamp)throws ServiceRuntime {
+		try{
+			return featureManager.toPrimaryKeyList(_loadFeatureByUpdate(new Date(timestamp)));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 添加一条验证日志记录
+	 * @param bean
+	 * @throws ServiceRuntime
+	 */
 	public void addLog(LogBean bean)throws ServiceRuntime {
 		try{
 			logManager.save(bean);
@@ -692,6 +903,11 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		} 
 	}
 	
+	/**
+	 * 添加一组验证日志记录(事务存储)
+	 * @param beans
+	 * @throws ServiceRuntime
+	 */
 	public void addLog(List<LogBean> beans)throws ServiceRuntime {
 		try{
 			logManager.saveAsTransaction(beans);
@@ -706,7 +922,20 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	
+	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+		try{
+			return logLightManager.loadByWhereAsList(where, null, startRow, numRows);
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}	
+	public int countLogLightWhere(String where) throws ServiceRuntime {
+		try{
+			return logLightManager.countWhere(where);
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
 	public int countLogWhere(String where) throws ServiceRuntime {
 		try{
 			return logManager.countWhere(where);
@@ -714,6 +943,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
+    /**
+     * 判断md5指定的图像记录是否存在
+     * @param md5
+     * @return
+     * @throws ServiceRuntime
+     */
     public boolean existsImage(String md5) throws ServiceRuntime {
 		try{
 			return imageManager.existsPrimaryKey(md5);
@@ -741,6 +976,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
+    /**
+     * 判断md5指定的特征记录是否存在
+     * @param md5
+     * @return
+     * @throws ServiceRuntime
+     */
     public boolean existsFeature(String md5) throws ServiceRuntime {
 		try{
 			return featureManager.existsPrimaryKey(md5);
@@ -759,7 +1000,7 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntime{
 		try{
 			return _addFeature(feature, _getPerson(personId), faecBeans);
-		} catch (RuntimeException e) {
+		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
@@ -774,16 +1015,78 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntime
 	 */
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,Map<ByteBuffer, FaceBean> faceInfo,Integer deviceId)throws ServiceRuntime{
-		try{
+	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
+			Integer deviceId) throws ServiceRuntime {
+		try {
 			return _addFeature(feature, _getPerson(personId), faceInfo, _getDevice(deviceId));
-		} catch (RuntimeException e) {
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 删除featureMd5指定的特征记录及关联的face记录
+	 * @param featureMd5
+	 * @param deleteImage 是否删除关联的 image记录
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntime{
+		try{
+			return _deleteFeature(featureMd5,deleteImage);
+		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-	
+	/**
+	 * 删除 personId 关联的所有特征(feature)记录
+	 * @param personId
+	 * @param deleteImage 是否删除关联的 image记录
+	 * @return
+	 * @see #deleteFeature(String, boolean)
+	 * @throws ServiceRuntime
+	 */
+	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntime{
+		try{
+			return _deleteAllFeaturesByPersonId(personId,deleteImage);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	/**
+	 * 根据MD5校验码返回人脸特征数据记录
+	 * @param md5
+	 * @return 如果数据库中没有对应的数据则返回null
+	 * @throws ServiceRuntime
+	 */
+	public FeatureBean getFeature(String md5)throws ServiceRuntime{
+		try{
+			return _getFeature(md5);
+		}catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
+	 * 根据MD5校验码返回人脸特征数据
+	 * @param md5
+	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
+	 * @throws ServiceRuntime
+	 */
+	public ByteBuffer getFeatureBytes(String md5)throws ServiceRuntime{
+		try{
+			FeatureBean featureBean = _getFeature(md5);
+			return null ==featureBean?null:featureBean.getFeature();
+		}catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
 	/**
 	 * 根据图像的MD5校验码返回图像数据
 	 * @param imageMD5
@@ -813,32 +1116,41 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 	}
 	/**
-	 * 根据MD5校验码返回人脸特征数据记录
-	 * @param md5
-	 * @return 如果数据库中没有对应的数据则返回null
+	 * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5) 
+	 * @param featureMd5 人脸特征id(MD5)
+	 * @return
 	 * @throws ServiceRuntime
 	 */
-	public FeatureBean getFeature(String md5)throws ServiceRuntime{
+	public List<String> getImagesAssociatedByFeature(String featureMd5)throws ServiceRuntime{
 		try{
-			return _getFeature(md5);
-		}catch (Exception e) {
+			return _getImageKeysImportedByFeatureMd5(featureMd5);
+		}catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
 	/**
-	 * 根据MD5校验码返回人脸特征数据
-	 * @param md5
-	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
+	 * 删除imageMd5指定图像及其缩略图
+	 * @param imageMd5
+	 * @return
 	 * @throws ServiceRuntime
 	 */
-	public ByteBuffer getFeatureBytes(String md5)throws ServiceRuntime{
+	public int deleteImage(String imageMd5)throws ServiceRuntime{
 		try{
-			FeatureBean featureBean = _getFeature(md5);
-			return null ==featureBean?null:featureBean.getFeature();
-		}catch (Exception e) {
+			return _deleteImage(imageMd5);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
 			throw new ServiceRuntime(e);
-		}
+		} 
 	}
+	/**
+     * 判断id指定的设备记录是否存在
+     * @param id
+     * @return
+     * @throws ServiceRuntime
+     */
     public boolean existsDevice(int id) throws ServiceRuntime {
 		try{
 			return deviceManager.existsPrimaryKey(id);

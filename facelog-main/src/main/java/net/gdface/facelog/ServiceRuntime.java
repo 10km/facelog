@@ -2,6 +2,11 @@ package net.gdface.facelog;
 
 import com.facebook.swift.codec.ThriftStruct;
 
+/**
+ * 服务端抛出的异常
+ * @author guyadong
+ *
+ */
 @ThriftStruct
 public class ServiceRuntime extends RuntimeException {
 	private static final long serialVersionUID = -4932379960883720487L;
