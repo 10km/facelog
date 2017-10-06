@@ -283,14 +283,42 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an unique DeviceBean using the mac index.
      *
      * @param mac the mac column's value filter. must not be null
-     * @return an array of DeviceBean
+     * @return 
      */
     public DeviceBean loadByIndexMac(String mac);
-
+    /**
+     * Retrieves an unique DeviceBean for each mac index.
+     *
+     * @param indexs index array
+     * @return an list of DeviceBean
+     */
+    public java.util.List<DeviceBean> loadByIndexMac(String... indexs);
+    /**
+     * Retrieves an unique DeviceBean for each mac index.
+     *
+     * @param indexs index collection
+     * @return an list of DeviceBean
+     */
+    public java.util.List<DeviceBean> loadByIndexMac(java.util.Collection<String> indexs);
+    /**
+     * Deletes rows for each mac index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexMac(String... indexs);
+    /**
+     * Deletes rows for each mac index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexMac(java.util.Collection<String> indexs);
 
     /**
      * Deletes rows using the mac index.
@@ -300,14 +328,42 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     public int deleteByIndexMac(String mac);
     
+
     /**
      * Retrieves an unique DeviceBean using the serial_no index.
      *
      * @param serialNo the serial_no column's value filter. must not be null
-     * @return an array of DeviceBean
+     * @return 
      */
     public DeviceBean loadByIndexSerialNo(String serialNo);
-
+    /**
+     * Retrieves an unique DeviceBean for each serial_no index.
+     *
+     * @param indexs index array
+     * @return an list of DeviceBean
+     */
+    public java.util.List<DeviceBean> loadByIndexSerialNo(String... indexs);
+    /**
+     * Retrieves an unique DeviceBean for each serial_no index.
+     *
+     * @param indexs index collection
+     * @return an list of DeviceBean
+     */
+    public java.util.List<DeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs);
+    /**
+     * Deletes rows for each serial_no index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexSerialNo(String... indexs);
+    /**
+     * Deletes rows for each serial_no index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexSerialNo(java.util.Collection<String> indexs);
 
     /**
      * Deletes rows using the serial_no index.
@@ -317,6 +373,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     public int deleteByIndexSerialNo(String serialNo);
     
+
      /**
      * Retrieves an array of DeviceBean using the group_id index.
      *

@@ -258,6 +258,7 @@ public interface IFaceManager extends TableManager<FaceBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
      /**
      * Retrieves an array of FaceBean using the feature_md5 index.
      *
@@ -282,6 +283,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     public int deleteByIndexFeatureMd5(String featureMd5);
     
+
      /**
      * Retrieves an array of FaceBean using the image_md5 index.
      *

@@ -307,6 +307,7 @@ public interface IImageManager extends TableManager<ImageBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
      /**
      * Retrieves an array of ImageBean using the device_id index.
      *

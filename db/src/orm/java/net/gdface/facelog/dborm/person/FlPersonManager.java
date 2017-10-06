@@ -1285,11 +1285,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an unique FlPersonBean using the image_md5 index.
      *
      * @param imageMd5 the image_md5 column's value filter. must not be null
-     * @return a list of FlPersonBean
+     * @return 
      * @throws DAOException
      */
     public FlPersonBean loadByIndexImageMd5(String imageMd5) throws DAOException
@@ -1299,6 +1300,74 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return null;
         bean.setImageMd5(imageMd5);
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlPersonBean for each image_md5 index.
+     *
+     * @param indexs index array
+     * @return an list of FlPersonBean
+     */
+    public java.util.List<FlPersonBean> loadByIndexImageMd5(String... indexs)throws DAOException
+    {
+        if(null == indexs)return new java.util.ArrayList<FlPersonBean>();
+        java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexImageMd5(indexs[i]));
+        }
+        return list;
+    }
+    /**
+     * Retrieves an unique FlPersonBean for each image_md5 index.
+     *
+     * @param indexs index array
+     * @return an list of FlPersonBean
+     */
+    public java.util.List<FlPersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs )return new java.util.ArrayList<FlPersonBean>();
+        java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexImageMd5(key));
+            }
+        }else{
+            FlPersonBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexImageMd5(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    /**
+     * Deletes rows for each the image_md5 index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexImageMd5(String... indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexImageMd5(index);
+        }
+        return count;
+    }
+    /**
+     * Deletes rows for each the image_md5 index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexImageMd5(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexImageMd5(index);
+        }
+        return count;
     }
     /**
      * Deletes rows using the image_md5 index.
@@ -1314,11 +1383,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an unique FlPersonBean using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter. must not be null
-     * @return a list of FlPersonBean
+     * @return 
      * @throws DAOException
      */
     public FlPersonBean loadByIndexPapersNum(String papersNum) throws DAOException
@@ -1328,6 +1398,74 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return null;
         bean.setPapersNum(papersNum);
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlPersonBean for each papers_num index.
+     *
+     * @param indexs index array
+     * @return an list of FlPersonBean
+     */
+    public java.util.List<FlPersonBean> loadByIndexPapersNum(String... indexs)throws DAOException
+    {
+        if(null == indexs)return new java.util.ArrayList<FlPersonBean>();
+        java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexPapersNum(indexs[i]));
+        }
+        return list;
+    }
+    /**
+     * Retrieves an unique FlPersonBean for each papers_num index.
+     *
+     * @param indexs index array
+     * @return an list of FlPersonBean
+     */
+    public java.util.List<FlPersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs )return new java.util.ArrayList<FlPersonBean>();
+        java.util.ArrayList<FlPersonBean> list = new java.util.ArrayList<FlPersonBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexPapersNum(key));
+            }
+        }else{
+            FlPersonBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexPapersNum(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    /**
+     * Deletes rows for each the papers_num index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexPapersNum(String... indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexPapersNum(index);
+        }
+        return count;
+    }
+    /**
+     * Deletes rows for each the papers_num index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexPapersNum(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexPapersNum(index);
+        }
+        return count;
     }
     /**
      * Deletes rows using the papers_num index.
@@ -1343,6 +1481,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlPersonBean using the expiry_date index.
      *
@@ -1382,6 +1521,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlPersonBean using the group_id index.
      *

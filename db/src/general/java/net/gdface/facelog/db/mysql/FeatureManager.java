@@ -172,10 +172,8 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public java.util.List<FeatureBean> loadByPrimaryKey(String... keys){
         if(null == keys)return new java.util.ArrayList<FeatureBean>();
         java.util.ArrayList<FeatureBean> list = new java.util.ArrayList<FeatureBean>(keys.length);
-        FeatureBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }

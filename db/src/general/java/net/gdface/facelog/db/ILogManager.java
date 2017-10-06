@@ -204,6 +204,7 @@ public interface ILogManager extends TableManager<LogBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
      /**
      * Retrieves an array of LogBean using the compare_face index.
      *
@@ -228,6 +229,7 @@ public interface ILogManager extends TableManager<LogBean>
      */
     public int deleteByIndexCompareFace(Integer compareFace);
     
+
      /**
      * Retrieves an array of LogBean using the device_id index.
      *
@@ -252,6 +254,7 @@ public interface ILogManager extends TableManager<LogBean>
      */
     public int deleteByIndexDeviceId(Integer deviceId);
     
+
      /**
      * Retrieves an array of LogBean using the person_id index.
      *
@@ -276,6 +279,7 @@ public interface ILogManager extends TableManager<LogBean>
      */
     public int deleteByIndexPersonId(Integer personId);
     
+
      /**
      * Retrieves an array of LogBean using the verify_feature index.
      *

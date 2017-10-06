@@ -1217,6 +1217,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an array of FlImageBean using the device_id index.
      *

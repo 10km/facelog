@@ -1134,11 +1134,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an unique FlDeviceBean using the mac index.
      *
      * @param mac the mac column's value filter. must not be null
-     * @return a list of FlDeviceBean
+     * @return 
      * @throws DAOException
      */
     public FlDeviceBean loadByIndexMac(String mac) throws DAOException
@@ -1148,6 +1149,74 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             return null;
         bean.setMac(mac);
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlDeviceBean for each mac index.
+     *
+     * @param indexs index array
+     * @return an list of FlDeviceBean
+     */
+    public java.util.List<FlDeviceBean> loadByIndexMac(String... indexs)throws DAOException
+    {
+        if(null == indexs)return new java.util.ArrayList<FlDeviceBean>();
+        java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexMac(indexs[i]));
+        }
+        return list;
+    }
+    /**
+     * Retrieves an unique FlDeviceBean for each mac index.
+     *
+     * @param indexs index array
+     * @return an list of FlDeviceBean
+     */
+    public java.util.List<FlDeviceBean> loadByIndexMac(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs )return new java.util.ArrayList<FlDeviceBean>();
+        java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexMac(key));
+            }
+        }else{
+            FlDeviceBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexMac(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    /**
+     * Deletes rows for each the mac index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexMac(String... indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexMac(index);
+        }
+        return count;
+    }
+    /**
+     * Deletes rows for each the mac index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexMac(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexMac(index);
+        }
+        return count;
     }
     /**
      * Deletes rows using the mac index.
@@ -1163,11 +1232,12 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an unique FlDeviceBean using the serial_no index.
      *
      * @param serialNo the serial_no column's value filter. must not be null
-     * @return a list of FlDeviceBean
+     * @return 
      * @throws DAOException
      */
     public FlDeviceBean loadByIndexSerialNo(String serialNo) throws DAOException
@@ -1177,6 +1247,74 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             return null;
         bean.setSerialNo(serialNo);
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlDeviceBean for each serial_no index.
+     *
+     * @param indexs index array
+     * @return an list of FlDeviceBean
+     */
+    public java.util.List<FlDeviceBean> loadByIndexSerialNo(String... indexs)throws DAOException
+    {
+        if(null == indexs)return new java.util.ArrayList<FlDeviceBean>();
+        java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexSerialNo(indexs[i]));
+        }
+        return list;
+    }
+    /**
+     * Retrieves an unique FlDeviceBean for each serial_no index.
+     *
+     * @param indexs index array
+     * @return an list of FlDeviceBean
+     */
+    public java.util.List<FlDeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs )return new java.util.ArrayList<FlDeviceBean>();
+        java.util.ArrayList<FlDeviceBean> list = new java.util.ArrayList<FlDeviceBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexSerialNo(key));
+            }
+        }else{
+            FlDeviceBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexSerialNo(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    /**
+     * Deletes rows for each the serial_no index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexSerialNo(String... indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexSerialNo(index);
+        }
+        return count;
+    }
+    /**
+     * Deletes rows for each the serial_no index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexSerialNo(java.util.Collection<String> indexs)throws DAOException
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexSerialNo(index);
+        }
+        return count;
     }
     /**
      * Deletes rows using the serial_no index.
@@ -1192,6 +1330,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlDeviceBean using the group_id index.
      *

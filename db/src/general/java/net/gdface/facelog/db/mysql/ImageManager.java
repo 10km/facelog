@@ -172,10 +172,8 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public java.util.List<ImageBean> loadByPrimaryKey(String... keys){
         if(null == keys)return new java.util.ArrayList<ImageBean>();
         java.util.ArrayList<ImageBean> list = new java.util.ArrayList<ImageBean>(keys.length);
-        ImageBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }

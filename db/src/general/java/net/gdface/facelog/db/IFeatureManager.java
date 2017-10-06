@@ -307,6 +307,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
      /**
      * Retrieves an array of FeatureBean using the person_id index.
      *

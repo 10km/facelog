@@ -171,10 +171,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public java.util.List<DeviceBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<DeviceBean>();
         java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(keys.length);
-        DeviceBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }
@@ -706,7 +704,58 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    // override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByIndexMac(String... indexs)
+    {
+        if(null == indexs)return new java.util.ArrayList<DeviceBean>();
+        java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexMac(indexs[i]));
+        }
+        return list;
+    }
+    // override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByIndexMac(java.util.Collection<String> indexs)
+    {
+        if(null == indexs )return new java.util.ArrayList<DeviceBean>();
+        java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexMac(key));
+            }
+        }else{
+            DeviceBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexMac(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexMac(String... indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexMac(index);
+        }
+        return count;
+    }
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexMac(java.util.Collection<String> indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexMac(index);
+        }
+        return count;
+    }
 
     // override IDeviceManager
     @Override 
@@ -733,7 +782,58 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    // override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByIndexSerialNo(String... indexs)
+    {
+        if(null == indexs)return new java.util.ArrayList<DeviceBean>();
+        java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexSerialNo(indexs[i]));
+        }
+        return list;
+    }
+    // override IDeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)
+    {
+        if(null == indexs )return new java.util.ArrayList<DeviceBean>();
+        java.util.ArrayList<DeviceBean> list = new java.util.ArrayList<DeviceBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexSerialNo(key));
+            }
+        }else{
+            DeviceBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexSerialNo(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexSerialNo(String... indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexSerialNo(index);
+        }
+        return count;
+    }
+    // override IDeviceManager
+    @Override 
+    public int deleteByIndexSerialNo(java.util.Collection<String> indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexSerialNo(index);
+        }
+        return count;
+    }
 
     // override IDeviceManager
     @Override 

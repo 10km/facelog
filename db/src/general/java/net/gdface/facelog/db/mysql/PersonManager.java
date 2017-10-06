@@ -172,10 +172,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public java.util.List<PersonBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<PersonBean>();
         java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(keys.length);
-        PersonBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }
@@ -795,7 +793,58 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    // override IPersonManager
+    @Override 
+    public java.util.List<PersonBean> loadByIndexImageMd5(String... indexs)
+    {
+        if(null == indexs)return new java.util.ArrayList<PersonBean>();
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexImageMd5(indexs[i]));
+        }
+        return list;
+    }
+    // override IPersonManager
+    @Override 
+    public java.util.List<PersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs)
+    {
+        if(null == indexs )return new java.util.ArrayList<PersonBean>();
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexImageMd5(key));
+            }
+        }else{
+            PersonBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexImageMd5(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    // override IPersonManager
+    @Override 
+    public int deleteByIndexImageMd5(String... indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexImageMd5(index);
+        }
+        return count;
+    }
+    // override IPersonManager
+    @Override 
+    public int deleteByIndexImageMd5(java.util.Collection<String> indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexImageMd5(index);
+        }
+        return count;
+    }
 
     // override IPersonManager
     @Override 
@@ -822,7 +871,58 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new WrapDAOException(e);
         }
     }
-
+    // override IPersonManager
+    @Override 
+    public java.util.List<PersonBean> loadByIndexPapersNum(String... indexs)
+    {
+        if(null == indexs)return new java.util.ArrayList<PersonBean>();
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.length);
+        for(int i = 0 ;i< indexs.length;++i){
+            list.add(loadByIndexPapersNum(indexs[i]));
+        }
+        return list;
+    }
+    // override IPersonManager
+    @Override 
+    public java.util.List<PersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs)
+    {
+        if(null == indexs )return new java.util.ArrayList<PersonBean>();
+        java.util.ArrayList<PersonBean> list = new java.util.ArrayList<PersonBean>(indexs.size());
+        if(indexs instanceof java.util.List){
+            for(String key: indexs){
+                list.add(loadByIndexPapersNum(key));
+            }
+        }else{
+            PersonBean bean;
+            for(String key: indexs){
+                if(null != (bean = loadByIndexPapersNum(key)))
+                    list.add(bean);
+            }
+        }
+        return list;
+    }
+    // override IPersonManager
+    @Override 
+    public int deleteByIndexPapersNum(String... indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexPapersNum(index);
+        }
+        return count;
+    }
+    // override IPersonManager
+    @Override 
+    public int deleteByIndexPapersNum(java.util.Collection<String> indexs)
+    {
+        if(null == indexs)return 0;
+        int count = 0;
+        for(String index : indexs){
+            count += deleteByIndexPapersNum(index);
+        }
+        return count;
+    }
 
     // override IPersonManager
     @Override 

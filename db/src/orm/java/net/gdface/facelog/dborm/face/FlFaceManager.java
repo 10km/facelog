@@ -1378,6 +1378,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an array of FlFaceBean using the feature_md5 index.
      *
@@ -1417,6 +1418,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlFaceBean using the image_md5 index.
      *

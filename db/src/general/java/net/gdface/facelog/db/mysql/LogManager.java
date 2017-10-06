@@ -173,10 +173,8 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     public java.util.List<LogBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<LogBean>();
         java.util.ArrayList<LogBean> list = new java.util.ArrayList<LogBean>(keys.length);
-        LogBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }

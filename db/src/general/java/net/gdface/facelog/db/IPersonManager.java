@@ -307,14 +307,42 @@ public interface IPersonManager extends TableManager<PersonBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an unique PersonBean using the image_md5 index.
      *
      * @param imageMd5 the image_md5 column's value filter. must not be null
-     * @return an array of PersonBean
+     * @return 
      */
     public PersonBean loadByIndexImageMd5(String imageMd5);
-
+    /**
+     * Retrieves an unique PersonBean for each image_md5 index.
+     *
+     * @param indexs index array
+     * @return an list of PersonBean
+     */
+    public java.util.List<PersonBean> loadByIndexImageMd5(String... indexs);
+    /**
+     * Retrieves an unique PersonBean for each image_md5 index.
+     *
+     * @param indexs index collection
+     * @return an list of PersonBean
+     */
+    public java.util.List<PersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs);
+    /**
+     * Deletes rows for each image_md5 index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexImageMd5(String... indexs);
+    /**
+     * Deletes rows for each image_md5 index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexImageMd5(java.util.Collection<String> indexs);
 
     /**
      * Deletes rows using the image_md5 index.
@@ -324,14 +352,42 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     public int deleteByIndexImageMd5(String imageMd5);
     
+
     /**
      * Retrieves an unique PersonBean using the papers_num index.
      *
      * @param papersNum the papers_num column's value filter. must not be null
-     * @return an array of PersonBean
+     * @return 
      */
     public PersonBean loadByIndexPapersNum(String papersNum);
-
+    /**
+     * Retrieves an unique PersonBean for each papers_num index.
+     *
+     * @param indexs index array
+     * @return an list of PersonBean
+     */
+    public java.util.List<PersonBean> loadByIndexPapersNum(String... indexs);
+    /**
+     * Retrieves an unique PersonBean for each papers_num index.
+     *
+     * @param indexs index collection
+     * @return an list of PersonBean
+     */
+    public java.util.List<PersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs);
+    /**
+     * Deletes rows for each papers_num index.
+     *
+     * @param indexs index array
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexPapersNum(String... indexs);
+    /**
+     * Deletes rows for each papers_num index.
+     *
+     * @param indexs index collection
+     * @return the number of deleted rows
+     */
+    public int deleteByIndexPapersNum(java.util.Collection<String> indexs);
 
     /**
      * Deletes rows using the papers_num index.
@@ -341,6 +397,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     public int deleteByIndexPapersNum(String papersNum);
     
+
      /**
      * Retrieves an array of PersonBean using the expiry_date index.
      *
@@ -365,6 +422,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     public int deleteByIndexExpiryDate(java.util.Date expiryDate);
     
+
      /**
      * Retrieves an array of PersonBean using the group_id index.
      *

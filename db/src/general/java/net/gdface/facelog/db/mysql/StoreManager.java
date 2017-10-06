@@ -169,10 +169,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     public java.util.List<StoreBean> loadByPrimaryKey(String... keys){
         if(null == keys)return new java.util.ArrayList<StoreBean>();
         java.util.ArrayList<StoreBean> list = new java.util.ArrayList<StoreBean>(keys.length);
-        StoreBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }

@@ -1060,6 +1060,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     // USING INDICES
     //_____________________________________________________________________
 
+
     /**
      * Retrieves an array of FlLogBean using the compare_face index.
      *
@@ -1099,6 +1100,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlLogBean using the device_id index.
      *
@@ -1138,6 +1140,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlLogBean using the person_id index.
      *
@@ -1177,6 +1180,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return deleteUsingTemplate(bean);
     }
     
+
     /**
      * Retrieves an array of FlLogBean using the verify_feature index.
      *

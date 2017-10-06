@@ -172,10 +172,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public java.util.List<FaceBean> loadByPrimaryKey(int... keys){
         if(null == keys)return new java.util.ArrayList<FaceBean>();
         java.util.ArrayList<FaceBean> list = new java.util.ArrayList<FaceBean>(keys.length);
-        FaceBean bean;
         for(int i = 0 ;i< keys.length;++i){
-            if(null != (bean = loadByPrimaryKey(keys[i])))
-                list.add(bean);
+            list.add(loadByPrimaryKey(keys[i]));
         }
         return list;
     }
