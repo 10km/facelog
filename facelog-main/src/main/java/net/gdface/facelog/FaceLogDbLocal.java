@@ -14,7 +14,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.javatuples.Pair;
-import org.weakref.jmx.com.google.common.primitives.Ints;
+
+import com.google.common.primitives.Ints;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
