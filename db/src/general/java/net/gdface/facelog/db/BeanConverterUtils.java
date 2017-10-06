@@ -490,9 +490,9 @@ public class BeanConverterUtils {
                 methods.put("checkFeatureInitialized",rightType.getMethod("checkFeatureInitialized"));
             }catch(Exception e){}
             try{         
-                methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
-                methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
-                methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
+                methods.put("getUpdateTime",rightType.getMethod("getUpdateTime"));
+                methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
+                methods.put("checkUpdateTimeInitialized",rightType.getMethod("checkUpdateTimeInitialized"));
             }catch(Exception e){}
         }
         @Override
@@ -511,9 +511,9 @@ public class BeanConverterUtils {
                     if((boolean)initializedMethod.invoke(right))
                         left.setFeature((java.nio.ByteBuffer)getterMethod.invoke(right));
                 }
-                if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
+                if( null != (initializedMethod = methods.get("checkUpdateTimeInitialized")) && null != (getterMethod = methods.get("getUpdateTime"))){
                     if((boolean)initializedMethod.invoke(right))
-                        left.setCreateTime((java.util.Date)getterMethod.invoke(right));
+                        left.setUpdateTime((java.util.Date)getterMethod.invoke(right));
                 }
                 left.isNew((boolean)methods.get("isNew").invoke(right));
                 left.setModified((long)methods.get("getModified").invoke(right));
@@ -534,9 +534,9 @@ public class BeanConverterUtils {
                     setterMethod.invoke(right,left.getPersonId());
                 if(null != (setterMethod = methods.get("setFeature")) && left.checkFeatureInitialized() )
                     setterMethod.invoke(right,left.getFeature());
-// IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getCreateTime());
+// IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized() )
+//                     setterMethod.invoke(right,left.getUpdateTime());
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){

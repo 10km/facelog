@@ -912,11 +912,11 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 _dirtyCount++;
             }
 
-            if (bean.checkCreateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("create_time");
+                sql.append("update_time");
                 _dirtyCount++;
             }
 
@@ -1006,13 +1006,13 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 sql.append("feature=?");
             }
 
-            if (bean.checkCreateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("create_time=?");
+                sql.append("update_time=?");
             }
             sql.append(" WHERE ");
             sql.append("md5=?");
@@ -1405,12 +1405,12 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("feature = ?");
                 }
             }
-            if (bean.checkCreateTimeModified()) {
+            if (bean.checkUpdateTimeModified()) {
                 _dirtyCount ++;
-                if (bean.getCreateTime() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time IS NULL");
+                if (bean.getUpdateTime() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("create_time = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("update_time = ?");
                 }
             }
         }
@@ -1467,9 +1467,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeature() + "]");
                 if (bean.getFeature() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getFeature()); }
             }
-            if (bean.checkCreateTimeModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+            if (bean.checkUpdateTimeModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getUpdateTime() + "]");
+                if (bean.getUpdateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getUpdateTime().getTime())); }
             }
         }
         catch(SQLException e)
@@ -1579,7 +1579,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             bean.setMd5(rs.getString(1));
             bean.setPersonId(Manager.getInteger(rs, 2));
             bean.setFeature(Manager.getBytes(rs, 3));
-            bean.setCreateTime(rs.getTimestamp(4));
+            bean.setUpdateTime(rs.getTimestamp(4));
         }
         catch(SQLException e)
         {
@@ -1623,9 +1623,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                         ++pos;
                         bean.setFeature(Manager.getBytes(rs, pos));
                         break;
-                    case FL_FEATURE_ID_CREATE_TIME:
+                    case FL_FEATURE_ID_UPDATE_TIME:
                         ++pos;
-                        bean.setCreateTime(rs.getTimestamp(pos));
+                        bean.setUpdateTime(rs.getTimestamp(pos));
                         break;
                     default:
                         throw new DAOException("Unknown field id " + fieldList[i]);
@@ -1658,7 +1658,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             bean.setMd5(rs.getString("md5"));
             bean.setPersonId(Manager.getInteger(rs, "person_id"));
             bean.setFeature(Manager.getBytes(rs, "feature"));
-            bean.setCreateTime(rs.getTimestamp("create_time"));
+            bean.setUpdateTime(rs.getTimestamp("update_time"));
         }
         catch(SQLException e)
         {
@@ -1993,5 +1993,31 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         int getCount(){
             return count.get();
         }
+    }
+    /**
+     * return a primary key list from {@link FlFeatureBean} array
+     * @param array
+     */
+    //45
+    public List<String> toPrimaryKeyList(FlFeatureBean... array){        
+        if(null == array)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
+        for(FlFeatureBean bean:array){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
+    /**
+     * return a primary key list from {@link FlFeatureBean} collection
+     * @param array
+     */
+    //46
+    public List<String> toPrimaryKeyList(java.util.Collection<FlFeatureBean> collection){        
+        if(null == collection)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
+        for(FlFeatureBean bean:collection){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
     }
 }

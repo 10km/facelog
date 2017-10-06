@@ -193,9 +193,9 @@ public interface Constant {
     /** Identify the fl_feature.feature field (ordinal:3). */
     public static final int FL_FEATURE_ID_FEATURE = 2;
     public static final long FL_FEATURE_ID_FEATURE_MASK = 1L << 2;
-    /** Identify the fl_feature.create_time field (ordinal:4). */
-    public static final int FL_FEATURE_ID_CREATE_TIME = 3;
-    public static final long FL_FEATURE_ID_CREATE_TIME_MASK = 1L << 3;
+    /** Identify the fl_feature.update_time field (ordinal:4). */
+    public static final int FL_FEATURE_ID_UPDATE_TIME = 3;
+    public static final long FL_FEATURE_ID_UPDATE_TIME_MASK = 1L << 3;
     /** Identify the fl_image.md5 field (ordinal:1). */
     public static final int FL_IMAGE_ID_MD5 = 0;
     public static final long FL_IMAGE_ID_MD5_MASK = 1L << 0;
@@ -341,7 +341,7 @@ public interface Constant {
     public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
                             + ",fl_feature.person_id"
                             + ",fl_feature.feature"
-                            + ",fl_feature.create_time";
+                            + ",fl_feature.update_time";
     /** Contains all the full fields of the fl_image table.*/
     public static final String FL_IMAGE_FULL_FIELDS ="fl_image.md5"
                             + ",fl_image.format"
@@ -451,13 +451,13 @@ public interface Constant {
     public static final String FL_FEATURE_FIELDS = "md5"
                             + ",person_id"
                             + ",feature"
-                            + ",create_time";
+                            + ",update_time";
     public static final java.util.List<String> FL_FEATURE_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_feature table. */
     public static final String FL_FEATURE_JAVA_FIELDS = "md5"
                             + ",personId"
                             + ",feature"
-                            + ",createTime";
+                            + ",updateTime";
     public static final java.util.List<String> FL_FEATURE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_image table. */
     public static final String FL_IMAGE_FIELDS = "md5"

@@ -985,4 +985,25 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
                 return  ImageManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override IImageManager
+    @Override 
+    public java.util.List<String> toPrimaryKeyList(ImageBean... array){        
+        if(null == array)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
+        for(ImageBean bean:array){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
+    //46 override IImageManager
+    @Override 
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> collection){        
+        if(null == collection)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
+        for(ImageBean bean:collection){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
 }

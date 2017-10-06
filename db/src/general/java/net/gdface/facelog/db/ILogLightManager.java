@@ -14,4 +14,5 @@ package net.gdface.facelog.db;
 public interface ILogLightManager extends TableManager<LogLightBean>
 {  
  
- }
+ 
+}

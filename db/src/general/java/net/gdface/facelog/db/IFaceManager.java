@@ -306,4 +306,17 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     public int deleteByIndexImageMd5(String imageMd5);
     
+
+    /**
+     * return a primary key list from {@link FaceBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<Integer> toPrimaryKeyList(FaceBean... array);
+    /**
+     * return a primary key list from {@link FaceBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> collection);
 }

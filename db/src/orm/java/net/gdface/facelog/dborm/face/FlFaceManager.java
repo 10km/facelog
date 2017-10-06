@@ -2582,4 +2582,30 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             return count.get();
         }
     }
+    /**
+     * return a primary key list from {@link FlFaceBean} array
+     * @param array
+     */
+    //45
+    public List<Integer> toPrimaryKeyList(FlFaceBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(FlFaceBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    /**
+     * return a primary key list from {@link FlFaceBean} collection
+     * @param array
+     */
+    //46
+    public List<Integer> toPrimaryKeyList(java.util.Collection<FlFaceBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(FlFaceBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

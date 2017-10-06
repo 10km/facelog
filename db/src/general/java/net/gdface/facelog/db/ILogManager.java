@@ -300,4 +300,17 @@ public interface ILogManager extends TableManager<LogBean>
      */
     public int deleteByIndexVerifyFeature(String verifyFeature);
     
+
+    /**
+     * return a primary key list from {@link LogBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<Integer> toPrimaryKeyList(LogBean... array);
+    /**
+     * return a primary key list from {@link LogBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> collection);
 }

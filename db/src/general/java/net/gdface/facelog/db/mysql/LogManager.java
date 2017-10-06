@@ -961,4 +961,25 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
                 return  LogManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override ILogManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(LogBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(LogBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    //46 override ILogManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(LogBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

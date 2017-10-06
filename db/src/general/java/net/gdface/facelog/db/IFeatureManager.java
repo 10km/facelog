@@ -331,4 +331,17 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      */
     public int deleteByIndexPersonId(Integer personId);
     
+
+    /**
+     * return a primary key list from {@link FeatureBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<String> toPrimaryKeyList(FeatureBean... array);
+    /**
+     * return a primary key list from {@link FeatureBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> collection);
 }

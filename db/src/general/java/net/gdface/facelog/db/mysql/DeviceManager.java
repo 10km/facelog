@@ -950,4 +950,25 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
                 return  DeviceManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override IDeviceManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(DeviceBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(DeviceBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    //46 override IDeviceManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(DeviceBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

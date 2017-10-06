@@ -40,7 +40,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      *   <li>{@link Constant#FL_FEATURE_ID_MD5}
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID}
      *   <li>{@link Constant#FL_FEATURE_ID_FEATURE}
-     *   <li>{@link Constant#FL_FEATURE_ID_CREATE_TIME}
+     *   <li>{@link Constant#FL_FEATURE_ID_UPDATE_TIME}
      * </ul>
      */
     public FlFeatureComparator(int iType)
@@ -62,7 +62,7 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
      *   <li>{@link Constant#FL_FEATURE_ID_MD5})
      *   <li>{@link Constant#FL_FEATURE_ID_PERSON_ID})
      *   <li>{@link Constant#FL_FEATURE_ID_FEATURE})
-     *   <li>{@link Constant#FL_FEATURE_ID_CREATE_TIME})
+     *   <li>{@link Constant#FL_FEATURE_ID_UPDATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -112,15 +112,15 @@ public class FlFeatureComparator implements Comparator<FlFeatureBean>,Constant
                     iReturn = b1.getFeature().compareTo(b2.getFeature());
                 }
                 break;
-            case FL_FEATURE_ID_CREATE_TIME:
-                if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
+            case FL_FEATURE_ID_UPDATE_TIME:
+                if (b1.getUpdateTime() == null && b2.getUpdateTime() != null) {
                     iReturn = -1;
-                } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {
+                } else if (b1.getUpdateTime() == null && b2.getUpdateTime() == null) {
                     iReturn = 0;
-                } else if (b1.getCreateTime() != null && b2.getCreateTime() == null) {
+                } else if (b1.getUpdateTime() != null && b2.getUpdateTime() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getCreateTime().compareTo(b2.getCreateTime());
+                    iReturn = b1.getUpdateTime().compareTo(b2.getUpdateTime());
                 }
                 break;
             default:

@@ -2193,4 +2193,30 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             return count.get();
         }
     }
+    /**
+     * return a primary key list from {@link FlDeviceBean} array
+     * @param array
+     */
+    //45
+    public List<Integer> toPrimaryKeyList(FlDeviceBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(FlDeviceBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    /**
+     * return a primary key list from {@link FlDeviceBean} collection
+     * @param array
+     */
+    //46
+    public List<Integer> toPrimaryKeyList(java.util.Collection<FlDeviceBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(FlDeviceBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

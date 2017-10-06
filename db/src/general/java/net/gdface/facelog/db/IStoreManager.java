@@ -98,4 +98,17 @@ public interface IStoreManager extends TableManager<StoreBean>
     //2.5
     public int delete(java.util.Collection<StoreBean> beans);
  
- }
+ 
+    /**
+     * return a primary key list from {@link StoreBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<String> toPrimaryKeyList(StoreBean... array);
+    /**
+     * return a primary key list from {@link StoreBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> collection);
+}

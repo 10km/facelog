@@ -35,7 +35,7 @@ public class FlFeatureBean
     /** comments:二进制特征数据 */
     private java.nio.ByteBuffer feature;
 
-    private java.util.Date createTime;
+    private java.util.Date updateTime;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -284,70 +284,70 @@ public class FlFeatureBean
         return 0L !=  (initialized & FL_FEATURE_ID_FEATURE_MASK);
     }
     /**
-     * Getter method for {@link #createTime}.<br>
+     * Getter method for {@link #updateTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_feature.create_time</li>
+     * <li>full name: fl_feature.update_time</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
-     * @return the value of createTime
+     * @return the value of updateTime
      */
-    public java.util.Date getCreateTime(){
-        return createTime;
+    public java.util.Date getUpdateTime(){
+        return updateTime;
     }
     /**
-     * Setter method for {@link #createTime}.<br>
+     * Setter method for {@link #updateTime}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value (NOT NULL) to be assigned to updateTime
      */
-    public void setCreateTime(java.util.Date newVal)
+    public void setUpdateTime(java.util.Date newVal)
     {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
+            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
             return;
         }
-        createTime = newVal;
+        updateTime = newVal;
 
-        modified |= FL_FEATURE_ID_CREATE_TIME_MASK;
-        initialized |= FL_FEATURE_ID_CREATE_TIME_MASK;
+        modified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
+        initialized |= FL_FEATURE_ID_UPDATE_TIME_MASK;
     }
 
     /**
-     * Setter method for {@link #createTime}.<br>
+     * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to createTime
+     * @param newVal the new value to be assigned to updateTime
      */
-    public void setCreateTime(long newVal)
+    public void setUpdateTime(long newVal)
     {
-        setCreateTime(new java.util.Date(newVal));
+        setUpdateTime(new java.util.Date(newVal));
     }
     /**
-     * Determines if the createTime has been modified.
+     * Determines if the updateTime has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkCreateTimeModified()
+    public boolean checkUpdateTimeModified()
     {
-        return 0L !=  (modified & FL_FEATURE_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_FEATURE_ID_UPDATE_TIME_MASK);
     }
 
     /**
-     * Determines if the createTime has been initialized.<br>
+     * Determines if the updateTime has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkCreateTimeInitialized()
+    public boolean checkUpdateTimeInitialized()
     {
-        return 0L !=  (initialized & FL_FEATURE_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_FEATURE_ID_UPDATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
@@ -392,8 +392,8 @@ public class FlFeatureBean
             return checkPersonIdModified();
         case FL_FEATURE_ID_FEATURE:
             return checkFeatureModified();
-        case FL_FEATURE_ID_CREATE_TIME:
-            return checkCreateTimeModified();
+        case FL_FEATURE_ID_UPDATE_TIME:
+            return checkUpdateTimeModified();
         }
         return false;
     }
@@ -413,8 +413,8 @@ public class FlFeatureBean
             return checkPersonIdInitialized();
         case FL_FEATURE_ID_FEATURE:
             return checkFeatureInitialized();
-        case FL_FEATURE_ID_CREATE_TIME:
-            return checkCreateTimeInitialized();
+        case FL_FEATURE_ID_UPDATE_TIME:
+            return checkUpdateTimeInitialized();
         }
         return false;
     }
@@ -462,7 +462,7 @@ public class FlFeatureBean
     {
         modified &= (~(FL_FEATURE_ID_PERSON_ID_MASK |
             FL_FEATURE_ID_FEATURE_MASK |
-            FL_FEATURE_ID_CREATE_TIME_MASK));
+            FL_FEATURE_ID_UPDATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -483,7 +483,7 @@ public class FlFeatureBean
             .append(getMd5(), obj.getMd5())
             .append(getPersonId(), obj.getPersonId())
             .append(getFeature(), obj.getFeature())
-            .append(getCreateTime(), obj.getCreateTime())
+            .append(getUpdateTime(), obj.getUpdateTime())
             .isEquals();
     }
 
@@ -501,7 +501,7 @@ public class FlFeatureBean
             .append("\tmd5=").append(getMd5()).append("\n")
             .append("\tperson_id=").append(getPersonId()).append("\n")
             .append("\tfeature=").append(getFeature()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
+            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -512,7 +512,7 @@ public class FlFeatureBean
             .append(getMd5(), object.getMd5())
             .append(getPersonId(), object.getPersonId())
             .append(getFeature(), object.getFeature())
-            .append(getCreateTime(), object.getCreateTime())
+            .append(getUpdateTime(), object.getUpdateTime())
             .toComparison();
     }
     @Override
@@ -533,7 +533,7 @@ public class FlFeatureBean
         setMd5(null);
         setPersonId(null);
         setFeature(null);
-        setCreateTime(null);
+        setUpdateTime(null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -593,8 +593,8 @@ public class FlFeatureBean
             return (T)getPersonId();        
         case FL_FEATURE_ID_FEATURE: 
             return (T)getFeature();        
-        case FL_FEATURE_ID_CREATE_TIME: 
-            return (T)getCreateTime();        
+        case FL_FEATURE_ID_UPDATE_TIME: 
+            return (T)getUpdateTime();        
         }
         return null;
     }
@@ -611,8 +611,8 @@ public class FlFeatureBean
             setPersonId((Integer)value);
         case FL_FEATURE_ID_FEATURE:        
             setFeature((java.nio.ByteBuffer)value);
-        case FL_FEATURE_ID_CREATE_TIME:        
-            setCreateTime((java.util.Date)value);
+        case FL_FEATURE_ID_UPDATE_TIME:        
+            setUpdateTime((java.util.Date)value);
         }
     }
     

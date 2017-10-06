@@ -2433,4 +2433,30 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return count.get();
         }
     }
+    /**
+     * return a primary key list from {@link FlPersonBean} array
+     * @param array
+     */
+    //45
+    public List<Integer> toPrimaryKeyList(FlPersonBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(FlPersonBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    /**
+     * return a primary key list from {@link FlPersonBean} collection
+     * @param array
+     */
+    //46
+    public List<Integer> toPrimaryKeyList(java.util.Collection<FlPersonBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(FlPersonBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

@@ -985,4 +985,25 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
                 return  FeatureManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override IFeatureManager
+    @Override 
+    public java.util.List<String> toPrimaryKeyList(FeatureBean... array){        
+        if(null == array)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
+        for(FeatureBean bean:array){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
+    //46 override IFeatureManager
+    @Override 
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> collection){        
+        if(null == collection)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
+        for(FeatureBean bean:collection){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
 }

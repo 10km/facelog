@@ -1384,4 +1384,30 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             return count.get();
         }
     }
+    /**
+     * return a primary key list from {@link FlStoreBean} array
+     * @param array
+     */
+    //45
+    public List<String> toPrimaryKeyList(FlStoreBean... array){        
+        if(null == array)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
+        for(FlStoreBean bean:array){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
+    /**
+     * return a primary key list from {@link FlStoreBean} collection
+     * @param array
+     */
+    //46
+    public List<String> toPrimaryKeyList(java.util.Collection<FlStoreBean> collection){        
+        if(null == collection)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
+        for(FlStoreBean bean:collection){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
 }

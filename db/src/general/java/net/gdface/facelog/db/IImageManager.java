@@ -331,4 +331,17 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     public int deleteByIndexDeviceId(Integer deviceId);
     
+
+    /**
+     * return a primary key list from {@link ImageBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<String> toPrimaryKeyList(ImageBean... array);
+    /**
+     * return a primary key list from {@link ImageBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> collection);
 }

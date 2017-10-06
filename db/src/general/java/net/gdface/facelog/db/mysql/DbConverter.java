@@ -179,8 +179,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setPersonId(right.getPersonId());
             if(right.checkFeatureInitialized())
                 left.setFeature(right.getFeature());
-            if(right.checkCreateTimeInitialized())
-                left.setCreateTime(right.getCreateTime());
+            if(right.checkUpdateTimeInitialized())
+                left.setUpdateTime(right.getUpdateTime());
             left.isNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -193,9 +193,9 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setPersonId(left.getPersonId());
             if(left.checkFeatureInitialized() )
                 right.setFeature(left.getFeature());
-// IGNORE field fl_feature.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//             if(left.checkCreateTimeInitialized() )
-//                 right.setCreateTime(left.getCreateTime());
+// IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkUpdateTimeInitialized() )
+//                 right.setUpdateTime(left.getUpdateTime());
             right.isNew(left.isNew());
             right.setModified(left.getModified());
         }};

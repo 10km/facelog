@@ -389,4 +389,17 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     public int deleteByIndexGroupId(Integer groupId);
     
+
+    /**
+     * return a primary key list from {@link PersonBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<Integer> toPrimaryKeyList(PersonBean... array);
+    /**
+     * return a primary key list from {@link PersonBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> collection);
 }

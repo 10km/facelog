@@ -322,4 +322,5 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
                 return  LogLightManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
 }

@@ -341,4 +341,17 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      */
     public int deleteByIndexGroupId(Integer groupId);
     
+
+    /**
+     * return a primary key list from {@link DeviceBean} array
+     * @param array
+     */
+    //45
+    public java.util.List<Integer> toPrimaryKeyList(DeviceBean... array);
+    /**
+     * return a primary key list from {@link DeviceBean} collection
+     * @param array
+     */
+    //46
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceBean> collection);
 }

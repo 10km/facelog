@@ -1072,4 +1072,25 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
                 return  PersonManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override IPersonManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(PersonBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(PersonBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    //46 override IPersonManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(PersonBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

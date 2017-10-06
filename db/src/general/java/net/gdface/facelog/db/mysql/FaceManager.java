@@ -981,4 +981,25 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
                 return  FaceManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override IFaceManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(FaceBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(FaceBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    //46 override IFaceManager
+    @Override 
+    public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(FaceBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }

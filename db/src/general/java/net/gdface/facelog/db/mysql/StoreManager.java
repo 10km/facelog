@@ -500,4 +500,25 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
                 return  StoreManager.this.beanConverter.toRight(action.getBean());
             }};
     }
+    
+    //45 override IStoreManager
+    @Override 
+    public java.util.List<String> toPrimaryKeyList(StoreBean... array){        
+        if(null == array)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(array.length);
+        for(StoreBean bean:array){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
+    //46 override IStoreManager
+    @Override 
+    public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> collection){        
+        if(null == collection)return new java.util.ArrayList<String>();
+        java.util.ArrayList<String> list = new java.util.ArrayList<String>(collection.size());
+        for(StoreBean bean:collection){
+            list.add(null == bean ? null : bean.getMd5());
+        }
+        return list;
+    }
 }

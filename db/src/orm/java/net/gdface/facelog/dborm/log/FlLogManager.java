@@ -2136,4 +2136,30 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             return count.get();
         }
     }
+    /**
+     * return a primary key list from {@link FlLogBean} array
+     * @param array
+     */
+    //45
+    public List<Integer> toPrimaryKeyList(FlLogBean... array){        
+        if(null == array)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(array.length);
+        for(FlLogBean bean:array){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
+    /**
+     * return a primary key list from {@link FlLogBean} collection
+     * @param array
+     */
+    //46
+    public List<Integer> toPrimaryKeyList(java.util.Collection<FlLogBean> collection){        
+        if(null == collection)return new java.util.ArrayList<Integer>();
+        java.util.ArrayList<Integer> list = new java.util.ArrayList<Integer>(collection.size());
+        for(FlLogBean bean:collection){
+            list.add(null == bean ? null : bean.getId());
+        }
+        return list;
+    }
 }
