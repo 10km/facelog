@@ -25,6 +25,24 @@ public interface ITableCache<K, B extends BaseBean<B>> {
      * @return
      */
     public B getBean(K key);
+    /**
+     * 向cache中更新数据
+     * @param bean
+     * @return
+     */
+    public void put(B bean);
+    /**
+     * 向cache中增加数据
+     * @param bean
+     * @return
+     */
+    public void putIfAbsent(B bean);
+    /**
+     * 更新cache已有数据
+     * @param bean
+     * @return
+     */
+    public void replace(B bean);
     /** 注册侦听器 */
     public void registerListener();
     /** 注销侦听器 */

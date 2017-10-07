@@ -8,8 +8,6 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.TimeUnit;
-import net.gdface.facelog.db.BaseBean;
-import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
@@ -24,7 +22,8 @@ import net.gdface.facelog.db.StoreBean;
  * @author guyadong
  *
  */
-public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, B> {
+public class Cache{
+    private Cache(){}
     /**
      * cache manager for DeviceBean base {@link com.google.common.cache.LoadingCache}<br>
      * primary key (fl_device.id) is key
@@ -32,43 +31,124 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
-        DeviceManager manager = DeviceManager.getInstance();
-        public DeviceCache() {
-            super();
-        }
-
+        private final DeviceManager manager = DeviceManager.getInstance();
+        private final TableLoadCaching<String, DeviceBean> macCacher;
+        private final TableLoadCaching<String, DeviceBean> serialNoCacher;
         public DeviceCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
+
+            macCacher = new TableLoadCaching<String, DeviceBean>(){
+                @Override
+                public void registerListener() {
+                    manager.registerListener(tableListener);
+                }
+                @Override
+                public void unregisterListener() {
+                    manager.unregisterListener(tableListener);        
+                }
+                @Override
+                protected String returnKey(DeviceBean bean) {
+                    return bean.getMac();
+                }
+                @Override
+                protected DeviceBean loadfromDatabase(String key) {
+                    return manager.loadByIndexMac(key);
+                }};
+
+            serialNoCacher = new TableLoadCaching<String, DeviceBean>(){
+                @Override
+                public void registerListener() {
+                    manager.registerListener(tableListener);
+                }
+                @Override
+                public void unregisterListener() {
+                    manager.unregisterListener(tableListener);        
+                }
+                @Override
+                protected String returnKey(DeviceBean bean) {
+                    return bean.getSerialNo();
+                }
+                @Override
+                protected DeviceBean loadfromDatabase(String key) {
+                    return manager.loadByIndexSerialNo(key);
+                }};
         }
 
         public DeviceCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public DeviceCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public DeviceCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
+            macCacher.registerListener();
+            serialNoCacher.registerListener();
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
+            macCacher.unregisterListener();
+            serialNoCacher.unregisterListener();
         }
-    
         @Override
         protected Integer returnKey(DeviceBean bean) {
             return bean.getId();
         }
-    
         @Override
         protected DeviceBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public DeviceBean getBeanById(Integer id){
+            return getBean(id);
+        }
+
+        public void putById(DeviceBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentById(DeviceBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceById(DeviceBean bean){
+            replace(bean);
+        }       
+        public DeviceBean getBeanByMac(String mac){
+            return macCacher.getBean(mac);
+        }
+        public void putByMac(DeviceBean bean){
+            macCacher.put(bean);
+        }
+
+        public void putIfAbsentByMac(DeviceBean bean){
+            macCacher.putIfAbsent(bean);
+        }
+
+        public void replaceByMac(DeviceBean bean){
+            macCacher.replace(bean);
+        }   
+        public DeviceBean getBeanBySerialNo(String serialNo){
+            return serialNoCacher.getBean(serialNo);
+        }
+        public void putBySerialNo(DeviceBean bean){
+            serialNoCacher.put(bean);
+        }
+
+        public void putIfAbsentBySerialNo(DeviceBean bean){
+            serialNoCacher.putIfAbsent(bean);
+        }
+
+        public void replaceBySerialNo(DeviceBean bean){
+            serialNoCacher.replace(bean);
+        }   
     }
     /**
      * cache manager for FaceBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -77,43 +157,54 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class FaceCache extends TableLoadCaching<Integer, FaceBean> {
-        FaceManager manager = FaceManager.getInstance();
-        public FaceCache() {
-            super();
-        }
-
+        private final FaceManager manager = FaceManager.getInstance();
         public FaceCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
         }
 
         public FaceCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public FaceCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public FaceCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
         }
-    
         @Override
         protected Integer returnKey(FaceBean bean) {
             return bean.getId();
         }
-    
         @Override
         protected FaceBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public FaceBean getBeanById(Integer id){
+            return getBean(id);
+        }
+
+        public void putById(FaceBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentById(FaceBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceById(FaceBean bean){
+            replace(bean);
+        }       
     }
     /**
      * cache manager for FeatureBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -122,43 +213,54 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class FeatureCache extends TableLoadCaching<String, FeatureBean> {
-        FeatureManager manager = FeatureManager.getInstance();
-        public FeatureCache() {
-            super();
-        }
-
+        private final FeatureManager manager = FeatureManager.getInstance();
         public FeatureCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
         }
 
         public FeatureCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public FeatureCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public FeatureCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
         }
-    
         @Override
         protected String returnKey(FeatureBean bean) {
             return bean.getMd5();
         }
-    
         @Override
         protected FeatureBean loadfromDatabase(String key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public FeatureBean getBeanByMd5(String md5){
+            return getBean(md5);
+        }
+
+        public void putByMd5(FeatureBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentByMd5(FeatureBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceByMd5(FeatureBean bean){
+            replace(bean);
+        }       
     }
     /**
      * cache manager for ImageBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -167,43 +269,54 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class ImageCache extends TableLoadCaching<String, ImageBean> {
-        ImageManager manager = ImageManager.getInstance();
-        public ImageCache() {
-            super();
-        }
-
+        private final ImageManager manager = ImageManager.getInstance();
         public ImageCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
         }
 
         public ImageCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public ImageCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public ImageCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
         }
-    
         @Override
         protected String returnKey(ImageBean bean) {
             return bean.getMd5();
         }
-    
         @Override
         protected ImageBean loadfromDatabase(String key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public ImageBean getBeanByMd5(String md5){
+            return getBean(md5);
+        }
+
+        public void putByMd5(ImageBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentByMd5(ImageBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceByMd5(ImageBean bean){
+            replace(bean);
+        }       
     }
     /**
      * cache manager for LogBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -212,43 +325,54 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class LogCache extends TableLoadCaching<Integer, LogBean> {
-        LogManager manager = LogManager.getInstance();
-        public LogCache() {
-            super();
-        }
-
+        private final LogManager manager = LogManager.getInstance();
         public LogCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
         }
 
         public LogCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public LogCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public LogCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
         }
-    
         @Override
         protected Integer returnKey(LogBean bean) {
             return bean.getId();
         }
-    
         @Override
         protected LogBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public LogBean getBeanById(Integer id){
+            return getBean(id);
+        }
+
+        public void putById(LogBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentById(LogBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceById(LogBean bean){
+            replace(bean);
+        }       
     }
     /**
      * cache manager for PersonBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -257,43 +381,124 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class PersonCache extends TableLoadCaching<Integer, PersonBean> {
-        PersonManager manager = PersonManager.getInstance();
-        public PersonCache() {
-            super();
-        }
-
+        private final PersonManager manager = PersonManager.getInstance();
+        private final TableLoadCaching<String, PersonBean> imageMd5Cacher;
+        private final TableLoadCaching<String, PersonBean> papersNumCacher;
         public PersonCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
+
+            imageMd5Cacher = new TableLoadCaching<String, PersonBean>(){
+                @Override
+                public void registerListener() {
+                    manager.registerListener(tableListener);
+                }
+                @Override
+                public void unregisterListener() {
+                    manager.unregisterListener(tableListener);        
+                }
+                @Override
+                protected String returnKey(PersonBean bean) {
+                    return bean.getImageMd5();
+                }
+                @Override
+                protected PersonBean loadfromDatabase(String key) {
+                    return manager.loadByIndexImageMd5(key);
+                }};
+
+            papersNumCacher = new TableLoadCaching<String, PersonBean>(){
+                @Override
+                public void registerListener() {
+                    manager.registerListener(tableListener);
+                }
+                @Override
+                public void unregisterListener() {
+                    manager.unregisterListener(tableListener);        
+                }
+                @Override
+                protected String returnKey(PersonBean bean) {
+                    return bean.getPapersNum();
+                }
+                @Override
+                protected PersonBean loadfromDatabase(String key) {
+                    return manager.loadByIndexPapersNum(key);
+                }};
         }
 
         public PersonCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public PersonCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public PersonCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
+            imageMd5Cacher.registerListener();
+            papersNumCacher.registerListener();
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
+            imageMd5Cacher.unregisterListener();
+            papersNumCacher.unregisterListener();
         }
-    
         @Override
         protected Integer returnKey(PersonBean bean) {
             return bean.getId();
         }
-    
         @Override
         protected PersonBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public PersonBean getBeanById(Integer id){
+            return getBean(id);
+        }
+
+        public void putById(PersonBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentById(PersonBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceById(PersonBean bean){
+            replace(bean);
+        }       
+        public PersonBean getBeanByImageMd5(String imageMd5){
+            return imageMd5Cacher.getBean(imageMd5);
+        }
+        public void putByImageMd5(PersonBean bean){
+            imageMd5Cacher.put(bean);
+        }
+
+        public void putIfAbsentByImageMd5(PersonBean bean){
+            imageMd5Cacher.putIfAbsent(bean);
+        }
+
+        public void replaceByImageMd5(PersonBean bean){
+            imageMd5Cacher.replace(bean);
+        }   
+        public PersonBean getBeanByPapersNum(String papersNum){
+            return papersNumCacher.getBean(papersNum);
+        }
+        public void putByPapersNum(PersonBean bean){
+            papersNumCacher.put(bean);
+        }
+
+        public void putIfAbsentByPapersNum(PersonBean bean){
+            papersNumCacher.putIfAbsent(bean);
+        }
+
+        public void replaceByPapersNum(PersonBean bean){
+            papersNumCacher.replace(bean);
+        }   
     }
     /**
      * cache manager for StoreBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -302,43 +507,54 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      *
      */
     public static class StoreCache extends TableLoadCaching<String, StoreBean> {
-        StoreManager manager = StoreManager.getInstance();
-        public StoreCache() {
-            super();
-        }
-
+        private final StoreManager manager = StoreManager.getInstance();
         public StoreCache(long maximumSize, long duration, TimeUnit unit) {
             super(maximumSize, duration, unit);
         }
 
         public StoreCache(long maximumSize, long durationMinutes) {
-            super(maximumSize, durationMinutes);
+            this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
         }
 
         public StoreCache(long maximumSize) {
-            super(maximumSize);
+            this(maximumSize,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
         }
-
+        public StoreCache() {
+            this(DEFAULT_CACHE_MAXIMUMSIZE,DEFAULT_DURATION,DEFAULT_TIME_UNIT);
+        }
+        
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
         }
-    
         @Override
         public void unregisterListener() {
-            manager.unregisterListener(tableListener);        
+            manager.unregisterListener(tableListener);
         }
-    
         @Override
         protected String returnKey(StoreBean bean) {
             return bean.getMd5();
         }
-    
         @Override
         protected StoreBean loadfromDatabase(String key) {
             return manager.loadByPrimaryKey(key);
         }
-    
+        
+        public StoreBean getBeanByMd5(String md5){
+            return getBean(md5);
+        }
+
+        public void putByMd5(StoreBean bean){
+            put(bean);
+        }
+
+        public void putIfAbsentByMd5(StoreBean bean){
+            putIfAbsent(bean);
+        }
+
+        public void replaceByMd5(StoreBean bean){
+            replace(bean);
+        }       
     }
     // Table fl_log_light haven't primary key
 }
