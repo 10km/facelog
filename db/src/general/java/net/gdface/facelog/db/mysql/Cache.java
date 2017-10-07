@@ -227,5 +227,5 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
         }
     
     }
-    // Table fl_log_light has a composite key, not a unique primary key
+    // Table fl_log_light haven't primary key
 }
