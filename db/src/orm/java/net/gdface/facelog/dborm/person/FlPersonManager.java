@@ -1306,6 +1306,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param indexs index array
      * @return an list of FlPersonBean
+     * @throws DAOException
      */
     public java.util.List<FlPersonBean> loadByIndexImageMd5(String... indexs)throws DAOException
     {
@@ -1321,6 +1322,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param indexs index array
      * @return an list of FlPersonBean
+     * @throws DAOException
      */
     public java.util.List<FlPersonBean> loadByIndexImageMd5(java.util.Collection<String> indexs)throws DAOException
     {
@@ -1340,10 +1342,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return list;
     }
     /**
-     * Deletes rows for each the image_md5 index.
+     * Deletes rows for each image_md5 index.
      *
      * @param indexs index array
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexImageMd5(String... indexs)throws DAOException
     {
@@ -1355,10 +1358,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return count;
     }
     /**
-     * Deletes rows for each the image_md5 index.
+     * Deletes rows for each image_md5 index.
      *
      * @param indexs index collection
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexImageMd5(java.util.Collection<String> indexs)throws DAOException
     {
@@ -1404,6 +1408,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param indexs index array
      * @return an list of FlPersonBean
+     * @throws DAOException
      */
     public java.util.List<FlPersonBean> loadByIndexPapersNum(String... indexs)throws DAOException
     {
@@ -1419,6 +1424,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param indexs index array
      * @return an list of FlPersonBean
+     * @throws DAOException
      */
     public java.util.List<FlPersonBean> loadByIndexPapersNum(java.util.Collection<String> indexs)throws DAOException
     {
@@ -1438,10 +1444,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return list;
     }
     /**
-     * Deletes rows for each the papers_num index.
+     * Deletes rows for each papers_num index.
      *
      * @param indexs index array
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexPapersNum(String... indexs)throws DAOException
     {
@@ -1453,10 +1460,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return count;
     }
     /**
-     * Deletes rows for each the papers_num index.
+     * Deletes rows for each papers_num index.
      *
      * @param indexs index collection
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexPapersNum(java.util.Collection<String> indexs)throws DAOException
     {

@@ -1155,6 +1155,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      *
      * @param indexs index array
      * @return an list of FlDeviceBean
+     * @throws DAOException
      */
     public java.util.List<FlDeviceBean> loadByIndexMac(String... indexs)throws DAOException
     {
@@ -1170,6 +1171,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      *
      * @param indexs index array
      * @return an list of FlDeviceBean
+     * @throws DAOException
      */
     public java.util.List<FlDeviceBean> loadByIndexMac(java.util.Collection<String> indexs)throws DAOException
     {
@@ -1189,10 +1191,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return list;
     }
     /**
-     * Deletes rows for each the mac index.
+     * Deletes rows for each mac index.
      *
      * @param indexs index array
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexMac(String... indexs)throws DAOException
     {
@@ -1204,10 +1207,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return count;
     }
     /**
-     * Deletes rows for each the mac index.
+     * Deletes rows for each mac index.
      *
      * @param indexs index collection
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexMac(java.util.Collection<String> indexs)throws DAOException
     {
@@ -1253,6 +1257,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      *
      * @param indexs index array
      * @return an list of FlDeviceBean
+     * @throws DAOException
      */
     public java.util.List<FlDeviceBean> loadByIndexSerialNo(String... indexs)throws DAOException
     {
@@ -1268,6 +1273,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      *
      * @param indexs index array
      * @return an list of FlDeviceBean
+     * @throws DAOException
      */
     public java.util.List<FlDeviceBean> loadByIndexSerialNo(java.util.Collection<String> indexs)throws DAOException
     {
@@ -1287,10 +1293,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return list;
     }
     /**
-     * Deletes rows for each the serial_no index.
+     * Deletes rows for each serial_no index.
      *
      * @param indexs index array
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexSerialNo(String... indexs)throws DAOException
     {
@@ -1302,10 +1309,11 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         return count;
     }
     /**
-     * Deletes rows for each the serial_no index.
+     * Deletes rows for each serial_no index.
      *
      * @param indexs index collection
      * @return the number of deleted rows
+     * @throws DAOException
      */
     public int deleteByIndexSerialNo(java.util.Collection<String> indexs)throws DAOException
     {
