@@ -7,6 +7,7 @@
 
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.TimeUnit;
 import net.gdface.facelog.db.BaseBean;
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.TableLoadCaching;
@@ -32,6 +33,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         DeviceManager manager = DeviceManager.getInstance();
+        public DeviceCache() {
+            super();
+        }
+
+        public DeviceCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public DeviceCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public DeviceCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
@@ -61,6 +78,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class FaceCache extends TableLoadCaching<Integer, FaceBean> {
         FaceManager manager = FaceManager.getInstance();
+        public FaceCache() {
+            super();
+        }
+
+        public FaceCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public FaceCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public FaceCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
@@ -90,6 +123,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class FeatureCache extends TableLoadCaching<String, FeatureBean> {
         FeatureManager manager = FeatureManager.getInstance();
+        public FeatureCache() {
+            super();
+        }
+
+        public FeatureCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public FeatureCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public FeatureCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
@@ -119,6 +168,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class ImageCache extends TableLoadCaching<String, ImageBean> {
         ImageManager manager = ImageManager.getInstance();
+        public ImageCache() {
+            super();
+        }
+
+        public ImageCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public ImageCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public ImageCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
@@ -148,6 +213,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class LogCache extends TableLoadCaching<Integer, LogBean> {
         LogManager manager = LogManager.getInstance();
+        public LogCache() {
+            super();
+        }
+
+        public LogCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public LogCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public LogCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
@@ -177,6 +258,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class PersonCache extends TableLoadCaching<Integer, PersonBean> {
         PersonManager manager = PersonManager.getInstance();
+        public PersonCache() {
+            super();
+        }
+
+        public PersonCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public PersonCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public PersonCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
@@ -206,6 +303,22 @@ public abstract class Cache<K ,B extends BaseBean<B>> implements ITableCache<K, 
      */
     public static class StoreCache extends TableLoadCaching<String, StoreBean> {
         StoreManager manager = StoreManager.getInstance();
+        public StoreCache() {
+            super();
+        }
+
+        public StoreCache(long maximumSize, long duration, TimeUnit unit) {
+            super(maximumSize, duration, unit);
+        }
+
+        public StoreCache(long maximumSize, long durationMinutes) {
+            super(maximumSize, durationMinutes);
+        }
+
+        public StoreCache(long maximumSize) {
+            super(maximumSize);
+        }
+
         @Override
         public void registerListener() {
             manager.registerListener(tableListener);
