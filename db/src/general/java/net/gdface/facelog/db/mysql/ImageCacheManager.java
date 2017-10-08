@@ -72,7 +72,7 @@ public class ImageCacheManager extends ImageManager
     //1.2
     @Override
     public ImageBean loadByPrimaryKey(ImageBean bean){        
-        return null == bean ? null : cache.getBean(bean.getMd5());
+        return null == bean ? null : loadByPrimaryKey(bean.getMd5());
     }
     
     //////////////////////////////////////

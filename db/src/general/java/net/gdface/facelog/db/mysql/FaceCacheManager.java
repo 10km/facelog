@@ -74,7 +74,7 @@ public class FaceCacheManager extends FaceManager
     //1.2
     @Override
     public FaceBean loadByPrimaryKey(FaceBean bean){        
-        return null == bean ? null : cache.getBean(bean.getId());
+        return null == bean ? null : loadByPrimaryKey(bean.getId());
     }
     
     //////////////////////////////////////

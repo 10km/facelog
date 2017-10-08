@@ -72,7 +72,7 @@ public class FeatureCacheManager extends FeatureManager
     //1.2
     @Override
     public FeatureBean loadByPrimaryKey(FeatureBean bean){        
-        return null == bean ? null : cache.getBean(bean.getMd5());
+        return null == bean ? null : loadByPrimaryKey(bean.getMd5());
     }
     
     //////////////////////////////////////

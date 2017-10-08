@@ -72,7 +72,7 @@ public class PersonCacheManager extends PersonManager
     //1.2
     @Override
     public PersonBean loadByPrimaryKey(PersonBean bean){        
-        return null == bean ? null : cache.getBean(bean.getId());
+        return null == bean ? null : loadByPrimaryKey(bean.getId());
     }
     
     //////////////////////////////////////

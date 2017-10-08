@@ -70,7 +70,7 @@ public class StoreCacheManager extends StoreManager
     //1.2
     @Override
     public StoreBean loadByPrimaryKey(StoreBean bean){        
-        return null == bean ? null : cache.getBean(bean.getMd5());
+        return null == bean ? null : loadByPrimaryKey(bean.getMd5());
     }
     
     private class CacheAction implements Action<StoreBean>{

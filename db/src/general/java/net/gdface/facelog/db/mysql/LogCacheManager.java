@@ -78,7 +78,7 @@ public class LogCacheManager extends LogManager
     //1.2
     @Override
     public LogBean loadByPrimaryKey(LogBean bean){        
-        return null == bean ? null : cache.getBean(bean.getId());
+        return null == bean ? null : loadByPrimaryKey(bean.getId());
     }
     
     //////////////////////////////////////

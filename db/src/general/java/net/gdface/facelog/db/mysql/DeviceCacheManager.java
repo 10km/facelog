@@ -70,7 +70,7 @@ public class DeviceCacheManager extends DeviceManager
     //1.2
     @Override
     public DeviceBean loadByPrimaryKey(DeviceBean bean){        
-        return null == bean ? null : cache.getBean(bean.getId());
+        return null == bean ? null : loadByPrimaryKey(bean.getId());
     }
     
     private class CacheAction implements Action<DeviceBean>{
