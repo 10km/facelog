@@ -7,6 +7,7 @@
 
 package net.gdface.facelog.db.mysql;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.DeviceBean;
@@ -112,16 +113,37 @@ public class Cache{
             serialNoCacher.put(bean);
         }
         @Override
+        public Collection<DeviceBean> put(Collection<DeviceBean> beans){
+            super.put(beans);
+            macCacher.put(beans);
+            serialNoCacher.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(DeviceBean bean){
             super.putIfAbsent(bean);
             macCacher.putIfAbsent(bean);
             serialNoCacher.putIfAbsent(bean);
         }
         @Override
+        public Collection<DeviceBean> putIfAbsent(Collection<DeviceBean> beans){
+            super.putIfAbsent(beans);
+            macCacher.putIfAbsent(beans);
+            serialNoCacher.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(DeviceBean bean){
             super.replace(bean);
             macCacher.replace(bean);
             serialNoCacher.replace(bean);
+        }
+        @Override
+        public Collection<DeviceBean> replace(Collection<DeviceBean> beans){
+            super.replace(beans);
+            macCacher.replace(beans);
+            serialNoCacher.replace(beans);
+            return beans;
         }
         
         public DeviceBean getBeanById(Integer id){
@@ -178,12 +200,27 @@ public class Cache{
             super.put(bean);
         }
         @Override
+        public Collection<FaceBean> put(Collection<FaceBean> beans){
+            super.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(FaceBean bean){
             super.putIfAbsent(bean);
         }
         @Override
+        public Collection<FaceBean> putIfAbsent(Collection<FaceBean> beans){
+            super.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(FaceBean bean){
             super.replace(bean);
+        }
+        @Override
+        public Collection<FaceBean> replace(Collection<FaceBean> beans){
+            super.replace(beans);
+            return beans;
         }
         
         public FaceBean getBeanById(Integer id){
@@ -234,12 +271,27 @@ public class Cache{
             super.put(bean);
         }
         @Override
+        public Collection<FeatureBean> put(Collection<FeatureBean> beans){
+            super.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(FeatureBean bean){
             super.putIfAbsent(bean);
         }
         @Override
+        public Collection<FeatureBean> putIfAbsent(Collection<FeatureBean> beans){
+            super.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(FeatureBean bean){
             super.replace(bean);
+        }
+        @Override
+        public Collection<FeatureBean> replace(Collection<FeatureBean> beans){
+            super.replace(beans);
+            return beans;
         }
         
         public FeatureBean getBeanByMd5(String md5){
@@ -290,12 +342,27 @@ public class Cache{
             super.put(bean);
         }
         @Override
+        public Collection<ImageBean> put(Collection<ImageBean> beans){
+            super.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(ImageBean bean){
             super.putIfAbsent(bean);
         }
         @Override
+        public Collection<ImageBean> putIfAbsent(Collection<ImageBean> beans){
+            super.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(ImageBean bean){
             super.replace(bean);
+        }
+        @Override
+        public Collection<ImageBean> replace(Collection<ImageBean> beans){
+            super.replace(beans);
+            return beans;
         }
         
         public ImageBean getBeanByMd5(String md5){
@@ -346,12 +413,27 @@ public class Cache{
             super.put(bean);
         }
         @Override
+        public Collection<LogBean> put(Collection<LogBean> beans){
+            super.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(LogBean bean){
             super.putIfAbsent(bean);
         }
         @Override
+        public Collection<LogBean> putIfAbsent(Collection<LogBean> beans){
+            super.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(LogBean bean){
             super.replace(bean);
+        }
+        @Override
+        public Collection<LogBean> replace(Collection<LogBean> beans){
+            super.replace(beans);
+            return beans;
         }
         
         public LogBean getBeanById(Integer id){
@@ -446,16 +528,37 @@ public class Cache{
             papersNumCacher.put(bean);
         }
         @Override
+        public Collection<PersonBean> put(Collection<PersonBean> beans){
+            super.put(beans);
+            imageMd5Cacher.put(beans);
+            papersNumCacher.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(PersonBean bean){
             super.putIfAbsent(bean);
             imageMd5Cacher.putIfAbsent(bean);
             papersNumCacher.putIfAbsent(bean);
         }
         @Override
+        public Collection<PersonBean> putIfAbsent(Collection<PersonBean> beans){
+            super.putIfAbsent(beans);
+            imageMd5Cacher.putIfAbsent(beans);
+            papersNumCacher.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(PersonBean bean){
             super.replace(bean);
             imageMd5Cacher.replace(bean);
             papersNumCacher.replace(bean);
+        }
+        @Override
+        public Collection<PersonBean> replace(Collection<PersonBean> beans){
+            super.replace(beans);
+            imageMd5Cacher.replace(beans);
+            papersNumCacher.replace(beans);
+            return beans;
         }
         
         public PersonBean getBeanById(Integer id){
@@ -512,12 +615,27 @@ public class Cache{
             super.put(bean);
         }
         @Override
+        public Collection<StoreBean> put(Collection<StoreBean> beans){
+            super.put(beans);
+            return beans;
+        }
+        @Override
         public void putIfAbsent(StoreBean bean){
             super.putIfAbsent(bean);
         }
         @Override
+        public Collection<StoreBean> putIfAbsent(Collection<StoreBean> beans){
+            super.putIfAbsent(beans);
+            return beans;
+        }
+        @Override
         public void replace(StoreBean bean){
             super.replace(bean);
+        }
+        @Override
+        public Collection<StoreBean> replace(Collection<StoreBean> beans){
+            super.replace(beans);
+            return beans;
         }
         
         public StoreBean getBeanByMd5(String md5){

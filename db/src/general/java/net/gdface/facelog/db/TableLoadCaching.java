@@ -7,6 +7,7 @@
 
 package net.gdface.facelog.db;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -82,15 +83,42 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         cacheMap.put(key,bean);
     }
     @Override
+    public Collection<B> put(Collection<B> beans){
+        if(null != beans){
+            for(B bean : beans){
+                put(bean);
+            }
+        }
+        return beans;
+    }
+    @Override
     public void putIfAbsent(B bean){
         K key;
         if(null == bean || null == (key = returnKey(bean)))return;
         cacheMap.putIfAbsent(key,bean);
     }
     @Override
+    public Collection<B> putIfAbsent(Collection<B> beans){
+        if(null != beans){
+            for(B bean : beans){
+                putIfAbsent(bean);
+            }
+        }
+        return beans;
+    }
+    @Override
     public void replace(B bean){
         K key;
         if(null == bean || null == (key = returnKey(bean)))return;
         cacheMap.replace(key,bean);
+    }
+    @Override
+    public Collection<B> replace(Collection<B> beans){
+        if(null != beans){
+            for(B bean : beans){
+                replace(bean);
+            }
+        }
+        return beans;
     }
 }
