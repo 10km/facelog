@@ -74,7 +74,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     }
 
     private static FlImageManager singleton = new FlImageManager();
-
+    protected FlImageManager(){}
     /**
      * Get the FlImageManager singleton.
      *

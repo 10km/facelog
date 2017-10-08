@@ -67,7 +67,7 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
     }
 
     private static FlLogLightManager singleton = new FlLogLightManager();
-
+    protected FlLogLightManager(){}
     /**
      * Get the FlLogLightManager singleton.
      *

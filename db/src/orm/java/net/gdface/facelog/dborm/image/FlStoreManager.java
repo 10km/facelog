@@ -68,7 +68,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     }
 
     private static FlStoreManager singleton = new FlStoreManager();
-
+    protected FlStoreManager(){}
     /**
      * Get the FlStoreManager singleton.
      *

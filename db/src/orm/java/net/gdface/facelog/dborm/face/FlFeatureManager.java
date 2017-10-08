@@ -74,7 +74,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     }
 
     private static FlFeatureManager singleton = new FlFeatureManager();
-
+    protected FlFeatureManager(){}
     /**
      * Get the FlFeatureManager singleton.
      *

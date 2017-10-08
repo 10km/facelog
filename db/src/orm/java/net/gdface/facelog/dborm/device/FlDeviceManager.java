@@ -72,7 +72,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     }
 
     private static FlDeviceManager singleton = new FlDeviceManager();
-
+    protected FlDeviceManager(){}
     /**
      * Get the FlDeviceManager singleton.
      *

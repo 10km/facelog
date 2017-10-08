@@ -74,7 +74,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
 
     private static FlPersonManager singleton = new FlPersonManager();
-
+    protected FlPersonManager(){}
     /**
      * Get the FlPersonManager singleton.
      *

@@ -74,7 +74,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     }
 
     private static FlFaceManager singleton = new FlFaceManager();
-
+    protected FlFaceManager(){}
     /**
      * Get the FlFaceManager singleton.
      *

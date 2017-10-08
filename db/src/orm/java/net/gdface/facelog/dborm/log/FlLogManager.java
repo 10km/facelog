@@ -76,7 +76,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
 
     private static FlLogManager singleton = new FlLogManager();
-
+    protected FlLogManager(){}
     /**
      * Get the FlLogManager singleton.
      *
