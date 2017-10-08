@@ -105,50 +105,34 @@ public class Cache{
         protected DeviceBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(DeviceBean bean){
+            super.put(bean);
+            macCacher.put(bean);
+            serialNoCacher.put(bean);
+        }
+        @Override
+        public void putIfAbsent(DeviceBean bean){
+            super.putIfAbsent(bean);
+            macCacher.putIfAbsent(bean);
+            serialNoCacher.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(DeviceBean bean){
+            super.replace(bean);
+            macCacher.replace(bean);
+            serialNoCacher.replace(bean);
+        }
         
         public DeviceBean getBeanById(Integer id){
-            return getBean(id);
+            return super.getBean(id);
         }
-
-        public void putById(DeviceBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentById(DeviceBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceById(DeviceBean bean){
-            replace(bean);
-        }       
         public DeviceBean getBeanByMac(String mac){
             return macCacher.getBean(mac);
         }
-        public void putByMac(DeviceBean bean){
-            macCacher.put(bean);
-        }
-
-        public void putIfAbsentByMac(DeviceBean bean){
-            macCacher.putIfAbsent(bean);
-        }
-
-        public void replaceByMac(DeviceBean bean){
-            macCacher.replace(bean);
-        }   
         public DeviceBean getBeanBySerialNo(String serialNo){
             return serialNoCacher.getBean(serialNo);
         }
-        public void putBySerialNo(DeviceBean bean){
-            serialNoCacher.put(bean);
-        }
-
-        public void putIfAbsentBySerialNo(DeviceBean bean){
-            serialNoCacher.putIfAbsent(bean);
-        }
-
-        public void replaceBySerialNo(DeviceBean bean){
-            serialNoCacher.replace(bean);
-        }   
     }
     /**
      * cache manager for FaceBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -189,22 +173,22 @@ public class Cache{
         protected FaceBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(FaceBean bean){
+            super.put(bean);
+        }
+        @Override
+        public void putIfAbsent(FaceBean bean){
+            super.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(FaceBean bean){
+            super.replace(bean);
+        }
         
         public FaceBean getBeanById(Integer id){
-            return getBean(id);
+            return super.getBean(id);
         }
-
-        public void putById(FaceBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentById(FaceBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceById(FaceBean bean){
-            replace(bean);
-        }       
     }
     /**
      * cache manager for FeatureBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -245,22 +229,22 @@ public class Cache{
         protected FeatureBean loadfromDatabase(String key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(FeatureBean bean){
+            super.put(bean);
+        }
+        @Override
+        public void putIfAbsent(FeatureBean bean){
+            super.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(FeatureBean bean){
+            super.replace(bean);
+        }
         
         public FeatureBean getBeanByMd5(String md5){
-            return getBean(md5);
+            return super.getBean(md5);
         }
-
-        public void putByMd5(FeatureBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentByMd5(FeatureBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceByMd5(FeatureBean bean){
-            replace(bean);
-        }       
     }
     /**
      * cache manager for ImageBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -301,22 +285,22 @@ public class Cache{
         protected ImageBean loadfromDatabase(String key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(ImageBean bean){
+            super.put(bean);
+        }
+        @Override
+        public void putIfAbsent(ImageBean bean){
+            super.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(ImageBean bean){
+            super.replace(bean);
+        }
         
         public ImageBean getBeanByMd5(String md5){
-            return getBean(md5);
+            return super.getBean(md5);
         }
-
-        public void putByMd5(ImageBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentByMd5(ImageBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceByMd5(ImageBean bean){
-            replace(bean);
-        }       
     }
     /**
      * cache manager for LogBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -357,22 +341,22 @@ public class Cache{
         protected LogBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(LogBean bean){
+            super.put(bean);
+        }
+        @Override
+        public void putIfAbsent(LogBean bean){
+            super.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(LogBean bean){
+            super.replace(bean);
+        }
         
         public LogBean getBeanById(Integer id){
-            return getBean(id);
+            return super.getBean(id);
         }
-
-        public void putById(LogBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentById(LogBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceById(LogBean bean){
-            replace(bean);
-        }       
     }
     /**
      * cache manager for PersonBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -455,50 +439,34 @@ public class Cache{
         protected PersonBean loadfromDatabase(Integer key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(PersonBean bean){
+            super.put(bean);
+            imageMd5Cacher.put(bean);
+            papersNumCacher.put(bean);
+        }
+        @Override
+        public void putIfAbsent(PersonBean bean){
+            super.putIfAbsent(bean);
+            imageMd5Cacher.putIfAbsent(bean);
+            papersNumCacher.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(PersonBean bean){
+            super.replace(bean);
+            imageMd5Cacher.replace(bean);
+            papersNumCacher.replace(bean);
+        }
         
         public PersonBean getBeanById(Integer id){
-            return getBean(id);
+            return super.getBean(id);
         }
-
-        public void putById(PersonBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentById(PersonBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceById(PersonBean bean){
-            replace(bean);
-        }       
         public PersonBean getBeanByImageMd5(String imageMd5){
             return imageMd5Cacher.getBean(imageMd5);
         }
-        public void putByImageMd5(PersonBean bean){
-            imageMd5Cacher.put(bean);
-        }
-
-        public void putIfAbsentByImageMd5(PersonBean bean){
-            imageMd5Cacher.putIfAbsent(bean);
-        }
-
-        public void replaceByImageMd5(PersonBean bean){
-            imageMd5Cacher.replace(bean);
-        }   
         public PersonBean getBeanByPapersNum(String papersNum){
             return papersNumCacher.getBean(papersNum);
         }
-        public void putByPapersNum(PersonBean bean){
-            papersNumCacher.put(bean);
-        }
-
-        public void putIfAbsentByPapersNum(PersonBean bean){
-            papersNumCacher.putIfAbsent(bean);
-        }
-
-        public void replaceByPapersNum(PersonBean bean){
-            papersNumCacher.replace(bean);
-        }   
     }
     /**
      * cache manager for StoreBean base {@link com.google.common.cache.LoadingCache}<br>
@@ -539,22 +507,22 @@ public class Cache{
         protected StoreBean loadfromDatabase(String key) {
             return manager.loadByPrimaryKey(key);
         }
+        @Override
+        public void put(StoreBean bean){
+            super.put(bean);
+        }
+        @Override
+        public void putIfAbsent(StoreBean bean){
+            super.putIfAbsent(bean);
+        }
+        @Override
+        public void replace(StoreBean bean){
+            super.replace(bean);
+        }
         
         public StoreBean getBeanByMd5(String md5){
-            return getBean(md5);
+            return super.getBean(md5);
         }
-
-        public void putByMd5(StoreBean bean){
-            put(bean);
-        }
-
-        public void putIfAbsentByMd5(StoreBean bean){
-            putIfAbsent(bean);
-        }
-
-        public void replaceByMd5(StoreBean bean){
-            replace(bean);
-        }       
     }
     // Table fl_log_light haven't primary key
 }
