@@ -7,69 +7,62 @@
 
 package net.gdface.facelog.db.mysql;
 
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.Constant;
-import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.db.IBeanConverter;
-import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ITableCache;
-import net.gdface.facelog.db.TableManager;
-import net.gdface.facelog.db.ILogManager;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.db.mysql.Cache.DeviceCache;
+import net.gdface.facelog.db.mysql.DeviceCacheManager;
 import net.gdface.facelog.db.FaceBean;
-import net.gdface.facelog.db.mysql.Cache.FaceCache;
+import net.gdface.facelog.db.mysql.FaceCacheManager;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.mysql.Cache.FeatureCache;
+import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.PersonBean;
-import net.gdface.facelog.db.mysql.Cache.PersonCache;
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
-
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.LogManager;
 import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.db.mysql.Cache.LogCache;
+import net.gdface.facelog.db.mysql.LogCache;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
  * @author guyadong
  */
-public class LogCachemanager extends LogManager
+public class LogCacheManager extends LogManager
 {
-    private LogManager nativeManager = LogManager.getInstance();
-    private final LogCache logCache;
-    private DeviceCache deviceCache;
-    public void setDeviceCache(DeviceCache deviceCache){
-        this.deviceCache = deviceCache;
+    /** singleton of LogCacheManager */
+    private static LogCacheManager instance;
+    /** 
+     * @return a instance of LogCacheManager
+     * @throws IllegalStateException while {@link #instance} is null
+     */
+    public static final LogCacheManager getInstance(){
+        if(null == instance){
+            throw new IllegalStateException("uninitialized instance of LogCacheManager");
+        }
+        return instance;
     }
-    private FaceCache faceCache;
-    public void setFaceCache(FaceCache faceCache){
-        this.faceCache = faceCache;
+    /**
+     * create a instance of LogCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
+     * otherwise return <code>instance</code>
+     */
+    public static synchronized final LogCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        if(null == instance){
+            instance = new LogCacheManager(maximumSize,duration,unit);
+        }
+        return instance;
     }
-    private FeatureCache featureCache;
-    public void setFeatureCache(FeatureCache featureCache){
-        this.featureCache = featureCache;
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final LogCacheManager makeInstance(long maximumSize, long durationMinutes){
+        return makeInstance(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
     }
-    private PersonCache personCache;
-    public void setPersonCache(PersonCache personCache){
-        this.personCache = personCache;
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final LogCacheManager makeInstance(long maximumSize){
+        return makeInstance(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
     }
-    public LogCachemanager(long maximumSize, long duration, TimeUnit unit) {
-        this.logCache = new LogCache(maximumSize,duration,unit);
-    }
-    public LogCachemanager(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
-    }
-
-    public LogCachemanager(long maximumSize) {
-        this(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
-    }
-    public LogCachemanager() {
-        this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** instance of {@link LogCache} */
+    private final LogCache cache;
+    protected LogCacheManager(long maximumSize, long duration, TimeUnit unit) {
+        cache = new LogCache(maximumSize,duration,unit);
+        cache.registerListener();
     }
 
     //////////////////////////////////////
@@ -78,20 +71,15 @@ public class LogCachemanager extends LogManager
 
     //1 override ILogManager
     @Override 
-    public LogBean loadByPrimaryKey(Integer id)
-    {
-        return logCache.getBean(id);
+    public LogBean loadByPrimaryKey(Integer id){
+        return cache.getBean(id);
     }
 
     //1.2
     @Override
-    public LogBean loadByPrimaryKey(LogBean bean)
-    {        
-        return null == bean ? null : logCache.getBean(bean.getId());
+    public LogBean loadByPrimaryKey(LogBean bean){        
+        return null == bean ? null : cache.getBean(bean.getId());
     }
-
-
-
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -99,47 +87,43 @@ public class LogCachemanager extends LogManager
 
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
-    public DeviceBean getReferencedByDeviceId(LogBean bean)
-    {
+    public DeviceBean getReferencedByDeviceId(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByDeviceId(deviceCache.getBean(bean.getDeviceId())); 
-        return bean.getReferencedByDeviceId();        
+        bean.setReferencedByDeviceId(DeviceCacheManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
+        return bean.getReferencedByDeviceId();
     }
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
-    public FaceBean getReferencedByCompareFace(LogBean bean)
-    {
+    public FaceBean getReferencedByCompareFace(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByCompareFace(faceCache.getBean(bean.getCompareFace())); 
-        return bean.getReferencedByCompareFace();        
+        bean.setReferencedByCompareFace(FaceCacheManager.getInstance().loadByPrimaryKey(bean.getCompareFace())); 
+        return bean.getReferencedByCompareFace();
     }
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
-    public FeatureBean getReferencedByVerifyFeature(LogBean bean)
-    {
+    public FeatureBean getReferencedByVerifyFeature(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByVerifyFeature(featureCache.getBean(bean.getVerifyFeature())); 
-        return bean.getReferencedByVerifyFeature();        
+        bean.setReferencedByVerifyFeature(FeatureCacheManager.getInstance().loadByPrimaryKey(bean.getVerifyFeature())); 
+        return bean.getReferencedByVerifyFeature();
     }
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
-    public PersonBean getReferencedByPersonId(LogBean bean)
-    {
+    public PersonBean getReferencedByPersonId(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByPersonId(personCache.getBean(bean.getPersonId())); 
-        return bean.getReferencedByPersonId();        
+        bean.setReferencedByPersonId(PersonCacheManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
+        return bean.getReferencedByPersonId();
     }
     private class CacheAction implements Action<LogBean>{
         final Action<LogBean> action;
         CacheAction(Action<LogBean>action){
-            this.action = action;            
+            this.action = action;
         }
         @Override
         public void call(LogBean bean) {
             if(null != action){
                 action.call(bean);
             }
-            logCache.put(bean);
+            cache.put(bean);
         }
         @Override
         public LogBean getBean() {
@@ -147,8 +131,7 @@ public class LogCachemanager extends LogManager
         }}
     //20-5
     @Override
-    public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action)
-    {
+    public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action){
         if(null == fieldList )
             action = new CacheAction(action);
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
@@ -158,6 +141,4 @@ public class LogCachemanager extends LogManager
     //
     // USING INDICES
     //_____________________________________________________________________
-
-
 }

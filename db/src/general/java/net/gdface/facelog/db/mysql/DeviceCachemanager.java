@@ -7,57 +7,54 @@
 
 package net.gdface.facelog.db.mysql;
 
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.Constant;
-import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.db.IBeanConverter;
-import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ITableCache;
-import net.gdface.facelog.db.TableManager;
-import net.gdface.facelog.db.IDeviceManager;
-import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.mysql.Cache.ImageCache;
-import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.db.mysql.Cache.LogCache;
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
-
-import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.db.mysql.DeviceManager;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.db.mysql.Cache.DeviceCache;
+import net.gdface.facelog.db.mysql.DeviceCache;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
  * @author guyadong
  */
-public class DeviceCachemanager extends DeviceManager
+public class DeviceCacheManager extends DeviceManager
 {
-    private DeviceManager nativeManager = DeviceManager.getInstance();
-    private final DeviceCache deviceCache;
-    private ImageCache imageCache;
-    public void setImageCache(ImageCache imageCache){
-        this.imageCache = imageCache;
+    /** singleton of DeviceCacheManager */
+    private static DeviceCacheManager instance;
+    /** 
+     * @return a instance of DeviceCacheManager
+     * @throws IllegalStateException while {@link #instance} is null
+     */
+    public static final DeviceCacheManager getInstance(){
+        if(null == instance){
+            throw new IllegalStateException("uninitialized instance of DeviceCacheManager");
+        }
+        return instance;
     }
-    private LogCache logCache;
-    public void setLogCache(LogCache logCache){
-        this.logCache = logCache;
+    /**
+     * create a instance of DeviceCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
+     * otherwise return <code>instance</code>
+     */
+    public static synchronized final DeviceCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        if(null == instance){
+            instance = new DeviceCacheManager(maximumSize,duration,unit);
+        }
+        return instance;
     }
-    public DeviceCachemanager(long maximumSize, long duration, TimeUnit unit) {
-        this.deviceCache = new DeviceCache(maximumSize,duration,unit);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final DeviceCacheManager makeInstance(long maximumSize, long durationMinutes){
+        return makeInstance(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
     }
-    public DeviceCachemanager(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final DeviceCacheManager makeInstance(long maximumSize){
+        return makeInstance(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
     }
-
-    public DeviceCachemanager(long maximumSize) {
-        this(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
-    }
-    public DeviceCachemanager() {
-        this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** instance of {@link DeviceCache} */
+    private final DeviceCache cache;
+    protected DeviceCacheManager(long maximumSize, long duration, TimeUnit unit) {
+        cache = new DeviceCache(maximumSize,duration,unit);
+        cache.registerListener();
     }
 
     //////////////////////////////////////
@@ -66,50 +63,27 @@ public class DeviceCachemanager extends DeviceManager
 
     //1 override IDeviceManager
     @Override 
-    public DeviceBean loadByPrimaryKey(Integer id)
-    {
-        return deviceCache.getBean(id);
+    public DeviceBean loadByPrimaryKey(Integer id){
+        return cache.getBean(id);
     }
 
     //1.2
     @Override
-    public DeviceBean loadByPrimaryKey(DeviceBean bean)
-    {        
-        return null == bean ? null : deviceCache.getBean(bean.getId());
+    public DeviceBean loadByPrimaryKey(DeviceBean bean){        
+        return null == bean ? null : cache.getBean(bean.getId());
     }
-
-
-    //////////////////////////////////////
-    // GET/SET IMPORTED KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //3.2 GET IMPORTED override IDeviceManager
-    @Override 
-    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(DeviceBean bean)
-    {
-        return (java.util.List<ImageBean>)imageCache.put(super.getImageBeansByDeviceIdAsList(bean));
-    }
-
-    //3.2 GET IMPORTED override IDeviceManager
-    @Override 
-    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(DeviceBean bean)
-    {
-        return (java.util.List<LogBean>)logCache.put(super.getLogBeansByDeviceIdAsList(bean));
-    }
-
-
     
     private class CacheAction implements Action<DeviceBean>{
         final Action<DeviceBean> action;
         CacheAction(Action<DeviceBean>action){
-            this.action = action;            
+            this.action = action;
         }
         @Override
         public void call(DeviceBean bean) {
             if(null != action){
                 action.call(bean);
             }
-            deviceCache.put(bean);
+            cache.put(bean);
         }
         @Override
         public DeviceBean getBean() {
@@ -117,8 +91,7 @@ public class DeviceCachemanager extends DeviceManager
         }}
     //20-5
     @Override
-    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action)
-    {
+    public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action){
         if(null == fieldList )
             action = new CacheAction(action);
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
@@ -128,6 +101,14 @@ public class DeviceCachemanager extends DeviceManager
     //
     // USING INDICES
     //_____________________________________________________________________
-
-
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexMac(String mac){
+        return cache.getBeanByMac(mac);
+    }
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexSerialNo(String serialNo){
+        return cache.getBeanBySerialNo(serialNo);
+    }
 }

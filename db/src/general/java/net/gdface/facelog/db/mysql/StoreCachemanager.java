@@ -7,45 +7,54 @@
 
 package net.gdface.facelog.db.mysql;
 
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.Constant;
-import net.gdface.facelog.db.StoreBean;
-import net.gdface.facelog.db.IBeanConverter;
-import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ITableCache;
-import net.gdface.facelog.db.TableManager;
-import net.gdface.facelog.db.IStoreManager;
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
-
-import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.db.mysql.StoreManager;
 import net.gdface.facelog.db.StoreBean;
-import net.gdface.facelog.db.mysql.Cache.StoreCache;
+import net.gdface.facelog.db.mysql.StoreCache;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
  * @author guyadong
  */
-public class StoreCachemanager extends StoreManager
+public class StoreCacheManager extends StoreManager
 {
-    private StoreManager nativeManager = StoreManager.getInstance();
-    private final StoreCache storeCache;
-    public StoreCachemanager(long maximumSize, long duration, TimeUnit unit) {
-        this.storeCache = new StoreCache(maximumSize,duration,unit);
+    /** singleton of StoreCacheManager */
+    private static StoreCacheManager instance;
+    /** 
+     * @return a instance of StoreCacheManager
+     * @throws IllegalStateException while {@link #instance} is null
+     */
+    public static final StoreCacheManager getInstance(){
+        if(null == instance){
+            throw new IllegalStateException("uninitialized instance of StoreCacheManager");
+        }
+        return instance;
     }
-    public StoreCachemanager(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
+    /**
+     * create a instance of StoreCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
+     * otherwise return <code>instance</code>
+     */
+    public static synchronized final StoreCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        if(null == instance){
+            instance = new StoreCacheManager(maximumSize,duration,unit);
+        }
+        return instance;
     }
-
-    public StoreCachemanager(long maximumSize) {
-        this(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final StoreCacheManager makeInstance(long maximumSize, long durationMinutes){
+        return makeInstance(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
     }
-    public StoreCachemanager() {
-        this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final StoreCacheManager makeInstance(long maximumSize){
+        return makeInstance(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    }
+    /** instance of {@link StoreCache} */
+    private final StoreCache cache;
+    protected StoreCacheManager(long maximumSize, long duration, TimeUnit unit) {
+        cache = new StoreCache(maximumSize,duration,unit);
+        cache.registerListener();
     }
 
     //////////////////////////////////////
@@ -54,32 +63,27 @@ public class StoreCachemanager extends StoreManager
 
     //1 override IStoreManager
     @Override 
-    public StoreBean loadByPrimaryKey(String md5)
-    {
-        return storeCache.getBean(md5);
+    public StoreBean loadByPrimaryKey(String md5){
+        return cache.getBean(md5);
     }
 
     //1.2
     @Override
-    public StoreBean loadByPrimaryKey(StoreBean bean)
-    {        
-        return null == bean ? null : storeCache.getBean(bean.getMd5());
+    public StoreBean loadByPrimaryKey(StoreBean bean){        
+        return null == bean ? null : cache.getBean(bean.getMd5());
     }
-
-
-
     
     private class CacheAction implements Action<StoreBean>{
         final Action<StoreBean> action;
         CacheAction(Action<StoreBean>action){
-            this.action = action;            
+            this.action = action;
         }
         @Override
         public void call(StoreBean bean) {
             if(null != action){
                 action.call(bean);
             }
-            storeCache.put(bean);
+            cache.put(bean);
         }
         @Override
         public StoreBean getBean() {
@@ -87,12 +91,10 @@ public class StoreCachemanager extends StoreManager
         }}
     //20-5
     @Override
-    public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action)
-    {
+    public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action){
         if(null == fieldList )
             action = new CacheAction(action);
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
-
 
 }

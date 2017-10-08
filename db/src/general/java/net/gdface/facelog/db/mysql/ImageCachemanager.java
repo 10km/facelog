@@ -7,63 +7,56 @@
 
 package net.gdface.facelog.db.mysql;
 
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.Constant;
-import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.IBeanConverter;
-import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ITableCache;
-import net.gdface.facelog.db.TableManager;
-import net.gdface.facelog.db.IImageManager;
-import net.gdface.facelog.db.FaceBean;
-import net.gdface.facelog.db.mysql.Cache.FaceCache;
-import net.gdface.facelog.db.PersonBean;
-import net.gdface.facelog.db.mysql.Cache.PersonCache;
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.db.mysql.Cache.DeviceCache;
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
-
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.db.mysql.DeviceCacheManager;
 import net.gdface.facelog.db.mysql.ImageManager;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.mysql.Cache.ImageCache;
+import net.gdface.facelog.db.mysql.ImageCache;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_image table.<br>
  * @author guyadong
  */
-public class ImageCachemanager extends ImageManager
+public class ImageCacheManager extends ImageManager
 {
-    private ImageManager nativeManager = ImageManager.getInstance();
-    private final ImageCache imageCache;
-    private FaceCache faceCache;
-    public void setFaceCache(FaceCache faceCache){
-        this.faceCache = faceCache;
+    /** singleton of ImageCacheManager */
+    private static ImageCacheManager instance;
+    /** 
+     * @return a instance of ImageCacheManager
+     * @throws IllegalStateException while {@link #instance} is null
+     */
+    public static final ImageCacheManager getInstance(){
+        if(null == instance){
+            throw new IllegalStateException("uninitialized instance of ImageCacheManager");
+        }
+        return instance;
     }
-    private PersonCache personCache;
-    public void setPersonCache(PersonCache personCache){
-        this.personCache = personCache;
+    /**
+     * create a instance of ImageCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
+     * otherwise return <code>instance</code>
+     */
+    public static synchronized final ImageCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        if(null == instance){
+            instance = new ImageCacheManager(maximumSize,duration,unit);
+        }
+        return instance;
     }
-    private DeviceCache deviceCache;
-    public void setDeviceCache(DeviceCache deviceCache){
-        this.deviceCache = deviceCache;
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final ImageCacheManager makeInstance(long maximumSize, long durationMinutes){
+        return makeInstance(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
     }
-    public ImageCachemanager(long maximumSize, long duration, TimeUnit unit) {
-        this.imageCache = new ImageCache(maximumSize,duration,unit);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final ImageCacheManager makeInstance(long maximumSize){
+        return makeInstance(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
     }
-    public ImageCachemanager(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
-    }
-
-    public ImageCachemanager(long maximumSize) {
-        this(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
-    }
-    public ImageCachemanager() {
-        this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** instance of {@link ImageCache} */
+    private final ImageCache cache;
+    protected ImageCacheManager(long maximumSize, long duration, TimeUnit unit) {
+        cache = new ImageCache(maximumSize,duration,unit);
+        cache.registerListener();
     }
 
     //////////////////////////////////////
@@ -72,38 +65,15 @@ public class ImageCachemanager extends ImageManager
 
     //1 override IImageManager
     @Override 
-    public ImageBean loadByPrimaryKey(String md5)
-    {
-        return imageCache.getBean(md5);
+    public ImageBean loadByPrimaryKey(String md5){
+        return cache.getBean(md5);
     }
 
     //1.2
     @Override
-    public ImageBean loadByPrimaryKey(ImageBean bean)
-    {        
-        return null == bean ? null : imageCache.getBean(bean.getMd5());
+    public ImageBean loadByPrimaryKey(ImageBean bean){        
+        return null == bean ? null : cache.getBean(bean.getMd5());
     }
-
-
-    //////////////////////////////////////
-    // GET/SET IMPORTED KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //3.2 GET IMPORTED override IImageManager
-    @Override 
-    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean)
-    {
-        return (java.util.List<FaceBean>)faceCache.put(super.getFaceBeansByImageMd5AsList(bean));
-    }
-
-    //3.2 GET IMPORTED override IImageManager
-    @Override 
-    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean)
-    {
-        return (java.util.List<PersonBean>)personCache.put(super.getPersonBeansByImageMd5AsList(bean));
-    }
-
-
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -111,23 +81,22 @@ public class ImageCachemanager extends ImageManager
 
     //5.1 GET REFERENCED VALUE override IImageManager
     @Override 
-    public DeviceBean getReferencedByDeviceId(ImageBean bean)
-    {
+    public DeviceBean getReferencedByDeviceId(ImageBean bean){
         if(null == bean)return null;
-        bean.setReferencedByDeviceId(deviceCache.getBean(bean.getDeviceId())); 
-        return bean.getReferencedByDeviceId();        
+        bean.setReferencedByDeviceId(DeviceCacheManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
+        return bean.getReferencedByDeviceId();
     }
     private class CacheAction implements Action<ImageBean>{
         final Action<ImageBean> action;
         CacheAction(Action<ImageBean>action){
-            this.action = action;            
+            this.action = action;
         }
         @Override
         public void call(ImageBean bean) {
             if(null != action){
                 action.call(bean);
             }
-            imageCache.put(bean);
+            cache.put(bean);
         }
         @Override
         public ImageBean getBean() {
@@ -135,8 +104,7 @@ public class ImageCachemanager extends ImageManager
         }}
     //20-5
     @Override
-    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action)
-    {
+    public int loadUsingTemplate(ImageBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<ImageBean> action){
         if(null == fieldList )
             action = new CacheAction(action);
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
@@ -146,6 +114,4 @@ public class ImageCachemanager extends ImageManager
     //
     // USING INDICES
     //_____________________________________________________________________
-
-
 }

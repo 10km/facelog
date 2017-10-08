@@ -7,63 +7,58 @@
 
 package net.gdface.facelog.db.mysql;
 
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.Constant;
-import net.gdface.facelog.db.FaceBean;
-import net.gdface.facelog.db.IBeanConverter;
-import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ITableCache;
-import net.gdface.facelog.db.TableManager;
-import net.gdface.facelog.db.IFaceManager;
-import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.db.mysql.Cache.LogCache;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.mysql.Cache.FeatureCache;
+import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.mysql.Cache.ImageCache;
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
-
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.db.mysql.ImageCacheManager;
 import net.gdface.facelog.db.mysql.FaceManager;
 import net.gdface.facelog.db.FaceBean;
-import net.gdface.facelog.db.mysql.Cache.FaceCache;
+import net.gdface.facelog.db.mysql.FaceCache;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
  * @author guyadong
  */
-public class FaceCachemanager extends FaceManager
+public class FaceCacheManager extends FaceManager
 {
-    private FaceManager nativeManager = FaceManager.getInstance();
-    private final FaceCache faceCache;
-    private LogCache logCache;
-    public void setLogCache(LogCache logCache){
-        this.logCache = logCache;
+    /** singleton of FaceCacheManager */
+    private static FaceCacheManager instance;
+    /** 
+     * @return a instance of FaceCacheManager
+     * @throws IllegalStateException while {@link #instance} is null
+     */
+    public static final FaceCacheManager getInstance(){
+        if(null == instance){
+            throw new IllegalStateException("uninitialized instance of FaceCacheManager");
+        }
+        return instance;
     }
-    private FeatureCache featureCache;
-    public void setFeatureCache(FeatureCache featureCache){
-        this.featureCache = featureCache;
+    /**
+     * create a instance of FaceCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
+     * otherwise return <code>instance</code>
+     */
+    public static synchronized final FaceCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        if(null == instance){
+            instance = new FaceCacheManager(maximumSize,duration,unit);
+        }
+        return instance;
     }
-    private ImageCache imageCache;
-    public void setImageCache(ImageCache imageCache){
-        this.imageCache = imageCache;
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final FaceCacheManager makeInstance(long maximumSize, long durationMinutes){
+        return makeInstance(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
     }
-    public FaceCachemanager(long maximumSize, long duration, TimeUnit unit) {
-        this.faceCache = new FaceCache(maximumSize,duration,unit);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final FaceCacheManager makeInstance(long maximumSize){
+        return makeInstance(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
     }
-    public FaceCachemanager(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
-    }
-
-    public FaceCachemanager(long maximumSize) {
-        this(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
-    }
-    public FaceCachemanager() {
-        this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** instance of {@link FaceCache} */
+    private final FaceCache cache;
+    protected FaceCacheManager(long maximumSize, long duration, TimeUnit unit) {
+        cache = new FaceCache(maximumSize,duration,unit);
+        cache.registerListener();
     }
 
     //////////////////////////////////////
@@ -72,31 +67,15 @@ public class FaceCachemanager extends FaceManager
 
     //1 override IFaceManager
     @Override 
-    public FaceBean loadByPrimaryKey(Integer id)
-    {
-        return faceCache.getBean(id);
+    public FaceBean loadByPrimaryKey(Integer id){
+        return cache.getBean(id);
     }
 
     //1.2
     @Override
-    public FaceBean loadByPrimaryKey(FaceBean bean)
-    {        
-        return null == bean ? null : faceCache.getBean(bean.getId());
+    public FaceBean loadByPrimaryKey(FaceBean bean){        
+        return null == bean ? null : cache.getBean(bean.getId());
     }
-
-
-    //////////////////////////////////////
-    // GET/SET IMPORTED KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //3.2 GET IMPORTED override IFaceManager
-    @Override 
-    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean)
-    {
-        return (java.util.List<LogBean>)logCache.put(super.getLogBeansByCompareFaceAsList(bean));
-    }
-
-
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -104,31 +83,29 @@ public class FaceCachemanager extends FaceManager
 
     //5.1 GET REFERENCED VALUE override IFaceManager
     @Override 
-    public FeatureBean getReferencedByFeatureMd5(FaceBean bean)
-    {
+    public FeatureBean getReferencedByFeatureMd5(FaceBean bean){
         if(null == bean)return null;
-        bean.setReferencedByFeatureMd5(featureCache.getBean(bean.getFeatureMd5())); 
-        return bean.getReferencedByFeatureMd5();        
+        bean.setReferencedByFeatureMd5(FeatureCacheManager.getInstance().loadByPrimaryKey(bean.getFeatureMd5())); 
+        return bean.getReferencedByFeatureMd5();
     }
     //5.1 GET REFERENCED VALUE override IFaceManager
     @Override 
-    public ImageBean getReferencedByImageMd5(FaceBean bean)
-    {
+    public ImageBean getReferencedByImageMd5(FaceBean bean){
         if(null == bean)return null;
-        bean.setReferencedByImageMd5(imageCache.getBean(bean.getImageMd5())); 
-        return bean.getReferencedByImageMd5();        
+        bean.setReferencedByImageMd5(ImageCacheManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
+        return bean.getReferencedByImageMd5();
     }
     private class CacheAction implements Action<FaceBean>{
         final Action<FaceBean> action;
         CacheAction(Action<FaceBean>action){
-            this.action = action;            
+            this.action = action;
         }
         @Override
         public void call(FaceBean bean) {
             if(null != action){
                 action.call(bean);
             }
-            faceCache.put(bean);
+            cache.put(bean);
         }
         @Override
         public FaceBean getBean() {
@@ -136,8 +113,7 @@ public class FaceCachemanager extends FaceManager
         }}
     //20-5
     @Override
-    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action)
-    {
+    public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action){
         if(null == fieldList )
             action = new CacheAction(action);
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
@@ -147,6 +123,4 @@ public class FaceCachemanager extends FaceManager
     //
     // USING INDICES
     //_____________________________________________________________________
-
-
 }

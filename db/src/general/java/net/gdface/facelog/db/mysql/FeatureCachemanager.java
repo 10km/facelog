@@ -7,63 +7,56 @@
 
 package net.gdface.facelog.db.mysql;
 
-
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import net.gdface.facelog.db.Constant;
-import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.IBeanConverter;
-import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.ITableCache;
-import net.gdface.facelog.db.TableManager;
-import net.gdface.facelog.db.IFeatureManager;
-import net.gdface.facelog.db.FaceBean;
-import net.gdface.facelog.db.mysql.Cache.FaceCache;
-import net.gdface.facelog.db.LogBean;
-import net.gdface.facelog.db.mysql.Cache.LogCache;
 import net.gdface.facelog.db.PersonBean;
-import net.gdface.facelog.db.mysql.Cache.PersonCache;
-import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
-
-import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.FeatureManager;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.mysql.Cache.FeatureCache;
+import net.gdface.facelog.db.mysql.FeatureCache;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_feature table.<br>
  * @author guyadong
  */
-public class FeatureCachemanager extends FeatureManager
+public class FeatureCacheManager extends FeatureManager
 {
-    private FeatureManager nativeManager = FeatureManager.getInstance();
-    private final FeatureCache featureCache;
-    private FaceCache faceCache;
-    public void setFaceCache(FaceCache faceCache){
-        this.faceCache = faceCache;
+    /** singleton of FeatureCacheManager */
+    private static FeatureCacheManager instance;
+    /** 
+     * @return a instance of FeatureCacheManager
+     * @throws IllegalStateException while {@link #instance} is null
+     */
+    public static final FeatureCacheManager getInstance(){
+        if(null == instance){
+            throw new IllegalStateException("uninitialized instance of FeatureCacheManager");
+        }
+        return instance;
     }
-    private LogCache logCache;
-    public void setLogCache(LogCache logCache){
-        this.logCache = logCache;
+    /**
+     * create a instance of FeatureCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
+     * otherwise return <code>instance</code>
+     */
+    public static synchronized final FeatureCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        if(null == instance){
+            instance = new FeatureCacheManager(maximumSize,duration,unit);
+        }
+        return instance;
     }
-    private PersonCache personCache;
-    public void setPersonCache(PersonCache personCache){
-        this.personCache = personCache;
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final FeatureCacheManager makeInstance(long maximumSize, long durationMinutes){
+        return makeInstance(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
     }
-    public FeatureCachemanager(long maximumSize, long duration, TimeUnit unit) {
-        this.featureCache = new FeatureCache(maximumSize,duration,unit);
+    /** @see #makeInstance(long, long, TimeUnit) */
+    public static final FeatureCacheManager makeInstance(long maximumSize){
+        return makeInstance(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
     }
-    public FeatureCachemanager(long maximumSize, long durationMinutes) {
-        this(maximumSize, durationMinutes, ITableCache.DEFAULT_TIME_UNIT);
-    }
-
-    public FeatureCachemanager(long maximumSize) {
-        this(maximumSize,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
-    }
-    public FeatureCachemanager() {
-        this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,ITableCache.DEFAULT_DURATION,ITableCache.DEFAULT_TIME_UNIT);
+    /** instance of {@link FeatureCache} */
+    private final FeatureCache cache;
+    protected FeatureCacheManager(long maximumSize, long duration, TimeUnit unit) {
+        cache = new FeatureCache(maximumSize,duration,unit);
+        cache.registerListener();
     }
 
     //////////////////////////////////////
@@ -72,38 +65,15 @@ public class FeatureCachemanager extends FeatureManager
 
     //1 override IFeatureManager
     @Override 
-    public FeatureBean loadByPrimaryKey(String md5)
-    {
-        return featureCache.getBean(md5);
+    public FeatureBean loadByPrimaryKey(String md5){
+        return cache.getBean(md5);
     }
 
     //1.2
     @Override
-    public FeatureBean loadByPrimaryKey(FeatureBean bean)
-    {        
-        return null == bean ? null : featureCache.getBean(bean.getMd5());
+    public FeatureBean loadByPrimaryKey(FeatureBean bean){        
+        return null == bean ? null : cache.getBean(bean.getMd5());
     }
-
-
-    //////////////////////////////////////
-    // GET/SET IMPORTED KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //3.2 GET IMPORTED override IFeatureManager
-    @Override 
-    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean)
-    {
-        return (java.util.List<FaceBean>)faceCache.put(super.getFaceBeansByFeatureMd5AsList(bean));
-    }
-
-    //3.2 GET IMPORTED override IFeatureManager
-    @Override 
-    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean)
-    {
-        return (java.util.List<LogBean>)logCache.put(super.getLogBeansByVerifyFeatureAsList(bean));
-    }
-
-
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -111,23 +81,22 @@ public class FeatureCachemanager extends FeatureManager
 
     //5.1 GET REFERENCED VALUE override IFeatureManager
     @Override 
-    public PersonBean getReferencedByPersonId(FeatureBean bean)
-    {
+    public PersonBean getReferencedByPersonId(FeatureBean bean){
         if(null == bean)return null;
-        bean.setReferencedByPersonId(personCache.getBean(bean.getPersonId())); 
-        return bean.getReferencedByPersonId();        
+        bean.setReferencedByPersonId(PersonCacheManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
+        return bean.getReferencedByPersonId();
     }
     private class CacheAction implements Action<FeatureBean>{
         final Action<FeatureBean> action;
         CacheAction(Action<FeatureBean>action){
-            this.action = action;            
+            this.action = action;
         }
         @Override
         public void call(FeatureBean bean) {
             if(null != action){
                 action.call(bean);
             }
-            featureCache.put(bean);
+            cache.put(bean);
         }
         @Override
         public FeatureBean getBean() {
@@ -135,8 +104,7 @@ public class FeatureCachemanager extends FeatureManager
         }}
     //20-5
     @Override
-    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action)
-    {
+    public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action){
         if(null == fieldList )
             action = new CacheAction(action);
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
@@ -146,6 +114,4 @@ public class FeatureCachemanager extends FeatureManager
     //
     // USING INDICES
     //_____________________________________________________________________
-
-
 }
