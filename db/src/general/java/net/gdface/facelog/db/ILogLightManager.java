@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_log_light table.<br>
+ * Remarks: VIEW
  * @author guyadong
  */
 public interface ILogLightManager extends TableManager<LogLightBean>

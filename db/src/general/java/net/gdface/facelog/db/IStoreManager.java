@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_store table.<br>
+ * Remarks: 二进制数据存储表
  * @author guyadong
  */
 public interface IStoreManager extends TableManager<StoreBean>

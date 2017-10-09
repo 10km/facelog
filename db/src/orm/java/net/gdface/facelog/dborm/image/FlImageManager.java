@@ -33,7 +33,8 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_image table.
+ * Handles database calls (save, load, count, etc...) for the fl_image table.<br>
+ * Remarks: 图像信息存储表,用于存储系统中所有用到的图像数据,表中只包含图像基本信息,图像二进制源数据存在在fl_store中(md5对应)<br>
  * @author sql2java
  */
 public class FlImageManager extends TableManager.Adapter<FlImageBean>

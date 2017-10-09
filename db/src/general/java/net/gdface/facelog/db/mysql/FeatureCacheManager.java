@@ -10,6 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.FeatureManager;
@@ -17,7 +18,7 @@ import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.mysql.FeatureCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_feature table.<br>
+ * cache implementation for FeatureManager<br>
  * @author guyadong
  */
 public class FeatureCacheManager extends FeatureManager
@@ -35,14 +36,19 @@ public class FeatureCacheManager extends FeatureManager
         return instance;
     }
     /**
-     * create a instance of FeatureCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of FeatureCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link FeatureCacheManager#FeatureCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final FeatureCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final FeatureCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new FeatureCacheManager(maximumSize,duration,unit);
+            instance = new FeatureCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final FeatureCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final FeatureCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -54,8 +60,11 @@ public class FeatureCacheManager extends FeatureManager
     }
     /** instance of {@link FeatureCache} */
     private final FeatureCache cache;
-    protected FeatureCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new FeatureCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link FeatureCache#FeatureCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected FeatureCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new FeatureCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -96,7 +105,7 @@ public class FeatureCacheManager extends FeatureManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public FeatureBean getBean() {

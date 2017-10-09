@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_person table.<br>
+ * Remarks: 人员基本描述信息
  * @author guyadong
  */
 public interface IPersonManager extends TableManager<PersonBean>

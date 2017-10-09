@@ -33,7 +33,8 @@ import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_person table.
+ * Handles database calls (save, load, count, etc...) for the fl_person table.<br>
+ * Remarks: 人员基本描述信息<br>
  * @author sql2java
  */
 public class FlPersonManager extends TableManager.Adapter<FlPersonBean>

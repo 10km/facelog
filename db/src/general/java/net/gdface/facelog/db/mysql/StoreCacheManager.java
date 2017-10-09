@@ -10,12 +10,13 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.mysql.StoreManager;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.mysql.StoreCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
+ * cache implementation for StoreManager<br>
  * @author guyadong
  */
 public class StoreCacheManager extends StoreManager
@@ -33,14 +34,19 @@ public class StoreCacheManager extends StoreManager
         return instance;
     }
     /**
-     * create a instance of StoreCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of StoreCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link StoreCacheManager#StoreCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final StoreCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final StoreCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new StoreCacheManager(maximumSize,duration,unit);
+            instance = new StoreCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final StoreCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final StoreCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -52,8 +58,11 @@ public class StoreCacheManager extends StoreManager
     }
     /** instance of {@link StoreCache} */
     private final StoreCache cache;
-    protected StoreCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new StoreCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link StoreCache#StoreCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected StoreCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new StoreCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -83,7 +92,7 @@ public class StoreCacheManager extends StoreManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public StoreBean getBean() {

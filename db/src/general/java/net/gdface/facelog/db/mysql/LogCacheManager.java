@@ -10,6 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.mysql.DeviceCacheManager;
 import net.gdface.facelog.db.FaceBean;
@@ -23,7 +24,7 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.mysql.LogCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
+ * cache implementation for LogManager<br>
  * @author guyadong
  */
 public class LogCacheManager extends LogManager
@@ -41,14 +42,19 @@ public class LogCacheManager extends LogManager
         return instance;
     }
     /**
-     * create a instance of LogCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of LogCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link LogCacheManager#LogCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final LogCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final LogCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new LogCacheManager(maximumSize,duration,unit);
+            instance = new LogCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final LogCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final LogCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -60,8 +66,11 @@ public class LogCacheManager extends LogManager
     }
     /** instance of {@link LogCache} */
     private final LogCache cache;
-    protected LogCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new LogCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link LogCache#LogCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected LogCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new LogCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -123,7 +132,7 @@ public class LogCacheManager extends LogManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public LogBean getBean() {

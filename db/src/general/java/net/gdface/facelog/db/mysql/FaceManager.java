@@ -27,7 +27,8 @@ import net.gdface.facelog.dborm.face.FlFaceBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * Remarks: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)<br>
  * @author guyadong
  */
 public class FaceManager extends TableManager.Adapter<FaceBean> implements IFaceManager

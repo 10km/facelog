@@ -24,7 +24,8 @@ import net.gdface.facelog.dborm.log.FlLogLightBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log_light table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * Remarks: VIEW<br>
  * @author guyadong
  */
 public class LogLightManager extends TableManager.Adapter<LogLightBean> implements ILogLightManager

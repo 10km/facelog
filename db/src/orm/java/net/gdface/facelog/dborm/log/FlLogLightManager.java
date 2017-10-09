@@ -27,7 +27,8 @@ import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_log_light table.
+ * Handles database calls (save, load, count, etc...) for the fl_log_light table.<br>
+ * Remarks: VIEW<br>
  * @author sql2java
  */
 public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>

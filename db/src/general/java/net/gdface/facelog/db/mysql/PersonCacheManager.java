@@ -10,6 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.mysql.ImageCacheManager;
 import net.gdface.facelog.db.mysql.PersonManager;
@@ -17,7 +18,7 @@ import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.mysql.PersonCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_person table.<br>
+ * cache implementation for PersonManager<br>
  * @author guyadong
  */
 public class PersonCacheManager extends PersonManager
@@ -35,14 +36,19 @@ public class PersonCacheManager extends PersonManager
         return instance;
     }
     /**
-     * create a instance of PersonCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of PersonCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link PersonCacheManager#PersonCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final PersonCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final PersonCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new PersonCacheManager(maximumSize,duration,unit);
+            instance = new PersonCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final PersonCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final PersonCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -54,8 +60,11 @@ public class PersonCacheManager extends PersonManager
     }
     /** instance of {@link PersonCache} */
     private final PersonCache cache;
-    protected PersonCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new PersonCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link PersonCache#PersonCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected PersonCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new PersonCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -96,7 +105,7 @@ public class PersonCacheManager extends PersonManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public PersonBean getBean() {

@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_device table.<br>
+ * Remarks: 前端设备基本信息
  * @author guyadong
  */
 public interface IDeviceManager extends TableManager<DeviceBean>

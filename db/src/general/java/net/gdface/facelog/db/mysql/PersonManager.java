@@ -27,7 +27,8 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * Remarks: 人员基本描述信息<br>
  * @author guyadong
  */
 public class PersonManager extends TableManager.Adapter<PersonBean> implements IPersonManager

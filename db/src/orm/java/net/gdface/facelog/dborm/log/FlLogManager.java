@@ -35,7 +35,8 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_log table.
+ * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
+ * Remarks: 人脸验证日志,记录所有通过验证的人员<br>
  * @author sql2java
  */
 public class FlLogManager extends TableManager.Adapter<FlLogBean>

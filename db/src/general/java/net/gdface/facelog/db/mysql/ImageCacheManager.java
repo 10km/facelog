@@ -10,6 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.mysql.DeviceCacheManager;
 import net.gdface.facelog.db.mysql.ImageManager;
@@ -17,7 +18,7 @@ import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.mysql.ImageCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_image table.<br>
+ * cache implementation for ImageManager<br>
  * @author guyadong
  */
 public class ImageCacheManager extends ImageManager
@@ -35,14 +36,19 @@ public class ImageCacheManager extends ImageManager
         return instance;
     }
     /**
-     * create a instance of ImageCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of ImageCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link ImageCacheManager#ImageCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final ImageCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final ImageCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new ImageCacheManager(maximumSize,duration,unit);
+            instance = new ImageCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final ImageCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final ImageCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -54,8 +60,11 @@ public class ImageCacheManager extends ImageManager
     }
     /** instance of {@link ImageCache} */
     private final ImageCache cache;
-    protected ImageCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new ImageCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link ImageCache#ImageCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected ImageCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new ImageCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -96,7 +105,7 @@ public class ImageCacheManager extends ImageManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public ImageBean getBean() {

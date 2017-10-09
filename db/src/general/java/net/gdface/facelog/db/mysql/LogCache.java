@@ -20,10 +20,15 @@ import net.gdface.facelog.db.LogBean;
  */
 public class LogCache extends TableLoadCaching<Integer, LogBean> {
     private final LogManager manager = LogManager.getInstance();
-    public LogCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public LogCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
     }
-
+    public LogCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public LogCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -52,30 +57,12 @@ public class LogCache extends TableLoadCaching<Integer, LogBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(LogBean bean){
-        super.put(bean);
+    public void update(LogBean bean){
+        super.update(bean);
     }
     @Override
-    public Collection<LogBean> put(Collection<LogBean> beans){
-        super.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(LogBean bean){
-        super.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<LogBean> putIfAbsent(Collection<LogBean> beans){
-        super.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(LogBean bean){
-        super.replace(bean);
-    }
-    @Override
-    public Collection<LogBean> replace(Collection<LogBean> beans){
-        super.replace(beans);
+    public Collection<LogBean> update(Collection<LogBean> beans){
+        super.update(beans);
         return beans;
     }
     

@@ -28,7 +28,8 @@ import net.gdface.facelog.dborm.log.FlLogBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_log table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * Remarks: 人脸验证日志,记录所有通过验证的人员<br>
  * @author guyadong
  */
 public class LogManager extends TableManager.Adapter<LogBean> implements ILogManager

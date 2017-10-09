@@ -31,7 +31,8 @@ import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_device table.
+ * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
+ * Remarks: 前端设备基本信息<br>
  * @author sql2java
  */
 public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>

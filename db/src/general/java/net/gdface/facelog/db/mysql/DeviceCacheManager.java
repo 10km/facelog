@@ -10,12 +10,13 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.mysql.DeviceManager;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.mysql.DeviceCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
+ * cache implementation for DeviceManager<br>
  * @author guyadong
  */
 public class DeviceCacheManager extends DeviceManager
@@ -33,14 +34,19 @@ public class DeviceCacheManager extends DeviceManager
         return instance;
     }
     /**
-     * create a instance of DeviceCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of DeviceCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link DeviceCacheManager#DeviceCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final DeviceCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final DeviceCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new DeviceCacheManager(maximumSize,duration,unit);
+            instance = new DeviceCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final DeviceCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final DeviceCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -52,8 +58,11 @@ public class DeviceCacheManager extends DeviceManager
     }
     /** instance of {@link DeviceCache} */
     private final DeviceCache cache;
-    protected DeviceCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new DeviceCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link DeviceCache#DeviceCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected DeviceCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new DeviceCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -83,7 +92,7 @@ public class DeviceCacheManager extends DeviceManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public DeviceBean getBean() {

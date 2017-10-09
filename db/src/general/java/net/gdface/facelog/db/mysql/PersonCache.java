@@ -22,10 +22,13 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
     private final PersonManager manager = PersonManager.getInstance();
     private final TableLoadCaching<String, PersonBean> imageMd5Cacher;
     private final TableLoadCaching<String, PersonBean> papersNumCacher;
-    public PersonCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public PersonCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
 
-        imageMd5Cacher = new TableLoadCaching<String, PersonBean>(){
+        imageMd5Cacher = new TableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(tableListener);
@@ -43,7 +46,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
                 return manager.loadByIndexImageMd5(key);
             }};
 
-        papersNumCacher = new TableLoadCaching<String, PersonBean>(){
+        papersNumCacher = new TableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(tableListener);
@@ -61,7 +64,9 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
                 return manager.loadByIndexPapersNum(key);
             }};
     }
-
+    public PersonCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public PersonCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -94,42 +99,16 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(PersonBean bean){
-        super.put(bean);
-        imageMd5Cacher.put(bean);
-        papersNumCacher.put(bean);
+    public void update(PersonBean bean){
+        super.update(bean);
+        imageMd5Cacher.update(bean);
+        papersNumCacher.update(bean);
     }
     @Override
-    public Collection<PersonBean> put(Collection<PersonBean> beans){
-        super.put(beans);
-        imageMd5Cacher.put(beans);
-        papersNumCacher.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(PersonBean bean){
-        super.putIfAbsent(bean);
-        imageMd5Cacher.putIfAbsent(bean);
-        papersNumCacher.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<PersonBean> putIfAbsent(Collection<PersonBean> beans){
-        super.putIfAbsent(beans);
-        imageMd5Cacher.putIfAbsent(beans);
-        papersNumCacher.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(PersonBean bean){
-        super.replace(bean);
-        imageMd5Cacher.replace(bean);
-        papersNumCacher.replace(bean);
-    }
-    @Override
-    public Collection<PersonBean> replace(Collection<PersonBean> beans){
-        super.replace(beans);
-        imageMd5Cacher.replace(beans);
-        papersNumCacher.replace(beans);
+    public Collection<PersonBean> update(Collection<PersonBean> beans){
+        super.update(beans);
+        imageMd5Cacher.update(beans);
+        papersNumCacher.update(beans);
         return beans;
     }
     

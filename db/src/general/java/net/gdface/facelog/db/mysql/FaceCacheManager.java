@@ -10,6 +10,7 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
+import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.ImageBean;
@@ -19,7 +20,7 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.mysql.FaceCache;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
+ * cache implementation for FaceManager<br>
  * @author guyadong
  */
 public class FaceCacheManager extends FaceManager
@@ -37,14 +38,19 @@ public class FaceCacheManager extends FaceManager
         return instance;
     }
     /**
-     * create a instance of FaceCacheManager and assign to {@link #instance},if <code>instance</code> is not initialized.<br>
-     * otherwise return <code>instance</code>
+     * create a instance of FaceCacheManager and assign to {@link #instance} if {@code instance} is not initialized.<br>
+     * otherwise return {@code instance}.
+     * @see {@link FaceCacheManager#FaceCacheManager(UpdateStrategy ,long , long , TimeUnit )}
      */
-    public static synchronized final FaceCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+    public static synchronized final FaceCacheManager makeInstance(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit){
         if(null == instance){
-            instance = new FaceCacheManager(maximumSize,duration,unit);
+            instance = new FaceCacheManager(updateStragey,maximumSize,duration,unit);
         }
         return instance;
+    }
+    /** @see #makeInstance(UpdateStrategy,long, long, TimeUnit) */
+    public static final FaceCacheManager makeInstance(long maximumSize, long duration, TimeUnit unit){
+        return makeInstance(ITableCache.DEFAULT_STRATEGY,maximumSize, duration, unit);
     }
     /** @see #makeInstance(long, long, TimeUnit) */
     public static final FaceCacheManager makeInstance(long maximumSize, long durationMinutes){
@@ -56,8 +62,11 @@ public class FaceCacheManager extends FaceManager
     }
     /** instance of {@link FaceCache} */
     private final FaceCache cache;
-    protected FaceCacheManager(long maximumSize, long duration, TimeUnit unit) {
-        cache = new FaceCache(maximumSize,duration,unit);
+    /** constructor<br>
+     * @see {@link FaceCache#FaceCache(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    protected FaceCacheManager(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        cache = new FaceCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
 
@@ -105,7 +114,7 @@ public class FaceCacheManager extends FaceManager
             if(null != action){
                 action.call(bean);
             }
-            cache.put(bean);
+            cache.update(bean);
         }
         @Override
         public FaceBean getBean() {

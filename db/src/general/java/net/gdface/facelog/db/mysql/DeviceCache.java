@@ -22,10 +22,13 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
     private final DeviceManager manager = DeviceManager.getInstance();
     private final TableLoadCaching<String, DeviceBean> macCacher;
     private final TableLoadCaching<String, DeviceBean> serialNoCacher;
-    public DeviceCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public DeviceCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
 
-        macCacher = new TableLoadCaching<String, DeviceBean>(){
+        macCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(tableListener);
@@ -43,7 +46,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 return manager.loadByIndexMac(key);
             }};
 
-        serialNoCacher = new TableLoadCaching<String, DeviceBean>(){
+        serialNoCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
                 manager.registerListener(tableListener);
@@ -61,7 +64,9 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 return manager.loadByIndexSerialNo(key);
             }};
     }
-
+    public DeviceCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public DeviceCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -94,42 +99,16 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(DeviceBean bean){
-        super.put(bean);
-        macCacher.put(bean);
-        serialNoCacher.put(bean);
+    public void update(DeviceBean bean){
+        super.update(bean);
+        macCacher.update(bean);
+        serialNoCacher.update(bean);
     }
     @Override
-    public Collection<DeviceBean> put(Collection<DeviceBean> beans){
-        super.put(beans);
-        macCacher.put(beans);
-        serialNoCacher.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(DeviceBean bean){
-        super.putIfAbsent(bean);
-        macCacher.putIfAbsent(bean);
-        serialNoCacher.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<DeviceBean> putIfAbsent(Collection<DeviceBean> beans){
-        super.putIfAbsent(beans);
-        macCacher.putIfAbsent(beans);
-        serialNoCacher.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(DeviceBean bean){
-        super.replace(bean);
-        macCacher.replace(bean);
-        serialNoCacher.replace(bean);
-    }
-    @Override
-    public Collection<DeviceBean> replace(Collection<DeviceBean> beans){
-        super.replace(beans);
-        macCacher.replace(beans);
-        serialNoCacher.replace(beans);
+    public Collection<DeviceBean> update(Collection<DeviceBean> beans){
+        super.update(beans);
+        macCacher.update(beans);
+        serialNoCacher.update(beans);
         return beans;
     }
     

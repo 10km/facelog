@@ -20,10 +20,15 @@ import net.gdface.facelog.db.FaceBean;
  */
 public class FaceCache extends TableLoadCaching<Integer, FaceBean> {
     private final FaceManager manager = FaceManager.getInstance();
-    public FaceCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public FaceCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
     }
-
+    public FaceCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public FaceCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -52,30 +57,12 @@ public class FaceCache extends TableLoadCaching<Integer, FaceBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(FaceBean bean){
-        super.put(bean);
+    public void update(FaceBean bean){
+        super.update(bean);
     }
     @Override
-    public Collection<FaceBean> put(Collection<FaceBean> beans){
-        super.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(FaceBean bean){
-        super.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<FaceBean> putIfAbsent(Collection<FaceBean> beans){
-        super.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(FaceBean bean){
-        super.replace(bean);
-    }
-    @Override
-    public Collection<FaceBean> replace(Collection<FaceBean> beans){
-        super.replace(beans);
+    public Collection<FaceBean> update(Collection<FaceBean> beans){
+        super.update(beans);
         return beans;
     }
     

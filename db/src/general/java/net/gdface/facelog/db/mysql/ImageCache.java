@@ -20,10 +20,15 @@ import net.gdface.facelog.db.ImageBean;
  */
 public class ImageCache extends TableLoadCaching<String, ImageBean> {
     private final ImageManager manager = ImageManager.getInstance();
-    public ImageCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public ImageCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
     }
-
+    public ImageCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public ImageCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -52,30 +57,12 @@ public class ImageCache extends TableLoadCaching<String, ImageBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(ImageBean bean){
-        super.put(bean);
+    public void update(ImageBean bean){
+        super.update(bean);
     }
     @Override
-    public Collection<ImageBean> put(Collection<ImageBean> beans){
-        super.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(ImageBean bean){
-        super.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<ImageBean> putIfAbsent(Collection<ImageBean> beans){
-        super.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(ImageBean bean){
-        super.replace(bean);
-    }
-    @Override
-    public Collection<ImageBean> replace(Collection<ImageBean> beans){
-        super.replace(beans);
+    public Collection<ImageBean> update(Collection<ImageBean> beans){
+        super.update(beans);
         return beans;
     }
     

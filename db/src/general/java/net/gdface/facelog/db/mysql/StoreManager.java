@@ -24,7 +24,8 @@ import net.gdface.facelog.dborm.image.FlStoreBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * Remarks: 二进制数据存储表<br>
  * @author guyadong
  */
 public class StoreManager extends TableManager.Adapter<StoreBean> implements IStoreManager

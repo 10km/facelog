@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-
+import com.google.common.base.Preconditions;
 /**
  * 
  * 基于 {@link LoadingCache}实现表数据缓存,并可以通过{@link TableListener}实现缓存数组的更新
@@ -28,6 +28,8 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
     private final LoadingCache<K, B> cache;
     protected final ConcurrentMap<K, B> cacheMap;
     protected final  TableListener.Adapter<B> tableListener;
+    private final UpdateStrategy updateStragey;
+
     /** 返回bean中主键值 */
     protected abstract K returnKey(B bean)
     /** 从数据库中加载主键(pk)指定的记录 */;
@@ -47,6 +49,17 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         this(maximumSize,durationMinutes,DEFAULT_TIME_UNIT);
     }
     public TableLoadCaching(long maximumSize,long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
+    /**
+     * 构造函数
+     * @param updateStragey 缓存更新策略
+     * @param maximumSize 最大缓存容量,参见 {@link CacheBuilder#maximumSize(long)}
+     * @param duration 失效时间,参见 {@link CacheBuilder#expireAfterWrite(long, TimeUnit)}
+     * @param unit {@code duration}的时间单位
+     */
+    public TableLoadCaching(UpdateStrategy updateStragey,long maximumSize,long duration, TimeUnit unit) {
+        this.updateStragey = Preconditions.checkNotNull(updateStragey);
         cache = CacheBuilder.newBuilder()
                 .maximumSize(maximumSize)
                 .expireAfterWrite(duration, unit)
@@ -77,46 +90,23 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         }
     }
     @Override
-    public void put(B bean){
+    public void update(B bean){
         K key;
         if(null == bean || null == (key = returnKey(bean)))return;
-        cacheMap.put(key,bean);
+        switch(updateStragey){
+        case always:
+            cacheMap.put(key,bean);break;
+        case ifAbsent:
+            cacheMap.putIfAbsent(key,bean);break;
+        case replace:
+            cacheMap.replace(key,bean);break;
+        }        
     }
     @Override
-    public Collection<B> put(Collection<B> beans){
+    public Collection<B> update(Collection<B> beans){
         if(null != beans){
             for(B bean : beans){
-                put(bean);
-            }
-        }
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(B bean){
-        K key;
-        if(null == bean || null == (key = returnKey(bean)))return;
-        cacheMap.putIfAbsent(key,bean);
-    }
-    @Override
-    public Collection<B> putIfAbsent(Collection<B> beans){
-        if(null != beans){
-            for(B bean : beans){
-                putIfAbsent(bean);
-            }
-        }
-        return beans;
-    }
-    @Override
-    public void replace(B bean){
-        K key;
-        if(null == bean || null == (key = returnKey(bean)))return;
-        cacheMap.replace(key,bean);
-    }
-    @Override
-    public Collection<B> replace(Collection<B> beans){
-        if(null != beans){
-            for(B bean : beans){
-                replace(bean);
+                update(bean);
             }
         }
         return beans;

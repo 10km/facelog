@@ -20,10 +20,15 @@ import net.gdface.facelog.db.FeatureBean;
  */
 public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
     private final FeatureManager manager = FeatureManager.getInstance();
-    public FeatureCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public FeatureCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
     }
-
+    public FeatureCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public FeatureCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -52,30 +57,12 @@ public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(FeatureBean bean){
-        super.put(bean);
+    public void update(FeatureBean bean){
+        super.update(bean);
     }
     @Override
-    public Collection<FeatureBean> put(Collection<FeatureBean> beans){
-        super.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(FeatureBean bean){
-        super.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<FeatureBean> putIfAbsent(Collection<FeatureBean> beans){
-        super.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(FeatureBean bean){
-        super.replace(bean);
-    }
-    @Override
-    public Collection<FeatureBean> replace(Collection<FeatureBean> beans){
-        super.replace(beans);
+    public Collection<FeatureBean> update(Collection<FeatureBean> beans){
+        super.update(beans);
         return beans;
     }
     

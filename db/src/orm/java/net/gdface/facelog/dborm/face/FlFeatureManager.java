@@ -33,7 +33,8 @@ import net.gdface.facelog.dborm.person.FlPersonBean;
 import net.gdface.facelog.dborm.person.FlPersonManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_feature table.
+ * Handles database calls (save, load, count, etc...) for the fl_feature table.<br>
+ * Remarks: 用于验证身份的人脸特征数据表<br>
  * @author sql2java
  */
 public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>

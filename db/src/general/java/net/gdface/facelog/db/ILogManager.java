@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_log table.<br>
+ * Remarks: 人脸验证日志,记录所有通过验证的人员
  * @author guyadong
  */
 public interface ILogManager extends TableManager<LogBean>

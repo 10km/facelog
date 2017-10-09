@@ -27,7 +27,8 @@ import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_store table.
+ * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
+ * Remarks: 二进制数据存储表<br>
  * @author sql2java
  */
 public class FlStoreManager extends TableManager.Adapter<FlStoreBean>

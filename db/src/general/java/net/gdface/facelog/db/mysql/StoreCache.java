@@ -20,10 +20,15 @@ import net.gdface.facelog.db.StoreBean;
  */
 public class StoreCache extends TableLoadCaching<String, StoreBean> {
     private final StoreManager manager = StoreManager.getInstance();
-    public StoreCache(long maximumSize, long duration, TimeUnit unit) {
-        super(maximumSize, duration, unit);
+    /** constructor<br>
+     * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
+     */
+    public StoreCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
+        super(updateStragey,maximumSize, duration, unit);
     }
-
+    public StoreCache(long maximumSize, long duration, TimeUnit unit) {
+        this(DEFAULT_STRATEGY,maximumSize,duration,unit);
+    }
     public StoreCache(long maximumSize, long durationMinutes) {
         this(maximumSize, durationMinutes, DEFAULT_TIME_UNIT);
     }
@@ -52,30 +57,12 @@ public class StoreCache extends TableLoadCaching<String, StoreBean> {
         return manager.loadByPrimaryKey(key);
     }
     @Override
-    public void put(StoreBean bean){
-        super.put(bean);
+    public void update(StoreBean bean){
+        super.update(bean);
     }
     @Override
-    public Collection<StoreBean> put(Collection<StoreBean> beans){
-        super.put(beans);
-        return beans;
-    }
-    @Override
-    public void putIfAbsent(StoreBean bean){
-        super.putIfAbsent(bean);
-    }
-    @Override
-    public Collection<StoreBean> putIfAbsent(Collection<StoreBean> beans){
-        super.putIfAbsent(beans);
-        return beans;
-    }
-    @Override
-    public void replace(StoreBean bean){
-        super.replace(bean);
-    }
-    @Override
-    public Collection<StoreBean> replace(Collection<StoreBean> beans){
-        super.replace(beans);
+    public Collection<StoreBean> update(Collection<StoreBean> beans){
+        super.update(beans);
         return beans;
     }
     

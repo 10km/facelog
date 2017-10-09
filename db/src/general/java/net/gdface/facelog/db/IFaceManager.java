@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_face table.<br>
+ * Remarks: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)
  * @author guyadong
  */
 public interface IFaceManager extends TableManager<FaceBean>

@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_feature table.<br>
+ * Remarks: 用于验证身份的人脸特征数据表
  * @author guyadong
  */
 public interface IFeatureManager extends TableManager<FeatureBean>

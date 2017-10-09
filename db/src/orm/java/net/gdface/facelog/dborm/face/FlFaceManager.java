@@ -33,7 +33,8 @@ import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_face table.
+ * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
+ * Remarks: 人脸检测信息数据表,用于保存检测到的人脸的所有信息(特征数据除外)<br>
  * @author sql2java
  */
 public class FlFaceManager extends TableManager.Adapter<FlFaceBean>

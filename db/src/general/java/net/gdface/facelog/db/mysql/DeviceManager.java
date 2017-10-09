@@ -26,7 +26,8 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
- * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.
+ * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
+ * Remarks: 前端设备基本信息<br>
  * @author guyadong
  */
 public class DeviceManager extends TableManager.Adapter<DeviceBean> implements IDeviceManager
