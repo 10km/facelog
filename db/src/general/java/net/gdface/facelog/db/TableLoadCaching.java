@@ -58,17 +58,21 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
      * @param duration 失效时间,参见 {@link CacheBuilder#expireAfterWrite(long, TimeUnit)}
      * @param unit {@code duration}的时间单位
      */
-    public TableLoadCaching(UpdateStrategy updateStragey,long maximumSize,long duration, TimeUnit unit) {
-        this.updateStragey = Preconditions.checkNotNull(updateStragey);
+    public TableLoadCaching(UpdateStrategy updateStragey,long maximumSize,long duration, TimeUnit unit) {        
+        if(null == updateStragey ) updateStragey = DEFAULT_STRATEGY;
+        if(0 >= maximumSize) maximumSize = DEFAULT_CACHE_MAXIMUMSIZE;
+        if(0 >= duration) maximumSize = DEFAULT_DURATION;
+        if(null == unit) unit = DEFAULT_TIME_UNIT;
+        this.updateStragey = updateStragey;
         cache = CacheBuilder.newBuilder()
-                .maximumSize(maximumSize)
-                .expireAfterWrite(duration, unit)
-                .build(
-                        new CacheLoader<K,B>() {
-                            @Override
-                            public B load(K key) throws Exception {
-                                return loadfromDatabase(key);
-                            }});
+            .maximumSize(maximumSize)
+            .expireAfterWrite(duration, unit)
+            .build(
+                new CacheLoader<K,B>() {
+                    @Override
+                    public B load(K key) throws Exception {
+                        return loadfromDatabase(key);
+                    }});
         cacheMap = cache.asMap();
         tableListener = new TableListener.Adapter<B>(){
             @Override

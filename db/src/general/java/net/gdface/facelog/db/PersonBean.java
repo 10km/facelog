@@ -48,11 +48,11 @@ public class PersonBean
     private String imageMd5;
 
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
-    private java.util.Date expiryDate;
+    private java.util.Date expiryDate= java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0)); // DEFAULT '2050-12-31';
 
-    private java.util.Date createTime;
+    private java.util.Date createTime= java.text.DateFormat.getDateTimeInstance().parse("2017-12-31 12:12:12.0",new java.text.ParsePosition(0)); // DEFAULT '2017-12-31 12:12:12';
 
-    private java.util.Date updateTime;
+    private java.util.Date updateTime; // DEFAULT 'CURRENT_TIMESTAMP';
 
     /** columns modified flag */
     private long modified = 0L;
@@ -663,6 +663,7 @@ public class PersonBean
      * <ul>
      * <li>full name: fl_person.expiry_date</li>
      * <li>comments: 验证有效期限(超过期限不能通过验证),为NULL永久有效</li>
+     * <li>default value: = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0)); // DEFAULT '2050-12-31'</li>
      * <li>column size: 10</li>
      * <li>jdbc type returned by the driver: Types.DATE</li>
      * </ul>
@@ -744,6 +745,7 @@ public class PersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.create_time</li>
+     * <li>default value: = java.text.DateFormat.getDateTimeInstance().parse("2017-12-31 12:12:12.0",new java.text.ParsePosition(0)); // DEFAULT '2017-12-31 12:12:12'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
@@ -826,6 +828,7 @@ public class PersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.update_time</li>
+     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>

@@ -43,9 +43,9 @@ public class FlDeviceBean
     /** comments:6字节MAC地址(HEX) */
     private String mac;
 
-    private java.util.Date createTime;
+    private java.util.Date createTime; // DEFAULT 'CURRENT_TIMESTAMP';
 
-    private java.util.Date updateTime;
+    private java.util.Date updateTime; // DEFAULT 'CURRENT_TIMESTAMP';
 
     /** columns modified flag */
     private long modified = 0L;
@@ -475,6 +475,7 @@ public class FlDeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.create_time</li>
+     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
@@ -541,6 +542,7 @@ public class FlDeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.update_time</li>
+     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>

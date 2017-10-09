@@ -42,9 +42,9 @@ public class LogBean
     private Double similarty;
 
     /** comments:验证时间(可能由前端设备提供时间) */
-    private java.util.Date verifyTime;
+    private java.util.Date verifyTime; // DEFAULT 'CURRENT_TIMESTAMP';
 
-    private java.util.Date createTime;
+    private java.util.Date createTime; // DEFAULT 'CURRENT_TIMESTAMP';
 
     /** columns modified flag */
     private long modified = 0L;
@@ -526,6 +526,7 @@ public class LogBean
      * <ul>
      * <li>full name: fl_log.verify_time</li>
      * <li>comments: 验证时间(可能由前端设备提供时间)</li>
+     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
@@ -608,6 +609,7 @@ public class LogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.create_time</li>
+     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>

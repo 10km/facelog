@@ -35,7 +35,7 @@ public class FlFeatureBean
     /** comments:二进制特征数据 */
     private java.nio.ByteBuffer feature;
 
-    private java.util.Date updateTime;
+    private java.util.Date updateTime; // DEFAULT 'CURRENT_TIMESTAMP';
 
     /** columns modified flag */
     private long modified = 0L;
@@ -288,6 +288,7 @@ public class FlFeatureBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.update_time</li>
+     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
      * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
