@@ -21,6 +21,11 @@ import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.StoreCacheManager;
 import net.gdface.facelog.db.mysql.TableInstance;
 
+/**
+ * 全局初始化数据库访问对象(TableManager)
+ * @author guyadong
+ *
+ */
 public class TableManagerInitializer {
 	
 	public final IDeviceManager deviceManager;
@@ -42,7 +47,9 @@ public class TableManagerInitializer {
 		personManager = PersonCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
 		storeManager = StoreCacheManager.makeInstance(UpdateStrategy.always,100,10,TimeUnit.MINUTES);
 		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
-  /*	deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
+ 
+		
+/*		deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
 		faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);
 		imageManager = (IImageManager) TableInstance.getInstance(ImageBean.class);
 		logManager = (ILogManager) TableInstance.getInstance(LogBean.class);
