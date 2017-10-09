@@ -69,6 +69,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static DeviceBean _getDevice(Integer deviceId){
 		return deviceManager.loadByPrimaryKey(deviceId); 
 	}
+	protected static List<DeviceBean> _getDevice(Collection<Integer> collection){
+		return deviceManager.loadByPrimaryKey(collection); 
+	}
 	protected static int _deleteDevice(Integer deviceId){
 		return deviceManager.deleteByPrimaryKey(deviceId);
 	}
@@ -141,6 +144,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	protected static FeatureBean _getFeature(String md5){
 		return featureManager.loadByPrimaryKey(md5);
 	}
+	protected static List<FeatureBean> _getFeature(Collection<String> collection){
+		return featureManager.loadByPrimaryKey(collection); 
+	}
 	protected static List<FeatureBean> _getFeatureBeansByPersonId(Integer personId){
 		return personManager.getFeatureBeansByPersonIdAsList(personId);
 	}
@@ -175,6 +181,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	}
 	protected static ImageBean _getImage(String md5){
 		return imageManager.loadByPrimaryKey(md5);
+	}
+	protected static List<ImageBean> _getImage(Collection<String> collection){
+		return imageManager.loadByPrimaryKey(collection); 
 	}
 	protected static List<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
 		ArrayList<String> imageBeans = new ArrayList<String>();
@@ -379,12 +388,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	/**
 	 * 返回 persionId 关联的所有人脸特征记录
 	 * @param personId fl_person.id
-	 * @return
+	 * @return 返回 fl_feature.md5  列表
 	 * @throws ServiceRuntime
 	 */
-	public List<FeatureBean> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
+	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
-			return _getFeatureBeansByPersonId(personId);
+			return featureManager.toPrimaryKeyList(_getFeatureBeansByPersonId(personId));
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -569,9 +578,9 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 * @return
 	 * @throws ServiceRuntime
 	 */
-	public List<PersonBean> loadAllPerson()throws ServiceRuntime {
+	public List<Integer> loadAllPerson()throws ServiceRuntime {
 		try{
-			return _loadPersonByWhere(null);
+			return personManager.toPrimaryKeyList(_loadPersonByWhere(null));
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -579,12 +588,12 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	/**
 	 * 返回 where 指定的所有人员记录
 	 * @param where SQL条件语句
-	 * @return
+	 * @return 返回 fl_person.id 列表
 	 * @throws ServiceRuntime
 	 */
-	public List<PersonBean> loadPersonByWhere(String where)throws ServiceRuntime {
+	public List<Integer> loadPersonByWhere(String where)throws ServiceRuntime {
 		try{
-			return personManager.loadByWhereAsList(where);
+			return personManager.toPrimaryKeyList(personManager.loadByWhereAsList(where));
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -802,25 +811,10 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	 * 返回fl_person.update_time字段大于指定时间戳( timestamp )的所有fl_person记录<br>
 	 * 同时包含fl_feature更新记录引用的fl_person记录
 	 * @param timestamp
-	 * @return
-	 * @throws ServiceRuntime
-	 */
-	public List<PersonBean> loadUpdatePersons(long timestamp)throws ServiceRuntime {
-		try{
-			return _loadUpdatePersons(new Date(timestamp));
-		} catch (ServiceRuntime e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		}
-	}
-	/**
-	 * 参见 {@link #loadUpdatePersons(long)}<br>
-	 * @param timestamp
 	 * @return 返回fl_person.id 列表
 	 * @throws ServiceRuntime
 	 */
-	public List<Integer> loadUpdatePersonIds(long timestamp)throws ServiceRuntime {
+	public List<Integer> loadUpdatePersons(long timestamp)throws ServiceRuntime {
 		try{
 			return personManager.toPrimaryKeyList(_loadUpdatePersons(new Date(timestamp)));
 		} catch (ServiceRuntime e) {
@@ -832,21 +826,6 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_person.update_time 字段大于指定时间戳( timestamp )的所有fl_person记录
-	 * @param timestamp
-	 * @return
-	 * @throws ServiceRuntime
-	 */
-	public List<PersonBean> loadPersonByUpdate(long timestamp)throws ServiceRuntime {
-		try{
-			return _loadPersonByUpdate(new Date(timestamp));
-		} catch (ServiceRuntime e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		}
-	}
-	/**
-	 * 参见 {@link #loadPersonByUpdate(long)}
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
 	 * @throws ServiceRuntime
@@ -863,21 +842,6 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 	/**
 	 * (主动更新机制实现)<br>
 	 * 返回 fl_feature.update_time 字段大于指定时间戳( timestamp )的所有fl_feature记录
-	 * @param timestamp
-	 * @return
-	 * @throws ServiceRuntime
-	 */
-	public List<FeatureBean> loadFeatureByUpdate(long timestamp)throws ServiceRuntime {
-		try{
-			return _loadFeatureByUpdate(new Date(timestamp));
-		} catch (ServiceRuntime e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		}
-	}
-	/**
-	 * 参见 {@link #loadFeatureByUpdate(long)}
 	 * @param timestamp
 	 * @return 返回 fl_feature.md5 列表
 	 * @throws ServiceRuntime
@@ -1075,6 +1039,21 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		}
 	}
 	/**
+	 * 根据MD5校验码返回人脸特征数据记录
+	 * @param md5 md5列表
+	 * @return {@link FeatureBean}列表
+	 * @throws ServiceRuntime
+	 */
+	public List<FeatureBean> getFeature(List<String> md5)throws ServiceRuntime{
+		try{
+			return _getFeature(md5);
+		}catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/**
 	 * 根据MD5校验码返回人脸特征数据
 	 * @param md5
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
@@ -1158,5 +1137,33 @@ public class FaceLogDbLocal implements FaceLogDb,CommonConstant,
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
+	}
+    
+    public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntime{
+    	try{
+		return _saveDevice(deviceBean);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	public DeviceBean getDevice(Integer deviceId)throws ServiceRuntime{
+    	try{
+		return _getDevice(deviceId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	public List<DeviceBean> getDevice(List<Integer> deviceId)throws ServiceRuntime{
+    	try{
+		return _getDevice(deviceId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		} 
 	}
 }
