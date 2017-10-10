@@ -70,14 +70,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -263,14 +268,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -599,14 +609,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -747,14 +762,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -934,14 +954,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -1138,14 +1163,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -1379,14 +1409,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
@@ -1506,14 +1541,19 @@ public class BeanConverterUtils implements Constant {
                     throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
                 return (T) obj;
             }catch(ClassCastException ce){
-                // long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                // Long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
                     try {
                         // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                         return type.getConstructor(long.class).newInstance(obj);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+                // Date -> Long,long
+                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                    	Long time = ((java.util.Date)obj).getTime();
+                        return (T)time;
                 }
                 // byte[] -> ByteBuffer
                 if(ByteBuffer.class == type && obj instanceof byte[]){
