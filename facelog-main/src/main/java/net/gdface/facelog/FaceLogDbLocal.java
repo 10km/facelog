@@ -495,29 +495,25 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#setPersonExpiryDate(int, java.util.Date)
-	 */
+
 	@Override
-	public void setPersonExpiryDate(int personId,Date expiryDate)throws ServiceRuntime{
+	public void setPersonExpiryDate(int personId,long expiryDate)throws ServiceRuntime{
 		try{
-			_setPersonExpiryDate(_getPerson(personId),expiryDate);
+			_setPersonExpiryDate(_getPerson(personId),new Date(expiryDate));
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#setPersonExpiryDate(java.util.List, java.util.Date)
-	 */
+
 	@Override
-	public  void setPersonExpiryDate(final List<Integer> personIdList,final Date expiryDate)throws ServiceRuntime{
+	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate)throws ServiceRuntime{
 		try{		
 			personManager.runAsTransaction(new Runnable(){
 				@Override
 				public void run() {
-					_setPersonExpiryDate(personIdList,expiryDate);
+					_setPersonExpiryDate(personIdList,new Date(expiryDate));
 				}});			
 		}catch(ServiceRuntime e){
 			throw e;
@@ -525,16 +521,12 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#disablePerson(java.util.List)
-	 */
+
 	@Override
 	public  void disablePerson(final List<Integer> personIdList)throws ServiceRuntime{
-		setPersonExpiryDate(personIdList,new Date());
+		setPersonExpiryDate(personIdList,new Date().getTime());
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getLogBeansByPersonId(int)
-	 */
+
 	@Override
 	public List<LogBean> getLogBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
@@ -543,9 +535,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadAllPerson()
-	 */
+
 	@Override
 	public List<Integer> loadAllPerson()throws ServiceRuntime {
 		try{
@@ -554,9 +544,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadPersonByWhere(java.lang.String)
-	 */
+
 	@Override
 	public List<Integer> loadPersonByWhere(String where)throws ServiceRuntime {
 		try{
@@ -566,9 +554,6 @@ public class FaceLogDbLocal implements CommonConstant,
 		} 
 	}
 
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean)
-	 */
 	@Override
 	public PersonBean savePerson(PersonBean bean)throws ServiceRuntime {
 		try{
@@ -577,9 +562,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(java.util.List)
-	 */
+
 	@Override
 	public void savePerson(List<PersonBean> beans)throws ServiceRuntime  {
 		try{
@@ -588,9 +571,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean, java.nio.ByteBuffer)
-	 */
+
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto)throws ServiceRuntime {
 		try{
@@ -605,9 +586,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(java.util.Map)
-	 */
+
 	@Override
 	public Integer savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntime {
 		try{
@@ -622,17 +601,15 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean, net.gdface.facelog.db.ImageBean, net.gdface.facelog.db.FeatureBean)
-	 */
+
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ImageBean idPhoto, final FeatureBean featureBean)
+	public PersonBean savePerson(final PersonBean bean, final String idPhotoMd5, final String featureMd5)
 			throws ServiceRuntime {
 		try {
 			return personManager.runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, idPhoto, Arrays.asList(featureBean));
+					return _savePerson(bean, _getImage(idPhotoMd5), Arrays.asList(_getFeature(featureMd5)));
 				}
 			});
 		} catch (ServiceRuntime e) {
@@ -642,17 +619,14 @@ public class FaceLogDbLocal implements CommonConstant,
 		}
 	}
 	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean, java.nio.ByteBuffer, net.gdface.facelog.db.FeatureBean, java.lang.Integer)
-	 */
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData, final FeatureBean featureBean,
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final FeatureBean featureBean,
 			final Integer deviceId) throws ServiceRuntime {
 		try {
 			return personManager.runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, imageData, featureBean, _getDevice(deviceId));
+					return _savePerson(bean, idPhoto, featureBean, _getDevice(deviceId));
 				}
 			});
 		} catch (ServiceRuntime e) {
@@ -661,17 +635,15 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean, java.nio.ByteBuffer, java.nio.ByteBuffer, java.util.List)
-	 */
+
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData, final ByteBuffer feature,
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final List<FaceBean> faceBeans) throws ServiceRuntime {
 		try {
 			return personManager.runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, imageData, _addFeature(feature, bean, faceBeans), null);
+					return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceBeans), null);
 				}
 			});
 		} catch (ServiceRuntime e) {
@@ -680,17 +652,15 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean, java.nio.ByteBuffer, java.nio.ByteBuffer, java.util.Map, java.lang.Integer)
-	 */
+
 	@Override
-	public PersonBean savePerson(final PersonBean bean, final ByteBuffer imageData, final ByteBuffer feature,
+	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId) throws ServiceRuntime {
 		try {
 			return personManager.runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
-					return _savePerson(bean, imageData, feature, faceInfo, _getDevice(deviceId));
+					return _savePerson(bean, idPhoto, feature, faceInfo, _getDevice(deviceId));
 				}
 			});
 		} catch (ServiceRuntime e) {
@@ -699,9 +669,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#savePerson(net.gdface.facelog.db.PersonBean, java.nio.ByteBuffer, java.nio.ByteBuffer, java.nio.ByteBuffer, net.gdface.facelog.db.FaceBean, java.lang.Integer)
-	 */
+
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId)throws ServiceRuntime {
@@ -717,9 +685,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#replaceFeature(java.lang.Integer, java.lang.String, boolean)
-	 */
+
 	@Override
 	public void replaceFeature(final Integer personId, final String featureMd5, final boolean deleteOldFeatureImage)
 			throws ServiceRuntime {
@@ -736,9 +702,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadUpdatePersons(long)
-	 */
+
 	@Override
 	public List<Integer> loadUpdatePersons(long timestamp)throws ServiceRuntime {
 		try{
@@ -749,9 +713,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadPersonIdByUpdate(long)
-	 */
+
 	@Override
 	public List<Integer> loadPersonIdByUpdate(long timestamp)throws ServiceRuntime {
 		try{
@@ -762,9 +724,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadFeatureMd5ByUpdate(long)
-	 */
+
 	@Override
 	public List<String> loadFeatureMd5ByUpdate(long timestamp)throws ServiceRuntime {
 		try{
@@ -775,9 +735,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#addLog(net.gdface.facelog.db.LogBean)
-	 */
+
 	@Override
 	public void addLog(LogBean bean)throws ServiceRuntime {
 		try{
@@ -786,10 +744,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#addLog(java.util.List)
-	 */
+
 	@Override
 	public void addLog(List<LogBean> beans)throws ServiceRuntime {
 		try{
@@ -798,9 +753,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadLogByWhere(java.lang.String, java.util.List, int, int)
-	 */
+
 	@Override
 	public List<LogBean> loadLogByWhere(String where, List<Integer> fieldList, int startRow, int numRows) throws ServiceRuntime {
 		try{
@@ -809,9 +762,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#loadLogLightByWhere(java.lang.String, int, int)
-	 */
+
 	@Override
 	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		try{
@@ -820,9 +771,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}	
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#countLogLightWhere(java.lang.String)
-	 */
+
 	@Override
 	public int countLogLightWhere(String where) throws ServiceRuntime {
 		try{
@@ -831,9 +780,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#countLogWhere(java.lang.String)
-	 */
+
 	@Override
 	public int countLogWhere(String where) throws ServiceRuntime {
 		try{
@@ -842,9 +789,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-    /* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#existsImage(java.lang.String)
-	 */
+
     @Override
 	public boolean existsImage(String md5) throws ServiceRuntime {
 		try{
@@ -853,9 +798,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#addImage(java.nio.ByteBuffer, java.lang.Integer, net.gdface.facelog.db.FaceBean, java.lang.Integer)
-	 */
+
 	@Override
 	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
 			, FaceBean faceBean , Integer personId) throws ServiceRuntime{
@@ -867,9 +810,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-    /* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#existsFeature(java.lang.String)
-	 */
+
     @Override
 	public boolean existsFeature(String md5) throws ServiceRuntime {
 		try{
@@ -878,9 +819,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#addFeature(java.nio.ByteBuffer, java.lang.Integer, java.util.List)
-	 */
+
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntime{
 		try{
@@ -891,9 +830,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#addFeature(java.nio.ByteBuffer, java.lang.Integer, java.util.Map, java.lang.Integer)
-	 */
+
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId) throws ServiceRuntime {
@@ -905,9 +842,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deleteFeature(java.lang.String, boolean)
-	 */
+
 	@Override
 	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntime{
 		try{
@@ -918,9 +853,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deleteAllFeaturesByPersonId(int, boolean)
-	 */
+
 	@Override
 	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntime{
 		try{
@@ -931,9 +864,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getFeature(java.lang.String)
-	 */
+
 	@Override
 	public FeatureBean getFeature(String md5)throws ServiceRuntime{
 		try{
@@ -944,9 +875,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getFeature(java.util.List)
-	 */
+
 	@Override
 	public List<FeatureBean> getFeature(List<String> md5)throws ServiceRuntime{
 		try{
@@ -957,9 +886,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getFeatureBytes(java.lang.String)
-	 */
+
 	@Override
 	public ByteBuffer getFeatureBytes(String md5)throws ServiceRuntime{
 		try{
@@ -969,9 +896,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getImageBytes(java.lang.String)
-	 */
+
 	@Override
 	public ByteBuffer getImageBytes(String imageMD5)throws ServiceRuntime{
 		try{
@@ -981,9 +906,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getImage(java.lang.String)
-	 */
+
 	@Override
 	public ImageBean getImage(String imageMD5)throws ServiceRuntime{
 		try{
@@ -992,9 +915,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getImagesAssociatedByFeature(java.lang.String)
-	 */
+
 	@Override
 	public List<String> getImagesAssociatedByFeature(String featureMd5)throws ServiceRuntime{
 		try{
@@ -1005,9 +926,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deleteImage(java.lang.String)
-	 */
+
 	@Override
 	public int deleteImage(String imageMd5)throws ServiceRuntime{
 		try{
@@ -1018,9 +937,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#existsDevice(int)
-	 */
+
     @Override
 	public boolean existsDevice(int id) throws ServiceRuntime {
 		try{
@@ -1029,10 +946,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-    
-    /* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#saveDevice(net.gdface.facelog.db.DeviceBean)
-	 */
+
     @Override
 	public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntime{
     	try{
@@ -1043,9 +957,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getDevice(java.lang.Integer)
-	 */
+
 	@Override
 	public DeviceBean getDevice(Integer deviceId)throws ServiceRuntime{
     	try{
@@ -1056,9 +968,7 @@ public class FaceLogDbLocal implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getDevice(java.util.List)
-	 */
+
 	@Override
 	public List<DeviceBean> getDevice(List<Integer> deviceId)throws ServiceRuntime{
     	try{

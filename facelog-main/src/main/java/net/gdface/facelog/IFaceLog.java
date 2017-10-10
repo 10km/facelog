@@ -1,7 +1,6 @@
 package net.gdface.facelog;
 
 import java.nio.ByteBuffer;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -107,14 +106,16 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	boolean isDisable(int personId) throws ServiceRuntime;
 
 	/**
 	 * 设置 personId 指定的人员为禁止状态
 	 * @param personId
 	 * @throws ServiceRuntime
-	 * @see #setPersonExpiryDate(int, Date)
+	 * @see #setPersonExpiryDate(int, long)
 	 */
+	@ThriftMethod
 	void disablePerson(int personId) throws ServiceRuntime;
 
 	/**
@@ -123,7 +124,8 @@ public interface IFaceLog {
 	 * @param expiryDate 失效日期
 	 * @throws ServiceRuntime
 	 */
-	void setPersonExpiryDate(int personId, Date expiryDate) throws ServiceRuntime;
+	@ThriftMethod
+	void setPersonExpiryDate(int personId, long expiryDate) throws ServiceRuntime;
 
 	/**
 	 * 修改 personIdList 指定的人员记录的有效期
@@ -131,13 +133,14 @@ public interface IFaceLog {
 	 * @param expiryDate 失效日期 
 	 * @throws ServiceRuntime
 	 */
-	void setPersonExpiryDate(List<Integer> personIdList, Date expiryDate) throws ServiceRuntime;
+	void setPersonExpiryDate(List<Integer> personIdList, long expiryDate) throws ServiceRuntime;
 
 	/**
 	 * 设置 personIdList 指定的人员为禁止状态
 	 * @param personIdList 人员id列表
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("disablePersonList")
 	void disablePerson(List<Integer> personIdList) throws ServiceRuntime;
 
 	/**
@@ -146,6 +149,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<LogBean> getLogBeansByPersonId(int personId) throws ServiceRuntime;
 
 	/**
@@ -153,6 +157,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<Integer> loadAllPerson() throws ServiceRuntime;
 
 	/**
@@ -161,6 +166,7 @@ public interface IFaceLog {
 	 * @return 返回 fl_person.id 列表
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<Integer> loadPersonByWhere(String where) throws ServiceRuntime;
 
 	/**
@@ -169,6 +175,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	PersonBean savePerson(PersonBean bean) throws ServiceRuntime;
 
 	/**
@@ -176,6 +183,7 @@ public interface IFaceLog {
 	 * @param beans 
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("savePersonList")
 	void savePerson(List<PersonBean> beans) throws ServiceRuntime;
 
 	/**
@@ -185,6 +193,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("savePersonWithPhoto")
 	PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto) throws ServiceRuntime;
 
 	/**
@@ -193,53 +202,58 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("savePersonsWithPhoto")
 	Integer savePerson(Map<ByteBuffer, PersonBean> persons) throws ServiceRuntime;
 
 	/**
 	 * 保存人员信息记录
 	 * @param bean
-	 * @param idPhoto 标准照图像对象,可为null
-	 * @param featureBean 用于验证的人脸特征数据对象,可为null
+	 * @param idPhotoMd5 标准照图像对象,可为null
+	 * @param featureMd5 用于验证的人脸特征数据对象,可为null
 	 * @return
 	 * @throws ServiceRuntime
 	 */
-	PersonBean savePerson(PersonBean bean, ImageBean idPhoto, FeatureBean featureBean) throws ServiceRuntime;
+	@ThriftMethod("savePersonWithPhotoAndFeatureSaved")
+	PersonBean savePerson(PersonBean bean, String idPhotoMd5, String featureMd5) throws ServiceRuntime;
 
 	/**
 	 * 保存人员信息记录
 	 * @param bean
-	 * @param imageData 标准照图像,可为null
+	 * @param idPhoto 标准照图像,可为null
 	 * @param featureBean 用于验证的人脸特征数据对象,可为null
 	 * @param deviceId 标准照图像来源设备id,可为null
 	 * @return
 	 * @throws ServiceRuntime
 	 */
-	PersonBean savePerson(PersonBean bean, ByteBuffer imageData, FeatureBean featureBean, Integer deviceId)
+	@ThriftMethod("savePersonWithPhotoAndFeature")
+	PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean, Integer deviceId)
 			throws ServiceRuntime;
 
 	/**
 	 * 保存人员信息记录
 	 * @param bean
-	 * @param imageData 标准照图像,可为null
+	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
 	 * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
 	 * @return
 	 * @throws ServiceRuntime
 	 */
-	PersonBean savePerson(PersonBean bean, ByteBuffer imageData, ByteBuffer feature, List<FaceBean> faceBeans)
+	@ThriftMethod("savePersonWithPhotoAndFeatureMultiFaces")
+	PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, List<FaceBean> faceBeans)
 			throws ServiceRuntime;
 
 	/**
 	 * 保存人员信息记录
 	 * @param bean 
-	 * @param imageData 标准照图像,可为null
+	 * @param idPhoto 标准照图像,可为null
 	 * @param feature 用于验证的人脸特征数据,可为null 
 	 * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @param deviceId faceInfo 图像来源设备id,可为null 
 	 * @return bean 保存的{@link PersonBean}对象
 	 * @throws ServiceRuntime
 	 */
-	PersonBean savePerson(PersonBean bean, ByteBuffer imageData, ByteBuffer feature, Map<ByteBuffer, FaceBean> faceInfo,
+	@ThriftMethod("savePersonWithPhotoAndFeatureMultiImage")
+	PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, Map<ByteBuffer, FaceBean> faceInfo,
 			Integer deviceId) throws ServiceRuntime;
 
 	/**
@@ -252,6 +266,7 @@ public interface IFaceLog {
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
 	 */
+	@ThriftMethod("savePersonFull")
 	PersonBean savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature, ByteBuffer featureImage,
 			FaceBean featureFaceBean, Integer deviceId) throws ServiceRuntime;
 
@@ -262,6 +277,7 @@ public interface IFaceLog {
 	 * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	void replaceFeature(Integer personId, String featureMd5, boolean deleteOldFeatureImage) throws ServiceRuntime;
 
 	/**
@@ -272,6 +288,7 @@ public interface IFaceLog {
 	 * @return 返回fl_person.id 列表
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<Integer> loadUpdatePersons(long timestamp) throws ServiceRuntime;
 
 	/**
@@ -281,6 +298,7 @@ public interface IFaceLog {
 	 * @return 返回fl_person.id 列表
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<Integer> loadPersonIdByUpdate(long timestamp) throws ServiceRuntime;
 
 	/**
@@ -290,6 +308,7 @@ public interface IFaceLog {
 	 * @return 返回 fl_feature.md5 列表
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<String> loadFeatureMd5ByUpdate(long timestamp) throws ServiceRuntime;
 
 	/**
@@ -297,6 +316,7 @@ public interface IFaceLog {
 	 * @param bean
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	void addLog(LogBean bean) throws ServiceRuntime;
 
 	/**
@@ -304,15 +324,17 @@ public interface IFaceLog {
 	 * @param beans
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("addLogList")
 	void addLog(List<LogBean> beans) throws ServiceRuntime;
-
+	@ThriftMethod
 	List<LogBean> loadLogByWhere(String where, List<Integer> fieldList, int startRow, int numRows)
 			throws ServiceRuntime;
-
+	
+	@ThriftMethod
 	List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime;
-
+	@ThriftMethod
 	int countLogLightWhere(String where) throws ServiceRuntime;
-
+	@ThriftMethod
 	int countLogWhere(String where) throws ServiceRuntime;
 
 	/**
@@ -321,6 +343,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	boolean existsImage(String md5) throws ServiceRuntime;
 
 	/**
@@ -333,6 +356,7 @@ public interface IFaceLog {
 	 * @throws ServiceRuntime
 	 * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
 	 */
+	@ThriftMethod
 	ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId)
 			throws ServiceRuntime;
 
@@ -342,6 +366,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	boolean existsFeature(String md5) throws ServiceRuntime;
 
 	/**
@@ -352,6 +377,7 @@ public interface IFaceLog {
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntime;
 
 	/**
@@ -363,6 +389,7 @@ public interface IFaceLog {
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("addFeatureMulti")
 	FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId)
 			throws ServiceRuntime;
 
@@ -373,6 +400,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<String> deleteFeature(String featureMd5, boolean deleteImage) throws ServiceRuntime;
 
 	/**
@@ -383,6 +411,7 @@ public interface IFaceLog {
 	 * @see #deleteFeature(String, boolean)
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	int deleteAllFeaturesByPersonId(int personId, boolean deleteImage) throws ServiceRuntime;
 
 	/**
@@ -391,6 +420,7 @@ public interface IFaceLog {
 	 * @return 如果数据库中没有对应的数据则返回null
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	FeatureBean getFeature(String md5) throws ServiceRuntime;
 
 	/**
@@ -399,6 +429,7 @@ public interface IFaceLog {
 	 * @return {@link FeatureBean}列表
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod("getFeatureList")
 	List<FeatureBean> getFeature(List<String> md5) throws ServiceRuntime;
 
 	/**
@@ -407,6 +438,7 @@ public interface IFaceLog {
 	 * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	ByteBuffer getFeatureBytes(String md5) throws ServiceRuntime;
 
 	/**
@@ -416,6 +448,7 @@ public interface IFaceLog {
 	 * @throws ServiceRuntime
 	 * @see {@link #getBinary(String)}
 	 */
+	@ThriftMethod
 	ByteBuffer getImageBytes(String imageMD5) throws ServiceRuntime;
 
 	/**
@@ -424,6 +457,7 @@ public interface IFaceLog {
 	 * @return {@link ImageBean} ,如果没有对应记录则返回null
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	ImageBean getImage(String imageMD5) throws ServiceRuntime;
 
 	/**
@@ -432,6 +466,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	List<String> getImagesAssociatedByFeature(String featureMd5) throws ServiceRuntime;
 
 	/**
@@ -440,6 +475,7 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	int deleteImage(String imageMd5) throws ServiceRuntime;
 
 	/**
@@ -448,12 +484,13 @@ public interface IFaceLog {
 	 * @return
 	 * @throws ServiceRuntime
 	 */
+	@ThriftMethod
 	boolean existsDevice(int id) throws ServiceRuntime;
-
+	@ThriftMethod
 	DeviceBean saveDevice(DeviceBean deviceBean) throws ServiceRuntime;
-
+	@ThriftMethod
 	DeviceBean getDevice(Integer deviceId) throws ServiceRuntime;
-
+	@ThriftMethod("getDeviceList")
 	List<DeviceBean> getDevice(List<Integer> deviceId) throws ServiceRuntime;
 
 }
