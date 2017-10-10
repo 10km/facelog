@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * DeviceBean is a mapping of fl_device Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class DeviceBean
+public final class DeviceBean
     implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1983784566394161565L;
@@ -55,7 +56,7 @@ public class DeviceBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -83,7 +84,7 @@ public class DeviceBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -98,7 +99,7 @@ public class DeviceBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -130,7 +131,7 @@ public class DeviceBean
      *
      * @return the value of id
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -198,7 +199,7 @@ public class DeviceBean
      *
      * @return the value of name
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public String getName(){
         return name;
     }
@@ -256,7 +257,7 @@ public class DeviceBean
      *
      * @return the value of groupId
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public Integer getGroupId(){
         return groupId;
     }
@@ -324,7 +325,7 @@ public class DeviceBean
      *
      * @return the value of version
      */
-    @ThriftField(7)
+    @ThriftField(value=7)
     public String getVersion(){
         return version;
     }
@@ -382,7 +383,7 @@ public class DeviceBean
      *
      * @return the value of serialNo
      */
-    @ThriftField(8)
+    @ThriftField(value=8)
     public String getSerialNo(){
         return serialNo;
     }
@@ -440,7 +441,7 @@ public class DeviceBean
      *
      * @return the value of mac
      */
-    @ThriftField(9)
+    @ThriftField(value=9)
     public String getMac(){
         return mac;
     }

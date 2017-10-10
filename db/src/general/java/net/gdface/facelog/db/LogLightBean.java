@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * LogLightBean is a mapping of fl_log_light Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class LogLightBean
+public final class LogLightBean
     implements Serializable,BaseBean<LogLightBean>,Comparable<LogLightBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 4419196843551738129L;
@@ -51,7 +52,7 @@ public class LogLightBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -79,7 +80,7 @@ public class LogLightBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -94,7 +95,7 @@ public class LogLightBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -123,7 +124,7 @@ public class LogLightBean
      *
      * @return the value of id
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -193,7 +194,7 @@ public class LogLightBean
      *
      * @return the value of personId
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public Integer getPersonId(){
         return personId;
     }
@@ -262,7 +263,7 @@ public class LogLightBean
      *
      * @return the value of name
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public String getName(){
         return name;
     }
@@ -320,7 +321,7 @@ public class LogLightBean
      *
      * @return the value of papersType
      */
-    @ThriftField(7)
+    @ThriftField(value=7)
     public Integer getPapersType(){
         return papersType;
     }
@@ -388,7 +389,7 @@ public class LogLightBean
      *
      * @return the value of papersNum
      */
-    @ThriftField(8)
+    @ThriftField(value=8)
     public String getPapersNum(){
         return papersNum;
     }

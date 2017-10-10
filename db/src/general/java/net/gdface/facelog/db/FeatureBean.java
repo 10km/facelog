@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * FeatureBean is a mapping of fl_feature Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class FeatureBean
+public final class FeatureBean
     implements Serializable,BaseBean<FeatureBean>,Comparable<FeatureBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -2191238184879882524L;
@@ -44,7 +45,7 @@ public class FeatureBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -72,7 +73,7 @@ public class FeatureBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -87,7 +88,7 @@ public class FeatureBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -118,7 +119,7 @@ public class FeatureBean
      *
      * @return the value of md5
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public String getMd5(){
         return md5;
     }
@@ -177,7 +178,7 @@ public class FeatureBean
      *
      * @return the value of personId
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public Integer getPersonId(){
         return personId;
     }
@@ -246,7 +247,7 @@ public class FeatureBean
      *
      * @return the value of feature
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public java.nio.ByteBuffer getFeature(){
         return feature;
     }
@@ -384,7 +385,7 @@ public class FeatureBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @ThriftField(8)
+    @ThriftField(value=8)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }

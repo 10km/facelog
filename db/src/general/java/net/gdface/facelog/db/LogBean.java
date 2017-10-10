@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * LogBean is a mapping of fl_log Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class LogBean
+public final class LogBean
     implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 46995545005652737L;
@@ -56,7 +57,7 @@ public class LogBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -84,7 +85,7 @@ public class LogBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -99,7 +100,7 @@ public class LogBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -129,7 +130,7 @@ public class LogBean
      *
      * @return the value of id
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -199,7 +200,7 @@ public class LogBean
      *
      * @return the value of personId
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public Integer getPersonId(){
         return personId;
     }
@@ -268,7 +269,7 @@ public class LogBean
      *
      * @return the value of deviceId
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -337,7 +338,7 @@ public class LogBean
      *
      * @return the value of verifyFeature
      */
-    @ThriftField(7)
+    @ThriftField(value=7)
     public String getVerifyFeature(){
         return verifyFeature;
     }
@@ -396,7 +397,7 @@ public class LogBean
      *
      * @return the value of compareFace
      */
-    @ThriftField(8)
+    @ThriftField(value=8)
     public Integer getCompareFace(){
         return compareFace;
     }
@@ -464,7 +465,7 @@ public class LogBean
      *
      * @return the value of similarty
      */
-    @ThriftField(9)
+    @ThriftField(value=9)
     public Double getSimilarty(){
         return similarty;
     }
@@ -696,7 +697,7 @@ public class LogBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @ThriftField(12)
+    @ThriftField(value=12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
@@ -711,7 +712,7 @@ public class LogBean
      */
     private FaceBean referencedByCompareFace;
     /** Getter method for {@link #referencedByCompareFace}. */
-    @ThriftField(13)
+    @ThriftField(value=13)
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
@@ -726,7 +727,7 @@ public class LogBean
      */
     private FeatureBean referencedByVerifyFeature;
     /** Getter method for {@link #referencedByVerifyFeature}. */
-    @ThriftField(14)
+    @ThriftField(value=14)
     public FeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
@@ -741,7 +742,7 @@ public class LogBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @ThriftField(15)
+    @ThriftField(value=15)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }

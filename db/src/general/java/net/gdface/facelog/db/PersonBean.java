@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * PersonBean is a mapping of fl_person Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class PersonBean
+public final class PersonBean
     implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 7741617836285025804L;
@@ -64,7 +65,7 @@ public class PersonBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -92,7 +93,7 @@ public class PersonBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -107,7 +108,7 @@ public class PersonBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -139,7 +140,7 @@ public class PersonBean
      *
      * @return the value of id
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -207,7 +208,7 @@ public class PersonBean
      *
      * @return the value of groupId
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public Integer getGroupId(){
         return groupId;
     }
@@ -276,7 +277,7 @@ public class PersonBean
      *
      * @return the value of name
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public String getName(){
         return name;
     }
@@ -334,7 +335,7 @@ public class PersonBean
      *
      * @return the value of sex
      */
-    @ThriftField(7)
+    @ThriftField(value=7)
     public Integer getSex(){
         return sex;
     }
@@ -484,7 +485,7 @@ public class PersonBean
      *
      * @return the value of papersType
      */
-    @ThriftField(9)
+    @ThriftField(value=9)
     public Integer getPapersType(){
         return papersType;
     }
@@ -552,7 +553,7 @@ public class PersonBean
      *
      * @return the value of papersNum
      */
-    @ThriftField(10)
+    @ThriftField(value=10)
     public String getPapersNum(){
         return papersNum;
     }
@@ -611,7 +612,7 @@ public class PersonBean
      *
      * @return the value of imageMd5
      */
-    @ThriftField(11)
+    @ThriftField(value=11)
     public String getImageMd5(){
         return imageMd5;
     }
@@ -915,7 +916,7 @@ public class PersonBean
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @ThriftField(15)
+    @ThriftField(value=15)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }

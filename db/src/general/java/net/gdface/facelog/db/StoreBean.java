@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * StoreBean is a mapping of fl_store Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class StoreBean
+public final class StoreBean
     implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1684185165668832146L;
@@ -42,7 +43,7 @@ public class StoreBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -70,7 +71,7 @@ public class StoreBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -85,7 +86,7 @@ public class StoreBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -114,7 +115,7 @@ public class StoreBean
      *
      * @return the value of md5
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public String getMd5(){
         return md5;
     }
@@ -172,7 +173,7 @@ public class StoreBean
      *
      * @return the value of encoding
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public String getEncoding(){
         return encoding;
     }
@@ -230,7 +231,7 @@ public class StoreBean
      *
      * @return the value of data
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public java.nio.ByteBuffer getData(){
         return data;
     }

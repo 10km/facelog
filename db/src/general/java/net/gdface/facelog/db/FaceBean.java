@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * FaceBean is a mapping of fl_face Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class FaceBean
+public final class FaceBean
     implements Serializable,BaseBean<FaceBean>,Comparable<FaceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1428389659131258505L;
@@ -77,7 +78,7 @@ public class FaceBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -105,7 +106,7 @@ public class FaceBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -120,7 +121,7 @@ public class FaceBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -151,7 +152,7 @@ public class FaceBean
      *
      * @return the value of id
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -221,7 +222,7 @@ public class FaceBean
      *
      * @return the value of imageMd5
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public String getImageMd5(){
         return imageMd5;
     }
@@ -279,7 +280,7 @@ public class FaceBean
      *
      * @return the value of faceLeft
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public Integer getFaceLeft(){
         return faceLeft;
     }
@@ -347,7 +348,7 @@ public class FaceBean
      *
      * @return the value of faceTop
      */
-    @ThriftField(7)
+    @ThriftField(value=7)
     public Integer getFaceTop(){
         return faceTop;
     }
@@ -415,7 +416,7 @@ public class FaceBean
      *
      * @return the value of faceWidth
      */
-    @ThriftField(8)
+    @ThriftField(value=8)
     public Integer getFaceWidth(){
         return faceWidth;
     }
@@ -483,7 +484,7 @@ public class FaceBean
      *
      * @return the value of faceHeight
      */
-    @ThriftField(9)
+    @ThriftField(value=9)
     public Integer getFaceHeight(){
         return faceHeight;
     }
@@ -550,7 +551,7 @@ public class FaceBean
      *
      * @return the value of eyeLeftx
      */
-    @ThriftField(10)
+    @ThriftField(value=10)
     public Integer getEyeLeftx(){
         return eyeLeftx;
     }
@@ -617,7 +618,7 @@ public class FaceBean
      *
      * @return the value of eyeLefty
      */
-    @ThriftField(11)
+    @ThriftField(value=11)
     public Integer getEyeLefty(){
         return eyeLefty;
     }
@@ -684,7 +685,7 @@ public class FaceBean
      *
      * @return the value of eyeRightx
      */
-    @ThriftField(12)
+    @ThriftField(value=12)
     public Integer getEyeRightx(){
         return eyeRightx;
     }
@@ -751,7 +752,7 @@ public class FaceBean
      *
      * @return the value of eyeRighty
      */
-    @ThriftField(13)
+    @ThriftField(value=13)
     public Integer getEyeRighty(){
         return eyeRighty;
     }
@@ -818,7 +819,7 @@ public class FaceBean
      *
      * @return the value of mouthX
      */
-    @ThriftField(14)
+    @ThriftField(value=14)
     public Integer getMouthX(){
         return mouthX;
     }
@@ -885,7 +886,7 @@ public class FaceBean
      *
      * @return the value of mouthY
      */
-    @ThriftField(15)
+    @ThriftField(value=15)
     public Integer getMouthY(){
         return mouthY;
     }
@@ -952,7 +953,7 @@ public class FaceBean
      *
      * @return the value of noseX
      */
-    @ThriftField(16)
+    @ThriftField(value=16)
     public Integer getNoseX(){
         return noseX;
     }
@@ -1019,7 +1020,7 @@ public class FaceBean
      *
      * @return the value of noseY
      */
-    @ThriftField(17)
+    @ThriftField(value=17)
     public Integer getNoseY(){
         return noseY;
     }
@@ -1086,7 +1087,7 @@ public class FaceBean
      *
      * @return the value of angleYaw
      */
-    @ThriftField(18)
+    @ThriftField(value=18)
     public Integer getAngleYaw(){
         return angleYaw;
     }
@@ -1153,7 +1154,7 @@ public class FaceBean
      *
      * @return the value of anglePitch
      */
-    @ThriftField(19)
+    @ThriftField(value=19)
     public Integer getAnglePitch(){
         return anglePitch;
     }
@@ -1220,7 +1221,7 @@ public class FaceBean
      *
      * @return the value of angleRoll
      */
-    @ThriftField(20)
+    @ThriftField(value=20)
     public Integer getAngleRoll(){
         return angleRoll;
     }
@@ -1288,7 +1289,7 @@ public class FaceBean
      *
      * @return the value of extInfo
      */
-    @ThriftField(21)
+    @ThriftField(value=21)
     public java.nio.ByteBuffer getExtInfo(){
         return extInfo;
     }
@@ -1347,7 +1348,7 @@ public class FaceBean
      *
      * @return the value of featureMd5
      */
-    @ThriftField(22)
+    @ThriftField(value=22)
     public String getFeatureMd5(){
         return featureMd5;
     }
@@ -1485,7 +1486,7 @@ public class FaceBean
      */
     private FeatureBean referencedByFeatureMd5;
     /** Getter method for {@link #referencedByFeatureMd5}. */
-    @ThriftField(24)
+    @ThriftField(value=24)
     public FeatureBean getReferencedByFeatureMd5() {
         return this.referencedByFeatureMd5;
     }
@@ -1500,7 +1501,7 @@ public class FaceBean
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @ThriftField(25)
+    @ThriftField(value=25)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }

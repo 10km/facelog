@@ -9,6 +9,7 @@ package net.gdface.facelog.db;
 import java.io.Serializable;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
+import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * ImageBean is a mapping of fl_image Table.
  * <br>Meta Data Information (in progress):
@@ -18,7 +19,7 @@ import com.facebook.swift.codec.ThriftField;
  * @author guyadong
 */
 @ThriftStruct
-public class ImageBean
+public final class ImageBean
     implements Serializable,BaseBean<ImageBean>,Comparable<ImageBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -5491214114261088424L;
@@ -57,7 +58,7 @@ public class ImageBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(1)
+    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -85,7 +86,7 @@ public class ImageBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(2)
+    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -100,7 +101,7 @@ public class ImageBean
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(3)
+    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -131,7 +132,7 @@ public class ImageBean
      *
      * @return the value of md5
      */
-    @ThriftField(4)
+    @ThriftField(value=4)
     public String getMd5(){
         return md5;
     }
@@ -189,7 +190,7 @@ public class ImageBean
      *
      * @return the value of format
      */
-    @ThriftField(5)
+    @ThriftField(value=5)
     public String getFormat(){
         return format;
     }
@@ -248,7 +249,7 @@ public class ImageBean
      *
      * @return the value of width
      */
-    @ThriftField(6)
+    @ThriftField(value=6)
     public Integer getWidth(){
         return width;
     }
@@ -317,7 +318,7 @@ public class ImageBean
      *
      * @return the value of height
      */
-    @ThriftField(7)
+    @ThriftField(value=7)
     public Integer getHeight(){
         return height;
     }
@@ -387,7 +388,7 @@ public class ImageBean
      *
      * @return the value of depth
      */
-    @ThriftField(8)
+    @ThriftField(value=8)
     public Integer getDepth(){
         return depth;
     }
@@ -457,7 +458,7 @@ public class ImageBean
      *
      * @return the value of faceNum
      */
-    @ThriftField(9)
+    @ThriftField(value=9)
     public Integer getFaceNum(){
         return faceNum;
     }
@@ -525,7 +526,7 @@ public class ImageBean
      *
      * @return the value of thumbMd5
      */
-    @ThriftField(10)
+    @ThriftField(value=10)
     public String getThumbMd5(){
         return thumbMd5;
     }
@@ -584,7 +585,7 @@ public class ImageBean
      *
      * @return the value of deviceId
      */
-    @ThriftField(11)
+    @ThriftField(value=11)
     public Integer getDeviceId(){
         return deviceId;
     }
@@ -649,7 +650,7 @@ public class ImageBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @ThriftField(12)
+    @ThriftField(value=12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
