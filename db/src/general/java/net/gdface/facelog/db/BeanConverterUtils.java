@@ -8,6 +8,7 @@
 
 package net.gdface.facelog.db;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Hashtable;
 import net.gdface.facelog.db.IBeanConverter;
@@ -26,7 +27,7 @@ import net.gdface.facelog.db.LogLightBean;
  * @author guyadong
  *
  */
-public class BeanConverterUtils {
+public class BeanConverterUtils implements Constant {
     private BeanConverterUtils(){}
     /**
      * implementation of {@link IBeanConverter} by reflect<br>
@@ -40,6 +41,54 @@ public class BeanConverterUtils {
         public DeviceBeanConverter(){
             super();
             init();
+        }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
         }
         public DeviceBeanConverter (Class<DeviceBean> leftClass, Class<N_DEVICE> rightClass){
             super(leftClass,rightClass);
@@ -58,83 +107,84 @@ public class BeanConverterUtils {
             }
             try{         
                 methods.put("getId",rightType.getMethod("getId"));
-                methods.put("setId",rightType.getMethod("setId",Integer.class));
-                methods.put("checkIdInitialized",rightType.getMethod("checkIdInitialized"));
+                try{
+                    methods.put("setId",rightType.getMethod("setId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setId",rightType.getMethod("setId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getName",rightType.getMethod("getName"));
                 methods.put("setName",rightType.getMethod("setName",String.class));
-                methods.put("checkNameInitialized",rightType.getMethod("checkNameInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getGroupId",rightType.getMethod("getGroupId"));
-                methods.put("setGroupId",rightType.getMethod("setGroupId",Integer.class));
-                methods.put("checkGroupIdInitialized",rightType.getMethod("checkGroupIdInitialized"));
+                try{
+                    methods.put("setGroupId",rightType.getMethod("setGroupId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setGroupId",rightType.getMethod("setGroupId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getVersion",rightType.getMethod("getVersion"));
                 methods.put("setVersion",rightType.getMethod("setVersion",String.class));
-                methods.put("checkVersionInitialized",rightType.getMethod("checkVersionInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getSerialNo",rightType.getMethod("getSerialNo"));
                 methods.put("setSerialNo",rightType.getMethod("setSerialNo",String.class));
-                methods.put("checkSerialNoInitialized",rightType.getMethod("checkSerialNoInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getMac",rightType.getMethod("getMac"));
                 methods.put("setMac",rightType.getMethod("setMac",String.class));
-                methods.put("checkMacInitialized",rightType.getMethod("checkMacInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
-                methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
-                methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
+                try{
+                    methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getUpdateTime",rightType.getMethod("getUpdateTime"));
-                methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
-                methods.put("checkUpdateTimeInitialized",rightType.getMethod("checkUpdateTimeInitialized"));
+                try{
+                    methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(DeviceBean left, N_DEVICE right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkIdInitialized")) && null != (getterMethod = methods.get("getId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkNameInitialized")) && null != (getterMethod = methods.get("getName"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setName((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkGroupIdInitialized")) && null != (getterMethod = methods.get("getGroupId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setGroupId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkVersionInitialized")) && null != (getterMethod = methods.get("getVersion"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setVersion((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkSerialNoInitialized")) && null != (getterMethod = methods.get("getSerialNo"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setSerialNo((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkMacInitialized")) && null != (getterMethod = methods.get("getMac"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setMac((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setCreateTime((java.util.Date)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkUpdateTimeInitialized")) && null != (getterMethod = methods.get("getUpdateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setUpdateTime((java.util.Date)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_DEVICE_ID_ID_MASK)) && (null != (getterMethod = methods.get("getId"))))
+                    left.setId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_NAME_MASK)) && (null != (getterMethod = methods.get("getName"))))
+                    left.setName(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_GROUP_ID_MASK)) && (null != (getterMethod = methods.get("getGroupId"))))
+                    left.setGroupId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_VERSION_MASK)) && (null != (getterMethod = methods.get("getVersion"))))
+                    left.setVersion(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_SERIAL_NO_MASK)) && (null != (getterMethod = methods.get("getSerialNo"))))
+                    left.setSerialNo(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_MAC_MASK)) && (null != (getterMethod = methods.get("getMac"))))
+                    left.setMac(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_CREATE_TIME_MASK)) && (null != (getterMethod = methods.get("getCreateTime"))))
+                    left.setCreateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_DEVICE_ID_UPDATE_TIME_MASK)) && (null != (getterMethod = methods.get("getUpdateTime"))))
+                    left.setUpdateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -146,24 +196,24 @@ public class BeanConverterUtils {
         protected void _toRight(DeviceBean left, N_DEVICE right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized() )
-                    setterMethod.invoke(right,left.getId());
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized() )
-                    setterMethod.invoke(right,left.getName());
-                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized() )
-                    setterMethod.invoke(right,left.getGroupId());
-                if(null != (setterMethod = methods.get("setVersion")) && left.checkVersionInitialized() )
-                    setterMethod.invoke(right,left.getVersion());
-                if(null != (setterMethod = methods.get("setSerialNo")) && left.checkSerialNoInitialized() )
-                    setterMethod.invoke(right,left.getSerialNo());
-                if(null != (setterMethod = methods.get("setMac")) && left.checkMacInitialized() )
-                    setterMethod.invoke(right,left.getMac());
+                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getId()));
+                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getName()));
+                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getGroupId()));
+                if(null != (setterMethod = methods.get("setVersion")) && left.checkVersionInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getVersion()));
+                if(null != (setterMethod = methods.get("setSerialNo")) && left.checkSerialNoInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getSerialNo()));
+                if(null != (setterMethod = methods.get("setMac")) && left.checkMacInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getMac()));
 // IGNORE field fl_device.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getCreateTime());
+//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getCreateTime()));
 // IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getUpdateTime());
+//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getUpdateTime()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -185,6 +235,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public FaceBeanConverter (Class<FaceBean> leftClass, Class<N_FACE> rightClass){
             super(leftClass,rightClass);
             init();
@@ -202,191 +300,204 @@ public class BeanConverterUtils {
             }
             try{         
                 methods.put("getId",rightType.getMethod("getId"));
-                methods.put("setId",rightType.getMethod("setId",Integer.class));
-                methods.put("checkIdInitialized",rightType.getMethod("checkIdInitialized"));
+                try{
+                    methods.put("setId",rightType.getMethod("setId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setId",rightType.getMethod("setId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getImageMd5",rightType.getMethod("getImageMd5"));
                 methods.put("setImageMd5",rightType.getMethod("setImageMd5",String.class));
-                methods.put("checkImageMd5Initialized",rightType.getMethod("checkImageMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getFaceLeft",rightType.getMethod("getFaceLeft"));
-                methods.put("setFaceLeft",rightType.getMethod("setFaceLeft",Integer.class));
-                methods.put("checkFaceLeftInitialized",rightType.getMethod("checkFaceLeftInitialized"));
+                try{
+                    methods.put("setFaceLeft",rightType.getMethod("setFaceLeft",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setFaceLeft",rightType.getMethod("setFaceLeft",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getFaceTop",rightType.getMethod("getFaceTop"));
-                methods.put("setFaceTop",rightType.getMethod("setFaceTop",Integer.class));
-                methods.put("checkFaceTopInitialized",rightType.getMethod("checkFaceTopInitialized"));
+                try{
+                    methods.put("setFaceTop",rightType.getMethod("setFaceTop",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setFaceTop",rightType.getMethod("setFaceTop",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getFaceWidth",rightType.getMethod("getFaceWidth"));
-                methods.put("setFaceWidth",rightType.getMethod("setFaceWidth",Integer.class));
-                methods.put("checkFaceWidthInitialized",rightType.getMethod("checkFaceWidthInitialized"));
+                try{
+                    methods.put("setFaceWidth",rightType.getMethod("setFaceWidth",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setFaceWidth",rightType.getMethod("setFaceWidth",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getFaceHeight",rightType.getMethod("getFaceHeight"));
-                methods.put("setFaceHeight",rightType.getMethod("setFaceHeight",Integer.class));
-                methods.put("checkFaceHeightInitialized",rightType.getMethod("checkFaceHeightInitialized"));
+                try{
+                    methods.put("setFaceHeight",rightType.getMethod("setFaceHeight",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setFaceHeight",rightType.getMethod("setFaceHeight",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getEyeLeftx",rightType.getMethod("getEyeLeftx"));
-                methods.put("setEyeLeftx",rightType.getMethod("setEyeLeftx",Integer.class));
-                methods.put("checkEyeLeftxInitialized",rightType.getMethod("checkEyeLeftxInitialized"));
+                try{
+                    methods.put("setEyeLeftx",rightType.getMethod("setEyeLeftx",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setEyeLeftx",rightType.getMethod("setEyeLeftx",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getEyeLefty",rightType.getMethod("getEyeLefty"));
-                methods.put("setEyeLefty",rightType.getMethod("setEyeLefty",Integer.class));
-                methods.put("checkEyeLeftyInitialized",rightType.getMethod("checkEyeLeftyInitialized"));
+                try{
+                    methods.put("setEyeLefty",rightType.getMethod("setEyeLefty",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setEyeLefty",rightType.getMethod("setEyeLefty",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getEyeRightx",rightType.getMethod("getEyeRightx"));
-                methods.put("setEyeRightx",rightType.getMethod("setEyeRightx",Integer.class));
-                methods.put("checkEyeRightxInitialized",rightType.getMethod("checkEyeRightxInitialized"));
+                try{
+                    methods.put("setEyeRightx",rightType.getMethod("setEyeRightx",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setEyeRightx",rightType.getMethod("setEyeRightx",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getEyeRighty",rightType.getMethod("getEyeRighty"));
-                methods.put("setEyeRighty",rightType.getMethod("setEyeRighty",Integer.class));
-                methods.put("checkEyeRightyInitialized",rightType.getMethod("checkEyeRightyInitialized"));
+                try{
+                    methods.put("setEyeRighty",rightType.getMethod("setEyeRighty",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setEyeRighty",rightType.getMethod("setEyeRighty",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getMouthX",rightType.getMethod("getMouthX"));
-                methods.put("setMouthX",rightType.getMethod("setMouthX",Integer.class));
-                methods.put("checkMouthXInitialized",rightType.getMethod("checkMouthXInitialized"));
+                try{
+                    methods.put("setMouthX",rightType.getMethod("setMouthX",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setMouthX",rightType.getMethod("setMouthX",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getMouthY",rightType.getMethod("getMouthY"));
-                methods.put("setMouthY",rightType.getMethod("setMouthY",Integer.class));
-                methods.put("checkMouthYInitialized",rightType.getMethod("checkMouthYInitialized"));
+                try{
+                    methods.put("setMouthY",rightType.getMethod("setMouthY",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setMouthY",rightType.getMethod("setMouthY",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getNoseX",rightType.getMethod("getNoseX"));
-                methods.put("setNoseX",rightType.getMethod("setNoseX",Integer.class));
-                methods.put("checkNoseXInitialized",rightType.getMethod("checkNoseXInitialized"));
+                try{
+                    methods.put("setNoseX",rightType.getMethod("setNoseX",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setNoseX",rightType.getMethod("setNoseX",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getNoseY",rightType.getMethod("getNoseY"));
-                methods.put("setNoseY",rightType.getMethod("setNoseY",Integer.class));
-                methods.put("checkNoseYInitialized",rightType.getMethod("checkNoseYInitialized"));
+                try{
+                    methods.put("setNoseY",rightType.getMethod("setNoseY",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setNoseY",rightType.getMethod("setNoseY",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getAngleYaw",rightType.getMethod("getAngleYaw"));
-                methods.put("setAngleYaw",rightType.getMethod("setAngleYaw",Integer.class));
-                methods.put("checkAngleYawInitialized",rightType.getMethod("checkAngleYawInitialized"));
+                try{
+                    methods.put("setAngleYaw",rightType.getMethod("setAngleYaw",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setAngleYaw",rightType.getMethod("setAngleYaw",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getAnglePitch",rightType.getMethod("getAnglePitch"));
-                methods.put("setAnglePitch",rightType.getMethod("setAnglePitch",Integer.class));
-                methods.put("checkAnglePitchInitialized",rightType.getMethod("checkAnglePitchInitialized"));
+                try{
+                    methods.put("setAnglePitch",rightType.getMethod("setAnglePitch",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setAnglePitch",rightType.getMethod("setAnglePitch",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getAngleRoll",rightType.getMethod("getAngleRoll"));
-                methods.put("setAngleRoll",rightType.getMethod("setAngleRoll",Integer.class));
-                methods.put("checkAngleRollInitialized",rightType.getMethod("checkAngleRollInitialized"));
+                try{
+                    methods.put("setAngleRoll",rightType.getMethod("setAngleRoll",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setAngleRoll",rightType.getMethod("setAngleRoll",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getExtInfo",rightType.getMethod("getExtInfo"));
                 methods.put("setExtInfo",rightType.getMethod("setExtInfo",java.nio.ByteBuffer.class));
-                methods.put("checkExtInfoInitialized",rightType.getMethod("checkExtInfoInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getFeatureMd5",rightType.getMethod("getFeatureMd5"));
                 methods.put("setFeatureMd5",rightType.getMethod("setFeatureMd5",String.class));
-                methods.put("checkFeatureMd5Initialized",rightType.getMethod("checkFeatureMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
-                methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
-                methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
+                try{
+                    methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(FaceBean left, N_FACE right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkIdInitialized")) && null != (getterMethod = methods.get("getId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkImageMd5Initialized")) && null != (getterMethod = methods.get("getImageMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setImageMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFaceLeftInitialized")) && null != (getterMethod = methods.get("getFaceLeft"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFaceLeft((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFaceTopInitialized")) && null != (getterMethod = methods.get("getFaceTop"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFaceTop((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFaceWidthInitialized")) && null != (getterMethod = methods.get("getFaceWidth"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFaceWidth((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFaceHeightInitialized")) && null != (getterMethod = methods.get("getFaceHeight"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFaceHeight((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkEyeLeftxInitialized")) && null != (getterMethod = methods.get("getEyeLeftx"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setEyeLeftx((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkEyeLeftyInitialized")) && null != (getterMethod = methods.get("getEyeLefty"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setEyeLefty((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkEyeRightxInitialized")) && null != (getterMethod = methods.get("getEyeRightx"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setEyeRightx((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkEyeRightyInitialized")) && null != (getterMethod = methods.get("getEyeRighty"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setEyeRighty((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkMouthXInitialized")) && null != (getterMethod = methods.get("getMouthX"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setMouthX((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkMouthYInitialized")) && null != (getterMethod = methods.get("getMouthY"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setMouthY((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkNoseXInitialized")) && null != (getterMethod = methods.get("getNoseX"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setNoseX((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkNoseYInitialized")) && null != (getterMethod = methods.get("getNoseY"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setNoseY((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkAngleYawInitialized")) && null != (getterMethod = methods.get("getAngleYaw"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setAngleYaw((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkAnglePitchInitialized")) && null != (getterMethod = methods.get("getAnglePitch"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setAnglePitch((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkAngleRollInitialized")) && null != (getterMethod = methods.get("getAngleRoll"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setAngleRoll((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkExtInfoInitialized")) && null != (getterMethod = methods.get("getExtInfo"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setExtInfo((java.nio.ByteBuffer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFeatureMd5Initialized")) && null != (getterMethod = methods.get("getFeatureMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFeatureMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setCreateTime((java.util.Date)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_FACE_ID_ID_MASK)) && (null != (getterMethod = methods.get("getId"))))
+                    left.setId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_IMAGE_MD5_MASK)) && (null != (getterMethod = methods.get("getImageMd5"))))
+                    left.setImageMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_FACE_LEFT_MASK)) && (null != (getterMethod = methods.get("getFaceLeft"))))
+                    left.setFaceLeft(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_FACE_TOP_MASK)) && (null != (getterMethod = methods.get("getFaceTop"))))
+                    left.setFaceTop(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_FACE_WIDTH_MASK)) && (null != (getterMethod = methods.get("getFaceWidth"))))
+                    left.setFaceWidth(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_FACE_HEIGHT_MASK)) && (null != (getterMethod = methods.get("getFaceHeight"))))
+                    left.setFaceHeight(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_EYE_LEFTX_MASK)) && (null != (getterMethod = methods.get("getEyeLeftx"))))
+                    left.setEyeLeftx(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_EYE_LEFTY_MASK)) && (null != (getterMethod = methods.get("getEyeLefty"))))
+                    left.setEyeLefty(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_EYE_RIGHTX_MASK)) && (null != (getterMethod = methods.get("getEyeRightx"))))
+                    left.setEyeRightx(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_EYE_RIGHTY_MASK)) && (null != (getterMethod = methods.get("getEyeRighty"))))
+                    left.setEyeRighty(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_MOUTH_X_MASK)) && (null != (getterMethod = methods.get("getMouthX"))))
+                    left.setMouthX(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_MOUTH_Y_MASK)) && (null != (getterMethod = methods.get("getMouthY"))))
+                    left.setMouthY(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_NOSE_X_MASK)) && (null != (getterMethod = methods.get("getNoseX"))))
+                    left.setNoseX(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_NOSE_Y_MASK)) && (null != (getterMethod = methods.get("getNoseY"))))
+                    left.setNoseY(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_ANGLE_YAW_MASK)) && (null != (getterMethod = methods.get("getAngleYaw"))))
+                    left.setAngleYaw(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_ANGLE_PITCH_MASK)) && (null != (getterMethod = methods.get("getAnglePitch"))))
+                    left.setAnglePitch(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_ANGLE_ROLL_MASK)) && (null != (getterMethod = methods.get("getAngleRoll"))))
+                    left.setAngleRoll(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_EXT_INFO_MASK)) && (null != (getterMethod = methods.get("getExtInfo"))))
+                    left.setExtInfo(convert(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_FEATURE_MD5_MASK)) && (null != (getterMethod = methods.get("getFeatureMd5"))))
+                    left.setFeatureMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FACE_ID_CREATE_TIME_MASK)) && (null != (getterMethod = methods.get("getCreateTime"))))
+                    left.setCreateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -398,47 +509,47 @@ public class BeanConverterUtils {
         protected void _toRight(FaceBean left, N_FACE right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized() )
-                    setterMethod.invoke(right,left.getId());
-                if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized() )
-                    setterMethod.invoke(right,left.getImageMd5());
-                if(null != (setterMethod = methods.get("setFaceLeft")) && left.checkFaceLeftInitialized() )
-                    setterMethod.invoke(right,left.getFaceLeft());
-                if(null != (setterMethod = methods.get("setFaceTop")) && left.checkFaceTopInitialized() )
-                    setterMethod.invoke(right,left.getFaceTop());
-                if(null != (setterMethod = methods.get("setFaceWidth")) && left.checkFaceWidthInitialized() )
-                    setterMethod.invoke(right,left.getFaceWidth());
-                if(null != (setterMethod = methods.get("setFaceHeight")) && left.checkFaceHeightInitialized() )
-                    setterMethod.invoke(right,left.getFaceHeight());
-                if(null != (setterMethod = methods.get("setEyeLeftx")) && left.checkEyeLeftxInitialized() )
-                    setterMethod.invoke(right,left.getEyeLeftx());
-                if(null != (setterMethod = methods.get("setEyeLefty")) && left.checkEyeLeftyInitialized() )
-                    setterMethod.invoke(right,left.getEyeLefty());
-                if(null != (setterMethod = methods.get("setEyeRightx")) && left.checkEyeRightxInitialized() )
-                    setterMethod.invoke(right,left.getEyeRightx());
-                if(null != (setterMethod = methods.get("setEyeRighty")) && left.checkEyeRightyInitialized() )
-                    setterMethod.invoke(right,left.getEyeRighty());
-                if(null != (setterMethod = methods.get("setMouthX")) && left.checkMouthXInitialized() )
-                    setterMethod.invoke(right,left.getMouthX());
-                if(null != (setterMethod = methods.get("setMouthY")) && left.checkMouthYInitialized() )
-                    setterMethod.invoke(right,left.getMouthY());
-                if(null != (setterMethod = methods.get("setNoseX")) && left.checkNoseXInitialized() )
-                    setterMethod.invoke(right,left.getNoseX());
-                if(null != (setterMethod = methods.get("setNoseY")) && left.checkNoseYInitialized() )
-                    setterMethod.invoke(right,left.getNoseY());
-                if(null != (setterMethod = methods.get("setAngleYaw")) && left.checkAngleYawInitialized() )
-                    setterMethod.invoke(right,left.getAngleYaw());
-                if(null != (setterMethod = methods.get("setAnglePitch")) && left.checkAnglePitchInitialized() )
-                    setterMethod.invoke(right,left.getAnglePitch());
-                if(null != (setterMethod = methods.get("setAngleRoll")) && left.checkAngleRollInitialized() )
-                    setterMethod.invoke(right,left.getAngleRoll());
-                if(null != (setterMethod = methods.get("setExtInfo")) && left.checkExtInfoInitialized() )
-                    setterMethod.invoke(right,left.getExtInfo());
-                if(null != (setterMethod = methods.get("setFeatureMd5")) && left.checkFeatureMd5Initialized() )
-                    setterMethod.invoke(right,left.getFeatureMd5());
+                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getId()));
+                if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getImageMd5()));
+                if(null != (setterMethod = methods.get("setFaceLeft")) && left.checkFaceLeftInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFaceLeft()));
+                if(null != (setterMethod = methods.get("setFaceTop")) && left.checkFaceTopInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFaceTop()));
+                if(null != (setterMethod = methods.get("setFaceWidth")) && left.checkFaceWidthInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFaceWidth()));
+                if(null != (setterMethod = methods.get("setFaceHeight")) && left.checkFaceHeightInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFaceHeight()));
+                if(null != (setterMethod = methods.get("setEyeLeftx")) && left.checkEyeLeftxInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getEyeLeftx()));
+                if(null != (setterMethod = methods.get("setEyeLefty")) && left.checkEyeLeftyInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getEyeLefty()));
+                if(null != (setterMethod = methods.get("setEyeRightx")) && left.checkEyeRightxInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getEyeRightx()));
+                if(null != (setterMethod = methods.get("setEyeRighty")) && left.checkEyeRightyInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getEyeRighty()));
+                if(null != (setterMethod = methods.get("setMouthX")) && left.checkMouthXInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getMouthX()));
+                if(null != (setterMethod = methods.get("setMouthY")) && left.checkMouthYInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getMouthY()));
+                if(null != (setterMethod = methods.get("setNoseX")) && left.checkNoseXInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getNoseX()));
+                if(null != (setterMethod = methods.get("setNoseY")) && left.checkNoseYInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getNoseY()));
+                if(null != (setterMethod = methods.get("setAngleYaw")) && left.checkAngleYawInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getAngleYaw()));
+                if(null != (setterMethod = methods.get("setAnglePitch")) && left.checkAnglePitchInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getAnglePitch()));
+                if(null != (setterMethod = methods.get("setAngleRoll")) && left.checkAngleRollInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getAngleRoll()));
+                if(null != (setterMethod = methods.get("setExtInfo")) && left.checkExtInfoInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getExtInfo()));
+                if(null != (setterMethod = methods.get("setFeatureMd5")) && left.checkFeatureMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFeatureMd5()));
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getCreateTime());
+//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getCreateTime()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -460,6 +571,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public FeatureBeanConverter (Class<FeatureBean> leftClass, Class<N_FEATURE> rightClass){
             super(leftClass,rightClass);
             init();
@@ -478,46 +637,47 @@ public class BeanConverterUtils {
             try{         
                 methods.put("getMd5",rightType.getMethod("getMd5"));
                 methods.put("setMd5",rightType.getMethod("setMd5",String.class));
-                methods.put("checkMd5Initialized",rightType.getMethod("checkMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getPersonId",rightType.getMethod("getPersonId"));
-                methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
-                methods.put("checkPersonIdInitialized",rightType.getMethod("checkPersonIdInitialized"));
+                try{
+                    methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setPersonId",rightType.getMethod("setPersonId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getFeature",rightType.getMethod("getFeature"));
                 methods.put("setFeature",rightType.getMethod("setFeature",java.nio.ByteBuffer.class));
-                methods.put("checkFeatureInitialized",rightType.getMethod("checkFeatureInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getUpdateTime",rightType.getMethod("getUpdateTime"));
-                methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
-                methods.put("checkUpdateTimeInitialized",rightType.getMethod("checkUpdateTimeInitialized"));
+                try{
+                    methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(FeatureBean left, N_FEATURE right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkMd5Initialized")) && null != (getterMethod = methods.get("getMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPersonIdInitialized")) && null != (getterMethod = methods.get("getPersonId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPersonId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFeatureInitialized")) && null != (getterMethod = methods.get("getFeature"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFeature((java.nio.ByteBuffer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkUpdateTimeInitialized")) && null != (getterMethod = methods.get("getUpdateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setUpdateTime((java.util.Date)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_FEATURE_ID_MD5_MASK)) && (null != (getterMethod = methods.get("getMd5"))))
+                    left.setMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FEATURE_ID_PERSON_ID_MASK)) && (null != (getterMethod = methods.get("getPersonId"))))
+                    left.setPersonId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FEATURE_ID_FEATURE_MASK)) && (null != (getterMethod = methods.get("getFeature"))))
+                    left.setFeature(convert(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_FEATURE_ID_UPDATE_TIME_MASK)) && (null != (getterMethod = methods.get("getUpdateTime"))))
+                    left.setUpdateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -529,15 +689,15 @@ public class BeanConverterUtils {
         protected void _toRight(FeatureBean left, N_FEATURE right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized() )
-                    setterMethod.invoke(right,left.getMd5());
-                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized() )
-                    setterMethod.invoke(right,left.getPersonId());
-                if(null != (setterMethod = methods.get("setFeature")) && left.checkFeatureInitialized() )
-                    setterMethod.invoke(right,left.getFeature());
+                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getMd5()));
+                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPersonId()));
+                if(null != (setterMethod = methods.get("setFeature")) && left.checkFeatureInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFeature()));
 // IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getUpdateTime());
+//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getUpdateTime()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -559,6 +719,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public ImageBeanConverter (Class<ImageBean> leftClass, Class<N_IMAGE> rightClass){
             super(leftClass,rightClass);
             init();
@@ -577,82 +785,79 @@ public class BeanConverterUtils {
             try{         
                 methods.put("getMd5",rightType.getMethod("getMd5"));
                 methods.put("setMd5",rightType.getMethod("setMd5",String.class));
-                methods.put("checkMd5Initialized",rightType.getMethod("checkMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getFormat",rightType.getMethod("getFormat"));
                 methods.put("setFormat",rightType.getMethod("setFormat",String.class));
-                methods.put("checkFormatInitialized",rightType.getMethod("checkFormatInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getWidth",rightType.getMethod("getWidth"));
-                methods.put("setWidth",rightType.getMethod("setWidth",Integer.class));
-                methods.put("checkWidthInitialized",rightType.getMethod("checkWidthInitialized"));
+                try{
+                    methods.put("setWidth",rightType.getMethod("setWidth",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setWidth",rightType.getMethod("setWidth",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getHeight",rightType.getMethod("getHeight"));
-                methods.put("setHeight",rightType.getMethod("setHeight",Integer.class));
-                methods.put("checkHeightInitialized",rightType.getMethod("checkHeightInitialized"));
+                try{
+                    methods.put("setHeight",rightType.getMethod("setHeight",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setHeight",rightType.getMethod("setHeight",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getDepth",rightType.getMethod("getDepth"));
-                methods.put("setDepth",rightType.getMethod("setDepth",Integer.class));
-                methods.put("checkDepthInitialized",rightType.getMethod("checkDepthInitialized"));
+                try{
+                    methods.put("setDepth",rightType.getMethod("setDepth",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setDepth",rightType.getMethod("setDepth",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getFaceNum",rightType.getMethod("getFaceNum"));
-                methods.put("setFaceNum",rightType.getMethod("setFaceNum",Integer.class));
-                methods.put("checkFaceNumInitialized",rightType.getMethod("checkFaceNumInitialized"));
+                try{
+                    methods.put("setFaceNum",rightType.getMethod("setFaceNum",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setFaceNum",rightType.getMethod("setFaceNum",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getThumbMd5",rightType.getMethod("getThumbMd5"));
                 methods.put("setThumbMd5",rightType.getMethod("setThumbMd5",String.class));
-                methods.put("checkThumbMd5Initialized",rightType.getMethod("checkThumbMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getDeviceId",rightType.getMethod("getDeviceId"));
-                methods.put("setDeviceId",rightType.getMethod("setDeviceId",Integer.class));
-                methods.put("checkDeviceIdInitialized",rightType.getMethod("checkDeviceIdInitialized"));
+                try{
+                    methods.put("setDeviceId",rightType.getMethod("setDeviceId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setDeviceId",rightType.getMethod("setDeviceId",int.class));
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(ImageBean left, N_IMAGE right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkMd5Initialized")) && null != (getterMethod = methods.get("getMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFormatInitialized")) && null != (getterMethod = methods.get("getFormat"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFormat((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkWidthInitialized")) && null != (getterMethod = methods.get("getWidth"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setWidth((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkHeightInitialized")) && null != (getterMethod = methods.get("getHeight"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setHeight((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkDepthInitialized")) && null != (getterMethod = methods.get("getDepth"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setDepth((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkFaceNumInitialized")) && null != (getterMethod = methods.get("getFaceNum"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setFaceNum((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkThumbMd5Initialized")) && null != (getterMethod = methods.get("getThumbMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setThumbMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkDeviceIdInitialized")) && null != (getterMethod = methods.get("getDeviceId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setDeviceId((Integer)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_IMAGE_ID_MD5_MASK)) && (null != (getterMethod = methods.get("getMd5"))))
+                    left.setMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_FORMAT_MASK)) && (null != (getterMethod = methods.get("getFormat"))))
+                    left.setFormat(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_WIDTH_MASK)) && (null != (getterMethod = methods.get("getWidth"))))
+                    left.setWidth(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_HEIGHT_MASK)) && (null != (getterMethod = methods.get("getHeight"))))
+                    left.setHeight(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_DEPTH_MASK)) && (null != (getterMethod = methods.get("getDepth"))))
+                    left.setDepth(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_FACE_NUM_MASK)) && (null != (getterMethod = methods.get("getFaceNum"))))
+                    left.setFaceNum(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_THUMB_MD5_MASK)) && (null != (getterMethod = methods.get("getThumbMd5"))))
+                    left.setThumbMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_IMAGE_ID_DEVICE_ID_MASK)) && (null != (getterMethod = methods.get("getDeviceId"))))
+                    left.setDeviceId(convert(Integer.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -664,22 +869,22 @@ public class BeanConverterUtils {
         protected void _toRight(ImageBean left, N_IMAGE right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized() )
-                    setterMethod.invoke(right,left.getMd5());
-                if(null != (setterMethod = methods.get("setFormat")) && left.checkFormatInitialized() )
-                    setterMethod.invoke(right,left.getFormat());
-                if(null != (setterMethod = methods.get("setWidth")) && left.checkWidthInitialized() )
-                    setterMethod.invoke(right,left.getWidth());
-                if(null != (setterMethod = methods.get("setHeight")) && left.checkHeightInitialized() )
-                    setterMethod.invoke(right,left.getHeight());
-                if(null != (setterMethod = methods.get("setDepth")) && left.checkDepthInitialized() )
-                    setterMethod.invoke(right,left.getDepth());
-                if(null != (setterMethod = methods.get("setFaceNum")) && left.checkFaceNumInitialized() )
-                    setterMethod.invoke(right,left.getFaceNum());
-                if(null != (setterMethod = methods.get("setThumbMd5")) && left.checkThumbMd5Initialized() )
-                    setterMethod.invoke(right,left.getThumbMd5());
-                if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized() )
-                    setterMethod.invoke(right,left.getDeviceId());
+                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getMd5()));
+                if(null != (setterMethod = methods.get("setFormat")) && left.checkFormatInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFormat()));
+                if(null != (setterMethod = methods.get("setWidth")) && left.checkWidthInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getWidth()));
+                if(null != (setterMethod = methods.get("setHeight")) && left.checkHeightInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getHeight()));
+                if(null != (setterMethod = methods.get("setDepth")) && left.checkDepthInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getDepth()));
+                if(null != (setterMethod = methods.get("setFaceNum")) && left.checkFaceNumInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getFaceNum()));
+                if(null != (setterMethod = methods.get("setThumbMd5")) && left.checkThumbMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getThumbMd5()));
+                if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getDeviceId()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -701,6 +906,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public LogBeanConverter (Class<LogBean> leftClass, Class<N_LOG> rightClass){
             super(leftClass,rightClass);
             init();
@@ -718,83 +971,96 @@ public class BeanConverterUtils {
             }
             try{         
                 methods.put("getId",rightType.getMethod("getId"));
-                methods.put("setId",rightType.getMethod("setId",Integer.class));
-                methods.put("checkIdInitialized",rightType.getMethod("checkIdInitialized"));
+                try{
+                    methods.put("setId",rightType.getMethod("setId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setId",rightType.getMethod("setId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getPersonId",rightType.getMethod("getPersonId"));
-                methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
-                methods.put("checkPersonIdInitialized",rightType.getMethod("checkPersonIdInitialized"));
+                try{
+                    methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setPersonId",rightType.getMethod("setPersonId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getDeviceId",rightType.getMethod("getDeviceId"));
-                methods.put("setDeviceId",rightType.getMethod("setDeviceId",Integer.class));
-                methods.put("checkDeviceIdInitialized",rightType.getMethod("checkDeviceIdInitialized"));
+                try{
+                    methods.put("setDeviceId",rightType.getMethod("setDeviceId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setDeviceId",rightType.getMethod("setDeviceId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getVerifyFeature",rightType.getMethod("getVerifyFeature"));
                 methods.put("setVerifyFeature",rightType.getMethod("setVerifyFeature",String.class));
-                methods.put("checkVerifyFeatureInitialized",rightType.getMethod("checkVerifyFeatureInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getCompareFace",rightType.getMethod("getCompareFace"));
-                methods.put("setCompareFace",rightType.getMethod("setCompareFace",Integer.class));
-                methods.put("checkCompareFaceInitialized",rightType.getMethod("checkCompareFaceInitialized"));
+                try{
+                    methods.put("setCompareFace",rightType.getMethod("setCompareFace",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setCompareFace",rightType.getMethod("setCompareFace",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getSimilarty",rightType.getMethod("getSimilarty"));
-                methods.put("setSimilarty",rightType.getMethod("setSimilarty",Double.class));
-                methods.put("checkSimilartyInitialized",rightType.getMethod("checkSimilartyInitialized"));
+                try{
+                    methods.put("setSimilarty",rightType.getMethod("setSimilarty",Double.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setSimilarty",rightType.getMethod("setSimilarty",double.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getVerifyTime",rightType.getMethod("getVerifyTime"));
-                methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",java.util.Date.class));
-                methods.put("checkVerifyTimeInitialized",rightType.getMethod("checkVerifyTimeInitialized"));
+                try{
+                    methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
-                methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
-                methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
+                try{
+                    methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(LogBean left, N_LOG right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkIdInitialized")) && null != (getterMethod = methods.get("getId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPersonIdInitialized")) && null != (getterMethod = methods.get("getPersonId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPersonId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkDeviceIdInitialized")) && null != (getterMethod = methods.get("getDeviceId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setDeviceId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkVerifyFeatureInitialized")) && null != (getterMethod = methods.get("getVerifyFeature"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setVerifyFeature((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkCompareFaceInitialized")) && null != (getterMethod = methods.get("getCompareFace"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setCompareFace((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkSimilartyInitialized")) && null != (getterMethod = methods.get("getSimilarty"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setSimilarty((Double)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkVerifyTimeInitialized")) && null != (getterMethod = methods.get("getVerifyTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setVerifyTime((java.util.Date)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setCreateTime((java.util.Date)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_LOG_ID_ID_MASK)) && (null != (getterMethod = methods.get("getId"))))
+                    left.setId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_PERSON_ID_MASK)) && (null != (getterMethod = methods.get("getPersonId"))))
+                    left.setPersonId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_DEVICE_ID_MASK)) && (null != (getterMethod = methods.get("getDeviceId"))))
+                    left.setDeviceId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_VERIFY_FEATURE_MASK)) && (null != (getterMethod = methods.get("getVerifyFeature"))))
+                    left.setVerifyFeature(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_COMPARE_FACE_MASK)) && (null != (getterMethod = methods.get("getCompareFace"))))
+                    left.setCompareFace(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_SIMILARTY_MASK)) && (null != (getterMethod = methods.get("getSimilarty"))))
+                    left.setSimilarty(convert(Double.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_VERIFY_TIME_MASK)) && (null != (getterMethod = methods.get("getVerifyTime"))))
+                    left.setVerifyTime(convert(java.util.Date.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_ID_CREATE_TIME_MASK)) && (null != (getterMethod = methods.get("getCreateTime"))))
+                    left.setCreateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -806,23 +1072,23 @@ public class BeanConverterUtils {
         protected void _toRight(LogBean left, N_LOG right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized() )
-                    setterMethod.invoke(right,left.getId());
-                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized() )
-                    setterMethod.invoke(right,left.getPersonId());
-                if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized() )
-                    setterMethod.invoke(right,left.getDeviceId());
-                if(null != (setterMethod = methods.get("setVerifyFeature")) && left.checkVerifyFeatureInitialized() )
-                    setterMethod.invoke(right,left.getVerifyFeature());
-                if(null != (setterMethod = methods.get("setCompareFace")) && left.checkCompareFaceInitialized() )
-                    setterMethod.invoke(right,left.getCompareFace());
-                if(null != (setterMethod = methods.get("setSimilarty")) && left.checkSimilartyInitialized() )
-                    setterMethod.invoke(right,left.getSimilarty());
-                if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized() )
-                    setterMethod.invoke(right,left.getVerifyTime());
+                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getId()));
+                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPersonId()));
+                if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getDeviceId()));
+                if(null != (setterMethod = methods.get("setVerifyFeature")) && left.checkVerifyFeatureInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getVerifyFeature()));
+                if(null != (setterMethod = methods.get("setCompareFace")) && left.checkCompareFaceInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getCompareFace()));
+                if(null != (setterMethod = methods.get("setSimilarty")) && left.checkSimilartyInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getSimilarty()));
+                if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getVerifyTime()));
 // IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getCreateTime());
+//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getCreateTime()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -844,6 +1110,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public PersonBeanConverter (Class<PersonBean> leftClass, Class<N_PERSON> rightClass){
             super(leftClass,rightClass);
             init();
@@ -861,110 +1175,126 @@ public class BeanConverterUtils {
             }
             try{         
                 methods.put("getId",rightType.getMethod("getId"));
-                methods.put("setId",rightType.getMethod("setId",Integer.class));
-                methods.put("checkIdInitialized",rightType.getMethod("checkIdInitialized"));
+                try{
+                    methods.put("setId",rightType.getMethod("setId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setId",rightType.getMethod("setId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getGroupId",rightType.getMethod("getGroupId"));
-                methods.put("setGroupId",rightType.getMethod("setGroupId",Integer.class));
-                methods.put("checkGroupIdInitialized",rightType.getMethod("checkGroupIdInitialized"));
+                try{
+                    methods.put("setGroupId",rightType.getMethod("setGroupId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setGroupId",rightType.getMethod("setGroupId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getName",rightType.getMethod("getName"));
                 methods.put("setName",rightType.getMethod("setName",String.class));
-                methods.put("checkNameInitialized",rightType.getMethod("checkNameInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getSex",rightType.getMethod("getSex"));
-                methods.put("setSex",rightType.getMethod("setSex",Integer.class));
-                methods.put("checkSexInitialized",rightType.getMethod("checkSexInitialized"));
+                try{
+                    methods.put("setSex",rightType.getMethod("setSex",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setSex",rightType.getMethod("setSex",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getBirthdate",rightType.getMethod("getBirthdate"));
-                methods.put("setBirthdate",rightType.getMethod("setBirthdate",java.util.Date.class));
-                methods.put("checkBirthdateInitialized",rightType.getMethod("checkBirthdateInitialized"));
+                try{
+                    methods.put("setBirthdate",rightType.getMethod("setBirthdate",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setBirthdate",rightType.getMethod("setBirthdate",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setBirthdate",rightType.getMethod("setBirthdate",Long.class));
+                    }
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getPapersType",rightType.getMethod("getPapersType"));
-                methods.put("setPapersType",rightType.getMethod("setPapersType",Integer.class));
-                methods.put("checkPapersTypeInitialized",rightType.getMethod("checkPapersTypeInitialized"));
+                try{
+                    methods.put("setPapersType",rightType.getMethod("setPapersType",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setPapersType",rightType.getMethod("setPapersType",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getPapersNum",rightType.getMethod("getPapersNum"));
                 methods.put("setPapersNum",rightType.getMethod("setPapersNum",String.class));
-                methods.put("checkPapersNumInitialized",rightType.getMethod("checkPapersNumInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getImageMd5",rightType.getMethod("getImageMd5"));
                 methods.put("setImageMd5",rightType.getMethod("setImageMd5",String.class));
-                methods.put("checkImageMd5Initialized",rightType.getMethod("checkImageMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getExpiryDate",rightType.getMethod("getExpiryDate"));
-                methods.put("setExpiryDate",rightType.getMethod("setExpiryDate",java.util.Date.class));
-                methods.put("checkExpiryDateInitialized",rightType.getMethod("checkExpiryDateInitialized"));
+                try{
+                    methods.put("setExpiryDate",rightType.getMethod("setExpiryDate",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setExpiryDate",rightType.getMethod("setExpiryDate",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setExpiryDate",rightType.getMethod("setExpiryDate",Long.class));
+                    }
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getCreateTime",rightType.getMethod("getCreateTime"));
-                methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
-                methods.put("checkCreateTimeInitialized",rightType.getMethod("checkCreateTimeInitialized"));
+                try{
+                    methods.put("setCreateTime",rightType.getMethod("setCreateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setCreateTime",rightType.getMethod("setCreateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getUpdateTime",rightType.getMethod("getUpdateTime"));
-                methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
-                methods.put("checkUpdateTimeInitialized",rightType.getMethod("checkUpdateTimeInitialized"));
+                try{
+                    methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setUpdateTime",rightType.getMethod("setUpdateTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(PersonBean left, N_PERSON right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkIdInitialized")) && null != (getterMethod = methods.get("getId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkGroupIdInitialized")) && null != (getterMethod = methods.get("getGroupId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setGroupId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkNameInitialized")) && null != (getterMethod = methods.get("getName"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setName((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkSexInitialized")) && null != (getterMethod = methods.get("getSex"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setSex((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkBirthdateInitialized")) && null != (getterMethod = methods.get("getBirthdate"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setBirthdate((java.util.Date)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPapersTypeInitialized")) && null != (getterMethod = methods.get("getPapersType"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPapersType((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPapersNumInitialized")) && null != (getterMethod = methods.get("getPapersNum"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPapersNum((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkImageMd5Initialized")) && null != (getterMethod = methods.get("getImageMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setImageMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkExpiryDateInitialized")) && null != (getterMethod = methods.get("getExpiryDate"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setExpiryDate((java.util.Date)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkCreateTimeInitialized")) && null != (getterMethod = methods.get("getCreateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setCreateTime((java.util.Date)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkUpdateTimeInitialized")) && null != (getterMethod = methods.get("getUpdateTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setUpdateTime((java.util.Date)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_PERSON_ID_ID_MASK)) && (null != (getterMethod = methods.get("getId"))))
+                    left.setId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_GROUP_ID_MASK)) && (null != (getterMethod = methods.get("getGroupId"))))
+                    left.setGroupId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_NAME_MASK)) && (null != (getterMethod = methods.get("getName"))))
+                    left.setName(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_SEX_MASK)) && (null != (getterMethod = methods.get("getSex"))))
+                    left.setSex(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_BIRTHDATE_MASK)) && (null != (getterMethod = methods.get("getBirthdate"))))
+                    left.setBirthdate(convert(java.util.Date.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_PAPERS_TYPE_MASK)) && (null != (getterMethod = methods.get("getPapersType"))))
+                    left.setPapersType(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_PAPERS_NUM_MASK)) && (null != (getterMethod = methods.get("getPapersNum"))))
+                    left.setPapersNum(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_IMAGE_MD5_MASK)) && (null != (getterMethod = methods.get("getImageMd5"))))
+                    left.setImageMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_EXPIRY_DATE_MASK)) && (null != (getterMethod = methods.get("getExpiryDate"))))
+                    left.setExpiryDate(convert(java.util.Date.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_CREATE_TIME_MASK)) && (null != (getterMethod = methods.get("getCreateTime"))))
+                    left.setCreateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_PERSON_ID_UPDATE_TIME_MASK)) && (null != (getterMethod = methods.get("getUpdateTime"))))
+                    left.setUpdateTime(convert(java.util.Date.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -976,30 +1306,30 @@ public class BeanConverterUtils {
         protected void _toRight(PersonBean left, N_PERSON right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized() )
-                    setterMethod.invoke(right,left.getId());
-                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized() )
-                    setterMethod.invoke(right,left.getGroupId());
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized() )
-                    setterMethod.invoke(right,left.getName());
-                if(null != (setterMethod = methods.get("setSex")) && left.checkSexInitialized() )
-                    setterMethod.invoke(right,left.getSex());
-                if(null != (setterMethod = methods.get("setBirthdate")) && left.checkBirthdateInitialized() )
-                    setterMethod.invoke(right,left.getBirthdate());
-                if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized() )
-                    setterMethod.invoke(right,left.getPapersType());
-                if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized() )
-                    setterMethod.invoke(right,left.getPapersNum());
-                if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized() )
-                    setterMethod.invoke(right,left.getImageMd5());
-                if(null != (setterMethod = methods.get("setExpiryDate")) && left.checkExpiryDateInitialized() )
-                    setterMethod.invoke(right,left.getExpiryDate());
+                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getId()));
+                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getGroupId()));
+                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getName()));
+                if(null != (setterMethod = methods.get("setSex")) && left.checkSexInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getSex()));
+                if(null != (setterMethod = methods.get("setBirthdate")) && left.checkBirthdateInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getBirthdate()));
+                if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPapersType()));
+                if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPapersNum()));
+                if(null != (setterMethod = methods.get("setImageMd5")) && left.checkImageMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getImageMd5()));
+                if(null != (setterMethod = methods.get("setExpiryDate")) && left.checkExpiryDateInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getExpiryDate()));
 // IGNORE field fl_person.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getCreateTime());
+//                 if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getCreateTime()));
 // IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized() )
-//                     setterMethod.invoke(right,left.getUpdateTime());
+//                 if(null != (setterMethod = methods.get("setUpdateTime")) && left.checkUpdateTimeInitialized())
+//                     setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getUpdateTime()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -1021,6 +1351,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public StoreBeanConverter (Class<StoreBean> leftClass, Class<N_STORE> rightClass){
             super(leftClass,rightClass);
             init();
@@ -1039,37 +1417,29 @@ public class BeanConverterUtils {
             try{         
                 methods.put("getMd5",rightType.getMethod("getMd5"));
                 methods.put("setMd5",rightType.getMethod("setMd5",String.class));
-                methods.put("checkMd5Initialized",rightType.getMethod("checkMd5Initialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getEncoding",rightType.getMethod("getEncoding"));
                 methods.put("setEncoding",rightType.getMethod("setEncoding",String.class));
-                methods.put("checkEncodingInitialized",rightType.getMethod("checkEncodingInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getData",rightType.getMethod("getData"));
                 methods.put("setData",rightType.getMethod("setData",java.nio.ByteBuffer.class));
-                methods.put("checkDataInitialized",rightType.getMethod("checkDataInitialized"));
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(StoreBean left, N_STORE right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkMd5Initialized")) && null != (getterMethod = methods.get("getMd5"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setMd5((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkEncodingInitialized")) && null != (getterMethod = methods.get("getEncoding"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setEncoding((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkDataInitialized")) && null != (getterMethod = methods.get("getData"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setData((java.nio.ByteBuffer)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_STORE_ID_MD5_MASK)) && (null != (getterMethod = methods.get("getMd5"))))
+                    left.setMd5(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_STORE_ID_ENCODING_MASK)) && (null != (getterMethod = methods.get("getEncoding"))))
+                    left.setEncoding(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_STORE_ID_DATA_MASK)) && (null != (getterMethod = methods.get("getData"))))
+                    left.setData(convert(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -1081,12 +1451,12 @@ public class BeanConverterUtils {
         protected void _toRight(StoreBean left, N_STORE right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized() )
-                    setterMethod.invoke(right,left.getMd5());
-                if(null != (setterMethod = methods.get("setEncoding")) && left.checkEncodingInitialized() )
-                    setterMethod.invoke(right,left.getEncoding());
-                if(null != (setterMethod = methods.get("setData")) && left.checkDataInitialized() )
-                    setterMethod.invoke(right,left.getData());
+                if(null != (setterMethod = methods.get("setMd5")) && left.checkMd5Initialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getMd5()));
+                if(null != (setterMethod = methods.get("setEncoding")) && left.checkEncodingInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getEncoding()));
+                if(null != (setterMethod = methods.get("setData")) && left.checkDataInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getData()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
@@ -1108,6 +1478,54 @@ public class BeanConverterUtils {
             super();
             init();
         }
+        /**
+         * 返回buffer中所有字节(position~limit),不改变buffer状态
+         * @param buffer
+         * @return
+         */
+        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+            int pos = buffer.position();
+            try{
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return bytes;
+            }finally{
+                buffer.position(pos);
+            }
+        }
+        /**
+         * {@code obj}转为{@code type}指定的类型
+         * @param type
+         * @param obj
+         * @return
+         */
+        @SuppressWarnings({ "unchecked" })
+        private static final <T> T convert(Class<T> type,Object obj){
+            try{
+                if(null ==obj && type.isPrimitive())
+                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+                return (T) obj;
+            }catch(ClassCastException ce){
+                // long -> Date
+                if(java.util.Date.class.isAssignableFrom(type) && obj instanceof Long){
+                    try {
+                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                        return type.getConstructor(long.class).newInstance(obj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                // byte[] -> ByteBuffer
+                if(ByteBuffer.class == type && obj instanceof byte[]){
+                    return (T) ByteBuffer.wrap((byte[]) obj);
+                }
+                // ByteBuffer -> byte[]
+                if(byte[].class == type && obj instanceof ByteBuffer){
+                    return (T) getBytesInBuffer((ByteBuffer) obj);
+                }
+                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+            }
+        }
         public LogLightBeanConverter (Class<LogLightBean> leftClass, Class<N_LOGLIGHT> rightClass){
             super(leftClass,rightClass);
             init();
@@ -1125,65 +1543,68 @@ public class BeanConverterUtils {
             }
             try{         
                 methods.put("getId",rightType.getMethod("getId"));
-                methods.put("setId",rightType.getMethod("setId",Integer.class));
-                methods.put("checkIdInitialized",rightType.getMethod("checkIdInitialized"));
+                try{
+                    methods.put("setId",rightType.getMethod("setId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setId",rightType.getMethod("setId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getPersonId",rightType.getMethod("getPersonId"));
-                methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
-                methods.put("checkPersonIdInitialized",rightType.getMethod("checkPersonIdInitialized"));
+                try{
+                    methods.put("setPersonId",rightType.getMethod("setPersonId",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setPersonId",rightType.getMethod("setPersonId",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getName",rightType.getMethod("getName"));
                 methods.put("setName",rightType.getMethod("setName",String.class));
-                methods.put("checkNameInitialized",rightType.getMethod("checkNameInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getPapersType",rightType.getMethod("getPapersType"));
-                methods.put("setPapersType",rightType.getMethod("setPapersType",Integer.class));
-                methods.put("checkPapersTypeInitialized",rightType.getMethod("checkPapersTypeInitialized"));
+                try{
+                    methods.put("setPapersType",rightType.getMethod("setPapersType",Integer.class));
+                }catch(NoSuchMethodException nm){
+                    methods.put("setPapersType",rightType.getMethod("setPapersType",int.class));
+                }
             }catch(Exception e){}
             try{         
                 methods.put("getPapersNum",rightType.getMethod("getPapersNum"));
                 methods.put("setPapersNum",rightType.getMethod("setPapersNum",String.class));
-                methods.put("checkPapersNumInitialized",rightType.getMethod("checkPapersNumInitialized"));
             }catch(Exception e){}
             try{         
                 methods.put("getVerifyTime",rightType.getMethod("getVerifyTime"));
-                methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",java.util.Date.class));
-                methods.put("checkVerifyTimeInitialized",rightType.getMethod("checkVerifyTimeInitialized"));
+                try{
+                    methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",java.util.Date.class));
+                }catch(NoSuchMethodException nm){
+                    try{
+                        methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",long.class));
+                    }catch(NoSuchMethodException nm2){
+                        methods.put("setVerifyTime",rightType.getMethod("setVerifyTime",Long.class));
+                    }
+                }
             }catch(Exception e){}
         }
         @Override
         protected void _fromRight(LogLightBean left, N_LOGLIGHT right) {
             try{
-                Method initializedMethod,getterMethod;
-                if( null != (initializedMethod = methods.get("checkIdInitialized")) && null != (getterMethod = methods.get("getId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPersonIdInitialized")) && null != (getterMethod = methods.get("getPersonId"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPersonId((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkNameInitialized")) && null != (getterMethod = methods.get("getName"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setName((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPapersTypeInitialized")) && null != (getterMethod = methods.get("getPapersType"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPapersType((Integer)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkPapersNumInitialized")) && null != (getterMethod = methods.get("getPapersNum"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setPapersNum((String)getterMethod.invoke(right));
-                }
-                if( null != (initializedMethod = methods.get("checkVerifyTimeInitialized")) && null != (getterMethod = methods.get("getVerifyTime"))){
-                    if((boolean)initializedMethod.invoke(right))
-                        left.setVerifyTime((java.util.Date)getterMethod.invoke(right));
-                }
+                Method getterMethod;
+                long modified = (long)methods.get("getModified").invoke(right);
+                if( (0L !=  (modified & FL_LOG_LIGHT_ID_ID_MASK)) && (null != (getterMethod = methods.get("getId"))))
+                    left.setId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_LIGHT_ID_PERSON_ID_MASK)) && (null != (getterMethod = methods.get("getPersonId"))))
+                    left.setPersonId(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_LIGHT_ID_NAME_MASK)) && (null != (getterMethod = methods.get("getName"))))
+                    left.setName(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK)) && (null != (getterMethod = methods.get("getPapersType"))))
+                    left.setPapersType(convert(Integer.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_LIGHT_ID_PAPERS_NUM_MASK)) && (null != (getterMethod = methods.get("getPapersNum"))))
+                    left.setPapersNum(convert(String.class,getterMethod.invoke(right)));
+                if( (0L !=  (modified & FL_LOG_LIGHT_ID_VERIFY_TIME_MASK)) && (null != (getterMethod = methods.get("getVerifyTime"))))
+                    left.setVerifyTime(convert(java.util.Date.class,getterMethod.invoke(right)));
                 left.isNew((boolean)methods.get("isNew").invoke(right));
-                left.setModified((long)methods.get("getModified").invoke(right));
+                left.setModified(modified);
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -1195,18 +1616,18 @@ public class BeanConverterUtils {
         protected void _toRight(LogLightBean left, N_LOGLIGHT right) {
             try{
                 Method setterMethod;
-                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized() )
-                    setterMethod.invoke(right,left.getId());
-                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized() )
-                    setterMethod.invoke(right,left.getPersonId());
-                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized() )
-                    setterMethod.invoke(right,left.getName());
-                if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized() )
-                    setterMethod.invoke(right,left.getPapersType());
-                if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized() )
-                    setterMethod.invoke(right,left.getPapersNum());
-                if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized() )
-                    setterMethod.invoke(right,left.getVerifyTime());
+                if(null != (setterMethod = methods.get("setId")) && left.checkIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getId()));
+                if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPersonId()));
+                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getName()));
+                if(null != (setterMethod = methods.get("setPapersType")) && left.checkPapersTypeInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPapersType()));
+                if(null != (setterMethod = methods.get("setPapersNum")) && left.checkPapersNumInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getPapersNum()));
+                if(null != (setterMethod = methods.get("setVerifyTime")) && left.checkVerifyTimeInitialized())
+                    setterMethod.invoke(right,convert(setterMethod.getParameterTypes()[0],left.getVerifyTime()));
                 methods.get("setNew").invoke(right,left.isNew());
                 methods.get("setModified").invoke(right,left.getModified());
             }catch(RuntimeException e){
