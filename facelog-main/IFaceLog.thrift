@@ -6,9 +6,9 @@ namespace cpp gdface
 
 
 struct DeviceBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  i32 id;
   5:  string name;
   6:  i32 groupId;
@@ -20,9 +20,9 @@ struct DeviceBean {
 }
 
 struct LogLightBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  i32 id;
   5:  i32 personId;
   6:  string name;
@@ -32,9 +32,9 @@ struct LogLightBean {
 }
 
 struct ImageBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  string md5;
   5:  string format;
   6:  i32 width;
@@ -47,9 +47,9 @@ struct ImageBean {
 }
 
 struct PersonBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  i32 id;
   5:  i32 groupId;
   6:  string name;
@@ -65,9 +65,9 @@ struct PersonBean {
 }
 
 struct FeatureBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  string md5;
   5:  i32 personId;
   6:  binary feature;
@@ -76,9 +76,9 @@ struct FeatureBean {
 }
 
 struct FaceBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  i32 id;
   5:  string imageMd5;
   6:  i32 faceLeft;
@@ -104,9 +104,9 @@ struct FaceBean {
 }
 
 struct LogBean {
-  1:  bool new;
-  2:  i64 modified;
-  3:  i64 initialized;
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
   4:  i32 id;
   5:  i32 personId;
   6:  i32 deviceId;
