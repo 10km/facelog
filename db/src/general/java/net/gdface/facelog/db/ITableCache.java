@@ -3,6 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // jdbc driver used at code generation time: $db.driver
+// template: itablecache.java.vm
 // ______________________________________________________
 
 package net.gdface.facelog.db;
