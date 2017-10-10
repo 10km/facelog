@@ -55,6 +55,7 @@ public class TestFastjson {
 
 	    private Long       id;
 	    private String     name;
+	    private boolean isNew=false;
 	    private List<User> users = new ArrayList<User>();
 	    public Date date=new Date();
 	    public java.sql.Date sqldate=new java.sql.Date(date.getTime());
@@ -93,6 +94,14 @@ public class TestFastjson {
 	    public boolean _getModified(){
 	    	return false;
 	    }
+
+		public boolean isNew() {
+			return isNew;
+		}
+
+		public void setNew(boolean isNew) {
+			this.isNew = isNew;
+		}
 	}
 	@Test
 	public void test() {
