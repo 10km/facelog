@@ -20,7 +20,7 @@ import net.gdface.facelog.dborm.HashCodeBuilder;
  * </ul>
  * @author guyadong
 */
-public class FlStoreBean
+public  class FlStoreBean
     implements Serializable,BaseBean<FlStoreBean>,Comparable<FlStoreBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -5705582857978645940L;

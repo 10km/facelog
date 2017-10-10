@@ -43,7 +43,7 @@ public final class StoreBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -63,7 +63,7 @@ public final class StoreBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -79,7 +79,7 @@ public final class StoreBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -94,7 +94,7 @@ public final class StoreBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -127,7 +127,7 @@ public final class StoreBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to md5
      */
-    @ThriftField
+    @ThriftField()
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
@@ -185,7 +185,7 @@ public final class StoreBean
      *
      * @param newVal the new value  to be assigned to encoding
      */
-    @ThriftField
+    @ThriftField()
     public void setEncoding(String newVal)
     {
         if ((newVal != null && encoding != null && (newVal.compareTo(encoding) == 0)) ||
@@ -243,7 +243,7 @@ public final class StoreBean
      *
      * @param newVal the new value  to be assigned to data
      */
-    @ThriftField
+    @ThriftField()
     public void setData(java.nio.ByteBuffer newVal)
     {
         if ((newVal != null && data != null && (newVal.compareTo(data) == 0)) ||

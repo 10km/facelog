@@ -56,7 +56,7 @@ public final class DeviceBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -76,7 +76,7 @@ public final class DeviceBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -92,7 +92,7 @@ public final class DeviceBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -107,7 +107,7 @@ public final class DeviceBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -143,7 +143,7 @@ public final class DeviceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField
+    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -211,7 +211,7 @@ public final class DeviceBean
      *
      * @param newVal the new value  to be assigned to name
      */
-    @ThriftField
+    @ThriftField()
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -269,7 +269,7 @@ public final class DeviceBean
      *
      * @param newVal the new value  to be assigned to groupId
      */
-    @ThriftField
+    @ThriftField()
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
@@ -337,7 +337,7 @@ public final class DeviceBean
      *
      * @param newVal the new value  to be assigned to version
      */
-    @ThriftField
+    @ThriftField()
     public void setVersion(String newVal)
     {
         if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
@@ -395,7 +395,7 @@ public final class DeviceBean
      *
      * @param newVal the new value  to be assigned to serialNo
      */
-    @ThriftField
+    @ThriftField()
     public void setSerialNo(String newVal)
     {
         if ((newVal != null && serialNo != null && (newVal.compareTo(serialNo) == 0)) ||
@@ -453,7 +453,7 @@ public final class DeviceBean
      *
      * @param newVal the new value  to be assigned to mac
      */
-    @ThriftField
+    @ThriftField()
     public void setMac(String newVal)
     {
         if ((newVal != null && mac != null && (newVal.compareTo(mac) == 0)) ||

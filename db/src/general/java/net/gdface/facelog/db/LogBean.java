@@ -57,7 +57,7 @@ public final class LogBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -77,7 +77,7 @@ public final class LogBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -93,7 +93,7 @@ public final class LogBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -108,7 +108,7 @@ public final class LogBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -142,7 +142,7 @@ public final class LogBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField
+    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -212,7 +212,7 @@ public final class LogBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to personId
      */
-    @ThriftField
+    @ThriftField()
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
@@ -281,7 +281,7 @@ public final class LogBean
      *
      * @param newVal the new value  to be assigned to deviceId
      */
-    @ThriftField
+    @ThriftField()
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
@@ -350,7 +350,7 @@ public final class LogBean
      *
      * @param newVal the new value  to be assigned to verifyFeature
      */
-    @ThriftField
+    @ThriftField()
     public void setVerifyFeature(String newVal)
     {
         if ((newVal != null && verifyFeature != null && (newVal.compareTo(verifyFeature) == 0)) ||
@@ -409,7 +409,7 @@ public final class LogBean
      *
      * @param newVal the new value  to be assigned to compareFace
      */
-    @ThriftField
+    @ThriftField()
     public void setCompareFace(Integer newVal)
     {
         if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
@@ -477,7 +477,7 @@ public final class LogBean
      *
      * @param newVal the new value  to be assigned to similarty
      */
-    @ThriftField
+    @ThriftField()
     public void setSimilarty(Double newVal)
     {
         if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
@@ -702,7 +702,7 @@ public final class LogBean
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -717,7 +717,7 @@ public final class LogBean
         return this.referencedByCompareFace;
     }
     /** Setter method for {@link #referencedByCompareFace}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByCompareFace(FaceBean reference) {
         this.referencedByCompareFace = reference;
     }
@@ -732,7 +732,7 @@ public final class LogBean
         return this.referencedByVerifyFeature;
     }
     /** Setter method for {@link #referencedByVerifyFeature}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByVerifyFeature(FeatureBean reference) {
         this.referencedByVerifyFeature = reference;
     }
@@ -747,7 +747,7 @@ public final class LogBean
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }

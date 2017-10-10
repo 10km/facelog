@@ -52,7 +52,7 @@ public final class LogLightBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -72,7 +72,7 @@ public final class LogLightBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -88,7 +88,7 @@ public final class LogLightBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -103,7 +103,7 @@ public final class LogLightBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -136,7 +136,7 @@ public final class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField
+    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -206,7 +206,7 @@ public final class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to personId
      */
-    @ThriftField
+    @ThriftField()
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
@@ -275,7 +275,7 @@ public final class LogLightBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to name
      */
-    @ThriftField
+    @ThriftField()
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -333,7 +333,7 @@ public final class LogLightBean
      *
      * @param newVal the new value  to be assigned to papersType
      */
-    @ThriftField
+    @ThriftField()
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
@@ -401,7 +401,7 @@ public final class LogLightBean
      *
      * @param newVal the new value  to be assigned to papersNum
      */
-    @ThriftField
+    @ThriftField()
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||

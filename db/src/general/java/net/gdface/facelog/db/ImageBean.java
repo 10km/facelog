@@ -58,7 +58,7 @@ public final class ImageBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -78,7 +78,7 @@ public final class ImageBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -94,7 +94,7 @@ public final class ImageBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -109,7 +109,7 @@ public final class ImageBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -144,7 +144,7 @@ public final class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to md5
      */
-    @ThriftField
+    @ThriftField()
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
@@ -202,7 +202,7 @@ public final class ImageBean
      *
      * @param newVal the new value  to be assigned to format
      */
-    @ThriftField
+    @ThriftField()
     public void setFormat(String newVal)
     {
         if ((newVal != null && format != null && (newVal.compareTo(format) == 0)) ||
@@ -261,7 +261,7 @@ public final class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to width
      */
-    @ThriftField
+    @ThriftField()
     public void setWidth(Integer newVal)
     {
         if ((newVal != null && width != null && (newVal.compareTo(width) == 0)) ||
@@ -330,7 +330,7 @@ public final class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to height
      */
-    @ThriftField
+    @ThriftField()
     public void setHeight(Integer newVal)
     {
         if ((newVal != null && height != null && (newVal.compareTo(height) == 0)) ||
@@ -400,7 +400,7 @@ public final class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to depth
      */
-    @ThriftField
+    @ThriftField()
     public void setDepth(Integer newVal)
     {
         if ((newVal != null && depth != null && (newVal.compareTo(depth) == 0)) ||
@@ -470,7 +470,7 @@ public final class ImageBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to faceNum
      */
-    @ThriftField
+    @ThriftField()
     public void setFaceNum(Integer newVal)
     {
         if ((newVal != null && faceNum != null && (newVal.compareTo(faceNum) == 0)) ||
@@ -538,7 +538,7 @@ public final class ImageBean
      *
      * @param newVal the new value  to be assigned to thumbMd5
      */
-    @ThriftField
+    @ThriftField()
     public void setThumbMd5(String newVal)
     {
         if ((newVal != null && thumbMd5 != null && (newVal.compareTo(thumbMd5) == 0)) ||
@@ -597,7 +597,7 @@ public final class ImageBean
      *
      * @param newVal the new value  to be assigned to deviceId
      */
-    @ThriftField
+    @ThriftField()
     public void setDeviceId(Integer newVal)
     {
         if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
@@ -655,7 +655,7 @@ public final class ImageBean
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }

@@ -45,7 +45,7 @@ public final class FeatureBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -65,7 +65,7 @@ public final class FeatureBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -81,7 +81,7 @@ public final class FeatureBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -96,7 +96,7 @@ public final class FeatureBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -131,7 +131,7 @@ public final class FeatureBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to md5
      */
-    @ThriftField
+    @ThriftField()
     public void setMd5(String newVal)
     {
         if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
@@ -190,7 +190,7 @@ public final class FeatureBean
      *
      * @param newVal the new value  to be assigned to personId
      */
-    @ThriftField
+    @ThriftField()
     public void setPersonId(Integer newVal)
     {
         if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
@@ -259,7 +259,7 @@ public final class FeatureBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to feature
      */
-    @ThriftField
+    @ThriftField()
     public void setFeature(java.nio.ByteBuffer newVal)
     {
         if ((newVal != null && feature != null && (newVal.compareTo(feature) == 0)) ||
@@ -390,7 +390,7 @@ public final class FeatureBean
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }

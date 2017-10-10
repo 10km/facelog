@@ -78,7 +78,7 @@ public final class FaceBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -98,7 +98,7 @@ public final class FaceBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -114,7 +114,7 @@ public final class FaceBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -129,7 +129,7 @@ public final class FaceBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -164,7 +164,7 @@ public final class FaceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField
+    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -234,7 +234,7 @@ public final class FaceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to imageMd5
      */
-    @ThriftField
+    @ThriftField()
     public void setImageMd5(String newVal)
     {
         if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
@@ -292,7 +292,7 @@ public final class FaceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to faceLeft
      */
-    @ThriftField
+    @ThriftField()
     public void setFaceLeft(Integer newVal)
     {
         if ((newVal != null && faceLeft != null && (newVal.compareTo(faceLeft) == 0)) ||
@@ -360,7 +360,7 @@ public final class FaceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to faceTop
      */
-    @ThriftField
+    @ThriftField()
     public void setFaceTop(Integer newVal)
     {
         if ((newVal != null && faceTop != null && (newVal.compareTo(faceTop) == 0)) ||
@@ -428,7 +428,7 @@ public final class FaceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to faceWidth
      */
-    @ThriftField
+    @ThriftField()
     public void setFaceWidth(Integer newVal)
     {
         if ((newVal != null && faceWidth != null && (newVal.compareTo(faceWidth) == 0)) ||
@@ -496,7 +496,7 @@ public final class FaceBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to faceHeight
      */
-    @ThriftField
+    @ThriftField()
     public void setFaceHeight(Integer newVal)
     {
         if ((newVal != null && faceHeight != null && (newVal.compareTo(faceHeight) == 0)) ||
@@ -563,7 +563,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to eyeLeftx
      */
-    @ThriftField
+    @ThriftField()
     public void setEyeLeftx(Integer newVal)
     {
         if ((newVal != null && eyeLeftx != null && (newVal.compareTo(eyeLeftx) == 0)) ||
@@ -630,7 +630,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to eyeLefty
      */
-    @ThriftField
+    @ThriftField()
     public void setEyeLefty(Integer newVal)
     {
         if ((newVal != null && eyeLefty != null && (newVal.compareTo(eyeLefty) == 0)) ||
@@ -697,7 +697,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to eyeRightx
      */
-    @ThriftField
+    @ThriftField()
     public void setEyeRightx(Integer newVal)
     {
         if ((newVal != null && eyeRightx != null && (newVal.compareTo(eyeRightx) == 0)) ||
@@ -764,7 +764,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to eyeRighty
      */
-    @ThriftField
+    @ThriftField()
     public void setEyeRighty(Integer newVal)
     {
         if ((newVal != null && eyeRighty != null && (newVal.compareTo(eyeRighty) == 0)) ||
@@ -831,7 +831,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to mouthX
      */
-    @ThriftField
+    @ThriftField()
     public void setMouthX(Integer newVal)
     {
         if ((newVal != null && mouthX != null && (newVal.compareTo(mouthX) == 0)) ||
@@ -898,7 +898,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to mouthY
      */
-    @ThriftField
+    @ThriftField()
     public void setMouthY(Integer newVal)
     {
         if ((newVal != null && mouthY != null && (newVal.compareTo(mouthY) == 0)) ||
@@ -965,7 +965,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to noseX
      */
-    @ThriftField
+    @ThriftField()
     public void setNoseX(Integer newVal)
     {
         if ((newVal != null && noseX != null && (newVal.compareTo(noseX) == 0)) ||
@@ -1032,7 +1032,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to noseY
      */
-    @ThriftField
+    @ThriftField()
     public void setNoseY(Integer newVal)
     {
         if ((newVal != null && noseY != null && (newVal.compareTo(noseY) == 0)) ||
@@ -1099,7 +1099,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to angleYaw
      */
-    @ThriftField
+    @ThriftField()
     public void setAngleYaw(Integer newVal)
     {
         if ((newVal != null && angleYaw != null && (newVal.compareTo(angleYaw) == 0)) ||
@@ -1166,7 +1166,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to anglePitch
      */
-    @ThriftField
+    @ThriftField()
     public void setAnglePitch(Integer newVal)
     {
         if ((newVal != null && anglePitch != null && (newVal.compareTo(anglePitch) == 0)) ||
@@ -1233,7 +1233,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to angleRoll
      */
-    @ThriftField
+    @ThriftField()
     public void setAngleRoll(Integer newVal)
     {
         if ((newVal != null && angleRoll != null && (newVal.compareTo(angleRoll) == 0)) ||
@@ -1301,7 +1301,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to extInfo
      */
-    @ThriftField
+    @ThriftField()
     public void setExtInfo(java.nio.ByteBuffer newVal)
     {
         if ((newVal != null && extInfo != null && (newVal.compareTo(extInfo) == 0)) ||
@@ -1360,7 +1360,7 @@ public final class FaceBean
      *
      * @param newVal the new value  to be assigned to featureMd5
      */
-    @ThriftField
+    @ThriftField()
     public void setFeatureMd5(String newVal)
     {
         if ((newVal != null && featureMd5 != null && (newVal.compareTo(featureMd5) == 0)) ||
@@ -1491,7 +1491,7 @@ public final class FaceBean
         return this.referencedByFeatureMd5;
     }
     /** Setter method for {@link #referencedByFeatureMd5}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByFeatureMd5(FeatureBean reference) {
         this.referencedByFeatureMd5 = reference;
     }
@@ -1506,7 +1506,7 @@ public final class FaceBean
         return this.referencedByImageMd5;
     }
     /** Setter method for {@link #referencedByImageMd5}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
     }

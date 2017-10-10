@@ -65,7 +65,7 @@ public final class PersonBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,requiredness=Requiredness.REQUIRED)
+    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -85,7 +85,7 @@ public final class PersonBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField
+    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -101,7 +101,7 @@ public final class PersonBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField
+    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
@@ -116,7 +116,7 @@ public final class PersonBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField
+    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -152,7 +152,7 @@ public final class PersonBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField
+    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -220,7 +220,7 @@ public final class PersonBean
      *
      * @param newVal the new value  to be assigned to groupId
      */
-    @ThriftField
+    @ThriftField()
     public void setGroupId(Integer newVal)
     {
         if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
@@ -289,7 +289,7 @@ public final class PersonBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to name
      */
-    @ThriftField
+    @ThriftField()
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -347,7 +347,7 @@ public final class PersonBean
      *
      * @param newVal the new value  to be assigned to sex
      */
-    @ThriftField
+    @ThriftField()
     public void setSex(Integer newVal)
     {
         if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
@@ -497,7 +497,7 @@ public final class PersonBean
      *
      * @param newVal the new value  to be assigned to papersType
      */
-    @ThriftField
+    @ThriftField()
     public void setPapersType(Integer newVal)
     {
         if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
@@ -565,7 +565,7 @@ public final class PersonBean
      *
      * @param newVal the new value  to be assigned to papersNum
      */
-    @ThriftField
+    @ThriftField()
     public void setPapersNum(String newVal)
     {
         if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
@@ -624,7 +624,7 @@ public final class PersonBean
      *
      * @param newVal the new value  to be assigned to imageMd5
      */
-    @ThriftField
+    @ThriftField()
     public void setImageMd5(String newVal)
     {
         if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
@@ -921,7 +921,7 @@ public final class PersonBean
         return this.referencedByImageMd5;
     }
     /** Setter method for {@link #referencedByImageMd5}. */
-    @ThriftField
+    @ThriftField()
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
     }
