@@ -30,6 +30,59 @@ import net.gdface.facelog.db.LogLightBean;
 public class BeanConverterUtils implements Constant {
     private BeanConverterUtils(){}
     /**
+     * 返回buffer中所有字节(position~limit),不改变buffer状态
+     * @param buffer
+     * @return
+     */
+    private static final byte[] getBytesInBuffer(ByteBuffer buffer){
+        int pos = buffer.position();
+        try{
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return bytes;
+        }finally{
+            buffer.position(pos);
+        }
+    }
+    /**
+     * {@code obj}转为{@code type}指定的类型
+     * @param type
+     * @param obj
+     * @return
+     */
+    @SuppressWarnings({ "unchecked" })
+    private static final <T> T convert(Class<T> type,Object obj){
+        try{
+            if(null ==obj && type.isPrimitive())
+                throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
+            return (T) obj;
+        }catch(ClassCastException ce){
+            // Long -> Date
+            if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
+                try {
+                    // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
+                    return type.getConstructor(long.class).newInstance(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            // Date -> Long,long
+            if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
+                	Long time = ((java.util.Date)obj).getTime();
+                    return (T)time;
+            }
+            // byte[] -> ByteBuffer
+            if(ByteBuffer.class == type && obj instanceof byte[]){
+                return (T) ByteBuffer.wrap((byte[]) obj);
+            }
+            // ByteBuffer -> byte[]
+            if(byte[].class == type && obj instanceof ByteBuffer){
+                return (T) getBytesInBuffer((ByteBuffer) obj);
+            }
+            throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
+        }
+    }
+    /**
      * implementation of {@link IBeanConverter} by reflect<br>
      * generic type converter for {@link DeviceBean} to N_DEVICE <br>
      * @author guyadong
@@ -41,59 +94,6 @@ public class BeanConverterUtils implements Constant {
         public DeviceBeanConverter(){
             super();
             init();
-        }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
         }
         public DeviceBeanConverter (Class<DeviceBean> leftClass, Class<N_DEVICE> rightClass){
             super(leftClass,rightClass);
@@ -239,59 +239,6 @@ public class BeanConverterUtils implements Constant {
         public FaceBeanConverter(){
             super();
             init();
-        }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
         }
         public FaceBeanConverter (Class<FaceBean> leftClass, Class<N_FACE> rightClass){
             super(leftClass,rightClass);
@@ -581,59 +528,6 @@ public class BeanConverterUtils implements Constant {
             super();
             init();
         }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
-        }
         public FeatureBeanConverter (Class<FeatureBean> leftClass, Class<N_FEATURE> rightClass){
             super(leftClass,rightClass);
             init();
@@ -733,59 +627,6 @@ public class BeanConverterUtils implements Constant {
         public ImageBeanConverter(){
             super();
             init();
-        }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
         }
         public ImageBeanConverter (Class<ImageBean> leftClass, Class<N_IMAGE> rightClass){
             super(leftClass,rightClass);
@@ -925,59 +766,6 @@ public class BeanConverterUtils implements Constant {
         public LogBeanConverter(){
             super();
             init();
-        }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
         }
         public LogBeanConverter (Class<LogBean> leftClass, Class<N_LOG> rightClass){
             super(leftClass,rightClass);
@@ -1134,59 +922,6 @@ public class BeanConverterUtils implements Constant {
         public PersonBeanConverter(){
             super();
             init();
-        }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
         }
         public PersonBeanConverter (Class<PersonBean> leftClass, Class<N_PERSON> rightClass){
             super(leftClass,rightClass);
@@ -1381,59 +1116,6 @@ public class BeanConverterUtils implements Constant {
             super();
             init();
         }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
-        }
         public StoreBeanConverter (Class<StoreBean> leftClass, Class<N_STORE> rightClass){
             super(leftClass,rightClass);
             init();
@@ -1512,59 +1194,6 @@ public class BeanConverterUtils implements Constant {
         public LogLightBeanConverter(){
             super();
             init();
-        }
-        /**
-         * 返回buffer中所有字节(position~limit),不改变buffer状态
-         * @param buffer
-         * @return
-         */
-        private static final byte[] getBytesInBuffer(ByteBuffer buffer){
-            int pos = buffer.position();
-            try{
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return bytes;
-            }finally{
-                buffer.position(pos);
-            }
-        }
-        /**
-         * {@code obj}转为{@code type}指定的类型
-         * @param type
-         * @param obj
-         * @return
-         */
-        @SuppressWarnings({ "unchecked" })
-        private static final <T> T convert(Class<T> type,Object obj){
-            try{
-                if(null ==obj && type.isPrimitive())
-                    throw new IllegalArgumentException(String.format("can't convert null to primitive type %s",type.getSimpleName()));
-                return (T) obj;
-            }catch(ClassCastException ce){
-                // Long -> Date
-                if(java.util.Date.class.isAssignableFrom(type) && (obj instanceof Long)){
-                    try {
-                        // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
-                        return type.getConstructor(long.class).newInstance(obj);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Date -> Long,long
-                if( (long.class == type || Long.class == type) && obj instanceof java.util.Date){
-                    	Long time = ((java.util.Date)obj).getTime();
-                        return (T)time;
-                }
-                // byte[] -> ByteBuffer
-                if(ByteBuffer.class == type && obj instanceof byte[]){
-                    return (T) ByteBuffer.wrap((byte[]) obj);
-                }
-                // ByteBuffer -> byte[]
-                if(byte[].class == type && obj instanceof ByteBuffer){
-                    return (T) getBytesInBuffer((ByteBuffer) obj);
-                }
-                throw new IllegalArgumentException(String.format("can't convert %s to %s",obj.getClass().getSimpleName(),type.getSimpleName()));
-            }
         }
         public LogLightBeanConverter (Class<LogLightBean> leftClass, Class<N_LOGLIGHT> rightClass){
             super(leftClass,rightClass);
