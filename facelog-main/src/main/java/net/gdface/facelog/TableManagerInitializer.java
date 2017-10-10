@@ -39,14 +39,15 @@ public class TableManagerInitializer {
 	
 	public static final TableManagerInitializer instance = new TableManagerInitializer();
 	private TableManagerInitializer() {
-		deviceManager = DeviceCacheManager.makeInstance(UpdateStrategy.always,100,60,TimeUnit.MINUTES);
-		faceManager = FaceCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
-		imageManager = ImageCacheManager.makeInstance(UpdateStrategy.always,100,10,TimeUnit.MINUTES);
-		logManager = LogCacheManager.makeInstance(UpdateStrategy.always,1000,60,TimeUnit.MINUTES);
+		// 配置cache参数
+		deviceManager = DeviceCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
+		faceManager = FaceCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
+		imageManager = ImageCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
+		logManager = LogCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
 		logLightManager = (ILogLightManager) TableInstance.getInstance(LogLightBean.class);
 		personManager = PersonCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
-		storeManager = StoreCacheManager.makeInstance(UpdateStrategy.always,100,10,TimeUnit.MINUTES);
-		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
+		storeManager = StoreCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
+		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
  
 		
 /*		deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
