@@ -58,7 +58,7 @@ public class TestFastjson {
 	    private boolean isNew=false;
 	    private List<User> users = new ArrayList<User>();
 	    public Date date=new Date();
-	    public java.sql.Date sqldate=new java.sql.Date(date.getTime());
+	    private java.sql.Date sqldate=new java.sql.Date(date.getTime());
 	    public byte[] array=new byte[]{22,33,3,2,3,1,5,-1};
 	    public ByteBuffer byteBuffer =ByteBuffer.wrap(array);
 	    public String nullStr=null;
@@ -101,6 +101,17 @@ public class TestFastjson {
 
 		public void setNew(boolean isNew) {
 			this.isNew = isNew;
+		}
+
+		public java.sql.Date getSqldate() {
+			return sqldate;
+		}
+
+		public void setSqldate(java.sql.Date sqldate) {
+			this.sqldate = sqldate;
+		}
+		public void setSqldate(long sqldate) {
+			this.sqldate =new java.sql.Date( sqldate);
 		}
 	}
 	@Test
