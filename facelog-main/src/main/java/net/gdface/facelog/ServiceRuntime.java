@@ -7,7 +7,6 @@ import com.facebook.swift.codec.ThriftStruct;
  * @author guyadong
  *
  */
-@ThriftStruct
 public class ServiceRuntime extends RuntimeException {
 	private static final long serialVersionUID = -4932379960883720487L;
 
