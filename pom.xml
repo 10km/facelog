@@ -25,5 +25,6 @@
   	<module>db</module>
     <module>simplemq</module>
     <module>facelog-main</module>
+    <module>facelog-client</module>
   </modules>
 </project>
