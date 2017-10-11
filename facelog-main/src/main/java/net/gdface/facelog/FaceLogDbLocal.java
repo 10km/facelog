@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.javatuples.Pair;
 
-import com.google.common.primitives.Ints;
-
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
@@ -755,9 +753,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	}
 
 	@Override
-	public List<LogBean> loadLogByWhere(String where, List<Integer> fieldList, int startRow, int numRows) throws ServiceRuntime {
+	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		try{
-			return logManager.loadByWhereAsList(where, null ==fieldList ?null: Ints.toArray(fieldList), startRow, numRows);
+			return logManager.loadByWhereAsList(where, null, startRow, numRows);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 

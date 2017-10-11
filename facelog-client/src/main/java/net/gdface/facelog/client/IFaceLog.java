@@ -204,9 +204,8 @@ public interface IFaceLog
         @ThriftMethod(value = "loadLogByWhere")
         ListenableFuture<List<LogBean>> loadLogByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-            @ThriftField(value=2, name="fieldList", requiredness=Requiredness.NONE) final List<Integer> fieldList,
-            @ThriftField(value=3, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-            @ThriftField(value=4, name="numRows", requiredness=Requiredness.NONE) final int numRows
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
         );
 
         @ThriftMethod(value = "loadLogLightByWhere")
@@ -545,9 +544,8 @@ public interface IFaceLog
     @ThriftMethod(value = "loadLogByWhere")
     List<LogBean> loadLogByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
-        @ThriftField(value=2, name="fieldList", requiredness=Requiredness.NONE) final List<Integer> fieldList,
-        @ThriftField(value=3, name="startRow", requiredness=Requiredness.NONE) final int startRow,
-        @ThriftField(value=4, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
     );
 
 

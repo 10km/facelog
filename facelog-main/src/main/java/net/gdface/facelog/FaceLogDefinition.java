@@ -15,6 +15,14 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PersonBean;
 
+/**
+ * 定义 FaceLog 服务接口<br>
+ * 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
+ * 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
+ * 所以这里采用抽象类来定义服务接口,如果抽象类中的方法是抽象的，也无法获取参数名，所以这里所有方法都有一个空的函数体。
+ * @author guyadong
+ *
+ */
 @ThriftService("IFaceLog")
 public abstract class FaceLogDefinition {
 
@@ -384,7 +392,7 @@ public abstract class FaceLogDefinition {
 	public void addLog(List<LogBean> beans) throws ServiceRuntime {
 	}
 	@ThriftMethod
-	public List<LogBean> loadLogByWhere(String where, List<Integer> fieldList, int startRow, int numRows)
+	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows)
 			throws ServiceRuntime {
 		return null;
 	}

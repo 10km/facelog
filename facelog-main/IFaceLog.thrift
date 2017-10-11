@@ -158,7 +158,7 @@ service IFaceLog {
   bool isDisable(1:  i32 personId);
   list<i32> loadAllPerson();
   list<string> loadFeatureMd5ByUpdate(1:  i64 timestamp);
-  list<LogBean> loadLogByWhere(1:  string where, 2:  list<i32> fieldList, 3:  i32 startRow, 4:  i32 numRows);
+  list<LogBean> loadLogByWhere(1:  string where, 2:  i32 startRow, 3:  i32 numRows);
   list<LogLightBean> loadLogLightByWhere(1:  string where, 2:  i32 startRow, 3:  i32 numRows);
   list<i32> loadPersonByWhere(1:  string where);
   list<i32> loadPersonIdByUpdate(1:  i64 timestamp);
