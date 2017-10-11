@@ -155,7 +155,8 @@ public abstract class FaceLogDefinition {
 	 * @param expiryDate 失效日期 
 	 * @throws ServiceRuntime
 	 */
-	void setPersonExpiryDate(List<Integer> personIdList, long expiryDate) throws ServiceRuntime {
+	@ThriftMethod("setPersonExpiryDateList")
+	public void setPersonExpiryDate(List<Integer> personIdList, long expiryDate) throws ServiceRuntime {
 	}
 
 	/**

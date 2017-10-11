@@ -175,4 +175,5 @@ service IFaceLog {
   PersonBean savePersonWithPhotoAndFeatureSaved(1:  PersonBean bean, 2:  string idPhotoMd5, 3:  string featureMd5);
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate);
+  void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate);
 }

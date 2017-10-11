@@ -311,6 +311,12 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
             @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
         );
+
+        @ThriftMethod(value = "setPersonExpiryDateList")
+        ListenableFuture<Void> setPersonExpiryDateList(
+            @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
+            @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
+        );
     }
     @ThriftMethod(value = "addFeature")
     FeatureBean addFeature(
@@ -660,6 +666,13 @@ public interface IFaceLog
     @ThriftMethod(value = "setPersonExpiryDate")
     void setPersonExpiryDate(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
+        @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
+    );
+
+
+    @ThriftMethod(value = "setPersonExpiryDateList")
+    void setPersonExpiryDateList(
+        @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
     );
 
