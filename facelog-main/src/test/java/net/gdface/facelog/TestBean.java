@@ -7,14 +7,14 @@ import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftStruct;
 
 @ThriftStruct
-public final class TestBean1 implements Cloneable,Serializable{
+public final class TestBean implements Cloneable,Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1258100305388020798L;
 	private byte[] blob;
 	private Integer id;
-	public TestBean1() {
+	public TestBean() {
 	}
 	@ThriftField(name="blob", value=1)
 	public ByteBuffer readBlob() {

@@ -7,7 +7,6 @@ import com.facebook.swift.service.ThriftMethod;
 import com.facebook.swift.service.ThriftService;
 
 import net.gdface.facelog.db.DeviceBean;
-import net.gdface.facelog.test2.TestBean2;
 
 @ThriftService
 public interface TestService {
@@ -16,11 +15,9 @@ public interface TestService {
     @ThriftMethod
     public void fooOne(ByteBuffer input);
     @ThriftMethod
-    public void setBean(TestBean1 bean);
+    public void setBean(TestBean bean);
     @ThriftMethod
-    public TestBean1 getBean() throws ServiceRuntime;
-    @ThriftMethod
-    public TestBean2 getBean2();
+    public TestBean getBean() throws ServiceRuntime;
     @ThriftMethod
     public DeviceBean getBean3();
 }
