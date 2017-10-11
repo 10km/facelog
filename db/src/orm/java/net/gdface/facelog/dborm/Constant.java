@@ -3,6 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
+// template: constant.java.vm
 // ______________________________________________________
 
 package net.gdface.facelog.dborm;
@@ -306,6 +307,7 @@ public interface Constant {
     //////////////////////////////////////
     // COLUMN NAME DECLARE
     //////////////////////////////////////    
+    /////////////////// fl_device ////////////
     /** Contains all the full fields of the fl_device table.*/
     public static final String FL_DEVICE_FULL_FIELDS ="fl_device.id"
                             + ",fl_device.name"
@@ -315,6 +317,27 @@ public interface Constant {
                             + ",fl_device.mac"
                             + ",fl_device.create_time"
                             + ",fl_device.update_time";
+    /** Field that contains the comma separated fields of the fl_device table. */
+    public static final String FL_DEVICE_FIELDS = "id"
+                            + ",name"
+                            + ",group_id"
+                            + ",version"
+                            + ",serial_no"
+                            + ",mac"
+                            + ",create_time"
+                            + ",update_time";
+    public static final java.util.List<String> FL_DEVICE_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_FIELDS.split(","));
+    /** Field that contains the comma separated java fields of the fl_device table. */
+    public static final String FL_DEVICE_JAVA_FIELDS = "id"
+                            + ",name"
+                            + ",groupId"
+                            + ",version"
+                            + ",serialNo"
+                            + ",mac"
+                            + ",createTime"
+                            + ",updateTime";
+    public static final java.util.List<String> FL_DEVICE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_JAVA_FIELDS.split(","));
+    /////////////////// fl_face ////////////
     /** Contains all the full fields of the fl_face table.*/
     public static final String FL_FACE_FULL_FIELDS ="fl_face.id"
                             + ",fl_face.image_md5"
@@ -336,72 +359,6 @@ public interface Constant {
                             + ",fl_face.ext_info"
                             + ",fl_face.feature_md5"
                             + ",fl_face.create_time";
-    /** Contains all the full fields of the fl_feature table.*/
-    public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
-                            + ",fl_feature.person_id"
-                            + ",fl_feature.feature"
-                            + ",fl_feature.update_time";
-    /** Contains all the full fields of the fl_image table.*/
-    public static final String FL_IMAGE_FULL_FIELDS ="fl_image.md5"
-                            + ",fl_image.format"
-                            + ",fl_image.width"
-                            + ",fl_image.height"
-                            + ",fl_image.depth"
-                            + ",fl_image.face_num"
-                            + ",fl_image.thumb_md5"
-                            + ",fl_image.device_id";
-    /** Contains all the full fields of the fl_log table.*/
-    public static final String FL_LOG_FULL_FIELDS ="fl_log.id"
-                            + ",fl_log.person_id"
-                            + ",fl_log.device_id"
-                            + ",fl_log.verify_feature"
-                            + ",fl_log.compare_face"
-                            + ",fl_log.similarty"
-                            + ",fl_log.verify_time"
-                            + ",fl_log.create_time";
-    /** Contains all the full fields of the fl_person table.*/
-    public static final String FL_PERSON_FULL_FIELDS ="fl_person.id"
-                            + ",fl_person.group_id"
-                            + ",fl_person.name"
-                            + ",fl_person.sex"
-                            + ",fl_person.birthdate"
-                            + ",fl_person.papers_type"
-                            + ",fl_person.papers_num"
-                            + ",fl_person.image_md5"
-                            + ",fl_person.expiry_date"
-                            + ",fl_person.create_time"
-                            + ",fl_person.update_time";
-    /** Contains all the full fields of the fl_store table.*/
-    public static final String FL_STORE_FULL_FIELDS ="fl_store.md5"
-                            + ",fl_store.encoding"
-                            + ",fl_store.data";
-    /** Contains all the full fields of the fl_log_light table.*/
-    public static final String FL_LOG_LIGHT_FULL_FIELDS ="fl_log_light.id"
-                            + ",fl_log_light.person_id"
-                            + ",fl_log_light.name"
-                            + ",fl_log_light.papers_type"
-                            + ",fl_log_light.papers_num"
-                            + ",fl_log_light.verify_time";
-    /** Field that contains the comma separated fields of the fl_device table. */
-    public static final String FL_DEVICE_FIELDS = "id"
-                            + ",name"
-                            + ",group_id"
-                            + ",version"
-                            + ",serial_no"
-                            + ",mac"
-                            + ",create_time"
-                            + ",update_time";
-    public static final java.util.List<String> FL_DEVICE_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_FIELDS.split(","));
-    /** Field that contains the comma separated java fields of the fl_device table. */
-    public static final String FL_DEVICE_JAVA_FIELDS = "id"
-                            + ",name"
-                            + ",groupId"
-                            + ",version"
-                            + ",serialNo"
-                            + ",mac"
-                            + ",createTime"
-                            + ",updateTime";
-    public static final java.util.List<String> FL_DEVICE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_JAVA_FIELDS.split(","));
     /** Field that contains the comma separated fields of the fl_face table. */
     public static final String FL_FACE_FIELDS = "id"
                             + ",image_md5"
@@ -446,6 +403,12 @@ public interface Constant {
                             + ",featureMd5"
                             + ",createTime";
     public static final java.util.List<String> FL_FACE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FACE_JAVA_FIELDS.split(","));
+    /////////////////// fl_feature ////////////
+    /** Contains all the full fields of the fl_feature table.*/
+    public static final String FL_FEATURE_FULL_FIELDS ="fl_feature.md5"
+                            + ",fl_feature.person_id"
+                            + ",fl_feature.feature"
+                            + ",fl_feature.update_time";
     /** Field that contains the comma separated fields of the fl_feature table. */
     public static final String FL_FEATURE_FIELDS = "md5"
                             + ",person_id"
@@ -458,6 +421,16 @@ public interface Constant {
                             + ",feature"
                             + ",updateTime";
     public static final java.util.List<String> FL_FEATURE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_FEATURE_JAVA_FIELDS.split(","));
+    /////////////////// fl_image ////////////
+    /** Contains all the full fields of the fl_image table.*/
+    public static final String FL_IMAGE_FULL_FIELDS ="fl_image.md5"
+                            + ",fl_image.format"
+                            + ",fl_image.width"
+                            + ",fl_image.height"
+                            + ",fl_image.depth"
+                            + ",fl_image.face_num"
+                            + ",fl_image.thumb_md5"
+                            + ",fl_image.device_id";
     /** Field that contains the comma separated fields of the fl_image table. */
     public static final String FL_IMAGE_FIELDS = "md5"
                             + ",format"
@@ -478,6 +451,16 @@ public interface Constant {
                             + ",thumbMd5"
                             + ",deviceId";
     public static final java.util.List<String> FL_IMAGE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_IMAGE_JAVA_FIELDS.split(","));
+    /////////////////// fl_log ////////////
+    /** Contains all the full fields of the fl_log table.*/
+    public static final String FL_LOG_FULL_FIELDS ="fl_log.id"
+                            + ",fl_log.person_id"
+                            + ",fl_log.device_id"
+                            + ",fl_log.verify_feature"
+                            + ",fl_log.compare_face"
+                            + ",fl_log.similarty"
+                            + ",fl_log.verify_time"
+                            + ",fl_log.create_time";
     /** Field that contains the comma separated fields of the fl_log table. */
     public static final String FL_LOG_FIELDS = "id"
                             + ",person_id"
@@ -498,6 +481,19 @@ public interface Constant {
                             + ",verifyTime"
                             + ",createTime";
     public static final java.util.List<String> FL_LOG_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_LOG_JAVA_FIELDS.split(","));
+    /////////////////// fl_person ////////////
+    /** Contains all the full fields of the fl_person table.*/
+    public static final String FL_PERSON_FULL_FIELDS ="fl_person.id"
+                            + ",fl_person.group_id"
+                            + ",fl_person.name"
+                            + ",fl_person.sex"
+                            + ",fl_person.birthdate"
+                            + ",fl_person.papers_type"
+                            + ",fl_person.papers_num"
+                            + ",fl_person.image_md5"
+                            + ",fl_person.expiry_date"
+                            + ",fl_person.create_time"
+                            + ",fl_person.update_time";
     /** Field that contains the comma separated fields of the fl_person table. */
     public static final String FL_PERSON_FIELDS = "id"
                             + ",group_id"
@@ -524,6 +520,11 @@ public interface Constant {
                             + ",createTime"
                             + ",updateTime";
     public static final java.util.List<String> FL_PERSON_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_JAVA_FIELDS.split(","));
+    /////////////////// fl_store ////////////
+    /** Contains all the full fields of the fl_store table.*/
+    public static final String FL_STORE_FULL_FIELDS ="fl_store.md5"
+                            + ",fl_store.encoding"
+                            + ",fl_store.data";
     /** Field that contains the comma separated fields of the fl_store table. */
     public static final String FL_STORE_FIELDS = "md5"
                             + ",encoding"
@@ -534,6 +535,14 @@ public interface Constant {
                             + ",encoding"
                             + ",data";
     public static final java.util.List<String> FL_STORE_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_STORE_JAVA_FIELDS.split(","));
+    /////////////////// fl_log_light ////////////
+    /** Contains all the full fields of the fl_log_light table.*/
+    public static final String FL_LOG_LIGHT_FULL_FIELDS ="fl_log_light.id"
+                            + ",fl_log_light.person_id"
+                            + ",fl_log_light.name"
+                            + ",fl_log_light.papers_type"
+                            + ",fl_log_light.papers_num"
+                            + ",fl_log_light.verify_time";
     /** Field that contains the comma separated fields of the fl_log_light table. */
     public static final String FL_LOG_LIGHT_FIELDS = "id"
                             + ",person_id"

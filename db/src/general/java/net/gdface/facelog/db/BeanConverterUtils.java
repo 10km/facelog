@@ -7,9 +7,12 @@
 // ______________________________________________________
 
 package net.gdface.facelog.db;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -30,11 +33,9 @@ import net.gdface.facelog.db.LogLightBean;
  *
  */
 public class BeanConverterUtils implements Constant {
-    public static class NullCastPrimitiveException extends RuntimeException {
+    private static class NullCastPrimitiveException extends ClassCastException {
         private static final long serialVersionUID = 1L;
-        public NullCastPrimitiveException() {
-        }
-        public NullCastPrimitiveException(String message) {
+        NullCastPrimitiveException(String message) {
             super(message);
         }
     }
@@ -55,18 +56,19 @@ public class BeanConverterUtils implements Constant {
         }
     }
     private static final List<Long> toList(long[] array) {
-        java.util.ArrayList<Long> result = new java.util.ArrayList<Long>(array.length);
+        ArrayList<Long> result = new ArrayList<Long>(array.length);
         for (int i = 0; i < array.length; i++) {
             result.add(new Long(array[i]));
         }
         return result;
     }
     private static final long[] toPrimitive(List<Long> list) {        
-        long[]dst = new long[list.size()];
+        long[] dst = new long[list.size()];
         Long element;
         for (int i = 0; i < dst.length; i++) {
-            if(null != (element = list.get(i)))
-                dst[i] = element.longValue();
+            if(null == (element = list.get(i)))
+                throw new IllegalArgumentException("can't cast List<Long> to long[] because of null element");
+            dst[i] = element.longValue();
         }
         return dst;
     }
@@ -97,7 +99,9 @@ public class BeanConverterUtils implements Constant {
                     // call constructor,such as  java.util.Date#Date(long), java.sql.Time.Time(long)
                     return type.getConstructor(long.class).newInstance(source);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    throw new ClassCastException(writer.toString());
                 }
             }
             // Date -> Long,long
@@ -160,32 +164,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new DeviceBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_DEVICE,<br>
-         *                   if null, use default string:{@link Constant#FL_DEVICE_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_DEVICE_JAVA_FIELDS}
          */
         public DeviceBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see DeviceBeanConverter(String) */
+        /** @see #DeviceBeanConverter(String) */
         public DeviceBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link DeviceBeanConverter(String)}
+         * @param javaFields see also {@link #DeviceBeanConverter(String)}
          */
         public DeviceBeanConverter (Class<DeviceBean> leftClass, Class<R_DEVICE> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #DeviceBeanConverter(Class,Class,String) */
         public DeviceBeanConverter (Class<DeviceBean> leftClass, Class<R_DEVICE> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -211,6 +217,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setName");
@@ -322,6 +334,12 @@ public class BeanConverterUtils implements Constant {
                     }catch(NullCastPrimitiveException e){}
                 }
 */
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -371,32 +389,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new FaceBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_FACE,<br>
-         *                   if null, use default string:{@link Constant#FL_FACE_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_FACE_JAVA_FIELDS}
          */
         public FaceBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see FaceBeanConverter(String) */
+        /** @see #FaceBeanConverter(String) */
         public FaceBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link FaceBeanConverter(String)}
+         * @param javaFields see also {@link #FaceBeanConverter(String)}
          */
         public FaceBeanConverter (Class<FaceBean> leftClass, Class<R_FACE> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #FaceBeanConverter(Class,Class,String) */
         public FaceBeanConverter (Class<FaceBean> leftClass, Class<R_FACE> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -422,6 +442,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setImageMd5");
@@ -650,6 +676,12 @@ public class BeanConverterUtils implements Constant {
                     }catch(NullCastPrimitiveException e){}
                 }
 */
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -699,32 +731,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new FeatureBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_FEATURE,<br>
-         *                   if null, use default string:{@link Constant#FL_FEATURE_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_FEATURE_JAVA_FIELDS}
          */
         public FeatureBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see FeatureBeanConverter(String) */
+        /** @see #FeatureBeanConverter(String) */
         public FeatureBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link FeatureBeanConverter(String)}
+         * @param javaFields see also {@link #FeatureBeanConverter(String)}
          */
         public FeatureBeanConverter (Class<FeatureBean> leftClass, Class<R_FEATURE> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #FeatureBeanConverter(Class,Class,String) */
         public FeatureBeanConverter (Class<FeatureBean> leftClass, Class<R_FEATURE> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -750,6 +784,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setMd5");
             getSetterNoThrow("setMd5",String.class); 
             getGetter("setPersonId");
@@ -818,6 +858,12 @@ public class BeanConverterUtils implements Constant {
                     }catch(NullCastPrimitiveException e){}
                 }
 */
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -867,32 +913,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new ImageBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_IMAGE,<br>
-         *                   if null, use default string:{@link Constant#FL_IMAGE_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_IMAGE_JAVA_FIELDS}
          */
         public ImageBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see ImageBeanConverter(String) */
+        /** @see #ImageBeanConverter(String) */
         public ImageBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link ImageBeanConverter(String)}
+         * @param javaFields see also {@link #ImageBeanConverter(String)}
          */
         public ImageBeanConverter (Class<ImageBean> leftClass, Class<R_IMAGE> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #ImageBeanConverter(Class,Class,String) */
         public ImageBeanConverter (Class<ImageBean> leftClass, Class<R_IMAGE> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -918,6 +966,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setMd5");
             getSetterNoThrow("setMd5",String.class); 
             getGetter("setFormat");
@@ -1023,6 +1077,12 @@ public class BeanConverterUtils implements Constant {
                         bitOR("deviceId",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -1072,32 +1132,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new LogBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_LOG,<br>
-         *                   if null, use default string:{@link Constant#FL_LOG_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_LOG_JAVA_FIELDS}
          */
         public LogBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see LogBeanConverter(String) */
+        /** @see #LogBeanConverter(String) */
         public LogBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link LogBeanConverter(String)}
+         * @param javaFields see also {@link #LogBeanConverter(String)}
          */
         public LogBeanConverter (Class<LogBean> leftClass, Class<R_LOG> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #LogBeanConverter(Class,Class,String) */
         public LogBeanConverter (Class<LogBean> leftClass, Class<R_LOG> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -1123,6 +1185,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setPersonId");
@@ -1231,6 +1299,12 @@ public class BeanConverterUtils implements Constant {
                     }catch(NullCastPrimitiveException e){}
                 }
 */
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -1280,32 +1354,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new PersonBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_PERSON,<br>
-         *                   if null, use default string:{@link Constant#FL_PERSON_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_PERSON_JAVA_FIELDS}
          */
         public PersonBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see PersonBeanConverter(String) */
+        /** @see #PersonBeanConverter(String) */
         public PersonBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link PersonBeanConverter(String)}
+         * @param javaFields see also {@link #PersonBeanConverter(String)}
          */
         public PersonBeanConverter (Class<PersonBean> leftClass, Class<R_PERSON> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #PersonBeanConverter(Class,Class,String) */
         public PersonBeanConverter (Class<PersonBean> leftClass, Class<R_PERSON> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -1331,6 +1407,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setGroupId");
@@ -1472,6 +1554,12 @@ public class BeanConverterUtils implements Constant {
                     }catch(NullCastPrimitiveException e){}
                 }
 */
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -1521,32 +1609,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new StoreBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_STORE,<br>
-         *                   if null, use default string:{@link Constant#FL_STORE_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_STORE_JAVA_FIELDS}
          */
         public StoreBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see StoreBeanConverter(String) */
+        /** @see #StoreBeanConverter(String) */
         public StoreBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link StoreBeanConverter(String)}
+         * @param javaFields see also {@link #StoreBeanConverter(String)}
          */
         public StoreBeanConverter (Class<StoreBean> leftClass, Class<R_STORE> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #StoreBeanConverter(Class,Class,String) */
         public StoreBeanConverter (Class<StoreBean> leftClass, Class<R_STORE> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -1572,6 +1662,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setMd5");
             getSetterNoThrow("setMd5",String.class); 
             getGetter("setEncoding");
@@ -1627,6 +1723,12 @@ public class BeanConverterUtils implements Constant {
                         bitOR("data",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)
                     methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
@@ -1676,32 +1778,34 @@ public class BeanConverterUtils implements Constant {
             throw new NoSuchMethodException();
         }
         private void getSetterNoThrow(String name, Class<?>...types){
-        	try{
-        		getSetter(name,types);
-        	}catch(NoSuchMethodException e){}
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
         }
         /** 
          * usage: <pre>new LogLightBeanConverter&lt;Model&gt;(javaFields){};</pre>
          * @param javaFields a comma splice string,including all field name of R_LOGLIGHT,<br>
-         *                   if null, use default string:{@link Constant#FL_LOG_LIGHT_JAVA_FIELDS}
+         *                   if null or empty, use default string:{@link Constant#FL_LOG_LIGHT_JAVA_FIELDS}
          */
         public LogLightBeanConverter(String javaFields){
             super();
             init(javaFields);
         }
-        /** @see LogLightBeanConverter(String) */
+        /** @see #LogLightBeanConverter(String) */
         public LogLightBeanConverter(){
             this(null);
         }
         /**
+         * constructor
          * @param leftClass
          * @param rightClass
-         * @param javaFields see also {@link LogLightBeanConverter(String)}
+         * @param javaFields see also {@link #LogLightBeanConverter(String)}
          */
         public LogLightBeanConverter (Class<LogLightBean> leftClass, Class<R_LOGLIGHT> rightClass,String javaFields){
             super(leftClass,rightClass);
             init(javaFields);
         }
+        /** @see #LogLightBeanConverter(Class,Class,String) */
         public LogLightBeanConverter (Class<LogLightBean> leftClass, Class<R_LOGLIGHT> rightClass){
             this(leftClass,rightClass,null);
         }
@@ -1727,6 +1831,12 @@ public class BeanConverterUtils implements Constant {
             }catch(NoSuchMethodException e){
                 throw new RuntimeException(e);
             }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setPersonId");
@@ -1811,6 +1921,12 @@ public class BeanConverterUtils implements Constant {
                         setterMethod.invoke(right,cast(setterParams.get("setVerifyTime"),left.getVerifyTime()));
                         bitOR("verifyTime",modified);
                     }catch(NullCastPrimitiveException e){}
+                }
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
                 }
                 methods.get("setNew").invoke(right,left.isNew());
                 if( modified.length > 1)

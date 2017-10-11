@@ -25,26 +25,26 @@ import net.gdface.facelog.db.LogLightBean;
  * usage:<pre>new DbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7,Model8&gt;(){};</pre>
  * @author guyadong
  *
- * @param <N_DEVICE> native type for fl_device
- * @param <N_FACE> native type for fl_face
- * @param <N_FEATURE> native type for fl_feature
- * @param <N_IMAGE> native type for fl_image
- * @param <N_LOG> native type for fl_log
- * @param <N_PERSON> native type for fl_person
- * @param <N_STORE> native type for fl_store
- * @param <N_LOGLIGHT> native type for fl_log_light
+ * @param <R_DEVICE> native type for fl_device
+ * @param <R_FACE> native type for fl_face
+ * @param <R_FEATURE> native type for fl_feature
+ * @param <R_IMAGE> native type for fl_image
+ * @param <R_LOG> native type for fl_log
+ * @param <R_PERSON> native type for fl_person
+ * @param <R_STORE> native type for fl_store
+ * @param <R_LOGLIGHT> native type for fl_log_light
  *
  */
-public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_FEATURE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_LOGLIGHT> 
-    implements IDbConverter<N_DEVICE,N_FACE,N_FEATURE,N_IMAGE,N_LOG,N_PERSON,N_STORE,N_LOGLIGHT> {
-    private final IBeanConverter<DeviceBean,N_DEVICE> converterDeviceBean;
-    private final IBeanConverter<FaceBean,N_FACE> converterFaceBean;
-    private final IBeanConverter<FeatureBean,N_FEATURE> converterFeatureBean;
-    private final IBeanConverter<ImageBean,N_IMAGE> converterImageBean;
-    private final IBeanConverter<LogBean,N_LOG> converterLogBean;
-    private final IBeanConverter<PersonBean,N_PERSON> converterPersonBean;
-    private final IBeanConverter<StoreBean,N_STORE> converterStoreBean;
-    private final IBeanConverter<LogLightBean,N_LOGLIGHT> converterLogLightBean;
+public abstract class DbConverterGeneric<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG,R_PERSON,R_STORE,R_LOGLIGHT> 
+    implements IDbConverter<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG,R_PERSON,R_STORE,R_LOGLIGHT>, Constant{
+    private final IBeanConverter<DeviceBean,R_DEVICE> converterDeviceBean;
+    private final IBeanConverter<FaceBean,R_FACE> converterFaceBean;
+    private final IBeanConverter<FeatureBean,R_FEATURE> converterFeatureBean;
+    private final IBeanConverter<ImageBean,R_IMAGE> converterImageBean;
+    private final IBeanConverter<LogBean,R_LOG> converterLogBean;
+    private final IBeanConverter<PersonBean,R_PERSON> converterPersonBean;
+    private final IBeanConverter<StoreBean,R_STORE> converterStoreBean;
+    private final IBeanConverter<LogLightBean,R_LOGLIGHT> converterLogLightBean;
     private static Class<?> getRawClass(Type type){
         if(type instanceof Class<?>){
             return (Class<?>) type;
@@ -54,25 +54,49 @@ public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_FEATURE,N_IMAGE,N_LOG
             throw new IllegalArgumentException("invalid type");
         }
     }
+    /** 
+     * usage: <pre>new DbConverterGeneric&lt;Model...&gt;(javaFields...){};</pre>
+     * each 'javaFields' parameter is a comma splice string,including all field name of right type,<br>
+     * if null or empty, use default string of each table
+     */
     @SuppressWarnings("unchecked")
-    public DbConverterGeneric(){
+    public DbConverterGeneric(String javaFieldsOfDevice,
+                    String javaFieldsOfFace,
+                    String javaFieldsOfFeature,
+                    String javaFieldsOfImage,
+                    String javaFieldsOfLog,
+                    String javaFieldsOfPerson,
+                    String javaFieldsOfStore,
+                    String javaFieldsOfLogLight){
+        if(null == javaFieldsOfDevice || javaFieldsOfDevice.isEmpty())javaFieldsOfDevice = FL_DEVICE_JAVA_FIELDS;
+        if(null == javaFieldsOfFace || javaFieldsOfFace.isEmpty())javaFieldsOfFace = FL_FACE_JAVA_FIELDS;
+        if(null == javaFieldsOfFeature || javaFieldsOfFeature.isEmpty())javaFieldsOfFeature = FL_FEATURE_JAVA_FIELDS;
+        if(null == javaFieldsOfImage || javaFieldsOfImage.isEmpty())javaFieldsOfImage = FL_IMAGE_JAVA_FIELDS;
+        if(null == javaFieldsOfLog || javaFieldsOfLog.isEmpty())javaFieldsOfLog = FL_LOG_JAVA_FIELDS;
+        if(null == javaFieldsOfPerson || javaFieldsOfPerson.isEmpty())javaFieldsOfPerson = FL_PERSON_JAVA_FIELDS;
+        if(null == javaFieldsOfStore || javaFieldsOfStore.isEmpty())javaFieldsOfStore = FL_STORE_JAVA_FIELDS;
+        if(null == javaFieldsOfLogLight || javaFieldsOfLogLight.isEmpty())javaFieldsOfLogLight = FL_LOG_LIGHT_JAVA_FIELDS;
+        
         Type[] typeArguments = ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments();
-        this.converterDeviceBean = new BeanConverterUtils.DeviceBeanConverter<N_DEVICE>(DeviceBean.class,
-            (Class<N_DEVICE>)getRawClass(typeArguments[0]));            
-        this.converterFaceBean = new BeanConverterUtils.FaceBeanConverter<N_FACE>(FaceBean.class,
-            (Class<N_FACE>)getRawClass(typeArguments[1]));            
-        this.converterFeatureBean = new BeanConverterUtils.FeatureBeanConverter<N_FEATURE>(FeatureBean.class,
-            (Class<N_FEATURE>)getRawClass(typeArguments[2]));            
-        this.converterImageBean = new BeanConverterUtils.ImageBeanConverter<N_IMAGE>(ImageBean.class,
-            (Class<N_IMAGE>)getRawClass(typeArguments[3]));            
-        this.converterLogBean = new BeanConverterUtils.LogBeanConverter<N_LOG>(LogBean.class,
-            (Class<N_LOG>)getRawClass(typeArguments[4]));            
-        this.converterPersonBean = new BeanConverterUtils.PersonBeanConverter<N_PERSON>(PersonBean.class,
-            (Class<N_PERSON>)getRawClass(typeArguments[5]));            
-        this.converterStoreBean = new BeanConverterUtils.StoreBeanConverter<N_STORE>(StoreBean.class,
-            (Class<N_STORE>)getRawClass(typeArguments[6]));            
-        this.converterLogLightBean = new BeanConverterUtils.LogLightBeanConverter<N_LOGLIGHT>(LogLightBean.class,
-            (Class<N_LOGLIGHT>)getRawClass(typeArguments[7]));            
+        this.converterDeviceBean = new BeanConverterUtils.DeviceBeanConverter<R_DEVICE>(DeviceBean.class,
+            (Class<R_DEVICE>)getRawClass(typeArguments[0]),javaFieldsOfDevice);            
+        this.converterFaceBean = new BeanConverterUtils.FaceBeanConverter<R_FACE>(FaceBean.class,
+            (Class<R_FACE>)getRawClass(typeArguments[1]),javaFieldsOfFace);            
+        this.converterFeatureBean = new BeanConverterUtils.FeatureBeanConverter<R_FEATURE>(FeatureBean.class,
+            (Class<R_FEATURE>)getRawClass(typeArguments[2]),javaFieldsOfFeature);            
+        this.converterImageBean = new BeanConverterUtils.ImageBeanConverter<R_IMAGE>(ImageBean.class,
+            (Class<R_IMAGE>)getRawClass(typeArguments[3]),javaFieldsOfImage);            
+        this.converterLogBean = new BeanConverterUtils.LogBeanConverter<R_LOG>(LogBean.class,
+            (Class<R_LOG>)getRawClass(typeArguments[4]),javaFieldsOfLog);            
+        this.converterPersonBean = new BeanConverterUtils.PersonBeanConverter<R_PERSON>(PersonBean.class,
+            (Class<R_PERSON>)getRawClass(typeArguments[5]),javaFieldsOfPerson);            
+        this.converterStoreBean = new BeanConverterUtils.StoreBeanConverter<R_STORE>(StoreBean.class,
+            (Class<R_STORE>)getRawClass(typeArguments[6]),javaFieldsOfStore);            
+        this.converterLogLightBean = new BeanConverterUtils.LogLightBeanConverter<R_LOGLIGHT>(LogLightBean.class,
+            (Class<R_LOGLIGHT>)getRawClass(typeArguments[7]),javaFieldsOfLogLight);            
+    }
+    public DbConverterGeneric(){
+        this(null,null,null,null,null,null,null,null);
     }
     @Override
     public <L,R>IBeanConverter<L,R>getBeanConverter(Class<L> lClass,Class<R> rClass){
@@ -85,35 +109,35 @@ public abstract class DbConverterGeneric<N_DEVICE,N_FACE,N_FEATURE,N_IMAGE,N_LOG
     }
 
     @Override
-    public IBeanConverter<DeviceBean, N_DEVICE> getDeviceBeanConverter() {
+    public IBeanConverter<DeviceBean, R_DEVICE> getDeviceBeanConverter() {
         return converterDeviceBean;
     }
     @Override
-    public IBeanConverter<FaceBean, N_FACE> getFaceBeanConverter() {
+    public IBeanConverter<FaceBean, R_FACE> getFaceBeanConverter() {
         return converterFaceBean;
     }
     @Override
-    public IBeanConverter<FeatureBean, N_FEATURE> getFeatureBeanConverter() {
+    public IBeanConverter<FeatureBean, R_FEATURE> getFeatureBeanConverter() {
         return converterFeatureBean;
     }
     @Override
-    public IBeanConverter<ImageBean, N_IMAGE> getImageBeanConverter() {
+    public IBeanConverter<ImageBean, R_IMAGE> getImageBeanConverter() {
         return converterImageBean;
     }
     @Override
-    public IBeanConverter<LogBean, N_LOG> getLogBeanConverter() {
+    public IBeanConverter<LogBean, R_LOG> getLogBeanConverter() {
         return converterLogBean;
     }
     @Override
-    public IBeanConverter<PersonBean, N_PERSON> getPersonBeanConverter() {
+    public IBeanConverter<PersonBean, R_PERSON> getPersonBeanConverter() {
         return converterPersonBean;
     }
     @Override
-    public IBeanConverter<StoreBean, N_STORE> getStoreBeanConverter() {
+    public IBeanConverter<StoreBean, R_STORE> getStoreBeanConverter() {
         return converterStoreBean;
     }
     @Override
-    public IBeanConverter<LogLightBean, N_LOGLIGHT> getLogLightBeanConverter() {
+    public IBeanConverter<LogLightBean, R_LOGLIGHT> getLogLightBeanConverter() {
         return converterLogLightBean;
     }
 }
