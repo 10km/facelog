@@ -32,8 +32,8 @@ import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
 
-public class FaceLogDbLocal implements CommonConstant,
-		net.gdface.facelog.db.Constant, IFaceLog {
+public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
+		net.gdface.facelog.db.Constant {
 	private final  RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
@@ -358,9 +358,9 @@ public class FaceLogDbLocal implements CommonConstant,
 	 * @see net.gdface.facelog.IFaceLog#getPersons(java.util.List)
 	 */
 	@Override
-	public List<PersonBean> getPersons(List<Integer> list)throws ServiceRuntime {
+	public List<PersonBean> getPersons(List<Integer> idList)throws ServiceRuntime {
 		try{
-			return _getPerson(list);
+			return _getPerson(idList);
 		}catch(ServiceRuntime e){
 			throw e;
 		}catch (Exception e) {
