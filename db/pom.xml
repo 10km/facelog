@@ -45,7 +45,7 @@
 	            <version>3.0.0</version>
 	                        
 	            <executions>
-	                <!-- 配置ORM文件夹,用于保存sql2java生成的ORM代码 -->
+	                <!-- 配置orm,general文件夹,用于保存sql2java生成的ORM代码 -->
 	                <execution>
 	                    <id>add-source</id>
 	                    <phase>generate-sources</phase>
