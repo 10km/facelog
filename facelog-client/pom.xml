@@ -25,7 +25,7 @@
 		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-codec -->
 		<dependency>
 		    <groupId>com.facebook.swift</groupId>
-		    <artifactId>swift-codec</artifactId>
+		    <artifactId>swift-service</artifactId>
 		    <version>0.14.2</version>
 		</dependency>
   </dependencies>
