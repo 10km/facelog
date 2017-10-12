@@ -3,10 +3,11 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
-// template: table.listener.java.vm
+// template: tablelistener.java.vm
 // ______________________________________________________
 
 package net.gdface.facelog.db;
+
 /**
  * Listener that is notified of table changes.
  * @author guyadong
@@ -85,3 +86,4 @@ public interface TableListener<B>{
      */
     public void afterDelete(B bean);
 }
+
