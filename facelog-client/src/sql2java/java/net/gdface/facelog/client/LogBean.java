@@ -1015,4 +1015,33 @@ public  class LogBean
             index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.LogBean}
+     * @see {@link ThriftConverter#converterLogBean}
+     */
+    public net.gdface.facelog.client.thrift.LogBean toThrift(){
+        return ThriftConverter.converterLogBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.LogBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterLogBean}
+     */
+    public LogBean fromThrift(net.gdface.facelog.client.thrift.LogBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterLogBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.LogBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterLogBean}
+     */
+    public LogBean(net.gdface.facelog.client.thrift.LogBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterLogBean.fromRight(this,thriftBean);
+    }
 }

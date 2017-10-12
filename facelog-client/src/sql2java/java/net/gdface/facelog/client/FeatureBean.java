@@ -629,4 +629,33 @@ public  class FeatureBean
             index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.FeatureBean}
+     * @see {@link ThriftConverter#converterFeatureBean}
+     */
+    public net.gdface.facelog.client.thrift.FeatureBean toThrift(){
+        return ThriftConverter.converterFeatureBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.FeatureBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterFeatureBean}
+     */
+    public FeatureBean fromThrift(net.gdface.facelog.client.thrift.FeatureBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterFeatureBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.FeatureBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterFeatureBean}
+     */
+    public FeatureBean(net.gdface.facelog.client.thrift.FeatureBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterFeatureBean.fromRight(this,thriftBean);
+    }
 }

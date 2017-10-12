@@ -789,4 +789,33 @@ public  class LogLightBean
             index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.LogLightBean}
+     * @see {@link ThriftConverter#converterLogLightBean}
+     */
+    public net.gdface.facelog.client.thrift.LogLightBean toThrift(){
+        return ThriftConverter.converterLogLightBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.LogLightBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterLogLightBean}
+     */
+    public LogLightBean fromThrift(net.gdface.facelog.client.thrift.LogLightBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterLogLightBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.LogLightBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterLogLightBean}
+     */
+    public LogLightBean(net.gdface.facelog.client.thrift.LogLightBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterLogLightBean.fromRight(this,thriftBean);
+    }
 }

@@ -957,4 +957,33 @@ public  class ImageBean
             index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.ImageBean}
+     * @see {@link ThriftConverter#converterImageBean}
+     */
+    public net.gdface.facelog.client.thrift.ImageBean toThrift(){
+        return ThriftConverter.converterImageBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.ImageBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterImageBean}
+     */
+    public ImageBean fromThrift(net.gdface.facelog.client.thrift.ImageBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterImageBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.ImageBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterImageBean}
+     */
+    public ImageBean(net.gdface.facelog.client.thrift.ImageBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterImageBean.fromRight(this,thriftBean);
+    }
 }

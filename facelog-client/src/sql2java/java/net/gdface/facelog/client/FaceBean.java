@@ -1919,4 +1919,33 @@ public  class FaceBean
             index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.FaceBean}
+     * @see {@link ThriftConverter#converterFaceBean}
+     */
+    public net.gdface.facelog.client.thrift.FaceBean toThrift(){
+        return ThriftConverter.converterFaceBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.FaceBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterFaceBean}
+     */
+    public FaceBean fromThrift(net.gdface.facelog.client.thrift.FaceBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterFaceBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.FaceBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterFaceBean}
+     */
+    public FaceBean(net.gdface.facelog.client.thrift.FaceBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterFaceBean.fromRight(this,thriftBean);
+    }
 }
