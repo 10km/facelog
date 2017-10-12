@@ -47,7 +47,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setCreateTime(right.getCreateTime());
             if(right.checkUpdateTimeInitialized())
                 left.setUpdateTime(right.getUpdateTime());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -71,7 +71,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkUpdateTimeInitialized() )
 //                 right.setUpdateTime(left.getUpdateTime());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -119,7 +119,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setFeatureMd5(right.getFeatureMd5());
             if(right.checkCreateTimeInitialized())
                 left.setCreateTime(right.getCreateTime());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -166,7 +166,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_face.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() )
 //                 right.setCreateTime(left.getCreateTime());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -182,7 +182,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setFeature(right.getFeature());
             if(right.checkUpdateTimeInitialized())
                 left.setUpdateTime(right.getUpdateTime());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -197,7 +197,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_feature.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkUpdateTimeInitialized() )
 //                 right.setUpdateTime(left.getUpdateTime());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -221,7 +221,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setThumbMd5(right.getThumbMd5());
             if(right.checkDeviceIdInitialized())
                 left.setDeviceId(right.getDeviceId());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -243,7 +243,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setThumbMd5(left.getThumbMd5());
             if(left.checkDeviceIdInitialized() )
                 right.setDeviceId(left.getDeviceId());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -267,7 +267,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setVerifyTime(right.getVerifyTime());
             if(right.checkCreateTimeInitialized())
                 left.setCreateTime(right.getCreateTime());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -290,7 +290,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_log.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkCreateTimeInitialized() )
 //                 right.setCreateTime(left.getCreateTime());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -320,7 +320,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setCreateTime(right.getCreateTime());
             if(right.checkUpdateTimeInitialized())
                 left.setUpdateTime(right.getUpdateTime());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -350,7 +350,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkUpdateTimeInitialized() )
 //                 right.setUpdateTime(left.getUpdateTime());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -364,7 +364,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setEncoding(right.getEncoding());
             if(right.checkDataInitialized())
                 left.setData(right.getData());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -376,7 +376,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setEncoding(left.getEncoding());
             if(left.checkDataInitialized() )
                 right.setData(left.getData());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
@@ -396,7 +396,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setPapersNum(right.getPapersNum());
             if(right.checkVerifyTimeInitialized())
                 left.setVerifyTime(right.getVerifyTime());
-            left.isNew(right.isNew());
+            left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
 
@@ -414,7 +414,7 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setPapersNum(left.getPapersNum());
             if(left.checkVerifyTimeInitialized() )
                 right.setVerifyTime(left.getVerifyTime());
-            right.isNew(left.isNew());
+            right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
         
