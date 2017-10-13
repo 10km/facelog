@@ -249,7 +249,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
@@ -266,7 +266,7 @@ public class BeanConverterUtils implements Constant {
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
                 if( bitCheck("updateTime",modified) && (null != (getterMethod = methods.get("getUpdateTime"))))
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -498,7 +498,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("imageMd5",modified) && (null != (getterMethod = methods.get("getImageMd5"))))
@@ -539,7 +539,7 @@ public class BeanConverterUtils implements Constant {
                     left.setFeatureMd5(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("createTime",modified) && (null != (getterMethod = methods.get("getCreateTime"))))
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -808,7 +808,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("md5",modified) && (null != (getterMethod = methods.get("getMd5"))))
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("personId",modified) && (null != (getterMethod = methods.get("getPersonId"))))
@@ -817,7 +817,7 @@ public class BeanConverterUtils implements Constant {
                     left.setFeature(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
                 if( bitCheck("updateTime",modified) && (null != (getterMethod = methods.get("getUpdateTime"))))
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -998,7 +998,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("md5",modified) && (null != (getterMethod = methods.get("getMd5"))))
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("format",modified) && (null != (getterMethod = methods.get("getFormat"))))
@@ -1015,7 +1015,7 @@ public class BeanConverterUtils implements Constant {
                     left.setThumbMd5(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("deviceId",modified) && (null != (getterMethod = methods.get("getDeviceId"))))
                     left.setDeviceId(cast(Integer.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -1217,7 +1217,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("personId",modified) && (null != (getterMethod = methods.get("getPersonId"))))
@@ -1234,7 +1234,7 @@ public class BeanConverterUtils implements Constant {
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
                 if( bitCheck("createTime",modified) && (null != (getterMethod = methods.get("getCreateTime"))))
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -1445,7 +1445,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("groupId",modified) && (null != (getterMethod = methods.get("getGroupId"))))
@@ -1468,7 +1468,7 @@ public class BeanConverterUtils implements Constant {
                     left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
                 if( bitCheck("updateTime",modified) && (null != (getterMethod = methods.get("getUpdateTime"))))
                     left.setUpdateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -1684,14 +1684,14 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("md5",modified) && (null != (getterMethod = methods.get("getMd5"))))
                     left.setMd5(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("encoding",modified) && (null != (getterMethod = methods.get("getEncoding"))))
                     left.setEncoding(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("data",modified) && (null != (getterMethod = methods.get("getData"))))
                     left.setData(cast(java.nio.ByteBuffer.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
@@ -1859,7 +1859,7 @@ public class BeanConverterUtils implements Constant {
                 if(rightIndexs.size() > 64)
                     modified = (long[])methods.get("getModified").invoke(right);
                 else
-                    modified = new long[]{(long)methods.get("getModified").invoke(right)};
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("personId",modified) && (null != (getterMethod = methods.get("getPersonId"))))
@@ -1872,7 +1872,7 @@ public class BeanConverterUtils implements Constant {
                     left.setPapersNum(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("verifyTime",modified) && (null != (getterMethod = methods.get("getVerifyTime"))))
                     left.setVerifyTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((boolean)methods.get("isNew").invoke(right));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
             }catch(Exception e){
