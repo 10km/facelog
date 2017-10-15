@@ -10,7 +10,7 @@
 // classloader.parent sun.misc.Launcher$ExtClassLoader
 
 /*
-com.facebook.swift.service.metadata.ThriftServiceMetadata@acf395d3
+com.facebook.swift.service.metadata.ThriftServiceMetadata
 IFaceLog
 0 name: addFeature 
 	param 0: feature class java.nio.ByteBuffer
