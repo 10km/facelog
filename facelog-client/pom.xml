@@ -7,21 +7,13 @@
     <artifactId>facelog</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>net.gdface.facelog</groupId>
   <artifactId>facelog-client</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <name>client</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
-<!--		<dependency>
-		    <groupId>com.facebook.swift</groupId>
-		    <artifactId>swift-service</artifactId>
-		    <version>0.14.2</version>
-		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-codec -->
 		<dependency>
 		    <groupId>com.facebook.swift</groupId>
@@ -37,7 +29,7 @@
 	            <version>3.0.0</version>
 	                        
 	            <executions>
-	                <!-- ÅäÖÃthrift,sql2javaÎÄ¼þ¼Ð,ÓÃÓÚ±£´æswiftºÍsql2javaÉú³ÉµÄclient´úÂë -->
+	                <!-- é…ç½®thrift,sql2javaæ–‡ä»¶å¤¹,ç”¨äºŽä¿å­˜swiftå’Œsql2javaç”Ÿæˆçš„clientä»£ç  -->
 	                <execution>
 	                    <id>add-source</id>
 	                    <phase>generate-sources</phase>
