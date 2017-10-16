@@ -7,9 +7,7 @@
 // ______________________________________________________
 
 
-// gu.rpc.thrift.SwiftServiceParser 
-// classloader sun.misc.Launcher$AppClassLoader
-// classloader.parent sun.misc.Launcher$ExtClassLoader
+
 
 /*
 com.facebook.swift.service.metadata.ThriftServiceMetadata
@@ -219,6 +217,10 @@ import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
 import static com.google.common.net.HostAndPort.fromParts;
 
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.Map.Entry;
+
 public class IFaceLogClient implements Constant{
     private final ThriftClientManager clientManager = new ThriftClientManager();
     private final net.gdface.facelog.client.thrift.IFaceLog service;
@@ -227,21 +229,48 @@ public class IFaceLogClient implements Constant{
             service = clientManager.createClient(
                     new FramedClientConnector(fromParts(host, port)),
                     net.gdface.facelog.client.thrift.IFaceLog.class).get();
-		    } catch (Exception e) {
-		    	throw new RuntimeException(e);
-		    }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+    }
+    public static final byte[] toBytes(ByteBuffer buffer){
+        if(null == buffer)return null;
+        int pos = buffer.position();
+        try{
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return bytes;
+        }finally{
+            buffer.position(pos);
+        }
+    }
+    protected static final<V>Map<byte[],V> toBytesKey(java.util.Map<ByteBuffer,V> source){
+        if(null == source)return null;
+        HashMap<byte[], V> dest = new java.util.HashMap<byte[],V>();
+        for(Entry<ByteBuffer, V> entry:source.entrySet()){
+            dest.put(toBytes(entry.getKey()), entry.getValue());
+        }
+        return dest;
+    }
+    protected static final<K> java.util.Map<K,byte[]> toBytesValue(java.util.Map<K,ByteBuffer> source){
+        if(null == source)return null;
+        HashMap<K,byte[]> dest = new java.util.HashMap<K,byte[]>();
+        for(Entry<K, ByteBuffer> entry:source.entrySet()){
+            dest.put(entry.getKey(),toBytes(entry.getValue()));
+        }
+        return dest;        
     }
 
-    public FeatureBean addFeature(byte[] feature,int personId,java.util.List<FaceBean> faecBeans){
+    public FeatureBean addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
         return ThriftConverter.converterFeatureBean.fromRight(service.addFeature(feature,
                 personId,
                 ThriftConverter.converterFaceBean.toRight(faecBeans)));
     }
 
-    public FeatureBean addFeature(byte[] feature,int personId,java.util.Map<java.nio.ByteBuffer, FaceBean> faceInfo,int deviceId){
+    public FeatureBean addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return ThriftConverter.converterFeatureBean.fromRight(service.addFeatureMulti(feature,
                 personId,
-                ThriftConverter.converterFaceBean.toRightValue(faceInfo),
+                toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
 
@@ -256,7 +285,7 @@ public class IFaceLogClient implements Constant{
         service.addLog(ThriftConverter.converterLogBean.toRight(bean));
     }
 
-    public void addLog(java.util.List<LogBean> beans){
+    public void addLog(List<LogBean> beans){
         service.addLogList(ThriftConverter.converterLogBean.toRight(beans));
     }
 
@@ -273,7 +302,7 @@ public class IFaceLogClient implements Constant{
                 deleteImage);
     }
 
-    public java.util.List<String> deleteFeature(String featureMd5,boolean deleteImage){
+    public List<String> deleteFeature(String featureMd5,boolean deleteImage){
         return service.deleteFeature(featureMd5,
                 deleteImage);
     }
@@ -290,11 +319,11 @@ public class IFaceLogClient implements Constant{
         return service.deletePersonByPapersNum(papersNum);
     }
 
-    public int deletePersons(java.util.List<Integer> personIdList){
+    public int deletePersons(List<Integer> personIdList){
         return service.deletePersons(personIdList);
     }
 
-    public int deletePersonsByPapersNum(java.util.List<String> papersNumlist){
+    public int deletePersonsByPapersNum(List<String> papersNumlist){
         return service.deletePersonsByPapersNum(papersNumlist);
     }
 
@@ -302,7 +331,7 @@ public class IFaceLogClient implements Constant{
         service.disablePerson(personId);
     }
 
-    public void disablePerson(java.util.List<Integer> personIdList){
+    public void disablePerson(List<Integer> personIdList){
         service.disablePersonList(personIdList);
     }
 
@@ -326,7 +355,7 @@ public class IFaceLogClient implements Constant{
         return ThriftConverter.converterDeviceBean.fromRight(service.getDevice(deviceId));
     }
 
-    public java.util.List<DeviceBean> getDevice(java.util.List<Integer> deviceId){
+    public List<DeviceBean> getDevice(List<Integer> deviceId){
         return ThriftConverter.converterDeviceBean.fromRight(service.getDeviceList(deviceId));
     }
 
@@ -334,7 +363,7 @@ public class IFaceLogClient implements Constant{
         return ThriftConverter.converterFeatureBean.fromRight(service.getFeature(md5));
     }
 
-    public java.util.List<String> getFeatureBeansByPersonId(int personId){
+    public List<String> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
 
@@ -342,7 +371,7 @@ public class IFaceLogClient implements Constant{
         return service.getFeatureBytes(md5);
     }
 
-    public java.util.List<FeatureBean> getFeature(java.util.List<String> md5){
+    public List<FeatureBean> getFeature(List<String> md5){
         return ThriftConverter.converterFeatureBean.fromRight(service.getFeatureList(md5));
     }
 
@@ -354,11 +383,11 @@ public class IFaceLogClient implements Constant{
         return service.getImageBytes(imageMD5);
     }
 
-    public java.util.List<String> getImagesAssociatedByFeature(String featureMd5){
+    public List<String> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
 
-    public java.util.List<LogBean> getLogBeansByPersonId(int personId){
+    public List<LogBean> getLogBeansByPersonId(int personId){
         return ThriftConverter.converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
     }
 
@@ -370,7 +399,7 @@ public class IFaceLogClient implements Constant{
         return ThriftConverter.converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
     }
 
-    public java.util.List<PersonBean> getPersons(java.util.List<Integer> idList){
+    public List<PersonBean> getPersons(List<Integer> idList){
         return ThriftConverter.converterPersonBean.fromRight(service.getPersons(idList));
     }
 
@@ -378,35 +407,35 @@ public class IFaceLogClient implements Constant{
         return service.isDisable(personId);
     }
 
-    public java.util.List<Integer> loadAllPerson(){
+    public List<Integer> loadAllPerson(){
         return service.loadAllPerson();
     }
 
-    public java.util.List<String> loadFeatureMd5ByUpdate(long timestamp){
+    public List<String> loadFeatureMd5ByUpdate(long timestamp){
         return service.loadFeatureMd5ByUpdate(timestamp);
     }
 
-    public java.util.List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
+    public List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
         return ThriftConverter.converterLogBean.fromRight(service.loadLogByWhere(where,
                 startRow,
                 numRows));
     }
 
-    public java.util.List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
+    public List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
         return ThriftConverter.converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
                 startRow,
                 numRows));
     }
 
-    public java.util.List<Integer> loadPersonByWhere(String where){
+    public List<Integer> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
 
-    public java.util.List<Integer> loadPersonIdByUpdate(long timestamp){
+    public List<Integer> loadPersonIdByUpdate(long timestamp){
         return service.loadPersonIdByUpdate(timestamp);
     }
 
-    public java.util.List<Integer> loadUpdatePersons(long timestamp){
+    public List<Integer> loadUpdatePersons(long timestamp){
         return service.loadUpdatePersons(timestamp);
     }
 
@@ -433,12 +462,12 @@ public class IFaceLogClient implements Constant{
                 deviceId));
     }
 
-    public void savePerson(java.util.List<PersonBean> beans){
+    public void savePerson(List<PersonBean> beans){
         service.savePersonList(ThriftConverter.converterPersonBean.toRight(beans));
     }
 
-    public int savePerson(java.util.Map<java.nio.ByteBuffer, PersonBean> persons){
-        return service.savePersonsWithPhoto(ThriftConverter.converterPersonBean.toRightValue(persons));
+    public int savePerson(Map<ByteBuffer, PersonBean> persons){
+        return service.savePersonsWithPhoto(toBytesKey(ThriftConverter.converterPersonBean.toRightValue(persons)));
     }
 
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
@@ -453,18 +482,18 @@ public class IFaceLogClient implements Constant{
                 deviceId));
     }
 
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,java.util.List<FaceBean> faceBeans){
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(ThriftConverter.converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
                 ThriftConverter.converterFaceBean.toRight(faceBeans)));
     }
 
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,java.util.Map<java.nio.ByteBuffer, FaceBean> faceInfo,int deviceId){
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(ThriftConverter.converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
-                ThriftConverter.converterFaceBean.toRightValue(faceInfo),
+                toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
 
@@ -479,7 +508,7 @@ public class IFaceLogClient implements Constant{
                 expiryDate);
     }
 
-    public void setPersonExpiryDate(java.util.List<Integer> personIdList,long expiryDate){
+    public void setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
         service.setPersonExpiryDateList(personIdList,
                 expiryDate);
     }
