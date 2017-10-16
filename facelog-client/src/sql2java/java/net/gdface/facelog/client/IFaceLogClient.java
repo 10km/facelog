@@ -5,9 +5,11 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: service.java.vm
 // ______________________________________________________
+
+
 // gu.rpc.thrift.SwiftServiceParser 
-// classloader java.net.FactoryURLClassLoader
-// classloader.parent org.apache.tools.ant.loader.AntClassLoader5
+// classloader sun.misc.Launcher$AppClassLoader
+// classloader.parent sun.misc.Launcher$ExtClassLoader
 
 /*
 com.facebook.swift.service.metadata.ThriftServiceMetadata
@@ -228,5 +230,257 @@ public class IFaceLogClient implements Constant{
 		    } catch (Exception e) {
 		    	throw new RuntimeException(e);
 		    }
+    }
+
+    public FeatureBean addFeature(byte[] feature,int personId,java.util.List<FaceBean> faecBeans){
+        return ThriftConverter.converterFeatureBean.fromRight(service.addFeature(feature,
+                personId,
+                ThriftConverter.converterFaceBean.toRight(faecBeans)));
+    }
+
+    public FeatureBean addFeature(byte[] feature,int personId,java.util.Map<java.nio.ByteBuffer, FaceBean> faceInfo,int deviceId){
+        return ThriftConverter.converterFeatureBean.fromRight(service.addFeatureMulti(feature,
+                personId,
+                ThriftConverter.converterFaceBean.toRightValue(faceInfo),
+                deviceId));
+    }
+
+    public ImageBean addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
+        return ThriftConverter.converterImageBean.fromRight(service.addImage(imageData,
+                deviceId,
+                ThriftConverter.converterFaceBean.toRight(faceBean),
+                personId));
+    }
+
+    public void addLog(LogBean bean){
+        service.addLog(ThriftConverter.converterLogBean.toRight(bean));
+    }
+
+    public void addLog(java.util.List<LogBean> beans){
+        service.addLogList(ThriftConverter.converterLogBean.toRight(beans));
+    }
+
+    public int countLogLightWhere(String where){
+        return service.countLogLightWhere(where);
+    }
+
+    public int countLogWhere(String where){
+        return service.countLogWhere(where);
+    }
+
+    public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
+        return service.deleteAllFeaturesByPersonId(personId,
+                deleteImage);
+    }
+
+    public java.util.List<String> deleteFeature(String featureMd5,boolean deleteImage){
+        return service.deleteFeature(featureMd5,
+                deleteImage);
+    }
+
+    public int deleteImage(String imageMd5){
+        return service.deleteImage(imageMd5);
+    }
+
+    public int deletePerson(int personId){
+        return service.deletePerson(personId);
+    }
+
+    public int deletePersonByPapersNum(String papersNum){
+        return service.deletePersonByPapersNum(papersNum);
+    }
+
+    public int deletePersons(java.util.List<Integer> personIdList){
+        return service.deletePersons(personIdList);
+    }
+
+    public int deletePersonsByPapersNum(java.util.List<String> papersNumlist){
+        return service.deletePersonsByPapersNum(papersNumlist);
+    }
+
+    public void disablePerson(int personId){
+        service.disablePerson(personId);
+    }
+
+    public void disablePerson(java.util.List<Integer> personIdList){
+        service.disablePersonList(personIdList);
+    }
+
+    public boolean existsDevice(int id){
+        return service.existsDevice(id);
+    }
+
+    public boolean existsFeature(String md5){
+        return service.existsFeature(md5);
+    }
+
+    public boolean existsImage(String md5){
+        return service.existsImage(md5);
+    }
+
+    public boolean existsPerson(int persionId){
+        return service.existsPerson(persionId);
+    }
+
+    public DeviceBean getDevice(int deviceId){
+        return ThriftConverter.converterDeviceBean.fromRight(service.getDevice(deviceId));
+    }
+
+    public java.util.List<DeviceBean> getDevice(java.util.List<Integer> deviceId){
+        return ThriftConverter.converterDeviceBean.fromRight(service.getDeviceList(deviceId));
+    }
+
+    public FeatureBean getFeature(String md5){
+        return ThriftConverter.converterFeatureBean.fromRight(service.getFeature(md5));
+    }
+
+    public java.util.List<String> getFeatureBeansByPersonId(int personId){
+        return service.getFeatureBeansByPersonId(personId);
+    }
+
+    public byte[] getFeatureBytes(String md5){
+        return service.getFeatureBytes(md5);
+    }
+
+    public java.util.List<FeatureBean> getFeature(java.util.List<String> md5){
+        return ThriftConverter.converterFeatureBean.fromRight(service.getFeatureList(md5));
+    }
+
+    public ImageBean getImage(String imageMD5){
+        return ThriftConverter.converterImageBean.fromRight(service.getImage(imageMD5));
+    }
+
+    public byte[] getImageBytes(String imageMD5){
+        return service.getImageBytes(imageMD5);
+    }
+
+    public java.util.List<String> getImagesAssociatedByFeature(String featureMd5){
+        return service.getImagesAssociatedByFeature(featureMd5);
+    }
+
+    public java.util.List<LogBean> getLogBeansByPersonId(int personId){
+        return ThriftConverter.converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
+    }
+
+    public PersonBean getPerson(int personId){
+        return ThriftConverter.converterPersonBean.fromRight(service.getPerson(personId));
+    }
+
+    public PersonBean getPersonByPapersNum(String papersNum){
+        return ThriftConverter.converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
+    }
+
+    public java.util.List<PersonBean> getPersons(java.util.List<Integer> idList){
+        return ThriftConverter.converterPersonBean.fromRight(service.getPersons(idList));
+    }
+
+    public boolean isDisable(int personId){
+        return service.isDisable(personId);
+    }
+
+    public java.util.List<Integer> loadAllPerson(){
+        return service.loadAllPerson();
+    }
+
+    public java.util.List<String> loadFeatureMd5ByUpdate(long timestamp){
+        return service.loadFeatureMd5ByUpdate(timestamp);
+    }
+
+    public java.util.List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
+        return ThriftConverter.converterLogBean.fromRight(service.loadLogByWhere(where,
+                startRow,
+                numRows));
+    }
+
+    public java.util.List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
+        return ThriftConverter.converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
+                startRow,
+                numRows));
+    }
+
+    public java.util.List<Integer> loadPersonByWhere(String where){
+        return service.loadPersonByWhere(where);
+    }
+
+    public java.util.List<Integer> loadPersonIdByUpdate(long timestamp){
+        return service.loadPersonIdByUpdate(timestamp);
+    }
+
+    public java.util.List<Integer> loadUpdatePersons(long timestamp){
+        return service.loadUpdatePersons(timestamp);
+    }
+
+    public void replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
+        service.replaceFeature(personId,
+                featureMd5,
+                deleteOldFeatureImage);
+    }
+
+    public DeviceBean saveDevice(DeviceBean deviceBean){
+        return ThriftConverter.converterDeviceBean.fromRight(service.saveDevice(ThriftConverter.converterDeviceBean.toRight(deviceBean)));
+    }
+
+    public PersonBean savePerson(PersonBean bean){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePerson(ThriftConverter.converterPersonBean.toRight(bean)));
+    }
+
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePersonFull(ThriftConverter.converterPersonBean.toRight(bean),
+                idPhoto,
+                feature,
+                featureImage,
+                ThriftConverter.converterFaceBean.toRight(featureFaceBean),
+                deviceId));
+    }
+
+    public void savePerson(java.util.List<PersonBean> beans){
+        service.savePersonList(ThriftConverter.converterPersonBean.toRight(beans));
+    }
+
+    public int savePerson(java.util.Map<java.nio.ByteBuffer, PersonBean> persons){
+        return service.savePersonsWithPhoto(ThriftConverter.converterPersonBean.toRightValue(persons));
+    }
+
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhoto(ThriftConverter.converterPersonBean.toRight(bean),
+                idPhoto));
+    }
+
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(ThriftConverter.converterPersonBean.toRight(bean),
+                idPhoto,
+                ThriftConverter.converterFeatureBean.toRight(featureBean),
+                deviceId));
+    }
+
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,java.util.List<FaceBean> faceBeans){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(ThriftConverter.converterPersonBean.toRight(bean),
+                idPhoto,
+                feature,
+                ThriftConverter.converterFaceBean.toRight(faceBeans)));
+    }
+
+    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,java.util.Map<java.nio.ByteBuffer, FaceBean> faceInfo,int deviceId){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(ThriftConverter.converterPersonBean.toRight(bean),
+                idPhoto,
+                feature,
+                ThriftConverter.converterFaceBean.toRightValue(faceInfo),
+                deviceId));
+    }
+
+    public PersonBean savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
+        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(ThriftConverter.converterPersonBean.toRight(bean),
+                idPhotoMd5,
+                featureMd5));
+    }
+
+    public void setPersonExpiryDate(int personId,long expiryDate){
+        service.setPersonExpiryDate(personId,
+                expiryDate);
+    }
+
+    public void setPersonExpiryDate(java.util.List<Integer> personIdList,long expiryDate){
+        service.setPersonExpiryDateList(personIdList,
+                expiryDate);
     }
 }
