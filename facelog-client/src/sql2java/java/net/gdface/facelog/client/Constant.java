@@ -6,7 +6,6 @@
 // template: constant.java.vm
 // ______________________________________________________
 
-
 package net.gdface.facelog.client;
 /**
  * constant declare

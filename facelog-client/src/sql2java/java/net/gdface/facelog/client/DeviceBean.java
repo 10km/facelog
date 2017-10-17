@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: bean.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.client;
 import java.io.Serializable;
 /**

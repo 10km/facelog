@@ -5,12 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: service.java.vm
 // ______________________________________________________
-
-
-
-
-
-
 package net.gdface.facelog.client;
 import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
@@ -39,7 +33,7 @@ public class IFaceLogClient implements Constant{
                 throw new RuntimeException(e);
             }
     }
-    public static final byte[] toBytes(ByteBuffer buffer){
+    protected static final byte[] toBytes(ByteBuffer buffer){
         if(null == buffer)return null;
         int pos = buffer.position();
         try{
