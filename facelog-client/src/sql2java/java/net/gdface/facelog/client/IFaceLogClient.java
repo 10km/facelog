@@ -5,12 +5,10 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: service.client.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.client;
 import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
 import static com.google.common.net.HostAndPort.fromParts;
-
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
