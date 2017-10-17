@@ -9,208 +9,6 @@
 
 
 
-/*
-com.facebook.swift.service.metadata.ThriftServiceMetadata
-IFaceLog
-0 name: addFeature 
-	param 0: feature class java.nio.ByteBuffer
-	param 1: personId class java.lang.Integer
-	param 2: faecBeans java.util.List<net.gdface.facelog.db.FaceBean>
-	return:class net.gdface.facelog.db.FeatureBean
-1 name: addFeatureMulti original name: addFeature 
-	param 0: feature class java.nio.ByteBuffer
-	param 1: personId class java.lang.Integer
-	param 2: faceInfo java.util.Map<java.nio.ByteBuffer, net.gdface.facelog.db.FaceBean>
-	param 3: deviceId class java.lang.Integer
-	return:class net.gdface.facelog.db.FeatureBean
-2 name: addImage 
-	param 0: imageData class java.nio.ByteBuffer
-	param 1: deviceId class java.lang.Integer
-	param 2: faceBean class net.gdface.facelog.db.FaceBean
-	param 3: personId class java.lang.Integer
-	return:class net.gdface.facelog.db.ImageBean
-3 name: addLog 
-	param 0: bean class net.gdface.facelog.db.LogBean
-	return:void
-4 name: addLogList original name: addLog 
-	param 0: beans java.util.List<net.gdface.facelog.db.LogBean>
-	return:void
-5 name: countLogLightWhere 
-	param 0: where class java.lang.String
-	return:int
-6 name: countLogWhere 
-	param 0: where class java.lang.String
-	return:int
-7 name: deleteAllFeaturesByPersonId 
-	param 0: personId int
-	param 1: deleteImage boolean
-	return:int
-8 name: deleteFeature 
-	param 0: featureMd5 class java.lang.String
-	param 1: deleteImage boolean
-	return:java.util.List<java.lang.String>
-9 name: deleteImage 
-	param 0: imageMd5 class java.lang.String
-	return:int
-10 name: deletePerson 
-	param 0: personId int
-	return:int
-11 name: deletePersonByPapersNum 
-	param 0: papersNum class java.lang.String
-	return:int
-12 name: deletePersons 
-	param 0: personIdList java.util.List<java.lang.Integer>
-	return:int
-13 name: deletePersonsByPapersNum 
-	param 0: papersNumlist java.util.List<java.lang.String>
-	return:int
-14 name: disablePerson 
-	param 0: personId int
-	return:void
-15 name: disablePersonList original name: disablePerson 
-	param 0: personIdList java.util.List<java.lang.Integer>
-	return:void
-16 name: existsDevice 
-	param 0: id int
-	return:boolean
-17 name: existsFeature 
-	param 0: md5 class java.lang.String
-	return:boolean
-18 name: existsImage 
-	param 0: md5 class java.lang.String
-	return:boolean
-19 name: existsPerson 
-	param 0: persionId int
-	return:boolean
-20 name: getDevice 
-	param 0: deviceId class java.lang.Integer
-	return:class net.gdface.facelog.db.DeviceBean
-21 name: getDeviceList original name: getDevice 
-	param 0: deviceId java.util.List<java.lang.Integer>
-	return:java.util.List<net.gdface.facelog.db.DeviceBean>
-22 name: getFeature 
-	param 0: md5 class java.lang.String
-	return:class net.gdface.facelog.db.FeatureBean
-23 name: getFeatureBeansByPersonId 
-	param 0: personId int
-	return:java.util.List<java.lang.String>
-24 name: getFeatureBytes 
-	param 0: md5 class java.lang.String
-	return:class java.nio.ByteBuffer
-25 name: getFeatureList original name: getFeature 
-	param 0: md5 java.util.List<java.lang.String>
-	return:java.util.List<net.gdface.facelog.db.FeatureBean>
-26 name: getImage 
-	param 0: imageMD5 class java.lang.String
-	return:class net.gdface.facelog.db.ImageBean
-27 name: getImageBytes 
-	param 0: imageMD5 class java.lang.String
-	return:class java.nio.ByteBuffer
-28 name: getImagesAssociatedByFeature 
-	param 0: featureMd5 class java.lang.String
-	return:java.util.List<java.lang.String>
-29 name: getLogBeansByPersonId 
-	param 0: personId int
-	return:java.util.List<net.gdface.facelog.db.LogBean>
-30 name: getPerson 
-	param 0: personId int
-	return:class net.gdface.facelog.db.PersonBean
-31 name: getPersonByPapersNum 
-	param 0: papersNum class java.lang.String
-	return:class net.gdface.facelog.db.PersonBean
-32 name: getPersons 
-	param 0: idList java.util.List<java.lang.Integer>
-	return:java.util.List<net.gdface.facelog.db.PersonBean>
-33 name: isDisable 
-	param 0: personId int
-	return:boolean
-34 name: loadAllPerson 
-	return:java.util.List<java.lang.Integer>
-35 name: loadFeatureMd5ByUpdate 
-	param 0: timestamp long
-	return:java.util.List<java.lang.String>
-36 name: loadLogByWhere 
-	param 0: where class java.lang.String
-	param 1: startRow int
-	param 2: numRows int
-	return:java.util.List<net.gdface.facelog.db.LogBean>
-37 name: loadLogLightByWhere 
-	param 0: where class java.lang.String
-	param 1: startRow int
-	param 2: numRows int
-	return:java.util.List<net.gdface.facelog.db.LogLightBean>
-38 name: loadPersonByWhere 
-	param 0: where class java.lang.String
-	return:java.util.List<java.lang.Integer>
-39 name: loadPersonIdByUpdate 
-	param 0: timestamp long
-	return:java.util.List<java.lang.Integer>
-40 name: loadUpdatePersons 
-	param 0: timestamp long
-	return:java.util.List<java.lang.Integer>
-41 name: replaceFeature 
-	param 0: personId class java.lang.Integer
-	param 1: featureMd5 class java.lang.String
-	param 2: deleteOldFeatureImage boolean
-	return:void
-42 name: saveDevice 
-	param 0: deviceBean class net.gdface.facelog.db.DeviceBean
-	return:class net.gdface.facelog.db.DeviceBean
-43 name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	return:class net.gdface.facelog.db.PersonBean
-44 name: savePersonFull original name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	param 1: idPhoto class java.nio.ByteBuffer
-	param 2: feature class java.nio.ByteBuffer
-	param 3: featureImage class java.nio.ByteBuffer
-	param 4: featureFaceBean class net.gdface.facelog.db.FaceBean
-	param 5: deviceId class java.lang.Integer
-	return:class net.gdface.facelog.db.PersonBean
-45 name: savePersonList original name: savePerson 
-	param 0: beans java.util.List<net.gdface.facelog.db.PersonBean>
-	return:void
-46 name: savePersonWithPhoto original name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	param 1: idPhoto class java.nio.ByteBuffer
-	return:class net.gdface.facelog.db.PersonBean
-47 name: savePersonWithPhotoAndFeature original name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	param 1: idPhoto class java.nio.ByteBuffer
-	param 2: featureBean class net.gdface.facelog.db.FeatureBean
-	param 3: deviceId class java.lang.Integer
-	return:class net.gdface.facelog.db.PersonBean
-48 name: savePersonWithPhotoAndFeatureMultiFaces original name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	param 1: idPhoto class java.nio.ByteBuffer
-	param 2: feature class java.nio.ByteBuffer
-	param 3: faceBeans java.util.List<net.gdface.facelog.db.FaceBean>
-	return:class net.gdface.facelog.db.PersonBean
-49 name: savePersonWithPhotoAndFeatureMultiImage original name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	param 1: idPhoto class java.nio.ByteBuffer
-	param 2: feature class java.nio.ByteBuffer
-	param 3: faceInfo java.util.Map<java.nio.ByteBuffer, net.gdface.facelog.db.FaceBean>
-	param 4: deviceId class java.lang.Integer
-	return:class net.gdface.facelog.db.PersonBean
-50 name: savePersonWithPhotoAndFeatureSaved original name: savePerson 
-	param 0: bean class net.gdface.facelog.db.PersonBean
-	param 1: idPhotoMd5 class java.lang.String
-	param 2: featureMd5 class java.lang.String
-	return:class net.gdface.facelog.db.PersonBean
-51 name: savePersonsWithPhoto original name: savePerson 
-	param 0: persons java.util.Map<java.nio.ByteBuffer, net.gdface.facelog.db.PersonBean>
-	return:class java.lang.Integer
-52 name: setPersonExpiryDate 
-	param 0: personId int
-	param 1: expiryDate long
-	return:void
-53 name: setPersonExpiryDateList original name: setPersonExpiryDate 
-	param 0: personIdList java.util.List<java.lang.Integer>
-	param 1: expiryDate long
-	return:void
-
-*/
 
 package net.gdface.facelog.client;
 import com.facebook.nifty.client.FramedClientConnector;
@@ -220,6 +18,14 @@ import static com.google.common.net.HostAndPort.fromParts;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
+
+/**
+ * 定义 FaceLog 服务接口<br>
+ * 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
+ * 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
+ * 所以这里采用抽象类来定义服务接口,如果抽象类中的方法是抽象的，也无法获取参数名，所以这里所有方法都有一个空的函数体。
+ * @author:guyadong
+ */
 
 public class IFaceLogClient implements Constant{
     private final ThriftClientManager clientManager = new ThriftClientManager();
@@ -260,12 +66,29 @@ public class IFaceLogClient implements Constant{
         }
         return dest;        
     }
+    /**
+     * 增加一个人脸特征记录，如果记录已经存在则抛出异常
+     * @param:feature 特征数据
+     * @param:personId 关联的人员id(fl_person.id),可为null
+     * @param:faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @return:保存的人脸特征记录{@link FeatureBean}
+     * @throws:ServiceRuntime
+     */
 
     public FeatureBean addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
         return ThriftConverter.converterFeatureBean.fromRight(service.addFeature(feature,
                 personId,
                 ThriftConverter.converterFaceBean.toRight(faecBeans)));
     }
+    /**
+     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+     * @param:feature 特征数据
+     * @param:personId 关联的人员id(fl_person.id),可为null
+     * @param:faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
+     * @param:deviceId 图像来源设备id,可为null
+     * @return:保存的人脸特征记录{@link FeatureBean}
+     * @throws:ServiceRuntime
+     */
 
     public FeatureBean addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return ThriftConverter.converterFeatureBean.fromRight(service.addFeatureMulti(feature,
@@ -273,6 +96,16 @@ public class IFaceLogClient implements Constant{
                 toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
+    /**
+     * 保存图像数据,如果图像数据已经存在，则抛出异常
+     * @param:imageData 图像数据
+     * @param:deviceId 图像来源设备id,可为null
+     * @param:faceBean 关联的人脸信息对象,可为null
+     * @param:personId 关联的人员id(fl_person.id),可为null
+     * @return:
+     * @throws:ServiceRuntime
+     * @see:{@link #_addImage(ByteBuffer, DeviceBean, List, List)}
+     */
 
     public ImageBean addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
         return ThriftConverter.converterImageBean.fromRight(service.addImage(imageData,
@@ -280,10 +113,20 @@ public class IFaceLogClient implements Constant{
                 ThriftConverter.converterFaceBean.toRight(faceBean),
                 personId));
     }
+    /**
+     * 添加一条验证日志记录
+     * @param:bean
+     * @throws:ServiceRuntime
+     */
 
     public void addLog(LogBean bean){
         service.addLog(ThriftConverter.converterLogBean.toRight(bean));
     }
+    /**
+     * 添加一组验证日志记录(事务存储)
+     * @param:beans
+     * @throws:ServiceRuntime
+     */
 
     public void addLog(List<LogBean> beans){
         service.addLogList(ThriftConverter.converterLogBean.toRight(beans));
@@ -296,56 +139,137 @@ public class IFaceLogClient implements Constant{
     public int countLogWhere(String where){
         return service.countLogWhere(where);
     }
+    /**
+     * 删除 personId 关联的所有特征(feature)记录
+     * @param:personId
+     * @param:deleteImage 是否删除关联的 image记录
+     * @return:
+     * @see:#deleteFeature(String, boolean)
+     * @throws:ServiceRuntime
+     */
 
     public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
         return service.deleteAllFeaturesByPersonId(personId,
                 deleteImage);
     }
+    /**
+     * 删除featureMd5指定的特征记录及关联的face记录
+     * @param:featureMd5
+     * @param:deleteImage 是否删除关联的 image记录
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public List<String> deleteFeature(String featureMd5,boolean deleteImage){
         return service.deleteFeature(featureMd5,
                 deleteImage);
     }
+    /**
+     * 删除imageMd5指定图像及其缩略图
+     * @param:imageMd5
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public int deleteImage(String imageMd5){
         return service.deleteImage(imageMd5);
     }
+    /**
+     * 删除personId指定的人员(person)记录及关联的所有记录
+     * @param:personId
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public int deletePerson(int personId){
         return service.deletePerson(personId);
     }
+    /**
+     * 删除papersNum指定的人员(person)记录及关联的所有记录
+     * @param:papersNum 证件号码
+     * @return:返回删除的 person 记录数量
+     * @throws:ServiceRuntime
+     * @see:{@link #deletePerson(int)}
+     */
 
     public int deletePersonByPapersNum(String papersNum){
         return service.deletePersonByPapersNum(papersNum);
     }
+    /**
+     * 删除personIdList指定的人员(person)记录及关联的所有记录
+     * @param:personIdList 人员id列表
+     * @return:返回删除的 person 记录数量
+     * @throws:ServiceRuntime
+     */
 
     public int deletePersons(List<Integer> personIdList){
         return service.deletePersons(personIdList);
     }
+    /**
+     * 删除papersNum指定的人员(person)记录及关联的所有记录
+     * @param:papersNumlist 证件号码列表
+     * @return:返回删除的 person 记录数量
+     * @throws:ServiceRuntime
+     */
 
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         return service.deletePersonsByPapersNum(papersNumlist);
     }
+    /**
+     * 设置 personId 指定的人员为禁止状态
+     * @param:personId
+     * @throws:ServiceRuntime
+     * @see:#setPersonExpiryDate(int, long)
+     */
 
     public void disablePerson(int personId){
         service.disablePerson(personId);
     }
+    /**
+     * 设置 personIdList 指定的人员为禁止状态
+     * @param:personIdList 人员id列表
+     * @throws:ServiceRuntime
+     */
 
     public void disablePerson(List<Integer> personIdList){
         service.disablePersonList(personIdList);
     }
+    /**
+     * 判断id指定的设备记录是否存在
+     * @param:id
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public boolean existsDevice(int id){
         return service.existsDevice(id);
     }
+    /**
+     * 判断md5指定的特征记录是否存在
+     * @param:md5
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public boolean existsFeature(String md5){
         return service.existsFeature(md5);
     }
+    /**
+     * 判断md5指定的图像记录是否存在
+     * @param:md5
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public boolean existsImage(String md5){
         return service.existsImage(md5);
     }
+    /**
+     * 判断是否存在personId指定的人员记录
+     * @param:persionId
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public boolean existsPerson(int persionId){
         return service.existsPerson(persionId);
@@ -358,58 +282,143 @@ public class IFaceLogClient implements Constant{
     public List<DeviceBean> getDevice(List<Integer> deviceId){
         return ThriftConverter.converterDeviceBean.fromRight(service.getDeviceList(deviceId));
     }
+    /**
+     * 根据MD5校验码返回人脸特征数据记录
+     * @param:md5
+     * @return:如果数据库中没有对应的数据则返回null
+     * @throws:ServiceRuntime
+     */
 
     public FeatureBean getFeature(String md5){
         return ThriftConverter.converterFeatureBean.fromRight(service.getFeature(md5));
     }
+    /**
+     * 返回 persionId 关联的所有人脸特征记录
+     * @param:personId fl_person.id
+     * @return:返回 fl_feature.md5  列表
+     * @throws:ServiceRuntime
+     */
 
     public List<String> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
+    /**
+     * 根据MD5校验码返回人脸特征数据
+     * @param:md5
+     * @return:二进制数据字节数组,如果数据库中没有对应的数据则返回null
+     * @throws:ServiceRuntime
+     */
 
     public byte[] getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
+    /**
+     * 根据MD5校验码返回人脸特征数据记录
+     * @param:md5 md5列表
+     * @return:{@link FeatureBean}列表
+     * @throws:ServiceRuntime
+     */
 
     public List<FeatureBean> getFeature(List<String> md5){
         return ThriftConverter.converterFeatureBean.fromRight(service.getFeatureList(md5));
     }
+    /**
+     * 根据图像的MD5校验码返回图像记录
+     * @param:imageMD5
+     * @return:{@link ImageBean} ,如果没有对应记录则返回null
+     * @throws:ServiceRuntime
+     */
 
     public ImageBean getImage(String imageMD5){
         return ThriftConverter.converterImageBean.fromRight(service.getImage(imageMD5));
     }
+    /**
+     * 根据图像的MD5校验码返回图像数据
+     * @param:imageMD5
+     * @return:二进制数据字节数组,如果数据库中没有对应的数据则返回null
+     * @throws:ServiceRuntime
+     * @see:{@link #getBinary(String)}
+     */
 
     public byte[] getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
+    /**
+     * 返回featureMd5的人脸特征记录关联的所有图像记录id(MD5)
+     * @param:featureMd5 人脸特征id(MD5)
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
+    /**
+     * 返回 persionId 关联的所有日志记录
+     * @param:personId fl_person.id
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public List<LogBean> getLogBeansByPersonId(int personId){
         return ThriftConverter.converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
     }
+    /**
+     * 返回personId指定的人员记录
+     * @param:personId
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean getPerson(int personId){
         return ThriftConverter.converterPersonBean.fromRight(service.getPerson(personId));
     }
+    /**
+     * 根据证件号码返回人员记录
+     * @param:papersNum
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean getPersonByPapersNum(String papersNum){
         return ThriftConverter.converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
     }
+    /**
+     * 返回 list 指定的人员记录
+     * @param:idList 人员id列表
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public List<PersonBean> getPersons(List<Integer> idList){
         return ThriftConverter.converterPersonBean.fromRight(service.getPersons(idList));
     }
+    /**
+     * 判断 personId 指定的人员记录是否过期
+     * @param:personId
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public boolean isDisable(int personId){
         return service.isDisable(personId);
     }
+    /**
+     * 返回所有人员记录
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public List<Integer> loadAllPerson(){
         return service.loadAllPerson();
     }
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_feature.update_time 字段大于指定时间戳( timestamp )的所有fl_feature记录
+     * @param:timestamp
+     * @return:返回 fl_feature.md5 列表
+     * @throws:ServiceRuntime
+     */
 
     public List<String> loadFeatureMd5ByUpdate(long timestamp){
         return service.loadFeatureMd5ByUpdate(timestamp);
@@ -426,18 +435,46 @@ public class IFaceLogClient implements Constant{
                 startRow,
                 numRows));
     }
+    /**
+     * 返回 where 指定的所有人员记录
+     * @param:where SQL条件语句
+     * @return:返回 fl_person.id 列表
+     * @throws:ServiceRuntime
+     */
 
     public List<Integer> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_person.update_time 字段大于指定时间戳( timestamp )的所有fl_person记录
+     * @param:timestamp
+     * @return:返回fl_person.id 列表
+     * @throws:ServiceRuntime
+     */
 
     public List<Integer> loadPersonIdByUpdate(long timestamp){
         return service.loadPersonIdByUpdate(timestamp);
     }
+    /**
+     * (主动更新机制实现)<br>
+     * 返回fl_person.update_time字段大于指定时间戳( timestamp )的所有fl_person记录<br>
+     * 同时包含fl_feature更新记录引用的fl_person记录
+     * @param:timestamp
+     * @return:返回fl_person.id 列表
+     * @throws:ServiceRuntime
+     */
 
     public List<Integer> loadUpdatePersons(long timestamp){
         return service.loadUpdatePersons(timestamp);
     }
+    /**
+     * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
+     * @param:personId 人员记录id
+     * @param:featureMd5 人脸特征数据记录id (已经保存在数据库中)
+     * @param:deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
+     * @throws:ServiceRuntime
+     */
 
     public void replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
         service.replaceFeature(personId,
@@ -448,10 +485,25 @@ public class IFaceLogClient implements Constant{
     public DeviceBean saveDevice(DeviceBean deviceBean){
         return ThriftConverter.converterDeviceBean.fromRight(service.saveDevice(ThriftConverter.converterDeviceBean.toRight(deviceBean)));
     }
+    /**
+     * 保存人员(person)记录
+     * @param:bean
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean savePerson(PersonBean bean){
         return ThriftConverter.converterPersonBean.fromRight(service.savePerson(ThriftConverter.converterPersonBean.toRight(bean)));
     }
+    /**
+     * @param:bean 人员信息对象
+     * @param:idPhoto 标准照图像
+     * @param:feature 人脸特征数据
+     * @param:featureImage 提取特征源图像,为null 时,默认使用idPhoto
+     * @param:featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+     * @param:deviceBean featureImage来源设备对象
+     * @return:
+     */
 
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonFull(ThriftConverter.converterPersonBean.toRight(bean),
@@ -461,19 +513,46 @@ public class IFaceLogClient implements Constant{
                 ThriftConverter.converterFaceBean.toRight(featureFaceBean),
                 deviceId));
     }
+    /**
+     * 保存人员(person)记录
+     * @param:beans
+     * @throws:ServiceRuntime
+     */
 
     public void savePerson(List<PersonBean> beans){
         service.savePersonList(ThriftConverter.converterPersonBean.toRight(beans));
     }
+    /**
+     * 保存人员信息记录(包含标准照)
+     * @param:persons
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public int savePerson(Map<ByteBuffer, PersonBean> persons){
         return service.savePersonsWithPhoto(toBytesKey(ThriftConverter.converterPersonBean.toRightValue(persons)));
     }
+    /**
+     * 保存人员信息记录
+     * @param:bean
+     * @param:idPhoto 标准照图像对象,可为null
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhoto(ThriftConverter.converterPersonBean.toRight(bean),
                 idPhoto));
     }
+    /**
+     * 保存人员信息记录
+     * @param:bean
+     * @param:idPhoto 标准照图像,可为null
+     * @param:featureBean 用于验证的人脸特征数据对象,可为null
+     * @param:deviceId 标准照图像来源设备id,可为null
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(ThriftConverter.converterPersonBean.toRight(bean),
@@ -481,6 +560,15 @@ public class IFaceLogClient implements Constant{
                 ThriftConverter.converterFeatureBean.toRight(featureBean),
                 deviceId));
     }
+    /**
+     * 保存人员信息记录
+     * @param:bean
+     * @param:idPhoto 标准照图像,可为null
+     * @param:feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+     * @param:faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(ThriftConverter.converterPersonBean.toRight(bean),
@@ -488,6 +576,16 @@ public class IFaceLogClient implements Constant{
                 feature,
                 ThriftConverter.converterFaceBean.toRight(faceBeans)));
     }
+    /**
+     * 保存人员信息记录
+     * @param:bean
+     * @param:idPhoto 标准照图像,可为null
+     * @param:feature 用于验证的人脸特征数据,可为null
+     * @param:faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param:deviceId faceInfo 图像来源设备id,可为null
+     * @return:bean 保存的{@link PersonBean}对象
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(ThriftConverter.converterPersonBean.toRight(bean),
@@ -496,17 +594,37 @@ public class IFaceLogClient implements Constant{
                 toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
+    /**
+     * 保存人员信息记录
+     * @param:bean
+     * @param:idPhotoMd5 标准照图像对象,可为null
+     * @param:featureMd5 用于验证的人脸特征数据对象,可为null
+     * @return:
+     * @throws:ServiceRuntime
+     */
 
     public PersonBean savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
         return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(ThriftConverter.converterPersonBean.toRight(bean),
                 idPhotoMd5,
                 featureMd5));
     }
+    /**
+     * 修改 personId 指定的人员记录的有效期
+     * @param:personId
+     * @param:expiryDate 失效日期
+     * @throws:ServiceRuntime
+     */
 
     public void setPersonExpiryDate(int personId,long expiryDate){
         service.setPersonExpiryDate(personId,
                 expiryDate);
     }
+    /**
+     * 修改 personIdList 指定的人员记录的有效期
+     * @param:personIdList 人员id列表
+     * @param:expiryDate 失效日期
+     * @throws:ServiceRuntime
+     */
 
     public void setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
         service.setPersonExpiryDateList(personIdList,
