@@ -3,8 +3,9 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
-// template: service.java.vm
+// template: service.client.java.vm
 // ______________________________________________________
+
 package net.gdface.facelog.client;
 import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
