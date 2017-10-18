@@ -8,16 +8,16 @@
 package net.gdface.facelog.client;
 import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
 import static com.google.common.net.HostAndPort.fromParts;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * 定义 FaceLog 服务接口<br>
- * 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
- * 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
- * 所以这里采用抽象类来定义服务接口,如果抽象类中的方法是抽象的，也无法获取参数名，所以这里所有方法都有一个空的函数体。
+ * remote implementation of the service IFaceLog<br>
+ * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * @author guyadong
  */
 public class IFaceLogClient implements Constant{
@@ -43,21 +43,21 @@ public class IFaceLogClient implements Constant{
             buffer.position(pos);
         }
     }
-    protected static final<V>Map<byte[],V> toBytesKey(java.util.Map<ByteBuffer,V> source){
+    protected static final<V>Map<byte[],V> toBytesKey(Map<ByteBuffer,V> source){
         if(null == source)return null;
-        HashMap<byte[], V> dest = new java.util.HashMap<byte[],V>();
+        HashMap<byte[], V> dest = new HashMap<byte[],V>();
         for(Entry<ByteBuffer, V> entry:source.entrySet()){
             dest.put(toBytes(entry.getKey()), entry.getValue());
         }
         return dest;
     }
-    protected static final<K> java.util.Map<K,byte[]> toBytesValue(java.util.Map<K,ByteBuffer> source){
+    protected static final<K> Map<K,byte[]> toBytesValue(Map<K,ByteBuffer> source){
         if(null == source)return null;
-        HashMap<K,byte[]> dest = new java.util.HashMap<K,byte[]>();
-        for(Entry<K, ByteBuffer> entry:source.entrySet()){
-            dest.put(entry.getKey(),toBytes(entry.getValue()));
-        }
-        return dest;        
+        return Maps.transformValues(source, new Function<ByteBuffer,byte[]>(){
+            @Override
+            public byte[] apply(ByteBuffer input) {
+                return toBytes(input);
+            }});
     }
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
