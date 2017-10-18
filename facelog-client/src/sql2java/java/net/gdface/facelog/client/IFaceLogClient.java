@@ -10,18 +10,133 @@ import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Maps.EntryTransformer;
 import static com.google.common.net.HostAndPort.fromParts;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
-
 /**
  * remote implementation of the service IFaceLog<br>
  * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * @author guyadong
  */
 public class IFaceLogClient implements Constant{
+    
+    private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
+    private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
+    private IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean = ThriftConverter.converterFeatureBean;
+    private IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean = ThriftConverter.converterImageBean;
+    private IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean = ThriftConverter.converterLogBean;
+    private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
+    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
+
+    /** 
+     * @return converter of DeviceBean 
+     */
+    public IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> getDeviceBeanConverter(){
+        return converterDeviceBean;
+    }
+    /** 
+     * setup converter of DeviceBean 
+     * @param converterDeviceBean must not be null. 
+     */
+    public void setDeviceBeanConverter(IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean){
+        if(null == converterDeviceBean)
+            throw new NullPointerException();
+        this.converterDeviceBean = converterDeviceBean;
+    }
+    /** 
+     * @return converter of FaceBean 
+     */
+    public IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> getFaceBeanConverter(){
+        return converterFaceBean;
+    }
+    /** 
+     * setup converter of FaceBean 
+     * @param converterFaceBean must not be null. 
+     */
+    public void setFaceBeanConverter(IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean){
+        if(null == converterFaceBean)
+            throw new NullPointerException();
+        this.converterFaceBean = converterFaceBean;
+    }
+    /** 
+     * @return converter of FeatureBean 
+     */
+    public IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> getFeatureBeanConverter(){
+        return converterFeatureBean;
+    }
+    /** 
+     * setup converter of FeatureBean 
+     * @param converterFeatureBean must not be null. 
+     */
+    public void setFeatureBeanConverter(IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean){
+        if(null == converterFeatureBean)
+            throw new NullPointerException();
+        this.converterFeatureBean = converterFeatureBean;
+    }
+    /** 
+     * @return converter of ImageBean 
+     */
+    public IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> getImageBeanConverter(){
+        return converterImageBean;
+    }
+    /** 
+     * setup converter of ImageBean 
+     * @param converterImageBean must not be null. 
+     */
+    public void setImageBeanConverter(IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean){
+        if(null == converterImageBean)
+            throw new NullPointerException();
+        this.converterImageBean = converterImageBean;
+    }
+    /** 
+     * @return converter of LogBean 
+     */
+    public IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> getLogBeanConverter(){
+        return converterLogBean;
+    }
+    /** 
+     * setup converter of LogBean 
+     * @param converterLogBean must not be null. 
+     */
+    public void setLogBeanConverter(IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean){
+        if(null == converterLogBean)
+            throw new NullPointerException();
+        this.converterLogBean = converterLogBean;
+    }
+    /** 
+     * @return converter of PersonBean 
+     */
+    public IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> getPersonBeanConverter(){
+        return converterPersonBean;
+    }
+    /** 
+     * setup converter of PersonBean 
+     * @param converterPersonBean must not be null. 
+     */
+    public void setPersonBeanConverter(IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean){
+        if(null == converterPersonBean)
+            throw new NullPointerException();
+        this.converterPersonBean = converterPersonBean;
+    }
+    /** 
+     * @return converter of LogLightBean 
+     */
+    public IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> getLogLightBeanConverter(){
+        return converterLogLightBean;
+    }
+    /** 
+     * setup converter of LogLightBean 
+     * @param converterLogLightBean must not be null. 
+     */
+    public void setLogLightBeanConverter(IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean){
+        if(null == converterLogLightBean)
+            throw new NullPointerException();
+        this.converterLogLightBean = converterLogLightBean;
+    }
     private final ThriftClientManager clientManager = new ThriftClientManager();
+
     private final net.gdface.facelog.client.thrift.IFaceLog service;
     public IFaceLogClient(String host,int port){
         try{
@@ -51,13 +166,14 @@ public class IFaceLogClient implements Constant{
         }
         return dest;
     }
+    private static final EntryTransformer<Object,ByteBuffer,byte[]> transformer = new EntryTransformer<Object,ByteBuffer,byte[]>(){
+        @Override
+        public byte[] transformEntry(Object key, ByteBuffer value) {
+             return toBytes(value);
+        }};
     protected static final<K> Map<K,byte[]> toBytesValue(Map<K,ByteBuffer> source){
         if(null == source)return null;
-        return Maps.transformValues(source, new Function<ByteBuffer,byte[]>(){
-            @Override
-            public byte[] apply(ByteBuffer input) {
-                return toBytes(input);
-            }});
+        return Maps.transformEntries(source, transformer);
     }
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
@@ -67,9 +183,9 @@ public class IFaceLogClient implements Constant{
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     public FeatureBean addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
-        return ThriftConverter.converterFeatureBean.fromRight(service.addFeature(feature,
+        return converterFeatureBean.fromRight(service.addFeature(feature,
                 personId,
-                ThriftConverter.converterFaceBean.toRight(faecBeans)));
+                converterFaceBean.toRight(faecBeans)));
     }
     /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
@@ -80,9 +196,9 @@ public class IFaceLogClient implements Constant{
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     public FeatureBean addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
-        return ThriftConverter.converterFeatureBean.fromRight(service.addFeatureMulti(feature,
+        return converterFeatureBean.fromRight(service.addFeatureMulti(feature,
                 personId,
-                toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
+                toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
     /**
@@ -95,9 +211,9 @@ public class IFaceLogClient implements Constant{
      * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
     public ImageBean addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
-        return ThriftConverter.converterImageBean.fromRight(service.addImage(imageData,
+        return converterImageBean.fromRight(service.addImage(imageData,
                 deviceId,
-                ThriftConverter.converterFaceBean.toRight(faceBean),
+                converterFaceBean.toRight(faceBean),
                 personId));
     }
     /**
@@ -105,14 +221,14 @@ public class IFaceLogClient implements Constant{
      * @param bean
      */
     public void addLog(LogBean bean){
-        service.addLog(ThriftConverter.converterLogBean.toRight(bean));
+        service.addLog(converterLogBean.toRight(bean));
     }
     /**
      * 添加一组验证日志记录(事务存储)
      * @param beans
      */
     public void addLog(List<LogBean> beans){
-        service.addLogList(ThriftConverter.converterLogBean.toRight(beans));
+        service.addLogList(converterLogBean.toRight(beans));
     }
 
     public int countLogLightWhere(String where){
@@ -233,11 +349,11 @@ public class IFaceLogClient implements Constant{
     }
 
     public DeviceBean getDevice(int deviceId){
-        return ThriftConverter.converterDeviceBean.fromRight(service.getDevice(deviceId));
+        return converterDeviceBean.fromRight(service.getDevice(deviceId));
     }
 
     public List<DeviceBean> getDevice(List<Integer> deviceId){
-        return ThriftConverter.converterDeviceBean.fromRight(service.getDeviceList(deviceId));
+        return converterDeviceBean.fromRight(service.getDeviceList(deviceId));
     }
     /**
      * 根据MD5校验码返回人脸特征数据记录
@@ -245,7 +361,7 @@ public class IFaceLogClient implements Constant{
      * @return 如果数据库中没有对应的数据则返回null
      */
     public FeatureBean getFeature(String md5){
-        return ThriftConverter.converterFeatureBean.fromRight(service.getFeature(md5));
+        return converterFeatureBean.fromRight(service.getFeature(md5));
     }
     /**
      * 返回 persionId 关联的所有人脸特征记录
@@ -269,7 +385,7 @@ public class IFaceLogClient implements Constant{
      * @return {@link FeatureBean}列表
      */
     public List<FeatureBean> getFeature(List<String> md5){
-        return ThriftConverter.converterFeatureBean.fromRight(service.getFeatureList(md5));
+        return converterFeatureBean.fromRight(service.getFeatureList(md5));
     }
     /**
      * 根据图像的MD5校验码返回图像记录
@@ -277,7 +393,7 @@ public class IFaceLogClient implements Constant{
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
     public ImageBean getImage(String imageMD5){
-        return ThriftConverter.converterImageBean.fromRight(service.getImage(imageMD5));
+        return converterImageBean.fromRight(service.getImage(imageMD5));
     }
     /**
      * 根据图像的MD5校验码返回图像数据
@@ -302,7 +418,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public List<LogBean> getLogBeansByPersonId(int personId){
-        return ThriftConverter.converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
+        return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
     }
     /**
      * 返回personId指定的人员记录
@@ -310,7 +426,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean getPerson(int personId){
-        return ThriftConverter.converterPersonBean.fromRight(service.getPerson(personId));
+        return converterPersonBean.fromRight(service.getPerson(personId));
     }
     /**
      * 根据证件号码返回人员记录
@@ -318,7 +434,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean getPersonByPapersNum(String papersNum){
-        return ThriftConverter.converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
+        return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
     }
     /**
      * 返回 list 指定的人员记录
@@ -326,7 +442,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public List<PersonBean> getPersons(List<Integer> idList){
-        return ThriftConverter.converterPersonBean.fromRight(service.getPersons(idList));
+        return converterPersonBean.fromRight(service.getPersons(idList));
     }
     /**
      * 判断 personId 指定的人员记录是否过期
@@ -354,13 +470,13 @@ public class IFaceLogClient implements Constant{
     }
 
     public List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
-        return ThriftConverter.converterLogBean.fromRight(service.loadLogByWhere(where,
+        return converterLogBean.fromRight(service.loadLogByWhere(where,
                 startRow,
                 numRows));
     }
 
     public List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
-        return ThriftConverter.converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
+        return converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
                 startRow,
                 numRows));
     }
@@ -404,7 +520,7 @@ public class IFaceLogClient implements Constant{
     }
 
     public DeviceBean saveDevice(DeviceBean deviceBean){
-        return ThriftConverter.converterDeviceBean.fromRight(service.saveDevice(ThriftConverter.converterDeviceBean.toRight(deviceBean)));
+        return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));
     }
     /**
      * 保存人员(person)记录
@@ -412,7 +528,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean savePerson(PersonBean bean){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePerson(ThriftConverter.converterPersonBean.toRight(bean)));
+        return converterPersonBean.fromRight(service.savePerson(converterPersonBean.toRight(bean)));
     }
     /**
      * @param bean 人员信息对象
@@ -424,11 +540,11 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePersonFull(ThriftConverter.converterPersonBean.toRight(bean),
+        return converterPersonBean.fromRight(service.savePersonFull(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
                 featureImage,
-                ThriftConverter.converterFaceBean.toRight(featureFaceBean),
+                converterFaceBean.toRight(featureFaceBean),
                 deviceId));
     }
     /**
@@ -436,7 +552,7 @@ public class IFaceLogClient implements Constant{
      * @param beans
      */
     public void savePerson(List<PersonBean> beans){
-        service.savePersonList(ThriftConverter.converterPersonBean.toRight(beans));
+        service.savePersonList(converterPersonBean.toRight(beans));
     }
     /**
      * 保存人员信息记录(包含标准照)
@@ -444,7 +560,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public int savePerson(Map<ByteBuffer, PersonBean> persons){
-        return service.savePersonsWithPhoto(toBytesKey(ThriftConverter.converterPersonBean.toRightValue(persons)));
+        return service.savePersonsWithPhoto(toBytesKey(converterPersonBean.toRightValue(persons)));
     }
     /**
      * 保存人员信息记录
@@ -453,7 +569,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhoto(ThriftConverter.converterPersonBean.toRight(bean),
+        return converterPersonBean.fromRight(service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 idPhoto));
     }
     /**
@@ -465,9 +581,9 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(ThriftConverter.converterPersonBean.toRight(bean),
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
                 idPhoto,
-                ThriftConverter.converterFeatureBean.toRight(featureBean),
+                converterFeatureBean.toRight(featureBean),
                 deviceId));
     }
     /**
@@ -479,10 +595,10 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(ThriftConverter.converterPersonBean.toRight(bean),
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
-                ThriftConverter.converterFaceBean.toRight(faceBeans)));
+                converterFaceBean.toRight(faceBeans)));
     }
     /**
      * 保存人员信息记录
@@ -494,10 +610,10 @@ public class IFaceLogClient implements Constant{
      * @return bean 保存的{@link PersonBean}对象
      */
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(ThriftConverter.converterPersonBean.toRight(bean),
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
-                toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
+                toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
     /**
@@ -508,7 +624,7 @@ public class IFaceLogClient implements Constant{
      * @return 
      */
     public PersonBean savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
-        return ThriftConverter.converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(ThriftConverter.converterPersonBean.toRight(bean),
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
                 idPhotoMd5,
                 featureMd5));
     }

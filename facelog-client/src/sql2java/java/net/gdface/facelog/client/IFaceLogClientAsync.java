@@ -10,20 +10,135 @@ import com.facebook.nifty.client.FramedClientConnector;
 import com.facebook.swift.service.ThriftClientManager;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Maps.EntryTransformer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import static com.google.common.net.HostAndPort.fromParts;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
-
 /**
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * @author guyadong
  */
 public class IFaceLogClientAsync implements Constant{
+    
+    private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
+    private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
+    private IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean = ThriftConverter.converterFeatureBean;
+    private IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean = ThriftConverter.converterImageBean;
+    private IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean = ThriftConverter.converterLogBean;
+    private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
+    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
+
+    /** 
+     * @return converter of DeviceBean 
+     */
+    public IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> getDeviceBeanConverter(){
+        return converterDeviceBean;
+    }
+    /** 
+     * setup converter of DeviceBean 
+     * @param converterDeviceBean must not be null. 
+     */
+    public void setDeviceBeanConverter(IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean){
+        if(null == converterDeviceBean)
+            throw new NullPointerException();
+        this.converterDeviceBean = converterDeviceBean;
+    }
+    /** 
+     * @return converter of FaceBean 
+     */
+    public IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> getFaceBeanConverter(){
+        return converterFaceBean;
+    }
+    /** 
+     * setup converter of FaceBean 
+     * @param converterFaceBean must not be null. 
+     */
+    public void setFaceBeanConverter(IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean){
+        if(null == converterFaceBean)
+            throw new NullPointerException();
+        this.converterFaceBean = converterFaceBean;
+    }
+    /** 
+     * @return converter of FeatureBean 
+     */
+    public IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> getFeatureBeanConverter(){
+        return converterFeatureBean;
+    }
+    /** 
+     * setup converter of FeatureBean 
+     * @param converterFeatureBean must not be null. 
+     */
+    public void setFeatureBeanConverter(IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean){
+        if(null == converterFeatureBean)
+            throw new NullPointerException();
+        this.converterFeatureBean = converterFeatureBean;
+    }
+    /** 
+     * @return converter of ImageBean 
+     */
+    public IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> getImageBeanConverter(){
+        return converterImageBean;
+    }
+    /** 
+     * setup converter of ImageBean 
+     * @param converterImageBean must not be null. 
+     */
+    public void setImageBeanConverter(IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean){
+        if(null == converterImageBean)
+            throw new NullPointerException();
+        this.converterImageBean = converterImageBean;
+    }
+    /** 
+     * @return converter of LogBean 
+     */
+    public IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> getLogBeanConverter(){
+        return converterLogBean;
+    }
+    /** 
+     * setup converter of LogBean 
+     * @param converterLogBean must not be null. 
+     */
+    public void setLogBeanConverter(IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean){
+        if(null == converterLogBean)
+            throw new NullPointerException();
+        this.converterLogBean = converterLogBean;
+    }
+    /** 
+     * @return converter of PersonBean 
+     */
+    public IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> getPersonBeanConverter(){
+        return converterPersonBean;
+    }
+    /** 
+     * setup converter of PersonBean 
+     * @param converterPersonBean must not be null. 
+     */
+    public void setPersonBeanConverter(IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean){
+        if(null == converterPersonBean)
+            throw new NullPointerException();
+        this.converterPersonBean = converterPersonBean;
+    }
+    /** 
+     * @return converter of LogLightBean 
+     */
+    public IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> getLogLightBeanConverter(){
+        return converterLogLightBean;
+    }
+    /** 
+     * setup converter of LogLightBean 
+     * @param converterLogLightBean must not be null. 
+     */
+    public void setLogLightBeanConverter(IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean){
+        if(null == converterLogLightBean)
+            throw new NullPointerException();
+        this.converterLogLightBean = converterLogLightBean;
+    }
     private final ThriftClientManager clientManager = new ThriftClientManager();
+
     private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
     public IFaceLogClientAsync(String host,int port){
         try{
@@ -53,13 +168,14 @@ public class IFaceLogClientAsync implements Constant{
         }
         return dest;
     }
+    private static final EntryTransformer<Object,ByteBuffer,byte[]> transformer = new EntryTransformer<Object,ByteBuffer,byte[]>(){
+        @Override
+        public byte[] transformEntry(Object key, ByteBuffer value) {
+             return toBytes(value);
+        }};
     protected static final<K> Map<K,byte[]> toBytesValue(Map<K,ByteBuffer> source){
         if(null == source)return null;
-        return Maps.transformValues(source, new Function<ByteBuffer,byte[]>(){
-            @Override
-            public byte[] apply(ByteBuffer input) {
-                return toBytes(input);
-            }});
+        return Maps.transformEntries(source, transformer);
     }
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
@@ -72,11 +188,11 @@ public class IFaceLogClientAsync implements Constant{
         return Futures.transform(
                 service.addFeature(feature,
                 personId,
-                ThriftConverter.converterFaceBean.toRight(faecBeans)), 
+                converterFaceBean.toRight(faecBeans)), 
                 new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return ThriftConverter.converterFeatureBean.fromRight(input);
+                        return converterFeatureBean.fromRight(input);
                     }
                 });
     }
@@ -92,12 +208,12 @@ public class IFaceLogClientAsync implements Constant{
         return Futures.transform(
                 service.addFeatureMulti(feature,
                 personId,
-                toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
+                toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId), 
                 new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return ThriftConverter.converterFeatureBean.fromRight(input);
+                        return converterFeatureBean.fromRight(input);
                     }
                 });
     }
@@ -114,12 +230,12 @@ public class IFaceLogClientAsync implements Constant{
         return Futures.transform(
                 service.addImage(imageData,
                 deviceId,
-                ThriftConverter.converterFaceBean.toRight(faceBean),
+                converterFaceBean.toRight(faceBean),
                 personId), 
                 new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        return ThriftConverter.converterImageBean.fromRight(input);
+                        return converterImageBean.fromRight(input);
                     }
                 });
     }
@@ -128,14 +244,14 @@ public class IFaceLogClientAsync implements Constant{
      * @param bean
      */
     public ListenableFuture<Void> addLog(LogBean bean){
-        return service.addLog(ThriftConverter.converterLogBean.toRight(bean));
+        return service.addLog(converterLogBean.toRight(bean));
     }
     /**
      * 添加一组验证日志记录(事务存储)
      * @param beans
      */
     public ListenableFuture<Void> addLog(List<LogBean> beans){
-        return service.addLogList(ThriftConverter.converterLogBean.toRight(beans));
+        return service.addLogList(converterLogBean.toRight(beans));
     }
 
     public ListenableFuture<Integer> countLogLightWhere(String where){
@@ -261,7 +377,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        return ThriftConverter.converterDeviceBean.fromRight(input);
+                        return converterDeviceBean.fromRight(input);
                     }
                 });
     }
@@ -272,7 +388,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return ThriftConverter.converterDeviceBean.fromRight(input);
+                        return converterDeviceBean.fromRight(input);
                     }
                 });
     }
@@ -287,7 +403,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
-                        return ThriftConverter.converterFeatureBean.fromRight(input);
+                        return converterFeatureBean.fromRight(input);
                     }
                 });
     }
@@ -318,7 +434,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
                     @Override
                     public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
-                        return ThriftConverter.converterFeatureBean.fromRight(input);
+                        return converterFeatureBean.fromRight(input);
                     }
                 });
     }
@@ -333,7 +449,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
-                        return ThriftConverter.converterImageBean.fromRight(input);
+                        return converterImageBean.fromRight(input);
                     }
                 });
     }
@@ -365,7 +481,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        return ThriftConverter.converterLogBean.fromRight(input);
+                        return converterLogBean.fromRight(input);
                     }
                 });
     }
@@ -380,7 +496,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -395,7 +511,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -410,7 +526,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -447,7 +563,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        return ThriftConverter.converterLogBean.fromRight(input);
+                        return converterLogBean.fromRight(input);
                     }
                 });
     }
@@ -460,7 +576,7 @@ public class IFaceLogClientAsync implements Constant{
                 new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        return ThriftConverter.converterLogLightBean.fromRight(input);
+                        return converterLogLightBean.fromRight(input);
                     }
                 });
     }
@@ -505,11 +621,11 @@ public class IFaceLogClientAsync implements Constant{
 
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean){
         return Futures.transform(
-                service.saveDevice(ThriftConverter.converterDeviceBean.toRight(deviceBean)), 
+                service.saveDevice(converterDeviceBean.toRight(deviceBean)), 
                 new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
-                        return ThriftConverter.converterDeviceBean.fromRight(input);
+                        return converterDeviceBean.fromRight(input);
                     }
                 });
     }
@@ -520,11 +636,11 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean){
         return Futures.transform(
-                service.savePerson(ThriftConverter.converterPersonBean.toRight(bean)), 
+                service.savePerson(converterPersonBean.toRight(bean)), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -539,16 +655,16 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
         return Futures.transform(
-                service.savePersonFull(ThriftConverter.converterPersonBean.toRight(bean),
+                service.savePersonFull(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
                 featureImage,
-                ThriftConverter.converterFaceBean.toRight(featureFaceBean),
+                converterFaceBean.toRight(featureFaceBean),
                 deviceId), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -557,7 +673,7 @@ public class IFaceLogClientAsync implements Constant{
      * @param beans
      */
     public ListenableFuture<Void> savePerson(List<PersonBean> beans){
-        return service.savePersonList(ThriftConverter.converterPersonBean.toRight(beans));
+        return service.savePersonList(converterPersonBean.toRight(beans));
     }
     /**
      * 保存人员信息记录(包含标准照)
@@ -565,7 +681,7 @@ public class IFaceLogClientAsync implements Constant{
      * @return 
      */
     public ListenableFuture<Integer> savePerson(Map<ByteBuffer, PersonBean> persons){
-        return service.savePersonsWithPhoto(toBytesKey(ThriftConverter.converterPersonBean.toRightValue(persons)));
+        return service.savePersonsWithPhoto(toBytesKey(converterPersonBean.toRightValue(persons)));
     }
     /**
      * 保存人员信息记录
@@ -575,12 +691,12 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto){
         return Futures.transform(
-                service.savePersonWithPhoto(ThriftConverter.converterPersonBean.toRight(bean),
+                service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 idPhoto), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -594,14 +710,14 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeature(ThriftConverter.converterPersonBean.toRight(bean),
+                service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
                 idPhoto,
-                ThriftConverter.converterFeatureBean.toRight(featureBean),
+                converterFeatureBean.toRight(featureBean),
                 deviceId), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -615,14 +731,14 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(ThriftConverter.converterPersonBean.toRight(bean),
+                service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
-                ThriftConverter.converterFaceBean.toRight(faceBeans)), 
+                converterFaceBean.toRight(faceBeans)), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -637,15 +753,15 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiImage(ThriftConverter.converterPersonBean.toRight(bean),
+                service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
-                toBytesKey(ThriftConverter.converterFaceBean.toRightValue(faceInfo)),
+                toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
@@ -658,13 +774,13 @@ public class IFaceLogClientAsync implements Constant{
      */
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureSaved(ThriftConverter.converterPersonBean.toRight(bean),
+                service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
                 idPhotoMd5,
                 featureMd5), 
                 new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
-                        return ThriftConverter.converterPersonBean.fromRight(input);
+                        return converterPersonBean.fromRight(input);
                     }
                 });
     }
