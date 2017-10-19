@@ -226,6 +226,7 @@ public class CollectionUtils {
 			@Override 
 			public boolean equals(Object object) {
 				if (TransformedEntry.class.isInstance(object)) {
+				//if(object instanceof TransformedEntry)
 					return fromEntry.equals((TransformedEntry)object);
 				}
 				return super.equals(object);
