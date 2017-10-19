@@ -14,6 +14,7 @@ import com.google.common.collect.Maps.EntryTransformer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import static com.google.common.net.HostAndPort.fromParts;
+import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
@@ -148,6 +149,10 @@ public class IFaceLogClientAsync implements Constant{
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+    }
+    public IFaceLogClientAsync(net.gdface.facelog.client.thrift.IFaceLog.Async service){
+    	checkNotNull(service,"service is null");
+    	this.service = service;
     }
     protected static final byte[] toBytes(ByteBuffer buffer){
         if(null == buffer)return null;
