@@ -6,12 +6,9 @@
 // template: service.client.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
-import com.facebook.nifty.client.FramedClientConnector;
-import com.facebook.swift.service.ThriftClientManager;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Maps.EntryTransformer;
-import static com.google.common.net.HostAndPort.fromParts;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -21,7 +18,7 @@ import java.util.Map.Entry;
  * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * @author guyadong
  */
-public class IFaceLogClient implements Constant{
+class IFaceLogClient implements Constant{
     
     private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
     private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
@@ -136,19 +133,12 @@ public class IFaceLogClient implements Constant{
             throw new NullPointerException();
         this.converterLogLightBean = converterLogLightBean;
     }
-    private final ThriftClientManager clientManager = new ThriftClientManager();
-
     private final net.gdface.facelog.client.thrift.IFaceLog service;
-    public IFaceLogClient(String host,int port){
-        try{
-            service = clientManager.createClient(
-                    new FramedClientConnector(fromParts(host, port)),
-                    net.gdface.facelog.client.thrift.IFaceLog.class).get();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-    }
-    public IFaceLogClient(net.gdface.facelog.client.thrift.IFaceLog service){
+    /**
+     * constructor 
+     * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog created by Swift, must not be null
+     */
+    IFaceLogClient(net.gdface.facelog.client.thrift.IFaceLog service){
     	checkNotNull(service,"service is null");
     	this.service = service;
     }

@@ -6,14 +6,11 @@
 // template: service.client.async.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
-import com.facebook.nifty.client.FramedClientConnector;
-import com.facebook.swift.service.ThriftClientManager;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Maps.EntryTransformer;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import static com.google.common.net.HostAndPort.fromParts;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -23,7 +20,7 @@ import java.util.Map.Entry;
  * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * @author guyadong
  */
-public class IFaceLogClientAsync implements Constant{
+class IFaceLogClientAsync implements Constant{
     
     private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
     private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
@@ -138,19 +135,12 @@ public class IFaceLogClientAsync implements Constant{
             throw new NullPointerException();
         this.converterLogLightBean = converterLogLightBean;
     }
-    private final ThriftClientManager clientManager = new ThriftClientManager();
-
     private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
-    public IFaceLogClientAsync(String host,int port){
-        try{
-            service = clientManager.createClient(
-                    new FramedClientConnector(fromParts(host, port)),
-                    net.gdface.facelog.client.thrift.IFaceLog.Async.class).get();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-    }
-    public IFaceLogClientAsync(net.gdface.facelog.client.thrift.IFaceLog.Async service){
+    /**
+     * constructor 
+     * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog.Async created by Swift, must not be null
+     */
+    IFaceLogClientAsync(net.gdface.facelog.client.thrift.IFaceLog.Async service){
     	checkNotNull(service,"service is null");
     	this.service = service;
     }
