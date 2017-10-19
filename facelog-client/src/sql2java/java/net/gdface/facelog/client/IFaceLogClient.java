@@ -6,7 +6,6 @@
 // template: service.client.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Maps.EntryTransformer;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -20,120 +19,20 @@ import java.util.Map.Entry;
  */
 class IFaceLogClient implements Constant{
     
+    /** bean converter between {@link DeviceBean} and corresponding thrift bean */
     private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
+    /** bean converter between {@link FaceBean} and corresponding thrift bean */
     private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
+    /** bean converter between {@link FeatureBean} and corresponding thrift bean */
     private IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean = ThriftConverter.converterFeatureBean;
+    /** bean converter between {@link ImageBean} and corresponding thrift bean */
     private IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean = ThriftConverter.converterImageBean;
+    /** bean converter between {@link LogBean} and corresponding thrift bean */
     private IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean = ThriftConverter.converterLogBean;
+    /** bean converter between {@link PersonBean} and corresponding thrift bean */
     private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
-    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
-
-    /** 
-     * @return converter of DeviceBean 
-     */
-    public IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> getDeviceBeanConverter(){
-        return converterDeviceBean;
-    }
-    /** 
-     * setup converter of DeviceBean 
-     * @param converterDeviceBean must not be null. 
-     */
-    public void setDeviceBeanConverter(IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean){
-        if(null == converterDeviceBean)
-            throw new NullPointerException();
-        this.converterDeviceBean = converterDeviceBean;
-    }
-    /** 
-     * @return converter of FaceBean 
-     */
-    public IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> getFaceBeanConverter(){
-        return converterFaceBean;
-    }
-    /** 
-     * setup converter of FaceBean 
-     * @param converterFaceBean must not be null. 
-     */
-    public void setFaceBeanConverter(IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean){
-        if(null == converterFaceBean)
-            throw new NullPointerException();
-        this.converterFaceBean = converterFaceBean;
-    }
-    /** 
-     * @return converter of FeatureBean 
-     */
-    public IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> getFeatureBeanConverter(){
-        return converterFeatureBean;
-    }
-    /** 
-     * setup converter of FeatureBean 
-     * @param converterFeatureBean must not be null. 
-     */
-    public void setFeatureBeanConverter(IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean){
-        if(null == converterFeatureBean)
-            throw new NullPointerException();
-        this.converterFeatureBean = converterFeatureBean;
-    }
-    /** 
-     * @return converter of ImageBean 
-     */
-    public IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> getImageBeanConverter(){
-        return converterImageBean;
-    }
-    /** 
-     * setup converter of ImageBean 
-     * @param converterImageBean must not be null. 
-     */
-    public void setImageBeanConverter(IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean){
-        if(null == converterImageBean)
-            throw new NullPointerException();
-        this.converterImageBean = converterImageBean;
-    }
-    /** 
-     * @return converter of LogBean 
-     */
-    public IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> getLogBeanConverter(){
-        return converterLogBean;
-    }
-    /** 
-     * setup converter of LogBean 
-     * @param converterLogBean must not be null. 
-     */
-    public void setLogBeanConverter(IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean){
-        if(null == converterLogBean)
-            throw new NullPointerException();
-        this.converterLogBean = converterLogBean;
-    }
-    /** 
-     * @return converter of PersonBean 
-     */
-    public IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> getPersonBeanConverter(){
-        return converterPersonBean;
-    }
-    /** 
-     * setup converter of PersonBean 
-     * @param converterPersonBean must not be null. 
-     */
-    public void setPersonBeanConverter(IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean){
-        if(null == converterPersonBean)
-            throw new NullPointerException();
-        this.converterPersonBean = converterPersonBean;
-    }
-    /** 
-     * @return converter of LogLightBean 
-     */
-    public IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> getLogLightBeanConverter(){
-        return converterLogLightBean;
-    }
-    /** 
-     * setup converter of LogLightBean 
-     * @param converterLogLightBean must not be null. 
-     */
-    public void setLogLightBeanConverter(IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean){
-        if(null == converterLogLightBean)
-            throw new NullPointerException();
-        this.converterLogLightBean = converterLogLightBean;
-    }
-    private final net.gdface.facelog.client.thrift.IFaceLog service;
+    /** bean converter between {@link LogLightBean} and corresponding thrift bean */
+    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;    private final net.gdface.facelog.client.thrift.IFaceLog service;
     /**
      * constructor 
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog created by Swift, must not be null

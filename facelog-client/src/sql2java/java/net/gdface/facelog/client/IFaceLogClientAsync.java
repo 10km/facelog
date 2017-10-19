@@ -6,7 +6,6 @@
 // template: service.client.async.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Maps.EntryTransformer;
 import com.google.common.util.concurrent.Futures;
@@ -22,120 +21,20 @@ import java.util.Map.Entry;
  */
 class IFaceLogClientAsync implements Constant{
     
+    /** bean converter between {@link DeviceBean} and corresponding thrift bean */
     private IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean = ThriftConverter.converterDeviceBean;
+    /** bean converter between {@link FaceBean} and corresponding thrift bean */
     private IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean = ThriftConverter.converterFaceBean;
+    /** bean converter between {@link FeatureBean} and corresponding thrift bean */
     private IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean = ThriftConverter.converterFeatureBean;
+    /** bean converter between {@link ImageBean} and corresponding thrift bean */
     private IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean = ThriftConverter.converterImageBean;
+    /** bean converter between {@link LogBean} and corresponding thrift bean */
     private IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean = ThriftConverter.converterLogBean;
+    /** bean converter between {@link PersonBean} and corresponding thrift bean */
     private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
-    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
-
-    /** 
-     * @return converter of DeviceBean 
-     */
-    public IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> getDeviceBeanConverter(){
-        return converterDeviceBean;
-    }
-    /** 
-     * setup converter of DeviceBean 
-     * @param converterDeviceBean must not be null. 
-     */
-    public void setDeviceBeanConverter(IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean){
-        if(null == converterDeviceBean)
-            throw new NullPointerException();
-        this.converterDeviceBean = converterDeviceBean;
-    }
-    /** 
-     * @return converter of FaceBean 
-     */
-    public IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> getFaceBeanConverter(){
-        return converterFaceBean;
-    }
-    /** 
-     * setup converter of FaceBean 
-     * @param converterFaceBean must not be null. 
-     */
-    public void setFaceBeanConverter(IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean){
-        if(null == converterFaceBean)
-            throw new NullPointerException();
-        this.converterFaceBean = converterFaceBean;
-    }
-    /** 
-     * @return converter of FeatureBean 
-     */
-    public IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> getFeatureBeanConverter(){
-        return converterFeatureBean;
-    }
-    /** 
-     * setup converter of FeatureBean 
-     * @param converterFeatureBean must not be null. 
-     */
-    public void setFeatureBeanConverter(IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean){
-        if(null == converterFeatureBean)
-            throw new NullPointerException();
-        this.converterFeatureBean = converterFeatureBean;
-    }
-    /** 
-     * @return converter of ImageBean 
-     */
-    public IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> getImageBeanConverter(){
-        return converterImageBean;
-    }
-    /** 
-     * setup converter of ImageBean 
-     * @param converterImageBean must not be null. 
-     */
-    public void setImageBeanConverter(IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean){
-        if(null == converterImageBean)
-            throw new NullPointerException();
-        this.converterImageBean = converterImageBean;
-    }
-    /** 
-     * @return converter of LogBean 
-     */
-    public IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> getLogBeanConverter(){
-        return converterLogBean;
-    }
-    /** 
-     * setup converter of LogBean 
-     * @param converterLogBean must not be null. 
-     */
-    public void setLogBeanConverter(IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean){
-        if(null == converterLogBean)
-            throw new NullPointerException();
-        this.converterLogBean = converterLogBean;
-    }
-    /** 
-     * @return converter of PersonBean 
-     */
-    public IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> getPersonBeanConverter(){
-        return converterPersonBean;
-    }
-    /** 
-     * setup converter of PersonBean 
-     * @param converterPersonBean must not be null. 
-     */
-    public void setPersonBeanConverter(IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean){
-        if(null == converterPersonBean)
-            throw new NullPointerException();
-        this.converterPersonBean = converterPersonBean;
-    }
-    /** 
-     * @return converter of LogLightBean 
-     */
-    public IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> getLogLightBeanConverter(){
-        return converterLogLightBean;
-    }
-    /** 
-     * setup converter of LogLightBean 
-     * @param converterLogLightBean must not be null. 
-     */
-    public void setLogLightBeanConverter(IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean){
-        if(null == converterLogLightBean)
-            throw new NullPointerException();
-        this.converterLogLightBean = converterLogLightBean;
-    }
-    private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
+    /** bean converter between {@link LogLightBean} and corresponding thrift bean */
+    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;    private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
     /**
      * constructor 
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog.Async created by Swift, must not be null
@@ -184,7 +83,7 @@ class IFaceLogClientAsync implements Constant{
                 service.addFeature(feature,
                 personId,
                 converterFaceBean.toRight(faecBeans)), 
-                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
@@ -205,7 +104,7 @@ class IFaceLogClientAsync implements Constant{
                 personId,
                 toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId), 
-                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
@@ -227,7 +126,7 @@ class IFaceLogClientAsync implements Constant{
                 deviceId,
                 converterFaceBean.toRight(faceBean),
                 personId), 
-                new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
                         return converterImageBean.fromRight(input);
@@ -369,7 +268,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<DeviceBean> getDevice(int deviceId){
         return Futures.transform(
                 service.getDevice(deviceId), 
-                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
                         return converterDeviceBean.fromRight(input);
@@ -380,7 +279,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<DeviceBean>> getDevice(List<Integer> deviceId){
         return Futures.transform(
                 service.getDeviceList(deviceId), 
-                new Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
+                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
                         return converterDeviceBean.fromRight(input);
@@ -395,7 +294,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<FeatureBean> getFeature(String md5){
         return Futures.transform(
                 service.getFeature(md5), 
-                new Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
                         return converterFeatureBean.fromRight(input);
@@ -426,7 +325,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<FeatureBean>> getFeature(List<String> md5){
         return Futures.transform(
                 service.getFeatureList(md5), 
-                new Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
+                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
                     @Override
                     public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
                         return converterFeatureBean.fromRight(input);
@@ -441,7 +340,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<ImageBean> getImage(String imageMD5){
         return Futures.transform(
                 service.getImage(imageMD5), 
-                new Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
                         return converterImageBean.fromRight(input);
@@ -473,7 +372,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<LogBean>> getLogBeansByPersonId(int personId){
         return Futures.transform(
                 service.getLogBeansByPersonId(personId), 
-                new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
+                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
                         return converterLogBean.fromRight(input);
@@ -488,7 +387,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<PersonBean> getPerson(int personId){
         return Futures.transform(
                 service.getPerson(personId), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -503,7 +402,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){
         return Futures.transform(
                 service.getPersonByPapersNum(papersNum), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -518,7 +417,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){
         return Futures.transform(
                 service.getPersons(idList), 
-                new Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
+                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
                         return converterPersonBean.fromRight(input);
@@ -555,7 +454,7 @@ class IFaceLogClientAsync implements Constant{
                 service.loadLogByWhere(where,
                 startRow,
                 numRows), 
-                new Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
+                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
                         return converterLogBean.fromRight(input);
@@ -568,7 +467,7 @@ class IFaceLogClientAsync implements Constant{
                 service.loadLogLightByWhere(where,
                 startRow,
                 numRows), 
-                new Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
+                new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
                         return converterLogLightBean.fromRight(input);
@@ -617,7 +516,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean){
         return Futures.transform(
                 service.saveDevice(converterDeviceBean.toRight(deviceBean)), 
-                new Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.DeviceBean,DeviceBean>(){
                     @Override
                     public DeviceBean apply(net.gdface.facelog.client.thrift.DeviceBean input) {
                         return converterDeviceBean.fromRight(input);
@@ -632,7 +531,7 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<PersonBean> savePerson(PersonBean bean){
         return Futures.transform(
                 service.savePerson(converterPersonBean.toRight(bean)), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -656,7 +555,7 @@ class IFaceLogClientAsync implements Constant{
                 featureImage,
                 converterFaceBean.toRight(featureFaceBean),
                 deviceId), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -688,7 +587,7 @@ class IFaceLogClientAsync implements Constant{
         return Futures.transform(
                 service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 idPhoto), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -709,7 +608,7 @@ class IFaceLogClientAsync implements Constant{
                 idPhoto,
                 converterFeatureBean.toRight(featureBean),
                 deviceId), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -730,7 +629,7 @@ class IFaceLogClientAsync implements Constant{
                 idPhoto,
                 feature,
                 converterFaceBean.toRight(faceBeans)), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -753,7 +652,7 @@ class IFaceLogClientAsync implements Constant{
                 feature,
                 toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
@@ -772,7 +671,7 @@ class IFaceLogClientAsync implements Constant{
                 service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
                 idPhotoMd5,
                 featureMd5), 
-                new Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
                         return converterPersonBean.fromRight(input);
