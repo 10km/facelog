@@ -14,19 +14,13 @@ import com.google.common.collect.Iterators;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CollectionUtils {
-	private CollectionUtils() {
+	private CollectionUtils() {	}
+	public static final<K1,K2,V>Map<K2,V> tranformKeys(Map<K1,V>fromMap, Function<K1, K2> transformer2, Function<K2, K1> transformer1){
+		return new TransformedMap<K1, K2, V>(fromMap,transformer2,transformer1);
 	}
-
-	public static final <K1, K2, V> Map<K2, V> tranformKeys(Map<K1, V> fromMap, Function<K1, K2> transformer2,
-			Function<K2, K1> transformer1) {
-		return new TransformedMap<K1, K2, V>(fromMap, transformer2, transformer1);
+	public static final <E1,E2>Set<E2>transform(Set<E1> fromSet, Function<E1, E2> transformer2, Function<E2, E1> transformer1){
+		return new TransformedSet<E1,E2>(fromSet,transformer2,transformer1);
 	}
-
-	public static final <E1, E2> Set<E2> transform(Set<E1> fromSet, Function<E1, E2> transformer2,
-			Function<E2, E1> transformer1) {
-		return new TransformedSet<E1, E2>(fromSet, transformer2, transformer1);
-	}
-
 	static class TransformedSet<E1, E2> extends AbstractSet<E2> {
 		final Set<E1> fromSet;
 		private final Function<E1, E2> transformer2;
@@ -185,7 +179,7 @@ public class CollectionUtils {
 					new Function<Entry<K1, V>, Entry<K2, V>>() {
 						@Override
 						public java.util.Map.Entry<K2, V> apply(java.util.Map.Entry<K1, V> input) {
-							return new SimpleEntry<K2, V>(transformer2.apply(input.getKey()), input.getValue());
+							return new TransformedEntry(input);
 						}
 					}, new Function<Entry<K2, V>, Entry<K1, V>>() {
 						@Override
@@ -207,5 +201,49 @@ public class CollectionUtils {
 		public int hashCode() {
 			return fromMap.hashCode();
 		}
+		class TransformedEntry implements Entry<K2, V> {
+			final Entry<K1,V>fromEntry;
+			TransformedEntry(Entry<K1,V>fromEntry){
+				checkNotNull(fromEntry);
+				this.fromEntry = fromEntry;
+			}
+			@Override
+			public K2 getKey() {
+				return transformer2.apply(fromEntry.getKey());
+			}
+
+			@Override
+			public V getValue() {
+				return fromEntry.getValue();
+			}
+
+			@Override
+			public V setValue(V value) {
+				throw new UnsupportedOperationException();
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override 
+			public boolean equals(Object object) {
+				if (TransformedEntry.class.isInstance(object)) {
+					return fromEntry.equals((TransformedEntry)object);
+				}
+				return super.equals(object);
+			}
+
+			@Override 
+			public int hashCode() {
+				return fromEntry.hashCode();
+			}
+
+			/**
+			 * Returns a string representation of the form {@code {key}={value}}.
+			 */
+			@Override 
+			public String toString() {
+				return fromEntry.toString();
+			}
+		}
+
 	}
 }
