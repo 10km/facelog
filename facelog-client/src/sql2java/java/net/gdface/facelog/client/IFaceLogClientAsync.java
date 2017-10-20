@@ -47,10 +47,30 @@ class IFaceLogClientAsync implements Constant{
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
-    // 1
+    // 1 
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
         return Futures.transform(
                 service.addFeature(feature,
+                personId,
+                converterFaceBean.toRight(faecBeans)), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return converterFeatureBean.fromRight(input);
+                    }
+                });
+    }
+    /**
+     * 增加一个人脸特征记录，如果记录已经存在则抛出异常
+     * @param feature 特征数据
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     */
+    // 1 
+    public ListenableFuture<FeatureBean> addFeatureGeneric(Object feature,int personId,List<FaceBean> faecBeans){
+        return Futures.transform(
+                service.addFeature(GenericUtils.toBytes(feature),
                 personId,
                 converterFaceBean.toRight(faecBeans)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
@@ -68,10 +88,32 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceId 图像来源设备id,可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
-    // 2
+    // 2 
     public ListenableFuture<FeatureBean> addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return Futures.transform(
                 service.addFeatureMulti(feature,
+                personId,
+                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                deviceId), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
+                    @Override
+                    public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
+                        return converterFeatureBean.fromRight(input);
+                    }
+                });
+    }
+    /**
+     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
+     * @param feature 特征数据
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
+     * @param deviceId 图像来源设备id,可为null
+     * @return 保存的人脸特征记录{@link FeatureBean}
+     */
+    // 2 
+    public ListenableFuture<FeatureBean> addFeatureGeneric(Object feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
+        return Futures.transform(
+                service.addFeatureMulti(GenericUtils.toBytes(feature),
                 personId,
                 GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId), 
@@ -91,7 +133,7 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
-    // 3
+    // 3 
     public ListenableFuture<ImageBean> addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
         return Futures.transform(
                 service.addImage(imageData,
@@ -106,10 +148,33 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /**
+     * 保存图像数据,如果图像数据已经存在，则抛出异常
+     * @param imageData 图像数据
+     * @param deviceId 图像来源设备id,可为null
+     * @param faceBean 关联的人脸信息对象,可为null
+     * @param personId 关联的人员id(fl_person.id),可为null
+     * @return 
+     * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
+     */
+    // 3 
+    public ListenableFuture<ImageBean> addImageGeneric(Object imageData,int deviceId,FaceBean faceBean,int personId){
+        return Futures.transform(
+                service.addImage(GenericUtils.toBytes(imageData),
+                deviceId,
+                converterFaceBean.toRight(faceBean),
+                personId), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
+                    @Override
+                    public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
+                        return converterImageBean.fromRight(input);
+                    }
+                });
+    }
+    /**
      * 添加一条验证日志记录
      * @param bean
      */
-    // 4
+    // 4 
     public ListenableFuture<Void> addLog(LogBean bean){
         return service.addLog(converterLogBean.toRight(bean));
     }
@@ -117,17 +182,17 @@ class IFaceLogClientAsync implements Constant{
      * 添加一组验证日志记录(事务存储)
      * @param beans
      */
-    // 5
+    // 5 
     public ListenableFuture<Void> addLog(List<LogBean> beans){
         return service.addLogList(converterLogBean.toRight(beans));
     }
 
-    // 6
+    // 6 
     public ListenableFuture<Integer> countLogLightWhere(String where){
         return service.countLogLightWhere(where);
     }
 
-    // 7
+    // 7 
     public ListenableFuture<Integer> countLogWhere(String where){
         return service.countLogWhere(where);
     }
@@ -138,7 +203,7 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      * @see #deleteFeature(String, boolean)
      */
-    // 8
+    // 8 
     public ListenableFuture<Integer> deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
         return service.deleteAllFeaturesByPersonId(personId,
                 deleteImage);
@@ -149,7 +214,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deleteImage 是否删除关联的 image记录
      * @return 
      */
-    // 9
+    // 9 
     public ListenableFuture<List<String>> deleteFeature(String featureMd5,boolean deleteImage){
         return service.deleteFeature(featureMd5,
                 deleteImage);
@@ -159,7 +224,7 @@ class IFaceLogClientAsync implements Constant{
      * @param imageMd5
      * @return 
      */
-    // 10
+    // 10 
     public ListenableFuture<Integer> deleteImage(String imageMd5){
         return service.deleteImage(imageMd5);
     }
@@ -168,7 +233,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    // 11
+    // 11 
     public ListenableFuture<Integer> deletePerson(int personId){
         return service.deletePerson(personId);
     }
@@ -178,7 +243,7 @@ class IFaceLogClientAsync implements Constant{
      * @return 返回删除的 person 记录数量
      * @see {@link #deletePerson(int)}
      */
-    // 12
+    // 12 
     public ListenableFuture<Integer> deletePersonByPapersNum(String papersNum){
         return service.deletePersonByPapersNum(papersNum);
     }
@@ -187,7 +252,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personIdList 人员id列表
      * @return 返回删除的 person 记录数量
      */
-    // 13
+    // 13 
     public ListenableFuture<Integer> deletePersons(List<Integer> personIdList){
         return service.deletePersons(personIdList);
     }
@@ -196,7 +261,7 @@ class IFaceLogClientAsync implements Constant{
      * @param papersNumlist 证件号码列表
      * @return 返回删除的 person 记录数量
      */
-    // 14
+    // 14 
     public ListenableFuture<Integer> deletePersonsByPapersNum(List<String> papersNumlist){
         return service.deletePersonsByPapersNum(papersNumlist);
     }
@@ -205,7 +270,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @see #setPersonExpiryDate(int, long)
      */
-    // 15
+    // 15 
     public ListenableFuture<Void> disablePerson(int personId){
         return service.disablePerson(personId);
     }
@@ -213,7 +278,7 @@ class IFaceLogClientAsync implements Constant{
      * 设置 personIdList 指定的人员为禁止状态
      * @param personIdList 人员id列表
      */
-    // 16
+    // 16 
     public ListenableFuture<Void> disablePerson(List<Integer> personIdList){
         return service.disablePersonList(personIdList);
     }
@@ -222,7 +287,7 @@ class IFaceLogClientAsync implements Constant{
      * @param id
      * @return 
      */
-    // 17
+    // 17 
     public ListenableFuture<Boolean> existsDevice(int id){
         return service.existsDevice(id);
     }
@@ -231,7 +296,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 
      */
-    // 18
+    // 18 
     public ListenableFuture<Boolean> existsFeature(String md5){
         return service.existsFeature(md5);
     }
@@ -240,7 +305,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 
      */
-    // 19
+    // 19 
     public ListenableFuture<Boolean> existsImage(String md5){
         return service.existsImage(md5);
     }
@@ -249,12 +314,12 @@ class IFaceLogClientAsync implements Constant{
      * @param persionId
      * @return 
      */
-    // 20
+    // 20 
     public ListenableFuture<Boolean> existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
 
-    // 21
+    // 21 
     public ListenableFuture<DeviceBean> getDevice(int deviceId){
         return Futures.transform(
                 service.getDevice(deviceId), 
@@ -266,7 +331,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
 
-    // 22
+    // 22 
     public ListenableFuture<List<DeviceBean>> getDevice(List<Integer> deviceId){
         return Futures.transform(
                 service.getDeviceList(deviceId), 
@@ -282,7 +347,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
      */
-    // 23
+    // 23 
     public ListenableFuture<FeatureBean> getFeature(String md5){
         return Futures.transform(
                 service.getFeature(md5), 
@@ -298,7 +363,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
      */
-    // 24
+    // 24 
     public ListenableFuture<List<String>> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
@@ -307,7 +372,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
-    // 25
+    // 25 
     public ListenableFuture<byte[]> getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
@@ -316,7 +381,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
      */
-    // 26
+    // 26 
     public ListenableFuture<List<FeatureBean>> getFeature(List<String> md5){
         return Futures.transform(
                 service.getFeatureList(md5), 
@@ -332,7 +397,7 @@ class IFaceLogClientAsync implements Constant{
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
-    // 27
+    // 27 
     public ListenableFuture<ImageBean> getImage(String imageMD5){
         return Futures.transform(
                 service.getImage(imageMD5), 
@@ -349,7 +414,7 @@ class IFaceLogClientAsync implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @see {@link #getBinary(String)}
      */
-    // 28
+    // 28 
     public ListenableFuture<byte[]> getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
@@ -358,7 +423,7 @@ class IFaceLogClientAsync implements Constant{
      * @param featureMd5 人脸特征id(MD5)
      * @return 
      */
-    // 29
+    // 29 
     public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
@@ -367,7 +432,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId fl_person.id
      * @return 
      */
-    // 30
+    // 30 
     public ListenableFuture<List<LogBean>> getLogBeansByPersonId(int personId){
         return Futures.transform(
                 service.getLogBeansByPersonId(personId), 
@@ -383,7 +448,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    // 31
+    // 31 
     public ListenableFuture<PersonBean> getPerson(int personId){
         return Futures.transform(
                 service.getPerson(personId), 
@@ -399,7 +464,7 @@ class IFaceLogClientAsync implements Constant{
      * @param papersNum
      * @return 
      */
-    // 32
+    // 32 
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){
         return Futures.transform(
                 service.getPersonByPapersNum(papersNum), 
@@ -415,7 +480,7 @@ class IFaceLogClientAsync implements Constant{
      * @param idList 人员id列表
      * @return 
      */
-    // 33
+    // 33 
     public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){
         return Futures.transform(
                 service.getPersons(idList), 
@@ -431,7 +496,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    // 34
+    // 34 
     public ListenableFuture<Boolean> isDisable(int personId){
         return service.isDisable(personId);
     }
@@ -439,7 +504,7 @@ class IFaceLogClientAsync implements Constant{
      * 返回所有人员记录
      * @return 
      */
-    // 35
+    // 35 
     public ListenableFuture<List<Integer>> loadAllPerson(){
         return service.loadAllPerson();
     }
@@ -449,12 +514,12 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
      */
-    // 36
+    // 36 
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(long timestamp){
         return service.loadFeatureMd5ByUpdate(timestamp);
     }
 
-    // 37
+    // 37 
     public ListenableFuture<List<LogBean>> loadLogByWhere(String where,int startRow,int numRows){
         return Futures.transform(
                 service.loadLogByWhere(where,
@@ -468,7 +533,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
 
-    // 38
+    // 38 
     public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(String where,int startRow,int numRows){
         return Futures.transform(
                 service.loadLogLightByWhere(where,
@@ -486,7 +551,7 @@ class IFaceLogClientAsync implements Constant{
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
      */
-    // 39
+    // 39 
     public ListenableFuture<List<Integer>> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
@@ -496,7 +561,7 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 40
+    // 40 
     public ListenableFuture<List<Integer>> loadPersonIdByUpdate(long timestamp){
         return service.loadPersonIdByUpdate(timestamp);
     }
@@ -507,7 +572,7 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 41
+    // 41 
     public ListenableFuture<List<Integer>> loadUpdatePersons(long timestamp){
         return service.loadUpdatePersons(timestamp);
     }
@@ -517,14 +582,14 @@ class IFaceLogClientAsync implements Constant{
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      */
-    // 42
+    // 42 
     public ListenableFuture<Void> replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
         return service.replaceFeature(personId,
                 featureMd5,
                 deleteOldFeatureImage);
     }
 
-    // 43
+    // 43 
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean){
         return Futures.transform(
                 service.saveDevice(converterDeviceBean.toRight(deviceBean)), 
@@ -540,7 +605,7 @@ class IFaceLogClientAsync implements Constant{
      * @param bean
      * @return 
      */
-    // 44
+    // 44 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean){
         return Futures.transform(
                 service.savePerson(converterPersonBean.toRight(bean)), 
@@ -560,7 +625,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    // 45
+    // 45 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
         return Futures.transform(
                 service.savePersonFull(converterPersonBean.toRight(bean),
@@ -577,10 +642,35 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /**
+     * @param bean 人员信息对象
+     * @param idPhoto 标准照图像
+     * @param feature 人脸特征数据
+     * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
+     * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
+     * @param deviceBean featureImage来源设备对象
+     * @return 
+     */
+    // 45 
+    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Object featureImage,FaceBean featureFaceBean,int deviceId){
+        return Futures.transform(
+                service.savePersonFull(converterPersonBean.toRight(bean),
+                GenericUtils.toBytes(idPhoto),
+                GenericUtils.toBytes(feature),
+                GenericUtils.toBytes(featureImage),
+                converterFaceBean.toRight(featureFaceBean),
+                deviceId), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    /**
      * 保存人员(person)记录
      * @param beans
      */
-    // 46
+    // 46 
     public ListenableFuture<Void> savePerson(List<PersonBean> beans){
         return service.savePersonList(converterPersonBean.toRight(beans));
     }
@@ -589,7 +679,7 @@ class IFaceLogClientAsync implements Constant{
      * @param persons
      * @return 
      */
-    // 47
+    // 47 
     public ListenableFuture<Integer> savePerson(Map<ByteBuffer, PersonBean> persons){
         return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
     }
@@ -599,11 +689,29 @@ class IFaceLogClientAsync implements Constant{
      * @param idPhoto 标准照图像对象,可为null
      * @return 
      */
-    // 48
+    // 48 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto){
         return Futures.transform(
                 service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 idPhoto), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    /**
+     * 保存人员信息记录
+     * @param bean
+     * @param idPhoto 标准照图像对象,可为null
+     * @return 
+     */
+    // 48 
+    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto){
+        return Futures.transform(
+                service.savePersonWithPhoto(converterPersonBean.toRight(bean),
+                GenericUtils.toBytes(idPhoto)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -619,7 +727,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceId 标准照图像来源设备id,可为null
      * @return 
      */
-    // 49
+    // 49 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
@@ -637,11 +745,33 @@ class IFaceLogClientAsync implements Constant{
      * 保存人员信息记录
      * @param bean
      * @param idPhoto 标准照图像,可为null
+     * @param featureBean 用于验证的人脸特征数据对象,可为null
+     * @param deviceId 标准照图像来源设备id,可为null
+     * @return 
+     */
+    // 49 
+    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,FeatureBean featureBean,int deviceId){
+        return Futures.transform(
+                service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
+                GenericUtils.toBytes(idPhoto),
+                converterFeatureBean.toRight(featureBean),
+                deviceId), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    /**
+     * 保存人员信息记录
+     * @param bean
+     * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @return 
      */
-    // 50
+    // 50 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
@@ -659,12 +789,34 @@ class IFaceLogClientAsync implements Constant{
      * 保存人员信息记录
      * @param bean
      * @param idPhoto 标准照图像,可为null
+     * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+     * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
+     * @return 
+     */
+    // 50 
+    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,List<FaceBean> faceBeans){
+        return Futures.transform(
+                service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
+                GenericUtils.toBytes(idPhoto),
+                GenericUtils.toBytes(feature),
+                converterFaceBean.toRight(faceBeans)), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    /**
+     * 保存人员信息记录
+     * @param bean
+     * @param idPhoto 标准照图像,可为null
      * @param feature 用于验证的人脸特征数据,可为null
      * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @return bean 保存的{@link PersonBean}对象
      */
-    // 51
+    // 51 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
@@ -682,11 +834,35 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 保存人员信息记录
      * @param bean
+     * @param idPhoto 标准照图像,可为null
+     * @param feature 用于验证的人脸特征数据,可为null
+     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
+     * @param deviceId faceInfo 图像来源设备id,可为null
+     * @return bean 保存的{@link PersonBean}对象
+     */
+    // 51 
+    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
+        return Futures.transform(
+                service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
+                GenericUtils.toBytes(idPhoto),
+                GenericUtils.toBytes(feature),
+                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                deviceId), 
+                new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
+                    @Override
+                    public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
+                        return converterPersonBean.fromRight(input);
+                    }
+                });
+    }
+    /**
+     * 保存人员信息记录
+     * @param bean
      * @param idPhotoMd5 标准照图像对象,可为null
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
      * @return 
      */
-    // 52
+    // 52 
     public ListenableFuture<PersonBean> savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
         return Futures.transform(
                 service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
@@ -704,7 +880,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @param expiryDate 失效日期
      */
-    // 53
+    // 53 
     public ListenableFuture<Void> setPersonExpiryDate(int personId,long expiryDate){
         return service.setPersonExpiryDate(personId,
                 expiryDate);
@@ -714,7 +890,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
      */
-    // 54
+    // 54 
     public ListenableFuture<Void> setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
         return service.setPersonExpiryDateList(personIdList,
                 expiryDate);
