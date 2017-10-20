@@ -11,7 +11,8 @@ import java.nio.ByteBuffer;
 import java.util.*;
 /**
  * remote implementation of the service IFaceLog<br>
- * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
+ * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
+ * <b>NOTE:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.<br>
  * @author guyadong
  */
 class IFaceLogClient implements Constant{
@@ -45,20 +46,19 @@ class IFaceLogClient implements Constant{
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
-    // 1 
+    // 1 SERIVCE PORT : addFeature
     public FeatureBean addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
         return converterFeatureBean.fromRight(service.addFeature(feature,
                 personId,
                 converterFaceBean.toRight(faecBeans)));
     }
-    /**
-     * 增加一个人脸特征记录，如果记录已经存在则抛出异常
-     * @param feature 特征数据
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @return 保存的人脸特征记录{@link FeatureBean}
+    /** 
+     * generic version of {@link #addFeature(byte[],int,List<FaceBean>)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 1 
+    // 1 GENERIC
     public FeatureBean addFeatureGeneric(Object feature,int personId,List<FaceBean> faecBeans){
         return converterFeatureBean.fromRight(service.addFeature(GenericUtils.toBytes(feature),
                 personId,
@@ -72,22 +72,20 @@ class IFaceLogClient implements Constant{
      * @param deviceId 图像来源设备id,可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
-    // 2 
+    // 2 SERIVCE PORT : addFeatureMulti
     public FeatureBean addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return converterFeatureBean.fromRight(service.addFeatureMulti(feature,
                 personId,
                 GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
-    /**
-     * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
-     * @param feature 特征数据
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
-     * @param deviceId 图像来源设备id,可为null
-     * @return 保存的人脸特征记录{@link FeatureBean}
+    /** 
+     * generic version of {@link #addFeature(byte[],int,Map<ByteBuffer, FaceBean>,int)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 2 
+    // 2 GENERIC
     public FeatureBean addFeatureGeneric(Object feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return converterFeatureBean.fromRight(service.addFeatureMulti(GenericUtils.toBytes(feature),
                 personId,
@@ -103,23 +101,20 @@ class IFaceLogClient implements Constant{
      * @return 
      * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
-    // 3 
+    // 3 SERIVCE PORT : addImage
     public ImageBean addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
         return converterImageBean.fromRight(service.addImage(imageData,
                 deviceId,
                 converterFaceBean.toRight(faceBean),
                 personId));
     }
-    /**
-     * 保存图像数据,如果图像数据已经存在，则抛出异常
-     * @param imageData 图像数据
-     * @param deviceId 图像来源设备id,可为null
-     * @param faceBean 关联的人脸信息对象,可为null
-     * @param personId 关联的人员id(fl_person.id),可为null
-     * @return 
-     * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
+    /** 
+     * generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 3 
+    // 3 GENERIC
     public ImageBean addImageGeneric(Object imageData,int deviceId,FaceBean faceBean,int personId){
         return converterImageBean.fromRight(service.addImage(GenericUtils.toBytes(imageData),
                 deviceId,
@@ -130,7 +125,7 @@ class IFaceLogClient implements Constant{
      * 添加一条验证日志记录
      * @param bean
      */
-    // 4 
+    // 4 SERIVCE PORT : addLog
     public void addLog(LogBean bean){
         service.addLog(converterLogBean.toRight(bean));
     }
@@ -138,17 +133,17 @@ class IFaceLogClient implements Constant{
      * 添加一组验证日志记录(事务存储)
      * @param beans
      */
-    // 5 
+    // 5 SERIVCE PORT : addLogList
     public void addLog(List<LogBean> beans){
         service.addLogList(converterLogBean.toRight(beans));
     }
 
-    // 6 
+    // 6 SERIVCE PORT : countLogLightWhere
     public int countLogLightWhere(String where){
         return service.countLogLightWhere(where);
     }
 
-    // 7 
+    // 7 SERIVCE PORT : countLogWhere
     public int countLogWhere(String where){
         return service.countLogWhere(where);
     }
@@ -159,7 +154,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @see #deleteFeature(String, boolean)
      */
-    // 8 
+    // 8 SERIVCE PORT : deleteAllFeaturesByPersonId
     public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
         return service.deleteAllFeaturesByPersonId(personId,
                 deleteImage);
@@ -170,7 +165,7 @@ class IFaceLogClient implements Constant{
      * @param deleteImage 是否删除关联的 image记录
      * @return 
      */
-    // 9 
+    // 9 SERIVCE PORT : deleteFeature
     public List<String> deleteFeature(String featureMd5,boolean deleteImage){
         return service.deleteFeature(featureMd5,
                 deleteImage);
@@ -180,7 +175,7 @@ class IFaceLogClient implements Constant{
      * @param imageMd5
      * @return 
      */
-    // 10 
+    // 10 SERIVCE PORT : deleteImage
     public int deleteImage(String imageMd5){
         return service.deleteImage(imageMd5);
     }
@@ -189,7 +184,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
-    // 11 
+    // 11 SERIVCE PORT : deletePerson
     public int deletePerson(int personId){
         return service.deletePerson(personId);
     }
@@ -199,7 +194,7 @@ class IFaceLogClient implements Constant{
      * @return 返回删除的 person 记录数量
      * @see {@link #deletePerson(int)}
      */
-    // 12 
+    // 12 SERIVCE PORT : deletePersonByPapersNum
     public int deletePersonByPapersNum(String papersNum){
         return service.deletePersonByPapersNum(papersNum);
     }
@@ -208,7 +203,7 @@ class IFaceLogClient implements Constant{
      * @param personIdList 人员id列表
      * @return 返回删除的 person 记录数量
      */
-    // 13 
+    // 13 SERIVCE PORT : deletePersons
     public int deletePersons(List<Integer> personIdList){
         return service.deletePersons(personIdList);
     }
@@ -217,7 +212,7 @@ class IFaceLogClient implements Constant{
      * @param papersNumlist 证件号码列表
      * @return 返回删除的 person 记录数量
      */
-    // 14 
+    // 14 SERIVCE PORT : deletePersonsByPapersNum
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         return service.deletePersonsByPapersNum(papersNumlist);
     }
@@ -226,7 +221,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @see #setPersonExpiryDate(int, long)
      */
-    // 15 
+    // 15 SERIVCE PORT : disablePerson
     public void disablePerson(int personId){
         service.disablePerson(personId);
     }
@@ -234,7 +229,7 @@ class IFaceLogClient implements Constant{
      * 设置 personIdList 指定的人员为禁止状态
      * @param personIdList 人员id列表
      */
-    // 16 
+    // 16 SERIVCE PORT : disablePersonList
     public void disablePerson(List<Integer> personIdList){
         service.disablePersonList(personIdList);
     }
@@ -243,7 +238,7 @@ class IFaceLogClient implements Constant{
      * @param id
      * @return 
      */
-    // 17 
+    // 17 SERIVCE PORT : existsDevice
     public boolean existsDevice(int id){
         return service.existsDevice(id);
     }
@@ -252,7 +247,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 
      */
-    // 18 
+    // 18 SERIVCE PORT : existsFeature
     public boolean existsFeature(String md5){
         return service.existsFeature(md5);
     }
@@ -261,7 +256,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 
      */
-    // 19 
+    // 19 SERIVCE PORT : existsImage
     public boolean existsImage(String md5){
         return service.existsImage(md5);
     }
@@ -270,17 +265,17 @@ class IFaceLogClient implements Constant{
      * @param persionId
      * @return 
      */
-    // 20 
+    // 20 SERIVCE PORT : existsPerson
     public boolean existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
 
-    // 21 
+    // 21 SERIVCE PORT : getDevice
     public DeviceBean getDevice(int deviceId){
         return converterDeviceBean.fromRight(service.getDevice(deviceId));
     }
 
-    // 22 
+    // 22 SERIVCE PORT : getDeviceList
     public List<DeviceBean> getDevice(List<Integer> deviceId){
         return converterDeviceBean.fromRight(service.getDeviceList(deviceId));
     }
@@ -289,7 +284,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
      */
-    // 23 
+    // 23 SERIVCE PORT : getFeature
     public FeatureBean getFeature(String md5){
         return converterFeatureBean.fromRight(service.getFeature(md5));
     }
@@ -298,7 +293,7 @@ class IFaceLogClient implements Constant{
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
      */
-    // 24 
+    // 24 SERIVCE PORT : getFeatureBeansByPersonId
     public List<String> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
@@ -307,7 +302,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
-    // 25 
+    // 25 SERIVCE PORT : getFeatureBytes
     public byte[] getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
@@ -316,7 +311,7 @@ class IFaceLogClient implements Constant{
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
      */
-    // 26 
+    // 26 SERIVCE PORT : getFeatureList
     public List<FeatureBean> getFeature(List<String> md5){
         return converterFeatureBean.fromRight(service.getFeatureList(md5));
     }
@@ -325,7 +320,7 @@ class IFaceLogClient implements Constant{
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
-    // 27 
+    // 27 SERIVCE PORT : getImage
     public ImageBean getImage(String imageMD5){
         return converterImageBean.fromRight(service.getImage(imageMD5));
     }
@@ -335,7 +330,7 @@ class IFaceLogClient implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @see {@link #getBinary(String)}
      */
-    // 28 
+    // 28 SERIVCE PORT : getImageBytes
     public byte[] getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
@@ -344,7 +339,7 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 人脸特征id(MD5)
      * @return 
      */
-    // 29 
+    // 29 SERIVCE PORT : getImagesAssociatedByFeature
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
@@ -353,7 +348,7 @@ class IFaceLogClient implements Constant{
      * @param personId fl_person.id
      * @return 
      */
-    // 30 
+    // 30 SERIVCE PORT : getLogBeansByPersonId
     public List<LogBean> getLogBeansByPersonId(int personId){
         return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
     }
@@ -362,7 +357,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
-    // 31 
+    // 31 SERIVCE PORT : getPerson
     public PersonBean getPerson(int personId){
         return converterPersonBean.fromRight(service.getPerson(personId));
     }
@@ -371,7 +366,7 @@ class IFaceLogClient implements Constant{
      * @param papersNum
      * @return 
      */
-    // 32 
+    // 32 SERIVCE PORT : getPersonByPapersNum
     public PersonBean getPersonByPapersNum(String papersNum){
         return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
     }
@@ -380,7 +375,7 @@ class IFaceLogClient implements Constant{
      * @param idList 人员id列表
      * @return 
      */
-    // 33 
+    // 33 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         return converterPersonBean.fromRight(service.getPersons(idList));
     }
@@ -389,7 +384,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
-    // 34 
+    // 34 SERIVCE PORT : isDisable
     public boolean isDisable(int personId){
         return service.isDisable(personId);
     }
@@ -397,7 +392,7 @@ class IFaceLogClient implements Constant{
      * 返回所有人员记录
      * @return 
      */
-    // 35 
+    // 35 SERIVCE PORT : loadAllPerson
     public List<Integer> loadAllPerson(){
         return service.loadAllPerson();
     }
@@ -407,19 +402,19 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
      */
-    // 36 
+    // 36 SERIVCE PORT : loadFeatureMd5ByUpdate
     public List<String> loadFeatureMd5ByUpdate(long timestamp){
         return service.loadFeatureMd5ByUpdate(timestamp);
     }
 
-    // 37 
+    // 37 SERIVCE PORT : loadLogByWhere
     public List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
         return converterLogBean.fromRight(service.loadLogByWhere(where,
                 startRow,
                 numRows));
     }
 
-    // 38 
+    // 38 SERIVCE PORT : loadLogLightByWhere
     public List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
         return converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
                 startRow,
@@ -430,7 +425,7 @@ class IFaceLogClient implements Constant{
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
      */
-    // 39 
+    // 39 SERIVCE PORT : loadPersonByWhere
     public List<Integer> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
@@ -440,7 +435,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 40 
+    // 40 SERIVCE PORT : loadPersonIdByUpdate
     public List<Integer> loadPersonIdByUpdate(long timestamp){
         return service.loadPersonIdByUpdate(timestamp);
     }
@@ -451,7 +446,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 41 
+    // 41 SERIVCE PORT : loadUpdatePersons
     public List<Integer> loadUpdatePersons(long timestamp){
         return service.loadUpdatePersons(timestamp);
     }
@@ -461,14 +456,14 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      */
-    // 42 
+    // 42 SERIVCE PORT : replaceFeature
     public void replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
         service.replaceFeature(personId,
                 featureMd5,
                 deleteOldFeatureImage);
     }
 
-    // 43 
+    // 43 SERIVCE PORT : saveDevice
     public DeviceBean saveDevice(DeviceBean deviceBean){
         return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));
     }
@@ -477,7 +472,7 @@ class IFaceLogClient implements Constant{
      * @param bean
      * @return 
      */
-    // 44 
+    // 44 SERIVCE PORT : savePerson
     public PersonBean savePerson(PersonBean bean){
         return converterPersonBean.fromRight(service.savePerson(converterPersonBean.toRight(bean)));
     }
@@ -490,7 +485,7 @@ class IFaceLogClient implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    // 45 
+    // 45 SERIVCE PORT : savePersonFull
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
         return converterPersonBean.fromRight(service.savePersonFull(converterPersonBean.toRight(bean),
                 idPhoto,
@@ -499,16 +494,13 @@ class IFaceLogClient implements Constant{
                 converterFaceBean.toRight(featureFaceBean),
                 deviceId));
     }
-    /**
-     * @param bean 人员信息对象
-     * @param idPhoto 标准照图像
-     * @param feature 人脸特征数据
-     * @param featureImage 提取特征源图像,为null 时,默认使用idPhoto
-     * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
-     * @param deviceBean featureImage来源设备对象
-     * @return 
+    /** 
+     * generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 45 
+    // 45 GENERIC
     public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Object featureImage,FaceBean featureFaceBean,int deviceId){
         return converterPersonBean.fromRight(service.savePersonFull(converterPersonBean.toRight(bean),
                 GenericUtils.toBytes(idPhoto),
@@ -521,7 +513,7 @@ class IFaceLogClient implements Constant{
      * 保存人员(person)记录
      * @param beans
      */
-    // 46 
+    // 46 SERIVCE PORT : savePersonList
     public void savePerson(List<PersonBean> beans){
         service.savePersonList(converterPersonBean.toRight(beans));
     }
@@ -530,7 +522,7 @@ class IFaceLogClient implements Constant{
      * @param persons
      * @return 
      */
-    // 47 
+    // 47 SERIVCE PORT : savePersonsWithPhoto
     public int savePerson(Map<ByteBuffer, PersonBean> persons){
         return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
     }
@@ -540,18 +532,18 @@ class IFaceLogClient implements Constant{
      * @param idPhoto 标准照图像对象,可为null
      * @return 
      */
-    // 48 
+    // 48 SERIVCE PORT : savePersonWithPhoto
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
         return converterPersonBean.fromRight(service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 idPhoto));
     }
-    /**
-     * 保存人员信息记录
-     * @param bean
-     * @param idPhoto 标准照图像对象,可为null
-     * @return 
+    /** 
+     * generic version of {@link #savePerson(PersonBean,byte[])}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 48 
+    // 48 GENERIC
     public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto){
         return converterPersonBean.fromRight(service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 GenericUtils.toBytes(idPhoto)));
@@ -564,22 +556,20 @@ class IFaceLogClient implements Constant{
      * @param deviceId 标准照图像来源设备id,可为null
      * @return 
      */
-    // 49 
+    // 49 SERIVCE PORT : savePersonWithPhotoAndFeature
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
                 idPhoto,
                 converterFeatureBean.toRight(featureBean),
                 deviceId));
     }
-    /**
-     * 保存人员信息记录
-     * @param bean
-     * @param idPhoto 标准照图像,可为null
-     * @param featureBean 用于验证的人脸特征数据对象,可为null
-     * @param deviceId 标准照图像来源设备id,可为null
-     * @return 
+    /** 
+     * generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 49 
+    // 49 GENERIC
     public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,FeatureBean featureBean,int deviceId){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
                 GenericUtils.toBytes(idPhoto),
@@ -594,22 +584,20 @@ class IFaceLogClient implements Constant{
      * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @return 
      */
-    // 50 
+    // 50 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
                 converterFaceBean.toRight(faceBeans)));
     }
-    /**
-     * 保存人员信息记录
-     * @param bean
-     * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,可为null,不可重复, 参见 {@link #addFeature(ByteBuffer, Integer, List)}
-     * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
-     * @return 
+    /** 
+     * generic version of {@link #savePerson(PersonBean,byte[],byte[],List<FaceBean>)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 50 
+    // 50 GENERIC
     public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,List<FaceBean> faceBeans){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
                 GenericUtils.toBytes(idPhoto),
@@ -625,7 +613,7 @@ class IFaceLogClient implements Constant{
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @return bean 保存的{@link PersonBean}对象
      */
-    // 51 
+    // 51 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
                 idPhoto,
@@ -633,16 +621,13 @@ class IFaceLogClient implements Constant{
                 GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
-    /**
-     * 保存人员信息记录
-     * @param bean
-     * @param idPhoto 标准照图像,可为null
-     * @param feature 用于验证的人脸特征数据,可为null
-     * @param faceInfo 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
-     * @param deviceId faceInfo 图像来源设备id,可为null
-     * @return bean 保存的{@link PersonBean}对象
+    /** 
+     * generic version of {@link #savePerson(PersonBean,byte[],byte[],Map<ByteBuffer, FaceBean>,int)}<br>
+     * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
+     * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
+     * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 51 
+    // 51 GENERIC
     public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
                 GenericUtils.toBytes(idPhoto),
@@ -657,7 +642,7 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
      * @return 
      */
-    // 52 
+    // 52 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     public PersonBean savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
                 idPhotoMd5,
@@ -668,7 +653,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @param expiryDate 失效日期
      */
-    // 53 
+    // 53 SERIVCE PORT : setPersonExpiryDate
     public void setPersonExpiryDate(int personId,long expiryDate){
         service.setPersonExpiryDate(personId,
                 expiryDate);
@@ -678,7 +663,7 @@ class IFaceLogClient implements Constant{
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
      */
-    // 54 
+    // 54 SERIVCE PORT : setPersonExpiryDateList
     public void setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
         service.setPersonExpiryDateList(personIdList,
                 expiryDate);
