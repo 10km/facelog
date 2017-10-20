@@ -6,8 +6,6 @@
 // template: service.client.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Maps.EntryTransformer;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -40,41 +38,6 @@ class IFaceLogClient implements Constant{
         checkNotNull(service,"service is null");
         this.service = service;
     }
-    protected static final byte[] toBytes(ByteBuffer buffer){
-        if(null == buffer)return null;
-        int pos = buffer.position();
-        try{
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            return bytes;
-        }finally{
-            buffer.position(pos);
-        }
-    }
-    private static final CollectionUtils.DualTransformer<ByteBuffer,byte[]> dualTransformer = new CollectionUtils.DualTransformer<ByteBuffer,byte[]>(){
-        @Override
-        public byte[] toRight(ByteBuffer input) {
-            return toBytes(input);
-        }
-        @Override
-        public ByteBuffer fromRight(byte[] input) {
-            return null == input ? null : ByteBuffer.wrap(input);
-        }};
-    /** get a view of {@code Map<ByteBuffer,V>} with {@code byte[]} key type */
-    protected static final<V>Map<byte[],V> toBytesKey(Map<ByteBuffer,V> source){
-        if(null == source)return null;
-        return CollectionUtils.tranformKeys(source, dualTransformer);
-    }
-    private static final EntryTransformer<Object,ByteBuffer,byte[]> transformer = new EntryTransformer<Object,ByteBuffer,byte[]>(){
-        @Override
-        public byte[] transformEntry(Object key, ByteBuffer value) {
-             return dualTransformer.toRight(value);
-        }};
-    /** get a view of {@code Map<K,ByteBuffer>} with {@code byte[]} value type */
-    protected static final<K> Map<K,byte[]> toBytesValue(Map<K,ByteBuffer> source){
-        if(null == source)return null;
-        return Maps.transformEntries(source, transformer);
-    }
     /**
      * 增加一个人脸特征记录，如果记录已经存在则抛出异常
      * @param feature 特征数据
@@ -82,6 +45,7 @@ class IFaceLogClient implements Constant{
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
+    // 1
     public FeatureBean addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
         return converterFeatureBean.fromRight(service.addFeature(feature,
                 personId,
@@ -95,10 +59,11 @@ class IFaceLogClient implements Constant{
      * @param deviceId 图像来源设备id,可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
+    // 2
     public FeatureBean addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return converterFeatureBean.fromRight(service.addFeatureMulti(feature,
                 personId,
-                toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
     /**
@@ -110,6 +75,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
+    // 3
     public ImageBean addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
         return converterImageBean.fromRight(service.addImage(imageData,
                 deviceId,
@@ -120,6 +86,7 @@ class IFaceLogClient implements Constant{
      * 添加一条验证日志记录
      * @param bean
      */
+    // 4
     public void addLog(LogBean bean){
         service.addLog(converterLogBean.toRight(bean));
     }
@@ -127,14 +94,17 @@ class IFaceLogClient implements Constant{
      * 添加一组验证日志记录(事务存储)
      * @param beans
      */
+    // 5
     public void addLog(List<LogBean> beans){
         service.addLogList(converterLogBean.toRight(beans));
     }
 
+    // 6
     public int countLogLightWhere(String where){
         return service.countLogLightWhere(where);
     }
 
+    // 7
     public int countLogWhere(String where){
         return service.countLogWhere(where);
     }
@@ -145,6 +115,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @see #deleteFeature(String, boolean)
      */
+    // 8
     public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
         return service.deleteAllFeaturesByPersonId(personId,
                 deleteImage);
@@ -155,6 +126,7 @@ class IFaceLogClient implements Constant{
      * @param deleteImage 是否删除关联的 image记录
      * @return 
      */
+    // 9
     public List<String> deleteFeature(String featureMd5,boolean deleteImage){
         return service.deleteFeature(featureMd5,
                 deleteImage);
@@ -164,6 +136,7 @@ class IFaceLogClient implements Constant{
      * @param imageMd5
      * @return 
      */
+    // 10
     public int deleteImage(String imageMd5){
         return service.deleteImage(imageMd5);
     }
@@ -172,6 +145,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
+    // 11
     public int deletePerson(int personId){
         return service.deletePerson(personId);
     }
@@ -181,6 +155,7 @@ class IFaceLogClient implements Constant{
      * @return 返回删除的 person 记录数量
      * @see {@link #deletePerson(int)}
      */
+    // 12
     public int deletePersonByPapersNum(String papersNum){
         return service.deletePersonByPapersNum(papersNum);
     }
@@ -189,6 +164,7 @@ class IFaceLogClient implements Constant{
      * @param personIdList 人员id列表
      * @return 返回删除的 person 记录数量
      */
+    // 13
     public int deletePersons(List<Integer> personIdList){
         return service.deletePersons(personIdList);
     }
@@ -197,6 +173,7 @@ class IFaceLogClient implements Constant{
      * @param papersNumlist 证件号码列表
      * @return 返回删除的 person 记录数量
      */
+    // 14
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         return service.deletePersonsByPapersNum(papersNumlist);
     }
@@ -205,6 +182,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @see #setPersonExpiryDate(int, long)
      */
+    // 15
     public void disablePerson(int personId){
         service.disablePerson(personId);
     }
@@ -212,6 +190,7 @@ class IFaceLogClient implements Constant{
      * 设置 personIdList 指定的人员为禁止状态
      * @param personIdList 人员id列表
      */
+    // 16
     public void disablePerson(List<Integer> personIdList){
         service.disablePersonList(personIdList);
     }
@@ -220,6 +199,7 @@ class IFaceLogClient implements Constant{
      * @param id
      * @return 
      */
+    // 17
     public boolean existsDevice(int id){
         return service.existsDevice(id);
     }
@@ -228,6 +208,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 
      */
+    // 18
     public boolean existsFeature(String md5){
         return service.existsFeature(md5);
     }
@@ -236,6 +217,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 
      */
+    // 19
     public boolean existsImage(String md5){
         return service.existsImage(md5);
     }
@@ -244,14 +226,17 @@ class IFaceLogClient implements Constant{
      * @param persionId
      * @return 
      */
+    // 20
     public boolean existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
 
+    // 21
     public DeviceBean getDevice(int deviceId){
         return converterDeviceBean.fromRight(service.getDevice(deviceId));
     }
 
+    // 22
     public List<DeviceBean> getDevice(List<Integer> deviceId){
         return converterDeviceBean.fromRight(service.getDeviceList(deviceId));
     }
@@ -260,6 +245,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
      */
+    // 23
     public FeatureBean getFeature(String md5){
         return converterFeatureBean.fromRight(service.getFeature(md5));
     }
@@ -268,6 +254,7 @@ class IFaceLogClient implements Constant{
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
      */
+    // 24
     public List<String> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
@@ -276,6 +263,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
+    // 25
     public byte[] getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
@@ -284,6 +272,7 @@ class IFaceLogClient implements Constant{
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
      */
+    // 26
     public List<FeatureBean> getFeature(List<String> md5){
         return converterFeatureBean.fromRight(service.getFeatureList(md5));
     }
@@ -292,6 +281,7 @@ class IFaceLogClient implements Constant{
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
+    // 27
     public ImageBean getImage(String imageMD5){
         return converterImageBean.fromRight(service.getImage(imageMD5));
     }
@@ -301,6 +291,7 @@ class IFaceLogClient implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @see {@link #getBinary(String)}
      */
+    // 28
     public byte[] getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
@@ -309,6 +300,7 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 人脸特征id(MD5)
      * @return 
      */
+    // 29
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
@@ -317,6 +309,7 @@ class IFaceLogClient implements Constant{
      * @param personId fl_person.id
      * @return 
      */
+    // 30
     public List<LogBean> getLogBeansByPersonId(int personId){
         return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
     }
@@ -325,6 +318,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
+    // 31
     public PersonBean getPerson(int personId){
         return converterPersonBean.fromRight(service.getPerson(personId));
     }
@@ -333,6 +327,7 @@ class IFaceLogClient implements Constant{
      * @param papersNum
      * @return 
      */
+    // 32
     public PersonBean getPersonByPapersNum(String papersNum){
         return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
     }
@@ -341,6 +336,7 @@ class IFaceLogClient implements Constant{
      * @param idList 人员id列表
      * @return 
      */
+    // 33
     public List<PersonBean> getPersons(List<Integer> idList){
         return converterPersonBean.fromRight(service.getPersons(idList));
     }
@@ -349,6 +345,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
+    // 34
     public boolean isDisable(int personId){
         return service.isDisable(personId);
     }
@@ -356,6 +353,7 @@ class IFaceLogClient implements Constant{
      * 返回所有人员记录
      * @return 
      */
+    // 35
     public List<Integer> loadAllPerson(){
         return service.loadAllPerson();
     }
@@ -365,16 +363,19 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
      */
+    // 36
     public List<String> loadFeatureMd5ByUpdate(long timestamp){
         return service.loadFeatureMd5ByUpdate(timestamp);
     }
 
+    // 37
     public List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
         return converterLogBean.fromRight(service.loadLogByWhere(where,
                 startRow,
                 numRows));
     }
 
+    // 38
     public List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
         return converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
                 startRow,
@@ -385,6 +386,7 @@ class IFaceLogClient implements Constant{
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
      */
+    // 39
     public List<Integer> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
@@ -394,6 +396,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
+    // 40
     public List<Integer> loadPersonIdByUpdate(long timestamp){
         return service.loadPersonIdByUpdate(timestamp);
     }
@@ -404,6 +407,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
+    // 41
     public List<Integer> loadUpdatePersons(long timestamp){
         return service.loadUpdatePersons(timestamp);
     }
@@ -413,12 +417,14 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      */
+    // 42
     public void replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
         service.replaceFeature(personId,
                 featureMd5,
                 deleteOldFeatureImage);
     }
 
+    // 43
     public DeviceBean saveDevice(DeviceBean deviceBean){
         return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));
     }
@@ -427,6 +433,7 @@ class IFaceLogClient implements Constant{
      * @param bean
      * @return 
      */
+    // 44
     public PersonBean savePerson(PersonBean bean){
         return converterPersonBean.fromRight(service.savePerson(converterPersonBean.toRight(bean)));
     }
@@ -439,6 +446,7 @@ class IFaceLogClient implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
+    // 45
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
         return converterPersonBean.fromRight(service.savePersonFull(converterPersonBean.toRight(bean),
                 idPhoto,
@@ -451,6 +459,7 @@ class IFaceLogClient implements Constant{
      * 保存人员(person)记录
      * @param beans
      */
+    // 46
     public void savePerson(List<PersonBean> beans){
         service.savePersonList(converterPersonBean.toRight(beans));
     }
@@ -459,8 +468,9 @@ class IFaceLogClient implements Constant{
      * @param persons
      * @return 
      */
+    // 47
     public int savePerson(Map<ByteBuffer, PersonBean> persons){
-        return service.savePersonsWithPhoto(toBytesKey(converterPersonBean.toRightValue(persons)));
+        return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
     }
     /**
      * 保存人员信息记录
@@ -468,6 +478,7 @@ class IFaceLogClient implements Constant{
      * @param idPhoto 标准照图像对象,可为null
      * @return 
      */
+    // 48
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
         return converterPersonBean.fromRight(service.savePersonWithPhoto(converterPersonBean.toRight(bean),
                 idPhoto));
@@ -480,6 +491,7 @@ class IFaceLogClient implements Constant{
      * @param deviceId 标准照图像来源设备id,可为null
      * @return 
      */
+    // 49
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
                 idPhoto,
@@ -494,6 +506,7 @@ class IFaceLogClient implements Constant{
      * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @return 
      */
+    // 50
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
                 idPhoto,
@@ -509,11 +522,12 @@ class IFaceLogClient implements Constant{
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @return bean 保存的{@link PersonBean}对象
      */
+    // 51
     public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
                 idPhoto,
                 feature,
-                toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                 deviceId));
     }
     /**
@@ -523,6 +537,7 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
      * @return 
      */
+    // 52
     public PersonBean savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
         return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
                 idPhotoMd5,
@@ -533,6 +548,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @param expiryDate 失效日期
      */
+    // 53
     public void setPersonExpiryDate(int personId,long expiryDate){
         service.setPersonExpiryDate(personId,
                 expiryDate);
@@ -542,6 +558,7 @@ class IFaceLogClient implements Constant{
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
      */
+    // 54
     public void setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
         service.setPersonExpiryDateList(personIdList,
                 expiryDate);
