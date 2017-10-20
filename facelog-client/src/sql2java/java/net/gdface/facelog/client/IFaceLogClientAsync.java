@@ -32,7 +32,8 @@ class IFaceLogClientAsync implements Constant{
     /** bean converter between {@link PersonBean} and corresponding thrift bean */
     private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
     /** bean converter between {@link LogLightBean} and corresponding thrift bean */
-    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;    private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
+    private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
+    private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
     /**
      * constructor 
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog.Async created by Swift, must not be null
@@ -62,7 +63,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #addFeature(byte[],int,List<FaceBean>)}<br>
+     * Generic version of {@link #addFeature(byte[],int,List<FaceBean>)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -103,7 +104,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #addFeature(byte[],int,Map<ByteBuffer, FaceBean>,int)}<br>
+     * Generic version of {@link #addFeature(byte[],int,Map<ByteBuffer, FaceBean>,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -146,7 +147,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
+     * Generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -637,7 +638,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -694,7 +695,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #savePerson(PersonBean,byte[])}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -734,7 +735,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -776,7 +777,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #savePerson(PersonBean,byte[],byte[],List<FaceBean>)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List<FaceBean>)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -820,7 +821,7 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * generic version of {@link #savePerson(PersonBean,byte[],byte[],Map<ByteBuffer, FaceBean>,int)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map<ByteBuffer, FaceBean>,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
