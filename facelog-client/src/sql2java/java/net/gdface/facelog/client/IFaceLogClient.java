@@ -11,7 +11,6 @@ import com.google.common.collect.Maps.EntryTransformer;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.Map.Entry;
 /**
  * remote implementation of the service IFaceLog<br>
  * all comment copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
@@ -38,8 +37,8 @@ class IFaceLogClient implements Constant{
      * @param service a instance of net.gdface.facelog.client.thrift.IFaceLog created by Swift, must not be null
      */
     IFaceLogClient(net.gdface.facelog.client.thrift.IFaceLog service){
-    	checkNotNull(service,"service is null");
-    	this.service = service;
+        checkNotNull(service,"service is null");
+        this.service = service;
     }
     protected static final byte[] toBytes(ByteBuffer buffer){
         if(null == buffer)return null;
@@ -52,19 +51,26 @@ class IFaceLogClient implements Constant{
             buffer.position(pos);
         }
     }
+    private static final CollectionUtils.DualTransformer<ByteBuffer,byte[]> dualTransformer = new CollectionUtils.DualTransformer<ByteBuffer,byte[]>(){
+        @Override
+        public byte[] toRight(ByteBuffer input) {
+            return toBytes(input);
+        }
+        @Override
+        public ByteBuffer fromRight(byte[] input) {
+            return null == input ? null : ByteBuffer.wrap(input);
+        }};
+    /** get a view of {@code Map<ByteBuffer,V>} with {@code byte[]} key type */
     protected static final<V>Map<byte[],V> toBytesKey(Map<ByteBuffer,V> source){
         if(null == source)return null;
-        HashMap<byte[], V> dest = new HashMap<byte[],V>();
-        for(Entry<ByteBuffer, V> entry:source.entrySet()){
-            dest.put(toBytes(entry.getKey()), entry.getValue());
-        }
-        return dest;
+        return CollectionUtils.tranformKeys(source, dualTransformer);
     }
     private static final EntryTransformer<Object,ByteBuffer,byte[]> transformer = new EntryTransformer<Object,ByteBuffer,byte[]>(){
         @Override
         public byte[] transformEntry(Object key, ByteBuffer value) {
-             return toBytes(value);
+             return dualTransformer.toRight(value);
         }};
+    /** get a view of {@code Map<K,ByteBuffer>} with {@code byte[]} value type */
     protected static final<K> Map<K,byte[]> toBytesValue(Map<K,ByteBuffer> source){
         if(null == source)return null;
         return Maps.transformEntries(source, transformer);
