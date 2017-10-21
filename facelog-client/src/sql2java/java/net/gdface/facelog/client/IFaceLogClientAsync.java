@@ -33,6 +33,7 @@ class IFaceLogClientAsync implements Constant{
     private IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean = ThriftConverter.converterPersonBean;
     /** bean converter between {@link LogLightBean} and corresponding thrift bean */
     private IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean = ThriftConverter.converterLogLightBean;
+
     private final net.gdface.facelog.client.thrift.IFaceLog.Async service;
     /**
      * constructor 
@@ -867,9 +868,9 @@ class IFaceLogClientAsync implements Constant{
      * @param expiryDate 失效日期
      */
     // 53 SERIVCE PORT : setPersonExpiryDate
-    public ListenableFuture<Void> setPersonExpiryDate(int personId,long expiryDate){
+    public ListenableFuture<Void> setPersonExpiryDate(int personId,Date expiryDate){
         return service.setPersonExpiryDate(personId,
-                expiryDate);
+                expiryDate.getTime());
     }
     /**
      * 修改 personIdList 指定的人员记录的有效期

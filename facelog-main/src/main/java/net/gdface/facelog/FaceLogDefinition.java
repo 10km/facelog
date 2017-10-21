@@ -1,7 +1,6 @@
 package net.gdface.facelog;
 
 import java.nio.ByteBuffer;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -602,5 +601,4 @@ public abstract class FaceLogDefinition {
 	public List<DeviceBean> getDevice(List<Integer> deviceId) throws ServiceRuntime {
 		return null;
 	}
-
 }

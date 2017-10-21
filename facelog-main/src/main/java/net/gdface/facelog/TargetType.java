@@ -8,8 +8,9 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER,ElementType.METHOD})
 public @interface TargetType
 {
     Class<?> value();
+    public static final String authentication="gu";
 }
