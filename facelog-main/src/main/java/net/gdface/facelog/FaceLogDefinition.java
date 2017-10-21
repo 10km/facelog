@@ -1,6 +1,7 @@
 package net.gdface.facelog;
 
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -154,7 +155,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public void setPersonExpiryDate(int personId, long expiryDate) throws ServiceRuntime {
+	public void setPersonExpiryDate(int personId, @TargetType("java.util.Date")long expiryDate) throws ServiceRuntime {
 	}
 
 	/**
