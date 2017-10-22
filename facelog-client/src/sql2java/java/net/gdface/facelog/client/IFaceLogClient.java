@@ -658,7 +658,7 @@ class IFaceLogClient implements Constant{
     // 53 SERIVCE PORT : setPersonExpiryDate
     public void setPersonExpiryDate(int personId,Date expiryDate){
         service.setPersonExpiryDate(personId,
-                expiryDate.getTime());
+                GenericUtils.toLong(expiryDate,Date.class));
     }
     /**
      * 修改 personIdList 指定的人员记录的有效期

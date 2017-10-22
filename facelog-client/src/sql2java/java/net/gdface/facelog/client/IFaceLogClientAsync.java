@@ -870,7 +870,7 @@ class IFaceLogClientAsync implements Constant{
     // 53 SERIVCE PORT : setPersonExpiryDate
     public ListenableFuture<Void> setPersonExpiryDate(int personId,Date expiryDate){
         return service.setPersonExpiryDate(personId,
-                expiryDate.getTime());
+                GenericUtils.toLong(expiryDate,Date.class));
     }
     /**
      * 修改 personIdList 指定的人员记录的有效期
