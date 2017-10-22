@@ -316,6 +316,19 @@ public interface IFaceLog
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
             @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
         );
+
+        @ThriftMethod(value = "testDate")
+        ListenableFuture<Long> testDate(
+            @ThriftField(value=1, name="test1", requiredness=Requiredness.NONE) final List<Long> test1,
+            @ThriftField(value=2, name="test2", requiredness=Requiredness.NONE) final Set<Long> test2,
+            @ThriftField(value=3, name="test3", requiredness=Requiredness.NONE) final Map<String, Long> test3,
+            @ThriftField(value=4, name="test4", requiredness=Requiredness.NONE) final Map<Long, String> test4,
+            @ThriftField(value=5, name="test5", requiredness=Requiredness.NONE) final Map<Long, DeviceBean> test5,
+            @ThriftField(value=6, name="test6", requiredness=Requiredness.NONE) final Map<FaceBean, Long> test6
+        );
+
+        @ThriftMethod(value = "testDate2")
+        ListenableFuture<Map<FaceBean, Long>> testDate2();
     }
     @ThriftMethod(value = "addFeature")
     FeatureBean addFeature(
@@ -673,5 +686,20 @@ public interface IFaceLog
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
     );
+
+
+    @ThriftMethod(value = "testDate")
+    long testDate(
+        @ThriftField(value=1, name="test1", requiredness=Requiredness.NONE) final List<Long> test1,
+        @ThriftField(value=2, name="test2", requiredness=Requiredness.NONE) final Set<Long> test2,
+        @ThriftField(value=3, name="test3", requiredness=Requiredness.NONE) final Map<String, Long> test3,
+        @ThriftField(value=4, name="test4", requiredness=Requiredness.NONE) final Map<Long, String> test4,
+        @ThriftField(value=5, name="test5", requiredness=Requiredness.NONE) final Map<Long, DeviceBean> test5,
+        @ThriftField(value=6, name="test6", requiredness=Requiredness.NONE) final Map<FaceBean, Long> test6
+    );
+
+
+    @ThriftMethod(value = "testDate2")
+    Map<FaceBean, Long> testDate2();
 
 }

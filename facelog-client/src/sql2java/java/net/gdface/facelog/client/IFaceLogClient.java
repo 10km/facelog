@@ -670,4 +670,19 @@ class IFaceLogClient implements Constant{
         service.setPersonExpiryDateList(personIdList,
                 expiryDate);
     }
+
+    // 55 SERIVCE PORT : testDate
+    public long testDate(List<Date> test1,Set<Date> test2,Map<String, java.sql.Timestamp> test3,Map<java.sql.Date, String> test4,Map<java.sql.Date, DeviceBean> test5,Map<FaceBean, java.sql.Date> test6){
+        return service.testDate(GenericUtils.toLong(test1,Date.class),
+                GenericUtils.toLong(test2,Date.class),
+                GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
+                GenericUtils.toLongKey(test4,java.sql.Date.class),
+                converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
+                converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class)));
+    }
+
+    // 56 SERIVCE PORT : testDate2
+    public Map<FaceBean, Long> testDate2(){
+        return converterFaceBean.fromRightKey(service.testDate2());
+    }
 }

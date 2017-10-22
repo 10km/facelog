@@ -176,4 +176,6 @@ service IFaceLog {
   i32 savePersonsWithPhoto(1:  map<binary, PersonBean> persons);
   void setPersonExpiryDate(1:  i32 personId, 2:  i64 expiryDate);
   void setPersonExpiryDateList(1:  list<i32> personIdList, 2:  i64 expiryDate);
+  i64 testDate(1:  list<i64> test1, 2:  set<i64> test2, 3:  map<string, i64> test3, 4:  map<i64, string> test4, 5:  map<i64, DeviceBean> test5, 6:  map<FaceBean, i64> test6);
+  map<FaceBean, i64> testDate2();
 }
