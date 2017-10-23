@@ -24,6 +24,7 @@ import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
+import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
@@ -112,11 +113,33 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //1
-    @SuppressWarnings("unused")
     public FlDeviceBean loadByPrimaryKey(Integer id) throws DAOException
     {
         if(null == id){
             return null;
+        }
+        try{
+            return loadByPrimaryKeyChecked(id);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    /**
+     * Loads a {@link FlDeviceBean} from the fl_device using primary key fields.
+     *
+     * @param id Integer - PK# 1
+     * @return a unique FlDeviceBean
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    //1.1
+    @SuppressWarnings("unused")
+    public FlDeviceBean loadByPrimaryKeyChecked(Integer id) throws DAOException
+    {
+        if(null == id){
+            throw new NullPointerException();
         }
         Connection c = null;
         PreparedStatement ps = null;
@@ -131,14 +154,18 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlDeviceBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (0 == pReturn.size()) {
-                return null;
+                throw new ObjectRetrievalException();
             } else {
                 return pReturn.get(0);
             }
         }
+        catch(ObjectRetrievalException e)
+        {
+            throw e;
+        }
         catch(SQLException e)
         {
-            throw new ObjectRetrievalException(e);
+            throw new DataRetrievalException(e);
         }
         finally
         {
@@ -151,7 +178,16 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean loadByPrimaryKey(FlDeviceBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKey( bean.getId());
+        return bean==null?null:loadByPrimaryKeyChecked(bean);
+    }
+    
+    //1.2.2
+    @Override
+    public FlDeviceBean loadByPrimaryKeyChecked(FlDeviceBean bean) throws DAOException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getId());
     }
     
     /**
@@ -163,11 +199,20 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //1.3
     @Override
     public FlDeviceBean loadByPrimaryKey(Object ...keys) throws DAOException{
+        try{
+            return loadByPrimaryKey(keys);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
+    }
+    //1.3.2
+    @Override
+    public FlDeviceBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        return loadByPrimaryKey((Integer)keys[0]);
+        return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
     /**
      * Returns true if this fl_device contains row with primary key fields.
@@ -175,6 +220,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //1.4
+    @SuppressWarnings("unused")
     public boolean existsPrimaryKey(Integer id) throws DAOException
     {
         if(null == id){

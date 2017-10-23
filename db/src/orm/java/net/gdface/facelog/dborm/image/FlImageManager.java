@@ -24,6 +24,7 @@ import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
+import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFaceBean;
 import net.gdface.facelog.dborm.face.FlFaceManager;
@@ -114,11 +115,33 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //1
-    @SuppressWarnings("unused")
     public FlImageBean loadByPrimaryKey(String md5) throws DAOException
     {
         if(null == md5){
             return null;
+        }
+        try{
+            return loadByPrimaryKeyChecked(md5);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    /**
+     * Loads a {@link FlImageBean} from the fl_image using primary key fields.
+     *
+     * @param md5 String - PK# 1
+     * @return a unique FlImageBean
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    //1.1
+    @SuppressWarnings("unused")
+    public FlImageBean loadByPrimaryKeyChecked(String md5) throws DAOException
+    {
+        if(null == md5){
+            throw new NullPointerException();
         }
         Connection c = null;
         PreparedStatement ps = null;
@@ -133,14 +156,18 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
             List<FlImageBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (0 == pReturn.size()) {
-                return null;
+                throw new ObjectRetrievalException();
             } else {
                 return pReturn.get(0);
             }
         }
+        catch(ObjectRetrievalException e)
+        {
+            throw e;
+        }
         catch(SQLException e)
         {
-            throw new ObjectRetrievalException(e);
+            throw new DataRetrievalException(e);
         }
         finally
         {
@@ -153,7 +180,16 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     @Override
     public FlImageBean loadByPrimaryKey(FlImageBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKey( bean.getMd5());
+        return bean==null?null:loadByPrimaryKeyChecked(bean);
+    }
+    
+    //1.2.2
+    @Override
+    public FlImageBean loadByPrimaryKeyChecked(FlImageBean bean) throws DAOException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getMd5());
     }
     
     /**
@@ -165,11 +201,20 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //1.3
     @Override
     public FlImageBean loadByPrimaryKey(Object ...keys) throws DAOException{
+        try{
+            return loadByPrimaryKey(keys);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
+    }
+    //1.3.2
+    @Override
+    public FlImageBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-        return loadByPrimaryKey((String)keys[0]);
+        return loadByPrimaryKeyChecked((String)keys[0]);
     }
     /**
      * Returns true if this fl_image contains row with primary key fields.
@@ -177,6 +222,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //1.4
+    @SuppressWarnings("unused")
     public boolean existsPrimaryKey(String md5) throws DAOException
     {
         if(null == md5){

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import net.gdface.facelog.dborm.exception.DAOException;
+import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 /**
  * Interface to handle database calls (save, load, count, etc...) for table.
  * @author guyadong
@@ -350,12 +351,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         public B loadByPrimaryKey(B bean)throws DAOException{
             throw new UnsupportedOperationException();
         }
-
+        @Override
+        public B loadByPrimaryKeyChecked(B bean)throws DAOException{
+            throw new UnsupportedOperationException();
+        }
         @Override
         public B loadByPrimaryKey(Object ...keys)throws DAOException{
             throw new UnsupportedOperationException();
         }
-
+        @Override
+        public B loadByPrimaryKeyChecked(Object ...keys)throws DAOException{
+            throw new UnsupportedOperationException();
+        }
         @Override
         public int deleteByPrimaryKey(Object ...keys)throws DAOException{
             throw new UnsupportedOperationException();
@@ -617,7 +624,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
 
     /**
      * Loads a B bean from the table using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
      * @param bean the B bean with primary key fields
      * @return a unique B or {@code null} if not found or bean is null
      * @throws DAOException
@@ -625,6 +631,14 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     //1.2
     public B loadByPrimaryKey(B bean)throws DAOException;
     
+    /**
+     * see also {@link loadByPrimaryKey(B)}
+     * @return a unique B ,otherwise throw exception
+     * @throws ObjectRetrievalException
+     * @throws DAOException
+     */
+    //1.2.2
+    public B loadByPrimaryKeyChecked(B bean)throws DAOException;    
     /**
      * Loads a B bean from the table using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
@@ -648,6 +662,15 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      */
     //1.3
     public B loadByPrimaryKey(Object ...keys)throws DAOException;
+
+    /**
+     * see also {@link #loadByPrimaryKey(Object...)}
+     * @return a unique B,otherwise throw exception
+     * @throws ObjectRetrievalException
+     * @throws DAOException
+     */
+    //1.3.2
+    public B loadByPrimaryKeyChecked(Object ...keys)throws DAOException;
     
     /**
      * Returns true if this table contains row with primary key fields.

@@ -24,6 +24,7 @@ import net.gdface.facelog.dborm.TableListener;
 import net.gdface.facelog.dborm.TableManager;
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
+import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.face.FlFeatureManager;
@@ -114,11 +115,33 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //1
-    @SuppressWarnings("unused")
     public FlPersonBean loadByPrimaryKey(Integer id) throws DAOException
     {
         if(null == id){
             return null;
+        }
+        try{
+            return loadByPrimaryKeyChecked(id);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    /**
+     * Loads a {@link FlPersonBean} from the fl_person using primary key fields.
+     *
+     * @param id Integer - PK# 1
+     * @return a unique FlPersonBean
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    //1.1
+    @SuppressWarnings("unused")
+    public FlPersonBean loadByPrimaryKeyChecked(Integer id) throws DAOException
+    {
+        if(null == id){
+            throw new NullPointerException();
         }
         Connection c = null;
         PreparedStatement ps = null;
@@ -133,14 +156,18 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlPersonBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (0 == pReturn.size()) {
-                return null;
+                throw new ObjectRetrievalException();
             } else {
                 return pReturn.get(0);
             }
         }
+        catch(ObjectRetrievalException e)
+        {
+            throw e;
+        }
         catch(SQLException e)
         {
-            throw new ObjectRetrievalException(e);
+            throw new DataRetrievalException(e);
         }
         finally
         {
@@ -153,7 +180,16 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean loadByPrimaryKey(FlPersonBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKey( bean.getId());
+        return bean==null?null:loadByPrimaryKeyChecked(bean);
+    }
+    
+    //1.2.2
+    @Override
+    public FlPersonBean loadByPrimaryKeyChecked(FlPersonBean bean) throws DAOException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getId());
     }
     
     /**
@@ -165,11 +201,20 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //1.3
     @Override
     public FlPersonBean loadByPrimaryKey(Object ...keys) throws DAOException{
+        try{
+            return loadByPrimaryKey(keys);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
+    }
+    //1.3.2
+    @Override
+    public FlPersonBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        return loadByPrimaryKey((Integer)keys[0]);
+        return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
     /**
      * Returns true if this fl_person contains row with primary key fields.
@@ -177,6 +222,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //1.4
+    @SuppressWarnings("unused")
     public boolean existsPrimaryKey(Integer id) throws DAOException
     {
         if(null == id){
