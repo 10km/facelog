@@ -10,6 +10,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
 /**
+ * 定义 FaceLog 服务接口<br>
  * remote implementation of the service IFaceLog<br>
  * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * <b>NOTE:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.<br>
@@ -172,7 +173,11 @@ class IFaceLogClient implements Constant{
     public int countLogLightWhere(String where){
         return service.countLogLightWhere(where);
     }
-
+    /**
+     * 返回满足{@code where}条件的日志记录(fl_log)数目
+     * @param where 为{@code null}时返回所有记录
+     * @return 
+     */
     // 7 SERIVCE PORT : countLogWhere
     public int countLogWhere(String where){
         return service.countLogWhere(where);
@@ -305,15 +310,23 @@ class IFaceLogClient implements Constant{
     public boolean existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
-
+    /**
+     * 返回{@code deviceId}指定的设备记录
+     * @param deviceId
+     * @return 
+     */
     // 21 SERIVCE PORT : getDevice
     public DeviceBean getDevice(int deviceId){
         return converterDeviceBean.fromRight(service.getDevice(deviceId));
     }
-
+    /**
+     * 返回 {@code idList} 指定的设备记录
+     * @param idList
+     * @return 
+     */
     // 22 SERIVCE PORT : getDeviceList
-    public List<DeviceBean> getDevice(List<Integer> deviceId){
-        return converterDeviceBean.fromRight(service.getDeviceList(deviceId));
+    public List<DeviceBean> getDevice(List<Integer> idList){
+        return converterDeviceBean.fromRight(service.getDeviceList(idList));
     }
     /**
      * 根据MD5校验码返回人脸特征数据记录
@@ -510,7 +523,11 @@ class IFaceLogClient implements Constant{
                     featureMd5,
                     deleteOldFeatureImage);
     }
-
+    /**
+     * 保存设备记录
+     * @param deviceBean
+     * @return 
+     */
     // 43 SERIVCE PORT : saveDevice
     public DeviceBean saveDevice(DeviceBean deviceBean){
         return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));

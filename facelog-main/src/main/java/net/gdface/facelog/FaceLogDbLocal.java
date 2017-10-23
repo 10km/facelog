@@ -968,9 +968,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	}
 
 	@Override
-	public List<DeviceBean> getDevice(List<Integer> deviceId)throws ServiceRuntime{
+	public List<DeviceBean> getDevice(List<Integer> idList)throws ServiceRuntime{
     	try{
-		return _getDevice(deviceId);
+		return _getDevice(idList);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {

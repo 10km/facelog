@@ -15,13 +15,13 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PersonBean;
 
+// 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
+// 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
+// 所以这里采用抽象类来定义服务接口,如果抽象类中的方法是抽象的，也无法获取参数名，所以这里所有方法都有一个空的函数体。
+
 /**
  * 定义 FaceLog 服务接口<br>
- * 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
- * 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
- * 所以这里采用抽象类来定义服务接口,如果抽象类中的方法是抽象的，也无法获取参数名，所以这里所有方法都有一个空的函数体。
  * @author guyadong
- *
  */
 @ThriftService("IFaceLog")
 public abstract class FaceLogDefinition {
@@ -405,6 +405,12 @@ public abstract class FaceLogDefinition {
 	public int countLogLightWhere(String where) throws ServiceRuntime {
 		return 0;
 	}
+	/**
+	 * 返回满足{@code where}条件的日志记录(fl_log)数目
+	 * @param where 为{@code null}时返回所有记录
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod
 	public int countLogWhere(String where) throws ServiceRuntime {
 		return 0;
@@ -589,16 +595,34 @@ public abstract class FaceLogDefinition {
 	public boolean existsDevice(int id) throws ServiceRuntime {
 		return false;
 	}
+	/**
+	 * 保存设备记录
+	 * @param deviceBean
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod
 	public DeviceBean saveDevice(DeviceBean deviceBean) throws ServiceRuntime {
 		return null;
 	}
+	/**
+	 * 返回{@code deviceId}指定的设备记录
+	 * @param deviceId
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod
 	public DeviceBean getDevice(Integer deviceId) throws ServiceRuntime {
 		return null;
 	}
+	/**
+	 * 返回 {@code idList} 指定的设备记录
+	 * @param idList
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod("getDeviceList")
-	public List<DeviceBean> getDevice(List<Integer> deviceId) throws ServiceRuntime {
+	public List<DeviceBean> getDevice(List<Integer> idList) throws ServiceRuntime {
 		return null;
 	}
 }

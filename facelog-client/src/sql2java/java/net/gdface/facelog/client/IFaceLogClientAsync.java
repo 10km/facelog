@@ -12,6 +12,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
 /**
+ * 定义 FaceLog 服务接口<br>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * <b>NOTE:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.<br>
@@ -216,7 +217,11 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Integer> countLogLightWhere(String where){
         return service.countLogLightWhere(where);
     }
-
+    /**
+     * 返回满足{@code where}条件的日志记录(fl_log)数目
+     * @param where 为{@code null}时返回所有记录
+     * @return 
+     */
     // 7 SERIVCE PORT : countLogWhere
     public ListenableFuture<Integer> countLogWhere(String where){
         return service.countLogWhere(where);
@@ -349,7 +354,11 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<Boolean> existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
-
+    /**
+     * 返回{@code deviceId}指定的设备记录
+     * @param deviceId
+     * @return 
+     */
     // 21 SERIVCE PORT : getDevice
     public ListenableFuture<DeviceBean> getDevice(int deviceId){
         return Futures.transform(
@@ -361,11 +370,15 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-
+    /**
+     * 返回 {@code idList} 指定的设备记录
+     * @param idList
+     * @return 
+     */
     // 22 SERIVCE PORT : getDeviceList
-    public ListenableFuture<List<DeviceBean>> getDevice(List<Integer> deviceId){
+    public ListenableFuture<List<DeviceBean>> getDevice(List<Integer> idList){
         return Futures.transform(
-                service.getDeviceList(deviceId), 
+                service.getDeviceList(idList), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
@@ -631,7 +644,11 @@ class IFaceLogClientAsync implements Constant{
                     featureMd5,
                     deleteOldFeatureImage);
     }
-
+    /**
+     * 保存设备记录
+     * @param deviceBean
+     * @return 
+     */
     // 43 SERIVCE PORT : saveDevice
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean){
         return Futures.transform(
