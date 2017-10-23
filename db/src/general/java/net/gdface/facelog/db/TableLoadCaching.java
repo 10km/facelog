@@ -5,18 +5,16 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: table.loadcaching.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.base.Preconditions;
+
 /**
  * 
  * 基于 {@link LoadingCache}实现表数据缓存,并可以通过{@link TableListener}实现缓存数组的更新
@@ -88,11 +86,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
     }
     @Override
     public B getBean(K key) {
-        try {
-            return cache.get(key);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return cache.getUnchecked(key);
     }
     @Override
     public void update(B bean){

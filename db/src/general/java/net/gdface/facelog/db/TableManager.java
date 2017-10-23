@@ -6,7 +6,6 @@
 // template: table.manager.java.vm
 // ______________________________________________________
 
-
 package net.gdface.facelog.db;
 import java.util.List;
 import java.util.LinkedList;

@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: dao.exception.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.dborm.exception;
 
 import java.sql.SQLException;

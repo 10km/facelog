@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: data.access.exception.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.dborm.exception;
 
 /**

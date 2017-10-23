@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: impl.dbconverter.generic.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

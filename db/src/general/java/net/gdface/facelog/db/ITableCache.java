@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: itablecache.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db;
 
 import java.util.concurrent.TimeUnit;

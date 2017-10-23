@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: cache.manager.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.TimeUnit;

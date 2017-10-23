@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: tableinstance.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db.mysql;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.BaseBean;

@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: comparator.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.dborm.log;
 
 import java.util.Comparator;

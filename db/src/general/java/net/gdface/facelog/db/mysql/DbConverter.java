@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: impl.dbconverter.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db.mysql;
 
 import java.util.Vector;

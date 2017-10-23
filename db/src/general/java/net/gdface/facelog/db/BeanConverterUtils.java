@@ -5,7 +5,6 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: bean.converter.utils.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db;
 import java.io.PrintWriter;
 import java.io.StringWriter;
