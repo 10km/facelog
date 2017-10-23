@@ -49,22 +49,30 @@ class IFaceLogClient implements Constant{
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     // 1 SERIVCE PORT : addFeature
-    public FeatureBean addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
-        return converterFeatureBean.fromRight(service.addFeature(feature,
-                personId,
-                converterFaceBean.toRight(faecBeans)));
+    public FeatureBean addFeature(
+            byte[] feature,
+            int personId,
+            List<FaceBean> faecBeans){
+        return converterFeatureBean.fromRight(service.addFeature(
+                    feature,
+                    personId,
+                    converterFaceBean.toRight(faecBeans)));
     }
     /** 
-     * Generic version of {@link #addFeature(byte[],int,List<FaceBean>)}<br>
+     * Generic version of {@link #addFeature(feature,personId,faecBeans)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 1 GENERIC
-    public FeatureBean addFeatureGeneric(Object feature,int personId,List<FaceBean> faecBeans){
-        return converterFeatureBean.fromRight(service.addFeature(GenericUtils.toBytes(feature),
-                personId,
-                converterFaceBean.toRight(faecBeans)));
+    public FeatureBean addFeatureGeneric(
+            Object feature,
+            int personId,
+            List<FaceBean> faecBeans){
+        return converterFeatureBean.fromRight(service.addFeature(
+                    GenericUtils.toBytes(feature),
+                    personId,
+                    converterFaceBean.toRight(faecBeans)));
     }
     /**
      * 增加一个人脸特征记录,特征数据由faceInfo指定的多张图像合成，如果记录已经存在则抛出异常
@@ -75,24 +83,34 @@ class IFaceLogClient implements Constant{
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     // 2 SERIVCE PORT : addFeatureMulti
-    public FeatureBean addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
-        return converterFeatureBean.fromRight(service.addFeatureMulti(feature,
-                personId,
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId));
+    public FeatureBean addFeature(
+            byte[] feature,
+            int personId,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
+        return converterFeatureBean.fromRight(service.addFeatureMulti(
+                    feature,
+                    personId,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId));
     }
     /** 
-     * Generic version of {@link #addFeature(byte[],int,Map<ByteBuffer, FaceBean>,int)}<br>
+     * Generic version of {@link #addFeature(feature,personId,faceInfo,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 2 GENERIC
-    public FeatureBean addFeatureGeneric(Object feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
-        return converterFeatureBean.fromRight(service.addFeatureMulti(GenericUtils.toBytes(feature),
-                personId,
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId));
+    public FeatureBean addFeatureGeneric(
+            Object feature,
+            int personId,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
+        return converterFeatureBean.fromRight(service.addFeatureMulti(
+                    GenericUtils.toBytes(feature),
+                    personId,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId));
     }
     /**
      * 保存图像数据,如果图像数据已经存在，则抛出异常
@@ -104,24 +122,34 @@ class IFaceLogClient implements Constant{
      * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
     // 3 SERIVCE PORT : addImage
-    public ImageBean addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
-        return converterImageBean.fromRight(service.addImage(imageData,
-                deviceId,
-                converterFaceBean.toRight(faceBean),
-                personId));
+    public ImageBean addImage(
+            byte[] imageData,
+            int deviceId,
+            FaceBean faceBean,
+            int personId){
+        return converterImageBean.fromRight(service.addImage(
+                    imageData,
+                    deviceId,
+                    converterFaceBean.toRight(faceBean),
+                    personId));
     }
     /** 
-     * Generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
+     * Generic version of {@link #addImage(imageData,deviceId,faceBean,personId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 3 GENERIC
-    public ImageBean addImageGeneric(Object imageData,int deviceId,FaceBean faceBean,int personId){
-        return converterImageBean.fromRight(service.addImage(GenericUtils.toBytes(imageData),
-                deviceId,
-                converterFaceBean.toRight(faceBean),
-                personId));
+    public ImageBean addImageGeneric(
+            Object imageData,
+            int deviceId,
+            FaceBean faceBean,
+            int personId){
+        return converterImageBean.fromRight(service.addImage(
+                    GenericUtils.toBytes(imageData),
+                    deviceId,
+                    converterFaceBean.toRight(faceBean),
+                    personId));
     }
     /**
      * 添加一条验证日志记录
@@ -157,9 +185,12 @@ class IFaceLogClient implements Constant{
      * @see #deleteFeature(String, boolean)
      */
     // 8 SERIVCE PORT : deleteAllFeaturesByPersonId
-    public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
-        return service.deleteAllFeaturesByPersonId(personId,
-                deleteImage);
+    public int deleteAllFeaturesByPersonId(
+            int personId,
+            boolean deleteImage){
+        return service.deleteAllFeaturesByPersonId(
+                    personId,
+                    deleteImage);
     }
     /**
      * 删除featureMd5指定的特征记录及关联的face记录
@@ -168,9 +199,12 @@ class IFaceLogClient implements Constant{
      * @return 
      */
     // 9 SERIVCE PORT : deleteFeature
-    public List<String> deleteFeature(String featureMd5,boolean deleteImage){
-        return service.deleteFeature(featureMd5,
-                deleteImage);
+    public List<String> deleteFeature(
+            String featureMd5,
+            boolean deleteImage){
+        return service.deleteFeature(
+                    featureMd5,
+                    deleteImage);
     }
     /**
      * 删除imageMd5指定图像及其缩略图
@@ -410,17 +444,25 @@ class IFaceLogClient implements Constant{
     }
 
     // 37 SERIVCE PORT : loadLogByWhere
-    public List<LogBean> loadLogByWhere(String where,int startRow,int numRows){
-        return converterLogBean.fromRight(service.loadLogByWhere(where,
-                startRow,
-                numRows));
+    public List<LogBean> loadLogByWhere(
+            String where,
+            int startRow,
+            int numRows){
+        return converterLogBean.fromRight(service.loadLogByWhere(
+                    where,
+                    startRow,
+                    numRows));
     }
 
     // 38 SERIVCE PORT : loadLogLightByWhere
-    public List<LogLightBean> loadLogLightByWhere(String where,int startRow,int numRows){
-        return converterLogLightBean.fromRight(service.loadLogLightByWhere(where,
-                startRow,
-                numRows));
+    public List<LogLightBean> loadLogLightByWhere(
+            String where,
+            int startRow,
+            int numRows){
+        return converterLogLightBean.fromRight(service.loadLogLightByWhere(
+                    where,
+                    startRow,
+                    numRows));
     }
     /**
      * 返回 where 指定的所有人员记录
@@ -459,10 +501,14 @@ class IFaceLogClient implements Constant{
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      */
     // 42 SERIVCE PORT : replaceFeature
-    public void replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
-        service.replaceFeature(personId,
-                featureMd5,
-                deleteOldFeatureImage);
+    public void replaceFeature(
+            int personId,
+            String featureMd5,
+            boolean deleteOldFeatureImage){
+        service.replaceFeature(
+                    personId,
+                    featureMd5,
+                    deleteOldFeatureImage);
     }
 
     // 43 SERIVCE PORT : saveDevice
@@ -488,28 +534,42 @@ class IFaceLogClient implements Constant{
      * @return 
      */
     // 45 SERIVCE PORT : savePersonFull
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
-        return converterPersonBean.fromRight(service.savePersonFull(converterPersonBean.toRight(bean),
-                idPhoto,
-                feature,
-                featureImage,
-                converterFaceBean.toRight(featureFaceBean),
-                deviceId));
+    public PersonBean savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            byte[] featureImage,
+            FaceBean featureFaceBean,
+            int deviceId){
+        return converterPersonBean.fromRight(service.savePersonFull(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    featureImage,
+                    converterFaceBean.toRight(featureFaceBean),
+                    deviceId));
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 45 GENERIC
-    public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Object featureImage,FaceBean featureFaceBean,int deviceId){
-        return converterPersonBean.fromRight(service.savePersonFull(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                GenericUtils.toBytes(feature),
-                GenericUtils.toBytes(featureImage),
-                converterFaceBean.toRight(featureFaceBean),
-                deviceId));
+    public PersonBean savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            Object feature,
+            Object featureImage,
+            FaceBean featureFaceBean,
+            int deviceId){
+        return converterPersonBean.fromRight(service.savePersonFull(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    GenericUtils.toBytes(featureImage),
+                    converterFaceBean.toRight(featureFaceBean),
+                    deviceId));
     }
     /**
      * 保存人员(person)记录
@@ -535,20 +595,26 @@ class IFaceLogClient implements Constant{
      * @return 
      */
     // 48 SERIVCE PORT : savePersonWithPhoto
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto){
-        return converterPersonBean.fromRight(service.savePersonWithPhoto(converterPersonBean.toRight(bean),
-                idPhoto));
+    public PersonBean savePerson(
+            PersonBean bean,
+            byte[] idPhoto){
+        return converterPersonBean.fromRight(service.savePersonWithPhoto(
+                    converterPersonBean.toRight(bean),
+                    idPhoto));
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 48 GENERIC
-    public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto){
-        return converterPersonBean.fromRight(service.savePersonWithPhoto(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto)));
+    public PersonBean savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto){
+        return converterPersonBean.fromRight(service.savePersonWithPhoto(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto)));
     }
     /**
      * 保存人员信息记录
@@ -559,24 +625,34 @@ class IFaceLogClient implements Constant{
      * @return 
      */
     // 49 SERIVCE PORT : savePersonWithPhotoAndFeature
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
-                idPhoto,
-                converterFeatureBean.toRight(featureBean),
-                deviceId));
+    public PersonBean savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            FeatureBean featureBean,
+            int deviceId){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    converterFeatureBean.toRight(featureBean),
+                    deviceId));
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,featureBean,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 49 GENERIC
-    public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,FeatureBean featureBean,int deviceId){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                converterFeatureBean.toRight(featureBean),
-                deviceId));
+    public PersonBean savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            FeatureBean featureBean,
+            int deviceId){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeature(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    converterFeatureBean.toRight(featureBean),
+                    deviceId));
     }
     /**
      * 保存人员信息记录
@@ -587,24 +663,34 @@ class IFaceLogClient implements Constant{
      * @return 
      */
     // 50 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
-                idPhoto,
-                feature,
-                converterFaceBean.toRight(faceBeans)));
+    public PersonBean savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            List<FaceBean> faceBeans){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    converterFaceBean.toRight(faceBeans)));
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List<FaceBean>)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,feature,faceBeans)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 50 GENERIC
-    public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,List<FaceBean> faceBeans){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                GenericUtils.toBytes(feature),
-                converterFaceBean.toRight(faceBeans)));
+    public PersonBean savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            Object feature,
+            List<FaceBean> faceBeans){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiFaces(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    converterFaceBean.toRight(faceBeans)));
     }
     /**
      * 保存人员信息记录
@@ -616,26 +702,38 @@ class IFaceLogClient implements Constant{
      * @return bean 保存的{@link PersonBean}对象
      */
     // 51 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
-    public PersonBean savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
-                idPhoto,
-                feature,
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId));
+    public PersonBean savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId));
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map<ByteBuffer, FaceBean>,int)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,feature,faceInfo,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 51 GENERIC
-    public PersonBean savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                GenericUtils.toBytes(feature),
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId));
+    public PersonBean savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            Object feature,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureMultiImage(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId));
     }
     /**
      * 保存人员信息记录
@@ -645,10 +743,14 @@ class IFaceLogClient implements Constant{
      * @return 
      */
     // 52 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
-    public PersonBean savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
-        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
-                idPhotoMd5,
-                featureMd5));
+    public PersonBean savePerson(
+            PersonBean bean,
+            String idPhotoMd5,
+            String featureMd5){
+        return converterPersonBean.fromRight(service.savePersonWithPhotoAndFeatureSaved(
+                    converterPersonBean.toRight(bean),
+                    idPhotoMd5,
+                    featureMd5));
     }
     /**
      * 修改 personId 指定的人员记录的有效期
@@ -656,9 +758,12 @@ class IFaceLogClient implements Constant{
      * @param expiryDate 失效日期
      */
     // 53 SERIVCE PORT : setPersonExpiryDate
-    public void setPersonExpiryDate(int personId,Date expiryDate){
-        service.setPersonExpiryDate(personId,
-                GenericUtils.toLong(expiryDate,Date.class));
+    public void setPersonExpiryDate(
+            int personId,
+            Date expiryDate){
+        service.setPersonExpiryDate(
+                    personId,
+                    GenericUtils.toLong(expiryDate,Date.class));
     }
     /**
      * 修改 personIdList 指定的人员记录的有效期
@@ -666,19 +771,29 @@ class IFaceLogClient implements Constant{
      * @param expiryDate 失效日期
      */
     // 54 SERIVCE PORT : setPersonExpiryDateList
-    public void setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
-        service.setPersonExpiryDateList(personIdList,
-                expiryDate);
+    public void setPersonExpiryDate(
+            List<Integer> personIdList,
+            long expiryDate){
+        service.setPersonExpiryDateList(
+                    personIdList,
+                    expiryDate);
     }
 
     // 55 SERIVCE PORT : testDate
-    public Date testDate(List<Date> test1,Set<Date> test2,Map<String, java.sql.Timestamp> test3,Map<java.sql.Date, String> test4,Map<java.sql.Date, DeviceBean> test5,Map<FaceBean, java.sql.Date> test6){
-        return GenericUtils.toDate(service.testDate(GenericUtils.toLong(test1,Date.class),
-                GenericUtils.toLong(test2,Date.class),
-                GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
-                GenericUtils.toLongKey(test4,java.sql.Date.class),
-                converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
-                converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class))),Date.class);
+    public Date testDate(
+            List<Date> test1,
+            Set<Date> test2,
+            Map<String, java.sql.Timestamp> test3,
+            Map<java.sql.Date, String> test4,
+            Map<java.sql.Date, DeviceBean> test5,
+            Map<FaceBean, java.sql.Date> test6){
+        return GenericUtils.toDate(service.testDate(
+                    GenericUtils.toLong(test1,Date.class),
+                    GenericUtils.toLong(test2,Date.class),
+                    GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
+                    GenericUtils.toLongKey(test4,java.sql.Date.class),
+                    converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
+                    converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class))),Date.class);
     }
 
     // 56 SERIVCE PORT : testDate2

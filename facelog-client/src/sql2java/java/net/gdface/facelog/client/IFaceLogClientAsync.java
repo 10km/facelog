@@ -51,11 +51,15 @@ class IFaceLogClientAsync implements Constant{
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     // 1 SERIVCE PORT : addFeature
-    public ListenableFuture<FeatureBean> addFeature(byte[] feature,int personId,List<FaceBean> faecBeans){
+    public ListenableFuture<FeatureBean> addFeature(
+            byte[] feature,
+            int personId,
+            List<FaceBean> faecBeans){
         return Futures.transform(
-                service.addFeature(feature,
-                personId,
-                converterFaceBean.toRight(faecBeans)), 
+                service.addFeature(
+                    feature,
+                    personId,
+                    converterFaceBean.toRight(faecBeans)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -64,17 +68,21 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #addFeature(byte[],int,List<FaceBean>)}<br>
+     * Generic version of {@link #addFeature(feature,personId,faecBeans)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 1 GENERIC
-    public ListenableFuture<FeatureBean> addFeatureGeneric(Object feature,int personId,List<FaceBean> faecBeans){
+    public ListenableFuture<FeatureBean> addFeatureGeneric(
+            Object feature,
+            int personId,
+            List<FaceBean> faecBeans){
         return Futures.transform(
-                service.addFeature(GenericUtils.toBytes(feature),
-                personId,
-                converterFaceBean.toRight(faecBeans)), 
+                service.addFeature(
+                    GenericUtils.toBytes(feature),
+                    personId,
+                    converterFaceBean.toRight(faecBeans)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -91,12 +99,17 @@ class IFaceLogClientAsync implements Constant{
      * @return 保存的人脸特征记录{@link FeatureBean}
      */
     // 2 SERIVCE PORT : addFeatureMulti
-    public ListenableFuture<FeatureBean> addFeature(byte[] feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
+    public ListenableFuture<FeatureBean> addFeature(
+            byte[] feature,
+            int personId,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
         return Futures.transform(
-                service.addFeatureMulti(feature,
-                personId,
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId), 
+                service.addFeatureMulti(
+                    feature,
+                    personId,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -105,18 +118,23 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #addFeature(byte[],int,Map<ByteBuffer, FaceBean>,int)}<br>
+     * Generic version of {@link #addFeature(feature,personId,faceInfo,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 2 GENERIC
-    public ListenableFuture<FeatureBean> addFeatureGeneric(Object feature,int personId,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
+    public ListenableFuture<FeatureBean> addFeatureGeneric(
+            Object feature,
+            int personId,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
         return Futures.transform(
-                service.addFeatureMulti(GenericUtils.toBytes(feature),
-                personId,
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId), 
+                service.addFeatureMulti(
+                    GenericUtils.toBytes(feature),
+                    personId,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -134,12 +152,17 @@ class IFaceLogClientAsync implements Constant{
      * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
     // 3 SERIVCE PORT : addImage
-    public ListenableFuture<ImageBean> addImage(byte[] imageData,int deviceId,FaceBean faceBean,int personId){
+    public ListenableFuture<ImageBean> addImage(
+            byte[] imageData,
+            int deviceId,
+            FaceBean faceBean,
+            int personId){
         return Futures.transform(
-                service.addImage(imageData,
-                deviceId,
-                converterFaceBean.toRight(faceBean),
-                personId), 
+                service.addImage(
+                    imageData,
+                    deviceId,
+                    converterFaceBean.toRight(faceBean),
+                    personId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
@@ -148,18 +171,23 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
+     * Generic version of {@link #addImage(imageData,deviceId,faceBean,personId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 3 GENERIC
-    public ListenableFuture<ImageBean> addImageGeneric(Object imageData,int deviceId,FaceBean faceBean,int personId){
+    public ListenableFuture<ImageBean> addImageGeneric(
+            Object imageData,
+            int deviceId,
+            FaceBean faceBean,
+            int personId){
         return Futures.transform(
-                service.addImage(GenericUtils.toBytes(imageData),
-                deviceId,
-                converterFaceBean.toRight(faceBean),
-                personId), 
+                service.addImage(
+                    GenericUtils.toBytes(imageData),
+                    deviceId,
+                    converterFaceBean.toRight(faceBean),
+                    personId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.ImageBean,ImageBean>(){
                     @Override
                     public ImageBean apply(net.gdface.facelog.client.thrift.ImageBean input) {
@@ -201,9 +229,12 @@ class IFaceLogClientAsync implements Constant{
      * @see #deleteFeature(String, boolean)
      */
     // 8 SERIVCE PORT : deleteAllFeaturesByPersonId
-    public ListenableFuture<Integer> deleteAllFeaturesByPersonId(int personId,boolean deleteImage){
-        return service.deleteAllFeaturesByPersonId(personId,
-                deleteImage);
+    public ListenableFuture<Integer> deleteAllFeaturesByPersonId(
+            int personId,
+            boolean deleteImage){
+        return service.deleteAllFeaturesByPersonId(
+                    personId,
+                    deleteImage);
     }
     /**
      * 删除featureMd5指定的特征记录及关联的face记录
@@ -212,9 +243,12 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      */
     // 9 SERIVCE PORT : deleteFeature
-    public ListenableFuture<List<String>> deleteFeature(String featureMd5,boolean deleteImage){
-        return service.deleteFeature(featureMd5,
-                deleteImage);
+    public ListenableFuture<List<String>> deleteFeature(
+            String featureMd5,
+            boolean deleteImage){
+        return service.deleteFeature(
+                    featureMd5,
+                    deleteImage);
     }
     /**
      * 删除imageMd5指定图像及其缩略图
@@ -517,11 +551,15 @@ class IFaceLogClientAsync implements Constant{
     }
 
     // 37 SERIVCE PORT : loadLogByWhere
-    public ListenableFuture<List<LogBean>> loadLogByWhere(String where,int startRow,int numRows){
+    public ListenableFuture<List<LogBean>> loadLogByWhere(
+            String where,
+            int startRow,
+            int numRows){
         return Futures.transform(
-                service.loadLogByWhere(where,
-                startRow,
-                numRows), 
+                service.loadLogByWhere(
+                    where,
+                    startRow,
+                    numRows), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
@@ -531,11 +569,15 @@ class IFaceLogClientAsync implements Constant{
     }
 
     // 38 SERIVCE PORT : loadLogLightByWhere
-    public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(String where,int startRow,int numRows){
+    public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(
+            String where,
+            int startRow,
+            int numRows){
         return Futures.transform(
-                service.loadLogLightByWhere(where,
-                startRow,
-                numRows), 
+                service.loadLogLightByWhere(
+                    where,
+                    startRow,
+                    numRows), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
@@ -580,10 +622,14 @@ class IFaceLogClientAsync implements Constant{
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      */
     // 42 SERIVCE PORT : replaceFeature
-    public ListenableFuture<Void> replaceFeature(int personId,String featureMd5,boolean deleteOldFeatureImage){
-        return service.replaceFeature(personId,
-                featureMd5,
-                deleteOldFeatureImage);
+    public ListenableFuture<Void> replaceFeature(
+            int personId,
+            String featureMd5,
+            boolean deleteOldFeatureImage){
+        return service.replaceFeature(
+                    personId,
+                    featureMd5,
+                    deleteOldFeatureImage);
     }
 
     // 43 SERIVCE PORT : saveDevice
@@ -623,14 +669,21 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      */
     // 45 SERIVCE PORT : savePersonFull
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,byte[] featureImage,FaceBean featureFaceBean,int deviceId){
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            byte[] featureImage,
+            FaceBean featureFaceBean,
+            int deviceId){
         return Futures.transform(
-                service.savePersonFull(converterPersonBean.toRight(bean),
-                idPhoto,
-                feature,
-                featureImage,
-                converterFaceBean.toRight(featureFaceBean),
-                deviceId), 
+                service.savePersonFull(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    featureImage,
+                    converterFaceBean.toRight(featureFaceBean),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -639,20 +692,27 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 45 GENERIC
-    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Object featureImage,FaceBean featureFaceBean,int deviceId){
+    public ListenableFuture<PersonBean> savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            Object feature,
+            Object featureImage,
+            FaceBean featureFaceBean,
+            int deviceId){
         return Futures.transform(
-                service.savePersonFull(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                GenericUtils.toBytes(feature),
-                GenericUtils.toBytes(featureImage),
-                converterFaceBean.toRight(featureFaceBean),
-                deviceId), 
+                service.savePersonFull(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    GenericUtils.toBytes(featureImage),
+                    converterFaceBean.toRight(featureFaceBean),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -684,10 +744,13 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      */
     // 48 SERIVCE PORT : savePersonWithPhoto
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto){
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto){
         return Futures.transform(
-                service.savePersonWithPhoto(converterPersonBean.toRight(bean),
-                idPhoto), 
+                service.savePersonWithPhoto(
+                    converterPersonBean.toRight(bean),
+                    idPhoto), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -696,16 +759,19 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 48 GENERIC
-    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto){
+    public ListenableFuture<PersonBean> savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto){
         return Futures.transform(
-                service.savePersonWithPhoto(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto)), 
+                service.savePersonWithPhoto(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -722,12 +788,17 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      */
     // 49 SERIVCE PORT : savePersonWithPhotoAndFeature
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,FeatureBean featureBean,int deviceId){
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            FeatureBean featureBean,
+            int deviceId){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
-                idPhoto,
-                converterFeatureBean.toRight(featureBean),
-                deviceId), 
+                service.savePersonWithPhotoAndFeature(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    converterFeatureBean.toRight(featureBean),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -736,18 +807,23 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,featureBean,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 49 GENERIC
-    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,FeatureBean featureBean,int deviceId){
+    public ListenableFuture<PersonBean> savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            FeatureBean featureBean,
+            int deviceId){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeature(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                converterFeatureBean.toRight(featureBean),
-                deviceId), 
+                service.savePersonWithPhotoAndFeature(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    converterFeatureBean.toRight(featureBean),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -764,12 +840,17 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      */
     // 50 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,List<FaceBean> faceBeans){
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            List<FaceBean> faceBeans){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
-                idPhoto,
-                feature,
-                converterFaceBean.toRight(faceBeans)), 
+                service.savePersonWithPhotoAndFeatureMultiFaces(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    converterFaceBean.toRight(faceBeans)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -778,18 +859,23 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List<FaceBean>)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,feature,faceBeans)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 50 GENERIC
-    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,List<FaceBean> faceBeans){
+    public ListenableFuture<PersonBean> savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            Object feature,
+            List<FaceBean> faceBeans){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiFaces(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                GenericUtils.toBytes(feature),
-                converterFaceBean.toRight(faceBeans)), 
+                service.savePersonWithPhotoAndFeatureMultiFaces(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    converterFaceBean.toRight(faceBeans)), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -807,13 +893,19 @@ class IFaceLogClientAsync implements Constant{
      * @return bean 保存的{@link PersonBean}对象
      */
     // 51 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean,byte[] idPhoto,byte[] feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            byte[] idPhoto,
+            byte[] feature,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
-                idPhoto,
-                feature,
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId), 
+                service.savePersonWithPhotoAndFeatureMultiImage(
+                    converterPersonBean.toRight(bean),
+                    idPhoto,
+                    feature,
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -822,19 +914,25 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /** 
-     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map<ByteBuffer, FaceBean>,int)}<br>
+     * Generic version of {@link #savePerson(bean,idPhoto,feature,faceInfo,deviceId)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
     // 51 GENERIC
-    public ListenableFuture<PersonBean> savePersonGeneric(PersonBean bean,Object idPhoto,Object feature,Map<ByteBuffer, FaceBean> faceInfo,int deviceId){
+    public ListenableFuture<PersonBean> savePersonGeneric(
+            PersonBean bean,
+            Object idPhoto,
+            Object feature,
+            Map<ByteBuffer, FaceBean> faceInfo,
+            int deviceId){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureMultiImage(converterPersonBean.toRight(bean),
-                GenericUtils.toBytes(idPhoto),
-                GenericUtils.toBytes(feature),
-                GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
-                deviceId), 
+                service.savePersonWithPhotoAndFeatureMultiImage(
+                    converterPersonBean.toRight(bean),
+                    GenericUtils.toBytes(idPhoto),
+                    GenericUtils.toBytes(feature),
+                    GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
+                    deviceId), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -850,11 +948,15 @@ class IFaceLogClientAsync implements Constant{
      * @return 
      */
     // 52 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
-    public ListenableFuture<PersonBean> savePerson(PersonBean bean,String idPhotoMd5,String featureMd5){
+    public ListenableFuture<PersonBean> savePerson(
+            PersonBean bean,
+            String idPhotoMd5,
+            String featureMd5){
         return Futures.transform(
-                service.savePersonWithPhotoAndFeatureSaved(converterPersonBean.toRight(bean),
-                idPhotoMd5,
-                featureMd5), 
+                service.savePersonWithPhotoAndFeatureSaved(
+                    converterPersonBean.toRight(bean),
+                    idPhotoMd5,
+                    featureMd5), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -868,9 +970,12 @@ class IFaceLogClientAsync implements Constant{
      * @param expiryDate 失效日期
      */
     // 53 SERIVCE PORT : setPersonExpiryDate
-    public ListenableFuture<Void> setPersonExpiryDate(int personId,Date expiryDate){
-        return service.setPersonExpiryDate(personId,
-                GenericUtils.toLong(expiryDate,Date.class));
+    public ListenableFuture<Void> setPersonExpiryDate(
+            int personId,
+            Date expiryDate){
+        return service.setPersonExpiryDate(
+                    personId,
+                    GenericUtils.toLong(expiryDate,Date.class));
     }
     /**
      * 修改 personIdList 指定的人员记录的有效期
@@ -878,20 +983,30 @@ class IFaceLogClientAsync implements Constant{
      * @param expiryDate 失效日期
      */
     // 54 SERIVCE PORT : setPersonExpiryDateList
-    public ListenableFuture<Void> setPersonExpiryDate(List<Integer> personIdList,long expiryDate){
-        return service.setPersonExpiryDateList(personIdList,
-                expiryDate);
+    public ListenableFuture<Void> setPersonExpiryDate(
+            List<Integer> personIdList,
+            long expiryDate){
+        return service.setPersonExpiryDateList(
+                    personIdList,
+                    expiryDate);
     }
 
     // 55 SERIVCE PORT : testDate
-    public ListenableFuture<Date> testDate(List<Date> test1,Set<Date> test2,Map<String, java.sql.Timestamp> test3,Map<java.sql.Date, String> test4,Map<java.sql.Date, DeviceBean> test5,Map<FaceBean, java.sql.Date> test6){
+    public ListenableFuture<Date> testDate(
+            List<Date> test1,
+            Set<Date> test2,
+            Map<String, java.sql.Timestamp> test3,
+            Map<java.sql.Date, String> test4,
+            Map<java.sql.Date, DeviceBean> test5,
+            Map<FaceBean, java.sql.Date> test6){
         return Futures.transform(
-                service.testDate(GenericUtils.toLong(test1,Date.class),
-                GenericUtils.toLong(test2,Date.class),
-                GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
-                GenericUtils.toLongKey(test4,java.sql.Date.class),
-                converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
-                converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class))), 
+                service.testDate(
+                    GenericUtils.toLong(test1,Date.class),
+                    GenericUtils.toLong(test2,Date.class),
+                    GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
+                    GenericUtils.toLongKey(test4,java.sql.Date.class),
+                    converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
+                    converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class))), 
                 new com.google.common.base.Function<Long,Date>(){
                     @Override
                     public Date apply(Long input) {
