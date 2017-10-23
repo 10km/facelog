@@ -884,23 +884,30 @@ class IFaceLogClientAsync implements Constant{
     }
 
     // 55 SERIVCE PORT : testDate
-    public ListenableFuture<Long> testDate(List<Date> test1,Set<Date> test2,Map<String, java.sql.Timestamp> test3,Map<java.sql.Date, String> test4,Map<java.sql.Date, DeviceBean> test5,Map<FaceBean, java.sql.Date> test6){
-        return service.testDate(GenericUtils.toLong(test1,Date.class),
+    public ListenableFuture<Date> testDate(List<Date> test1,Set<Date> test2,Map<String, java.sql.Timestamp> test3,Map<java.sql.Date, String> test4,Map<java.sql.Date, DeviceBean> test5,Map<FaceBean, java.sql.Date> test6){
+        return Futures.transform(
+                service.testDate(GenericUtils.toLong(test1,Date.class),
                 GenericUtils.toLong(test2,Date.class),
                 GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
                 GenericUtils.toLongKey(test4,java.sql.Date.class),
                 converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
-                converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class)));
+                converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class))), 
+                new com.google.common.base.Function<Long,Date>(){
+                    @Override
+                    public Date apply(Long input) {
+                        return GenericUtils.toDate(input,Date.class);
+                    }
+                });
     }
 
     // 56 SERIVCE PORT : testDate2
-    public ListenableFuture<Map<FaceBean, Long>> testDate2(){
+    public ListenableFuture<Map<FaceBean, java.sql.Timestamp>> testDate2(){
         return Futures.transform(
                 service.testDate2(), 
-                new com.google.common.base.Function<Map<net.gdface.facelog.client.thrift.FaceBean, Long>,Map<FaceBean, Long>>(){
+                new com.google.common.base.Function<Map<net.gdface.facelog.client.thrift.FaceBean, Long>,Map<FaceBean, java.sql.Timestamp>>(){
                     @Override
-                    public Map<FaceBean, Long> apply(Map<net.gdface.facelog.client.thrift.FaceBean, Long> input) {
-                        return converterFaceBean.fromRightKey(input);
+                    public Map<FaceBean, java.sql.Timestamp> apply(Map<net.gdface.facelog.client.thrift.FaceBean, Long> input) {
+                        return converterFaceBean.fromRightKey(GenericUtils.toDateValue(input,java.sql.Timestamp.class));
                     }
                 });
     }

@@ -601,7 +601,7 @@ public abstract class FaceLogDefinition {
 	public List<DeviceBean> getDevice(List<Integer> deviceId) throws ServiceRuntime {
 		return null;
 	}
-	@ThriftMethod
+	@ThriftMethod @TargetType(java.util.Date.class)
 	public long testDate(@TargetType(java.util.Date.class)List<Long>test1,
 			@TargetType(java.util.Date.class)java.util.Set<Long>test2,
 			@TargetType(java.sql.Timestamp.class)Map<String,Long>test3,
@@ -612,7 +612,7 @@ public abstract class FaceLogDefinition {
 		return 0;
 		
 	}
-	@ThriftMethod
+	@ThriftMethod @TargetType(java.sql.Timestamp.class)
 	public Map<FaceBean,Long> testDate2(){
 		return null;		
 	}
