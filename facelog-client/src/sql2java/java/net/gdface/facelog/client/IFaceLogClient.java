@@ -439,8 +439,8 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_feature.md5 列表
      */
     // 36 SERIVCE PORT : loadFeatureMd5ByUpdate
-    public List<String> loadFeatureMd5ByUpdate(long timestamp){
-        return service.loadFeatureMd5ByUpdate(timestamp);
+    public List<String> loadFeatureMd5ByUpdate(Date timestamp){
+        return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
 
     // 37 SERIVCE PORT : loadLogByWhere
@@ -480,8 +480,8 @@ class IFaceLogClient implements Constant{
      * @return 返回fl_person.id 列表
      */
     // 40 SERIVCE PORT : loadPersonIdByUpdate
-    public List<Integer> loadPersonIdByUpdate(long timestamp){
-        return service.loadPersonIdByUpdate(timestamp);
+    public List<Integer> loadPersonIdByUpdate(Date timestamp){
+        return service.loadPersonIdByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
     /**
      * (主动更新机制实现)<br>
@@ -491,8 +491,8 @@ class IFaceLogClient implements Constant{
      * @return 返回fl_person.id 列表
      */
     // 41 SERIVCE PORT : loadUpdatePersons
-    public List<Integer> loadUpdatePersons(long timestamp){
-        return service.loadUpdatePersons(timestamp);
+    public List<Integer> loadUpdatePersons(Date timestamp){
+        return service.loadUpdatePersons(GenericUtils.toLong(timestamp,Date.class));
     }
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
@@ -773,31 +773,9 @@ class IFaceLogClient implements Constant{
     // 54 SERIVCE PORT : setPersonExpiryDateList
     public void setPersonExpiryDate(
             List<Integer> personIdList,
-            long expiryDate){
+            Date expiryDate){
         service.setPersonExpiryDateList(
                     personIdList,
-                    expiryDate);
-    }
-
-    // 55 SERIVCE PORT : testDate
-    public Date testDate(
-            List<Date> test1,
-            Set<Date> test2,
-            Map<String, java.sql.Timestamp> test3,
-            Map<java.sql.Date, String> test4,
-            Map<java.sql.Date, DeviceBean> test5,
-            Map<FaceBean, java.sql.Date> test6){
-        return GenericUtils.toDate(service.testDate(
-                    GenericUtils.toLong(test1,Date.class),
-                    GenericUtils.toLong(test2,Date.class),
-                    GenericUtils.toLongValue(test3,java.sql.Timestamp.class),
-                    GenericUtils.toLongKey(test4,java.sql.Date.class),
-                    converterDeviceBean.toRightValue(GenericUtils.toLongKey(test5,java.sql.Date.class)),
-                    converterFaceBean.toRightKey(GenericUtils.toLongValue(test6,java.sql.Date.class))),Date.class);
-    }
-
-    // 56 SERIVCE PORT : testDate2
-    public Map<FaceBean, java.sql.Timestamp> testDate2(){
-        return converterFaceBean.fromRightKey(GenericUtils.toDateValue(service.testDate2(),java.sql.Timestamp.class));
+                    GenericUtils.toLong(expiryDate,Date.class));
     }
 }

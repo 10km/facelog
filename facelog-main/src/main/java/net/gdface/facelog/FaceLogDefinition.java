@@ -164,7 +164,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod("setPersonExpiryDateList")
-	public void setPersonExpiryDate(List<Integer> personIdList, long expiryDate) throws ServiceRuntime {
+	public void setPersonExpiryDate(List<Integer> personIdList, @TargetType(java.util.Date.class)long expiryDate) throws ServiceRuntime {
 	}
 
 	/**
@@ -346,7 +346,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<Integer> loadUpdatePersons(long timestamp) throws ServiceRuntime {
+	public List<Integer> loadUpdatePersons(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
 		return null;
 	}
 
@@ -358,7 +358,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<Integer> loadPersonIdByUpdate(long timestamp) throws ServiceRuntime {
+	public List<Integer> loadPersonIdByUpdate(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
 		return null;
 	}
 
@@ -370,7 +370,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<String> loadFeatureMd5ByUpdate(long timestamp) throws ServiceRuntime {
+	public List<String> loadFeatureMd5ByUpdate(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
 		return null;
 	}
 
@@ -600,20 +600,5 @@ public abstract class FaceLogDefinition {
 	@ThriftMethod("getDeviceList")
 	public List<DeviceBean> getDevice(List<Integer> deviceId) throws ServiceRuntime {
 		return null;
-	}
-	@ThriftMethod @TargetType(java.util.Date.class)
-	public long testDate(@TargetType(java.util.Date.class)List<Long>test1,
-			@TargetType(java.util.Date.class)java.util.Set<Long>test2,
-			@TargetType(java.sql.Timestamp.class)Map<String,Long>test3,
-			@TargetType(java.sql.Date.class)Map<Long,String>test4,
-			@TargetType(java.sql.Date.class)Map<Long,DeviceBean>test5,
-			@TargetType(java.sql.Date.class)Map<FaceBean,Long>test6)
-	{
-		return 0;
-		
-	}
-	@ThriftMethod @TargetType(java.sql.Timestamp.class)
-	public Map<FaceBean,Long> testDate2(){
-		return null;		
 	}
 }
