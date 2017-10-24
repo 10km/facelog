@@ -113,7 +113,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
             return null;
         }
     }
-    //1.1
+    //1.1 override IFaceManager
     @Override
     public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {

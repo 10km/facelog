@@ -112,7 +112,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             return null;
         }
     }
-    //1.1
+    //1.1 override IDeviceManager
     @Override
     public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {

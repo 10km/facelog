@@ -113,7 +113,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             return null;
         }
     }
-    //1.1
+    //1.1 override IImageManager
     @Override
     public ImageBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {

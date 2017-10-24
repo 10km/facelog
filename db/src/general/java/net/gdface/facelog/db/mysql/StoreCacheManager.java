@@ -7,10 +7,13 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.mysql.StoreManager;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.mysql.StoreCache;
@@ -70,17 +73,27 @@ public class StoreCacheManager extends StoreManager
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    //1 override IStoreManager
+    //1.1 override IStoreManager
     @Override 
-    public StoreBean loadByPrimaryKey(String md5){
-        return cache.getBean(md5);
+    public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
+    {
+        try{
+            return cache.getBean(md5);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
-    //1.2
-    @Override
-    public StoreBean loadByPrimaryKey(StoreBean bean){        
-        return null == bean ? null : loadByPrimaryKey(bean.getMd5());
-    }
     
     private class CacheAction implements Action<StoreBean>{
         final Action<StoreBean> action;
@@ -97,7 +110,8 @@ public class StoreCacheManager extends StoreManager
         @Override
         public StoreBean getBean() {
             return null == action?null:action.getBean();
-        }}
+        }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action){

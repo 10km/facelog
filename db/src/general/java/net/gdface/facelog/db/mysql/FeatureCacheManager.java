@@ -7,10 +7,13 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.FeatureManager;
@@ -72,17 +75,27 @@ public class FeatureCacheManager extends FeatureManager
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    //1 override IFeatureManager
+    //1.1 override IFeatureManager
     @Override 
-    public FeatureBean loadByPrimaryKey(String md5){
-        return cache.getBean(md5);
+    public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
+    {
+        try{
+            return cache.getBean(md5);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
-    //1.2
-    @Override
-    public FeatureBean loadByPrimaryKey(FeatureBean bean){        
-        return null == bean ? null : loadByPrimaryKey(bean.getMd5());
-    }
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -110,7 +123,8 @@ public class FeatureCacheManager extends FeatureManager
         @Override
         public FeatureBean getBean() {
             return null == action?null:action.getBean();
-        }}
+        }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action){

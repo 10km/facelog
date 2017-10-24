@@ -113,7 +113,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             return null;
         }
     }
-    //1.1
+    //1.1 override IPersonManager
     @Override
     public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {

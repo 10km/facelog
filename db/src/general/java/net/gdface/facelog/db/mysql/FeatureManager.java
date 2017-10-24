@@ -113,7 +113,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             return null;
         }
     }
-    //1.1
+    //1.1 override IFeatureManager
     @Override
     public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {

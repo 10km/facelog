@@ -110,7 +110,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
             return null;
         }
     }
-    //1.1
+    //1.1 override IStoreManager
     @Override
     public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {

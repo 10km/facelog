@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.DeviceBean;
@@ -112,13 +113,22 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         return beans;
     }
     
-    public DeviceBean getBeanById(Integer id){
-        return super.getBean(id);
+    public DeviceBean getBeanById(Integer id) throws ExecutionException{
+        return getBean(id);
     }
-    public DeviceBean getBeanByMac(String mac){
+    public DeviceBean getBeanByIdUnchecked(Integer id){
+        return getBeanUnchecked(id);
+    }
+    public DeviceBean getBeanByMac(String mac)  throws ExecutionException{
         return macCacher.getBean(mac);
     }
-    public DeviceBean getBeanBySerialNo(String serialNo){
+    public DeviceBean getBeanByMacUnchecked(String mac){
+        return macCacher.getBeanUnchecked(mac);
+    }
+    public DeviceBean getBeanBySerialNo(String serialNo)  throws ExecutionException{
         return serialNoCacher.getBean(serialNo);
+    }
+    public DeviceBean getBeanBySerialNoUnchecked(String serialNo){
+        return serialNoCacher.getBeanUnchecked(serialNo);
     }
 }

@@ -7,10 +7,13 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.mysql.ImageCacheManager;
 import net.gdface.facelog.db.mysql.PersonManager;
@@ -72,17 +75,27 @@ public class PersonCacheManager extends PersonManager
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    //1 override IPersonManager
+    //1.1 override IPersonManager
     @Override 
-    public PersonBean loadByPrimaryKey(Integer id){
-        return cache.getBean(id);
+    public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return cache.getBean(id);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
-    //1.2
-    @Override
-    public PersonBean loadByPrimaryKey(PersonBean bean){        
-        return null == bean ? null : loadByPrimaryKey(bean.getId());
-    }
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -110,7 +123,8 @@ public class PersonCacheManager extends PersonManager
         @Override
         public PersonBean getBean() {
             return null == action?null:action.getBean();
-        }}
+        }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action){
@@ -126,11 +140,61 @@ public class PersonCacheManager extends PersonManager
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexImageMd5(String imageMd5){
-        return cache.getBeanByImageMd5(imageMd5);
+        try{
+            if(null == imageMd5)
+                return null;
+            return loadByIndexImageMd5Checked(imageMd5);
+        }catch(ObjectRetrievalException ee){
+            return null;
+        }
+    }
+    // override IPersonManager
+    @Override 
+    public PersonBean loadByIndexImageMd5Checked(String imageMd5) throws ObjectRetrievalException{
+        try{
+            return cache.getBeanByImageMd5(imageMd5);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexPapersNum(String papersNum){
-        return cache.getBeanByPapersNum(papersNum);
+        try{
+            if(null == papersNum)
+                return null;
+            return loadByIndexPapersNumChecked(papersNum);
+        }catch(ObjectRetrievalException ee){
+            return null;
+        }
+    }
+    // override IPersonManager
+    @Override 
+    public PersonBean loadByIndexPapersNumChecked(String papersNum) throws ObjectRetrievalException{
+        try{
+            return cache.getBeanByPapersNum(papersNum);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 }

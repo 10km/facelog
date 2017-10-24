@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.PersonBean;
@@ -112,13 +113,22 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
         return beans;
     }
     
-    public PersonBean getBeanById(Integer id){
-        return super.getBean(id);
+    public PersonBean getBeanById(Integer id) throws ExecutionException{
+        return getBean(id);
     }
-    public PersonBean getBeanByImageMd5(String imageMd5){
+    public PersonBean getBeanByIdUnchecked(Integer id){
+        return getBeanUnchecked(id);
+    }
+    public PersonBean getBeanByImageMd5(String imageMd5)  throws ExecutionException{
         return imageMd5Cacher.getBean(imageMd5);
     }
-    public PersonBean getBeanByPapersNum(String papersNum){
+    public PersonBean getBeanByImageMd5Unchecked(String imageMd5){
+        return imageMd5Cacher.getBeanUnchecked(imageMd5);
+    }
+    public PersonBean getBeanByPapersNum(String papersNum)  throws ExecutionException{
         return papersNumCacher.getBean(papersNum);
+    }
+    public PersonBean getBeanByPapersNumUnchecked(String papersNum){
+        return papersNumCacher.getBeanUnchecked(papersNum);
     }
 }

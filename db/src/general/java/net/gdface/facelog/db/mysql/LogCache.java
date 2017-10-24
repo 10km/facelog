@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.LogBean;
@@ -66,7 +67,10 @@ public class LogCache extends TableLoadCaching<Integer, LogBean> {
         return beans;
     }
     
-    public LogBean getBeanById(Integer id){
-        return super.getBean(id);
+    public LogBean getBeanById(Integer id) throws ExecutionException{
+        return getBean(id);
+    }
+    public LogBean getBeanByIdUnchecked(Integer id){
+        return getBeanUnchecked(id);
     }
 }

@@ -7,10 +7,13 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.mysql.DeviceManager;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.mysql.DeviceCache;
@@ -70,17 +73,27 @@ public class DeviceCacheManager extends DeviceManager
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    //1 override IDeviceManager
+    //1.1 override IDeviceManager
     @Override 
-    public DeviceBean loadByPrimaryKey(Integer id){
-        return cache.getBean(id);
+    public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return cache.getBean(id);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
-    //1.2
-    @Override
-    public DeviceBean loadByPrimaryKey(DeviceBean bean){        
-        return null == bean ? null : loadByPrimaryKey(bean.getId());
-    }
     
     private class CacheAction implements Action<DeviceBean>{
         final Action<DeviceBean> action;
@@ -97,7 +110,8 @@ public class DeviceCacheManager extends DeviceManager
         @Override
         public DeviceBean getBean() {
             return null == action?null:action.getBean();
-        }}
+        }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action){
@@ -113,11 +127,61 @@ public class DeviceCacheManager extends DeviceManager
     // override IDeviceManager
     @Override 
     public DeviceBean loadByIndexMac(String mac){
-        return cache.getBeanByMac(mac);
+        try{
+            if(null == mac)
+                return null;
+            return loadByIndexMacChecked(mac);
+        }catch(ObjectRetrievalException ee){
+            return null;
+        }
+    }
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexMacChecked(String mac) throws ObjectRetrievalException{
+        try{
+            return cache.getBeanByMac(mac);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
     // override IDeviceManager
     @Override 
     public DeviceBean loadByIndexSerialNo(String serialNo){
-        return cache.getBeanBySerialNo(serialNo);
+        try{
+            if(null == serialNo)
+                return null;
+            return loadByIndexSerialNoChecked(serialNo);
+        }catch(ObjectRetrievalException ee){
+            return null;
+        }
+    }
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexSerialNoChecked(String serialNo) throws ObjectRetrievalException{
+        try{
+            return cache.getBeanBySerialNo(serialNo);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 }

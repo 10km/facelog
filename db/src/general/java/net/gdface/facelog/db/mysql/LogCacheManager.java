@@ -7,10 +7,13 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.mysql.DeviceCacheManager;
 import net.gdface.facelog.db.FaceBean;
@@ -78,17 +81,27 @@ public class LogCacheManager extends LogManager
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    //1 override ILogManager
+    //1.1 override ILogManager
     @Override 
-    public LogBean loadByPrimaryKey(Integer id){
-        return cache.getBean(id);
+    public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return cache.getBean(id);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
-    //1.2
-    @Override
-    public LogBean loadByPrimaryKey(LogBean bean){        
-        return null == bean ? null : loadByPrimaryKey(bean.getId());
-    }
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -137,7 +150,8 @@ public class LogCacheManager extends LogManager
         @Override
         public LogBean getBean() {
             return null == action?null:action.getBean();
-        }}
+        }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action){

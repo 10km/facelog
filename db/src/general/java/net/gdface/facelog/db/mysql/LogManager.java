@@ -114,7 +114,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             return null;
         }
     }
-    //1.1
+    //1.1 override ILogManager
     @Override
     public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {

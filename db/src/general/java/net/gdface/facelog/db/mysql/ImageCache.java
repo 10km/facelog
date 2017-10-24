@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.ImageBean;
@@ -66,7 +67,10 @@ public class ImageCache extends TableLoadCaching<String, ImageBean> {
         return beans;
     }
     
-    public ImageBean getBeanByMd5(String md5){
-        return super.getBean(md5);
+    public ImageBean getBeanByMd5(String md5) throws ExecutionException{
+        return getBean(md5);
+    }
+    public ImageBean getBeanByMd5Unchecked(String md5){
+        return getBeanUnchecked(md5);
     }
 }

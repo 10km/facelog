@@ -7,10 +7,13 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.ImageBean;
@@ -74,17 +77,27 @@ public class FaceCacheManager extends FaceManager
     // PRIMARY KEY METHODS
     //////////////////////////////////////
 
-    //1 override IFaceManager
+    //1.1 override IFaceManager
     @Override 
-    public FaceBean loadByPrimaryKey(Integer id){
-        return cache.getBean(id);
+    public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return cache.getBean(id);
+        }catch(ExecutionException ee){
+            try{
+                throw ee.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
-    //1.2
-    @Override
-    public FaceBean loadByPrimaryKey(FaceBean bean){        
-        return null == bean ? null : loadByPrimaryKey(bean.getId());
-    }
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
@@ -119,7 +132,8 @@ public class FaceCacheManager extends FaceManager
         @Override
         public FaceBean getBean() {
             return null == action?null:action.getBean();
-        }}
+        }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action){
