@@ -93,7 +93,13 @@ public class DeviceCacheManager extends DeviceManager
             }
         }
     }
-
+    //1.4 override IDeviceManager
+    @Override 
+    public boolean existsPrimaryKey(Integer id)
+    {
+        if(null != cache.getBeanIfPresent(id))return true;
+        return super.existsPrimaryKey(id);
+    }
     
     private class CacheAction implements Action<DeviceBean>{
         final Action<DeviceBean> action;

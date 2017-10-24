@@ -105,6 +105,10 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         return cache.get(key);
     }
     @Override
+    public B getBeanIfPresent(K key){
+    	return null == key ? null : cache.getIfPresent(key);    	
+    }
+    @Override
     public B getBeanUnchecked(K key){
         try{
             return cache.getUnchecked(key);

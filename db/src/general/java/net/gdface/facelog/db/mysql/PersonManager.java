@@ -169,7 +169,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public boolean existsPrimaryKey(Integer id)
     {
         try{
-            return nativeManager.existsPrimaryKey(id );
+            return nativeManager.existsPrimaryKey(id);
         }
         catch(DAOException e)
         {

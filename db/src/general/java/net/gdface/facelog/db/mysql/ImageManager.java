@@ -169,7 +169,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public boolean existsPrimaryKey(String md5)
     {
         try{
-            return nativeManager.existsPrimaryKey(md5 );
+            return nativeManager.existsPrimaryKey(md5);
         }
         catch(DAOException e)
         {

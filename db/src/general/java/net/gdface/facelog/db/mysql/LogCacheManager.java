@@ -101,7 +101,13 @@ public class LogCacheManager extends LogManager
             }
         }
     }
-
+    //1.4 override ILogManager
+    @Override 
+    public boolean existsPrimaryKey(Integer id)
+    {
+        if(null != cache.getBeanIfPresent(id))return true;
+        return super.existsPrimaryKey(id);
+    }
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD

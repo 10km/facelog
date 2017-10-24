@@ -169,7 +169,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public boolean existsPrimaryKey(Integer id)
     {
         try{
-            return nativeManager.existsPrimaryKey(id );
+            return nativeManager.existsPrimaryKey(id);
         }
         catch(DAOException e)
         {

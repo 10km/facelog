@@ -169,7 +169,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public boolean existsPrimaryKey(String md5)
     {
         try{
-            return nativeManager.existsPrimaryKey(md5 );
+            return nativeManager.existsPrimaryKey(md5);
         }
         catch(DAOException e)
         {

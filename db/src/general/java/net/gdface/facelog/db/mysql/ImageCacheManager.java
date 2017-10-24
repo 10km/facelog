@@ -95,7 +95,13 @@ public class ImageCacheManager extends ImageManager
             }
         }
     }
-
+    //1.4 override IImageManager
+    @Override 
+    public boolean existsPrimaryKey(String md5)
+    {
+        if(null != cache.getBeanIfPresent(md5))return true;
+        return super.existsPrimaryKey(md5);
+    }
     
     //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD

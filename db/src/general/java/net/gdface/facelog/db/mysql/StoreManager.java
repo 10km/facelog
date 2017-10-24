@@ -166,7 +166,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     public boolean existsPrimaryKey(String md5)
     {
         try{
-            return nativeManager.existsPrimaryKey(md5 );
+            return nativeManager.existsPrimaryKey(md5);
         }
         catch(DAOException e)
         {
