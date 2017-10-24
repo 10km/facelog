@@ -153,10 +153,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlDeviceBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (0 == pReturn.size()) {
-                throw new ObjectRetrievalException();
-            } else {
+            if (1 == pReturn.size()) {
                 return pReturn.get(0);
+            } else {
+                throw new ObjectRetrievalException();
             }
         }
         catch(ObjectRetrievalException e)
@@ -178,7 +178,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean loadByPrimaryKey(FlDeviceBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKeyChecked(bean);
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
     
     //1.2.2
@@ -199,17 +199,22 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //1.3
     @Override
     public FlDeviceBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        try{
-            return loadByPrimaryKey(keys);
-        }catch(ObjectRetrievalException e){
-            return null;
-        }
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
+        if(null == keys[0])return null;
+        return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlDeviceBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return loadByPrimaryKeyChecked((Integer)keys[0]);
@@ -354,10 +359,13 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlDeviceBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof Integer))
+        FlDeviceBean bean = createBean();   
+        
+        if(null != keys[0] && !(keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         bean.setId((Integer)keys[0]);
         return delete(bean);
@@ -727,6 +735,8 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean save(FlDeviceBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean[])){
@@ -752,6 +762,8 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean saveCollection(FlDeviceBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof java.util.Collection)){
@@ -1087,16 +1099,30 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     @Override
     public FlDeviceBean loadUniqueUsingTemplate(FlDeviceBean bean) throws DAOException
     {
-         FlDeviceBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlDeviceBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlDeviceBean loadUniqueUsingTemplateChecked(FlDeviceBean bean) throws DAOException
+    {
+         List<FlDeviceBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlDeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlDeviceBean> action) throws DAOException
@@ -1184,18 +1210,39 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
 
     /**
      * Retrieves an unique FlDeviceBean using the mac index.
-     *
-     * @param mac the mac column's value filter. must not be null
-     * @return 
+     * 
+     * @param mac the mac column's value filter
+     * @return an FlDeviceBean,otherwise null if not found or exists null in input arguments
      * @throws DAOException
      */
     public FlDeviceBean loadByIndexMac(String mac) throws DAOException
     {
-        FlDeviceBean bean = this.createBean();
-        if( null == mac)
+        FlDeviceBean bean = new FlDeviceBean();
+        if(null == mac)
             return null;
+        
         bean.setMac(mac);
+        
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlDeviceBean using the mac index.
+     * 
+     * @param mac the mac column's value filter. must not be null
+     * @return an FlDeviceBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    public FlDeviceBean loadByIndexMacChecked(String mac) throws DAOException
+    {
+        FlDeviceBean bean = new FlDeviceBean();
+        if(null == mac)
+            throw new NullPointerException();
+        
+        bean.setMac(mac);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     /**
      * Retrieves an unique FlDeviceBean for each mac index.
@@ -1286,18 +1333,39 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
 
     /**
      * Retrieves an unique FlDeviceBean using the serial_no index.
-     *
-     * @param serialNo the serial_no column's value filter. must not be null
-     * @return 
+     * 
+     * @param serialNo the serial_no column's value filter
+     * @return an FlDeviceBean,otherwise null if not found or exists null in input arguments
      * @throws DAOException
      */
     public FlDeviceBean loadByIndexSerialNo(String serialNo) throws DAOException
     {
-        FlDeviceBean bean = this.createBean();
-        if( null == serialNo)
+        FlDeviceBean bean = new FlDeviceBean();
+        if(null == serialNo)
             return null;
+        
         bean.setSerialNo(serialNo);
+        
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlDeviceBean using the serial_no index.
+     * 
+     * @param serialNo the serial_no column's value filter. must not be null
+     * @return an FlDeviceBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    public FlDeviceBean loadByIndexSerialNoChecked(String serialNo) throws DAOException
+    {
+        FlDeviceBean bean = new FlDeviceBean();
+        if(null == serialNo)
+            throw new NullPointerException();
+        
+        bean.setSerialNo(serialNo);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     /**
      * Retrieves an unique FlDeviceBean for each serial_no index.
@@ -1436,28 +1504,36 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public List<FlDeviceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_DEVICE_INDEX_MAC:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'mac' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             FlDeviceBean bean= this.loadByIndexMac((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlDeviceBean>() : java.util.Arrays.asList(bean);
         }
         case FL_DEVICE_INDEX_SERIAL_NO:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'serial_no' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             FlDeviceBean bean= this.loadByIndexSerialNo((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlDeviceBean>() : java.util.Arrays.asList(bean);
         }
         case FL_DEVICE_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[2] && !(keys[2] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1475,10 +1551,13 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_DEVICE_INDEX_MAC:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'mac' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexMac((String)keys[0]);
@@ -1486,14 +1565,16 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         case FL_DEVICE_INDEX_SERIAL_NO:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'serial_no' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexSerialNo((String)keys[0]);
         }
         case FL_DEVICE_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[2] && !(keys[2] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexGroupId((Integer)keys[0]);
         }

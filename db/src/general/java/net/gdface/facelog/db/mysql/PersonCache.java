@@ -35,15 +35,15 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
             }
             @Override
             public void unregisterListener() {
-                manager.unregisterListener(tableListener);        
+                manager.unregisterListener(tableListener);
             }
             @Override
             protected String returnKey(PersonBean bean) {
                 return bean.getImageMd5();
             }
             @Override
-            protected PersonBean loadfromDatabase(String key) {
-                return manager.loadByIndexImageMd5(key);
+            protected PersonBean loadfromDatabase(String key) throws Exception {
+                return manager.loadByIndexImageMd5Checked(key);
             }};
 
         papersNumCacher = new TableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
@@ -53,15 +53,15 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
             }
             @Override
             public void unregisterListener() {
-                manager.unregisterListener(tableListener);        
+                manager.unregisterListener(tableListener);
             }
             @Override
             protected String returnKey(PersonBean bean) {
                 return bean.getPapersNum();
             }
             @Override
-            protected PersonBean loadfromDatabase(String key) {
-                return manager.loadByIndexPapersNum(key);
+            protected PersonBean loadfromDatabase(String key) throws Exception {
+                return manager.loadByIndexPapersNumChecked(key);
             }};
     }
     public PersonCache(long maximumSize, long duration, TimeUnit unit) {
@@ -95,8 +95,8 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
         return bean.getId();
     }
     @Override
-    protected PersonBean loadfromDatabase(Integer key) {
-        return manager.loadByPrimaryKey(key);
+    protected PersonBean loadfromDatabase(Integer key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(PersonBean bean){

@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_face table.<br>
@@ -27,6 +29,15 @@ public interface IFaceManager extends TableManager<FaceBean>
     //1
     public FaceBean loadByPrimaryKey(Integer id);
 
+    /**
+     * Loads a {@link FaceBean} from the fl_face using primary key fields.
+     *
+     * @param id Integer - PK# 1
+     * @return a unique FaceBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_face contains row with primary key fields.
@@ -231,7 +242,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link FeatureBean} object to associate to the {@link FaceBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet);
@@ -250,7 +261,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param bean the {@link FaceBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link FaceBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet);

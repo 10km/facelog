@@ -53,8 +53,8 @@ public class StoreCache extends TableLoadCaching<String, StoreBean> {
         return bean.getMd5();
     }
     @Override
-    protected StoreBean loadfromDatabase(String key) {
-        return manager.loadByPrimaryKey(key);
+    protected StoreBean loadfromDatabase(String key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(StoreBean bean){

@@ -19,7 +19,8 @@ import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFaceManager;
@@ -102,38 +103,67 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override 
     public FaceBean loadByPrimaryKey(Integer id)
     {
-        try{
-            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(id));
+        if(null == id){
+            return null;
         }
-        catch(DAOException e)
-        {
+        try{
+            return loadByPrimaryKeyChecked(id);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    //1.1
+    @Override
+    public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+            throw new ObjectRetrievalException();
+        }catch(DAOException e){
             throw new WrapDAOException(e);
         }
     }
-
     //1.2
     @Override
     public FaceBean loadByPrimaryKey(FaceBean bean)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
 
+    //1.2.2
+    @Override
+    public FaceBean loadByPrimaryKeyChecked(FaceBean bean) throws ObjectRetrievalException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getId());
+    }
+    
     //1.3
     @Override
     public FaceBean loadByPrimaryKey(Object ...keys){
-        if(keys.length != 1 )
+        try{
+            return loadByPrimaryKeyChecked(keys);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    //1.3.2
+    @Override
+    public FaceBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1)
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        return loadByPrimaryKey((Integer)keys[0]);
+          return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
-    
+
     //1.4 override IFaceManager
     @Override 
     public boolean existsPrimaryKey(Integer id)
@@ -224,6 +254,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
@@ -486,6 +518,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override
     public FaceBean save(FaceBean bean,Object ...args) 
     {
+        if(null == args)
+            return save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FeatureBean)){
@@ -513,6 +547,8 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override
     public FaceBean saveCollection(FaceBean bean,Object ...inputs)
     {
+        if(null == inputs)
+            return save(bean);
         if(inputs.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         Object[] args = new Object[3];
@@ -712,7 +748,22 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public FaceBean loadUniqueUsingTemplateChecked(FaceBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(FaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FaceBean> action)

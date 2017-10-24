@@ -16,7 +16,8 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IStoreManager;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.image.FlStoreManager;
@@ -99,38 +100,67 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     @Override 
     public StoreBean loadByPrimaryKey(String md5)
     {
-        try{
-            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(md5));
+        if(null == md5){
+            return null;
         }
-        catch(DAOException e)
-        {
+        try{
+            return loadByPrimaryKeyChecked(md5);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    //1.1
+    @Override
+    public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(md5));
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+            throw new ObjectRetrievalException();
+        }catch(DAOException e){
             throw new WrapDAOException(e);
         }
     }
-
     //1.2
     @Override
     public StoreBean loadByPrimaryKey(StoreBean bean)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return bean==null?null:loadByPrimaryKey(bean.getMd5());
     }
 
+    //1.2.2
+    @Override
+    public StoreBean loadByPrimaryKeyChecked(StoreBean bean) throws ObjectRetrievalException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getMd5());
+    }
+    
     //1.3
     @Override
     public StoreBean loadByPrimaryKey(Object ...keys){
-        if(keys.length != 1 )
+        try{
+            return loadByPrimaryKeyChecked(keys);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    //1.3.2
+    @Override
+    public StoreBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1)
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-        return loadByPrimaryKey((String)keys[0]);
+          return loadByPrimaryKeyChecked((String)keys[0]);
     }
-    
+
     //1.4 override IStoreManager
     @Override 
     public boolean existsPrimaryKey(String md5)
@@ -221,6 +251,8 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof String))
@@ -337,7 +369,22 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public StoreBean loadUniqueUsingTemplateChecked(StoreBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(StoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<StoreBean> action)

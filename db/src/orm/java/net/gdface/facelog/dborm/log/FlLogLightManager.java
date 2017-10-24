@@ -370,16 +370,30 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
     @Override
     public FlLogLightBean loadUniqueUsingTemplate(FlLogLightBean bean) throws DAOException
     {
-         FlLogLightBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlLogLightBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlLogLightBean loadUniqueUsingTemplateChecked(FlLogLightBean bean) throws DAOException
+    {
+         List<FlLogLightBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlLogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogLightBean> action) throws DAOException

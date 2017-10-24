@@ -53,8 +53,8 @@ public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
         return bean.getMd5();
     }
     @Override
-    protected FeatureBean loadfromDatabase(String key) {
-        return manager.loadByPrimaryKey(key);
+    protected FeatureBean loadfromDatabase(String key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(FeatureBean bean){

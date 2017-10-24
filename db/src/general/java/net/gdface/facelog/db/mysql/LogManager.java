@@ -20,7 +20,8 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.log.FlLogManager;
@@ -103,38 +104,67 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public LogBean loadByPrimaryKey(Integer id)
     {
-        try{
-            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(id));
+        if(null == id){
+            return null;
         }
-        catch(DAOException e)
-        {
+        try{
+            return loadByPrimaryKeyChecked(id);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    //1.1
+    @Override
+    public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+            throw new ObjectRetrievalException();
+        }catch(DAOException e){
             throw new WrapDAOException(e);
         }
     }
-
     //1.2
     @Override
     public LogBean loadByPrimaryKey(LogBean bean)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
 
+    //1.2.2
+    @Override
+    public LogBean loadByPrimaryKeyChecked(LogBean bean) throws ObjectRetrievalException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getId());
+    }
+    
     //1.3
     @Override
     public LogBean loadByPrimaryKey(Object ...keys){
-        if(keys.length != 1 )
+        try{
+            return loadByPrimaryKeyChecked(keys);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    //1.3.2
+    @Override
+    public LogBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1)
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        return loadByPrimaryKey((Integer)keys[0]);
+          return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
-    
+
     //1.4 override ILogManager
     @Override 
     public boolean existsPrimaryKey(Integer id)
@@ -225,6 +255,8 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
@@ -318,6 +350,8 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override
     public LogBean save(LogBean bean,Object ...args) 
     {
+        if(null == args)
+            return save(bean);
         if(args.length > 4)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceBean)){
@@ -348,6 +382,8 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override
     public LogBean saveCollection(LogBean bean,Object ...inputs)
     {
+        if(null == inputs)
+            return save(bean);
         if(inputs.length > 4)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         Object[] args = new Object[4];
@@ -626,7 +662,22 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public LogBean loadUniqueUsingTemplateChecked(LogBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(LogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogBean> action)

@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_feature table.<br>
@@ -27,6 +29,15 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     //1
     public FeatureBean loadByPrimaryKey(String md5);
 
+    /**
+     * Loads a {@link FeatureBean} from the fl_feature using primary key fields.
+     *
+     * @param md5 String - PK# 1
+     * @return a unique FeatureBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_feature contains row with primary key fields.
@@ -299,7 +310,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param bean the {@link FeatureBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link FeatureBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(FeatureBean bean, PersonBean beanToSet);

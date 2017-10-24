@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_store table.<br>
@@ -27,6 +29,15 @@ public interface IStoreManager extends TableManager<StoreBean>
     //1
     public StoreBean loadByPrimaryKey(String md5);
 
+    /**
+     * Loads a {@link StoreBean} from the fl_store using primary key fields.
+     *
+     * @param md5 String - PK# 1
+     * @return a unique StoreBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_store contains row with primary key fields.

@@ -53,8 +53,8 @@ public class LogCache extends TableLoadCaching<Integer, LogBean> {
         return bean.getId();
     }
     @Override
-    protected LogBean loadfromDatabase(Integer key) {
-        return manager.loadByPrimaryKey(key);
+    protected LogBean loadfromDatabase(Integer key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(LogBean bean){

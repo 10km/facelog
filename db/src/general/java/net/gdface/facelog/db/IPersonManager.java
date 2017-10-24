@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_person table.<br>
@@ -27,6 +29,15 @@ public interface IPersonManager extends TableManager<PersonBean>
     //1
     public PersonBean loadByPrimaryKey(Integer id);
 
+    /**
+     * Loads a {@link PersonBean} from the fl_person using primary key fields.
+     *
+     * @param id Integer - PK# 1
+     * @return a unique PersonBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_person contains row with primary key fields.
@@ -299,7 +310,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the {@link PersonBean} object to use
      * @param beanToSet the {@link ImageBean} object to associate to the {@link PersonBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public ImageBean setReferencedByImageMd5(PersonBean bean, ImageBean beanToSet);
@@ -311,11 +322,22 @@ public interface IPersonManager extends TableManager<PersonBean>
 
     /**
      * Retrieves an unique PersonBean using the image_md5 index.
-     *
-     * @param imageMd5 the image_md5 column's value filter. must not be null
-     * @return 
+     * 
+     * @param imageMd5 the image_md5 column's value filter
+     * @return an PersonBean,otherwise null if not found or exists null in input arguments
+     * @throws WrapDAOException
      */
     public PersonBean loadByIndexImageMd5(String imageMd5);
+    /**
+     * Retrieves an unique PersonBean using the image_md5 index.
+     * 
+     * @param imageMd5 the image_md5 column's value filter. must not be null
+     * @return an PersonBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws WrapDAOException
+     */
+    public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException;
     /**
      * Retrieves an unique PersonBean for each image_md5 index.
      *
@@ -356,11 +378,22 @@ public interface IPersonManager extends TableManager<PersonBean>
 
     /**
      * Retrieves an unique PersonBean using the papers_num index.
-     *
-     * @param papersNum the papers_num column's value filter. must not be null
-     * @return 
+     * 
+     * @param papersNum the papers_num column's value filter
+     * @return an PersonBean,otherwise null if not found or exists null in input arguments
+     * @throws WrapDAOException
      */
     public PersonBean loadByIndexPapersNum(String papersNum);
+    /**
+     * Retrieves an unique PersonBean using the papers_num index.
+     * 
+     * @param papersNum the papers_num column's value filter. must not be null
+     * @return an PersonBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws WrapDAOException
+     */
+    public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException;
     /**
      * Retrieves an unique PersonBean for each papers_num index.
      *

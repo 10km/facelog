@@ -16,7 +16,8 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.ILogLightManager;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.log.FlLogLightManager;
@@ -161,7 +162,22 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public LogLightBean loadUniqueUsingTemplateChecked(LogLightBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(LogLightBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<LogLightBean> action)

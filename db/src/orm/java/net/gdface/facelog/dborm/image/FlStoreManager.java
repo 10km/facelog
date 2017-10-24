@@ -149,10 +149,10 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
             List<FlStoreBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (0 == pReturn.size()) {
-                throw new ObjectRetrievalException();
-            } else {
+            if (1 == pReturn.size()) {
                 return pReturn.get(0);
+            } else {
+                throw new ObjectRetrievalException();
             }
         }
         catch(ObjectRetrievalException e)
@@ -174,7 +174,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean loadByPrimaryKey(FlStoreBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKeyChecked(bean);
+        return bean==null?null:loadByPrimaryKey(bean.getMd5());
     }
     
     //1.2.2
@@ -195,17 +195,22 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //1.3
     @Override
     public FlStoreBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        try{
-            return loadByPrimaryKey(keys);
-        }catch(ObjectRetrievalException e){
-            return null;
-        }
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
+        if(null == keys[0])return null;
+        return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
     @Override
     public FlStoreBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
         if(! (keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return loadByPrimaryKeyChecked((String)keys[0]);
@@ -350,10 +355,13 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlStoreBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof String))
+        FlStoreBean bean = createBean();   
+        
+        if(null != keys[0] && !(keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         bean.setMd5((String)keys[0]);
         return delete(bean);
@@ -583,16 +591,30 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @Override
     public FlStoreBean loadUniqueUsingTemplate(FlStoreBean bean) throws DAOException
     {
-         FlStoreBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlStoreBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlStoreBean loadUniqueUsingTemplateChecked(FlStoreBean bean) throws DAOException
+    {
+         List<FlStoreBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlStoreBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlStoreBean> action) throws DAOException

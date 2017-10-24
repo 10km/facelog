@@ -155,10 +155,10 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (md5 == null) { ps.setNull(1, Types.CHAR); } else { ps.setString(1, md5); }
             List<FlFeatureBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (0 == pReturn.size()) {
-                throw new ObjectRetrievalException();
-            } else {
+            if (1 == pReturn.size()) {
                 return pReturn.get(0);
+            } else {
+                throw new ObjectRetrievalException();
             }
         }
         catch(ObjectRetrievalException e)
@@ -180,7 +180,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean loadByPrimaryKey(FlFeatureBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKeyChecked(bean);
+        return bean==null?null:loadByPrimaryKey(bean.getMd5());
     }
     
     //1.2.2
@@ -201,17 +201,22 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //1.3
     @Override
     public FlFeatureBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        try{
-            return loadByPrimaryKey(keys);
-        }catch(ObjectRetrievalException e){
-            return null;
-        }
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
+        if(null == keys[0])return null;
+        return loadByPrimaryKey((String)keys[0]);
     }
     //1.3.2
     @Override
     public FlFeatureBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
         if(! (keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         return loadByPrimaryKeyChecked((String)keys[0]);
@@ -356,10 +361,13 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlFeatureBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof String))
+        FlFeatureBean bean = createBean();   
+        
+        if(null != keys[0] && !(keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
         bean.setMd5((String)keys[0]);
         return delete(bean);
@@ -734,6 +742,8 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean save(FlFeatureBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlPersonBean)){
@@ -762,6 +772,8 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean saveCollection(FlFeatureBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlPersonBean)){
@@ -1102,16 +1114,30 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @Override
     public FlFeatureBean loadUniqueUsingTemplate(FlFeatureBean bean) throws DAOException
     {
-         FlFeatureBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlFeatureBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlFeatureBean loadUniqueUsingTemplateChecked(FlFeatureBean bean) throws DAOException
+    {
+         List<FlFeatureBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlFeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlFeatureBean> action) throws DAOException
@@ -1247,12 +1273,16 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     public List<FlFeatureBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_FEATURE_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
             return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1270,10 +1300,13 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_FEATURE_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexPersonId((Integer)keys[0]);

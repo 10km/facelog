@@ -352,7 +352,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             throw new UnsupportedOperationException();
         }
         @Override
-        public B loadByPrimaryKeyChecked(B bean)throws DAOException{
+        public B loadByPrimaryKeyChecked(B bean)throws DAOException,ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
@@ -360,7 +360,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             throw new UnsupportedOperationException();
         }
         @Override
-        public B loadByPrimaryKeyChecked(Object ...keys)throws DAOException{
+        public B loadByPrimaryKeyChecked(Object ...keys)throws DAOException,ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
@@ -634,11 +634,11 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     /**
      * see also {@link loadByPrimaryKey(B)}
      * @return a unique B ,otherwise throw exception
-     * @throws ObjectRetrievalException
+     * @throws ObjectRetrievalException not found
      * @throws DAOException
      */
     //1.2.2
-    public B loadByPrimaryKeyChecked(B bean)throws DAOException;    
+    public B loadByPrimaryKeyChecked(B bean)throws DAOException,ObjectRetrievalException;
     /**
      * Loads a B bean from the table using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
@@ -666,11 +666,11 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     /**
      * see also {@link #loadByPrimaryKey(Object...)}
      * @return a unique B,otherwise throw exception
-     * @throws ObjectRetrievalException
+     * @throws ObjectRetrievalException not found
      * @throws DAOException
      */
     //1.3.2
-    public B loadByPrimaryKeyChecked(Object ...keys)throws DAOException;
+    public B loadByPrimaryKeyChecked(Object ...keys)throws DAOException,ObjectRetrievalException;
     
     /**
      * Returns true if this table contains row with primary key fields.
@@ -838,11 +838,23 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * Loads a unique B bean from a template one giving a c
      *
      * @param bean the B bean to look for
-     * @return the bean matching the template
+     * @return the bean matching the template,or {@code null} if not found or null input argument
+     * @throws ObjectRetrievalException more than one row
      * @throws DAOException
      */
     //18   
     public B loadUniqueUsingTemplate(B bean)throws DAOException;
+
+    /**
+     * Loads a unique B bean from a template one giving a c
+     *
+     * @param bean the B bean to look for
+     * @return the bean matching the template
+     * @throws ObjectRetrievalException not found or more than one row
+     * @throws DAOException
+     */
+    //18-1
+    public B loadUniqueUsingTemplateChecked(B bean)throws DAOException,ObjectRetrievalException;
 
     /**
      * Loads an array of B from a template one.

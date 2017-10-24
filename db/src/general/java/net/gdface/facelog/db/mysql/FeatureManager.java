@@ -19,7 +19,8 @@ import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.face.FlFeatureManager;
@@ -102,38 +103,67 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public FeatureBean loadByPrimaryKey(String md5)
     {
-        try{
-            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(md5));
+        if(null == md5){
+            return null;
         }
-        catch(DAOException e)
-        {
+        try{
+            return loadByPrimaryKeyChecked(md5);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    //1.1
+    @Override
+    public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(md5));
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+            throw new ObjectRetrievalException();
+        }catch(DAOException e){
             throw new WrapDAOException(e);
         }
     }
-
     //1.2
     @Override
     public FeatureBean loadByPrimaryKey(FeatureBean bean)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return bean==null?null:loadByPrimaryKey(bean.getMd5());
     }
 
+    //1.2.2
+    @Override
+    public FeatureBean loadByPrimaryKeyChecked(FeatureBean bean) throws ObjectRetrievalException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getMd5());
+    }
+    
     //1.3
     @Override
     public FeatureBean loadByPrimaryKey(Object ...keys){
-        if(keys.length != 1 )
+        try{
+            return loadByPrimaryKeyChecked(keys);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    //1.3.2
+    @Override
+    public FeatureBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1)
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof String))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
-        return loadByPrimaryKey((String)keys[0]);
+          return loadByPrimaryKeyChecked((String)keys[0]);
     }
-    
+
     //1.4 override IFeatureManager
     @Override 
     public boolean existsPrimaryKey(String md5)
@@ -224,6 +254,8 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof String))
@@ -561,6 +593,8 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public FeatureBean save(FeatureBean bean,Object ...args) 
     {
+        if(null == args)
+            return save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonBean)){
@@ -588,6 +622,8 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override
     public FeatureBean saveCollection(FeatureBean bean,Object ...inputs)
     {
+        if(null == inputs)
+            return save(bean);
         if(inputs.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         Object[] args = new Object[3];
@@ -749,7 +785,22 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public FeatureBean loadUniqueUsingTemplateChecked(FeatureBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(FeatureBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FeatureBean> action)

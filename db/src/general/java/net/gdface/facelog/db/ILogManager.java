@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_log table.<br>
@@ -27,6 +29,15 @@ public interface ILogManager extends TableManager<LogBean>
     //1
     public LogBean loadByPrimaryKey(Integer id);
 
+    /**
+     * Loads a {@link LogBean} from the fl_log using primary key fields.
+     *
+     * @param id Integer - PK# 1
+     * @return a unique LogBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_log contains row with primary key fields.
@@ -139,7 +150,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(LogBean bean, DeviceBean beanToSet);
@@ -158,7 +169,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link FaceBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public FaceBean setReferencedByCompareFace(LogBean bean, FaceBean beanToSet);
@@ -177,7 +188,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link FeatureBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public FeatureBean setReferencedByVerifyFeature(LogBean bean, FeatureBean beanToSet);
@@ -196,7 +207,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param bean the {@link LogBean} object to use
      * @param beanToSet the {@link PersonBean} object to associate to the {@link LogBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public PersonBean setReferencedByPersonId(LogBean bean, PersonBean beanToSet);

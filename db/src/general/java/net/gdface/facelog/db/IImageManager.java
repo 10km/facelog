@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_image table.<br>
@@ -27,6 +29,15 @@ public interface IImageManager extends TableManager<ImageBean>
     //1
     public ImageBean loadByPrimaryKey(String md5);
 
+    /**
+     * Loads a {@link ImageBean} from the fl_image using primary key fields.
+     *
+     * @param md5 String - PK# 1
+     * @return a unique ImageBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public ImageBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_image contains row with primary key fields.
@@ -299,7 +310,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param bean the {@link ImageBean} object to use
      * @param beanToSet the {@link DeviceBean} object to associate to the {@link ImageBean}
      * @return always beanToSet saved
-     * @throws Exception
+     * @throws WrapDAOException
      */
     //5.2 SET REFERENCED 
     public DeviceBean setReferencedByDeviceId(ImageBean bean, DeviceBean beanToSet);

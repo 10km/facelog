@@ -35,15 +35,15 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
             }
             @Override
             public void unregisterListener() {
-                manager.unregisterListener(tableListener);        
+                manager.unregisterListener(tableListener);
             }
             @Override
             protected String returnKey(DeviceBean bean) {
                 return bean.getMac();
             }
             @Override
-            protected DeviceBean loadfromDatabase(String key) {
-                return manager.loadByIndexMac(key);
+            protected DeviceBean loadfromDatabase(String key) throws Exception {
+                return manager.loadByIndexMacChecked(key);
             }};
 
         serialNoCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
@@ -53,15 +53,15 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
             }
             @Override
             public void unregisterListener() {
-                manager.unregisterListener(tableListener);        
+                manager.unregisterListener(tableListener);
             }
             @Override
             protected String returnKey(DeviceBean bean) {
                 return bean.getSerialNo();
             }
             @Override
-            protected DeviceBean loadfromDatabase(String key) {
-                return manager.loadByIndexSerialNo(key);
+            protected DeviceBean loadfromDatabase(String key) throws Exception {
+                return manager.loadByIndexSerialNoChecked(key);
             }};
     }
     public DeviceCache(long maximumSize, long duration, TimeUnit unit) {
@@ -95,8 +95,8 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         return bean.getId();
     }
     @Override
-    protected DeviceBean loadfromDatabase(Integer key) {
-        return manager.loadByPrimaryKey(key);
+    protected DeviceBean loadfromDatabase(Integer key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(DeviceBean bean){

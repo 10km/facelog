@@ -157,10 +157,10 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlLogBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (0 == pReturn.size()) {
-                throw new ObjectRetrievalException();
-            } else {
+            if (1 == pReturn.size()) {
                 return pReturn.get(0);
+            } else {
+                throw new ObjectRetrievalException();
             }
         }
         catch(ObjectRetrievalException e)
@@ -182,7 +182,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public FlLogBean loadByPrimaryKey(FlLogBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKeyChecked(bean);
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
     
     //1.2.2
@@ -203,17 +203,22 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     //1.3
     @Override
     public FlLogBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        try{
-            return loadByPrimaryKey(keys);
-        }catch(ObjectRetrievalException e){
-            return null;
-        }
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
+        if(null == keys[0])return null;
+        return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlLogBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return loadByPrimaryKeyChecked((Integer)keys[0]);
@@ -358,10 +363,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlLogBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof Integer))
+        FlLogBean bean = createBean();   
+        
+        if(null != keys[0] && !(keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         bean.setId((Integer)keys[0]);
         return delete(bean);
@@ -425,6 +433,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public FlLogBean save(FlLogBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 4)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
@@ -456,6 +466,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public FlLogBean saveCollection(FlLogBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 4)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceBean)){
@@ -1013,16 +1025,30 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @Override
     public FlLogBean loadUniqueUsingTemplate(FlLogBean bean) throws DAOException
     {
-         FlLogBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlLogBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlLogBean loadUniqueUsingTemplateChecked(FlLogBean bean) throws DAOException
+    {
+         List<FlLogBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlLogBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlLogBean> action) throws DAOException
@@ -1278,33 +1304,43 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     public List<FlLogBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_LOG_INDEX_COMPARE_FACE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'compare_face' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
             return this.loadByIndexCompareFaceAsList((Integer)keys[0]);        
         }
         case FL_LOG_INDEX_DEVICE_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
-            if(null != keys[1] && !(keys[1] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
             return this.loadByIndexDeviceIdAsList((Integer)keys[0]);        
         }
         case FL_LOG_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
-            if(null != keys[2] && !(keys[2] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
             return this.loadByIndexPersonIdAsList((Integer)keys[0]);        
         }
         case FL_LOG_INDEX_VERIFY_FEATURE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'verify_feature' column number");
-            if(null != keys[3] && !(keys[3] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             return this.loadByIndexVerifyFeatureAsList((String)keys[0]);        
         }
         default:
@@ -1322,10 +1358,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_LOG_INDEX_COMPARE_FACE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'compare_face' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexCompareFace((Integer)keys[0]);
@@ -1333,21 +1372,24 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         case FL_LOG_INDEX_DEVICE_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'device_id' column number");
-            if(null != keys[1] && !(keys[1] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexDeviceId((Integer)keys[0]);
         }
         case FL_LOG_INDEX_PERSON_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'person_id' column number");
-            if(null != keys[2] && !(keys[2] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexPersonId((Integer)keys[0]);
         }
         case FL_LOG_INDEX_VERIFY_FEATURE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'verify_feature' column number");
-            if(null != keys[3] && !(keys[3] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexVerifyFeature((String)keys[0]);
         }

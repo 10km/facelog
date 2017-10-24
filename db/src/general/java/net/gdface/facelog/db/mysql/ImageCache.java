@@ -53,8 +53,8 @@ public class ImageCache extends TableLoadCaching<String, ImageBean> {
         return bean.getMd5();
     }
     @Override
-    protected ImageBean loadfromDatabase(String key) {
-        return manager.loadByPrimaryKey(key);
+    protected ImageBean loadfromDatabase(String key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(ImageBean bean){

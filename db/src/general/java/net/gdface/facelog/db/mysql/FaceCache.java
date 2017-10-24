@@ -53,8 +53,8 @@ public class FaceCache extends TableLoadCaching<Integer, FaceBean> {
         return bean.getId();
     }
     @Override
-    protected FaceBean loadfromDatabase(Integer key) {
-        return manager.loadByPrimaryKey(key);
+    protected FaceBean loadfromDatabase(Integer key)throws Exception {
+        return manager.loadByPrimaryKeyChecked(key);
     }
     @Override
     public void update(FaceBean bean){

@@ -155,10 +155,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlFaceBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (0 == pReturn.size()) {
-                throw new ObjectRetrievalException();
-            } else {
+            if (1 == pReturn.size()) {
                 return pReturn.get(0);
+            } else {
+                throw new ObjectRetrievalException();
             }
         }
         catch(ObjectRetrievalException e)
@@ -180,7 +180,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean loadByPrimaryKey(FlFaceBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKeyChecked(bean);
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
     
     //1.2.2
@@ -201,17 +201,22 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //1.3
     @Override
     public FlFaceBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        try{
-            return loadByPrimaryKey(keys);
-        }catch(ObjectRetrievalException e){
-            return null;
-        }
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
+        if(null == keys[0])return null;
+        return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlFaceBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return loadByPrimaryKeyChecked((Integer)keys[0]);
@@ -356,10 +361,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlFaceBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof Integer))
+        FlFaceBean bean = createBean();   
+        
+        if(null != keys[0] && !(keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         bean.setId((Integer)keys[0]);
         return delete(bean);
@@ -631,6 +639,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean save(FlFaceBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
@@ -659,6 +669,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean saveCollection(FlFaceBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlFeatureBean)){
@@ -1331,16 +1343,30 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @Override
     public FlFaceBean loadUniqueUsingTemplate(FlFaceBean bean) throws DAOException
     {
-         FlFaceBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlFaceBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlFaceBean loadUniqueUsingTemplateChecked(FlFaceBean bean) throws DAOException
+    {
+         List<FlFaceBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlFaceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlFaceBean> action) throws DAOException
@@ -1516,19 +1542,25 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     public List<FlFaceBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_FACE_INDEX_FEATURE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             return this.loadByIndexFeatureMd5AsList((String)keys[0]);        
         }
         case FL_FACE_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             return this.loadByIndexImageMd5AsList((String)keys[0]);        
         }
         default:
@@ -1546,10 +1578,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_FACE_INDEX_FEATURE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'feature_md5' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexFeatureMd5((String)keys[0]);
@@ -1557,7 +1592,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         case FL_FACE_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexImageMd5((String)keys[0]);
         }

@@ -19,7 +19,8 @@ import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.person.FlPersonManager;
@@ -102,38 +103,67 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public PersonBean loadByPrimaryKey(Integer id)
     {
-        try{
-            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(id));
+        if(null == id){
+            return null;
         }
-        catch(DAOException e)
-        {
+        try{
+            return loadByPrimaryKeyChecked(id);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    //1.1
+    @Override
+    public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+            throw new ObjectRetrievalException();
+        }catch(DAOException e){
             throw new WrapDAOException(e);
         }
     }
-
     //1.2
     @Override
     public PersonBean loadByPrimaryKey(PersonBean bean)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
 
+    //1.2.2
+    @Override
+    public PersonBean loadByPrimaryKeyChecked(PersonBean bean) throws ObjectRetrievalException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getId());
+    }
+    
     //1.3
     @Override
     public PersonBean loadByPrimaryKey(Object ...keys){
-        if(keys.length != 1 )
+        try{
+            return loadByPrimaryKeyChecked(keys);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    //1.3.2
+    @Override
+    public PersonBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1)
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        return loadByPrimaryKey((Integer)keys[0]);
+          return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
-    
+
     //1.4 override IPersonManager
     @Override 
     public boolean existsPrimaryKey(Integer id)
@@ -224,6 +254,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
@@ -561,6 +593,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override
     public PersonBean save(PersonBean bean,Object ...args) 
     {
+        if(null == args)
+            return save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean)){
@@ -588,6 +622,8 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override
     public PersonBean saveCollection(PersonBean bean,Object ...inputs)
     {
+        if(null == inputs)
+            return save(bean);
         if(inputs.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         Object[] args = new Object[3];
@@ -749,7 +785,22 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public PersonBean loadUniqueUsingTemplateChecked(PersonBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(PersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<PersonBean> action)
@@ -786,13 +837,24 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public PersonBean loadByIndexImageMd5(String imageMd5)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexImageMd5(imageMd5));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        PersonBean bean = new PersonBean();
+        if(null == imageMd5)
+            return null;
+        
+        bean.setImageMd5(imageMd5);
+        
+        return loadUniqueUsingTemplate(bean);
+    }
+    // override IPersonManager
+    @Override 
+    public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException{
+        PersonBean bean = new PersonBean();
+        if(null == imageMd5)
+            throw new NullPointerException();
+        
+        bean.setImageMd5(imageMd5);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     // override IPersonManager
     @Override 
@@ -864,13 +926,24 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public PersonBean loadByIndexPapersNum(String papersNum)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexPapersNum(papersNum));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        PersonBean bean = new PersonBean();
+        if(null == papersNum)
+            return null;
+        
+        bean.setPapersNum(papersNum);
+        
+        return loadUniqueUsingTemplate(bean);
+    }
+    // override IPersonManager
+    @Override 
+    public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException{
+        PersonBean bean = new PersonBean();
+        if(null == papersNum)
+            throw new NullPointerException();
+        
+        bean.setPapersNum(papersNum);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     // override IPersonManager
     @Override 

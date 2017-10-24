@@ -18,7 +18,8 @@ import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.TableListener;
-import net.gdface.facelog.db.WrapDAOException;
+import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.device.FlDeviceManager;
@@ -101,38 +102,67 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceBean loadByPrimaryKey(Integer id)
     {
-        try{
-            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKey(id));
+        if(null == id){
+            return null;
         }
-        catch(DAOException e)
-        {
+        try{
+            return loadByPrimaryKeyChecked(id);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    //1.1
+    @Override
+    public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(nativeManager.loadByPrimaryKeyChecked(id));
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+            throw new ObjectRetrievalException();
+        }catch(DAOException e){
             throw new WrapDAOException(e);
         }
     }
-
     //1.2
     @Override
     public DeviceBean loadByPrimaryKey(DeviceBean bean)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByPrimaryKey(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
 
+    //1.2.2
+    @Override
+    public DeviceBean loadByPrimaryKeyChecked(DeviceBean bean) throws ObjectRetrievalException
+    {
+        if(null == bean)
+            throw new NullPointerException();
+        return loadByPrimaryKeyChecked(bean.getId());
+    }
+    
     //1.3
     @Override
     public DeviceBean loadByPrimaryKey(Object ...keys){
-        if(keys.length != 1 )
+        try{
+            return loadByPrimaryKeyChecked(keys);
+        }catch(ObjectRetrievalException e){
+            // not found
+            return null;
+        }
+    }
+    
+    //1.3.2
+    @Override
+    public DeviceBean loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1)
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
-        return loadByPrimaryKey((Integer)keys[0]);
+          return loadByPrimaryKeyChecked((Integer)keys[0]);
     }
-    
+
     //1.4 override IDeviceManager
     @Override 
     public boolean existsPrimaryKey(Integer id)
@@ -223,6 +253,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys){
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
         if(! (keys[0] instanceof Integer))
@@ -557,6 +589,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override
     public DeviceBean save(DeviceBean bean,Object ...args) 
     {
+        if(null == args)
+            return save(bean);
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof ImageBean[])){
@@ -581,6 +615,8 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override
     public DeviceBean saveCollection(DeviceBean bean,Object ...inputs)
     {
+        if(null == inputs)
+            return save(bean);
         if(inputs.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
         Object[] args = new Object[2];
@@ -660,7 +696,22 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
      }
-
+    //18-1
+    @Override
+    public DeviceBean loadUniqueUsingTemplateChecked(DeviceBean bean) throws ObjectRetrievalException
+    {
+        try{
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+        }
+        catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
+        {
+            throw new ObjectRetrievalException();
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+     }
     //20-5
     @Override
     public int loadUsingTemplate(DeviceBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<DeviceBean> action)
@@ -697,13 +748,24 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceBean loadByIndexMac(String mac)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexMac(mac));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        DeviceBean bean = new DeviceBean();
+        if(null == mac)
+            return null;
+        
+        bean.setMac(mac);
+        
+        return loadUniqueUsingTemplate(bean);
+    }
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException{
+        DeviceBean bean = new DeviceBean();
+        if(null == mac)
+            throw new NullPointerException();
+        
+        bean.setMac(mac);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     // override IDeviceManager
     @Override 
@@ -775,13 +837,24 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceBean loadByIndexSerialNo(String serialNo)
     {
-        try{
-            return this.beanConverter.fromRight(this.nativeManager.loadByIndexSerialNo(serialNo));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        DeviceBean bean = new DeviceBean();
+        if(null == serialNo)
+            return null;
+        
+        bean.setSerialNo(serialNo);
+        
+        return loadUniqueUsingTemplate(bean);
+    }
+    // override IDeviceManager
+    @Override 
+    public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException{
+        DeviceBean bean = new DeviceBean();
+        if(null == serialNo)
+            throw new NullPointerException();
+        
+        bean.setSerialNo(serialNo);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     // override IDeviceManager
     @Override 

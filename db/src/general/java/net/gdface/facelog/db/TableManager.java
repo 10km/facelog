@@ -5,13 +5,12 @@
 // jdbc driver used at code generation time: com.mysql.jdbc.Driver
 // template: table.manager.java.vm
 // ______________________________________________________
-
 package net.gdface.facelog.db;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
 /**
  * Interface to handle database calls (save, load, count, etc...) for table.
  * @author guyadong
@@ -349,12 +348,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         public B loadByPrimaryKey(B bean){
             throw new UnsupportedOperationException();
         }
-
+        @Override
+        public B loadByPrimaryKeyChecked(B bean) throws ObjectRetrievalException{
+            throw new UnsupportedOperationException();
+        }
         @Override
         public B loadByPrimaryKey(Object ...keys){
             throw new UnsupportedOperationException();
         }
-
+        @Override
+        public B loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException{
+            throw new UnsupportedOperationException();
+        }
         @Override
         public int deleteByPrimaryKey(Object ...keys){
             throw new UnsupportedOperationException();
@@ -601,13 +606,19 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
 
     /**
      * Loads a B bean from the table using primary key fields of {@code bean}.
-     * when you don't know which is primary key of table,you can use the method.
      * @param bean the B bean with primary key fields
      * @return a unique B or {@code null} if not found or bean is null
      */
     //1.2
     public B loadByPrimaryKey(B bean);
     
+    /**
+     * see also {@link loadByPrimaryKey(B)}
+     * @return a unique B ,otherwise throw exception
+     * @throws ObjectRetrievalException not found
+     */
+    //1.2.2
+    public B loadByPrimaryKeyChecked(B bean) throws ObjectRetrievalException;
     /**
      * Loads a B bean from the table using primary key fields.
      * when you don't know which is primary key of table,you can use the method.
@@ -630,6 +641,14 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      */
     //1.3
     public B loadByPrimaryKey(Object ...keys);
+
+    /**
+     * see also {@link #loadByPrimaryKey(Object...)}
+     * @return a unique B,otherwise throw exception
+     * @throws ObjectRetrievalException not found
+     */
+    //1.3.2
+    public B loadByPrimaryKeyChecked(Object ...keys) throws ObjectRetrievalException;
     
     /**
      * Returns true if this table contains row with primary key fields.
@@ -784,10 +803,21 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * Loads a unique B bean from a template one giving a c
      *
      * @param bean the B bean to look for
-     * @return the bean matching the template
+     * @return the bean matching the template,or {@code null} if not found or null input argument
+     * @throws ObjectRetrievalException more than one row
      */
     //18   
     public B loadUniqueUsingTemplate(B bean);
+
+    /**
+     * Loads a unique B bean from a template one giving a c
+     *
+     * @param bean the B bean to look for
+     * @return the bean matching the template
+     * @throws ObjectRetrievalException not found or more than one row
+     */
+    //18-1
+    public B loadUniqueUsingTemplateChecked(B bean) throws ObjectRetrievalException;
 
     /**
      * Loads an array of B from a template one.

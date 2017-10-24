@@ -155,10 +155,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                                     ResultSet.CONCUR_READ_ONLY);
             if (id == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, id); }
             List<FlPersonBean> pReturn = this.loadByPreparedStatementAsList(ps);
-            if (0 == pReturn.size()) {
-                throw new ObjectRetrievalException();
-            } else {
+            if (1 == pReturn.size()) {
                 return pReturn.get(0);
+            } else {
+                throw new ObjectRetrievalException();
             }
         }
         catch(ObjectRetrievalException e)
@@ -180,7 +180,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean loadByPrimaryKey(FlPersonBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKeyChecked(bean);
+        return bean==null?null:loadByPrimaryKey(bean.getId());
     }
     
     //1.2.2
@@ -201,17 +201,22 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //1.3
     @Override
     public FlPersonBean loadByPrimaryKey(Object ...keys) throws DAOException{
-        try{
-            return loadByPrimaryKey(keys);
-        }catch(ObjectRetrievalException e){
-            return null;
-        }
+        if(null == keys)
+            throw new NullPointerException();
+        if(keys.length != 1 )
+            throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
+        if(null == keys[0])return null;
+        return loadByPrimaryKey((Integer)keys[0]);
     }
     //1.3.2
     @Override
     public FlPersonBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
+        
         if(! (keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         return loadByPrimaryKeyChecked((Integer)keys[0]);
@@ -356,10 +361,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //2.1
     @Override
     public int deleteByPrimaryKey(Object ...keys) throws DAOException{
+        if(null == keys)
+            throw new NullPointerException();
         if(keys.length != 1 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlPersonBean bean=createBean();   
-        if(null!= keys[0] && !(keys[0] instanceof Integer))
+        FlPersonBean bean = createBean();   
+        
+        if(null != keys[0] && !(keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
         bean.setId((Integer)keys[0]);
         return delete(bean);
@@ -734,6 +742,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean save(FlPersonBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
@@ -762,6 +772,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean saveCollection(FlPersonBean bean,Object ...args) throws DAOException
     {
+        if(null == args)
+            save(bean);
         if(args.length > 3)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
@@ -1238,16 +1250,30 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @Override
     public FlPersonBean loadUniqueUsingTemplate(FlPersonBean bean) throws DAOException
     {
-         FlPersonBean[] beans = this.loadUsingTemplate(bean);
-         if (beans.length == 0) {
+         List<FlPersonBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
              return null;
-         }
-         if (beans.length > 1) {
+         case 1:
+             return beans.get(0);
+         default:
              throw new ObjectRetrievalException("More than one element !!");
          }
-         return beans[0];
-     }
-
+    }
+    //18-1
+    @Override
+    public FlPersonBean loadUniqueUsingTemplateChecked(FlPersonBean bean) throws DAOException
+    {
+         List<FlPersonBean> beans = this.loadUsingTemplateAsList(bean);
+         switch(beans.size()){
+         case 0:
+             throw new ObjectRetrievalException("Not found element !!");
+         case 1:
+             return beans.get(0);
+         default:
+             throw new ObjectRetrievalException("More than one element !!");
+         }
+    }
     //20-5
     @Override
     public int loadUsingTemplate(FlPersonBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPersonBean> action) throws DAOException
@@ -1335,18 +1361,39 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Retrieves an unique FlPersonBean using the image_md5 index.
-     *
-     * @param imageMd5 the image_md5 column's value filter. must not be null
-     * @return 
+     * 
+     * @param imageMd5 the image_md5 column's value filter
+     * @return an FlPersonBean,otherwise null if not found or exists null in input arguments
      * @throws DAOException
      */
     public FlPersonBean loadByIndexImageMd5(String imageMd5) throws DAOException
     {
-        FlPersonBean bean = this.createBean();
-        if( null == imageMd5)
+        FlPersonBean bean = new FlPersonBean();
+        if(null == imageMd5)
             return null;
+        
         bean.setImageMd5(imageMd5);
+        
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlPersonBean using the image_md5 index.
+     * 
+     * @param imageMd5 the image_md5 column's value filter. must not be null
+     * @return an FlPersonBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    public FlPersonBean loadByIndexImageMd5Checked(String imageMd5) throws DAOException
+    {
+        FlPersonBean bean = new FlPersonBean();
+        if(null == imageMd5)
+            throw new NullPointerException();
+        
+        bean.setImageMd5(imageMd5);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     /**
      * Retrieves an unique FlPersonBean for each image_md5 index.
@@ -1437,18 +1484,39 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Retrieves an unique FlPersonBean using the papers_num index.
-     *
-     * @param papersNum the papers_num column's value filter. must not be null
-     * @return 
+     * 
+     * @param papersNum the papers_num column's value filter
+     * @return an FlPersonBean,otherwise null if not found or exists null in input arguments
      * @throws DAOException
      */
     public FlPersonBean loadByIndexPapersNum(String papersNum) throws DAOException
     {
-        FlPersonBean bean = this.createBean();
-        if( null == papersNum)
+        FlPersonBean bean = new FlPersonBean();
+        if(null == papersNum)
             return null;
+        
         bean.setPapersNum(papersNum);
+        
         return loadUniqueUsingTemplate(bean);
+    }
+    /**
+     * Retrieves an unique FlPersonBean using the papers_num index.
+     * 
+     * @param papersNum the papers_num column's value filter. must not be null
+     * @return an FlPersonBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws DAOException
+     */
+    public FlPersonBean loadByIndexPapersNumChecked(String papersNum) throws DAOException
+    {
+        FlPersonBean bean = new FlPersonBean();
+        if(null == papersNum)
+            throw new NullPointerException();
+        
+        bean.setPapersNum(papersNum);
+        
+        return loadUniqueUsingTemplateChecked(bean);
     }
     /**
      * Retrieves an unique FlPersonBean for each papers_num index.
@@ -1627,35 +1695,45 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public List<FlPersonBean> loadByIndexAsList(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_PERSON_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             FlPersonBean bean= this.loadByIndexImageMd5((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
+
             FlPersonBean bean= this.loadByIndexPapersNum((String)keys[0]);
             return null == bean ? new java.util.ArrayList<FlPersonBean>() : java.util.Arrays.asList(bean);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
-            if(null != keys[2] && !(keys[2] instanceof java.util.Date))
+            
+            if(null != keys[0] && !(keys[0] instanceof java.util.Date))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
+
             return this.loadByIndexExpiryDateAsList((java.util.Date)keys[0]);        
         }
         case FL_PERSON_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[3] && !(keys[3] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
             return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
         }
         default:
@@ -1673,10 +1751,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public int deleteByIndex(int keyIndex,Object ...keys)throws DAOException
     {
+        if(null == keys)
+            throw new NullPointerException();
         switch(keyIndex){
         case FL_PERSON_INDEX_IMAGE_MD5:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'image_md5' column number");
+            
             if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexImageMd5((String)keys[0]);
@@ -1684,21 +1765,24 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         case FL_PERSON_INDEX_PAPERS_NUM:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'papers_num' column number");
-            if(null != keys[1] && !(keys[1] instanceof String))
+            
+            if(null != keys[0] && !(keys[0] instanceof String))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:String");
             return this.deleteByIndexPapersNum((String)keys[0]);
         }
         case FL_PERSON_INDEX_EXPIRY_DATE:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'expiry_date' column number");
-            if(null != keys[2] && !(keys[2] instanceof java.util.Date))
+            
+            if(null != keys[0] && !(keys[0] instanceof java.util.Date))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
             return this.deleteByIndexExpiryDate((java.util.Date)keys[0]);
         }
         case FL_PERSON_INDEX_GROUP_ID:{
             if(keys.length != 1)
                 throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
-            if(null != keys[3] && !(keys[3] instanceof Integer))
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
             return this.deleteByIndexGroupId((Integer)keys[0]);
         }

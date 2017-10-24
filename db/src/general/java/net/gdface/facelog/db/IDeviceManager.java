@@ -6,6 +6,8 @@
 // template: manager.interface.java.vm
 // ______________________________________________________
 package net.gdface.facelog.db;
+import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_device table.<br>
@@ -27,6 +29,15 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     //1
     public DeviceBean loadByPrimaryKey(Integer id);
 
+    /**
+     * Loads a {@link DeviceBean} from the fl_device using primary key fields.
+     *
+     * @param id Integer - PK# 1
+     * @return a unique DeviceBean
+     * @throws ObjectRetrievalException if not found
+     */
+    //1.1
+    public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException;
     
     /**
      * Returns true if this fl_device contains row with primary key fields.
@@ -287,11 +298,22 @@ public interface IDeviceManager extends TableManager<DeviceBean>
 
     /**
      * Retrieves an unique DeviceBean using the mac index.
-     *
-     * @param mac the mac column's value filter. must not be null
-     * @return 
+     * 
+     * @param mac the mac column's value filter
+     * @return an DeviceBean,otherwise null if not found or exists null in input arguments
+     * @throws WrapDAOException
      */
     public DeviceBean loadByIndexMac(String mac);
+    /**
+     * Retrieves an unique DeviceBean using the mac index.
+     * 
+     * @param mac the mac column's value filter. must not be null
+     * @return an DeviceBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws WrapDAOException
+     */
+    public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException;
     /**
      * Retrieves an unique DeviceBean for each mac index.
      *
@@ -332,11 +354,22 @@ public interface IDeviceManager extends TableManager<DeviceBean>
 
     /**
      * Retrieves an unique DeviceBean using the serial_no index.
-     *
-     * @param serialNo the serial_no column's value filter. must not be null
-     * @return 
+     * 
+     * @param serialNo the serial_no column's value filter
+     * @return an DeviceBean,otherwise null if not found or exists null in input arguments
+     * @throws WrapDAOException
      */
     public DeviceBean loadByIndexSerialNo(String serialNo);
+    /**
+     * Retrieves an unique DeviceBean using the serial_no index.
+     * 
+     * @param serialNo the serial_no column's value filter. must not be null
+     * @return an DeviceBean
+     * @throws NullPointerException exists null in input arguments
+     * @throws ObjectRetrievalException if not found
+     * @throws WrapDAOException
+     */
+    public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException;
     /**
      * Retrieves an unique DeviceBean for each serial_no index.
      *
