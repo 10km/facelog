@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -2471,7 +2471,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     // LISTENER
     //_____________________________________________________________________
     class ListenerContainer implements TableListener<FlFaceBean> {
-        private final Set<TableListener<FlFaceBean>> listeners = new TreeSet<TableListener<FlFaceBean>>();
+        private final Set<TableListener<FlFaceBean>> listeners = new LinkedHashSet<TableListener<FlFaceBean>>();
         public ListenerContainer() {
         }
     

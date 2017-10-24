@@ -40,7 +40,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
             }
             @Override
             protected String returnKey(DeviceBean bean) {
-                return bean.getMac();
+                return null == bean ? null : bean.getMac();
             }
             @Override
             protected DeviceBean loadfromDatabase(String key) throws Exception {
@@ -58,7 +58,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
             }
             @Override
             protected String returnKey(DeviceBean bean) {
-                return bean.getSerialNo();
+                return null == bean ? null : bean.getSerialNo();
             }
             @Override
             protected DeviceBean loadfromDatabase(String key) throws Exception {
@@ -93,7 +93,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
     }
     @Override
     protected Integer returnKey(DeviceBean bean) {
-        return bean.getId();
+        return null == bean ? null : bean.getId();
     }
     @Override
     protected DeviceBean loadfromDatabase(Integer key)throws Exception {

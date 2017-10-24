@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -1257,7 +1257,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     // LISTENER
     //_____________________________________________________________________
     class ListenerContainer implements TableListener<FlStoreBean> {
-        private final Set<TableListener<FlStoreBean>> listeners = new TreeSet<TableListener<FlStoreBean>>();
+        private final Set<TableListener<FlStoreBean>> listeners = new LinkedHashSet<TableListener<FlStoreBean>>();
         public ListenerContainer() {
         }
     

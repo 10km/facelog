@@ -51,7 +51,7 @@ public class FaceCache extends TableLoadCaching<Integer, FaceBean> {
     }
     @Override
     protected Integer returnKey(FaceBean bean) {
-        return bean.getId();
+        return null == bean ? null : bean.getId();
     }
     @Override
     protected FaceBean loadfromDatabase(Integer key)throws Exception {

@@ -40,7 +40,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
             }
             @Override
             protected String returnKey(PersonBean bean) {
-                return bean.getImageMd5();
+                return null == bean ? null : bean.getImageMd5();
             }
             @Override
             protected PersonBean loadfromDatabase(String key) throws Exception {
@@ -58,7 +58,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
             }
             @Override
             protected String returnKey(PersonBean bean) {
-                return bean.getPapersNum();
+                return null == bean ? null : bean.getPapersNum();
             }
             @Override
             protected PersonBean loadfromDatabase(String key) throws Exception {
@@ -93,7 +93,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
     }
     @Override
     protected Integer returnKey(PersonBean bean) {
-        return bean.getId();
+        return null == bean ? null : bean.getId();
     }
     @Override
     protected PersonBean loadfromDatabase(Integer key)throws Exception {

@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -1879,7 +1879,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     // LISTENER
     //_____________________________________________________________________
     class ListenerContainer implements TableListener<FlFeatureBean> {
-        private final Set<TableListener<FlFeatureBean>> listeners = new TreeSet<TableListener<FlFeatureBean>>();
+        private final Set<TableListener<FlFeatureBean>> listeners = new LinkedHashSet<TableListener<FlFeatureBean>>();
         public ListenerContainer() {
         }
     

@@ -21,7 +21,7 @@ import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 /**
  * 
- * 基于 {@link LoadingCache}实现表数据缓存,并可以通过{@link TableListener}实现缓存数组的更新
+ * 基于 {@link LoadingCache}实现表数据缓存,并可以通过{@link TableListener}实现缓存数据自动更新
  * @author guyadong
  *
  * @param <K> 主键类型(Primary or Unique)
@@ -31,6 +31,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
     private final LoadingCache<K, B> cache;
     protected final ConcurrentMap<K, B> cacheMap;
     protected final  TableListener.Adapter<B> tableListener;
+    /** 当前更新策略 */
     private final UpdateStrategy updateStragey;
 
     /** 返回bean中主键值 */
@@ -77,14 +78,22 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
                         return loadfromDatabase(key);
                     }});
         cacheMap = cache.asMap();
+        // 初始化侦听器,当表数据改变时自动更新缓存
         tableListener = new TableListener.Adapter<B>(){
             @Override
             public void afterUpdate(B bean) {
-                cacheMap.putIfAbsent(returnKey(bean), bean);
+                update(bean);
             }
-
+            
+            @Override
+            public void afterInsert(B bean) {
+                update(bean);
+            }
+            
             @Override
             public void afterDelete(B bean) {
+                // the remove method allow null key
+                // see also com.google.common.cache.LocalCache.remove(Object key)
                 cacheMap.remove(returnKey(bean));
             }};
     }
@@ -106,11 +115,13 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
             throw e;
         }        
     }
+    /**
+     * 根据当前更新策略({@link UpdateStrategy})将{@code bean}更新到缓存
+     * @see net.gdface.facelog.db.ITableCache#update(net.gdface.facelog.db.BaseBean)
+     */
     @Override
     public void update(B bean){
-        K key;
-        if(null == bean || null == (key = returnKey(bean)))return;
-        updateStragey.update(cacheMap, key, bean);
+        updateStragey.update(cacheMap, returnKey(bean), bean);
     }
     @Override
     public Collection<B> update(Collection<B> beans){

@@ -51,7 +51,7 @@ public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
     }
     @Override
     protected String returnKey(FeatureBean bean) {
-        return bean.getMd5();
+        return null == bean ? null : bean.getMd5();
     }
     @Override
     protected FeatureBean loadfromDatabase(String key)throws Exception {

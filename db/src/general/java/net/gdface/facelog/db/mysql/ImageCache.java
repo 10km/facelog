@@ -51,7 +51,7 @@ public class ImageCache extends TableLoadCaching<String, ImageBean> {
     }
     @Override
     protected String returnKey(ImageBean bean) {
-        return bean.getMd5();
+        return null == bean ? null : bean.getMd5();
     }
     @Override
     protected ImageBean loadfromDatabase(String key)throws Exception {

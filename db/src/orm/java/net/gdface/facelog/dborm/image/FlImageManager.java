@@ -14,7 +14,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -2055,7 +2055,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     // LISTENER
     //_____________________________________________________________________
     class ListenerContainer implements TableListener<FlImageBean> {
-        private final Set<TableListener<FlImageBean>> listeners = new TreeSet<TableListener<FlImageBean>>();
+        private final Set<TableListener<FlImageBean>> listeners = new LinkedHashSet<TableListener<FlImageBean>>();
         public ListenerContainer() {
         }
     
