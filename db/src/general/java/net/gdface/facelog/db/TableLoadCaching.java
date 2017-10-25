@@ -12,10 +12,15 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Function;
+import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Predicate;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
+import com.google.common.collect.Collections2;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -121,6 +126,10 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
             throw e;
         }        
     }
+    @Override
+    public void remove(B bean){
+        cacheMap.remove(returnKey(bean));
+    }
     /**
      * 根据当前更新策略({@link UpdateStrategy})将{@code bean}更新到缓存
      * @see ITableCache#update(net.gdface.facelog.db.BaseBean)
@@ -138,15 +147,55 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         }
         return beans;
     }
+    @Override
+    public Collection<B> remove(Collection<B> beans){
+        if(null != beans){
+            for(B bean : beans){
+                remove(bean);
+            }
+        }
+        return beans;
+    }
     /**
-     * @param e
+     * 添加删除侦听器
+     * @param listener
      * @return
      * @see net.gdface.facelog.db.RemovalListenerContainer{esc.hash}add(com.google.common.cache.RemovalListener)
      */
-    public boolean addRemovalListener(RemovalListener<K, B> e) {
-        return listenerContainer.add(e);
+    public boolean addRemovalListener(RemovalListener<K, B> listener) {
+        return listenerContainer.add(listener);
     }
-    public void remove(B bean){
-        cacheMap.remove(returnKey(bean));
+    
+    /**
+     * 将当前cache绑定到指定的外键表cache上<br>
+     * 向{@code foreignKeyCache}添加一个{@link RemovalListener}
+     * @param foreignKeyCache
+     * @param toKey 从当前对象返回外键字段
+     * @param toDo 外键删除时的动作
+     * @return
+     */
+    public<FK,FB extends BaseBean<FB>> RemovalListener<FK, FB> bind(
+    		TableLoadCaching<FK,FB> foreignKeyCache,
+    		final Function<B,FK> toKey,
+    		final Predicate<B> toDo){
+    	checkNotNull(foreignKeyCache);
+    	checkNotNull(toKey);
+    	checkNotNull(toDo);
+    	RemovalListener<FK, FB> listener = new RemovalListener<FK,FB>(){
+    		@Override
+    		public void onRemoval(RemovalNotification<FK, FB> notification) {
+    			final FK deletedKey = notification.getKey();
+    			Collections2.filter(cacheMap.values(), new Predicate<B>(){
+    				@Override
+    				public boolean apply(B input) {
+    					if(deletedKey.equals(toKey.apply(input))){
+    						toDo.apply(input);
+    					}
+    					return false;
+    				}});				
+    		}};
+    		foreignKeyCache.addRemovalListener(listener);
+    		return listener;
     }
 }
+

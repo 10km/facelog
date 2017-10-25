@@ -10,6 +10,10 @@ package net.gdface.facelog.db.mysql;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
+
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.PersonBean;
 
@@ -21,30 +25,23 @@ import net.gdface.facelog.db.PersonBean;
  */
 public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
     private final PersonManager manager = PersonManager.getInstance();
+    
     private final TableLoadCaching<String, PersonBean> imageMd5Cacher;
     private final TableLoadCaching<String, PersonBean> papersNumCacher;
-/*
-    private final RemovalListener<String, ImageBean> bindOnDeleteImageListener = new RemovalListener<String, ImageBean>(){
-        @Override
-        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
-            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());                
-            remove(bean);
-            imageMd5Cacher.remove(bean);
-            papersNumCacher.remove(bean);
-        }
-    };
-    private final RemovalListener<String, ImageBean> bindSetNullImageListener = new RemovalListener<String, ImageBean>(){
-        @Override
-        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
-            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());
-            bean.setImageMd5(null);
-            update(bean);
-            imageMd5Cacher.update(bean);
-            papersNumCacher.update(bean);
-        }
-    };
+/*    
     public void bind(ImageCache imageCache){
-        imageCache.addRemovalListener(bindOnDeleteImageListener);
+    	bind(imageCache,
+    			new Function<PersonBean,String>(){
+				@Override
+				public String apply(PersonBean input) {
+					return input.getImageMd5();
+				}},
+	    		new Predicate<PersonBean>(){
+				@Override
+				public boolean apply(PersonBean input) {
+					remove(input);
+					return false;
+				}});
     }
 */
     /** constructor<br>
@@ -106,12 +103,13 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
     @Override
     public void registerListener() {
         manager.registerListener(tableListener);
+        
         imageMd5Cacher.registerListener();
-        papersNumCacher.registerListener();
-    }
+        papersNumCacher.registerListener();    }
     @Override
     public void unregisterListener() {
         manager.unregisterListener(tableListener);
+        
         imageMd5Cacher.unregisterListener();
         papersNumCacher.unregisterListener();
     }
@@ -126,17 +124,17 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
     @Override
     public void update(PersonBean bean){
         super.update(bean);
+        
         imageMd5Cacher.update(bean);
         papersNumCacher.update(bean);
     }
     @Override
-    public Collection<PersonBean> update(Collection<PersonBean> beans){
-        super.update(beans);
-        imageMd5Cacher.update(beans);
-        papersNumCacher.update(beans);
-        return beans;
+    public void remove(PersonBean bean){
+        super.remove(bean);
+        
+        imageMd5Cacher.remove(bean);
+        papersNumCacher.remove(bean);
     }
-    
     public PersonBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);
     }

@@ -10,6 +10,10 @@ package net.gdface.facelog.db.mysql;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
+
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.FeatureBean;
 
@@ -21,28 +25,21 @@ import net.gdface.facelog.db.FeatureBean;
  */
 public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
     private final FeatureManager manager = FeatureManager.getInstance();
-/*
-    private final RemovalListener<String, ImageBean> bindOnDeleteImageListener = new RemovalListener<String, ImageBean>(){
-        @Override
-        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
-            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());                
-            remove(bean);
-            imageMd5Cacher.remove(bean);
-            papersNumCacher.remove(bean);
-        }
-    };
-    private final RemovalListener<String, ImageBean> bindSetNullImageListener = new RemovalListener<String, ImageBean>(){
-        @Override
-        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
-            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());
-            bean.setImageMd5(null);
-            update(bean);
-            imageMd5Cacher.update(bean);
-            papersNumCacher.update(bean);
-        }
-    };
+    
+/*    
     public void bind(ImageCache imageCache){
-        imageCache.addRemovalListener(bindOnDeleteImageListener);
+    	bind(imageCache,
+    			new Function<PersonBean,String>(){
+				@Override
+				public String apply(PersonBean input) {
+					return input.getImageMd5();
+				}},
+	    		new Predicate<PersonBean>(){
+				@Override
+				public boolean apply(PersonBean input) {
+					remove(input);
+					return false;
+				}});
     }
 */
     /** constructor<br>
@@ -68,10 +65,11 @@ public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
     @Override
     public void registerListener() {
         manager.registerListener(tableListener);
-    }
+            }
     @Override
     public void unregisterListener() {
         manager.unregisterListener(tableListener);
+        
     }
     @Override
     public String returnKey(FeatureBean bean) {
@@ -84,13 +82,13 @@ public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
     @Override
     public void update(FeatureBean bean){
         super.update(bean);
+        
     }
     @Override
-    public Collection<FeatureBean> update(Collection<FeatureBean> beans){
-        super.update(beans);
-        return beans;
+    public void remove(FeatureBean bean){
+        super.remove(bean);
+        
     }
-    
     public FeatureBean getBeanByMd5(String md5) throws ExecutionException{
         return getBean(md5);
     }

@@ -57,14 +57,17 @@ public interface ITableCache<K, B extends BaseBean<B>> {
      * @return
      */
     public B getBeanUnchecked(K key);
-    
     /**
      * 返回cache中{@code key}指定的记录,如果不存在就返回{@code null}
      * @param key  
      * @return return false if key is null
      */
     public B getBeanIfPresent(K key);
-    
+    /**
+     * 删除cache中{@code key}指定的记录
+     * @param bean
+     */
+    public void remove(B bean);
     /**
      * 向cache中更新数据
      * @param bean
@@ -78,6 +81,12 @@ public interface ITableCache<K, B extends BaseBean<B>> {
      * @see #update(B) 
      */
     public Collection<B> update(Collection<B> beans);
+    /**
+     * @param beans
+     * @return always beans 
+     * @see #remove(B) 
+     */
+    public Collection<B> remove(Collection<B> beans);
     /** 注册侦听器 */
     public void registerListener();
     /** 注销侦听器 */
