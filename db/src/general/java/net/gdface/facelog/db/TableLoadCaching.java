@@ -121,7 +121,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
     }
     /**
      * 根据当前更新策略({@link UpdateStrategy})将{@code bean}更新到缓存
-     * @see net.gdface.facelog.db.ITableCache#update(net.gdface.facelog.db.BaseBean)
+     * @see ITableCache#update(net.gdface.facelog.db.BaseBean)
      */
     @Override
     public void update(B bean){
