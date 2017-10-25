@@ -245,7 +245,8 @@ class IFaceLogClientAsync implements Constant{
      * 删除featureMd5指定的特征记录及关联的face记录
      * @param featureMd5
      * @param deleteImage 是否删除关联的 image记录
-     * @return 
+     * @return 返回删除的特征记录关联的图像(image)记录的MD5<br>
+     * {@code deleteImage}为{@code true}时返回空表
      */
     // 9 SERIVCE PORT : deleteFeature
     public ListenableFuture<List<String>> deleteFeature(
