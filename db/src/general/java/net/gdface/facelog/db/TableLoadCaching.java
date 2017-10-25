@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -33,9 +34,9 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
     protected final  TableListener.Adapter<B> tableListener;
     /** 当前更新策略 */
     private final UpdateStrategy updateStragey;
-
+    private final RemovalListenerContainer<K,B> listenerContainer = new RemovalListenerContainer<K,B>();    
     /** 返回bean中主键值 */
-    protected abstract K returnKey(B bean)
+    public abstract K returnKey(B bean)
     /** 从数据库中加载主键(pk)指定的记录 */;
     protected abstract B loadfromDatabase(K key)throws Exception;
 
@@ -71,6 +72,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         cache = CacheBuilder.newBuilder()
             .maximumSize(maximumSize)
             .expireAfterWrite(duration, unit)
+            .removalListener(listenerContainer)
             .build(
                 new CacheLoader<K,B>() {
                     @Override
@@ -106,7 +108,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
     }
     @Override
     public B getBeanIfPresent(K key){
-    	return null == key ? null : cache.getIfPresent(key);
+        return null == key ? null : cache.getIfPresent(key);
     }
     @Override
     public B getBeanUnchecked(K key){
@@ -135,5 +137,16 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
             }
         }
         return beans;
+    }
+    /**
+     * @param e
+     * @return
+     * @see net.gdface.facelog.db.RemovalListenerContainer{esc.hash}add(com.google.common.cache.RemovalListener)
+     */
+    public boolean addRemovalListener(RemovalListener<K, B> e) {
+        return listenerContainer.add(e);
+    }
+    public void remove(B bean){
+        cacheMap.remove(returnKey(bean));
     }
 }

@@ -23,6 +23,30 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
     private final DeviceManager manager = DeviceManager.getInstance();
     private final TableLoadCaching<String, DeviceBean> macCacher;
     private final TableLoadCaching<String, DeviceBean> serialNoCacher;
+/*
+    private final RemovalListener<String, ImageBean> bindOnDeleteImageListener = new RemovalListener<String, ImageBean>(){
+        @Override
+        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
+            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());                
+            remove(bean);
+            imageMd5Cacher.remove(bean);
+            papersNumCacher.remove(bean);
+        }
+    };
+    private final RemovalListener<String, ImageBean> bindSetNullImageListener = new RemovalListener<String, ImageBean>(){
+        @Override
+        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
+            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());
+            bean.setImageMd5(null);
+            update(bean);
+            imageMd5Cacher.update(bean);
+            papersNumCacher.update(bean);
+        }
+    };
+    public void bind(ImageCache imageCache){
+        imageCache.addRemovalListener(bindOnDeleteImageListener);
+    }
+*/
     /** constructor<br>
      * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
@@ -39,7 +63,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 manager.unregisterListener(tableListener);
             }
             @Override
-            protected String returnKey(DeviceBean bean) {
+            public String returnKey(DeviceBean bean) {
                 return null == bean ? null : bean.getMac();
             }
             @Override
@@ -57,7 +81,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 manager.unregisterListener(tableListener);
             }
             @Override
-            protected String returnKey(DeviceBean bean) {
+            public String returnKey(DeviceBean bean) {
                 return null == bean ? null : bean.getSerialNo();
             }
             @Override
@@ -92,7 +116,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         serialNoCacher.unregisterListener();
     }
     @Override
-    protected Integer returnKey(DeviceBean bean) {
+    public Integer returnKey(DeviceBean bean) {
         return null == bean ? null : bean.getId();
     }
     @Override

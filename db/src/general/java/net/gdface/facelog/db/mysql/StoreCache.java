@@ -21,6 +21,30 @@ import net.gdface.facelog.db.StoreBean;
  */
 public class StoreCache extends TableLoadCaching<String, StoreBean> {
     private final StoreManager manager = StoreManager.getInstance();
+/*
+    private final RemovalListener<String, ImageBean> bindOnDeleteImageListener = new RemovalListener<String, ImageBean>(){
+        @Override
+        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
+            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());                
+            remove(bean);
+            imageMd5Cacher.remove(bean);
+            papersNumCacher.remove(bean);
+        }
+    };
+    private final RemovalListener<String, ImageBean> bindSetNullImageListener = new RemovalListener<String, ImageBean>(){
+        @Override
+        public void onRemoval(RemovalNotification<String, ImageBean> notification) {
+            PersonBean bean = imageMd5Cacher.getBeanIfPresent(notification.getKey());
+            bean.setImageMd5(null);
+            update(bean);
+            imageMd5Cacher.update(bean);
+            papersNumCacher.update(bean);
+        }
+    };
+    public void bind(ImageCache imageCache){
+        imageCache.addRemovalListener(bindOnDeleteImageListener);
+    }
+*/
     /** constructor<br>
      * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
@@ -50,7 +74,7 @@ public class StoreCache extends TableLoadCaching<String, StoreBean> {
         manager.unregisterListener(tableListener);
     }
     @Override
-    protected String returnKey(StoreBean bean) {
+    public String returnKey(StoreBean bean) {
         return null == bean ? null : bean.getMd5();
     }
     @Override
