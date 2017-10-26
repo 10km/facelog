@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Set;
-import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -2054,82 +2052,14 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    class ListenerContainer implements TableListener<FlImageBean> {
-        private final Set<TableListener<FlImageBean>> listeners = new LinkedHashSet<TableListener<FlImageBean>>();
-        public ListenerContainer() {
-        }
-    
-        @Override
-        public void beforeInsert(FlImageBean bean) throws DAOException {
-            for(TableListener<FlImageBean> listener:listeners){
-                listener.beforeInsert(bean);
-            }
-        }
-    
-        @Override
-        public void afterInsert(FlImageBean bean) throws DAOException {
-            for(TableListener<FlImageBean> listener:listeners){
-                listener.afterInsert(bean);
-            }
-        }
-    
-        @Override
-        public void beforeUpdate(FlImageBean bean) throws DAOException {
-            for(TableListener<FlImageBean> listener:listeners){
-                listener.beforeUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void afterUpdate(FlImageBean bean) throws DAOException {
-            for(TableListener<FlImageBean> listener:listeners){
-                listener.afterUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void beforeDelete(FlImageBean bean) throws DAOException {
-            for(TableListener<FlImageBean> listener:listeners){
-                listener.beforeDelete(bean);
-            }
-        }
-    
-        @Override
-        public void afterDelete(FlImageBean bean) throws DAOException {
-            for(TableListener<FlImageBean> listener:listeners){
-                listener.afterDelete(bean);
-            }
-        }
-    
-        public boolean isEmpty() {
-            return listeners.isEmpty();
-        }
-    
-        public boolean contains(TableListener<FlImageBean> o) {
-            return listeners.contains(o);
-        }
-    
-        public synchronized boolean add(TableListener<FlImageBean> e) {
-            if(null == e)
-                throw new NullPointerException();
-            return listeners.add(e);
-        }
-    
-        public synchronized boolean remove(TableListener<FlImageBean> o) {
-            return null == o? false : listeners.remove(o);
-        }
-    
-        public synchronized void clear() {
-            listeners.clear();
-        }    
-    }
-    private final ListenerContainer listenerContainer = new ListenerContainer();
 
+    private final TableListener.ListenerContainer<FlImageBean> listenerContainer = new TableListener.ListenerContainer<FlImageBean>();
     //35
     @Override
-    public void registerListener(TableListener<FlImageBean> listener)
+    public TableListener<FlImageBean> registerListener(TableListener<FlImageBean> listener)
     {
         this.listenerContainer.add(listener);
+        return listener;
     }
 
     /**
@@ -2142,6 +2072,23 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         this.listenerContainer.remove(listener);
     }
 
+    //37
+    @Override
+    public void fire(TableListener.Event event, FlImageBean bean) throws DAOException{
+        if(null == event)
+            throw new NullPointerException();
+        event.fire(listenerContainer, bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, FlImageBean bean) throws DAOException{
+        try{
+            fire(TableListener.Event.values()[event],bean);
+        }catch(ArrayIndexOutOfBoundsException e){
+            throw new IllegalArgumentException("invalid event id " + event);
+        }
+    }
     //_____________________________________________________________________
     //
     // UTILS

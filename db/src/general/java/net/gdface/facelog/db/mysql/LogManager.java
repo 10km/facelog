@@ -913,54 +913,119 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     // LISTENER
     //_____________________________________________________________________
 
+    /**
+     * @return {@link WrapListener} instance
+     */
     //35
     @Override
-    public void registerListener(TableListener<LogBean> listener)
+    public TableListener<LogBean> registerListener(TableListener<LogBean> listener)
     {
-        this.nativeManager.registerListener(this.toNative(listener));
+        WrapListener wrapListener;
+        if(listener instanceof WrapListener){
+            wrapListener = (WrapListener)listener;
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }else{
+            wrapListener = new WrapListener(listener);
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }
+        return wrapListener;
     }
 
     //36
     @Override
     public void unregisterListener(TableListener<LogBean> listener)
     {
-        this.nativeManager.unregisterListener(this.toNative(listener));
+        if(listener instanceof WrapListener)
+            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
+        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
     }
     
-    private net.gdface.facelog.dborm.TableListener<FlLogBean> toNative(final TableListener<LogBean> listener) {
-        return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlLogBean> (){
+    //37
+    @Override
+    public void fire(TableListener.Event event, LogBean bean){
+        fire(event.ordinal(), bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, LogBean bean){
+        try{
+            this.nativeManager.fire(event, this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
 
-            @Override
-            public void beforeInsert(FlLogBean bean) throws DAOException {
-                listener.beforeInsert(LogManager.this.beanConverter.fromRight(bean));                
-            }
+    /**
+     * wrap {@code TableListener<LogBean>} as native listener
+     * @author guyadong
+     *
+     */
+    public class WrapListener implements TableListener<LogBean>{
+        private final TableListener<LogBean> listener;
+        private final net.gdface.facelog.dborm.TableListener<FlLogBean> nativeListener;
+        private WrapListener(final TableListener<LogBean> listener) {
+            if(null == listener)
+                throw new NullPointerException();
+            this.listener = listener;
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlLogBean> (){
 
-            @Override
-            public void afterInsert(FlLogBean bean) throws DAOException {
-                listener.afterInsert(LogManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void beforeInsert(FlLogBean bean) throws DAOException {
+                    listener.beforeInsert(LogManager.this.beanConverter.fromRight(bean));                
+                }
 
-            @Override
-            public void beforeUpdate(FlLogBean bean) throws DAOException {
-                listener.beforeUpdate(LogManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void afterInsert(FlLogBean bean) throws DAOException {
+                    listener.afterInsert(LogManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterUpdate(FlLogBean bean) throws DAOException {
-                listener.afterUpdate(LogManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void beforeUpdate(FlLogBean bean) throws DAOException {
+                    listener.beforeUpdate(LogManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void beforeDelete(FlLogBean bean) throws DAOException {
-                listener.beforeDelete(LogManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void afterUpdate(FlLogBean bean) throws DAOException {
+                    listener.afterUpdate(LogManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterDelete(FlLogBean bean) throws DAOException {
-                listener.afterDelete(LogManager.this.beanConverter.fromRight(bean));
-            }};
+                @Override
+                public void beforeDelete(FlLogBean bean) throws DAOException {
+                    listener.beforeDelete(LogManager.this.beanConverter.fromRight(bean));
+                }
+
+                @Override
+                public void afterDelete(FlLogBean bean) throws DAOException {
+                    listener.afterDelete(LogManager.this.beanConverter.fromRight(bean));
+                }};
+        }
+
+        public void beforeInsert(LogBean bean) {
+            listener.beforeInsert(bean);
+        }
+
+        public void afterInsert(LogBean bean) {
+            listener.afterInsert(bean);
+        }
+
+        public void beforeUpdate(LogBean bean) {
+            listener.beforeUpdate(bean);
+        }
+
+        public void afterUpdate(LogBean bean) {
+            listener.afterUpdate(bean);
+        }
+
+        public void beforeDelete(LogBean bean) {
+            listener.beforeDelete(bean);
+        }
+
+        public void afterDelete(LogBean bean) {
+            listener.afterDelete(bean);
+        }        
     }
 
     //_____________________________________________________________________

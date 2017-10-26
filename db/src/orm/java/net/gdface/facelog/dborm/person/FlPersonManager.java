@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Set;
-import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -2515,82 +2513,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    class ListenerContainer implements TableListener<FlPersonBean> {
-        private final Set<TableListener<FlPersonBean>> listeners = new LinkedHashSet<TableListener<FlPersonBean>>();
-        public ListenerContainer() {
-        }
-    
-        @Override
-        public void beforeInsert(FlPersonBean bean) throws DAOException {
-            for(TableListener<FlPersonBean> listener:listeners){
-                listener.beforeInsert(bean);
-            }
-        }
-    
-        @Override
-        public void afterInsert(FlPersonBean bean) throws DAOException {
-            for(TableListener<FlPersonBean> listener:listeners){
-                listener.afterInsert(bean);
-            }
-        }
-    
-        @Override
-        public void beforeUpdate(FlPersonBean bean) throws DAOException {
-            for(TableListener<FlPersonBean> listener:listeners){
-                listener.beforeUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void afterUpdate(FlPersonBean bean) throws DAOException {
-            for(TableListener<FlPersonBean> listener:listeners){
-                listener.afterUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void beforeDelete(FlPersonBean bean) throws DAOException {
-            for(TableListener<FlPersonBean> listener:listeners){
-                listener.beforeDelete(bean);
-            }
-        }
-    
-        @Override
-        public void afterDelete(FlPersonBean bean) throws DAOException {
-            for(TableListener<FlPersonBean> listener:listeners){
-                listener.afterDelete(bean);
-            }
-        }
-    
-        public boolean isEmpty() {
-            return listeners.isEmpty();
-        }
-    
-        public boolean contains(TableListener<FlPersonBean> o) {
-            return listeners.contains(o);
-        }
-    
-        public synchronized boolean add(TableListener<FlPersonBean> e) {
-            if(null == e)
-                throw new NullPointerException();
-            return listeners.add(e);
-        }
-    
-        public synchronized boolean remove(TableListener<FlPersonBean> o) {
-            return null == o? false : listeners.remove(o);
-        }
-    
-        public synchronized void clear() {
-            listeners.clear();
-        }    
-    }
-    private final ListenerContainer listenerContainer = new ListenerContainer();
 
+    private final TableListener.ListenerContainer<FlPersonBean> listenerContainer = new TableListener.ListenerContainer<FlPersonBean>();
     //35
     @Override
-    public void registerListener(TableListener<FlPersonBean> listener)
+    public TableListener<FlPersonBean> registerListener(TableListener<FlPersonBean> listener)
     {
         this.listenerContainer.add(listener);
+        return listener;
     }
 
     /**
@@ -2603,6 +2533,23 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         this.listenerContainer.remove(listener);
     }
 
+    //37
+    @Override
+    public void fire(TableListener.Event event, FlPersonBean bean) throws DAOException{
+        if(null == event)
+            throw new NullPointerException();
+        event.fire(listenerContainer, bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, FlPersonBean bean) throws DAOException{
+        try{
+            fire(TableListener.Event.values()[event],bean);
+        }catch(ArrayIndexOutOfBoundsException e){
+            throw new IllegalArgumentException("invalid event id " + event);
+        }
+    }
     //_____________________________________________________________________
     //
     // UTILS

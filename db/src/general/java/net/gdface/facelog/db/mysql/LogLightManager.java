@@ -241,54 +241,119 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     // LISTENER
     //_____________________________________________________________________
 
+    /**
+     * @return {@link WrapListener} instance
+     */
     //35
     @Override
-    public void registerListener(TableListener<LogLightBean> listener)
+    public TableListener<LogLightBean> registerListener(TableListener<LogLightBean> listener)
     {
-        this.nativeManager.registerListener(this.toNative(listener));
+        WrapListener wrapListener;
+        if(listener instanceof WrapListener){
+            wrapListener = (WrapListener)listener;
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }else{
+            wrapListener = new WrapListener(listener);
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }
+        return wrapListener;
     }
 
     //36
     @Override
     public void unregisterListener(TableListener<LogLightBean> listener)
     {
-        this.nativeManager.unregisterListener(this.toNative(listener));
+        if(listener instanceof WrapListener)
+            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
+        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
     }
     
-    private net.gdface.facelog.dborm.TableListener<FlLogLightBean> toNative(final TableListener<LogLightBean> listener) {
-        return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlLogLightBean> (){
+    //37
+    @Override
+    public void fire(TableListener.Event event, LogLightBean bean){
+        fire(event.ordinal(), bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, LogLightBean bean){
+        try{
+            this.nativeManager.fire(event, this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
 
-            @Override
-            public void beforeInsert(FlLogLightBean bean) throws DAOException {
-                listener.beforeInsert(LogLightManager.this.beanConverter.fromRight(bean));                
-            }
+    /**
+     * wrap {@code TableListener<LogLightBean>} as native listener
+     * @author guyadong
+     *
+     */
+    public class WrapListener implements TableListener<LogLightBean>{
+        private final TableListener<LogLightBean> listener;
+        private final net.gdface.facelog.dborm.TableListener<FlLogLightBean> nativeListener;
+        private WrapListener(final TableListener<LogLightBean> listener) {
+            if(null == listener)
+                throw new NullPointerException();
+            this.listener = listener;
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlLogLightBean> (){
 
-            @Override
-            public void afterInsert(FlLogLightBean bean) throws DAOException {
-                listener.afterInsert(LogLightManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void beforeInsert(FlLogLightBean bean) throws DAOException {
+                    listener.beforeInsert(LogLightManager.this.beanConverter.fromRight(bean));                
+                }
 
-            @Override
-            public void beforeUpdate(FlLogLightBean bean) throws DAOException {
-                listener.beforeUpdate(LogLightManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void afterInsert(FlLogLightBean bean) throws DAOException {
+                    listener.afterInsert(LogLightManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterUpdate(FlLogLightBean bean) throws DAOException {
-                listener.afterUpdate(LogLightManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void beforeUpdate(FlLogLightBean bean) throws DAOException {
+                    listener.beforeUpdate(LogLightManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void beforeDelete(FlLogLightBean bean) throws DAOException {
-                listener.beforeDelete(LogLightManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void afterUpdate(FlLogLightBean bean) throws DAOException {
+                    listener.afterUpdate(LogLightManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterDelete(FlLogLightBean bean) throws DAOException {
-                listener.afterDelete(LogLightManager.this.beanConverter.fromRight(bean));
-            }};
+                @Override
+                public void beforeDelete(FlLogLightBean bean) throws DAOException {
+                    listener.beforeDelete(LogLightManager.this.beanConverter.fromRight(bean));
+                }
+
+                @Override
+                public void afterDelete(FlLogLightBean bean) throws DAOException {
+                    listener.afterDelete(LogLightManager.this.beanConverter.fromRight(bean));
+                }};
+        }
+
+        public void beforeInsert(LogLightBean bean) {
+            listener.beforeInsert(bean);
+        }
+
+        public void afterInsert(LogLightBean bean) {
+            listener.afterInsert(bean);
+        }
+
+        public void beforeUpdate(LogLightBean bean) {
+            listener.beforeUpdate(bean);
+        }
+
+        public void afterUpdate(LogLightBean bean) {
+            listener.afterUpdate(bean);
+        }
+
+        public void beforeDelete(LogLightBean bean) {
+            listener.beforeDelete(bean);
+        }
+
+        public void afterDelete(LogLightBean bean) {
+            listener.afterDelete(bean);
+        }        
     }
 
     //_____________________________________________________________________

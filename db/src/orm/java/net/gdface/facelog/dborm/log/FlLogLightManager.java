@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Set;
-import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -1086,82 +1084,14 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    class ListenerContainer implements TableListener<FlLogLightBean> {
-        private final Set<TableListener<FlLogLightBean>> listeners = new LinkedHashSet<TableListener<FlLogLightBean>>();
-        public ListenerContainer() {
-        }
-    
-        @Override
-        public void beforeInsert(FlLogLightBean bean) throws DAOException {
-            for(TableListener<FlLogLightBean> listener:listeners){
-                listener.beforeInsert(bean);
-            }
-        }
-    
-        @Override
-        public void afterInsert(FlLogLightBean bean) throws DAOException {
-            for(TableListener<FlLogLightBean> listener:listeners){
-                listener.afterInsert(bean);
-            }
-        }
-    
-        @Override
-        public void beforeUpdate(FlLogLightBean bean) throws DAOException {
-            for(TableListener<FlLogLightBean> listener:listeners){
-                listener.beforeUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void afterUpdate(FlLogLightBean bean) throws DAOException {
-            for(TableListener<FlLogLightBean> listener:listeners){
-                listener.afterUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void beforeDelete(FlLogLightBean bean) throws DAOException {
-            for(TableListener<FlLogLightBean> listener:listeners){
-                listener.beforeDelete(bean);
-            }
-        }
-    
-        @Override
-        public void afterDelete(FlLogLightBean bean) throws DAOException {
-            for(TableListener<FlLogLightBean> listener:listeners){
-                listener.afterDelete(bean);
-            }
-        }
-    
-        public boolean isEmpty() {
-            return listeners.isEmpty();
-        }
-    
-        public boolean contains(TableListener<FlLogLightBean> o) {
-            return listeners.contains(o);
-        }
-    
-        public synchronized boolean add(TableListener<FlLogLightBean> e) {
-            if(null == e)
-                throw new NullPointerException();
-            return listeners.add(e);
-        }
-    
-        public synchronized boolean remove(TableListener<FlLogLightBean> o) {
-            return null == o? false : listeners.remove(o);
-        }
-    
-        public synchronized void clear() {
-            listeners.clear();
-        }    
-    }
-    private final ListenerContainer listenerContainer = new ListenerContainer();
 
+    private final TableListener.ListenerContainer<FlLogLightBean> listenerContainer = new TableListener.ListenerContainer<FlLogLightBean>();
     //35
     @Override
-    public void registerListener(TableListener<FlLogLightBean> listener)
+    public TableListener<FlLogLightBean> registerListener(TableListener<FlLogLightBean> listener)
     {
         this.listenerContainer.add(listener);
+        return listener;
     }
 
     /**
@@ -1174,6 +1104,23 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
         this.listenerContainer.remove(listener);
     }
 
+    //37
+    @Override
+    public void fire(TableListener.Event event, FlLogLightBean bean) throws DAOException{
+        if(null == event)
+            throw new NullPointerException();
+        event.fire(listenerContainer, bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, FlLogLightBean bean) throws DAOException{
+        try{
+            fire(TableListener.Event.values()[event],bean);
+        }catch(ArrayIndexOutOfBoundsException e){
+            throw new IllegalArgumentException("invalid event id " + event);
+        }
+    }
     //_____________________________________________________________________
     //
     // UTILS

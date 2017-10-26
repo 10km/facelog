@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-import java.util.Set;
-import java.util.LinkedHashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -1878,82 +1876,14 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //
     // LISTENER
     //_____________________________________________________________________
-    class ListenerContainer implements TableListener<FlFeatureBean> {
-        private final Set<TableListener<FlFeatureBean>> listeners = new LinkedHashSet<TableListener<FlFeatureBean>>();
-        public ListenerContainer() {
-        }
-    
-        @Override
-        public void beforeInsert(FlFeatureBean bean) throws DAOException {
-            for(TableListener<FlFeatureBean> listener:listeners){
-                listener.beforeInsert(bean);
-            }
-        }
-    
-        @Override
-        public void afterInsert(FlFeatureBean bean) throws DAOException {
-            for(TableListener<FlFeatureBean> listener:listeners){
-                listener.afterInsert(bean);
-            }
-        }
-    
-        @Override
-        public void beforeUpdate(FlFeatureBean bean) throws DAOException {
-            for(TableListener<FlFeatureBean> listener:listeners){
-                listener.beforeUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void afterUpdate(FlFeatureBean bean) throws DAOException {
-            for(TableListener<FlFeatureBean> listener:listeners){
-                listener.afterUpdate(bean);
-            }
-        }
-    
-        @Override
-        public void beforeDelete(FlFeatureBean bean) throws DAOException {
-            for(TableListener<FlFeatureBean> listener:listeners){
-                listener.beforeDelete(bean);
-            }
-        }
-    
-        @Override
-        public void afterDelete(FlFeatureBean bean) throws DAOException {
-            for(TableListener<FlFeatureBean> listener:listeners){
-                listener.afterDelete(bean);
-            }
-        }
-    
-        public boolean isEmpty() {
-            return listeners.isEmpty();
-        }
-    
-        public boolean contains(TableListener<FlFeatureBean> o) {
-            return listeners.contains(o);
-        }
-    
-        public synchronized boolean add(TableListener<FlFeatureBean> e) {
-            if(null == e)
-                throw new NullPointerException();
-            return listeners.add(e);
-        }
-    
-        public synchronized boolean remove(TableListener<FlFeatureBean> o) {
-            return null == o? false : listeners.remove(o);
-        }
-    
-        public synchronized void clear() {
-            listeners.clear();
-        }    
-    }
-    private final ListenerContainer listenerContainer = new ListenerContainer();
 
+    private final TableListener.ListenerContainer<FlFeatureBean> listenerContainer = new TableListener.ListenerContainer<FlFeatureBean>();
     //35
     @Override
-    public void registerListener(TableListener<FlFeatureBean> listener)
+    public TableListener<FlFeatureBean> registerListener(TableListener<FlFeatureBean> listener)
     {
         this.listenerContainer.add(listener);
+        return listener;
     }
 
     /**
@@ -1966,6 +1896,23 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         this.listenerContainer.remove(listener);
     }
 
+    //37
+    @Override
+    public void fire(TableListener.Event event, FlFeatureBean bean) throws DAOException{
+        if(null == event)
+            throw new NullPointerException();
+        event.fire(listenerContainer, bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, FlFeatureBean bean) throws DAOException{
+        try{
+            fire(TableListener.Event.values()[event],bean);
+        }catch(ArrayIndexOutOfBoundsException e){
+            throw new IllegalArgumentException("invalid event id " + event);
+        }
+    }
     //_____________________________________________________________________
     //
     // UTILS

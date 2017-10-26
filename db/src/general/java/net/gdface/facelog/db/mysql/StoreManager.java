@@ -448,54 +448,119 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     // LISTENER
     //_____________________________________________________________________
 
+    /**
+     * @return {@link WrapListener} instance
+     */
     //35
     @Override
-    public void registerListener(TableListener<StoreBean> listener)
+    public TableListener<StoreBean> registerListener(TableListener<StoreBean> listener)
     {
-        this.nativeManager.registerListener(this.toNative(listener));
+        WrapListener wrapListener;
+        if(listener instanceof WrapListener){
+            wrapListener = (WrapListener)listener;
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }else{
+            wrapListener = new WrapListener(listener);
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }
+        return wrapListener;
     }
 
     //36
     @Override
     public void unregisterListener(TableListener<StoreBean> listener)
     {
-        this.nativeManager.unregisterListener(this.toNative(listener));
+        if(listener instanceof WrapListener)
+            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
+        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
     }
     
-    private net.gdface.facelog.dborm.TableListener<FlStoreBean> toNative(final TableListener<StoreBean> listener) {
-        return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlStoreBean> (){
+    //37
+    @Override
+    public void fire(TableListener.Event event, StoreBean bean){
+        fire(event.ordinal(), bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, StoreBean bean){
+        try{
+            this.nativeManager.fire(event, this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
 
-            @Override
-            public void beforeInsert(FlStoreBean bean) throws DAOException {
-                listener.beforeInsert(StoreManager.this.beanConverter.fromRight(bean));                
-            }
+    /**
+     * wrap {@code TableListener<StoreBean>} as native listener
+     * @author guyadong
+     *
+     */
+    public class WrapListener implements TableListener<StoreBean>{
+        private final TableListener<StoreBean> listener;
+        private final net.gdface.facelog.dborm.TableListener<FlStoreBean> nativeListener;
+        private WrapListener(final TableListener<StoreBean> listener) {
+            if(null == listener)
+                throw new NullPointerException();
+            this.listener = listener;
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlStoreBean> (){
 
-            @Override
-            public void afterInsert(FlStoreBean bean) throws DAOException {
-                listener.afterInsert(StoreManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void beforeInsert(FlStoreBean bean) throws DAOException {
+                    listener.beforeInsert(StoreManager.this.beanConverter.fromRight(bean));                
+                }
 
-            @Override
-            public void beforeUpdate(FlStoreBean bean) throws DAOException {
-                listener.beforeUpdate(StoreManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void afterInsert(FlStoreBean bean) throws DAOException {
+                    listener.afterInsert(StoreManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterUpdate(FlStoreBean bean) throws DAOException {
-                listener.afterUpdate(StoreManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void beforeUpdate(FlStoreBean bean) throws DAOException {
+                    listener.beforeUpdate(StoreManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void beforeDelete(FlStoreBean bean) throws DAOException {
-                listener.beforeDelete(StoreManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void afterUpdate(FlStoreBean bean) throws DAOException {
+                    listener.afterUpdate(StoreManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterDelete(FlStoreBean bean) throws DAOException {
-                listener.afterDelete(StoreManager.this.beanConverter.fromRight(bean));
-            }};
+                @Override
+                public void beforeDelete(FlStoreBean bean) throws DAOException {
+                    listener.beforeDelete(StoreManager.this.beanConverter.fromRight(bean));
+                }
+
+                @Override
+                public void afterDelete(FlStoreBean bean) throws DAOException {
+                    listener.afterDelete(StoreManager.this.beanConverter.fromRight(bean));
+                }};
+        }
+
+        public void beforeInsert(StoreBean bean) {
+            listener.beforeInsert(bean);
+        }
+
+        public void afterInsert(StoreBean bean) {
+            listener.afterInsert(bean);
+        }
+
+        public void beforeUpdate(StoreBean bean) {
+            listener.beforeUpdate(bean);
+        }
+
+        public void afterUpdate(StoreBean bean) {
+            listener.afterUpdate(bean);
+        }
+
+        public void beforeDelete(StoreBean bean) {
+            listener.beforeDelete(bean);
+        }
+
+        public void afterDelete(StoreBean bean) {
+            listener.afterDelete(bean);
+        }        
     }
 
     //_____________________________________________________________________

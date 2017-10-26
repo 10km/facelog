@@ -1026,54 +1026,119 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // LISTENER
     //_____________________________________________________________________
 
+    /**
+     * @return {@link WrapListener} instance
+     */
     //35
     @Override
-    public void registerListener(TableListener<DeviceBean> listener)
+    public TableListener<DeviceBean> registerListener(TableListener<DeviceBean> listener)
     {
-        this.nativeManager.registerListener(this.toNative(listener));
+        WrapListener wrapListener;
+        if(listener instanceof WrapListener){
+            wrapListener = (WrapListener)listener;
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }else{
+            wrapListener = new WrapListener(listener);
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }
+        return wrapListener;
     }
 
     //36
     @Override
     public void unregisterListener(TableListener<DeviceBean> listener)
     {
-        this.nativeManager.unregisterListener(this.toNative(listener));
+        if(listener instanceof WrapListener)
+            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
+        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
     }
     
-    private net.gdface.facelog.dborm.TableListener<FlDeviceBean> toNative(final TableListener<DeviceBean> listener) {
-        return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlDeviceBean> (){
+    //37
+    @Override
+    public void fire(TableListener.Event event, DeviceBean bean){
+        fire(event.ordinal(), bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, DeviceBean bean){
+        try{
+            this.nativeManager.fire(event, this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
 
-            @Override
-            public void beforeInsert(FlDeviceBean bean) throws DAOException {
-                listener.beforeInsert(DeviceManager.this.beanConverter.fromRight(bean));                
-            }
+    /**
+     * wrap {@code TableListener<DeviceBean>} as native listener
+     * @author guyadong
+     *
+     */
+    public class WrapListener implements TableListener<DeviceBean>{
+        private final TableListener<DeviceBean> listener;
+        private final net.gdface.facelog.dborm.TableListener<FlDeviceBean> nativeListener;
+        private WrapListener(final TableListener<DeviceBean> listener) {
+            if(null == listener)
+                throw new NullPointerException();
+            this.listener = listener;
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlDeviceBean> (){
 
-            @Override
-            public void afterInsert(FlDeviceBean bean) throws DAOException {
-                listener.afterInsert(DeviceManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void beforeInsert(FlDeviceBean bean) throws DAOException {
+                    listener.beforeInsert(DeviceManager.this.beanConverter.fromRight(bean));                
+                }
 
-            @Override
-            public void beforeUpdate(FlDeviceBean bean) throws DAOException {
-                listener.beforeUpdate(DeviceManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void afterInsert(FlDeviceBean bean) throws DAOException {
+                    listener.afterInsert(DeviceManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterUpdate(FlDeviceBean bean) throws DAOException {
-                listener.afterUpdate(DeviceManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+                    listener.beforeUpdate(DeviceManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void beforeDelete(FlDeviceBean bean) throws DAOException {
-                listener.beforeDelete(DeviceManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void afterUpdate(FlDeviceBean bean) throws DAOException {
+                    listener.afterUpdate(DeviceManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterDelete(FlDeviceBean bean) throws DAOException {
-                listener.afterDelete(DeviceManager.this.beanConverter.fromRight(bean));
-            }};
+                @Override
+                public void beforeDelete(FlDeviceBean bean) throws DAOException {
+                    listener.beforeDelete(DeviceManager.this.beanConverter.fromRight(bean));
+                }
+
+                @Override
+                public void afterDelete(FlDeviceBean bean) throws DAOException {
+                    listener.afterDelete(DeviceManager.this.beanConverter.fromRight(bean));
+                }};
+        }
+
+        public void beforeInsert(DeviceBean bean) {
+            listener.beforeInsert(bean);
+        }
+
+        public void afterInsert(DeviceBean bean) {
+            listener.afterInsert(bean);
+        }
+
+        public void beforeUpdate(DeviceBean bean) {
+            listener.beforeUpdate(bean);
+        }
+
+        public void afterUpdate(DeviceBean bean) {
+            listener.afterUpdate(bean);
+        }
+
+        public void beforeDelete(DeviceBean bean) {
+            listener.beforeDelete(bean);
+        }
+
+        public void afterDelete(DeviceBean bean) {
+            listener.afterDelete(bean);
+        }        
     }
 
     //_____________________________________________________________________

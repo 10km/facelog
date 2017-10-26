@@ -976,10 +976,11 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     //_____________________________________________________________________
 
     /**
-     * Registers a unique {@link TableListener} listener.
+     * Registers a unique {@link TableListener} listener.<br>
+     * do nothing if {@code TableListener} instance exists
      */
     //35
-    public void registerListener(TableListener<B> listener);
+    public TableListener<B> registerListener(TableListener<B> listener);
 
     /**
      * remove listener.
@@ -987,6 +988,18 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
     //36
     public void unregisterListener(TableListener<B> listener);
 
+    /**
+     * @see {@link TableListener.Event#fire(TableListener.ListenerContainer, Object)}
+     */
+    //37
+    public void fire(TableListener.Event event, B bean) ;
+    
+    /**
+     * @see #fire(TableListener.Event, B)
+     * @throws IllegalArgumentException invalid event id
+     */
+    //37-1
+    public void fire(int event, B bean) ;
     //_____________________________________________________________________
     //
     // SAVE

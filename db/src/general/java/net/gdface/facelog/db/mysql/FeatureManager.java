@@ -937,54 +937,119 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     // LISTENER
     //_____________________________________________________________________
 
+    /**
+     * @return {@link WrapListener} instance
+     */
     //35
     @Override
-    public void registerListener(TableListener<FeatureBean> listener)
+    public TableListener<FeatureBean> registerListener(TableListener<FeatureBean> listener)
     {
-        this.nativeManager.registerListener(this.toNative(listener));
+        WrapListener wrapListener;
+        if(listener instanceof WrapListener){
+            wrapListener = (WrapListener)listener;
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }else{
+            wrapListener = new WrapListener(listener);
+            this.nativeManager.registerListener(wrapListener.nativeListener);
+        }
+        return wrapListener;
     }
 
     //36
     @Override
     public void unregisterListener(TableListener<FeatureBean> listener)
     {
-        this.nativeManager.unregisterListener(this.toNative(listener));
+        if(listener instanceof WrapListener)
+            this.nativeManager.unregisterListener(((WrapListener)listener).nativeListener);
+        throw new IllegalArgumentException("invalid listener type: " + WrapListener.class.getName() +" required");
     }
     
-    private net.gdface.facelog.dborm.TableListener<FlFeatureBean> toNative(final TableListener<FeatureBean> listener) {
-        return null == listener ?null:new net.gdface.facelog.dborm.TableListener<FlFeatureBean> (){
+    //37
+    @Override
+    public void fire(TableListener.Event event, FeatureBean bean){
+        fire(event.ordinal(), bean);
+    }
+    
+    //37-1
+    @Override
+    public void fire(int event, FeatureBean bean){
+        try{
+            this.nativeManager.fire(event, this.beanConverter.toRight(bean));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
 
-            @Override
-            public void beforeInsert(FlFeatureBean bean) throws DAOException {
-                listener.beforeInsert(FeatureManager.this.beanConverter.fromRight(bean));                
-            }
+    /**
+     * wrap {@code TableListener<FeatureBean>} as native listener
+     * @author guyadong
+     *
+     */
+    public class WrapListener implements TableListener<FeatureBean>{
+        private final TableListener<FeatureBean> listener;
+        private final net.gdface.facelog.dborm.TableListener<FlFeatureBean> nativeListener;
+        private WrapListener(final TableListener<FeatureBean> listener) {
+            if(null == listener)
+                throw new NullPointerException();
+            this.listener = listener;
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlFeatureBean> (){
 
-            @Override
-            public void afterInsert(FlFeatureBean bean) throws DAOException {
-                listener.afterInsert(FeatureManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void beforeInsert(FlFeatureBean bean) throws DAOException {
+                    listener.beforeInsert(FeatureManager.this.beanConverter.fromRight(bean));                
+                }
 
-            @Override
-            public void beforeUpdate(FlFeatureBean bean) throws DAOException {
-                listener.beforeUpdate(FeatureManager.this.beanConverter.fromRight(bean));
-                
-            }
+                @Override
+                public void afterInsert(FlFeatureBean bean) throws DAOException {
+                    listener.afterInsert(FeatureManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterUpdate(FlFeatureBean bean) throws DAOException {
-                listener.afterUpdate(FeatureManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void beforeUpdate(FlFeatureBean bean) throws DAOException {
+                    listener.beforeUpdate(FeatureManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void beforeDelete(FlFeatureBean bean) throws DAOException {
-                listener.beforeDelete(FeatureManager.this.beanConverter.fromRight(bean));
-            }
+                @Override
+                public void afterUpdate(FlFeatureBean bean) throws DAOException {
+                    listener.afterUpdate(FeatureManager.this.beanConverter.fromRight(bean));
+                }
 
-            @Override
-            public void afterDelete(FlFeatureBean bean) throws DAOException {
-                listener.afterDelete(FeatureManager.this.beanConverter.fromRight(bean));
-            }};
+                @Override
+                public void beforeDelete(FlFeatureBean bean) throws DAOException {
+                    listener.beforeDelete(FeatureManager.this.beanConverter.fromRight(bean));
+                }
+
+                @Override
+                public void afterDelete(FlFeatureBean bean) throws DAOException {
+                    listener.afterDelete(FeatureManager.this.beanConverter.fromRight(bean));
+                }};
+        }
+
+        public void beforeInsert(FeatureBean bean) {
+            listener.beforeInsert(bean);
+        }
+
+        public void afterInsert(FeatureBean bean) {
+            listener.afterInsert(bean);
+        }
+
+        public void beforeUpdate(FeatureBean bean) {
+            listener.beforeUpdate(bean);
+        }
+
+        public void afterUpdate(FeatureBean bean) {
+            listener.afterUpdate(bean);
+        }
+
+        public void beforeDelete(FeatureBean bean) {
+            listener.beforeDelete(bean);
+        }
+
+        public void afterDelete(FeatureBean bean) {
+            listener.afterDelete(bean);
+        }        
     }
 
     //_____________________________________________________________________

@@ -7,6 +7,8 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 
+import java.util.LinkedHashSet;
+
 /**
  * Listener that is notified of table changes.
  * @author guyadong
@@ -84,5 +86,107 @@ public interface TableListener<B>{
      * @param bean the B that was just deleted
      */
     public void afterDelete(B bean);
+
+    /**
+     * listener event
+     * {@code INSERT} insert a bean<br>
+     * {@code UPDATE} update a bean<br>
+     * {@code DELETE} delete a bean<br>
+     * @author guyadong
+     *
+     */
+    public static enum Event{
+    	INSERT,UPDATE,DELETE;
+    	/**
+    	 * fire current event by  {@link ListenerContainer}
+    	 * @param container
+    	 * @param bean
+    	 * @throws DAOException
+    	 */
+    	public <B> void fire(ListenerContainer<B> container,B bean) {
+    		if(null == container || null == bean)return;
+    		switch(this){
+    		case INSERT:
+    			container.afterInsert(bean);
+    			break;
+    		case UPDATE:
+    			container.afterUpdate(bean);
+    			break;
+    		case DELETE:
+    			container.afterDelete(bean);
+    			break;
+    		}
+    	}
+    }
+    /** container for manager multiple listener */
+    public static class ListenerContainer <B> implements TableListener<B> {
+        private final LinkedHashSet<TableListener<B>> listeners = new LinkedHashSet<TableListener<B>>();
+        public ListenerContainer() {
+        }
+    
+        @Override
+        public void beforeInsert(B bean)  {
+            for(TableListener<B> listener:listeners){
+                listener.beforeInsert(bean);
+            }
+        }
+    
+        @Override
+        public void afterInsert(B bean)  {
+            for(TableListener<B> listener:listeners){
+                listener.afterInsert(bean);
+            }
+        }
+    
+        @Override
+        public void beforeUpdate(B bean)  {
+            for(TableListener<B> listener:listeners){
+                listener.beforeUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void afterUpdate(B bean)  {
+            for(TableListener<B> listener:listeners){
+                listener.afterUpdate(bean);
+            }
+        }
+    
+        @Override
+        public void beforeDelete(B bean)  {
+            for(TableListener<B> listener:listeners){
+                listener.beforeDelete(bean);
+            }
+        }
+    
+        @Override
+        public void afterDelete(B bean)  {
+            for(TableListener<B> listener:listeners){
+                listener.afterDelete(bean);
+            }
+        }
+    
+        public boolean isEmpty() {
+            return listeners.isEmpty();
+        }
+    
+        public boolean contains(TableListener<B> o) {
+            return listeners.contains(o);
+        }
+    
+        public synchronized boolean add(TableListener<B> e) {
+            if(null == e)
+                throw new NullPointerException();
+            return listeners.add(e);
+        }
+    
+        public synchronized boolean remove(TableListener<B> o) {
+            return null == o? false : listeners.remove(o);
+        }
+    
+        public synchronized void clear() {
+            listeners.clear();
+        }
+    }
 }
 
