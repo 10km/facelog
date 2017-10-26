@@ -1915,22 +1915,27 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     }
     
     private final TableListener.ForeignKeyListener<FlPersonBean,FlFeatureBean> foreignKeyListenerByPersonId = 
-    		new TableListener.ForeignKeyListener<FlPersonBean,FlFeatureBean>(){
-    	@Override
-    	protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
+            new TableListener.ForeignKeyListener<FlPersonBean,FlFeatureBean>(){
+        @Override
+        protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
           return FlPersonManager.getInstance().getFeatureBeansByPersonIdAsList(bean);
-    	}
-    	@Override
-    	protected void onRemove(List<FlFeatureBean> effectBeans) throws DAOException {
-    		for(FlFeatureBean bean:effectBeans){
-    			Event.UPDATE.fire(listenerContainer, bean);
-    		}
-    	}};
+        }
+        @Override
+        protected void onRemove(List<FlFeatureBean> effectBeans) throws DAOException {
+            for(FlFeatureBean bean:effectBeans){
+                Event.DELETE.fire(listenerContainer, bean);
+            }
+        }};
+    /**
+     * DELETE RULE : CASCADE<br>
+     * bind foreign key listener  to foreign table: <br>
+     * {@code fl_feature(person_id)-> fl_person(id)} <br>
+     */
     //37-2
-    public void bindListenerByPersonId(){
-    	FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
+    public void bindPersonIdListenerToFlPersonManager(){
+        FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
     }
-    
+
     //_____________________________________________________________________
     //
     // UTILS

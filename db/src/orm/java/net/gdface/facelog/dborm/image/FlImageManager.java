@@ -2091,23 +2091,28 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     }
     
     private final TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean> foreignKeyListenerByDeviceId = 
-    		new TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean>(){
-    	@Override
-    	protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
+            new TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean>(){
+        @Override
+        protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
           return FlDeviceManager.getInstance().getImageBeansByDeviceIdAsList(bean);
-    	}
-    	@Override
-    	protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
-    		for(FlImageBean bean:effectBeans){
-    			bean.setDeviceId(null);
-    			Event.UPDATE.fire(listenerContainer, bean);
-    		}
-    	}};
+        }
+        @Override
+        protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
+            for(FlImageBean bean:effectBeans){
+                bean.setDeviceId(null);
+                Event.UPDATE.fire(listenerContainer, bean);
+            }
+        }};
+    /**
+     * DELETE RULE : SET_NULL<br>
+     * bind foreign key listener  to foreign table: <br>
+     * {@code fl_image(device_id)-> fl_device(id)} <br>
+     */
     //37-2
-    public void bindListenerByDeviceId(){
-    	FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+    public void bindDeviceIdListenerToFlDeviceManager(){
+        FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
     }
-    
+
     //_____________________________________________________________________
     //
     // UTILS

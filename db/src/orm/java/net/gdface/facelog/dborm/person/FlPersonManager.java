@@ -2552,23 +2552,28 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
     
     private final TableListener.ForeignKeyListener<FlImageBean,FlPersonBean> foreignKeyListenerByImageMd5 = 
-    		new TableListener.ForeignKeyListener<FlImageBean,FlPersonBean>(){
-    	@Override
-    	protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
+            new TableListener.ForeignKeyListener<FlImageBean,FlPersonBean>(){
+        @Override
+        protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
           return FlImageManager.getInstance().getPersonBeansByImageMd5AsList(bean);
-    	}
-    	@Override
-    	protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
-    		for(FlPersonBean bean:effectBeans){
-    			bean.setImageMd5(null);
-    			Event.UPDATE.fire(listenerContainer, bean);
-    		}
-    	}};
+        }
+        @Override
+        protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
+            for(FlPersonBean bean:effectBeans){
+                bean.setImageMd5(null);
+                Event.UPDATE.fire(listenerContainer, bean);
+            }
+        }};
+    /**
+     * DELETE RULE : SET_NULL<br>
+     * bind foreign key listener  to foreign table: <br>
+     * {@code fl_person(image_md5)-> fl_image(md5)} <br>
+     */
     //37-2
-    public void bindListenerByImageMd5(){
-    	FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
+    public void bindImageMd5ListenerToFlImageManager(){
+        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
     }
-    
+
     //_____________________________________________________________________
     //
     // UTILS
