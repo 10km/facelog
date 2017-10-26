@@ -16,7 +16,7 @@ import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
  * Interface to handle database calls (save, load, count, etc...) for table.
  * @author guyadong
  */
-public interface TableManager<B extends BaseBean<?>> extends Constant {
+public interface TableManager<B extends BaseBean<B>> extends Constant {
 
     public interface Action<B>{
         public abstract class Adapter<B> implements Action<B>{
@@ -26,7 +26,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         void call(B bean)throws DAOException;
         B getBean();
     }
-    public abstract static class Adapter<B extends BaseBean<?>> implements TableManager<B>{
+    public abstract static class Adapter<B extends BaseBean<B>> implements TableManager<B>{
         protected abstract Class<B> _beanType();
        /**
          * Insert the B bean into the database.
@@ -317,32 +317,32 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public <T extends BaseBean<?>> T getReferencedBean(B bean, int fkIndex)throws DAOException{
+        public <T extends BaseBean<T>> T getReferencedBean(B bean, int fkIndex)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> T setReferencedBean(B bean, T beanToSet, int fkIndex)throws DAOException{
+        public <T extends BaseBean<T>> T setReferencedBean(B bean, T beanToSet, int fkIndex)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> T[] getImportedBeans(B bean, int ikIndex)throws DAOException{
+        public <T extends BaseBean<T>> T[] getImportedBeans(B bean, int ikIndex)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> List<T> getImportedBeansAsList(B bean, int ikIndex)throws DAOException{
+        public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean, int ikIndex)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> T[] setImportedBeans(B bean, T[] importedBeans, int ikIndex)throws DAOException{
+        public <T extends BaseBean<T>> T[] setImportedBeans(B bean, T[] importedBeans, int ikIndex)throws DAOException{
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>, C extends Collection<T>> C setImportedBeans(B bean, C importedBeans,
+        public <T extends BaseBean<T>, C extends Collection<T>> C setImportedBeans(B bean, C importedBeans,
                 int ikIndex)throws DAOException{
             throw new UnsupportedOperationException();
         }
@@ -1266,7 +1266,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      * @throws DAOException
      */
-    public <T extends BaseBean<?>> T getReferencedBean(B bean,int fkIndex)throws DAOException;
+    public <T extends BaseBean<T>> T getReferencedBean(B bean,int fkIndex)throws DAOException;
     
     /**
      * Associates the B object to the T object by fkName field.<br>
@@ -1277,7 +1277,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return always beanToSet saved
      * @throws DAOException
      */
-    public <T extends BaseBean<?>> T setReferencedBean(B bean,T beanToSet,int fkIndex)throws DAOException;
+    public <T extends BaseBean<T>> T setReferencedBean(B bean,T beanToSet,int fkIndex)throws DAOException;
     
     /**
      * Retrieves imported T objects by fkIndex.<br>
@@ -1321,7 +1321,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    public <T extends BaseBean<?>> T[] getImportedBeans(B bean,int ikIndex)throws DAOException;
+    public <T extends BaseBean<T>> T[] getImportedBeans(B bean,int ikIndex)throws DAOException;
     
     /**
      * Retrieves imported T objects by ikIndex.<br>
@@ -1331,7 +1331,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
-    public <T extends BaseBean<?>> List<T> getImportedBeansAsList(B bean,int ikIndex)throws DAOException;
+    public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean,int ikIndex)throws DAOException;
     
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
@@ -1343,7 +1343,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return importedBeans always
      * @throws DAOException
      */
-    public <T extends BaseBean<?>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex)throws DAOException;
+    public <T extends BaseBean<T>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex)throws DAOException;
     
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
@@ -1355,7 +1355,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @return importedBeans always
      * @throws DAOException
      */
-    public <T extends BaseBean<?>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex)throws DAOException;
+    public <T extends BaseBean<T>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex)throws DAOException;
     
     public String createSelectSql(int[] fieldList,String where);
 }

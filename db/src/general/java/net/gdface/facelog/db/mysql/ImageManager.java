@@ -314,7 +314,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(ImageBean bean, int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(ImageBean bean, int ikIndex){
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -331,7 +331,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> java.util.List<T> getImportedBeansAsList(ImageBean bean,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
             return (java.util.List<T>)this.getFaceBeansByImageMd5AsList(bean);
@@ -355,7 +355,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(ImageBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T[] setImportedBeans(ImageBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
             return (T[])setFaceBeansByImageMd5(bean,(FaceBean[])importedBeans);
@@ -378,7 +378,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(ImageBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_IMAGE_IK_FL_FACE_IMAGE_MD5:
             return (C)setFaceBeansByImageMd5(bean,(java.util.Collection<FaceBean>)importedBeans);
@@ -657,7 +657,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T getReferencedBean(ImageBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T getReferencedBean(ImageBean bean,int fkIndex){
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -675,7 +675,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T setReferencedBean(ImageBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T setReferencedBean(ImageBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_IMAGE_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (DeviceBean)beanToSet);

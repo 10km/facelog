@@ -383,7 +383,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlPersonBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlPersonBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -401,7 +401,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlPersonBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (List<T>)this.getFeatureBeansByPersonIdAsList(bean);
@@ -422,7 +422,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlPersonBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (T[])setFeatureBeansByPersonId(bean,(FlFeatureBean[])importedBeans);
@@ -443,7 +443,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlPersonBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (C)setFeatureBeansByPersonId(bean,(java.util.Collection<FlFeatureBean>)importedBeans);
@@ -803,7 +803,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlPersonBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlPersonBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.getReferencedByImageMd5(bean);
@@ -823,7 +823,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlPersonBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);

@@ -314,7 +314,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(FaceBean bean, int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(FaceBean bean, int ikIndex){
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -330,7 +330,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> java.util.List<T> getImportedBeansAsList(FaceBean bean,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (java.util.List<T>)this.getLogBeansByCompareFaceAsList(bean);
@@ -351,7 +351,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T[] setImportedBeans(FaceBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (T[])setLogBeansByCompareFace(bean,(LogBean[])importedBeans);
@@ -371,7 +371,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FaceBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (C)setLogBeansByCompareFace(bean,(java.util.Collection<LogBean>)importedBeans);
@@ -583,7 +583,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T getReferencedBean(FaceBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T getReferencedBean(FaceBean bean,int fkIndex){
         switch(fkIndex){
         case FL_FACE_FK_FEATURE_MD5:
             return  (T)this.getReferencedByFeatureMd5(bean);
@@ -603,7 +603,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T setReferencedBean(FaceBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_FACE_FK_FEATURE_MD5:
             return  (T)this.setReferencedByFeatureMd5(bean, (FeatureBean)beanToSet);

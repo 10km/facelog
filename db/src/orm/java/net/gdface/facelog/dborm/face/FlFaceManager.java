@@ -383,7 +383,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlFaceBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -400,7 +400,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlFaceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (List<T>)this.getLogBeansByCompareFaceAsList(bean);
@@ -419,7 +419,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlFaceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (T[])setLogBeansByCompareFace(bean,(FlLogBean[])importedBeans);
@@ -438,7 +438,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlFaceBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_FACE_IK_FL_LOG_COMPARE_FACE:
             return (C)setLogBeansByCompareFace(bean,(java.util.Collection<FlLogBean>)importedBeans);
@@ -701,7 +701,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlFaceBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_FACE_FK_FEATURE_MD5:
             return  (T)this.getReferencedByFeatureMd5(bean);
@@ -723,7 +723,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlFaceBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_FACE_FK_FEATURE_MD5:
             return  (T)this.setReferencedByFeatureMd5(bean, (FlFeatureBean)beanToSet);

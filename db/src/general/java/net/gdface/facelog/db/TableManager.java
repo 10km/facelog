@@ -25,7 +25,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         void call(B bean);
         B getBean();
     }
-    public abstract static class Adapter<B extends BaseBean<?>> implements TableManager<B>{
+    public abstract static class Adapter<B extends BaseBean<B>> implements TableManager<B>{
         protected abstract Class<B> _beanType();
        /**
          * Insert the B bean into the database.
@@ -314,32 +314,32 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
         }
         
         @Override
-        public <T extends BaseBean<?>> T getReferencedBean(B bean, int fkIndex){
+        public <T extends BaseBean<T>> T getReferencedBean(B bean, int fkIndex){
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> T setReferencedBean(B bean, T beanToSet, int fkIndex){
+        public <T extends BaseBean<T>> T setReferencedBean(B bean, T beanToSet, int fkIndex){
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> T[] getImportedBeans(B bean, int ikIndex){
+        public <T extends BaseBean<T>> T[] getImportedBeans(B bean, int ikIndex){
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> List<T> getImportedBeansAsList(B bean, int ikIndex){
+        public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean, int ikIndex){
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>> T[] setImportedBeans(B bean, T[] importedBeans, int ikIndex){
+        public <T extends BaseBean<T>> T[] setImportedBeans(B bean, T[] importedBeans, int ikIndex){
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <T extends BaseBean<?>, C extends Collection<T>> C setImportedBeans(B bean, C importedBeans,
+        public <T extends BaseBean<T>, C extends Collection<T>> C setImportedBeans(B bean, C importedBeans,
                 int ikIndex){
             throw new UnsupportedOperationException();
         }
@@ -1202,7 +1202,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        {@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
      */
-    public <T extends BaseBean<?>> T getReferencedBean(B bean,int fkIndex);
+    public <T extends BaseBean<T>> T getReferencedBean(B bean,int fkIndex);
     
     /**
      * Associates the B object to the T object by fkName field.<br>
@@ -1212,7 +1212,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param fkIndex see also {@link #getReferencedBean(B, int)}
      * @return always beanToSet saved
      */
-    public <T extends BaseBean<?>> T setReferencedBean(B bean,T beanToSet,int fkIndex);
+    public <T extends BaseBean<T>> T setReferencedBean(B bean,T beanToSet,int fkIndex);
     
     /**
      * Retrieves imported T objects by fkIndex.<br>
@@ -1255,7 +1255,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        {@link Constant#FL_FEATURE_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    public <T extends BaseBean<?>> T[] getImportedBeans(B bean,int ikIndex);
+    public <T extends BaseBean<T>> T[] getImportedBeans(B bean,int ikIndex);
     
     /**
      * Retrieves imported T objects by ikIndex.<br>
@@ -1264,7 +1264,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param ikIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
-    public <T extends BaseBean<?>> List<T> getImportedBeansAsList(B bean,int ikIndex);
+    public <T extends BaseBean<T>> List<T> getImportedBeansAsList(B bean,int ikIndex);
     
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
@@ -1275,7 +1275,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param fkIndex foreign key name.see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
      */
-    public <T extends BaseBean<?>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex);
+    public <T extends BaseBean<T>> T[] setImportedBeans(B bean,T[] importedBeans,int ikIndex);
     
     /**
      * Set the importedBeans associates to the bean by fkIndex<br>
@@ -1286,7 +1286,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param fkIndex foreign key name. see also {@link #getImportedBeans(B, int)}
      * @return importedBeans always
      */
-    public <T extends BaseBean<?>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex);
+    public <T extends BaseBean<T>,C extends Collection<T>> C setImportedBeans(B bean,C importedBeans,int ikIndex);
     
     public String createSelectSql(int[] fieldList,String where);
 }

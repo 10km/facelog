@@ -96,30 +96,30 @@ public interface TableListener<B>{
      *
      */
     public static enum Event{
-    	INSERT,UPDATE,DELETE;
+        INSERT,UPDATE,DELETE;
         /**
          * fire current event by  {@link ListenerContainer}
          * @param container
          * @param bean
          * @throws DAOException
          */
-    	public <B> void fire(ListenerContainer<B> container,B bean) {
-        	if(null == container || null == bean)return;
-        	switch(this){
-        	case INSERT:
-            	container.afterInsert(bean);
-            	break;
-        	case UPDATE:
-            	container.afterUpdate(bean);
-            	break;
-        	case DELETE:
-            	container.afterDelete(bean);
-            	break;
+        public <B> void fire(ListenerContainer<B> container,B bean) {
+            if(null == container || null == bean)return;
+            switch(this){
+            case INSERT:
+                container.afterInsert(bean);
+                break;
+            case UPDATE:
+                container.afterUpdate(bean);
+                break;
+            case DELETE:
+                container.afterDelete(bean);
+                break;
             }
         }
         public <B extends BaseBean<B>> void fire(TableManager<B > manager,B bean) {
-        	if(null == manager || null == bean)return;
-        	manager.fire(this, bean);
+            if(null == manager || null == bean)return;
+            manager.fire(this, bean);
         }
     }
     /** container for manager multiple listener */

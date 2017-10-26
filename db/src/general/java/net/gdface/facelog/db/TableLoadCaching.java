@@ -50,7 +50,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         if(null == executor)
             synchronized(TableLoadCaching.class){
                 if(null == executor){
-                    executor = Singleton.DEFAULT_POOL;        
+                    executor = Singleton.DEFAULT_POOL;
                 }
             }
         return executor;
@@ -66,9 +66,9 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
         if(null == TableLoadCaching.executor)
             synchronized(TableLoadCaching.class){
                 if(null == TableLoadCaching.executor){
-                    TableLoadCaching.executor = executor;        
+                    TableLoadCaching.executor = executor;
                 }
-            }        
+            }
     }
     private final LoadingCache<K, B> cache;
     protected final ConcurrentMap<K, B> cacheMap;
@@ -209,7 +209,7 @@ public abstract class TableLoadCaching<K ,B extends BaseBean<B>> implements ITab
                 @Override
                 public void run() {
                     onRemove(notification.getValue());
-                }});            
+                }});
         }
         protected abstract void onRemove(FB fb);
     }

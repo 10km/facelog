@@ -503,7 +503,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlLogBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.getReferencedByDeviceId(bean);
@@ -529,7 +529,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlLogBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
         case FL_LOG_FK_DEVICE_ID:
             return  (T)this.setReferencedByDeviceId(bean, (FlDeviceBean)beanToSet);

@@ -381,7 +381,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] getImportedBeans(FlDeviceBean bean, int ikIndex) throws DAOException {
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] getImportedBeans(FlDeviceBean bean, int ikIndex) throws DAOException {
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -399,7 +399,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> List<T> getImportedBeansAsList(FlDeviceBean bean,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (List<T>)this.getImageBeansByDeviceIdAsList(bean);
@@ -420,7 +420,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T[] setImportedBeans(FlDeviceBean bean,T[] importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (T[])setImageBeansByDeviceId(bean,(FlImageBean[])importedBeans);
@@ -441,7 +441,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceBean bean,C importedBeans,int ikIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(FlDeviceBean bean,C importedBeans,int ikIndex)throws DAOException{
         switch(ikIndex){
         case FL_DEVICE_IK_FL_IMAGE_DEVICE_ID:
             return (C)setImageBeansByDeviceId(bean,(java.util.Collection<FlImageBean>)importedBeans);

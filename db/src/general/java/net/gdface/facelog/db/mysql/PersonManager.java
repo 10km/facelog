@@ -314,7 +314,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] getImportedBeans(PersonBean bean, int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T[] getImportedBeans(PersonBean bean, int ikIndex){
         return getImportedBeansAsList(bean, ikIndex).toArray((T[])java.lang.reflect.Array.newInstance(importedBeanTypes[ikIndex],0));
     }
     
@@ -331,7 +331,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> java.util.List<T> getImportedBeansAsList(PersonBean bean,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (java.util.List<T>)this.getFeatureBeansByPersonIdAsList(bean);
@@ -355,7 +355,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T[] setImportedBeans(PersonBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (T[])setFeatureBeansByPersonId(bean,(FeatureBean[])importedBeans);
@@ -378,7 +378,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(PersonBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (C)setFeatureBeansByPersonId(bean,(java.util.Collection<FeatureBean>)importedBeans);
@@ -657,7 +657,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T getReferencedBean(PersonBean bean,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T getReferencedBean(PersonBean bean,int fkIndex){
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.getReferencedByImageMd5(bean);
@@ -675,7 +675,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.db.BaseBean<?>> T setReferencedBean(PersonBean bean,T beanToSet,int fkIndex){
+    public <T extends net.gdface.facelog.db.BaseBean<T>> T setReferencedBean(PersonBean bean,T beanToSet,int fkIndex){
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (ImageBean)beanToSet);
