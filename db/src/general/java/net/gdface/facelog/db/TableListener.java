@@ -8,6 +8,7 @@
 package net.gdface.facelog.db;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * Listener that is notified of table changes.
@@ -101,7 +102,6 @@ public interface TableListener<B>{
          * fire current event by  {@link ListenerContainer}
          * @param container
          * @param bean
-         * @throws DAOException
          */
         public <B> void fire(ListenerContainer<B> container,B bean) {
             if(null == container || null == bean)return;
@@ -129,42 +129,42 @@ public interface TableListener<B>{
         }
     
         @Override
-        public void beforeInsert(B bean)  {
+        public void beforeInsert(B bean){
             for(TableListener<B> listener:listeners){
                 listener.beforeInsert(bean);
             }
         }
     
         @Override
-        public void afterInsert(B bean)  {
+        public void afterInsert(B bean){
             for(TableListener<B> listener:listeners){
                 listener.afterInsert(bean);
             }
         }
     
         @Override
-        public void beforeUpdate(B bean)  {
+        public void beforeUpdate(B bean){
             for(TableListener<B> listener:listeners){
                 listener.beforeUpdate(bean);
             }
         }
     
         @Override
-        public void afterUpdate(B bean)  {
+        public void afterUpdate(B bean){
             for(TableListener<B> listener:listeners){
                 listener.afterUpdate(bean);
             }
         }
     
         @Override
-        public void beforeDelete(B bean)  {
+        public void beforeDelete(B bean){
             for(TableListener<B> listener:listeners){
                 listener.beforeDelete(bean);
             }
         }
     
         @Override
-        public void afterDelete(B bean)  {
+        public void afterDelete(B bean){
             for(TableListener<B> listener:listeners){
                 listener.afterDelete(bean);
             }
@@ -190,6 +190,39 @@ public interface TableListener<B>{
     
         public synchronized void clear() {
             listeners.clear();
+        }
+    }
+    
+    static abstract class ForeignKeyListener<FB extends BaseBean<FB>,B extends BaseBean<B>> extends TableListener.Adapter<FB>{
+        private Event event;
+        private ListenerContainer<B>  listenerContainer;
+        public ForeignKeyListener(TableListener.Event event,
+                TableListener.ListenerContainer<B> listenerContainer) {
+            if(null == event || null == listenerContainer)
+                throw new NullPointerException();
+            this.event = event;
+            this.listenerContainer = listenerContainer;
+        }
+
+        protected abstract List<B> getImportedBeans();
+        protected final InheritableThreadLocal<List<B>> effectedBeans = new InheritableThreadLocal<List<B>>();
+        @Override
+        public void beforeDelete(FB bean){
+            this.effectedBeans.set(getImportedBeans());
+        }
+
+        @Override
+        public void afterDelete(FB bean){
+            try{
+                List<B> beans = this.effectedBeans.get();
+                if(null != beans){
+                    for(B b:beans){
+                        event.fire(listenerContainer,b);
+                    }
+                }
+            }finally{
+                effectedBeans.set(null);
+            }
         }
     }
 }
