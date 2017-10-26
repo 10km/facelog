@@ -26,20 +26,23 @@ import net.gdface.facelog.db.LogBean;
 public class LogCache extends TableLoadCaching<Integer, LogBean> {
     private final LogManager manager = LogManager.getInstance();
     
-/*    
-    public void bind(ImageCache imageCache){
-    	bind(imageCache,
-    			new Function<PersonBean,String>(){
-				@Override
-				public String apply(PersonBean input) {
-					return input.getImageMd5();
-				}},
-	    		new Predicate<PersonBean>(){
-				@Override
-				public boolean apply(PersonBean input) {
-					remove(input);
-					return false;
-				}});
+/*
+    private RemovalListener<String, ImageBean> foreignKeyRevmovalListener = null;
+    public void bind(ImageCache fkCache){
+    	if(null == foreignKeyRevmovalListener){
+    		synchronized(this){
+    			if(null == foreignKeyRevmovalListener){
+    				foreignKeyRevmovalListener = new ForeignKeyListner<String, ImageBean>(){
+    					@Override
+    					protected void onRemove(ImageBean fb) {
+    						for(PersonBean bean:ImageManager.getInstance().getPersonBeansByImageMd5AsList(fb)){
+    							manager.fire(Event.DELETE, bean);
+    						}	
+    					}};
+    			}
+    		}
+    		bind(fkCache,foreignKeyRevmovalListener);
+    	}
     }
 */
     /** constructor<br>
