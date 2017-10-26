@@ -2306,6 +2306,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
+    
     //_____________________________________________________________________
     //
     // UTILS

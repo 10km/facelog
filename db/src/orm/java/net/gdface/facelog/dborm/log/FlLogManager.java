@@ -2067,6 +2067,78 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
+    
+    private final TableListener.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
+    		new TableListener.ForeignKeyListener<FlPersonBean,FlLogBean>(){
+    	@Override
+    	protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
+          return FlPersonManager.getInstance().getLogBeansByPersonIdAsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+    		for(FlLogBean bean:effectBeans){
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByPersonId(){
+    	FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
+    }
+    
+    private final TableListener.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
+    		new TableListener.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
+    	@Override
+    	protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
+          return FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+    		for(FlLogBean bean:effectBeans){
+    			bean.setDeviceId(null);
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByDeviceId(){
+    	FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+    }
+    
+    private final TableListener.ForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
+    		new TableListener.ForeignKeyListener<FlFeatureBean,FlLogBean>(){
+    	@Override
+    	protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
+          return FlFeatureManager.getInstance().getLogBeansByVerifyFeatureAsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+    		for(FlLogBean bean:effectBeans){
+    			bean.setVerifyFeature(null);
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByVerifyFeature(){
+    	FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);
+    }
+    
+    private final TableListener.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
+    		new TableListener.ForeignKeyListener<FlFaceBean,FlLogBean>(){
+    	@Override
+    	protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
+          return FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+    		for(FlLogBean bean:effectBeans){
+    			bean.setCompareFace(null);
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByCompareFace(){
+    	FlFaceManager.getInstance().registerListener(foreignKeyListenerByCompareFace);
+    }
+    
     //_____________________________________________________________________
     //
     // UTILS

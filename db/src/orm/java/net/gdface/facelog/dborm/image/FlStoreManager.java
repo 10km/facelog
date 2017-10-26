@@ -1291,6 +1291,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
+    
     //_____________________________________________________________________
     //
     // UTILS

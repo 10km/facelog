@@ -1121,6 +1121,7 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
+    
     //_____________________________________________________________________
     //
     // UTILS

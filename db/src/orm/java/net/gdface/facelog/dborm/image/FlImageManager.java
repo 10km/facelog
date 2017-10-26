@@ -2089,6 +2089,25 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
+    
+    private final TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean> foreignKeyListenerByDeviceId = 
+    		new TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean>(){
+    	@Override
+    	protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
+          return FlDeviceManager.getInstance().getImageBeansByDeviceIdAsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
+    		for(FlImageBean bean:effectBeans){
+    			bean.setDeviceId(null);
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByDeviceId(){
+    	FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+    }
+    
     //_____________________________________________________________________
     //
     // UTILS

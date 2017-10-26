@@ -2505,6 +2505,42 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
+    
+    private final TableListener.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
+    		new TableListener.ForeignKeyListener<FlImageBean,FlFaceBean>(){
+    	@Override
+    	protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
+          return FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
+    		for(FlFaceBean bean:effectBeans){
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByImageMd5(){
+    	FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
+    }
+    
+    private final TableListener.ForeignKeyListener<FlFeatureBean,FlFaceBean> foreignKeyListenerByFeatureMd5 = 
+    		new TableListener.ForeignKeyListener<FlFeatureBean,FlFaceBean>(){
+    	@Override
+    	protected List<FlFaceBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
+          return FlFeatureManager.getInstance().getFaceBeansByFeatureMd5AsList(bean);
+    	}
+    	@Override
+    	protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
+    		for(FlFaceBean bean:effectBeans){
+    			bean.setFeatureMd5(null);
+    			Event.UPDATE.fire(listenerContainer, bean);
+    		}
+    	}};
+    //37-2
+    public void bindListenerByFeatureMd5(){
+    	FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
+    }
+    
     //_____________________________________________________________________
     //
     // UTILS
