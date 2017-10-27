@@ -7,7 +7,6 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 
-import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
