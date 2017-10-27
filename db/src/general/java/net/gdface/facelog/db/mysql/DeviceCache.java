@@ -7,12 +7,8 @@
 // ______________________________________________________
 package net.gdface.facelog.db.mysql;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-
-import com.google.common.cache.RemovalListener;
-import com.google.common.cache.RemovalNotification;
 
 import net.gdface.facelog.db.TableLoadCaching;
 import net.gdface.facelog.db.DeviceBean;
@@ -28,25 +24,6 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
     
     private final TableLoadCaching<String, DeviceBean> macCacher;
     private final TableLoadCaching<String, DeviceBean> serialNoCacher;
-/*
-    private RemovalListener<String, ImageBean> foreignKeyRevmovalListener = null;
-    public void bind(ImageCache fkCache){
-        if(null == foreignKeyRevmovalListener){
-            synchronized(this){
-                if(null == foreignKeyRevmovalListener){
-                    foreignKeyRevmovalListener = new ForeignKeyListner<String, ImageBean>(){
-                        @Override
-                        protected void onRemove(ImageBean fb) {
-                            for(PersonBean bean:ImageManager.getInstance().getPersonBeansByImageMd5AsList(fb)){
-                                manager.fire(Event.DELETE, bean);
-                            }    
-                        }};
-                }
-            }
-            bind(fkCache,foreignKeyRevmovalListener);
-        }
-    }
-*/
     /** constructor<br>
      * @see {@link TableLoadCaching#TableLoadCaching(UpdateStrategy ,long , long , TimeUnit )}
      */
@@ -56,11 +33,11 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         macCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
-                manager.registerListener(tableListener);
+                manager.registerListener(this.tableListener);
             }
             @Override
             public void unregisterListener() {
-                manager.unregisterListener(tableListener);
+                manager.unregisterListener(this.tableListener);
             }
             @Override
             public String returnKey(DeviceBean bean) {
@@ -74,11 +51,11 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         serialNoCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override
             public void registerListener() {
-                manager.registerListener(tableListener);
+                manager.registerListener(this.tableListener);
             }
             @Override
             public void unregisterListener() {
-                manager.unregisterListener(tableListener);
+                manager.unregisterListener(this.tableListener);
             }
             @Override
             public String returnKey(DeviceBean bean) {
@@ -108,7 +85,8 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         manager.registerListener(tableListener);
         
         macCacher.registerListener();
-        serialNoCacher.registerListener();    }
+        serialNoCacher.registerListener();
+    }
     @Override
     public void unregisterListener() {
         manager.unregisterListener(tableListener);

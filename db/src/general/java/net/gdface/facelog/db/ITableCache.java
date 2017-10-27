@@ -9,7 +9,6 @@ package net.gdface.facelog.db;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
-import java.util.Collection;
 /**
  * 数据库对象缓存接口
  * @param <K> 主键类型(Primary or Unique)
@@ -75,18 +74,6 @@ public interface ITableCache<K, B extends BaseBean<B>> {
      * @see {@link UpdateStrategy}
      */
     public void update(B bean);
-    /**
-     * @param beans
-     * @return always beans 
-     * @see #update(B) 
-     */
-    public Collection<B> update(Collection<B> beans);
-    /**
-     * @param beans
-     * @return always beans 
-     * @see #remove(B) 
-     */
-    public Collection<B> remove(Collection<B> beans);
     /** 注册侦听器 */
     public void registerListener();
     /** 注销侦听器 */
