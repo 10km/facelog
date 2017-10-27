@@ -835,15 +835,14 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
 
     // override IPersonManager
     @Override 
-    public PersonBean loadByIndexImageMd5(String imageMd5)
-    {
-        PersonBean bean = new PersonBean();
+    public PersonBean loadByIndexImageMd5(String imageMd5){
         if(null == imageMd5)
             return null;
-        
-        bean.setImageMd5(imageMd5);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexImageMd5Checked(imageMd5);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     // override IPersonManager
     @Override 
@@ -924,15 +923,14 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     
     // override IPersonManager
     @Override 
-    public PersonBean loadByIndexPapersNum(String papersNum)
-    {
-        PersonBean bean = new PersonBean();
+    public PersonBean loadByIndexPapersNum(String papersNum){
         if(null == papersNum)
             return null;
-        
-        bean.setPapersNum(papersNum);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexPapersNumChecked(papersNum);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     // override IPersonManager
     @Override 

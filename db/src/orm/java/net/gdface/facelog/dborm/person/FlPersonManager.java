@@ -1366,13 +1366,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public FlPersonBean loadByIndexImageMd5(String imageMd5) throws DAOException
     {
-        FlPersonBean bean = new FlPersonBean();
         if(null == imageMd5)
             return null;
-        
-        bean.setImageMd5(imageMd5);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexImageMd5Checked(imageMd5);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     /**
      * Retrieves an unique FlPersonBean using the image_md5 index.
@@ -1489,13 +1489,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public FlPersonBean loadByIndexPapersNum(String papersNum) throws DAOException
     {
-        FlPersonBean bean = new FlPersonBean();
         if(null == papersNum)
             return null;
-        
-        bean.setPapersNum(papersNum);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexPapersNumChecked(papersNum);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     /**
      * Retrieves an unique FlPersonBean using the papers_num index.

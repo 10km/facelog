@@ -132,17 +132,6 @@ public class DeviceCacheManager extends DeviceManager
     //_____________________________________________________________________
     // override IDeviceManager
     @Override 
-    public DeviceBean loadByIndexMac(String mac){
-        try{
-            if(null == mac)
-                return null;
-            return loadByIndexMacChecked(mac);
-        }catch(ObjectRetrievalException ee){
-            return null;
-        }
-    }
-    // override IDeviceManager
-    @Override 
     public DeviceBean loadByIndexMacChecked(String mac) throws ObjectRetrievalException{
         try{
             return cache.getBeanByMac(mac);
@@ -158,17 +147,6 @@ public class DeviceCacheManager extends DeviceManager
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
             }
-        }
-    }
-    // override IDeviceManager
-    @Override 
-    public DeviceBean loadByIndexSerialNo(String serialNo){
-        try{
-            if(null == serialNo)
-                return null;
-            return loadByIndexSerialNoChecked(serialNo);
-        }catch(ObjectRetrievalException ee){
-            return null;
         }
     }
     // override IDeviceManager

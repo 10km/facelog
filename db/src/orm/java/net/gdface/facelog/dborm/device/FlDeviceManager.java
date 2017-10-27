@@ -1215,13 +1215,13 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public FlDeviceBean loadByIndexMac(String mac) throws DAOException
     {
-        FlDeviceBean bean = new FlDeviceBean();
         if(null == mac)
             return null;
-        
-        bean.setMac(mac);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexMacChecked(mac);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     /**
      * Retrieves an unique FlDeviceBean using the mac index.
@@ -1338,13 +1338,13 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public FlDeviceBean loadByIndexSerialNo(String serialNo) throws DAOException
     {
-        FlDeviceBean bean = new FlDeviceBean();
         if(null == serialNo)
             return null;
-        
-        bean.setSerialNo(serialNo);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexSerialNoChecked(serialNo);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     /**
      * Retrieves an unique FlDeviceBean using the serial_no index.

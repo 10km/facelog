@@ -746,15 +746,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
 
     // override IDeviceManager
     @Override 
-    public DeviceBean loadByIndexMac(String mac)
-    {
-        DeviceBean bean = new DeviceBean();
+    public DeviceBean loadByIndexMac(String mac){
         if(null == mac)
             return null;
-        
-        bean.setMac(mac);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexMacChecked(mac);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     // override IDeviceManager
     @Override 
@@ -835,15 +834,14 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     
     // override IDeviceManager
     @Override 
-    public DeviceBean loadByIndexSerialNo(String serialNo)
-    {
-        DeviceBean bean = new DeviceBean();
+    public DeviceBean loadByIndexSerialNo(String serialNo){
         if(null == serialNo)
             return null;
-        
-        bean.setSerialNo(serialNo);
-        
-        return loadUniqueUsingTemplate(bean);
+        try{
+            return loadByIndexSerialNoChecked(serialNo);
+        }catch(ObjectRetrievalException e){
+            return null;
+        }
     }
     // override IDeviceManager
     @Override 

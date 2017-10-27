@@ -145,17 +145,6 @@ public class PersonCacheManager extends PersonManager
     //_____________________________________________________________________
     // override IPersonManager
     @Override 
-    public PersonBean loadByIndexImageMd5(String imageMd5){
-        try{
-            if(null == imageMd5)
-                return null;
-            return loadByIndexImageMd5Checked(imageMd5);
-        }catch(ObjectRetrievalException ee){
-            return null;
-        }
-    }
-    // override IPersonManager
-    @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5) throws ObjectRetrievalException{
         try{
             return cache.getBeanByImageMd5(imageMd5);
@@ -171,17 +160,6 @@ public class PersonCacheManager extends PersonManager
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
             }
-        }
-    }
-    // override IPersonManager
-    @Override 
-    public PersonBean loadByIndexPapersNum(String papersNum){
-        try{
-            if(null == papersNum)
-                return null;
-            return loadByIndexPapersNumChecked(papersNum);
-        }catch(ObjectRetrievalException ee){
-            return null;
         }
     }
     // override IPersonManager
