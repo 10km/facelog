@@ -2067,98 +2067,90 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
-    private final TableListener.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
-            new TableListener.ForeignKeyListener<FlPersonBean,FlLogBean>(){
-        @Override
-        protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
-          return FlPersonManager.getInstance().getLogBeansByPersonIdAsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
-            for(FlLogBean bean:effectBeans){
-                Event.DELETE.fire(listenerContainer, bean);
-            }
-        }};
-    /**
-     * DELETE RULE : CASCADE<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_log(person_id)-> fl_person(id)} <br>
-     */
-    //37-2
-    public void bindPersonIdListenerToFlPersonManager(){
-        FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
-    }
 
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final TableListener.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
             new TableListener.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
-        @Override
-        protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
-          return FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
-            for(FlLogBean bean:effectBeans){
-                bean.setDeviceId(null);
-                Event.UPDATE.fire(listenerContainer, bean);
-            }
-        }};
-    /**
-     * DELETE RULE : SET_NULL<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_log(device_id)-> fl_device(id)} <br>
-     */
-    //37-2
-    public void bindDeviceIdListenerToFlDeviceManager(){
-        FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
-    }
+                @Override
+                protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlLogBean>asList()
+                            : FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+                    for(FlLogBean bean:effectBeans){
+                        bean.setDeviceId(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
 
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final TableListener.ForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
             new TableListener.ForeignKeyListener<FlFeatureBean,FlLogBean>(){
-        @Override
-        protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
-          return FlFeatureManager.getInstance().getLogBeansByVerifyFeatureAsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
-            for(FlLogBean bean:effectBeans){
-                bean.setVerifyFeature(null);
-                Event.UPDATE.fire(listenerContainer, bean);
-            }
-        }};
-    /**
-     * DELETE RULE : SET_NULL<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_log(verify_feature)-> fl_feature(md5)} <br>
-     */
-    //37-2
-    public void bindVerifyFeatureListenerToFlFeatureManager(){
-        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);
-    }
+                @Override
+                protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlLogBean>asList()
+                            : FlFeatureManager.getInstance().getLogBeansByVerifyFeatureAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+                    for(FlLogBean bean:effectBeans){
+                        bean.setVerifyFeature(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
 
+    /** foreign key listener for DEELTE RULE : CASCADE */
+    private final TableListener.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
+            new TableListener.ForeignKeyListener<FlPersonBean,FlLogBean>(){
+                @Override
+                protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlLogBean>asList()
+                            : FlPersonManager.getInstance().getLogBeansByPersonIdAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+                    for(FlLogBean bean:effectBeans){
+                        Event.DELETE.fire(listenerContainer, bean);
+                    }
+                }};
+
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final TableListener.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
             new TableListener.ForeignKeyListener<FlFaceBean,FlLogBean>(){
-        @Override
-        protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
-          return FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
-            for(FlLogBean bean:effectBeans){
-                bean.setCompareFace(null);
-                Event.UPDATE.fire(listenerContainer, bean);
-            }
-        }};
+                @Override
+                protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlLogBean>asList()
+                            : FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+                    for(FlLogBean bean:effectBeans){
+                        bean.setCompareFace(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
-     * DELETE RULE : SET_NULL<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_log(compare_face)-> fl_face(id)} <br>
+     * bind foreign key listener to foreign table: <br>
+     * DELETE RULE : SET_NULL {@code fl_log(device_id)-> fl_device(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(verify_feature)-> fl_feature(md5)} <br>
+     * DELETE RULE : CASCADE {@code fl_log(person_id)-> fl_person(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(compare_face)-> fl_face(id)} <br>
      */
     //37-2
-    public void bindCompareFaceListenerToFlFaceManager(){
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);
+        FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
         FlFaceManager.getInstance().registerListener(foreignKeyListenerByCompareFace);
+        
     }
-
     //_____________________________________________________________________
     //
     // UTILS

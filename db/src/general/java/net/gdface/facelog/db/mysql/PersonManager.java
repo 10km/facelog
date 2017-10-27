@@ -1192,6 +1192,11 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<PersonBean>} as native listener

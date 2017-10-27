@@ -2089,30 +2089,34 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
+
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean> foreignKeyListenerByDeviceId = 
             new TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean>(){
-        @Override
-        protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
-          return FlDeviceManager.getInstance().getImageBeansByDeviceIdAsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
-            for(FlImageBean bean:effectBeans){
-                bean.setDeviceId(null);
-                Event.UPDATE.fire(listenerContainer, bean);
-            }
-        }};
+                @Override
+                protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlImageBean>asList()
+                            : FlDeviceManager.getInstance().getImageBeansByDeviceIdAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
+                    for(FlImageBean bean:effectBeans){
+                        bean.setDeviceId(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
-     * DELETE RULE : SET_NULL<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_image(device_id)-> fl_device(id)} <br>
+     * bind foreign key listener to foreign table: <br>
+     * DELETE RULE : SET_NULL {@code fl_image(device_id)-> fl_device(id)} <br>
      */
     //37-2
-    public void bindDeviceIdListenerToFlDeviceManager(){
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
         FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+        
     }
-
     //_____________________________________________________________________
     //
     // UTILS

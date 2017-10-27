@@ -981,6 +981,11 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<FeatureBean>} as native listener

@@ -1070,6 +1070,11 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<DeviceBean>} as native listener

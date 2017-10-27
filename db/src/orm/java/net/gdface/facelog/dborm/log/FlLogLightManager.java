@@ -1121,7 +1121,15 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
+
+    /**
+     * bind foreign key listener to foreign table: <br>
+     */
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

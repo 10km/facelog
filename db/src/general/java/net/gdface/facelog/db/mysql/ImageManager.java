@@ -981,6 +981,11 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<ImageBean>} as native listener

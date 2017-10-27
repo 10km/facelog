@@ -194,21 +194,13 @@ public interface TableListener<B>{
     }
     
     static abstract class ForeignKeyListener<FB extends BaseBean<FB>,B extends BaseBean<B>> extends TableListener.Adapter<FB>{
-        private Event event;
-        private ListenerContainer<B>  listenerContainer;
-        public ForeignKeyListener(TableListener.Event event,
-                TableListener.ListenerContainer<B> listenerContainer) {
-            if(null == event || null == listenerContainer)
-                throw new NullPointerException();
-            this.event = event;
-            this.listenerContainer = listenerContainer;
-        }
-
-        protected abstract List<B> getImportedBeans();
+        public ForeignKeyListener(){}
+        protected abstract List<B> getImportedBeans(FB fb);
+        protected abstract void onRemove(List<B> effectBeans);
         protected final InheritableThreadLocal<List<B>> effectedBeans = new InheritableThreadLocal<List<B>>();
         @Override
         public void beforeDelete(FB bean){
-            this.effectedBeans.set(getImportedBeans());
+            this.effectedBeans.set(getImportedBeans(bean));
         }
 
         @Override
@@ -216,9 +208,7 @@ public interface TableListener<B>{
             try{
                 List<B> beans = this.effectedBeans.get();
                 if(null != beans){
-                    for(B b:beans){
-                        event.fire(listenerContainer,b);
-                    }
+                    onRemove(beans);
                 }
             }finally{
                 effectedBeans.set(null);

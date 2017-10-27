@@ -2505,52 +2505,52 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
+
+    /** foreign key listener for DEELTE RULE : CASCADE */
     private final TableListener.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
             new TableListener.ForeignKeyListener<FlImageBean,FlFaceBean>(){
-        @Override
-        protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
-          return FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
-            for(FlFaceBean bean:effectBeans){
-                Event.DELETE.fire(listenerContainer, bean);
-            }
-        }};
-    /**
-     * DELETE RULE : CASCADE<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_face(image_md5)-> fl_image(md5)} <br>
-     */
-    //37-2
-    public void bindImageMd5ListenerToFlImageManager(){
-        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
-    }
+                @Override
+                protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlFaceBean>asList()
+                            : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
+                    for(FlFaceBean bean:effectBeans){
+                        Event.DELETE.fire(listenerContainer, bean);
+                    }
+                }};
 
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final TableListener.ForeignKeyListener<FlFeatureBean,FlFaceBean> foreignKeyListenerByFeatureMd5 = 
             new TableListener.ForeignKeyListener<FlFeatureBean,FlFaceBean>(){
-        @Override
-        protected List<FlFaceBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
-          return FlFeatureManager.getInstance().getFaceBeansByFeatureMd5AsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
-            for(FlFaceBean bean:effectBeans){
-                bean.setFeatureMd5(null);
-                Event.UPDATE.fire(listenerContainer, bean);
-            }
-        }};
+                @Override
+                protected List<FlFaceBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlFaceBean>asList()
+                            : FlFeatureManager.getInstance().getFaceBeansByFeatureMd5AsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
+                    for(FlFaceBean bean:effectBeans){
+                        bean.setFeatureMd5(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
-     * DELETE RULE : SET_NULL<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
+     * bind foreign key listener to foreign table: <br>
+     * DELETE RULE : CASCADE {@code fl_face(image_md5)-> fl_image(md5)} <br>
+     * DELETE RULE : SET_NULL {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
      */
     //37-2
-    public void bindFeatureMd5ListenerToFlFeatureManager(){
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
+        
     }
-
     //_____________________________________________________________________
     //
     // UTILS

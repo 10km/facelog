@@ -977,6 +977,11 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<FaceBean>} as native listener

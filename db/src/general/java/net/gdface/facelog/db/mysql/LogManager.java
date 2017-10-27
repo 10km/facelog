@@ -957,6 +957,11 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<LogBean>} as native listener

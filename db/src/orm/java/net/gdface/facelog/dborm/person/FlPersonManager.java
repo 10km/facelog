@@ -2550,30 +2550,34 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
+
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final TableListener.ForeignKeyListener<FlImageBean,FlPersonBean> foreignKeyListenerByImageMd5 = 
             new TableListener.ForeignKeyListener<FlImageBean,FlPersonBean>(){
-        @Override
-        protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
-          return FlImageManager.getInstance().getPersonBeansByImageMd5AsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
-            for(FlPersonBean bean:effectBeans){
-                bean.setImageMd5(null);
-                Event.UPDATE.fire(listenerContainer, bean);
-            }
-        }};
+                @Override
+                protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlPersonBean>asList()
+                            : FlImageManager.getInstance().getPersonBeansByImageMd5AsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
+                    for(FlPersonBean bean:effectBeans){
+                        bean.setImageMd5(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
-     * DELETE RULE : SET_NULL<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_person(image_md5)-> fl_image(md5)} <br>
+     * bind foreign key listener to foreign table: <br>
+     * DELETE RULE : SET_NULL {@code fl_person(image_md5)-> fl_image(md5)} <br>
      */
     //37-2
-    public void bindImageMd5ListenerToFlImageManager(){
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
         FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
+        
     }
-
     //_____________________________________________________________________
     //
     // UTILS

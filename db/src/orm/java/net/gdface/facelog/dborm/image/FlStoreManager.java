@@ -1291,7 +1291,15 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
+
+    /**
+     * bind foreign key listener to foreign table: <br>
+     */
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

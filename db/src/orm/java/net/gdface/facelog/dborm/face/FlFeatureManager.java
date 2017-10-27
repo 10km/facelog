@@ -1913,29 +1913,33 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             throw new IllegalArgumentException("invalid event id " + event);
         }
     }
-    
+
+    /** foreign key listener for DEELTE RULE : CASCADE */
     private final TableListener.ForeignKeyListener<FlPersonBean,FlFeatureBean> foreignKeyListenerByPersonId = 
             new TableListener.ForeignKeyListener<FlPersonBean,FlFeatureBean>(){
-        @Override
-        protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
-          return FlPersonManager.getInstance().getFeatureBeansByPersonIdAsList(bean);
-        }
-        @Override
-        protected void onRemove(List<FlFeatureBean> effectBeans) throws DAOException {
-            for(FlFeatureBean bean:effectBeans){
-                Event.DELETE.fire(listenerContainer, bean);
-            }
-        }};
+                @Override
+                protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
+                  return listenerContainer.isEmpty() 
+                            ? java.util.Arrays.<FlFeatureBean>asList()
+                            : FlPersonManager.getInstance().getFeatureBeansByPersonIdAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlFeatureBean> effectBeans) throws DAOException {
+                    for(FlFeatureBean bean:effectBeans){
+                        Event.DELETE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
-     * DELETE RULE : CASCADE<br>
-     * bind foreign key listener  to foreign table: <br>
-     * {@code fl_feature(person_id)-> fl_person(id)} <br>
+     * bind foreign key listener to foreign table: <br>
+     * DELETE RULE : CASCADE {@code fl_feature(person_id)-> fl_person(id)} <br>
      */
     //37-2
-    public void bindPersonIdListenerToFlPersonManager(){
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
         FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
+        
     }
-
     //_____________________________________________________________________
     //
     // UTILS

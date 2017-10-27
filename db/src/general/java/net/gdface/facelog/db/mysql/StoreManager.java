@@ -492,6 +492,11 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
             throw new WrapDAOException(e);
         }
     }
+    //37-2
+    @Override
+    public void bindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.bindForeignKeyListenerForDeleteRule();
+    }
 
     /**
      * wrap {@code TableListener<StoreBean>} as native listener
