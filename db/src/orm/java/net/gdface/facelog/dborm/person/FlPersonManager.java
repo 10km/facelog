@@ -2552,12 +2552,13 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final TableListener.ForeignKeyListener<FlImageBean,FlPersonBean> foreignKeyListenerByImageMd5 = 
-            new TableListener.ForeignKeyListener<FlImageBean,FlPersonBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlPersonBean> foreignKeyListenerByImageMd5 = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlPersonBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlPersonBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlImageManager.getInstance().getPersonBeansByImageMd5AsList(bean);
                 }
                 @Override

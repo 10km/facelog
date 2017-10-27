@@ -2091,12 +2091,13 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     }
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean> foreignKeyListenerByDeviceId = 
-            new TableListener.ForeignKeyListener<FlDeviceBean,FlImageBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlImageBean> foreignKeyListenerByDeviceId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlImageBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlImageBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlDeviceManager.getInstance().getImageBeansByDeviceIdAsList(bean);
                 }
                 @Override

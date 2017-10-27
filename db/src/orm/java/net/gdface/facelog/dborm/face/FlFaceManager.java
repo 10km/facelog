@@ -2507,12 +2507,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     }
 
     /** foreign key listener for DEELTE RULE : CASCADE */
-    private final TableListener.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
-            new TableListener.ForeignKeyListener<FlImageBean,FlFaceBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlFaceBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
                 }
                 @Override
@@ -2523,12 +2524,13 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final TableListener.ForeignKeyListener<FlFeatureBean,FlFaceBean> foreignKeyListenerByFeatureMd5 = 
-            new TableListener.ForeignKeyListener<FlFeatureBean,FlFaceBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlFaceBean> foreignKeyListenerByFeatureMd5 = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlFaceBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlFaceBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlFaceBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlFeatureManager.getInstance().getFaceBeansByFeatureMd5AsList(bean);
                 }
                 @Override

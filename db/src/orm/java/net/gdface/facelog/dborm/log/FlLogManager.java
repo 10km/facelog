@@ -2069,12 +2069,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final TableListener.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
-            new TableListener.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlLogBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
                 }
                 @Override
@@ -2086,12 +2087,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final TableListener.ForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
-            new TableListener.ForeignKeyListener<FlFeatureBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlLogBean> foreignKeyListenerByVerifyFeature = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlLogBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlLogBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlFeatureManager.getInstance().getLogBeansByVerifyFeatureAsList(bean);
                 }
                 @Override
@@ -2103,12 +2105,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : CASCADE */
-    private final TableListener.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
-            new TableListener.ForeignKeyListener<FlPersonBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlLogBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlPersonManager.getInstance().getLogBeansByPersonIdAsList(bean);
                 }
                 @Override
@@ -2119,12 +2122,13 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 }};
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final TableListener.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
-            new TableListener.ForeignKeyListener<FlFaceBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean>(){
+                @SuppressWarnings("unchecked")
                 @Override
                 protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
-                  return listenerContainer.isEmpty() 
-                            ? java.util.Arrays.<FlLogBean>asList()
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
                             : FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
                 }
                 @Override

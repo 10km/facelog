@@ -192,28 +192,5 @@ public interface TableListener<B>{
             listeners.clear();
         }
     }
-    
-    static abstract class ForeignKeyListener<FB extends BaseBean<FB>,B extends BaseBean<B>> extends TableListener.Adapter<FB>{
-        public ForeignKeyListener(){}
-        protected abstract List<B> getImportedBeans(FB fb);
-        protected abstract void onRemove(List<B> effectBeans);
-        protected final InheritableThreadLocal<List<B>> effectedBeans = new InheritableThreadLocal<List<B>>();
-        @Override
-        public void beforeDelete(FB bean){
-            this.effectedBeans.set(getImportedBeans(bean));
-        }
-
-        @Override
-        public void afterDelete(FB bean){
-            try{
-                List<B> beans = this.effectedBeans.get();
-                if(null != beans){
-                    onRemove(beans);
-                }
-            }finally{
-                effectedBeans.set(null);
-            }
-        }
-    }
 }
 
