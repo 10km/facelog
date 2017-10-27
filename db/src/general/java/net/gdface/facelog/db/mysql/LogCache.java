@@ -60,16 +60,6 @@ public class LogCache extends TableLoadCaching<Integer, LogBean> {
     protected LogBean loadfromDatabase(Integer key)throws Exception {
         return manager.loadByPrimaryKeyChecked(key);
     }
-    @Override
-    public void update(LogBean bean){
-        super.update(bean);
-        
-    }
-    @Override
-    public void remove(LogBean bean){
-        super.remove(bean);
-        
-    }
     public LogBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);
     }

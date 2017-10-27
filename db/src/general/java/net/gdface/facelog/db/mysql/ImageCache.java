@@ -60,16 +60,6 @@ public class ImageCache extends TableLoadCaching<String, ImageBean> {
     protected ImageBean loadfromDatabase(String key)throws Exception {
         return manager.loadByPrimaryKeyChecked(key);
     }
-    @Override
-    public void update(ImageBean bean){
-        super.update(bean);
-        
-    }
-    @Override
-    public void remove(ImageBean bean){
-        super.remove(bean);
-        
-    }
     public ImageBean getBeanByMd5(String md5) throws ExecutionException{
         return getBean(md5);
     }

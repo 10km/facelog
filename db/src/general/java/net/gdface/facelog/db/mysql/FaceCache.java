@@ -60,16 +60,6 @@ public class FaceCache extends TableLoadCaching<Integer, FaceBean> {
     protected FaceBean loadfromDatabase(Integer key)throws Exception {
         return manager.loadByPrimaryKeyChecked(key);
     }
-    @Override
-    public void update(FaceBean bean){
-        super.update(bean);
-        
-    }
-    @Override
-    public void remove(FaceBean bean){
-        super.remove(bean);
-        
-    }
     public FaceBean getBeanById(Integer id) throws ExecutionException{
         return getBean(id);
     }

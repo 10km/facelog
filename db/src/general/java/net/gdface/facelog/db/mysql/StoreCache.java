@@ -60,16 +60,6 @@ public class StoreCache extends TableLoadCaching<String, StoreBean> {
     protected StoreBean loadfromDatabase(String key)throws Exception {
         return manager.loadByPrimaryKeyChecked(key);
     }
-    @Override
-    public void update(StoreBean bean){
-        super.update(bean);
-        
-    }
-    @Override
-    public void remove(StoreBean bean){
-        super.remove(bean);
-        
-    }
     public StoreBean getBeanByMd5(String md5) throws ExecutionException{
         return getBean(md5);
     }
