@@ -468,6 +468,7 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
     }
 
 
+// rTables: 
 
     //_____________________________________________________________________
     //

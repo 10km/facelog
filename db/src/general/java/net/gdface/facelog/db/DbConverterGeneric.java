@@ -12,36 +12,48 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.JunctionDeviceGroupBean;
+import net.gdface.facelog.db.JunctionPersonGroupBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.LogLightBean;
 /**
  * generic type converter of {@link IDbConverter} implementation<br>
- * usage:<pre>new DbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7,Model8&gt;(){};</pre>
+ * usage:<pre>new DbConverterGeneric&lt;Model1,Model2,Model3,Model4,Model5,Model6,Model7,Model8,Model9,Model10,Model11,Model12&gt;(){};</pre>
  * @author guyadong
  *
  * @param <R_DEVICE> native type for fl_device
+ * @param <R_DEVICEGROUP> native type for fl_device_group
  * @param <R_FACE> native type for fl_face
  * @param <R_FEATURE> native type for fl_feature
  * @param <R_IMAGE> native type for fl_image
+ * @param <R_JUNCTIONDEVICEGROUP> native type for fl_junction_device_group
+ * @param <R_JUNCTIONPERSONGROUP> native type for fl_junction_person_group
  * @param <R_LOG> native type for fl_log
  * @param <R_PERSON> native type for fl_person
+ * @param <R_PERSONGROUP> native type for fl_person_group
  * @param <R_STORE> native type for fl_store
  * @param <R_LOGLIGHT> native type for fl_log_light
  *
  */
-public abstract class DbConverterGeneric<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG,R_PERSON,R_STORE,R_LOGLIGHT> 
-    implements IDbConverter<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG,R_PERSON,R_STORE,R_LOGLIGHT>, Constant{
+public abstract class DbConverterGeneric<R_DEVICE,R_DEVICEGROUP,R_FACE,R_FEATURE,R_IMAGE,R_JUNCTIONDEVICEGROUP,R_JUNCTIONPERSONGROUP,R_LOG,R_PERSON,R_PERSONGROUP,R_STORE,R_LOGLIGHT> 
+    implements IDbConverter<R_DEVICE,R_DEVICEGROUP,R_FACE,R_FEATURE,R_IMAGE,R_JUNCTIONDEVICEGROUP,R_JUNCTIONPERSONGROUP,R_LOG,R_PERSON,R_PERSONGROUP,R_STORE,R_LOGLIGHT>, Constant{
     private final IBeanConverter<DeviceBean,R_DEVICE> converterDeviceBean;
+    private final IBeanConverter<DeviceGroupBean,R_DEVICEGROUP> converterDeviceGroupBean;
     private final IBeanConverter<FaceBean,R_FACE> converterFaceBean;
     private final IBeanConverter<FeatureBean,R_FEATURE> converterFeatureBean;
     private final IBeanConverter<ImageBean,R_IMAGE> converterImageBean;
+    private final IBeanConverter<JunctionDeviceGroupBean,R_JUNCTIONDEVICEGROUP> converterJunctionDeviceGroupBean;
+    private final IBeanConverter<JunctionPersonGroupBean,R_JUNCTIONPERSONGROUP> converterJunctionPersonGroupBean;
     private final IBeanConverter<LogBean,R_LOG> converterLogBean;
     private final IBeanConverter<PersonBean,R_PERSON> converterPersonBean;
+    private final IBeanConverter<PersonGroupBean,R_PERSONGROUP> converterPersonGroupBean;
     private final IBeanConverter<StoreBean,R_STORE> converterStoreBean;
     private final IBeanConverter<LogLightBean,R_LOGLIGHT> converterLogLightBean;
     private static Class<?> getRawClass(Type type){
@@ -60,42 +72,58 @@ public abstract class DbConverterGeneric<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG
      */
     @SuppressWarnings("unchecked")
     public DbConverterGeneric(String javaFieldsOfDevice,
+                    String javaFieldsOfDeviceGroup,
                     String javaFieldsOfFace,
                     String javaFieldsOfFeature,
                     String javaFieldsOfImage,
+                    String javaFieldsOfJunctionDeviceGroup,
+                    String javaFieldsOfJunctionPersonGroup,
                     String javaFieldsOfLog,
                     String javaFieldsOfPerson,
+                    String javaFieldsOfPersonGroup,
                     String javaFieldsOfStore,
                     String javaFieldsOfLogLight){
         if(null == javaFieldsOfDevice || javaFieldsOfDevice.isEmpty())javaFieldsOfDevice = FL_DEVICE_JAVA_FIELDS;
+        if(null == javaFieldsOfDeviceGroup || javaFieldsOfDeviceGroup.isEmpty())javaFieldsOfDeviceGroup = FL_DEVICE_GROUP_JAVA_FIELDS;
         if(null == javaFieldsOfFace || javaFieldsOfFace.isEmpty())javaFieldsOfFace = FL_FACE_JAVA_FIELDS;
         if(null == javaFieldsOfFeature || javaFieldsOfFeature.isEmpty())javaFieldsOfFeature = FL_FEATURE_JAVA_FIELDS;
         if(null == javaFieldsOfImage || javaFieldsOfImage.isEmpty())javaFieldsOfImage = FL_IMAGE_JAVA_FIELDS;
+        if(null == javaFieldsOfJunctionDeviceGroup || javaFieldsOfJunctionDeviceGroup.isEmpty())javaFieldsOfJunctionDeviceGroup = FL_JUNCTION_DEVICE_GROUP_JAVA_FIELDS;
+        if(null == javaFieldsOfJunctionPersonGroup || javaFieldsOfJunctionPersonGroup.isEmpty())javaFieldsOfJunctionPersonGroup = FL_JUNCTION_PERSON_GROUP_JAVA_FIELDS;
         if(null == javaFieldsOfLog || javaFieldsOfLog.isEmpty())javaFieldsOfLog = FL_LOG_JAVA_FIELDS;
         if(null == javaFieldsOfPerson || javaFieldsOfPerson.isEmpty())javaFieldsOfPerson = FL_PERSON_JAVA_FIELDS;
+        if(null == javaFieldsOfPersonGroup || javaFieldsOfPersonGroup.isEmpty())javaFieldsOfPersonGroup = FL_PERSON_GROUP_JAVA_FIELDS;
         if(null == javaFieldsOfStore || javaFieldsOfStore.isEmpty())javaFieldsOfStore = FL_STORE_JAVA_FIELDS;
         if(null == javaFieldsOfLogLight || javaFieldsOfLogLight.isEmpty())javaFieldsOfLogLight = FL_LOG_LIGHT_JAVA_FIELDS;
         
         Type[] typeArguments = ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments();
         this.converterDeviceBean = new BeanConverterUtils.DeviceBeanConverter<R_DEVICE>(DeviceBean.class,
             (Class<R_DEVICE>)getRawClass(typeArguments[0]),javaFieldsOfDevice);            
+        this.converterDeviceGroupBean = new BeanConverterUtils.DeviceGroupBeanConverter<R_DEVICEGROUP>(DeviceGroupBean.class,
+            (Class<R_DEVICEGROUP>)getRawClass(typeArguments[1]),javaFieldsOfDeviceGroup);            
         this.converterFaceBean = new BeanConverterUtils.FaceBeanConverter<R_FACE>(FaceBean.class,
-            (Class<R_FACE>)getRawClass(typeArguments[1]),javaFieldsOfFace);            
+            (Class<R_FACE>)getRawClass(typeArguments[2]),javaFieldsOfFace);            
         this.converterFeatureBean = new BeanConverterUtils.FeatureBeanConverter<R_FEATURE>(FeatureBean.class,
-            (Class<R_FEATURE>)getRawClass(typeArguments[2]),javaFieldsOfFeature);            
+            (Class<R_FEATURE>)getRawClass(typeArguments[3]),javaFieldsOfFeature);            
         this.converterImageBean = new BeanConverterUtils.ImageBeanConverter<R_IMAGE>(ImageBean.class,
-            (Class<R_IMAGE>)getRawClass(typeArguments[3]),javaFieldsOfImage);            
+            (Class<R_IMAGE>)getRawClass(typeArguments[4]),javaFieldsOfImage);            
+        this.converterJunctionDeviceGroupBean = new BeanConverterUtils.JunctionDeviceGroupBeanConverter<R_JUNCTIONDEVICEGROUP>(JunctionDeviceGroupBean.class,
+            (Class<R_JUNCTIONDEVICEGROUP>)getRawClass(typeArguments[5]),javaFieldsOfJunctionDeviceGroup);            
+        this.converterJunctionPersonGroupBean = new BeanConverterUtils.JunctionPersonGroupBeanConverter<R_JUNCTIONPERSONGROUP>(JunctionPersonGroupBean.class,
+            (Class<R_JUNCTIONPERSONGROUP>)getRawClass(typeArguments[6]),javaFieldsOfJunctionPersonGroup);            
         this.converterLogBean = new BeanConverterUtils.LogBeanConverter<R_LOG>(LogBean.class,
-            (Class<R_LOG>)getRawClass(typeArguments[4]),javaFieldsOfLog);            
+            (Class<R_LOG>)getRawClass(typeArguments[7]),javaFieldsOfLog);            
         this.converterPersonBean = new BeanConverterUtils.PersonBeanConverter<R_PERSON>(PersonBean.class,
-            (Class<R_PERSON>)getRawClass(typeArguments[5]),javaFieldsOfPerson);            
+            (Class<R_PERSON>)getRawClass(typeArguments[8]),javaFieldsOfPerson);            
+        this.converterPersonGroupBean = new BeanConverterUtils.PersonGroupBeanConverter<R_PERSONGROUP>(PersonGroupBean.class,
+            (Class<R_PERSONGROUP>)getRawClass(typeArguments[9]),javaFieldsOfPersonGroup);            
         this.converterStoreBean = new BeanConverterUtils.StoreBeanConverter<R_STORE>(StoreBean.class,
-            (Class<R_STORE>)getRawClass(typeArguments[6]),javaFieldsOfStore);            
+            (Class<R_STORE>)getRawClass(typeArguments[10]),javaFieldsOfStore);            
         this.converterLogLightBean = new BeanConverterUtils.LogLightBeanConverter<R_LOGLIGHT>(LogLightBean.class,
-            (Class<R_LOGLIGHT>)getRawClass(typeArguments[7]),javaFieldsOfLogLight);            
+            (Class<R_LOGLIGHT>)getRawClass(typeArguments[11]),javaFieldsOfLogLight);            
     }
     public DbConverterGeneric(){
-        this(null,null,null,null,null,null,null,null);
+        this(null,null,null,null,null,null,null,null,null,null,null,null);
     }
     @Override
     public <L,R>IBeanConverter<L,R>getBeanConverter(Class<L> lClass,Class<R> rClass){
@@ -112,6 +140,10 @@ public abstract class DbConverterGeneric<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG
         return converterDeviceBean;
     }
     @Override
+    public IBeanConverter<DeviceGroupBean, R_DEVICEGROUP> getDeviceGroupBeanConverter() {
+        return converterDeviceGroupBean;
+    }
+    @Override
     public IBeanConverter<FaceBean, R_FACE> getFaceBeanConverter() {
         return converterFaceBean;
     }
@@ -124,12 +156,24 @@ public abstract class DbConverterGeneric<R_DEVICE,R_FACE,R_FEATURE,R_IMAGE,R_LOG
         return converterImageBean;
     }
     @Override
+    public IBeanConverter<JunctionDeviceGroupBean, R_JUNCTIONDEVICEGROUP> getJunctionDeviceGroupBeanConverter() {
+        return converterJunctionDeviceGroupBean;
+    }
+    @Override
+    public IBeanConverter<JunctionPersonGroupBean, R_JUNCTIONPERSONGROUP> getJunctionPersonGroupBeanConverter() {
+        return converterJunctionPersonGroupBean;
+    }
+    @Override
     public IBeanConverter<LogBean, R_LOG> getLogBeanConverter() {
         return converterLogBean;
     }
     @Override
     public IBeanConverter<PersonBean, R_PERSON> getPersonBeanConverter() {
         return converterPersonBean;
+    }
+    @Override
+    public IBeanConverter<PersonGroupBean, R_PERSONGROUP> getPersonGroupBeanConverter() {
+        return converterPersonGroupBean;
     }
     @Override
     public IBeanConverter<StoreBean, R_STORE> getStoreBeanConverter() {

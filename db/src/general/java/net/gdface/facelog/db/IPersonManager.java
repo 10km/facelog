@@ -183,6 +183,74 @@ public interface IPersonManager extends TableManager<PersonBean>
     public <C extends java.util.Collection<FeatureBean>> C setFeatureBeansByPersonId(PersonBean bean , C importedBeans);
 
     /**
+     * Retrieves the {@link JunctionPersonGroupBean} object from the fl_junction_person_group.person_id field.<BR>
+     * FK_NAME : fl_junction_person_group_ibfk_1 
+     * @param bean the {@link PersonBean}
+     * @return the associated {@link JunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.1 GET IMPORTED
+    public JunctionPersonGroupBean[] getJunctionPersonGroupBeansByPersonId(PersonBean bean);
+    
+    /**
+     * Retrieves the {@link JunctionPersonGroupBean} object from the fl_junction_person_group.person_id field.<BR>
+     * FK_NAME : fl_junction_person_group_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link JunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public JunctionPersonGroupBean[] getJunctionPersonGroupBeansByPersonId(Integer personId);
+    
+    /**
+     * Retrieves the {@link JunctionPersonGroupBean} object from fl_junction_person_group.person_id field.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_1
+     * @param bean the {@link PersonBean}
+     * @return the associated {@link JunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.2 GET IMPORTED
+    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(PersonBean bean);
+
+    /**
+     * Retrieves the {@link JunctionPersonGroupBean} object from fl_junction_person_group.person_id field.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link JunctionPersonGroupBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(Integer personId);
+    /**
+     * delete the associated {@link JunctionPersonGroupBean} objects from fl_junction_person_group.person_id field.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteJunctionPersonGroupBeansByPersonId(Integer personId);
+    
+    /**
+     * set  the {@link JunctionPersonGroupBean} object array associate to PersonBean by the fl_junction_person_group.person_id field.<BR>
+     * FK_NAME : fl_junction_person_group_ibfk_1 
+     * @param bean the referenced {@link PersonBean}
+     * @param importedBeans imported beans from fl_junction_person_group
+     * @return importedBeans always
+     * @see {@link JunctionPersonGroupManager#setReferencedByPersonId(JunctionPersonGroupBean, PersonBean)
+     */
+    //3.3 SET IMPORTED
+    public JunctionPersonGroupBean[] setJunctionPersonGroupBeansByPersonId(PersonBean bean , JunctionPersonGroupBean[] importedBeans);
+
+    /**
+     * set  the {@link JunctionPersonGroupBean} object java.util.Collection associate to PersonBean by the fl_junction_person_group.person_id field.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_1
+     * @param bean the referenced {@link PersonBean} 
+     * @param importedBeans imported beans from fl_junction_person_group 
+     * @return importedBeans always
+     * @see {@link JunctionPersonGroupManager#setReferencedByPersonId(JunctionPersonGroupBean, PersonBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<JunctionPersonGroupBean>> C setJunctionPersonGroupBeansByPersonId(PersonBean bean , C importedBeans);
+
+    /**
      * Retrieves the {@link LogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
      * @param bean the {@link PersonBean}
@@ -256,42 +324,44 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param bean the {@link PersonBean} bean to be saved
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
      * @param impFeatureByPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
+     * @param impJunctionpersongroupByPersonId the {@link JunctionPersonGroupBean} bean refer to {@link PersonBean} 
      * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.5 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refImageByImageMd5 
-        , FeatureBean[] impFeatureByPersonId , LogBean[] impLogByPersonId );
+        , FeatureBean[] impFeatureByPersonId , JunctionPersonGroupBean[] impJunctionpersongroupByPersonId , LogBean[] impLogByPersonId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , FeatureBean[] , LogBean[] )}
+     * @see {@link #save(PersonBean , ImageBean , FeatureBean[] , JunctionPersonGroupBean[] , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refImageByImageMd5 
-        ,final FeatureBean[] impFeatureByPersonId ,final LogBean[] impLogByPersonId );
+        ,final FeatureBean[] impFeatureByPersonId ,final JunctionPersonGroupBean[] impJunctionpersongroupByPersonId ,final LogBean[] impLogByPersonId );
     /**
      * Save the PersonBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonBean} bean to be saved
      * @param refImageByImageMd5 the {@link ImageBean} bean referenced by {@link PersonBean} 
      * @param impFeatureByPersonId the {@link FeatureBean} bean refer to {@link PersonBean} 
+     * @param impJunctionpersongroupByPersonId the {@link JunctionPersonGroupBean} bean refer to {@link PersonBean} 
      * @param impLogByPersonId the {@link LogBean} bean refer to {@link PersonBean} 
      * @return the inserted or updated {@link PersonBean} bean
      */
     //3.7 SYNC SAVE 
     public PersonBean save(PersonBean bean
         , ImageBean refImageByImageMd5 
-        , java.util.Collection<FeatureBean> impFeatureByPersonId , java.util.Collection<LogBean> impLogByPersonId );
+        , java.util.Collection<FeatureBean> impFeatureByPersonId , java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByPersonId , java.util.Collection<LogBean> impLogByPersonId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(PersonBean , ImageBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public PersonBean saveAsTransaction(final PersonBean bean
         ,final ImageBean refImageByImageMd5 
-        ,final  java.util.Collection<FeatureBean> impFeatureByPersonId ,final  java.util.Collection<LogBean> impLogByPersonId );
+        ,final  java.util.Collection<FeatureBean> impFeatureByPersonId ,final  java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByPersonId ,final  java.util.Collection<LogBean> impLogByPersonId );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -455,31 +525,6 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the number of deleted objects
      */
     public int deleteByIndexExpiryDate(java.util.Date expiryDate);
-    
-
-     /**
-     * Retrieves an array of PersonBean using the group_id index.
-     *
-     * @param groupId the group_id column's value filter.
-     * @return an array of PersonBean
-     */
-    public PersonBean[] loadByIndexGroupId(Integer groupId);
-    
-    /**
-     * Retrieves a list of PersonBean using the group_id index.
-     *
-     * @param groupId the group_id column's value filter.
-     * @return a list of PersonBean
-     */
-    public java.util.List<PersonBean> loadByIndexGroupIdAsList(Integer groupId);
-
-    /**
-     * Deletes rows using the group_id index.
-     *
-     * @param groupId the group_id column's value filter.
-     * @return the number of deleted objects
-     */
-    public int deleteByIndexGroupId(Integer groupId);
     
 
     /**

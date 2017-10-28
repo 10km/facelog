@@ -528,16 +528,24 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * @param keys primary keys value<br>
      *      for fl_device table<br>
      *          PK# 1 fl_device.id type Integer<br>
+     *      for fl_device_group table<br>
+     *          PK# 1 fl_device_group.id type Integer<br>
      *      for fl_face table<br>
      *          PK# 1 fl_face.id type Integer<br>
      *      for fl_feature table<br>
      *          PK# 1 fl_feature.md5 type String<br>
      *      for fl_image table<br>
      *          PK# 1 fl_image.md5 type String<br>
+     *      for fl_junction_device_group table<br>
+     *          PK# 1 fl_junction_device_group.device_id type Integer,PK# 2 fl_junction_device_group.group_id type Integer<br>
+     *      for fl_junction_person_group table<br>
+     *          PK# 1 fl_junction_person_group.person_id type Integer,PK# 2 fl_junction_person_group.group_id type Integer<br>
      *      for fl_log table<br>
      *          PK# 1 fl_log.id type Integer<br>
      *      for fl_person table<br>
      *          PK# 1 fl_person.id type Integer<br>
+     *      for fl_person_group table<br>
+     *          PK# 1 fl_person_group.id type Integer<br>
      *      for fl_store table<br>
      *          PK# 1 fl_store.md5 type String<br>
      * @return the number of deleted rows
@@ -645,16 +653,24 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * @param keys primary keys value:<br> 
      *      for fl_device table<br>
      *          PK# 1 fl_device.id type Integer<br>
+     *      for fl_device_group table<br>
+     *          PK# 1 fl_device_group.id type Integer<br>
      *      for fl_face table<br>
      *          PK# 1 fl_face.id type Integer<br>
      *      for fl_feature table<br>
      *          PK# 1 fl_feature.md5 type String<br>
      *      for fl_image table<br>
      *          PK# 1 fl_image.md5 type String<br>
+     *      for fl_junction_device_group table<br>
+     *          PK# 1 fl_junction_device_group.device_id type Integer,PK# 2 fl_junction_device_group.group_id type Integer<br>
+     *      for fl_junction_person_group table<br>
+     *          PK# 1 fl_junction_person_group.person_id type Integer,PK# 2 fl_junction_person_group.group_id type Integer<br>
      *      for fl_log table<br>
      *          PK# 1 fl_log.id type Integer<br>
      *      for fl_person table<br>
      *          PK# 1 fl_person.id type Integer<br>
+     *      for fl_person_group table<br>
+     *          PK# 1 fl_person_group.id type Integer<br>
      *      for fl_store table<br>
      *          PK# 1 fl_store.md5 type String<br>
      * @return a unique B or {@code null} if not found
@@ -1004,7 +1020,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      *        for fl_log table<br>
      *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}<br>     
      *        for fl_person table<br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}<br>     
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
      * @param keys key values of index
      * @return a list of B bean
      * @throws DAOException
@@ -1110,17 +1126,25 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
             for fl_device table:<br>
-                {@code  FlImageBean[] FlLogBean[]}<br>
+                {@code  FlImageBean[] FlJunctionDeviceGroupBean[] FlLogBean[]}<br>
+            for fl_device_group table:<br>
+                {@code  FlJunctionDeviceGroupBean[]}<br>
             for fl_face table:<br>
                 {@code  FlFeatureBean FlImageBean FlLogBean[]}<br>
             for fl_feature table:<br>
                 {@code  FlPersonBean FlFaceBean[] FlLogBean[]}<br>
             for fl_image table:<br>
                 {@code  FlDeviceBean FlFaceBean[] FlPersonBean[]}<br>
+            for fl_junction_device_group table:<br>
+                {@code  FlDeviceBean FlDeviceGroupBean}<br>
+            for fl_junction_person_group table:<br>
+                {@code  FlPersonBean FlPersonGroupBean}<br>
             for fl_log table:<br>
                 {@code  FlDeviceBean FlFaceBean FlFeatureBean FlPersonBean}<br>
             for fl_person table:<br>
-                {@code  FlImageBean FlFeatureBean[] FlLogBean[]}<br>
+                {@code  FlImageBean FlFeatureBean[] FlJunctionPersonGroupBean[] FlLogBean[]}<br>
+            for fl_person_group table:<br>
+                {@code  FlJunctionPersonGroupBean[]}<br>
      * @return the inserted or updated B bean
       * @throws DAOException
      */
@@ -1133,17 +1157,25 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
             for fl_device table:<br>
-                {@code  Collection<FlImageBean> Collection<FlLogBean>}<br>
+                {@code  Collection<FlImageBean> Collection<FlJunctionDeviceGroupBean> Collection<FlLogBean>}<br>
+            for fl_device_group table:<br>
+                {@code  Collection<FlJunctionDeviceGroupBean>}<br>
             for fl_face table:<br>
                 {@code  FlFeatureBean FlImageBean Collection<FlLogBean>}<br>
             for fl_feature table:<br>
                 {@code  FlPersonBean Collection<FlFaceBean> Collection<FlLogBean>}<br>
             for fl_image table:<br>
                 {@code  FlDeviceBean Collection<FlFaceBean> Collection<FlPersonBean>}<br>
+            for fl_junction_device_group table:<br>
+                {@code  FlDeviceBean FlDeviceGroupBean}<br>
+            for fl_junction_person_group table:<br>
+                {@code  FlPersonBean FlPersonGroupBean}<br>
             for fl_log table:<br>
                 {@code  FlDeviceBean FlFaceBean FlFeatureBean FlPersonBean}<br>
             for fl_person table:<br>
-                {@code  FlImageBean Collection<FlFeatureBean> Collection<FlLogBean>}<br>
+                {@code  FlImageBean Collection<FlFeatureBean> Collection<FlJunctionPersonGroupBean> Collection<FlLogBean>}<br>
+            for fl_person_group table:<br>
+                {@code  Collection<FlJunctionPersonGroupBean>}<br>
      * @return the inserted or updated B bean
      * @throws DAOException
      */
@@ -1241,6 +1273,16 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
      * </ul>
      * <ul>
+     *     <li> for fl_junction_device_group:
+     *     <li> {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
+     *     <li> {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_GROUP_ID} -> {@link FlDeviceGroupBean}</li>
+     * </ul>
+     * <ul>
+     *     <li> for fl_junction_person_group:
+     *     <li> {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID} -> {@link FlPersonBean}</li>
+     *     <li> {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID} -> {@link FlPersonGroupBean}</li>
+     * </ul>
+     * <ul>
      *     <li> for fl_log:
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link FlDeviceBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FlFaceBean}</li>
@@ -1259,6 +1301,10 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      *        {@link Constant#FL_FEATURE_FK_PERSON_ID}<br>
      *        for for fl_image table:<br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}<br>
+     *        for for fl_junction_device_group table:<br>
+     *        {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_DEVICE_ID},{@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_GROUP_ID}<br>
+     *        for for fl_junction_person_group table:<br>
+     *        {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID},{@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID}<br>
      *        for for fl_log table:<br>
      *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
      *        for for fl_person table:<br>
@@ -1285,7 +1331,12 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * <ul>
      *     <li> for fl_device table:
      *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_IK_FL_JUNCTION_DEVICE_GROUP_DEVICE_ID} -> {@link FlImageBean}</li>
      *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link FlImageBean}</li>
+     * </ul>
+     * <ul>
+     *     <li> for fl_device_group table:
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID} -> {@link FlImageBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_face table:
@@ -1304,12 +1355,19 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * <ul>
      *     <li> for fl_person table:
      *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID} -> {@link FlImageBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlImageBean}</li>
+     * </ul>
+     * <ul>
+     *     <li> for fl_person_group table:
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID} -> {@link FlImageBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
      *        for fl_device table:<br>
-     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
+     *        for fl_device_group table:<br>
+     *        {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_GROUP_ID}<br>
      *        for fl_face table:<br>
      *        {@link Constant#FL_LOG_FK_COMPARE_FACE}<br>
      *        for fl_feature table:<br>
@@ -1317,7 +1375,9 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      *        for fl_image table:<br>
      *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
      *        for fl_person table:<br>
-     *        {@link Constant#FL_FEATURE_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_FEATURE_FK_PERSON_ID},{@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        for fl_person_group table:<br>
+     *        {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */

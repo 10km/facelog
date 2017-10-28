@@ -692,6 +692,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     }
 
 
+// rTables: 
 
     //_____________________________________________________________________
     //

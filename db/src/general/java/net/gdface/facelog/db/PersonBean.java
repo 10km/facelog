@@ -27,9 +27,6 @@ public final class PersonBean
     /** comments:用户id */
     private Integer id;
 
-    /** comments:用户所属组id */
-    private Integer groupId;
-
     /** comments:姓名 */
     private String name;
 
@@ -129,6 +126,7 @@ public final class PersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.id</li>
+     * <li> imported key: fl_junction_person_group.person_id</li>
      * <li> imported key: fl_feature.person_id</li>
      * <li> imported key: fl_log.person_id</li>
      * <li>comments: 用户id</li>
@@ -197,74 +195,6 @@ public final class PersonBean
         return 0L !=  (initialized & FL_PERSON_ID_ID_MASK);
     }
     /**
-     * Getter method for {@link #groupId}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_person.group_id</li>
-     * <li>comments: 用户所属组id</li>
-     * <li>column size: 10</li>
-     * <li>JDBC type returned by the driver: Types.INTEGER</li>
-     * </ul>
-     *
-     * @return the value of groupId
-     */
-    @ThriftField(value=5)
-    public Integer getGroupId(){
-        return groupId;
-    }
-    /**
-     * Setter method for {@link #groupId}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value  to be assigned to groupId
-     */
-    @ThriftField()
-    public void setGroupId(Integer newVal)
-    {
-        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && checkGroupIdInitialized())) {
-            return;
-        }
-        groupId = newVal;
-
-        modified |= FL_PERSON_ID_GROUP_ID_MASK;
-        initialized |= FL_PERSON_ID_GROUP_ID_MASK;
-    }
-
-    /**
-     * Setter method for {@link #groupId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to groupId
-     */
-    public void setGroupId(int newVal)
-    {
-        setGroupId(new Integer(newVal));
-    }
-    /**
-     * Determines if the groupId has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkGroupIdModified()
-    {
-        return 0L !=  (modified & FL_PERSON_ID_GROUP_ID_MASK);
-    }
-
-    /**
-     * Determines if the groupId has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkGroupIdInitialized()
-    {
-        return 0L !=  (initialized & FL_PERSON_ID_GROUP_ID_MASK);
-    }
-    /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -277,7 +207,7 @@ public final class PersonBean
      *
      * @return the value of name
      */
-    @ThriftField(value=6)
+    @ThriftField(value=5)
     public String getName(){
         return name;
     }
@@ -335,7 +265,7 @@ public final class PersonBean
      *
      * @return the value of sex
      */
-    @ThriftField(value=7)
+    @ThriftField(value=6)
     public Integer getSex(){
         return sex;
     }
@@ -410,7 +340,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support 
      * @see #getBirthdate()
      */
-    @ThriftField(name = "birthdate",value = 8)
+    @ThriftField(name = "birthdate",value = 7)
     public Long readBirthdate(){
         return null == birthdate ? null:birthdate.getTime();
     }
@@ -438,7 +368,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support
      * @see #setBirthdate(java.util.Date)  
      */
-    @ThriftField(name = "birthdate",value = 8)
+    @ThriftField(name = "birthdate",value = 7)
     public void writeBirthdate(Long newVal){
         setBirthdate(null == newVal?null:new java.util.Date(newVal));
     }
@@ -485,7 +415,7 @@ public final class PersonBean
      *
      * @return the value of papersType
      */
-    @ThriftField(value=9)
+    @ThriftField(value=8)
     public Integer getPapersType(){
         return papersType;
     }
@@ -553,7 +483,7 @@ public final class PersonBean
      *
      * @return the value of papersNum
      */
-    @ThriftField(value=10)
+    @ThriftField(value=9)
     public String getPapersNum(){
         return papersNum;
     }
@@ -612,7 +542,7 @@ public final class PersonBean
      *
      * @return the value of imageMd5
      */
-    @ThriftField(value=11)
+    @ThriftField(value=10)
     public String getImageMd5(){
         return imageMd5;
     }
@@ -678,7 +608,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support 
      * @see #getExpiryDate()
      */
-    @ThriftField(name = "expiryDate",value = 12)
+    @ThriftField(name = "expiryDate",value = 11)
     public Long readExpiryDate(){
         return null == expiryDate ? null:expiryDate.getTime();
     }
@@ -706,7 +636,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support
      * @see #setExpiryDate(java.util.Date)  
      */
-    @ThriftField(name = "expiryDate",value = 12)
+    @ThriftField(name = "expiryDate",value = 11)
     public void writeExpiryDate(Long newVal){
         setExpiryDate(null == newVal?null:new java.util.Date(newVal));
     }
@@ -761,7 +691,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support 
      * @see #getCreateTime()
      */
-    @ThriftField(name = "createTime",value = 13)
+    @ThriftField(name = "createTime",value = 12)
     public Long readCreateTime(){
         return null == createTime ? null:createTime.getTime();
     }
@@ -789,7 +719,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support
      * @see #setCreateTime(java.util.Date)  
      */
-    @ThriftField(name = "createTime",value = 13)
+    @ThriftField(name = "createTime",value = 12)
     public void writeCreateTime(Long newVal){
         setCreateTime(null == newVal?null:new java.util.Date(newVal));
     }
@@ -844,7 +774,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support 
      * @see #getUpdateTime()
      */
-    @ThriftField(name = "updateTime",value = 14)
+    @ThriftField(name = "updateTime",value = 13)
     public Long readUpdateTime(){
         return null == updateTime ? null:updateTime.getTime();
     }
@@ -872,7 +802,7 @@ public final class PersonBean
      * use Long to represent date type for thrift:swift support
      * @see #setUpdateTime(java.util.Date)  
      */
-    @ThriftField(name = "updateTime",value = 14)
+    @ThriftField(name = "updateTime",value = 13)
     public void writeUpdateTime(Long newVal){
         setUpdateTime(null == newVal?null:new java.util.Date(newVal));
     }
@@ -916,7 +846,7 @@ public final class PersonBean
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @ThriftField(value=15)
+    @ThriftField(value=14)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
@@ -948,8 +878,6 @@ public final class PersonBean
         switch ( columnID ){
         case FL_PERSON_ID_ID:
             return checkIdModified();
-        case FL_PERSON_ID_GROUP_ID:
-            return checkGroupIdModified();
         case FL_PERSON_ID_NAME:
             return checkNameModified();
         case FL_PERSON_ID_SEX:
@@ -983,8 +911,6 @@ public final class PersonBean
         switch(columnID) {
         case FL_PERSON_ID_ID:
             return checkIdInitialized();
-        case FL_PERSON_ID_GROUP_ID:
-            return checkGroupIdInitialized();
         case FL_PERSON_ID_NAME:
             return checkNameInitialized();
         case FL_PERSON_ID_SEX:
@@ -1048,8 +974,7 @@ public final class PersonBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_PERSON_ID_GROUP_ID_MASK |
-            FL_PERSON_ID_NAME_MASK |
+        modified &= (~(FL_PERSON_ID_NAME_MASK |
             FL_PERSON_ID_SEX_MASK |
             FL_PERSON_ID_BIRTHDATE_MASK |
             FL_PERSON_ID_PAPERS_TYPE_MASK |
@@ -1076,7 +1001,6 @@ public final class PersonBean
         PersonBean obj = (PersonBean) object;
         return new EqualsBuilder()
             .append(getId(), obj.getId())
-            .append(getGroupId(), obj.getGroupId())
             .append(getName(), obj.getName())
             .append(getSex(), obj.getSex())
             .append(getBirthdate(), obj.getBirthdate())
@@ -1101,7 +1025,6 @@ public final class PersonBean
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tid=").append(getId()).append("\n")
-            .append("\tgroup_id=").append(getGroupId()).append("\n")
             .append("\tname=").append(getName()).append("\n")
             .append("\tsex=").append(getSex()).append("\n")
             .append("\tbirthdate=").append(getBirthdate()).append("\n")
@@ -1119,7 +1042,6 @@ public final class PersonBean
     public int compareTo(PersonBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
-            .append(getGroupId(), object.getGroupId())
             .append(getName(), object.getName())
             .append(getSex(), object.getSex())
             .append(getBirthdate(), object.getBirthdate())
@@ -1147,7 +1069,6 @@ public final class PersonBean
     public PersonBean clean()
     {
         setId(null);
-        setGroupId(null);
         setName(null);
         setSex(null);
         setBirthdate(null);
@@ -1172,7 +1093,7 @@ public final class PersonBean
     public void copy(PersonBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 11; ++i) {
+            for (int i = 0; i < 10; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -1212,8 +1133,6 @@ public final class PersonBean
         switch( columnID ){
         case FL_PERSON_ID_ID: 
             return (T)getId();        
-        case FL_PERSON_ID_GROUP_ID: 
-            return (T)getGroupId();        
         case FL_PERSON_ID_NAME: 
             return (T)getName();        
         case FL_PERSON_ID_SEX: 
@@ -1244,8 +1163,6 @@ public final class PersonBean
         switch( columnID ) {
         case FL_PERSON_ID_ID:        
             setId((Integer)value);
-        case FL_PERSON_ID_GROUP_ID:        
-            setGroupId((Integer)value);
         case FL_PERSON_ID_NAME:        
             setName((String)value);
         case FL_PERSON_ID_SEX:        

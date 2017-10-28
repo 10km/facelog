@@ -183,6 +183,74 @@ public interface IDeviceManager extends TableManager<DeviceBean>
     public <C extends java.util.Collection<ImageBean>> C setImageBeansByDeviceId(DeviceBean bean , C importedBeans);
 
     /**
+     * Retrieves the {@link JunctionDeviceGroupBean} object from the fl_junction_device_group.device_id field.<BR>
+     * FK_NAME : fl_junction_device_group_ibfk_1 
+     * @param bean the {@link DeviceBean}
+     * @return the associated {@link JunctionDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.1 GET IMPORTED
+    public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByDeviceId(DeviceBean bean);
+    
+    /**
+     * Retrieves the {@link JunctionDeviceGroupBean} object from the fl_junction_device_group.device_id field.<BR>
+     * FK_NAME : fl_junction_device_group_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link JunctionDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByDeviceId(Integer deviceId);
+    
+    /**
+     * Retrieves the {@link JunctionDeviceGroupBean} object from fl_junction_device_group.device_id field.<BR>
+     * FK_NAME:fl_junction_device_group_ibfk_1
+     * @param bean the {@link DeviceBean}
+     * @return the associated {@link JunctionDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.2 GET IMPORTED
+    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByDeviceIdAsList(DeviceBean bean);
+
+    /**
+     * Retrieves the {@link JunctionDeviceGroupBean} object from fl_junction_device_group.device_id field.<BR>
+     * FK_NAME:fl_junction_device_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link JunctionDeviceGroupBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByDeviceIdAsList(Integer deviceId);
+    /**
+     * delete the associated {@link JunctionDeviceGroupBean} objects from fl_junction_device_group.device_id field.<BR>
+     * FK_NAME:fl_junction_device_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteJunctionDeviceGroupBeansByDeviceId(Integer deviceId);
+    
+    /**
+     * set  the {@link JunctionDeviceGroupBean} object array associate to DeviceBean by the fl_junction_device_group.device_id field.<BR>
+     * FK_NAME : fl_junction_device_group_ibfk_1 
+     * @param bean the referenced {@link DeviceBean}
+     * @param importedBeans imported beans from fl_junction_device_group
+     * @return importedBeans always
+     * @see {@link JunctionDeviceGroupManager#setReferencedByDeviceId(JunctionDeviceGroupBean, DeviceBean)
+     */
+    //3.3 SET IMPORTED
+    public JunctionDeviceGroupBean[] setJunctionDeviceGroupBeansByDeviceId(DeviceBean bean , JunctionDeviceGroupBean[] importedBeans);
+
+    /**
+     * set  the {@link JunctionDeviceGroupBean} object java.util.Collection associate to DeviceBean by the fl_junction_device_group.device_id field.<BR>
+     * FK_NAME:fl_junction_device_group_ibfk_1
+     * @param bean the referenced {@link DeviceBean} 
+     * @param importedBeans imported beans from fl_junction_device_group 
+     * @return importedBeans always
+     * @see {@link JunctionDeviceGroupManager#setReferencedByDeviceId(JunctionDeviceGroupBean, DeviceBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<JunctionDeviceGroupBean>> C setJunctionDeviceGroupBeansByDeviceId(DeviceBean bean , C importedBeans);
+
+    /**
      * Retrieves the {@link LogBean} object from the fl_log.device_id field.<BR>
      * FK_NAME : fl_log_ibfk_2 
      * @param bean the {@link DeviceBean}
@@ -255,41 +323,43 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      *
      * @param bean the {@link DeviceBean} bean to be saved
          * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
+     * @param impJunctiondevicegroupByDeviceId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceBean} 
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
      */
     //3.5 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         
-        , ImageBean[] impImageByDeviceId , LogBean[] impLogByDeviceId );
+        , ImageBean[] impImageByDeviceId , JunctionDeviceGroupBean[] impJunctiondevicegroupByDeviceId , LogBean[] impLogByDeviceId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceBean , ImageBean[] , LogBean[] )}
+     * @see {@link #save(DeviceBean , ImageBean[] , JunctionDeviceGroupBean[] , LogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final ImageBean[] impImageByDeviceId ,final LogBean[] impLogByDeviceId );
+        ,final ImageBean[] impImageByDeviceId ,final JunctionDeviceGroupBean[] impJunctiondevicegroupByDeviceId ,final LogBean[] impLogByDeviceId );
     /**
      * Save the DeviceBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceBean} bean to be saved
          * @param impImageByDeviceId the {@link ImageBean} bean refer to {@link DeviceBean} 
+     * @param impJunctiondevicegroupByDeviceId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceBean} 
      * @param impLogByDeviceId the {@link LogBean} bean refer to {@link DeviceBean} 
      * @return the inserted or updated {@link DeviceBean} bean
      */
     //3.7 SYNC SAVE 
     public DeviceBean save(DeviceBean bean
         
-        , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<LogBean> impLogByDeviceId );
+        , java.util.Collection<ImageBean> impImageByDeviceId , java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByDeviceId , java.util.Collection<LogBean> impLogByDeviceId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(DeviceBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public DeviceBean saveAsTransaction(final DeviceBean bean
         
-        ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId );
+        ,final  java.util.Collection<ImageBean> impImageByDeviceId ,final  java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByDeviceId ,final  java.util.Collection<LogBean> impLogByDeviceId );
       //_____________________________________________________________________
     //
     // USING INDICES

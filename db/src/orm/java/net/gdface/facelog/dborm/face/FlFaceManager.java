@@ -1600,6 +1600,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }        
     }
 
+// rTables: 
 
     //_____________________________________________________________________
     //
@@ -2506,23 +2507,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
     }
 
-    /** foreign key listener for DEELTE RULE : CASCADE */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean>(){
-                @SuppressWarnings("unchecked")
-                @Override
-                protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
-                    return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
-                            : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
-                }
-                @Override
-                protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
-                    for(FlFaceBean bean:effectBeans){
-                        Event.DELETE.fire(listenerContainer, bean);
-                    }
-                }};
-
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlFaceBean> foreignKeyListenerByFeatureMd5 = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlFaceBean>(){
@@ -2541,15 +2525,32 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     }
                 }};
 
+    /** foreign key listener for DEELTE RULE : CASCADE */
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean>(){
+                @SuppressWarnings("unchecked")
+                @Override
+                protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
+                            : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
+                    for(FlFaceBean bean:effectBeans){
+                        Event.DELETE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : CASCADE {@code fl_face(image_md5)-> fl_image(md5)} <br>
      * DELETE RULE : SET_NULL {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
+     * DELETE RULE : CASCADE {@code fl_face(image_md5)-> fl_image(md5)} <br>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
+        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         
     }
     /**
@@ -2558,8 +2559,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
         FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByFeatureMd5);
+        FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
         
     }
     //_____________________________________________________________________

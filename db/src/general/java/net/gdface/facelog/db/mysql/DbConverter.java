@@ -12,11 +12,15 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.JunctionDeviceGroupBean;
+import net.gdface.facelog.db.JunctionPersonGroupBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.LogLightBean;
 
@@ -25,7 +29,7 @@ import net.gdface.facelog.db.LogLightBean;
  * @author guyadong
  *
  */
-public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
+public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> {
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> converterDeviceBean=new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
         @Override
@@ -70,6 +74,28 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_device.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkUpdateTimeInitialized() )
 //                 right.setUpdateTime(left.getUpdateTime());
+            right.setNew(left.isNew());
+            right.setModified(left.getModified());
+        }};
+        
+    public static final IBeanConverter<DeviceGroupBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean> converterDeviceGroupBean=new IBeanConverter.AbstractHandle<DeviceGroupBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean>(){
+
+        @Override
+        protected void _fromRight(DeviceGroupBean left, net.gdface.facelog.dborm.device.FlDeviceGroupBean right) {
+            if(right.checkIdInitialized())
+                left.setId(right.getId());
+            if(right.checkNameInitialized())
+                left.setName(right.getName());
+            left.setNew(right.isNew());
+            left.setModified(right.getModified());
+        }
+
+        @Override
+        protected void _toRight(DeviceGroupBean left, net.gdface.facelog.dborm.device.FlDeviceGroupBean right) {
+            if(left.checkIdInitialized() )
+                right.setId(left.getId());
+            if(left.checkNameInitialized() )
+                right.setName(left.getName());
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
@@ -246,6 +272,60 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
             right.setModified(left.getModified());
         }};
         
+    public static final IBeanConverter<JunctionDeviceGroupBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean> converterJunctionDeviceGroupBean=new IBeanConverter.AbstractHandle<JunctionDeviceGroupBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean>(){
+
+        @Override
+        protected void _fromRight(JunctionDeviceGroupBean left, net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean right) {
+            if(right.checkDeviceIdInitialized())
+                left.setDeviceId(right.getDeviceId());
+            if(right.checkGroupIdInitialized())
+                left.setGroupId(right.getGroupId());
+            if(right.checkCreateTimeInitialized())
+                left.setCreateTime(right.getCreateTime());
+            left.setNew(right.isNew());
+            left.setModified(right.getModified());
+        }
+
+        @Override
+        protected void _toRight(JunctionDeviceGroupBean left, net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean right) {
+            if(left.checkDeviceIdInitialized() )
+                right.setDeviceId(left.getDeviceId());
+            if(left.checkGroupIdInitialized() )
+                right.setGroupId(left.getGroupId());
+// IGNORE field fl_junction_device_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkCreateTimeInitialized() )
+//                 right.setCreateTime(left.getCreateTime());
+            right.setNew(left.isNew());
+            right.setModified(left.getModified());
+        }};
+        
+    public static final IBeanConverter<JunctionPersonGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean> converterJunctionPersonGroupBean=new IBeanConverter.AbstractHandle<JunctionPersonGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean>(){
+
+        @Override
+        protected void _fromRight(JunctionPersonGroupBean left, net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean right) {
+            if(right.checkPersonIdInitialized())
+                left.setPersonId(right.getPersonId());
+            if(right.checkGroupIdInitialized())
+                left.setGroupId(right.getGroupId());
+            if(right.checkCreateTimeInitialized())
+                left.setCreateTime(right.getCreateTime());
+            left.setNew(right.isNew());
+            left.setModified(right.getModified());
+        }
+
+        @Override
+        protected void _toRight(JunctionPersonGroupBean left, net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean right) {
+            if(left.checkPersonIdInitialized() )
+                right.setPersonId(left.getPersonId());
+            if(left.checkGroupIdInitialized() )
+                right.setGroupId(left.getGroupId());
+// IGNORE field fl_junction_person_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+//             if(left.checkCreateTimeInitialized() )
+//                 right.setCreateTime(left.getCreateTime());
+            right.setNew(left.isNew());
+            right.setModified(left.getModified());
+        }};
+        
     public static final IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> converterLogBean=new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.dborm.log.FlLogBean>(){
 
         @Override
@@ -299,8 +379,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         protected void _fromRight(PersonBean left, net.gdface.facelog.dborm.person.FlPersonBean right) {
             if(right.checkIdInitialized())
                 left.setId(right.getId());
-            if(right.checkGroupIdInitialized())
-                left.setGroupId(right.getGroupId());
             if(right.checkNameInitialized())
                 left.setName(right.getName());
             if(right.checkSexInitialized())
@@ -327,8 +405,6 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         protected void _toRight(PersonBean left, net.gdface.facelog.dborm.person.FlPersonBean right) {
             if(left.checkIdInitialized() )
                 right.setId(left.getId());
-            if(left.checkGroupIdInitialized() )
-                right.setGroupId(left.getGroupId());
             if(left.checkNameInitialized() )
                 right.setName(left.getName());
             if(left.checkSexInitialized() )
@@ -349,6 +425,28 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
 // IGNORE field fl_person.update_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
 //             if(left.checkUpdateTimeInitialized() )
 //                 right.setUpdateTime(left.getUpdateTime());
+            right.setNew(left.isNew());
+            right.setModified(left.getModified());
+        }};
+        
+    public static final IBeanConverter<PersonGroupBean,net.gdface.facelog.dborm.person.FlPersonGroupBean> converterPersonGroupBean=new IBeanConverter.AbstractHandle<PersonGroupBean,net.gdface.facelog.dborm.person.FlPersonGroupBean>(){
+
+        @Override
+        protected void _fromRight(PersonGroupBean left, net.gdface.facelog.dborm.person.FlPersonGroupBean right) {
+            if(right.checkIdInitialized())
+                left.setId(right.getId());
+            if(right.checkNameInitialized())
+                left.setName(right.getName());
+            left.setNew(right.isNew());
+            left.setModified(right.getModified());
+        }
+
+        @Override
+        protected void _toRight(PersonGroupBean left, net.gdface.facelog.dborm.person.FlPersonGroupBean right) {
+            if(left.checkIdInitialized() )
+                right.setId(left.getId());
+            if(left.checkNameInitialized() )
+                right.setName(left.getName());
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
@@ -426,11 +524,15 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         private static final long serialVersionUID = 1L;
         {
             add(new Object[]{DeviceBean.class, net.gdface.facelog.dborm.device.FlDeviceBean.class, converterDeviceBean});
+            add(new Object[]{DeviceGroupBean.class, net.gdface.facelog.dborm.device.FlDeviceGroupBean.class, converterDeviceGroupBean});
             add(new Object[]{FaceBean.class, net.gdface.facelog.dborm.face.FlFaceBean.class, converterFaceBean});
             add(new Object[]{FeatureBean.class, net.gdface.facelog.dborm.face.FlFeatureBean.class, converterFeatureBean});
             add(new Object[]{ImageBean.class, net.gdface.facelog.dborm.image.FlImageBean.class, converterImageBean});
+            add(new Object[]{JunctionDeviceGroupBean.class, net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean.class, converterJunctionDeviceGroupBean});
+            add(new Object[]{JunctionPersonGroupBean.class, net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean.class, converterJunctionPersonGroupBean});
             add(new Object[]{LogBean.class, net.gdface.facelog.dborm.log.FlLogBean.class, converterLogBean});
             add(new Object[]{PersonBean.class, net.gdface.facelog.dborm.person.FlPersonBean.class, converterPersonBean});
+            add(new Object[]{PersonGroupBean.class, net.gdface.facelog.dborm.person.FlPersonGroupBean.class, converterPersonGroupBean});
             add(new Object[]{StoreBean.class, net.gdface.facelog.dborm.image.FlStoreBean.class, converterStoreBean});
             add(new Object[]{LogLightBean.class, net.gdface.facelog.dborm.log.FlLogLightBean.class, converterLogLightBean});
         }};
@@ -493,6 +595,10 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         return converterDeviceBean;
     }
     @Override
+    public IBeanConverter<DeviceGroupBean, net.gdface.facelog.dborm.device.FlDeviceGroupBean> getDeviceGroupBeanConverter() {
+        return converterDeviceGroupBean;
+    }
+    @Override
     public IBeanConverter<FaceBean, net.gdface.facelog.dborm.face.FlFaceBean> getFaceBeanConverter() {
         return converterFaceBean;
     }
@@ -505,12 +611,24 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
         return converterImageBean;
     }
     @Override
+    public IBeanConverter<JunctionDeviceGroupBean, net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean> getJunctionDeviceGroupBeanConverter() {
+        return converterJunctionDeviceGroupBean;
+    }
+    @Override
+    public IBeanConverter<JunctionPersonGroupBean, net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean> getJunctionPersonGroupBeanConverter() {
+        return converterJunctionPersonGroupBean;
+    }
+    @Override
     public IBeanConverter<LogBean, net.gdface.facelog.dborm.log.FlLogBean> getLogBeanConverter() {
         return converterLogBean;
     }
     @Override
     public IBeanConverter<PersonBean, net.gdface.facelog.dborm.person.FlPersonBean> getPersonBeanConverter() {
         return converterPersonBean;
+    }
+    @Override
+    public IBeanConverter<PersonGroupBean, net.gdface.facelog.dborm.person.FlPersonGroupBean> getPersonGroupBeanConverter() {
+        return converterPersonGroupBean;
     }
     @Override
     public IBeanConverter<StoreBean, net.gdface.facelog.dborm.image.FlStoreBean> getStoreBeanConverter() {
