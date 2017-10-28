@@ -38,9 +38,9 @@ public  class DeviceBean
     /** comments:6字节MAC地址(HEX) */
     private String mac;
 
-    private java.util.Date createTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
-    private java.util.Date updateTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date updateTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -116,7 +116,7 @@ public  class DeviceBean
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of id
@@ -182,7 +182,7 @@ public  class DeviceBean
      * <li>full name: fl_device.name</li>
      * <li>comments: 设备名称</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of name
@@ -238,7 +238,7 @@ public  class DeviceBean
      * <li>full name: fl_device.group_id</li>
      * <li>comments: 设备所属组id</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of groupId
@@ -304,7 +304,7 @@ public  class DeviceBean
      * <li>full name: fl_device.version</li>
      * <li>comments: 设备版本号</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of version
@@ -360,7 +360,7 @@ public  class DeviceBean
      * <li>full name: fl_device.serial_no</li>
      * <li>comments: 设备序列号</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of serialNo
@@ -416,7 +416,7 @@ public  class DeviceBean
      * <li>full name: fl_device.mac</li>
      * <li>comments: 6字节MAC地址(HEX)</li>
      * <li>column size: 12</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of mac
@@ -470,10 +470,10 @@ public  class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.create_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of createTime
@@ -537,10 +537,10 @@ public  class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.update_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of updateTime

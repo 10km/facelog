@@ -25,10 +25,10 @@ public final class LogLightBean
     private static final long serialVersionUID = 4419196843551738129L;
     
     /** comments:日志id */
-    private Integer id= new Integer(0); // DEFAULT '0';
+    private Integer id = new Integer(0)/* DEFAULT:'0'*/;
 
     /** comments:用户id */
-    private Integer personId= new Integer(0); // DEFAULT '0';
+    private Integer personId = new Integer(0)/* DEFAULT:'0'*/;
 
     /** comments:姓名 */
     private String name;
@@ -40,7 +40,7 @@ public final class LogLightBean
     private String papersNum;
 
     /** comments:验证时间(可能由前端设备提供时间) */
-    private java.util.Date verifyTime; // DEFAULT '0000-00-00 00:00:00';
+    private java.util.Date verifyTime/* DEFAULT:'0000-00-00 00:00:00'*/;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -116,10 +116,10 @@ public final class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.id</li>
      * <li>comments: 日志id</li>
-     * <li>default value: = new Integer(0); // DEFAULT '0'</li>
+     * <li>default value: '0'</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of id
@@ -186,10 +186,10 @@ public final class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.person_id</li>
      * <li>comments: 用户id</li>
-     * <li>default value: = new Integer(0); // DEFAULT '0'</li>
+     * <li>default value: '0'</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of personId
@@ -258,7 +258,7 @@ public final class LogLightBean
      * <li>comments: 姓名</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of name
@@ -316,7 +316,7 @@ public final class LogLightBean
      * <li>full name: fl_log_light.papers_type</li>
      * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
      * <li>column size: 3</li>
-     * <li>jdbc type returned by the driver: Types.TINYINT</li>
+     * <li>JDBC type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of papersType
@@ -384,7 +384,7 @@ public final class LogLightBean
      * <li>full name: fl_log_light.papers_num</li>
      * <li>comments: 证件号码</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of papersNum
@@ -441,10 +441,10 @@ public final class LogLightBean
      * <ul>
      * <li>full name: fl_log_light.verify_time</li>
      * <li>comments: 验证时间(可能由前端设备提供时间)</li>
-     * <li>default value: ; // DEFAULT '0000-00-00 00:00:00'</li>
+     * <li>default value: '0000-00-00 00:00:00'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of verifyTime

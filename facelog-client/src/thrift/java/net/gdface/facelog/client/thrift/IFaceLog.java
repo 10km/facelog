@@ -130,7 +130,7 @@ public interface IFaceLog
 
         @ThriftMethod(value = "getDeviceList")
         ListenableFuture<List<DeviceBean>> getDeviceList(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final List<Integer> deviceId
+            @ThriftField(value=1, name="idList", requiredness=Requiredness.NONE) final List<Integer> idList
         );
 
         @ThriftMethod(value = "getFeature")
@@ -455,7 +455,7 @@ public interface IFaceLog
 
     @ThriftMethod(value = "getDeviceList")
     List<DeviceBean> getDeviceList(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final List<Integer> deviceId
+        @ThriftField(value=1, name="idList", requiredness=Requiredness.NONE) final List<Integer> idList
     );
 
 

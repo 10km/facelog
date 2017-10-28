@@ -66,7 +66,7 @@ public final class FaceBean
     /** comments:外键,人脸特征数据MD5 id */
     private String featureMd5;
 
-    private java.util.Date createTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -147,7 +147,7 @@ public final class FaceBean
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of id
@@ -217,7 +217,7 @@ public final class FaceBean
      * <li>comments: 外键,所属图像id</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of imageMd5
@@ -275,7 +275,7 @@ public final class FaceBean
      * <li>full name: fl_face.face_left</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of faceLeft
@@ -343,7 +343,7 @@ public final class FaceBean
      * <li>full name: fl_face.face_top</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of faceTop
@@ -411,7 +411,7 @@ public final class FaceBean
      * <li>full name: fl_face.face_width</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of faceWidth
@@ -479,7 +479,7 @@ public final class FaceBean
      * <li>full name: fl_face.face_height</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of faceHeight
@@ -546,7 +546,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.eye_leftx</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of eyeLeftx
@@ -613,7 +613,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.eye_lefty</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of eyeLefty
@@ -680,7 +680,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.eye_rightx</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of eyeRightx
@@ -747,7 +747,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.eye_righty</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of eyeRighty
@@ -814,7 +814,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.mouth_x</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of mouthX
@@ -881,7 +881,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.mouth_y</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of mouthY
@@ -948,7 +948,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.nose_x</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of noseX
@@ -1015,7 +1015,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.nose_y</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of noseY
@@ -1082,7 +1082,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.angle_yaw</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of angleYaw
@@ -1149,7 +1149,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.angle_pitch</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of anglePitch
@@ -1216,7 +1216,7 @@ public final class FaceBean
      * <ul>
      * <li>full name: fl_face.angle_roll</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of angleRoll
@@ -1284,7 +1284,7 @@ public final class FaceBean
      * <li>full name: fl_face.ext_info</li>
      * <li>comments: 扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析</li>
      * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
      *
      * @return the value of extInfo
@@ -1343,7 +1343,7 @@ public final class FaceBean
      * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of featureMd5
@@ -1399,10 +1399,10 @@ public final class FaceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_face.create_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of createTime

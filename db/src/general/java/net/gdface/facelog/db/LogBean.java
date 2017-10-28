@@ -43,9 +43,9 @@ public final class LogBean
     private Double similarty;
 
     /** comments:验证时间(可能由前端设备提供时间) */
-    private java.util.Date verifyTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date verifyTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
-    private java.util.Date createTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -125,7 +125,7 @@ public final class LogBean
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of id
@@ -195,7 +195,7 @@ public final class LogBean
      * <li>comments: 外键,用户id</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of personId
@@ -264,7 +264,7 @@ public final class LogBean
      * <li> foreign key: fl_device.id</li>
      * <li>comments: 外键,图像来源设备id</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of deviceId
@@ -333,7 +333,7 @@ public final class LogBean
      * <li> foreign key: fl_feature.md5</li>
      * <li>comments: 外键,用于验证身份的人脸特征数据MD5 id</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of verifyFeature
@@ -392,7 +392,7 @@ public final class LogBean
      * <li> foreign key: fl_face.id</li>
      * <li>comments: 外键,数据库中相似度最高的人脸 id</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of compareFace
@@ -460,7 +460,7 @@ public final class LogBean
      * <li>full name: fl_log.similarty</li>
      * <li>comments: 验证相似度</li>
      * <li>column size: 22</li>
-     * <li>jdbc type returned by the driver: Types.DOUBLE</li>
+     * <li>JDBC type returned by the driver: Types.DOUBLE</li>
      * </ul>
      *
      * @return the value of similarty
@@ -527,10 +527,10 @@ public final class LogBean
      * <ul>
      * <li>full name: fl_log.verify_time</li>
      * <li>comments: 验证时间(可能由前端设备提供时间)</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of verifyTime
@@ -610,10 +610,10 @@ public final class LogBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_log.create_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of createTime

@@ -45,11 +45,11 @@ public  class PersonBean
     private String imageMd5;
 
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
-    private java.util.Date expiryDate= java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0)); // DEFAULT '2050-12-31';
+    private java.util.Date expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0))/* DEFAULT:'2050-12-31'*/;
 
-    private java.util.Date createTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
-    private java.util.Date updateTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date updateTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -125,7 +125,7 @@ public  class PersonBean
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of id
@@ -191,7 +191,7 @@ public  class PersonBean
      * <li>full name: fl_person.group_id</li>
      * <li>comments: 用户所属组id</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of groupId
@@ -258,7 +258,7 @@ public  class PersonBean
      * <li>comments: 姓名</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of name
@@ -314,7 +314,7 @@ public  class PersonBean
      * <li>full name: fl_person.sex</li>
      * <li>comments: 性别,0:女,1:男</li>
      * <li>column size: 3</li>
-     * <li>jdbc type returned by the driver: Types.TINYINT</li>
+     * <li>JDBC type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of sex
@@ -380,7 +380,7 @@ public  class PersonBean
      * <li>full name: fl_person.birthdate</li>
      * <li>comments: 出生日期</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.DATE</li>
+     * <li>JDBC type returned by the driver: Types.DATE</li>
      * </ul>
      *
      * @return the value of birthdate
@@ -446,7 +446,7 @@ public  class PersonBean
      * <li>full name: fl_person.papers_type</li>
      * <li>comments: 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他</li>
      * <li>column size: 3</li>
-     * <li>jdbc type returned by the driver: Types.TINYINT</li>
+     * <li>JDBC type returned by the driver: Types.TINYINT</li>
      * </ul>
      *
      * @return the value of papersType
@@ -512,7 +512,7 @@ public  class PersonBean
      * <li>full name: fl_person.papers_num</li>
      * <li>comments: 证件号码</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of papersNum
@@ -569,7 +569,7 @@ public  class PersonBean
      * <li> foreign key: fl_image.md5</li>
      * <li>comments: 用户默认照片(证件照,标准照)的md5校验码,外键</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of imageMd5
@@ -624,9 +624,9 @@ public  class PersonBean
      * <ul>
      * <li>full name: fl_person.expiry_date</li>
      * <li>comments: 验证有效期限(超过期限不能通过验证),为NULL永久有效</li>
-     * <li>default value: = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0)); // DEFAULT '2050-12-31'</li>
+     * <li>default value: '2050-12-31'</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.DATE</li>
+     * <li>JDBC type returned by the driver: Types.DATE</li>
      * </ul>
      *
      * @return the value of expiryDate
@@ -690,10 +690,10 @@ public  class PersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.create_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of createTime
@@ -757,10 +757,10 @@ public  class PersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.update_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of updateTime

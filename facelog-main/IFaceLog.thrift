@@ -143,7 +143,7 @@ service IFaceLog {
   bool existsImage(1:  string md5);
   bool existsPerson(1:  i32 persionId);
   DeviceBean getDevice(1:  i32 deviceId);
-  list<DeviceBean> getDeviceList(1:  list<i32> deviceId);
+  list<DeviceBean> getDeviceList(1:  list<i32> idList);
   FeatureBean getFeature(1:  string md5);
   list<string> getFeatureBeansByPersonId(1:  i32 personId);
   binary getFeatureBytes(1:  string md5);

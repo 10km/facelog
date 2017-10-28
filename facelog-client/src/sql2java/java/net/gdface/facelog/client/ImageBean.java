@@ -33,10 +33,10 @@ public  class ImageBean
     private Integer height;
 
     /** comments:通道数 */
-    private Integer depth= new Integer(0); // DEFAULT '0';
+    private Integer depth = new Integer(0)/* DEFAULT:'0'*/;
 
     /** comments:图像中的人脸数目 */
-    private Integer faceNum= new Integer(0); // DEFAULT '0';
+    private Integer faceNum = new Integer(0)/* DEFAULT:'0'*/;
 
     /** comments:缩略图md5,图像数据存储在 fl_imae_store(md5) */
     private String thumbMd5;
@@ -117,7 +117,7 @@ public  class ImageBean
      * <li>comments: 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of md5
@@ -173,7 +173,7 @@ public  class ImageBean
      * <li>full name: fl_image.format</li>
      * <li>comments: 图像格式</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of format
@@ -230,7 +230,7 @@ public  class ImageBean
      * <li>comments: 图像宽度</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of width
@@ -297,7 +297,7 @@ public  class ImageBean
      * <li>comments: 图像高度</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of height
@@ -362,10 +362,10 @@ public  class ImageBean
      * <ul>
      * <li>full name: fl_image.depth</li>
      * <li>comments: 通道数</li>
-     * <li>default value: = new Integer(0); // DEFAULT '0'</li>
+     * <li>default value: '0'</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of depth
@@ -430,10 +430,10 @@ public  class ImageBean
      * <ul>
      * <li>full name: fl_image.face_num</li>
      * <li>comments: 图像中的人脸数目</li>
-     * <li>default value: = new Integer(0); // DEFAULT '0'</li>
+     * <li>default value: '0'</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of faceNum
@@ -499,7 +499,7 @@ public  class ImageBean
      * <li>full name: fl_image.thumb_md5</li>
      * <li>comments: 缩略图md5,图像数据存储在 fl_imae_store(md5)</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of thumbMd5
@@ -556,7 +556,7 @@ public  class ImageBean
      * <li> foreign key: fl_device.id</li>
      * <li>comments: 外键,图像来源设备</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of deviceId

@@ -33,7 +33,7 @@ public final class FeatureBean
     /** comments:二进制特征数据 */
     private java.nio.ByteBuffer feature;
 
-    private java.util.Date updateTime; // DEFAULT 'CURRENT_TIMESTAMP';
+    private java.util.Date updateTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
     /** columns modified flag */
     private long modified = 0L;
@@ -114,7 +114,7 @@ public final class FeatureBean
      * <li>comments: 主键,特征码md5校验码</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of md5
@@ -173,7 +173,7 @@ public final class FeatureBean
      * <li> foreign key: fl_person.id</li>
      * <li>comments: 外键,所属用户id</li>
      * <li>column size: 10</li>
-     * <li>jdbc type returned by the driver: Types.INTEGER</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of personId
@@ -242,7 +242,7 @@ public final class FeatureBean
      * <li>comments: 二进制特征数据</li>
      * <li>NOT NULL</li>
      * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
      *
      * @return the value of feature
@@ -298,10 +298,10 @@ public final class FeatureBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_feature.update_time</li>
-     * <li>default value: ; // DEFAULT 'CURRENT_TIMESTAMP'</li>
+     * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
-     * <li>jdbc type returned by the driver: Types.TIMESTAMP</li>
+     * <li>JDBC type returned by the driver: Types.TIMESTAMP</li>
      * </ul>
      *
      * @return the value of updateTime

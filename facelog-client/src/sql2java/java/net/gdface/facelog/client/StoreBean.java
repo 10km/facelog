@@ -100,7 +100,7 @@ public  class StoreBean
      * <li>comments: 主键,md5检验码</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
-     * <li>jdbc type returned by the driver: Types.CHAR</li>
+     * <li>JDBC type returned by the driver: Types.CHAR</li>
      * </ul>
      *
      * @return the value of md5
@@ -156,7 +156,7 @@ public  class StoreBean
      * <li>full name: fl_store.encoding</li>
      * <li>comments: 编码类型,GBK,UTF8...</li>
      * <li>column size: 16</li>
-     * <li>jdbc type returned by the driver: Types.VARCHAR</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
      * </ul>
      *
      * @return the value of encoding
@@ -212,7 +212,7 @@ public  class StoreBean
      * <li>full name: fl_store.data</li>
      * <li>comments: 二进制数据</li>
      * <li>column size: 65535</li>
-     * <li>jdbc type returned by the driver: Types.LONGVARBINARY</li>
+     * <li>JDBC type returned by the driver: Types.LONGVARBINARY</li>
      * </ul>
      *
      * @return the value of data
