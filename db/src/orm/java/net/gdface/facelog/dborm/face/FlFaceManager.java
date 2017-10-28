@@ -2547,7 +2547,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * DELETE RULE : SET_NULL {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
      */
     //37-2
-    @Override
     public void bindForeignKeyListenerForDeleteRule(){
         FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);

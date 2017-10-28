@@ -1000,11 +1000,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      */
     //37-1
     public void fire(int event, B bean) ;
-    /**
-     * bind foreign key listener to foreign table for DELETE RULE
-     */
-    //37-2
-    public void bindForeignKeyListenerForDeleteRule();
     //_____________________________________________________________________
     //
     // SAVE

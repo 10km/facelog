@@ -1049,11 +1049,6 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      */
     //37-1
     public void fire(int event, B bean) throws DAOException;
-    /**
-     * bind foreign key listener to foreign table for DELETE RULE
-     */
-    //37-2
-    public void bindForeignKeyListenerForDeleteRule();
     //_____________________________________________________________________
     //
     // SAVE

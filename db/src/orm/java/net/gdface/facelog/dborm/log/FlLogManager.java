@@ -2147,7 +2147,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * DELETE RULE : SET_NULL {@code fl_log(compare_face)-> fl_face(id)} <br>
      */
     //37-2
-    @Override
     public void bindForeignKeyListenerForDeleteRule(){
         FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
         FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);

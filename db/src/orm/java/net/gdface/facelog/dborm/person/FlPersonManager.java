@@ -2574,7 +2574,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * DELETE RULE : SET_NULL {@code fl_person(image_md5)-> fl_image(md5)} <br>
      */
     //37-2
-    @Override
     public void bindForeignKeyListenerForDeleteRule(){
         FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         

@@ -981,9 +981,11 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             throw new WrapDAOException(e);
         }
     }
+    /**
+     * bind foreign key listener to foreign table for DELETE RULE
+     */
     //37-2
-    @Override
-    public void bindForeignKeyListenerForDeleteRule(){
+    void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
 

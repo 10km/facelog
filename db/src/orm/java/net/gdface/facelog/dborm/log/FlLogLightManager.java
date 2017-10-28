@@ -1126,7 +1126,6 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
      * bind foreign key listener to foreign table: <br>
      */
     //37-2
-    @Override
     public void bindForeignKeyListenerForDeleteRule(){
         
     }
