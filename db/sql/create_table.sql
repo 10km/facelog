@@ -2,12 +2,16 @@
 # delete all table/view  ###
 ############################
 DROP VIEW  IF EXISTS fl_log_light;
+DROP VIEW  IF EXISTS fl_junction_person_group;
+DROP VIEW  IF EXISTS fl_junction_device_group;
 DROP TABLE IF EXISTS fl_log ;
 DROP TABLE IF EXISTS fl_face ;
 DROP TABLE IF EXISTS fl_feature ;
 DROP TABLE IF EXISTS fl_person ;
 DROP TABLE IF EXISTS fl_image ;
 DROP TABLE IF EXISTS fl_device ;
+DROP TABLE IF EXISTS fl_person_group ;
+DROP TABLE IF EXISTS fl_device_group ;
 DROP TABLE IF EXISTS fl_store ;
 
 ############################
@@ -22,6 +26,20 @@ CREATE TABLE IF NOT EXISTS fl_store (
   `encoding` varchar(16) DEFAULT NULL COMMENT '编码类型,GBK,UTF8...',
   `data`     blob COMMENT '二进制数据'
 ) COMMENT '二进制数据存储表' ;
+
+CREATE TABLE IF NOT EXISTS fl_device_group (
+  `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备组id',
+  `name`        varchar(32) NOT NULL COMMENT '设备组名'
+#  `parent`      int(11) DEFAULT NULL COMMENT '上一级设备组id',
+#  FOREIGN KEY (parent)  REFERENCES fl_device_group(id) ON DELETE SET NULL
+) COMMENT '设备组信息' ;
+
+CREATE TABLE IF NOT EXISTS fl_person_group (
+  `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户组id',
+  `name`        varchar(32) NOT NULL COMMENT '用户组名'
+#  `parent`      int(11) DEFAULT NULL COMMENT '上一级用户组id',
+#  FOREIGN KEY (parent)  REFERENCES fl_person_group(id) ON DELETE SET NULL
+) COMMENT '用户组信息' ;
 
 CREATE TABLE IF NOT EXISTS fl_device (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备id',
@@ -59,7 +77,6 @@ CREATE TABLE IF NOT EXISTS fl_image (
 */
 CREATE TABLE IF NOT EXISTS fl_person (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户id',
-  `group_id`    int(11) DEFAULT NULL COMMENT '用户所属组id',
   `name`        varchar(32) NOT NULL COMMENT '姓名',
   `sex`         tinyint(1) DEFAULT NULL COMMENT '性别,0:女,1:男',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',
@@ -70,7 +87,6 @@ CREATE TABLE IF NOT EXISTS fl_person (
   `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (image_md5)    REFERENCES fl_image(md5) ON DELETE SET NULL,
-  INDEX `group_id` (`group_id` ASC),
   INDEX `expiry_date` (`expiry_date` ASC),
   # 验证 papers_type 字段有效性
   CHECK(papers_type>=0 AND papers_type<=8),
@@ -138,6 +154,23 @@ CREATE TABLE IF NOT EXISTS fl_log (
   FOREIGN KEY (compare_face)    REFERENCES fl_face(id)     ON DELETE SET NULL
 ) COMMENT '人脸验证日志,记录所有通过验证的人员' ;
 
+CREATE TABLE IF NOT EXISTS fl_junction_device_group (
+  `device_id`   int(11) NOT NULL COMMENT '外键,设备id',
+  `group_id`    int(11) NOT NULL COMMENT '外键,设备组id',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`device_id`, `group_id`),
+  FOREIGN KEY (device_id)  REFERENCES fl_device(id) ON DELETE CASCADE,
+  FOREIGN KEY (group_id)   REFERENCES fl_device_group(id) ON DELETE CASCADE
+) COMMENT '设备组信息关联表' ;
+
+CREATE TABLE IF NOT EXISTS fl_junction_person_group (
+  `person_id`   int(11) NOT NULL COMMENT '外键,设备id',
+  `group_id`    int(11) NOT NULL COMMENT '外键,设备组id',
+  `create_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`person_id`, `group_id`),
+  FOREIGN KEY (person_id)  REFERENCES fl_person(id) ON DELETE CASCADE,
+  FOREIGN KEY (group_id)   REFERENCES fl_person_group(id) ON DELETE CASCADE
+) COMMENT '用户组信息关联表' ;
 
 # 创建简单日志 view
 CREATE VIEW fl_log_light AS SELECT log.id,
