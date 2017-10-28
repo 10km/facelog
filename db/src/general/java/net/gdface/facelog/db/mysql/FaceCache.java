@@ -27,6 +27,7 @@ public class FaceCache extends TableLoadCaching<Integer, FaceBean> {
      */
     public FaceCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
+        manager.bindForeignKeyListenerForDeleteRule();
     }
     public FaceCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);

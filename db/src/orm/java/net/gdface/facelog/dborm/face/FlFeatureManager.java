@@ -1940,6 +1940,15 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
         
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    public void unbindForeignKeyListenerForDeleteRule(){
+        FlPersonManager.getInstance().unregisterListener(foreignKeyListenerByPersonId);
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

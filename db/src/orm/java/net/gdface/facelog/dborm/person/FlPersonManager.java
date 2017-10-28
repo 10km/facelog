@@ -2578,6 +2578,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    public void unbindForeignKeyListenerForDeleteRule(){
+        FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

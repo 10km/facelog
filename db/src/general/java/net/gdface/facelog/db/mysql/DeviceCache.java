@@ -29,6 +29,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
      */
     public DeviceCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
+        manager.bindForeignKeyListenerForDeleteRule();
 
         macCacher = new TableLoadCaching<String, DeviceBean>(updateStragey, maximumSize, duration, unit){
             @Override

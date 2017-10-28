@@ -27,6 +27,7 @@ public class LogCache extends TableLoadCaching<Integer, LogBean> {
      */
     public LogCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
+        manager.bindForeignKeyListenerForDeleteRule();
     }
     public LogCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);

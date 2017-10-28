@@ -27,6 +27,7 @@ public class FeatureCache extends TableLoadCaching<String, FeatureBean> {
      */
     public FeatureCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
+        manager.bindForeignKeyListenerForDeleteRule();
     }
     public FeatureCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);

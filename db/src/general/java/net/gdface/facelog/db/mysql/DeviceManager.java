@@ -1075,7 +1075,15 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    void unbindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
+    }
     /**
      * wrap {@code TableListener<DeviceBean>} as native listener
      * @author guyadong

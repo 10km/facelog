@@ -2552,6 +2552,16 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
         
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    public void unbindForeignKeyListenerForDeleteRule(){
+        FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
+        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByFeatureMd5);
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

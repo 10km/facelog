@@ -2117,6 +2117,15 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
         
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    public void unbindForeignKeyListenerForDeleteRule(){
+        FlDeviceManager.getInstance().unregisterListener(foreignKeyListenerByDeviceId);
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

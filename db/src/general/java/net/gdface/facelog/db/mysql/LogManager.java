@@ -964,7 +964,15 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    void unbindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
+    }
     /**
      * wrap {@code TableListener<LogBean>} as native listener
      * @author guyadong

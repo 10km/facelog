@@ -988,7 +988,15 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    void unbindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
+    }
     /**
      * wrap {@code TableListener<FeatureBean>} as native listener
      * @author guyadong

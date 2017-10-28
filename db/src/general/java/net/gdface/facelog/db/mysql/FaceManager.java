@@ -984,7 +984,15 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     void bindForeignKeyListenerForDeleteRule(){
         this.nativeManager.bindForeignKeyListenerForDeleteRule();
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    void unbindForeignKeyListenerForDeleteRule(){
+        this.nativeManager.unbindForeignKeyListenerForDeleteRule();
 
+    }
     /**
      * wrap {@code TableListener<FaceBean>} as native listener
      * @author guyadong

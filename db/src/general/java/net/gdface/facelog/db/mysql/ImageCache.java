@@ -27,6 +27,7 @@ public class ImageCache extends TableLoadCaching<String, ImageBean> {
      */
     public ImageCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
+        manager.bindForeignKeyListenerForDeleteRule();
     }
     public ImageCache(long maximumSize, long duration, TimeUnit unit) {
         this(DEFAULT_STRATEGY,maximumSize,duration,unit);

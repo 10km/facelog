@@ -29,6 +29,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
      */
     public PersonCache(UpdateStrategy updateStragey,long maximumSize, long duration, TimeUnit unit) {
         super(updateStragey,maximumSize, duration, unit);
+        manager.bindForeignKeyListenerForDeleteRule();
 
         imageMd5Cacher = new TableLoadCaching<String, PersonBean>(updateStragey, maximumSize, duration, unit){
             @Override

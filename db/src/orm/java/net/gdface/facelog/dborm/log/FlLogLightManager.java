@@ -1129,6 +1129,14 @@ public class FlLogLightManager extends TableManager.Adapter<FlLogLightBean>
     public void bindForeignKeyListenerForDeleteRule(){
         
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    public void unbindForeignKeyListenerForDeleteRule(){
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS

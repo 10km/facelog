@@ -2154,6 +2154,18 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         FlFaceManager.getInstance().registerListener(foreignKeyListenerByCompareFace);
         
     }
+    /**
+     * unbind foreign key listener from all of foreign tables <br>
+     * @see #bindForeignKeyListenerForDeleteRule()
+     */
+    //37-3
+    public void unbindForeignKeyListenerForDeleteRule(){
+        FlDeviceManager.getInstance().unregisterListener(foreignKeyListenerByDeviceId);
+        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByVerifyFeature);
+        FlPersonManager.getInstance().unregisterListener(foreignKeyListenerByPersonId);
+        FlFaceManager.getInstance().unregisterListener(foreignKeyListenerByCompareFace);
+        
+    }
     //_____________________________________________________________________
     //
     // UTILS
