@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
+import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.PersonBean;
@@ -19,6 +20,7 @@ import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.JunctionPersonGroupBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -420,13 +422,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean)
     {
-        try {
-            return this.dbConverter.getFeatureBeanConverter().fromRight(nativeManager.getFeatureBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getFeatureBeansByPersonIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
@@ -442,6 +438,18 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         java.util.List<FeatureBean> list =getFeatureBeansByPersonIdAsList(personId);
         return FeatureManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IPersonManager
+    @Override 
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getFeatureBeanConverter().fromRight(nativeManager.getFeatureBeansByPersonIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
@@ -485,13 +493,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(PersonBean bean)
     {
-        try {
-            return this.dbConverter.getJunctionPersonGroupBeanConverter().fromRight(nativeManager.getJunctionPersonGroupBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getJunctionPersonGroupBeansByPersonIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
@@ -507,6 +509,18 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         java.util.List<JunctionPersonGroupBean> list =getJunctionPersonGroupBeansByPersonIdAsList(personId);
         return JunctionPersonGroupManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IPersonManager
+    @Override 
+    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(PersonBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getJunctionPersonGroupBeanConverter().fromRight(nativeManager.getJunctionPersonGroupBeansByPersonIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
@@ -550,13 +564,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean)
     {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByPersonIdAsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getLogBeansByPersonIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
@@ -572,6 +580,18 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         java.util.List<LogBean> list =getLogBeansByPersonIdAsList(personId);
         return LogManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IPersonManager
+    @Override 
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByPersonIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IPersonManager
     @Override 
@@ -1162,6 +1182,90 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         }
     }
 
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    //22 MANY TO MANY override IPersonManager
+    @Override
+    public java.util.List<PersonBean> loadViaJunctionPersonGroupAsList(PersonGroupBean bean)
+    {
+         return this.loadViaJunctionPersonGroupAsList(bean, 1, -1);
+    }
+
+    //23 MANY TO MANY override IPersonManager
+    @Override
+    public java.util.List<PersonBean> loadViaJunctionPersonGroupAsList(PersonGroupBean bean, int startRow, int numRows)
+    {
+        try{
+            return this.beanConverter.fromRight(
+                this.nativeManager.loadViaJunctionPersonGroupAsList(
+                    this.dbConverter.getPersonGroupBeanConverter().toRight(bean),
+                    startRow,
+                    numRows));
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //23.2 MANY TO MANY override IPersonManager
+    @Override
+    public void addJunction(PersonBean bean,PersonGroupBean linked){
+        if(null == bean || null == bean.getId())
+            return ;
+        if(null == linked || null ==bean.getId())
+            return ;
+        if(!JunctionPersonGroupManager.getInstance().existsPrimaryKey(bean.getId(),linked.getId())){
+            JunctionPersonGroupBean junction = new JunctionPersonGroupBean();
+            junction.setPersonId(bean.getId());
+            junction.setGroupId(linked.getId());
+            JunctionPersonGroupManager.getInstance().save(junction);
+        }
+    }
+    //23.3 MANY TO MANY override IPersonManager
+    @Override
+    public int deleteJunction(PersonBean bean,PersonGroupBean linked){
+        if(null == bean || null == bean.getId())
+            return 0;
+        if(null == linked || null ==bean.getId())
+            return 0;
+        return JunctionPersonGroupManager.getInstance().deleteByPrimaryKey(bean.getId(),linked.getId());
+    }
+    //23.4 MANY TO MANY override IPersonManager
+    @Override
+    public void addJunction(PersonBean bean,PersonGroupBean... linkedBeans){
+        if(null == linkedBeans)return;
+        for(PersonGroupBean linked:linkedBeans){
+            addJunction(bean,linked);
+        }
+    }
+    //23.5 MANY TO MANY override IPersonManager
+    @Override
+    public void addJunction(PersonBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
+        if(null == linkedBeans)return;
+        for(PersonGroupBean linked:linkedBeans){
+            addJunction(bean,linked);
+        }
+    }
+    //23.6 MANY TO MANY override IPersonManager
+    @Override
+    public int deleteJunction(PersonBean bean,PersonGroupBean... linkedBeans){
+        if(null == linkedBeans)return 0;
+        int count = 0;
+        for(PersonGroupBean linked:linkedBeans){
+            count += deleteJunction(bean,linked);
+        }
+        return count;
+    }
+    //23.7 MANY TO MANY override IPersonManager
+    @Override
+    public int deleteJunction(PersonBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
+        if(null == linkedBeans)return 0;
+        int count = 0;
+        for(PersonGroupBean linked:linkedBeans){
+            count += deleteJunction(bean,linked);
+        }
+        return count;
+    }
     //_____________________________________________________________________
     //
     // COUNT

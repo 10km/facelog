@@ -1396,7 +1396,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         }        
     }
 
-// rTables: 
 
     //_____________________________________________________________________
     //
@@ -2070,19 +2069,19 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     }
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
                 @SuppressWarnings("unchecked")
                 @Override
-                protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
+                protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
+                            : FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
                     for(FlLogBean bean:effectBeans){
-                        bean.setCompareFace(null);
+                        bean.setDeviceId(null);
                         Event.UPDATE.fire(listenerContainer, bean);
                     }
                 }};
@@ -2105,24 +2104,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     }
                 }};
 
-    /** foreign key listener for DEELTE RULE : SET_NULL */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean> foreignKeyListenerByDeviceId = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceBean,FlLogBean>(){
-                @SuppressWarnings("unchecked")
-                @Override
-                protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
-                    return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
-                            : FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
-                }
-                @Override
-                protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
-                    for(FlLogBean bean:effectBeans){
-                        bean.setDeviceId(null);
-                        Event.UPDATE.fire(listenerContainer, bean);
-                    }
-                }};
-
     /** foreign key listener for DEELTE RULE : CASCADE */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean> foreignKeyListenerByPersonId = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlLogBean>(){
@@ -2140,19 +2121,37 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                     }
                 }};
 
+    /** foreign key listener for DEELTE RULE : SET_NULL */
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean> foreignKeyListenerByCompareFace = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlFaceBean,FlLogBean>(){
+                @SuppressWarnings("unchecked")
+                @Override
+                protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
+                            : FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
+                    for(FlLogBean bean:effectBeans){
+                        bean.setCompareFace(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : SET_NULL {@code fl_log(compare_face)-> fl_face(id)} <br>
-     * DELETE RULE : SET_NULL {@code fl_log(verify_feature)-> fl_feature(md5)} <br>
      * DELETE RULE : SET_NULL {@code fl_log(device_id)-> fl_device(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(verify_feature)-> fl_feature(md5)} <br>
      * DELETE RULE : CASCADE {@code fl_log(person_id)-> fl_person(id)} <br>
+     * DELETE RULE : SET_NULL {@code fl_log(compare_face)-> fl_face(id)} <br>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlFaceManager.getInstance().registerListener(foreignKeyListenerByCompareFace);
-        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);
         FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);
         FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
+        FlFaceManager.getInstance().registerListener(foreignKeyListenerByCompareFace);
         
     }
     /**
@@ -2161,10 +2160,10 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlFaceManager.getInstance().unregisterListener(foreignKeyListenerByCompareFace);
-        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByVerifyFeature);
         FlDeviceManager.getInstance().unregisterListener(foreignKeyListenerByDeviceId);
+        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByVerifyFeature);
         FlPersonManager.getInstance().unregisterListener(foreignKeyListenerByPersonId);
+        FlFaceManager.getInstance().unregisterListener(foreignKeyListenerByCompareFace);
         
     }
     //_____________________________________________________________________

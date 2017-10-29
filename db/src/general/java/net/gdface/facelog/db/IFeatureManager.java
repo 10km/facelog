@@ -134,10 +134,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     public FaceBean[] getFaceBeansByFeatureMd5(String featureMd5);
     
     /**
-     * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_2
-     * @param bean the {@link FeatureBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getFaceBeansByFeatureMd5AsList(FeatureBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean);
@@ -159,7 +156,16 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteFaceBeansByFeatureMd5(String featureMd5);
-    
+    /**
+     * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
+     * FK_NAME:fl_face_ibfk_2
+     * @param bean the {@link FeatureBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FaceBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean,int startRow,int numRows);    
     /**
      * set  the {@link FaceBean} object array associate to FeatureBean by the fl_face.feature_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_2 
@@ -202,10 +208,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
     public LogBean[] getLogBeansByVerifyFeature(String featureMd5);
     
     /**
-     * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
-     * FK_NAME:fl_log_ibfk_3
-     * @param bean the {@link FeatureBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getLogBeansByVerifyFeatureAsList(FeatureBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean);
@@ -227,7 +230,16 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByVerifyFeature(String featureMd5);
-    
+    /**
+     * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
+     * FK_NAME:fl_log_ibfk_3
+     * @param bean the {@link FeatureBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean,int startRow,int numRows);    
     /**
      * set  the {@link LogBean} object array associate to FeatureBean by the fl_log.verify_feature field.<BR>
      * FK_NAME : fl_log_ibfk_3 
@@ -357,4 +369,5 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      */
     //46
     public java.util.List<String> toPrimaryKeyList(java.util.Collection<FeatureBean> collection);
+
 }

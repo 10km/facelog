@@ -134,10 +134,7 @@ public interface IFaceManager extends TableManager<FaceBean>
     public LogBean[] getLogBeansByCompareFace(Integer faceId);
     
     /**
-     * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
-     * FK_NAME:fl_log_ibfk_4
-     * @param bean the {@link FaceBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getLogBeansByCompareFaceAsList(FaceBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean);
@@ -159,7 +156,16 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByCompareFace(Integer faceId);
-    
+    /**
+     * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the {@link FaceBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(FaceBean bean,int startRow,int numRows);    
     /**
      * set  the {@link LogBean} object array associate to FaceBean by the fl_log.compare_face field.<BR>
      * FK_NAME : fl_log_ibfk_4 
@@ -333,4 +339,5 @@ public interface IFaceManager extends TableManager<FaceBean>
      */
     //46
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<FaceBean> collection);
+
 }

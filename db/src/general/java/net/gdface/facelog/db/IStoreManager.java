@@ -123,4 +123,5 @@ public interface IStoreManager extends TableManager<StoreBean>
      */
     //46
     public java.util.List<String> toPrimaryKeyList(java.util.Collection<StoreBean> collection);
+
 }

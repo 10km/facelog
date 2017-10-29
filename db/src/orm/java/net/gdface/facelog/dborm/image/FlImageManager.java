@@ -492,10 +492,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //3.2 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return new java.util.ArrayList<FlFaceBean>();
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setImageMd5(bean.getMd5());
-        return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
+        return getFaceBeansByImageMd5AsList(bean,1,-1);
     }
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.image_md5 field.<BR>
@@ -510,6 +507,25 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
          FlImageBean bean = createBean();
         bean.setMd5(imageMd5);
         return getFaceBeansByImageMd5AsList(bean);
+    }
+    /**
+     * Retrieves the {@link FlFaceBean} object from fl_face.image_md5 field, 
+     * given the start row and number of rows.<BR>
+     * FK_NAME:fl_face_ibfk_1
+     * @param bean the {@link FlImageBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FlFaceBean} beans 
+     * @throws DAOException
+     */
+    //3.2.4 GET IMPORTED
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws DAOException
+    {
+        if(null == bean)
+            return new java.util.ArrayList<FlFaceBean>();
+        FlFaceBean other = new FlFaceBean();
+        other.setImageMd5(bean.getMd5());
+        return FlFaceManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlFaceBean} object array associate to FlImageBean by the fl_face.image_md5 field.<BR>
@@ -587,10 +603,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     //3.2 GET IMPORTED
     public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean) throws DAOException
     {
-        if(null == bean)return new java.util.ArrayList<FlPersonBean>();
-        FlPersonBean other = FlPersonManager.getInstance().createBean();
-        other.setImageMd5(bean.getMd5());
-        return FlPersonManager.getInstance().loadUsingTemplateAsList(other);
+        return getPersonBeansByImageMd5AsList(bean,1,-1);
     }
     /**
      * Retrieves the {@link FlPersonBean} object from fl_person.image_md5 field.<BR>
@@ -605,6 +618,25 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
          FlImageBean bean = createBean();
         bean.setMd5(imageMd5);
         return getPersonBeansByImageMd5AsList(bean);
+    }
+    /**
+     * Retrieves the {@link FlPersonBean} object from fl_person.image_md5 field, 
+     * given the start row and number of rows.<BR>
+     * FK_NAME:fl_person_ibfk_1
+     * @param bean the {@link FlImageBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FlPersonBean} beans 
+     * @throws DAOException
+     */
+    //3.2.4 GET IMPORTED
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(FlImageBean bean,int startRow, int numRows) throws DAOException
+    {
+        if(null == bean)
+            return new java.util.ArrayList<FlPersonBean>();
+        FlPersonBean other = new FlPersonBean();
+        other.setImageMd5(bean.getMd5());
+        return FlPersonManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPersonBean} object array associate to FlImageBean by the fl_person.image_md5 field.<BR>
@@ -1382,7 +1414,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         }        
     }
 
-// rTables: 
 
     //_____________________________________________________________________
     //

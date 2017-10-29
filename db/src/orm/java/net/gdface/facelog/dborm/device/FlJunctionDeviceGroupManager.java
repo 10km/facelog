@@ -24,10 +24,6 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.device.FlDeviceGroupBean;
-import net.gdface.facelog.dborm.device.FlDeviceGroupManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_junction_device_group table.<br>
@@ -921,7 +917,6 @@ public class FlJunctionDeviceGroupManager extends TableManager.Adapter<FlJunctio
     }
 
 
-// rTables: 
 
     //_____________________________________________________________________
     //

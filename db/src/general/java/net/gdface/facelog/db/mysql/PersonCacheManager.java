@@ -14,8 +14,11 @@ import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.JunctionPersonGroupBean;
+import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.mysql.ImageCacheManager;
+import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.mysql.PersonManager;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.mysql.PersonCache;
@@ -143,7 +146,7 @@ public class PersonCacheManager extends PersonManager
     //
     // USING INDICES
     //_____________________________________________________________________
-    // override IPersonManager
+    // override PersonManager
     @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5) throws ObjectRetrievalException{
         try{
@@ -162,7 +165,7 @@ public class PersonCacheManager extends PersonManager
             }
         }
     }
-    // override IPersonManager
+    // override PersonManager
     @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum) throws ObjectRetrievalException{
         try{
@@ -180,5 +183,25 @@ public class PersonCacheManager extends PersonManager
                 throw new RuntimeException(ee);
             }
         }
+    }
+
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    //23 MANY TO MANY
+    // override PersonManager
+    @Override 
+    public java.util.List<PersonBean> loadViaJunctionPersonGroupAsList(PersonGroupBean bean, int startRow, int numRows)
+    {
+        java.util.List<JunctionPersonGroupBean> junctions = 
+            PersonGroupManager.getInstance().getJunctionPersonGroupBeansByGroupIdAsList(bean,startRow,numRows);
+        java.util.ArrayList<PersonBean> lbeans = new java.util.ArrayList<PersonBean>(junctions.size());
+        for(JunctionPersonGroupBean jbean:junctions){
+        	try{
+        		lbeans.add(loadByPrimaryKeyChecked(jbean.getPersonId()));
+        	}catch(ObjectRetrievalException  e){}
+        }
+        return lbeans;
     }
 }

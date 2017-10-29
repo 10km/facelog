@@ -134,10 +134,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByGroupId(Integer devicegroupId);
     
     /**
-     * Retrieves the {@link JunctionDeviceGroupBean} object from fl_junction_device_group.group_id field.<BR>
-     * FK_NAME:fl_junction_device_group_ibfk_2
-     * @param bean the {@link DeviceGroupBean}
-     * @return the associated {@link JunctionDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean);
@@ -159,7 +156,16 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteJunctionDeviceGroupBeansByGroupId(Integer devicegroupId);
-    
+    /**
+     * Retrieves the {@link JunctionDeviceGroupBean} object from fl_junction_device_group.group_id field.<BR>
+     * FK_NAME:fl_junction_device_group_ibfk_2
+     * @param bean the {@link DeviceGroupBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link JunctionDeviceGroupBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows);    
     /**
      * set  the {@link JunctionDeviceGroupBean} object array associate to DeviceGroupBean by the fl_junction_device_group.group_id field.<BR>
      * FK_NAME : fl_junction_device_group_ibfk_2 
@@ -233,4 +239,52 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      */
     //46
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<DeviceGroupBean> collection);
+
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    /**
+     * @see #loadViaJunctionDeviceGroupAsList(DeviceGroupBean,int,int)
+     */
+    //22 MANY TO MANY
+    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean);
+
+    /**
+     * Retrieves an list of DeviceGroupBean using the junction table JunctionDeviceGroup, given a DeviceBean, 
+     * specifying the start row and the number of rows.
+     *
+     * @param bean the DeviceBean bean to be used
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return a list of DeviceGroupBean
+     */
+    //23 MANY TO MANY
+    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean, int startRow, int numRows);
+    /**
+     * add junction between {@link DeviceGroupBean} and {@link DeviceBean} if junction not exists
+     * @param bean
+     * @param linked
+     */
+    //23.2 MANY TO MANY
+    public void addJunction(DeviceGroupBean bean,DeviceBean linked);
+    /**
+     * remove junction between {@link DeviceGroupBean} and {@link DeviceBean}
+     * @param bean
+     * @param linked
+     */
+    //23.3 MANY TO MANY
+    public int deleteJunction(DeviceGroupBean bean,DeviceBean linked);
+    /** @see #addJunction(DeviceGroupBean,DeviceBean) */
+    //23.4 MANY TO MANY
+    public void addJunction(DeviceGroupBean bean,DeviceBean... linkedBeans);
+    /** @see #addJunction(DeviceGroupBean,DeviceBean) */
+    //23.5 MANY TO MANY
+    public void addJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans);
+    /** @see #deleteJunction(DeviceGroupBean,DeviceBean) */
+    //23.6 MANY TO MANY
+    public int deleteJunction(DeviceGroupBean bean,DeviceBean... linkedBeans);
+    /** @see #deleteJunction(DeviceGroupBean,DeviceBean) */
+    //23.7 MANY TO MANY
+    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans);
 }

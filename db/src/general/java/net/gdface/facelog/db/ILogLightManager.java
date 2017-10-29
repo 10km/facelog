@@ -18,4 +18,5 @@ public interface ILogLightManager extends TableManager<LogLightBean>
 {  
  
  
+
 }

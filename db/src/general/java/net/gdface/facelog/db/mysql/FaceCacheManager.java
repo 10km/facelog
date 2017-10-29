@@ -14,10 +14,9 @@ import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.mysql.ImageCacheManager;
 import net.gdface.facelog.db.mysql.FaceManager;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.mysql.FaceCache;
@@ -152,4 +151,5 @@ public class FaceCacheManager extends FaceManager
     //
     // USING INDICES
     //_____________________________________________________________________
+
 }

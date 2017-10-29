@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
+import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.ImageBean;
@@ -410,13 +411,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override 
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean)
     {
-        try {
-            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByImageMd5AsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getFaceBeansByImageMd5AsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IImageManager
     @Override
@@ -432,6 +427,18 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         java.util.List<FaceBean> list =getFaceBeansByImageMd5AsList(imageMd5);
         return FaceManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IImageManager
+    @Override 
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByImageMd5AsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IImageManager
     @Override 
@@ -475,13 +482,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override 
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean)
     {
-        try {
-            return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getPersonBeansByImageMd5AsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getPersonBeansByImageMd5AsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IImageManager
     @Override
@@ -497,6 +498,18 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         java.util.List<PersonBean> list =getPersonBeansByImageMd5AsList(imageMd5);
         return PersonManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IImageManager
+    @Override 
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getPersonBeansByImageMd5AsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IImageManager
     @Override 

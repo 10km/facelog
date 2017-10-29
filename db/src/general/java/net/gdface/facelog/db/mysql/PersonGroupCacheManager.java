@@ -14,6 +14,8 @@ import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.JunctionPersonGroupBean;
+import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.mysql.PersonGroupManager;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.mysql.PersonGroupCache;
@@ -126,4 +128,24 @@ public class PersonGroupCacheManager extends PersonGroupManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    //23 MANY TO MANY
+    // override PersonGroupManager
+    @Override 
+    public java.util.List<PersonGroupBean> loadViaJunctionPersonGroupAsList(PersonBean bean, int startRow, int numRows)
+    {
+        java.util.List<JunctionPersonGroupBean> junctions = 
+            PersonManager.getInstance().getJunctionPersonGroupBeansByPersonIdAsList(bean,startRow,numRows);
+        java.util.ArrayList<PersonGroupBean> lbeans = new java.util.ArrayList<PersonGroupBean>(junctions.size());
+        for(JunctionPersonGroupBean jbean:junctions){
+        	try{
+        		lbeans.add(loadByPrimaryKeyChecked(jbean.getGroupId()));
+        	}catch(ObjectRetrievalException  e){}
+        }
+        return lbeans;
+    }
 }

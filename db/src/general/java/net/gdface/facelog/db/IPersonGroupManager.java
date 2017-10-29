@@ -134,10 +134,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     public JunctionPersonGroupBean[] getJunctionPersonGroupBeansByGroupId(Integer persongroupId);
     
     /**
-     * Retrieves the {@link JunctionPersonGroupBean} object from fl_junction_person_group.group_id field.<BR>
-     * FK_NAME:fl_junction_person_group_ibfk_2
-     * @param bean the {@link PersonGroupBean}
-     * @return the associated {@link JunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getJunctionPersonGroupBeansByGroupIdAsList(PersonGroupBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(PersonGroupBean bean);
@@ -159,7 +156,16 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteJunctionPersonGroupBeansByGroupId(Integer persongroupId);
-    
+    /**
+     * Retrieves the {@link JunctionPersonGroupBean} object from fl_junction_person_group.group_id field.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_2
+     * @param bean the {@link PersonGroupBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link JunctionPersonGroupBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(PersonGroupBean bean,int startRow,int numRows);    
     /**
      * set  the {@link JunctionPersonGroupBean} object array associate to PersonGroupBean by the fl_junction_person_group.group_id field.<BR>
      * FK_NAME : fl_junction_person_group_ibfk_2 
@@ -233,4 +239,52 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      */
     //46
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonGroupBean> collection);
+
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    /**
+     * @see #loadViaJunctionPersonGroupAsList(PersonGroupBean,int,int)
+     */
+    //22 MANY TO MANY
+    public java.util.List<PersonGroupBean> loadViaJunctionPersonGroupAsList(PersonBean bean);
+
+    /**
+     * Retrieves an list of PersonGroupBean using the junction table JunctionPersonGroup, given a PersonBean, 
+     * specifying the start row and the number of rows.
+     *
+     * @param bean the PersonBean bean to be used
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return a list of PersonGroupBean
+     */
+    //23 MANY TO MANY
+    public java.util.List<PersonGroupBean> loadViaJunctionPersonGroupAsList(PersonBean bean, int startRow, int numRows);
+    /**
+     * add junction between {@link PersonGroupBean} and {@link PersonBean} if junction not exists
+     * @param bean
+     * @param linked
+     */
+    //23.2 MANY TO MANY
+    public void addJunction(PersonGroupBean bean,PersonBean linked);
+    /**
+     * remove junction between {@link PersonGroupBean} and {@link PersonBean}
+     * @param bean
+     * @param linked
+     */
+    //23.3 MANY TO MANY
+    public int deleteJunction(PersonGroupBean bean,PersonBean linked);
+    /** @see #addJunction(PersonGroupBean,PersonBean) */
+    //23.4 MANY TO MANY
+    public void addJunction(PersonGroupBean bean,PersonBean... linkedBeans);
+    /** @see #addJunction(PersonGroupBean,PersonBean) */
+    //23.5 MANY TO MANY
+    public void addJunction(PersonGroupBean bean,java.util.Collection<PersonBean> linkedBeans);
+    /** @see #deleteJunction(PersonGroupBean,PersonBean) */
+    //23.6 MANY TO MANY
+    public int deleteJunction(PersonGroupBean bean,PersonBean... linkedBeans);
+    /** @see #deleteJunction(PersonGroupBean,PersonBean) */
+    //23.7 MANY TO MANY
+    public int deleteJunction(PersonGroupBean bean,java.util.Collection<PersonBean> linkedBeans);
 }

@@ -329,4 +329,5 @@ public interface ILogManager extends TableManager<LogBean>
      */
     //46
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<LogBean> collection);
+
 }

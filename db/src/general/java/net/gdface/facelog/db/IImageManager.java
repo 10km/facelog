@@ -134,10 +134,7 @@ public interface IImageManager extends TableManager<ImageBean>
     public FaceBean[] getFaceBeansByImageMd5(String imageMd5);
     
     /**
-     * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
-     * FK_NAME:fl_face_ibfk_1
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link FaceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getFaceBeansByImageMd5AsList(ImageBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean);
@@ -159,7 +156,16 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteFaceBeansByImageMd5(String imageMd5);
-    
+    /**
+     * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
+     * FK_NAME:fl_face_ibfk_1
+     * @param bean the {@link ImageBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FaceBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(ImageBean bean,int startRow,int numRows);    
     /**
      * set  the {@link FaceBean} object array associate to ImageBean by the fl_face.image_md5 field.<BR>
      * FK_NAME : fl_face_ibfk_1 
@@ -202,10 +208,7 @@ public interface IImageManager extends TableManager<ImageBean>
     public PersonBean[] getPersonBeansByImageMd5(String imageMd5);
     
     /**
-     * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_1
-     * @param bean the {@link ImageBean}
-     * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getPersonBeansByImageMd5AsList(ImageBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean);
@@ -227,7 +230,16 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deletePersonBeansByImageMd5(String imageMd5);
-    
+    /**
+     * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
+     * FK_NAME:fl_person_ibfk_1
+     * @param bean the {@link ImageBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link PersonBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean,int startRow,int numRows);    
     /**
      * set  the {@link PersonBean} object array associate to ImageBean by the fl_person.image_md5 field.<BR>
      * FK_NAME : fl_person_ibfk_1 
@@ -357,4 +369,5 @@ public interface IImageManager extends TableManager<ImageBean>
      */
     //46
     public java.util.List<String> toPrimaryKeyList(java.util.Collection<ImageBean> collection);
+
 }

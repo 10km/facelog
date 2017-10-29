@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
+import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.LogBean;

@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
+import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.DeviceGroupBean;
@@ -16,6 +17,7 @@ import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IDeviceGroupManager;
 import net.gdface.facelog.db.JunctionDeviceGroupBean;
+import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -399,13 +401,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override 
     public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean)
     {
-        try {
-            return this.dbConverter.getJunctionDeviceGroupBeanConverter().fromRight(nativeManager.getJunctionDeviceGroupBeansByGroupIdAsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getJunctionDeviceGroupBeansByGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
     @Override
@@ -421,6 +417,18 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     {
         java.util.List<JunctionDeviceGroupBean> list =getJunctionDeviceGroupBeansByGroupIdAsList(devicegroupId);
         return JunctionDeviceGroupManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IDeviceGroupManager
+    @Override 
+    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getJunctionDeviceGroupBeanConverter().fromRight(nativeManager.getJunctionDeviceGroupBeansByGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IDeviceGroupManager
     @Override 
@@ -654,6 +662,90 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
 
 
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    //22 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean)
+    {
+         return this.loadViaJunctionDeviceGroupAsList(bean, 1, -1);
+    }
+
+    //23 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean, int startRow, int numRows)
+    {
+        try{
+            return this.beanConverter.fromRight(
+                this.nativeManager.loadViaJunctionDeviceGroupAsList(
+                    this.dbConverter.getDeviceBeanConverter().toRight(bean),
+                    startRow,
+                    numRows));
+        }catch(DAOException e){
+            throw new WrapDAOException(e);
+        }
+    }
+    //23.2 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public void addJunction(DeviceGroupBean bean,DeviceBean linked){
+        if(null == bean || null == bean.getId())
+            return ;
+        if(null == linked || null ==bean.getId())
+            return ;
+        if(!JunctionDeviceGroupManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
+            JunctionDeviceGroupBean junction = new JunctionDeviceGroupBean();
+            junction.setDeviceId(linked.getId());
+            junction.setGroupId(bean.getId());
+            JunctionDeviceGroupManager.getInstance().save(junction);
+        }
+    }
+    //23.3 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public int deleteJunction(DeviceGroupBean bean,DeviceBean linked){
+        if(null == bean || null == bean.getId())
+            return 0;
+        if(null == linked || null ==bean.getId())
+            return 0;
+        return JunctionDeviceGroupManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
+    }
+    //23.4 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public void addJunction(DeviceGroupBean bean,DeviceBean... linkedBeans){
+        if(null == linkedBeans)return;
+        for(DeviceBean linked:linkedBeans){
+            addJunction(bean,linked);
+        }
+    }
+    //23.5 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public void addJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans){
+        if(null == linkedBeans)return;
+        for(DeviceBean linked:linkedBeans){
+            addJunction(bean,linked);
+        }
+    }
+    //23.6 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public int deleteJunction(DeviceGroupBean bean,DeviceBean... linkedBeans){
+        if(null == linkedBeans)return 0;
+        int count = 0;
+        for(DeviceBean linked:linkedBeans){
+            count += deleteJunction(bean,linked);
+        }
+        return count;
+    }
+    //23.7 MANY TO MANY override IDeviceGroupManager
+    @Override
+    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans){
+        if(null == linkedBeans)return 0;
+        int count = 0;
+        for(DeviceBean linked:linkedBeans){
+            count += deleteJunction(bean,linked);
+        }
+        return count;
+    }
     //_____________________________________________________________________
     //
     // COUNT

@@ -14,6 +14,10 @@ import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
+import net.gdface.facelog.db.ImageBean;
+import net.gdface.facelog.db.JunctionDeviceGroupBean;
+import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.mysql.DeviceManager;
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.mysql.DeviceCache;
@@ -130,7 +134,7 @@ public class DeviceCacheManager extends DeviceManager
     //
     // USING INDICES
     //_____________________________________________________________________
-    // override IDeviceManager
+    // override DeviceManager
     @Override 
     public DeviceBean loadByIndexMacChecked(String mac) throws ObjectRetrievalException{
         try{
@@ -149,7 +153,7 @@ public class DeviceCacheManager extends DeviceManager
             }
         }
     }
-    // override IDeviceManager
+    // override DeviceManager
     @Override 
     public DeviceBean loadByIndexSerialNoChecked(String serialNo) throws ObjectRetrievalException{
         try{
@@ -167,5 +171,25 @@ public class DeviceCacheManager extends DeviceManager
                 throw new RuntimeException(ee);
             }
         }
+    }
+
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    //23 MANY TO MANY
+    // override DeviceManager
+    @Override 
+    public java.util.List<DeviceBean> loadViaJunctionDeviceGroupAsList(DeviceGroupBean bean, int startRow, int numRows)
+    {
+        java.util.List<JunctionDeviceGroupBean> junctions = 
+            DeviceGroupManager.getInstance().getJunctionDeviceGroupBeansByGroupIdAsList(bean,startRow,numRows);
+        java.util.ArrayList<DeviceBean> lbeans = new java.util.ArrayList<DeviceBean>(junctions.size());
+        for(JunctionDeviceGroupBean jbean:junctions){
+        	try{
+        		lbeans.add(loadByPrimaryKeyChecked(jbean.getDeviceId()));
+        	}catch(ObjectRetrievalException  e){}
+        }
+        return lbeans;
     }
 }

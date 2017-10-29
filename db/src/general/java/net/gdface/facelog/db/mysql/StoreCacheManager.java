@@ -126,4 +126,5 @@ public class StoreCacheManager extends StoreManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+
 }

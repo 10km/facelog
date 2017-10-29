@@ -24,8 +24,6 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean;
-import net.gdface.facelog.dborm.person.FlJunctionPersonGroupManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_person_group table.<br>
@@ -481,10 +479,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     //3.2 GET IMPORTED
     public List<FlJunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(FlPersonGroupBean bean) throws DAOException
     {
-        if(null == bean)return new java.util.ArrayList<FlJunctionPersonGroupBean>();
-        FlJunctionPersonGroupBean other = FlJunctionPersonGroupManager.getInstance().createBean();
-        other.setGroupId(bean.getId());
-        return FlJunctionPersonGroupManager.getInstance().loadUsingTemplateAsList(other);
+        return getJunctionPersonGroupBeansByGroupIdAsList(bean,1,-1);
     }
     /**
      * Retrieves the {@link FlJunctionPersonGroupBean} object from fl_junction_person_group.group_id field.<BR>
@@ -499,6 +494,25 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
          FlPersonGroupBean bean = createBean();
         bean.setId(persongroupId);
         return getJunctionPersonGroupBeansByGroupIdAsList(bean);
+    }
+    /**
+     * Retrieves the {@link FlJunctionPersonGroupBean} object from fl_junction_person_group.group_id field, 
+     * given the start row and number of rows.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_2
+     * @param bean the {@link FlPersonGroupBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FlJunctionPersonGroupBean} beans 
+     * @throws DAOException
+     */
+    //3.2.4 GET IMPORTED
+    public List<FlJunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(FlPersonGroupBean bean,int startRow, int numRows) throws DAOException
+    {
+        if(null == bean)
+            return new java.util.ArrayList<FlJunctionPersonGroupBean>();
+        FlJunctionPersonGroupBean other = new FlJunctionPersonGroupBean();
+        other.setGroupId(bean.getId());
+        return FlJunctionPersonGroupManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlJunctionPersonGroupBean} object array associate to FlPersonGroupBean by the fl_junction_person_group.group_id field.<BR>
@@ -982,65 +996,129 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     }
 
 
-// rTables: fl_junction_person_group
-// getForeignKeyFor: group_id
-
-    
     //_____________________________________________________________________
     //
     // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
     //_____________________________________________________________________
     /**
-     * Retrieves an array of FlPersonGroupBean using the relation table FlJunctionPersonGroup given a FlPersonGroupBean object.
-     *
-     * @param bean the FlPersonGroupBean bean to be used
-     * @return an array of FlPersonGroupBean
-     * @throws DAOException
+     * @see #loadViaJunctionPersonGroupAsList(FlPersonGroupBean,int,int)
      */
     //22 MANY TO MANY
-    public FlPersonGroupBean[] loadFlPersonGroupViaFlJunctionPersonGroup(FlPersonGroupBean bean) throws DAOException
+    public List<FlPersonGroupBean> loadViaJunctionPersonGroupAsList(FlPersonBean bean) throws DAOException
     {
-         return this.loadFlPersonGroupViaFlJunctionPersonGroup(bean, 1, -1);
+         return this.loadViaJunctionPersonGroupAsList(bean, 1, -1);
     }
 
     /**
-     * Retrieves an array of FlPersonGroupBean using the relation table FlJunctionPersonGroup given a FlPersonGroupBean object, specifying the start row and the number of rows.
+     * Retrieves an list of FlPersonGroupBean using the junction table FlJunctionPersonGroup, given a FlPersonBean, 
+     * specifying the start row and the number of rows.
      *
-     * @param bean the FlPersonGroupBean bean to be used
+     * @param bean the FlPersonBean bean to be used
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return an array of FlPersonGroupBean
+     * @return a list of FlPersonGroupBean
      * @throws DAOException
      */
     //23 MANY TO MANY
-    public FlPersonGroupBean[] loadFlPersonGroupViaFlJunctionPersonGroup(FlPersonGroupBean bean, int startRow, int numRows) throws DAOException
+    public List<FlPersonGroupBean> loadViaJunctionPersonGroupAsList(FlPersonBean bean, int startRow, int numRows) throws DAOException
     {
-         Connection c = null;
-         PreparedStatement ps = null;
-         String sql = " SELECT " + FL_PERSON_GROUP_ALL_FIELDS
-                         + " FROM fl_person_group fl_person_groupL, fl_junction_person_group fl_junction_person_groupR"
-                         + " WHERE "
-                         + "     fl_junction_person_groupR.id = ?"
-                         + " AND fl_junction_person_groupR.id = fl_person_groupL.group_id";
-         try
-         {
-             c = this.getConnection();
-             ps = c.prepareStatement(sql,
-                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                     ResultSet.CONCUR_READ_ONLY);
-             if (bean.getGroupId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getGroupId()); }
-             return FlPersonGroupManager.getInstance().loadByPreparedStatement(ps, null, startRow, numRows);
-         }
-         catch (SQLException e)
-         {
-             throw new DAOException(e.getMessage(), e);
-         }
-         finally
-         {
-            this.getManager().close(ps);
-            this.freeConnection(c);
-            sql = null;
-         }
+        if(null == bean || null == bean.getId())
+            return java.util.Arrays.<FlPersonGroupBean>asList();
+        Connection c = null;
+        PreparedStatement ps = null;
+        String sql = " SELECT " + FL_PERSON_GROUP_FULL_FIELDS
+                        + " FROM fl_junction_person_group, fl_person_group"
+                        + " WHERE "
+                        + "     fl_junction_person_group.person_id=?"
+                        + " AND fl_junction_person_group.group_id=fl_person_group.id";
+        try
+        {
+            c = this.getConnection();
+            ps = c.prepareStatement(sql,
+                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                    ResultSet.CONCUR_READ_ONLY);
+            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
+            return loadByPreparedStatementAsList(ps, null, startRow, numRows);
+        }
+        catch (SQLException e)
+        {
+            throw new DAOException(e.getMessage(), e);
+        }
+        finally
+        {
+           this.getManager().close(ps);
+           this.freeConnection(c);
+           sql = null;
+        }
+    }
+    /**
+     * add junction between {@link FlPersonGroupBean} and {@link FlPersonBean} if junction not exists
+     * @param bean
+     * @param linked
+     * @throws DAOException
+     */
+    //23.2 MANY TO MANY
+    public void addJunction(FlPersonGroupBean bean,FlPersonBean linked) throws DAOException{
+        if(null == bean || null == bean.getId())
+            return ;
+        if(null == linked || null ==bean.getId())
+            return ;
+        if(!FlJunctionPersonGroupManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
+            FlJunctionPersonGroupBean junction = new FlJunctionPersonGroupBean();
+            junction.setPersonId(linked.getId());
+            junction.setGroupId(bean.getId());
+            FlJunctionPersonGroupManager.getInstance().save(junction);
+        }
+    }
+    /**
+     * remove junction between {@link FlPersonGroupBean} and {@link FlPersonBean}
+     * @param bean
+     * @param linked
+     * @throws DAOException
+     */
+    //23.3 MANY TO MANY
+    public int deleteJunction(FlPersonGroupBean bean,FlPersonBean linked) throws DAOException{
+        if(null == bean || null == bean.getId())
+            return 0;
+        if(null == linked || null ==bean.getId())
+            return 0;
+        return FlJunctionPersonGroupManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
+    }
+    /** @see #addJunction(FlPersonGroupBean,FlPersonBean) */
+    //23.4 MANY TO MANY
+    public void addJunction(FlPersonGroupBean bean,FlPersonBean... linkedBeans) throws DAOException{
+        if(null == linkedBeans)return;
+        for(FlPersonBean linked:linkedBeans){
+            addJunction(bean,linked);
+        }
+    }
+    /** @see #addJunction(FlPersonGroupBean,FlPersonBean) */
+    //23.5 MANY TO MANY
+    public void addJunction(FlPersonGroupBean bean,java.util.Collection<FlPersonBean> linkedBeans) throws DAOException{
+        if(null == linkedBeans)return;
+        for(FlPersonBean linked:linkedBeans){
+            addJunction(bean,linked);
+        }
+    }
+    /** @see #deleteJunction(FlPersonGroupBean,FlPersonBean) */
+    //23.6 MANY TO MANY
+    public int deleteJunction(FlPersonGroupBean bean,FlPersonBean... linkedBeans) throws DAOException{
+        if(null == linkedBeans)return 0;
+        int count = 0;
+        for(FlPersonBean linked:linkedBeans){
+            count += deleteJunction(bean,linked);
+        }
+        return count;
+    }
+    /** @see #deleteJunction(FlPersonGroupBean,FlPersonBean) */
+    //23.7 MANY TO MANY
+    public int deleteJunction(FlPersonGroupBean bean,java.util.Collection<FlPersonBean> linkedBeans) throws DAOException{
+        if(null == linkedBeans)return 0;
+        int count = 0;
+        for(FlPersonBean linked:linkedBeans){
+            count += deleteJunction(bean,linked);
+        }
+        return count;
     }
 
     //_____________________________________________________________________

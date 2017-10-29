@@ -8,6 +8,7 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
+import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.FeatureBean;
@@ -410,13 +411,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean)
     {
-        try {
-            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByFeatureMd5AsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getFaceBeansByFeatureMd5AsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
@@ -432,6 +427,18 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         java.util.List<FaceBean> list =getFaceBeansByFeatureMd5AsList(featureMd5);
         return FaceManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IFeatureManager
+    @Override 
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(FeatureBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getFaceBeanConverter().fromRight(nativeManager.getFaceBeansByFeatureMd5AsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 
@@ -475,13 +482,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean)
     {
-        try {
-            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByVerifyFeatureAsList( this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
+        return getLogBeansByVerifyFeatureAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
@@ -497,6 +498,18 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         java.util.List<LogBean> list =getLogBeansByVerifyFeatureAsList(featureMd5);
         return LogManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IFeatureManager
+    @Override 
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(FeatureBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getLogBeanConverter().fromRight(nativeManager.getLogBeansByVerifyFeatureAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
     }
     //3.3 SET IMPORTED override IFeatureManager
     @Override 

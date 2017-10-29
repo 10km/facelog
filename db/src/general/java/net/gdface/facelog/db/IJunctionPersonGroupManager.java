@@ -138,4 +138,5 @@ public interface IJunctionPersonGroupManager extends TableManager<JunctionPerson
     //5.2 SET REFERENCED 
     public PersonGroupBean setReferencedByGroupId(JunctionPersonGroupBean bean, PersonGroupBean beanToSet);
 
+
 }

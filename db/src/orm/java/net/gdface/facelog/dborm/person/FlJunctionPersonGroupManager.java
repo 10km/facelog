@@ -24,10 +24,6 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonManager;
-import net.gdface.facelog.dborm.person.FlPersonGroupBean;
-import net.gdface.facelog.dborm.person.FlPersonGroupManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_junction_person_group table.<br>
@@ -921,7 +917,6 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
 
-// rTables: 
 
     //_____________________________________________________________________
     //

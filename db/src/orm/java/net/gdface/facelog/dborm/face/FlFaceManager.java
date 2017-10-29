@@ -26,8 +26,6 @@ import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
 import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogManager;
-import net.gdface.facelog.dborm.face.FlFeatureBean;
-import net.gdface.facelog.dborm.face.FlFeatureManager;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.image.FlImageManager;
 
@@ -485,10 +483,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //3.2 GET IMPORTED
     public List<FlLogBean> getLogBeansByCompareFaceAsList(FlFaceBean bean) throws DAOException
     {
-        if(null == bean)return new java.util.ArrayList<FlLogBean>();
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setCompareFace(bean.getId());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
+        return getLogBeansByCompareFaceAsList(bean,1,-1);
     }
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.compare_face field.<BR>
@@ -503,6 +498,25 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
          FlFaceBean bean = createBean();
         bean.setId(faceId);
         return getLogBeansByCompareFaceAsList(bean);
+    }
+    /**
+     * Retrieves the {@link FlLogBean} object from fl_log.compare_face field, 
+     * given the start row and number of rows.<BR>
+     * FK_NAME:fl_log_ibfk_4
+     * @param bean the {@link FlFaceBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FlLogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.4 GET IMPORTED
+    public List<FlLogBean> getLogBeansByCompareFaceAsList(FlFaceBean bean,int startRow, int numRows) throws DAOException
+    {
+        if(null == bean)
+            return new java.util.ArrayList<FlLogBean>();
+        FlLogBean other = new FlLogBean();
+        other.setCompareFace(bean.getId());
+        return FlLogManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.compare_face field.<BR>
@@ -1600,7 +1614,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }        
     }
 
-// rTables: 
 
     //_____________________________________________________________________
     //
@@ -2507,6 +2520,23 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
     }
 
+    /** foreign key listener for DEELTE RULE : CASCADE */
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean>(){
+                @SuppressWarnings("unchecked")
+                @Override
+                protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
+                            : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
+                    for(FlFaceBean bean:effectBeans){
+                        Event.DELETE.fire(listenerContainer, bean);
+                    }
+                }};
+
     /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlFaceBean> foreignKeyListenerByFeatureMd5 = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlFeatureBean,FlFaceBean>(){
@@ -2525,32 +2555,15 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                     }
                 }};
 
-    /** foreign key listener for DEELTE RULE : CASCADE */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean> foreignKeyListenerByImageMd5 = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlFaceBean>(){
-                @SuppressWarnings("unchecked")
-                @Override
-                protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
-                    return listenerContainer.isEmpty() 
-                            ? java.util.Collections.EMPTY_LIST
-                            : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
-                }
-                @Override
-                protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
-                    for(FlFaceBean bean:effectBeans){
-                        Event.DELETE.fire(listenerContainer, bean);
-                    }
-                }};
-
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : SET_NULL {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
      * DELETE RULE : CASCADE {@code fl_face(image_md5)-> fl_image(md5)} <br>
+     * DELETE RULE : SET_NULL {@code fl_face(feature_md5)-> fl_feature(md5)} <br>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
         FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
+        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
         
     }
     /**
@@ -2559,8 +2572,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByFeatureMd5);
         FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
+        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByFeatureMd5);
         
     }
     //_____________________________________________________________________

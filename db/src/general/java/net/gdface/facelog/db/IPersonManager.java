@@ -134,10 +134,7 @@ public interface IPersonManager extends TableManager<PersonBean>
     public FeatureBean[] getFeatureBeansByPersonId(Integer personId);
     
     /**
-     * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
-     * FK_NAME:fl_feature_ibfk_1
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link FeatureBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getFeatureBeansByPersonIdAsList(PersonBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean);
@@ -159,7 +156,16 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteFeatureBeansByPersonId(Integer personId);
-    
+    /**
+     * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
+     * FK_NAME:fl_feature_ibfk_1
+     * @param bean the {@link PersonBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FeatureBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(PersonBean bean,int startRow,int numRows);    
     /**
      * set  the {@link FeatureBean} object array associate to PersonBean by the fl_feature.person_id field.<BR>
      * FK_NAME : fl_feature_ibfk_1 
@@ -202,10 +208,7 @@ public interface IPersonManager extends TableManager<PersonBean>
     public JunctionPersonGroupBean[] getJunctionPersonGroupBeansByPersonId(Integer personId);
     
     /**
-     * Retrieves the {@link JunctionPersonGroupBean} object from fl_junction_person_group.person_id field.<BR>
-     * FK_NAME:fl_junction_person_group_ibfk_1
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link JunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getJunctionPersonGroupBeansByPersonIdAsList(PersonBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(PersonBean bean);
@@ -227,7 +230,16 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteJunctionPersonGroupBeansByPersonId(Integer personId);
-    
+    /**
+     * Retrieves the {@link JunctionPersonGroupBean} object from fl_junction_person_group.person_id field.<BR>
+     * FK_NAME:fl_junction_person_group_ibfk_1
+     * @param bean the {@link PersonBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link JunctionPersonGroupBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(PersonBean bean,int startRow,int numRows);    
     /**
      * set  the {@link JunctionPersonGroupBean} object array associate to PersonBean by the fl_junction_person_group.person_id field.<BR>
      * FK_NAME : fl_junction_person_group_ibfk_1 
@@ -270,10 +282,7 @@ public interface IPersonManager extends TableManager<PersonBean>
     public LogBean[] getLogBeansByPersonId(Integer personId);
     
     /**
-     * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
-     * FK_NAME:fl_log_ibfk_1
-     * @param bean the {@link PersonBean}
-     * @return the associated {@link LogBean} beans or {@code null} if {@code bean} is {@code null}
+     * @see #getLogBeansByPersonIdAsList(PersonBean,int,int)
      */
     //3.2 GET IMPORTED
     public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean);
@@ -295,7 +304,16 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //3.2.3 DELETE IMPORTED
     public int deleteLogBeansByPersonId(Integer personId);
-    
+    /**
+     * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
+     * FK_NAME:fl_log_ibfk_1
+     * @param bean the {@link PersonBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link LogBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(PersonBean bean,int startRow,int numRows);    
     /**
      * set  the {@link LogBean} object array associate to PersonBean by the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
@@ -539,4 +557,52 @@ public interface IPersonManager extends TableManager<PersonBean>
      */
     //46
     public java.util.List<Integer> toPrimaryKeyList(java.util.Collection<PersonBean> collection);
+
+    //_____________________________________________________________________
+    //
+    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
+    //_____________________________________________________________________
+    /**
+     * @see #loadViaJunctionPersonGroupAsList(PersonBean,int,int)
+     */
+    //22 MANY TO MANY
+    public java.util.List<PersonBean> loadViaJunctionPersonGroupAsList(PersonGroupBean bean);
+
+    /**
+     * Retrieves an list of PersonBean using the junction table JunctionPersonGroup, given a PersonGroupBean, 
+     * specifying the start row and the number of rows.
+     *
+     * @param bean the PersonGroupBean bean to be used
+     * @param startRow the start row to be used (first row = 1, last row = -1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return a list of PersonBean
+     */
+    //23 MANY TO MANY
+    public java.util.List<PersonBean> loadViaJunctionPersonGroupAsList(PersonGroupBean bean, int startRow, int numRows);
+    /**
+     * add junction between {@link PersonBean} and {@link PersonGroupBean} if junction not exists
+     * @param bean
+     * @param linked
+     */
+    //23.2 MANY TO MANY
+    public void addJunction(PersonBean bean,PersonGroupBean linked);
+    /**
+     * remove junction between {@link PersonBean} and {@link PersonGroupBean}
+     * @param bean
+     * @param linked
+     */
+    //23.3 MANY TO MANY
+    public int deleteJunction(PersonBean bean,PersonGroupBean linked);
+    /** @see #addJunction(PersonBean,PersonGroupBean) */
+    //23.4 MANY TO MANY
+    public void addJunction(PersonBean bean,PersonGroupBean... linkedBeans);
+    /** @see #addJunction(PersonBean,PersonGroupBean) */
+    //23.5 MANY TO MANY
+    public void addJunction(PersonBean bean,java.util.Collection<PersonGroupBean> linkedBeans);
+    /** @see #deleteJunction(PersonBean,PersonGroupBean) */
+    //23.6 MANY TO MANY
+    public int deleteJunction(PersonBean bean,PersonGroupBean... linkedBeans);
+    /** @see #deleteJunction(PersonBean,PersonGroupBean) */
+    //23.7 MANY TO MANY
+    public int deleteJunction(PersonBean bean,java.util.Collection<PersonGroupBean> linkedBeans);
 }

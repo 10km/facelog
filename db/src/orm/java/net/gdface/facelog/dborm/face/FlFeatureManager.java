@@ -24,8 +24,6 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
-import net.gdface.facelog.dborm.face.FlFaceBean;
-import net.gdface.facelog.dborm.face.FlFaceManager;
 import net.gdface.facelog.dborm.log.FlLogBean;
 import net.gdface.facelog.dborm.log.FlLogManager;
 import net.gdface.facelog.dborm.person.FlPersonBean;
@@ -492,10 +490,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //3.2 GET IMPORTED
     public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean)return new java.util.ArrayList<FlFaceBean>();
-        FlFaceBean other = FlFaceManager.getInstance().createBean();
-        other.setFeatureMd5(bean.getMd5());
-        return FlFaceManager.getInstance().loadUsingTemplateAsList(other);
+        return getFaceBeansByFeatureMd5AsList(bean,1,-1);
     }
     /**
      * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field.<BR>
@@ -510,6 +505,25 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
          FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
         return getFaceBeansByFeatureMd5AsList(bean);
+    }
+    /**
+     * Retrieves the {@link FlFaceBean} object from fl_face.feature_md5 field, 
+     * given the start row and number of rows.<BR>
+     * FK_NAME:fl_face_ibfk_2
+     * @param bean the {@link FlFeatureBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FlFaceBean} beans 
+     * @throws DAOException
+     */
+    //3.2.4 GET IMPORTED
+    public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(FlFeatureBean bean,int startRow, int numRows) throws DAOException
+    {
+        if(null == bean)
+            return new java.util.ArrayList<FlFaceBean>();
+        FlFaceBean other = new FlFaceBean();
+        other.setFeatureMd5(bean.getMd5());
+        return FlFaceManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlFaceBean} object array associate to FlFeatureBean by the fl_face.feature_md5 field.<BR>
@@ -587,10 +601,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     //3.2 GET IMPORTED
     public List<FlLogBean> getLogBeansByVerifyFeatureAsList(FlFeatureBean bean) throws DAOException
     {
-        if(null == bean)return new java.util.ArrayList<FlLogBean>();
-        FlLogBean other = FlLogManager.getInstance().createBean();
-        other.setVerifyFeature(bean.getMd5());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other);
+        return getLogBeansByVerifyFeatureAsList(bean,1,-1);
     }
     /**
      * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field.<BR>
@@ -605,6 +616,25 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
          FlFeatureBean bean = createBean();
         bean.setMd5(featureMd5);
         return getLogBeansByVerifyFeatureAsList(bean);
+    }
+    /**
+     * Retrieves the {@link FlLogBean} object from fl_log.verify_feature field, 
+     * given the start row and number of rows.<BR>
+     * FK_NAME:fl_log_ibfk_3
+     * @param bean the {@link FlFeatureBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link FlLogBean} beans 
+     * @throws DAOException
+     */
+    //3.2.4 GET IMPORTED
+    public List<FlLogBean> getLogBeansByVerifyFeatureAsList(FlFeatureBean bean,int startRow, int numRows) throws DAOException
+    {
+        if(null == bean)
+            return new java.util.ArrayList<FlLogBean>();
+        FlLogBean other = new FlLogBean();
+        other.setVerifyFeature(bean.getMd5());
+        return FlLogManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlFeatureBean by the fl_log.verify_feature field.<BR>
@@ -1314,7 +1344,6 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         }        
     }
 
-// rTables: 
 
     //_____________________________________________________________________
     //

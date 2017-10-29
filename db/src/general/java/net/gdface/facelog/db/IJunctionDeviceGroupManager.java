@@ -138,4 +138,5 @@ public interface IJunctionDeviceGroupManager extends TableManager<JunctionDevice
     //5.2 SET REFERENCED 
     public DeviceGroupBean setReferencedByGroupId(JunctionDeviceGroupBean bean, DeviceGroupBean beanToSet);
 
+
 }
