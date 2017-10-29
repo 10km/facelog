@@ -39,6 +39,7 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
      * <ul>
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_ID}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_NAME}
+     *   <li>{@link Constant#FL_PERSON_GROUP_ID_PARENT}
      * </ul>
      */
     public FlPersonGroupComparator(int iType)
@@ -59,6 +60,7 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
      * <ul>
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_ID})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_NAME})
+     *   <li>{@link Constant#FL_PERSON_GROUP_ID_PARENT})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
@@ -95,6 +97,17 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
                     iReturn = 1;
                 } else {
                     iReturn = b1.getName().compareTo(b2.getName());
+                }
+                break;
+            case FL_PERSON_GROUP_ID_PARENT:
+                if (b1.getParent() == null && b2.getParent() != null) {
+                    iReturn = -1;
+                } else if (b1.getParent() == null && b2.getParent() == null) {
+                    iReturn = 0;
+                } else if (b1.getParent() != null && b2.getParent() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getParent().compareTo(b2.getParent());
                 }
                 break;
             default:

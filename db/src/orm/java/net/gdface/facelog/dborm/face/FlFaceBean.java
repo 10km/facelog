@@ -9,7 +9,6 @@ package net.gdface.facelog.dborm.face;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
-import net.gdface.facelog.dborm.face.FlFeatureBean;
 import net.gdface.facelog.dborm.image.FlImageBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;

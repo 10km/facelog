@@ -24,6 +24,8 @@ public interface Constant {
     //////////////////////////////////////
     // FOREIGN KEY INDEX DECLARE
     //////////////////////////////////////    
+    /** foreign key fl_device_group(parent) -> fl_device_group */
+    public static final int FL_DEVICE_GROUP_FK_PARENT = 0;
     /** foreign key fl_face(feature_md5) -> fl_feature */
     public static final int FL_FACE_FK_FEATURE_MD5 = 0;
     /** foreign key fl_face(image_md5) -> fl_image */
@@ -50,6 +52,8 @@ public interface Constant {
     public static final int FL_LOG_FK_PERSON_ID = 3;
     /** foreign key fl_person(image_md5) -> fl_image */
     public static final int FL_PERSON_FK_IMAGE_MD5 = 0;
+    /** foreign key fl_person_group(parent) -> fl_person_group */
+    public static final int FL_PERSON_GROUP_FK_PARENT = 0;
     //////////////////////////////////////
     // IMPORTED KEY INDEX DECLARE
     //////////////////////////////////////    
@@ -59,8 +63,10 @@ public interface Constant {
     public static final int FL_DEVICE_IK_FL_JUNCTION_DEVICE_GROUP_DEVICE_ID = 1;
     /** imported key fl_log(device_id) -> fl_device */
     public static final int FL_DEVICE_IK_FL_LOG_DEVICE_ID = 2;
+    /** imported key fl_device_group(parent) -> fl_device_group */
+    public static final int FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT = 0;
     /** imported key fl_junction_device_group(group_id) -> fl_device_group */
-    public static final int FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID = 0;
+    public static final int FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID = 1;
     /** imported key fl_log(compare_face) -> fl_face */
     public static final int FL_FACE_IK_FL_LOG_COMPARE_FACE = 0;
     /** imported key fl_face(feature_md5) -> fl_feature */
@@ -79,6 +85,8 @@ public interface Constant {
     public static final int FL_PERSON_IK_FL_LOG_PERSON_ID = 2;
     /** imported key fl_junction_person_group(group_id) -> fl_person_group */
     public static final int FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID = 0;
+    /** imported key fl_person_group(parent) -> fl_person_group */
+    public static final int FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT = 1;
     //////////////////////////////////////
     // INDEX INDEX DECLARE
     //////////////////////////////////////    
@@ -88,6 +96,8 @@ public interface Constant {
     public static final int FL_DEVICE_INDEX_SERIAL_NO = 1;
     /** fl_device index (group_id) */
     public static final int FL_DEVICE_INDEX_GROUP_ID = 2;
+    /** fl_device_group index (parent) */
+    public static final int FL_DEVICE_GROUP_INDEX_PARENT = 0;
     /** fl_face index (feature_md5) */
     public static final int FL_FACE_INDEX_FEATURE_MD5 = 0;
     /** fl_face index (image_md5) */
@@ -110,6 +120,8 @@ public interface Constant {
     public static final int FL_PERSON_INDEX_PAPERS_NUM = 1;
     /** fl_person index (expiry_date) */
     public static final int FL_PERSON_INDEX_EXPIRY_DATE = 2;
+    /** fl_person_group index (parent) */
+    public static final int FL_PERSON_GROUP_INDEX_PARENT = 0;
     //////////////////////////////////////
     // COLUMN ID DECLARE
     //////////////////////////////////////    
@@ -143,6 +155,9 @@ public interface Constant {
     /** Identify the fl_device_group.name field (ordinal:2). */
     public static final int FL_DEVICE_GROUP_ID_NAME = 1;
     public static final long FL_DEVICE_GROUP_ID_NAME_MASK = 1L << 1;
+    /** Identify the fl_device_group.parent field (ordinal:3). */
+    public static final int FL_DEVICE_GROUP_ID_PARENT = 2;
+    public static final long FL_DEVICE_GROUP_ID_PARENT_MASK = 1L << 2;
     /** Identify the fl_face.id field (ordinal:1). */
     public static final int FL_FACE_ID_ID = 0;
     public static final long FL_FACE_ID_ID_MASK = 1L << 0;
@@ -317,6 +332,9 @@ public interface Constant {
     /** Identify the fl_person_group.name field (ordinal:2). */
     public static final int FL_PERSON_GROUP_ID_NAME = 1;
     public static final long FL_PERSON_GROUP_ID_NAME_MASK = 1L << 1;
+    /** Identify the fl_person_group.parent field (ordinal:3). */
+    public static final int FL_PERSON_GROUP_ID_PARENT = 2;
+    public static final long FL_PERSON_GROUP_ID_PARENT_MASK = 1L << 2;
     /** Identify the fl_store.md5 field (ordinal:1). */
     public static final int FL_STORE_ID_MD5 = 0;
     public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
@@ -380,14 +398,17 @@ public interface Constant {
     /////////////////// fl_device_group ////////////
     /** Contains all the full fields of the fl_device_group table.*/
     public static final String FL_DEVICE_GROUP_FULL_FIELDS ="fl_device_group.id"
-                            + ",fl_device_group.name";
+                            + ",fl_device_group.name"
+                            + ",fl_device_group.parent";
     /** Field that contains the comma separated fields of the fl_device_group table. */
     public static final String FL_DEVICE_GROUP_FIELDS = "id"
-                            + ",name";
+                            + ",name"
+                            + ",parent";
     public static final java.util.List<String> FL_DEVICE_GROUP_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_device_group table. */
     public static final String FL_DEVICE_GROUP_JAVA_FIELDS = "id"
-                            + ",name";
+                            + ",name"
+                            + ",parent";
     public static final java.util.List<String> FL_DEVICE_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_JAVA_FIELDS.split(","));
     /////////////////// fl_face ////////////
     /** Contains all the full fields of the fl_face table.*/
@@ -602,14 +623,17 @@ public interface Constant {
     /////////////////// fl_person_group ////////////
     /** Contains all the full fields of the fl_person_group table.*/
     public static final String FL_PERSON_GROUP_FULL_FIELDS ="fl_person_group.id"
-                            + ",fl_person_group.name";
+                            + ",fl_person_group.name"
+                            + ",fl_person_group.parent";
     /** Field that contains the comma separated fields of the fl_person_group table. */
     public static final String FL_PERSON_GROUP_FIELDS = "id"
-                            + ",name";
+                            + ",name"
+                            + ",parent";
     public static final java.util.List<String> FL_PERSON_GROUP_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_person_group table. */
     public static final String FL_PERSON_GROUP_JAVA_FIELDS = "id"
-                            + ",name";
+                            + ",name"
+                            + ",parent";
     public static final java.util.List<String> FL_PERSON_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_JAVA_FIELDS.split(","));
     /////////////////// fl_store ////////////
     /** Contains all the full fields of the fl_store table.*/

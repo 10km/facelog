@@ -51,17 +51,16 @@ struct PersonBean {
   2: required i64 modified;
   3: required i64 initialized;
   4:  i32 id;
-  5:  i32 groupId;
-  6:  string name;
-  7:  i32 sex;
-  8:  i64 birthdate;
-  9:  i32 papersType;
-  10:  string papersNum;
-  11:  string imageMd5;
-  12:  i64 expiryDate;
-  13:  i64 createTime;
-  14:  i64 updateTime;
-  15:  ImageBean referencedByImageMd5;
+  5:  string name;
+  6:  i32 sex;
+  7:  i64 birthdate;
+  8:  i32 papersType;
+  9:  string papersNum;
+  10:  string imageMd5;
+  11:  i64 expiryDate;
+  12:  i64 createTime;
+  13:  i64 updateTime;
+  14:  ImageBean referencedByImageMd5;
 }
 
 struct FeatureBean {

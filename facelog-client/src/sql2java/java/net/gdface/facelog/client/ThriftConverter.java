@@ -352,8 +352,6 @@ public class ThriftConverter implements Constant{
             long modified = right.getModified();
             if(0L !=  (modified & FL_PERSON_ID_ID_MASK))
                 left.setId(right.getId());
-            if(0L !=  (modified & FL_PERSON_ID_GROUP_ID_MASK))
-                left.setGroupId(right.getGroupId());
             if(0L !=  (modified & FL_PERSON_ID_NAME_MASK))
                 left.setName(right.getName());
             if(0L !=  (modified & FL_PERSON_ID_SEX_MASK))
@@ -379,9 +377,6 @@ public class ThriftConverter implements Constant{
         protected void _toRight(PersonBean left, net.gdface.facelog.client.thrift.PersonBean right) {
             if(left.checkIdInitialized() ){
                 right.setId(left.getId());
-            }
-            if(left.checkGroupIdInitialized() ){
-                right.setGroupId(left.getGroupId());
             }
             if(left.checkNameInitialized() ){
                 right.setName(left.getName());

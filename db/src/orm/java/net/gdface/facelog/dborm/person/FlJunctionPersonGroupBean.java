@@ -9,8 +9,6 @@ package net.gdface.facelog.dborm.person;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
-import net.gdface.facelog.dborm.person.FlPersonBean;
-import net.gdface.facelog.dborm.person.FlPersonGroupBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;

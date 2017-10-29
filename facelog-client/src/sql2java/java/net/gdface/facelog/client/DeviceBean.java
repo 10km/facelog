@@ -110,6 +110,7 @@ public  class DeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.id</li>
+     * <li> imported key: fl_junction_device_group.device_id</li>
      * <li> imported key: fl_log.device_id</li>
      * <li> imported key: fl_image.device_id</li>
      * <li>comments: 设备id</li>

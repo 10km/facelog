@@ -115,6 +115,80 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
+     * Retrieves the {@link DeviceGroupBean} object from the fl_device_group.parent field.<BR>
+     * FK_NAME : fl_device_group_ibfk_1 
+     * @param bean the {@link DeviceGroupBean}
+     * @return the associated {@link DeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.1 GET IMPORTED
+    public DeviceGroupBean[] getDeviceGroupBeansByParent(DeviceGroupBean bean);
+    
+    /**
+     * Retrieves the {@link DeviceGroupBean} object from the fl_device_group.parent field.<BR>
+     * FK_NAME : fl_device_group_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link DeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer devicegroupId);
+    
+    /**
+     * @see #getDeviceGroupBeansByParentAsList(DeviceGroupBean,int,int)
+     */
+    //3.2 GET IMPORTED
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean);
+
+    /**
+     * Retrieves the {@link DeviceGroupBean} object from fl_device_group.parent field.<BR>
+     * FK_NAME:fl_device_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link DeviceGroupBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer devicegroupId);
+    /**
+     * delete the associated {@link DeviceGroupBean} objects from fl_device_group.parent field.<BR>
+     * FK_NAME:fl_device_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteDeviceGroupBeansByParent(Integer devicegroupId);
+    /**
+     * Retrieves the {@link DeviceGroupBean} object from fl_device_group.parent field.<BR>
+     * FK_NAME:fl_device_group_ibfk_1
+     * @param bean the {@link DeviceGroupBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link DeviceGroupBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(DeviceGroupBean bean,int startRow,int numRows);    
+    /**
+     * set  the {@link DeviceGroupBean} object array associate to DeviceGroupBean by the fl_device_group.parent field.<BR>
+     * FK_NAME : fl_device_group_ibfk_1 
+     * @param bean the referenced {@link DeviceGroupBean}
+     * @param importedBeans imported beans from fl_device_group
+     * @return importedBeans always
+     * @see {@link DeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
+     */
+    //3.3 SET IMPORTED
+    public DeviceGroupBean[] setDeviceGroupBeansByParent(DeviceGroupBean bean , DeviceGroupBean[] importedBeans);
+
+    /**
+     * set  the {@link DeviceGroupBean} object java.util.Collection associate to DeviceGroupBean by the fl_device_group.parent field.<BR>
+     * FK_NAME:fl_device_group_ibfk_1
+     * @param bean the referenced {@link DeviceGroupBean} 
+     * @param importedBeans imported beans from fl_device_group 
+     * @return importedBeans always
+     * @see {@link DeviceGroupManager#setReferencedByParent(DeviceGroupBean, DeviceGroupBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<DeviceGroupBean>> C setDeviceGroupBeansByParent(DeviceGroupBean bean , C importedBeans);
+
+    /**
      * Retrieves the {@link JunctionDeviceGroupBean} object from the fl_junction_device_group.group_id field.<BR>
      * FK_NAME : fl_junction_device_group_ibfk_2 
      * @param bean the {@link DeviceGroupBean}
@@ -192,41 +266,97 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * Save the DeviceGroupBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
-         * @param impJunctiondevicegroupByGroupId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceGroupBean} 
+     * @param refDevicegroupByParent the {@link DeviceGroupBean} bean referenced by {@link DeviceGroupBean} 
+     * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
+     * @param impJunctiondevicegroupByGroupId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     //3.5 SYNC SAVE 
     public DeviceGroupBean save(DeviceGroupBean bean
-        
-        , JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId );
+        , DeviceGroupBean refDevicegroupByParent 
+        , DeviceGroupBean[] impDevicegroupByParent , JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceGroupBean , JunctionDeviceGroupBean[] )}
+     * @see {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceGroupBean[] , JunctionDeviceGroupBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
-        
-        ,final JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId );
+        ,final DeviceGroupBean refDevicegroupByParent 
+        ,final DeviceGroupBean[] impDevicegroupByParent ,final JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId );
     /**
      * Save the DeviceGroupBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
-         * @param impJunctiondevicegroupByGroupId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceGroupBean} 
+     * @param refDevicegroupByParent the {@link DeviceGroupBean} bean referenced by {@link DeviceGroupBean} 
+     * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
+     * @param impJunctiondevicegroupByGroupId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     //3.7 SYNC SAVE 
     public DeviceGroupBean save(DeviceGroupBean bean
-        
-        , java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId );
+        , DeviceGroupBean refDevicegroupByParent 
+        , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceGroupBean , java.util.Collection )}
+     * @see {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
-        
-        ,final  java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId );
-  
+        ,final DeviceGroupBean refDevicegroupByParent 
+        ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId );
+      //////////////////////////////////////
+    // GET/SET FOREIGN KEY BEAN METHOD
+    //////////////////////////////////////
+    /**
+     * Retrieves the {@link DeviceGroupBean} object referenced by {@link DeviceGroupBean#getParent}() field.<br>
+     * FK_NAME : fl_device_group_ibfk_1
+     * @param bean the {@link DeviceGroupBean}
+     * @return the associated {@link DeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //5.1 GET REFERENCED VALUE
+    public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean);
+
+    /**
+     * Associates the {@link DeviceGroupBean} object to the {@link DeviceGroupBean} object by {@link DeviceGroupBean#getParent}() field.
+     *
+     * @param bean the {@link DeviceGroupBean} object to use
+     * @param beanToSet the {@link DeviceGroupBean} object to associate to the {@link DeviceGroupBean}
+     * @return always beanToSet saved
+     * @throws WrapDAOException
+     */
+    //5.2 SET REFERENCED 
+    public DeviceGroupBean setReferencedByParent(DeviceGroupBean bean, DeviceGroupBean beanToSet);
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
+
+
+     /**
+     * Retrieves an array of DeviceGroupBean using the parent index.
+     *
+     * @param parent the parent column's value filter.
+     * @return an array of DeviceGroupBean
+     */
+    public DeviceGroupBean[] loadByIndexParent(Integer parent);
+    
+    /**
+     * Retrieves a list of DeviceGroupBean using the parent index.
+     *
+     * @param parent the parent column's value filter.
+     * @return a list of DeviceGroupBean
+     */
+    public java.util.List<DeviceGroupBean> loadByIndexParentAsList(Integer parent);
+
+    /**
+     * Deletes rows using the parent index.
+     *
+     * @param parent the parent column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexParent(Integer parent);
+    
+
     /**
      * return a primary key list from {@link DeviceGroupBean} array
      * @param array

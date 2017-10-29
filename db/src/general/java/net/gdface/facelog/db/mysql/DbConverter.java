@@ -86,6 +86,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setId(right.getId());
             if(right.checkNameInitialized())
                 left.setName(right.getName());
+            if(right.checkParentInitialized())
+                left.setParent(right.getParent());
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -96,6 +98,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setId(left.getId());
             if(left.checkNameInitialized() )
                 right.setName(left.getName());
+            if(left.checkParentInitialized() )
+                right.setParent(left.getParent());
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};
@@ -437,6 +441,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 left.setId(right.getId());
             if(right.checkNameInitialized())
                 left.setName(right.getName());
+            if(right.checkParentInitialized())
+                left.setParent(right.getParent());
             left.setNew(right.isNew());
             left.setModified(right.getModified());
         }
@@ -447,6 +453,8 @@ public class DbConverter implements IDbConverter<net.gdface.facelog.dborm.device
                 right.setId(left.getId());
             if(left.checkNameInitialized() )
                 right.setName(left.getName());
+            if(left.checkParentInitialized() )
+                right.setParent(left.getParent());
             right.setNew(left.isNew());
             right.setModified(left.getModified());
         }};

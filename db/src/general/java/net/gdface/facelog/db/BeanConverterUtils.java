@@ -455,6 +455,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setName");
             getSetterNoThrow("setName",String.class); 
+            getGetter("setParent");
+            getSetterNoThrow("setParent",Integer.class,int.class);                    
         }
         @Override
         protected void _fromRight(DeviceGroupBean left, R_DEVICEGROUP right) {
@@ -470,6 +472,8 @@ public class BeanConverterUtils implements Constant {
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
                     left.setName(cast(String.class,getterMethod.invoke(right)));
+                if( bitCheck("parent",modified) && (null != (getterMethod = methods.get("getParent"))))
+                    left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                 left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
@@ -494,6 +498,12 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setParent"),left.getParent()));
+                        bitOR("parent",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setInitialized"))){
@@ -2168,6 +2178,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setName");
             getSetterNoThrow("setName",String.class); 
+            getGetter("setParent");
+            getSetterNoThrow("setParent",Integer.class,int.class);                    
         }
         @Override
         protected void _fromRight(PersonGroupBean left, R_PERSONGROUP right) {
@@ -2183,6 +2195,8 @@ public class BeanConverterUtils implements Constant {
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
                     left.setName(cast(String.class,getterMethod.invoke(right)));
+                if( bitCheck("parent",modified) && (null != (getterMethod = methods.get("getParent"))))
+                    left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                 left.isNew((Boolean)methods.get("isNew").invoke(right));
             }catch(RuntimeException e){
                 throw e;
@@ -2207,6 +2221,12 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setParent"),left.getParent()));
+                        bitOR("parent",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
                 if(null != (setterMethod = methods.get("setInitialized"))){

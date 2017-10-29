@@ -31,6 +31,9 @@ public  class FlDeviceGroupBean
     /** comments:设备组名 */
     private String name;
 
+    /** comments:上一级设备组id */
+    private Integer parent;
+
     /** columns modified flag */
     private long modified = 0L;
     /** columns initialized flag */
@@ -100,6 +103,7 @@ public  class FlDeviceGroupBean
      * <ul>
      * <li>full name: fl_device_group.id</li>
      * <li> imported key: fl_junction_device_group.group_id</li>
+     * <li> imported key: fl_device_group.parent</li>
      * <li>comments: 设备组id</li>
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>
@@ -220,6 +224,89 @@ public  class FlDeviceGroupBean
     {
         return 0L !=  (initialized & FL_DEVICE_GROUP_ID_NAME_MASK);
     }
+    /**
+     * Getter method for {@link #parent}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device_group.parent</li>
+     * <li> foreign key: fl_device_group.id</li>
+     * <li>comments: 上一级设备组id</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of parent
+     */
+    public Integer getParent(){
+        return parent;
+    }
+    /**
+     * Setter method for {@link #parent}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value  to be assigned to parent
+     */
+    public void setParent(Integer newVal)
+    {
+        if ((newVal != null && parent != null && (newVal.compareTo(parent) == 0)) ||
+            (newVal == null && parent == null && checkParentInitialized())) {
+            return;
+        }
+        parent = newVal;
+
+        modified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
+        initialized |= FL_DEVICE_GROUP_ID_PARENT_MASK;
+    }
+
+    /**
+     * Setter method for {@link #parent}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to parent
+     */
+    public void setParent(int newVal)
+    {
+        setParent(new Integer(newVal));
+    }
+    /**
+     * Determines if the parent has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkParentModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_GROUP_ID_PARENT_MASK);
+    }
+
+    /**
+     * Determines if the parent has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkParentInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_PARENT_MASK);
+    }
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlDeviceGroupBean} by {@link #parent} . <br>
+     * FOREIGN KEY (parent) REFERENCES fl_device_group(id)
+     */
+    private FlDeviceGroupBean referencedByParent;
+    /** Getter method for {@link #referencedByParent}. */
+    public FlDeviceGroupBean getReferencedByParent() {
+        return this.referencedByParent;
+    }
+    /** Setter method for {@link #referencedByParent}. */
+    public void setReferencedByParent(FlDeviceGroupBean reference) {
+        this.referencedByParent = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -245,6 +332,8 @@ public  class FlDeviceGroupBean
             return checkIdModified();
         case FL_DEVICE_GROUP_ID_NAME:
             return checkNameModified();
+        case FL_DEVICE_GROUP_ID_PARENT:
+            return checkParentModified();
         }
         return false;
     }
@@ -262,6 +351,8 @@ public  class FlDeviceGroupBean
             return checkIdInitialized();
         case FL_DEVICE_GROUP_ID_NAME:
             return checkNameInitialized();
+        case FL_DEVICE_GROUP_ID_PARENT:
+            return checkParentInitialized();
         }
         return false;
     }
@@ -307,7 +398,8 @@ public  class FlDeviceGroupBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_DEVICE_GROUP_ID_NAME_MASK));
+        modified &= (~(FL_DEVICE_GROUP_ID_NAME_MASK |
+            FL_DEVICE_GROUP_ID_PARENT_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -327,6 +419,7 @@ public  class FlDeviceGroupBean
         return new EqualsBuilder()
             .append(getId(), obj.getId())
             .append(getName(), obj.getName())
+            .append(getParent(), obj.getParent())
             .isEquals();
     }
 
@@ -343,6 +436,7 @@ public  class FlDeviceGroupBean
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tid=").append(getId()).append("\n")
             .append("\tname=").append(getName()).append("\n")
+            .append("\tparent=").append(getParent()).append("\n")
             .append("]\n")
             .toString();
     }
@@ -352,6 +446,7 @@ public  class FlDeviceGroupBean
         return new CompareToBuilder()
             .append(getId(), object.getId())
             .append(getName(), object.getName())
+            .append(getParent(), object.getParent())
             .toComparison();
     }
     @Override
@@ -371,6 +466,7 @@ public  class FlDeviceGroupBean
     {
         setId(null);
         setName(null);
+        setParent(null);
         isNew(true);
         resetInitialized();
         resetIsModified();
@@ -386,7 +482,7 @@ public  class FlDeviceGroupBean
     public void copy(FlDeviceGroupBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 2; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -428,6 +524,8 @@ public  class FlDeviceGroupBean
             return (T)getId();        
         case FL_DEVICE_GROUP_ID_NAME: 
             return (T)getName();        
+        case FL_DEVICE_GROUP_ID_PARENT: 
+            return (T)getParent();        
         }
         return null;
     }
@@ -442,6 +540,8 @@ public  class FlDeviceGroupBean
             setId((Integer)value);
         case FL_DEVICE_GROUP_ID_NAME:        
             setName((String)value);
+        case FL_DEVICE_GROUP_ID_PARENT:        
+            setParent((Integer)value);
         }
     }
     

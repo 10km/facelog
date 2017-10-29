@@ -189,44 +189,174 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     public <C extends java.util.Collection<JunctionPersonGroupBean>> C setJunctionPersonGroupBeansByGroupId(PersonGroupBean bean , C importedBeans);
 
     /**
+     * Retrieves the {@link PersonGroupBean} object from the fl_person_group.parent field.<BR>
+     * FK_NAME : fl_person_group_ibfk_1 
+     * @param bean the {@link PersonGroupBean}
+     * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.1 GET IMPORTED
+    public PersonGroupBean[] getPersonGroupBeansByParent(PersonGroupBean bean);
+    
+    /**
+     * Retrieves the {@link PersonGroupBean} object from the fl_person_group.parent field.<BR>
+     * FK_NAME : fl_person_group_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link PersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public PersonGroupBean[] getPersonGroupBeansByParent(Integer persongroupId);
+    
+    /**
+     * @see #getPersonGroupBeansByParentAsList(PersonGroupBean,int,int)
+     */
+    //3.2 GET IMPORTED
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean);
+
+    /**
+     * Retrieves the {@link PersonGroupBean} object from fl_person_group.parent field.<BR>
+     * FK_NAME:fl_person_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link PersonGroupBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer persongroupId);
+    /**
+     * delete the associated {@link PersonGroupBean} objects from fl_person_group.parent field.<BR>
+     * FK_NAME:fl_person_group_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deletePersonGroupBeansByParent(Integer persongroupId);
+    /**
+     * Retrieves the {@link PersonGroupBean} object from fl_person_group.parent field.<BR>
+     * FK_NAME:fl_person_group_ibfk_1
+     * @param bean the {@link PersonGroupBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link PersonGroupBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(PersonGroupBean bean,int startRow,int numRows);    
+    /**
+     * set  the {@link PersonGroupBean} object array associate to PersonGroupBean by the fl_person_group.parent field.<BR>
+     * FK_NAME : fl_person_group_ibfk_1 
+     * @param bean the referenced {@link PersonGroupBean}
+     * @param importedBeans imported beans from fl_person_group
+     * @return importedBeans always
+     * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
+     */
+    //3.3 SET IMPORTED
+    public PersonGroupBean[] setPersonGroupBeansByParent(PersonGroupBean bean , PersonGroupBean[] importedBeans);
+
+    /**
+     * set  the {@link PersonGroupBean} object java.util.Collection associate to PersonGroupBean by the fl_person_group.parent field.<BR>
+     * FK_NAME:fl_person_group_ibfk_1
+     * @param bean the referenced {@link PersonGroupBean} 
+     * @param importedBeans imported beans from fl_person_group 
+     * @return importedBeans always
+     * @see {@link PersonGroupManager#setReferencedByParent(PersonGroupBean, PersonGroupBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<PersonGroupBean>> C setPersonGroupBeansByParent(PersonGroupBean bean , C importedBeans);
+
+    /**
      * Save the PersonGroupBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
-         * @param impJunctionpersongroupByGroupId the {@link JunctionPersonGroupBean} bean refer to {@link PersonGroupBean} 
+     * @param refPersongroupByParent the {@link PersonGroupBean} bean referenced by {@link PersonGroupBean} 
+     * @param impJunctionpersongroupByGroupId the {@link JunctionPersonGroupBean} bean refer to {@link PersonGroupBean} 
+     * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
     //3.5 SYNC SAVE 
     public PersonGroupBean save(PersonGroupBean bean
-        
-        , JunctionPersonGroupBean[] impJunctionpersongroupByGroupId );
+        , PersonGroupBean refPersongroupByParent 
+        , JunctionPersonGroupBean[] impJunctionpersongroupByGroupId , PersonGroupBean[] impPersongroupByParent );
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonGroupBean , JunctionPersonGroupBean[] )}
+     * @see {@link #save(PersonGroupBean , PersonGroupBean , JunctionPersonGroupBean[] , PersonGroupBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
-        
-        ,final JunctionPersonGroupBean[] impJunctionpersongroupByGroupId );
+        ,final PersonGroupBean refPersongroupByParent 
+        ,final JunctionPersonGroupBean[] impJunctionpersongroupByGroupId ,final PersonGroupBean[] impPersongroupByParent );
     /**
      * Save the PersonGroupBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
-         * @param impJunctionpersongroupByGroupId the {@link JunctionPersonGroupBean} bean refer to {@link PersonGroupBean} 
+     * @param refPersongroupByParent the {@link PersonGroupBean} bean referenced by {@link PersonGroupBean} 
+     * @param impJunctionpersongroupByGroupId the {@link JunctionPersonGroupBean} bean refer to {@link PersonGroupBean} 
+     * @param impPersongroupByParent the {@link PersonGroupBean} bean refer to {@link PersonGroupBean} 
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
     //3.7 SYNC SAVE 
     public PersonGroupBean save(PersonGroupBean bean
-        
-        , java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByGroupId );
+        , PersonGroupBean refPersongroupByParent 
+        , java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByGroupId , java.util.Collection<PersonGroupBean> impPersongroupByParent );
     /**
      * Transaction version for sync save
-     * @see {@link #save(PersonGroupBean , java.util.Collection )}
+     * @see {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
-        
-        ,final  java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByGroupId );
-  
+        ,final PersonGroupBean refPersongroupByParent 
+        ,final  java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByGroupId ,final  java.util.Collection<PersonGroupBean> impPersongroupByParent );
+      //////////////////////////////////////
+    // GET/SET FOREIGN KEY BEAN METHOD
+    //////////////////////////////////////
+    /**
+     * Retrieves the {@link PersonGroupBean} object referenced by {@link PersonGroupBean#getParent}() field.<br>
+     * FK_NAME : fl_person_group_ibfk_1
+     * @param bean the {@link PersonGroupBean}
+     * @return the associated {@link PersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     */
+    //5.1 GET REFERENCED VALUE
+    public PersonGroupBean getReferencedByParent(PersonGroupBean bean);
+
+    /**
+     * Associates the {@link PersonGroupBean} object to the {@link PersonGroupBean} object by {@link PersonGroupBean#getParent}() field.
+     *
+     * @param bean the {@link PersonGroupBean} object to use
+     * @param beanToSet the {@link PersonGroupBean} object to associate to the {@link PersonGroupBean}
+     * @return always beanToSet saved
+     * @throws WrapDAOException
+     */
+    //5.2 SET REFERENCED 
+    public PersonGroupBean setReferencedByParent(PersonGroupBean bean, PersonGroupBean beanToSet);
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
+
+
+     /**
+     * Retrieves an array of PersonGroupBean using the parent index.
+     *
+     * @param parent the parent column's value filter.
+     * @return an array of PersonGroupBean
+     */
+    public PersonGroupBean[] loadByIndexParent(Integer parent);
+    
+    /**
+     * Retrieves a list of PersonGroupBean using the parent index.
+     *
+     * @param parent the parent column's value filter.
+     * @return a list of PersonGroupBean
+     */
+    public java.util.List<PersonGroupBean> loadByIndexParentAsList(Integer parent);
+
+    /**
+     * Deletes rows using the parent index.
+     *
+     * @param parent the parent column's value filter.
+     * @return the number of deleted objects
+     */
+    public int deleteByIndexParent(Integer parent);
+    
+
     /**
      * return a primary key list from {@link PersonGroupBean} array
      * @param array

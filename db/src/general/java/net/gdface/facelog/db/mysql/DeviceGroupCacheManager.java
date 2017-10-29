@@ -103,6 +103,17 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
         return super.existsPrimaryKey(id);
     }
     
+    //////////////////////////////////////
+    // GET/SET FOREIGN KEY BEAN METHOD
+    //////////////////////////////////////
+
+    //5.1 GET REFERENCED VALUE override IDeviceGroupManager
+    @Override 
+    public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean){
+        if(null == bean)return null;
+        bean.setReferencedByParent(DeviceGroupCacheManager.getInstance().loadByPrimaryKey(bean.getParent())); 
+        return bean.getReferencedByParent();
+    }
     private class CacheAction implements Action<DeviceGroupBean>{
         final Action<DeviceGroupBean> action;
         CacheAction(Action<DeviceGroupBean>action){
@@ -128,6 +139,10 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
 
     //_____________________________________________________________________
     //

@@ -5,32 +5,28 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: bean.java.vm
 // ______________________________________________________
-package net.gdface.facelog.db;
+package net.gdface.facelog.client;
 import java.io.Serializable;
-import com.facebook.swift.codec.ThriftStruct;
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
- * DeviceGroupBean is a mapping of fl_device_group Table.
+ * PersonGroupBean is a mapping of fl_person_group Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 设备组信息 </li>
+ *    <li>comments: 用户组信息 </li>
  * </ul>
  * @author guyadong
 */
-@ThriftStruct
-public final class DeviceGroupBean
-    implements Serializable,BaseBean<DeviceGroupBean>,Comparable<DeviceGroupBean>,Constant,Cloneable
+public  class PersonGroupBean
+    implements Serializable,BaseBean<PersonGroupBean>,Comparable<PersonGroupBean>,Constant,Cloneable
 {
-    private static final long serialVersionUID = 4625524271694791446L;
+    private static final long serialVersionUID = 3660326998381566389L;
     
-    /** comments:设备组id */
+    /** comments:用户组id */
     private Integer id;
 
-    /** comments:设备组名 */
+    /** comments:用户组名 */
     private String name;
 
-    /** comments:上一级设备组id */
+    /** comments:上一级用户组id */
     private Integer parent;
 
     /** columns modified flag */
@@ -43,7 +39,6 @@ public final class DeviceGroupBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -63,7 +58,6 @@ public final class DeviceGroupBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -71,7 +65,6 @@ public final class DeviceGroupBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -79,14 +72,12 @@ public final class DeviceGroupBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -94,11 +85,10 @@ public final class DeviceGroupBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public DeviceGroupBean(){
+    public PersonGroupBean(){
         super();
     }
     /**
@@ -106,10 +96,10 @@ public final class DeviceGroupBean
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device_group.id</li>
-     * <li> imported key: fl_junction_device_group.group_id</li>
-     * <li> imported key: fl_device_group.parent</li>
-     * <li>comments: 设备组id</li>
+     * <li>full name: fl_person_group.id</li>
+     * <li> imported key: fl_junction_person_group.group_id</li>
+     * <li> imported key: fl_person_group.parent</li>
+     * <li>comments: 用户组id</li>
      * <li>AUTO_INCREMENT</li>
      * <li>NOT NULL</li>
      * <li>column size: 10</li>
@@ -118,7 +108,6 @@ public final class DeviceGroupBean
      *
      * @return the value of id
      */
-    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -130,7 +119,6 @@ public final class DeviceGroupBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -139,8 +127,8 @@ public final class DeviceGroupBean
         }
         id = newVal;
 
-        modified |= FL_DEVICE_GROUP_ID_ID_MASK;
-        initialized |= FL_DEVICE_GROUP_ID_ID_MASK;
+        modified |= FL_PERSON_GROUP_ID_ID_MASK;
+        initialized |= FL_PERSON_GROUP_ID_ID_MASK;
     }
 
     /**
@@ -160,7 +148,7 @@ public final class DeviceGroupBean
      */
     public boolean checkIdModified()
     {
-        return 0L !=  (modified & FL_DEVICE_GROUP_ID_ID_MASK);
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_ID_MASK);
     }
 
     /**
@@ -172,14 +160,14 @@ public final class DeviceGroupBean
      */
     public boolean checkIdInitialized()
     {
-        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_ID_MASK);
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_ID_MASK);
     }
     /**
      * Getter method for {@link #name}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device_group.name</li>
-     * <li>comments: 设备组名</li>
+     * <li>full name: fl_person_group.name</li>
+     * <li>comments: 用户组名</li>
      * <li>NOT NULL</li>
      * <li>column size: 32</li>
      * <li>JDBC type returned by the driver: Types.VARCHAR</li>
@@ -187,7 +175,6 @@ public final class DeviceGroupBean
      *
      * @return the value of name
      */
-    @ThriftField(value=5)
     public String getName(){
         return name;
     }
@@ -199,7 +186,6 @@ public final class DeviceGroupBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to name
      */
-    @ThriftField()
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -208,8 +194,8 @@ public final class DeviceGroupBean
         }
         name = newVal;
 
-        modified |= FL_DEVICE_GROUP_ID_NAME_MASK;
-        initialized |= FL_DEVICE_GROUP_ID_NAME_MASK;
+        modified |= FL_PERSON_GROUP_ID_NAME_MASK;
+        initialized |= FL_PERSON_GROUP_ID_NAME_MASK;
     }
 
     /**
@@ -219,7 +205,7 @@ public final class DeviceGroupBean
      */
     public boolean checkNameModified()
     {
-        return 0L !=  (modified & FL_DEVICE_GROUP_ID_NAME_MASK);
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_NAME_MASK);
     }
 
     /**
@@ -231,22 +217,21 @@ public final class DeviceGroupBean
      */
     public boolean checkNameInitialized()
     {
-        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_NAME_MASK);
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_NAME_MASK);
     }
     /**
      * Getter method for {@link #parent}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_device_group.parent</li>
-     * <li> foreign key: fl_device_group.id</li>
-     * <li>comments: 上一级设备组id</li>
+     * <li>full name: fl_person_group.parent</li>
+     * <li> foreign key: fl_person_group.id</li>
+     * <li>comments: 上一级用户组id</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
      * @return the value of parent
      */
-    @ThriftField(value=6)
     public Integer getParent(){
         return parent;
     }
@@ -258,7 +243,6 @@ public final class DeviceGroupBean
      *
      * @param newVal the new value  to be assigned to parent
      */
-    @ThriftField()
     public void setParent(Integer newVal)
     {
         if ((newVal != null && parent != null && (newVal.compareTo(parent) == 0)) ||
@@ -267,8 +251,8 @@ public final class DeviceGroupBean
         }
         parent = newVal;
 
-        modified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
-        initialized |= FL_DEVICE_GROUP_ID_PARENT_MASK;
+        modified |= FL_PERSON_GROUP_ID_PARENT_MASK;
+        initialized |= FL_PERSON_GROUP_ID_PARENT_MASK;
     }
 
     /**
@@ -288,7 +272,7 @@ public final class DeviceGroupBean
      */
     public boolean checkParentModified()
     {
-        return 0L !=  (modified & FL_DEVICE_GROUP_ID_PARENT_MASK);
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_PARENT_MASK);
     }
 
     /**
@@ -300,24 +284,22 @@ public final class DeviceGroupBean
      */
     public boolean checkParentInitialized()
     {
-        return 0L !=  (initialized & FL_DEVICE_GROUP_ID_PARENT_MASK);
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_PARENT_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link DeviceGroupBean} by {@link #parent} . <br>
-     * FOREIGN KEY (parent) REFERENCES fl_device_group(id)
+     * The referenced {@link PersonGroupBean} by {@link #parent} . <br>
+     * FOREIGN KEY (parent) REFERENCES fl_person_group(id)
      */
-    private DeviceGroupBean referencedByParent;
+    private PersonGroupBean referencedByParent;
     /** Getter method for {@link #referencedByParent}. */
-    @ThriftField(value=7)
-    public DeviceGroupBean getReferencedByParent() {
+    public PersonGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
     /** Setter method for {@link #referencedByParent}. */
-    @ThriftField()
-    public void setReferencedByParent(DeviceGroupBean reference) {
+    public void setReferencedByParent(PersonGroupBean reference) {
         this.referencedByParent = reference;
     }
 
@@ -341,11 +323,11 @@ public final class DeviceGroupBean
      */
     public boolean isModified(int columnID){
         switch ( columnID ){
-        case FL_DEVICE_GROUP_ID_ID:
+        case FL_PERSON_GROUP_ID_ID:
             return checkIdModified();
-        case FL_DEVICE_GROUP_ID_NAME:
+        case FL_PERSON_GROUP_ID_NAME:
             return checkNameModified();
-        case FL_DEVICE_GROUP_ID_PARENT:
+        case FL_PERSON_GROUP_ID_PARENT:
             return checkParentModified();
         }
         return false;
@@ -360,11 +342,11 @@ public final class DeviceGroupBean
      */
     public boolean isInitialized(int columnID){
         switch(columnID) {
-        case FL_DEVICE_GROUP_ID_ID:
+        case FL_PERSON_GROUP_ID_ID:
             return checkIdInitialized();
-        case FL_DEVICE_GROUP_ID_NAME:
+        case FL_PERSON_GROUP_ID_NAME:
             return checkNameInitialized();
-        case FL_DEVICE_GROUP_ID_PARENT:
+        case FL_PERSON_GROUP_ID_PARENT:
             return checkParentInitialized();
         }
         return false;
@@ -404,15 +386,15 @@ public final class DeviceGroupBean
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~(FL_DEVICE_GROUP_ID_ID_MASK));
+        modified &= (~(FL_PERSON_GROUP_ID_ID_MASK));
     }
     /**
      * Resets columns modification status except primary keys to 'not modified'.
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_DEVICE_GROUP_ID_NAME_MASK |
-            FL_DEVICE_GROUP_ID_PARENT_MASK));
+        modified &= (~(FL_PERSON_GROUP_ID_NAME_MASK |
+            FL_PERSON_GROUP_ID_PARENT_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -424,11 +406,11 @@ public final class DeviceGroupBean
     @Override
     public boolean equals(Object object)
     {
-        if (!(object instanceof DeviceGroupBean)) {
+        if (!(object instanceof PersonGroupBean)) {
             return false;
         }
 
-        DeviceGroupBean obj = (DeviceGroupBean) object;
+        PersonGroupBean obj = (PersonGroupBean) object;
         return new EqualsBuilder()
             .append(getId(), obj.getId())
             .append(getName(), obj.getName())
@@ -455,7 +437,7 @@ public final class DeviceGroupBean
     }
 
     @Override
-    public int compareTo(DeviceGroupBean object){
+    public int compareTo(PersonGroupBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
             .append(getName(), object.getName())
@@ -463,9 +445,9 @@ public final class DeviceGroupBean
             .toComparison();
     }
     @Override
-    public DeviceGroupBean clone(){
+    public PersonGroupBean clone(){
         try {
-            return (DeviceGroupBean) super.clone();
+            return (PersonGroupBean) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -475,7 +457,7 @@ public final class DeviceGroupBean
     *
     * @author guyadong
     */
-    public DeviceGroupBean clean()
+    public PersonGroupBean clean()
     {
         setId(null);
         setName(null);
@@ -492,7 +474,7 @@ public final class DeviceGroupBean
      * @param bean the bean to copy into the current bean
      * @param fieldList the column id list to copy into the current bean
      */
-    public void copy(DeviceGroupBean bean, int... fieldList)
+    public void copy(PersonGroupBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             for (int i = 0; i < 3; ++i) {
@@ -512,7 +494,7 @@ public final class DeviceGroupBean
      * @param bean the bean to copy into the current bean
      * @param fieldList the column name list to copy into the current bean
      */
-    public void copy(DeviceGroupBean bean, String... fieldList)
+    public void copy(PersonGroupBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             copy(bean,(int[])null);
@@ -533,11 +515,11 @@ public final class DeviceGroupBean
     public <T>T getValue(int columnID)
     {
         switch( columnID ){
-        case FL_DEVICE_GROUP_ID_ID: 
+        case FL_PERSON_GROUP_ID_ID: 
             return (T)getId();        
-        case FL_DEVICE_GROUP_ID_NAME: 
+        case FL_PERSON_GROUP_ID_NAME: 
             return (T)getName();        
-        case FL_DEVICE_GROUP_ID_PARENT: 
+        case FL_PERSON_GROUP_ID_PARENT: 
             return (T)getParent();        
         }
         return null;
@@ -549,11 +531,11 @@ public final class DeviceGroupBean
     public <T> void setValue(int columnID,T value)
     {
         switch( columnID ) {
-        case FL_DEVICE_GROUP_ID_ID:        
+        case FL_PERSON_GROUP_ID_ID:        
             setId((Integer)value);
-        case FL_DEVICE_GROUP_ID_NAME:        
+        case FL_PERSON_GROUP_ID_NAME:        
             setName((String)value);
-        case FL_DEVICE_GROUP_ID_PARENT:        
+        case FL_PERSON_GROUP_ID_PARENT:        
             setParent((Integer)value);
         }
     }
@@ -575,9 +557,9 @@ public final class DeviceGroupBean
     }
 
     public static int columnIDOf(String column){
-        int index = FL_DEVICE_GROUP_FIELDS_LIST.indexOf(column);
+        int index = FL_PERSON_GROUP_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
-            index = FL_DEVICE_GROUP_JAVA_FIELDS_LIST.indexOf(column);
+            index = FL_PERSON_GROUP_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
 }

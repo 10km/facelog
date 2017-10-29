@@ -5,11 +5,8 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: bean.java.vm
 // ______________________________________________________
-package net.gdface.facelog.db;
+package net.gdface.facelog.client;
 import java.io.Serializable;
-import com.facebook.swift.codec.ThriftStruct;
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftField.Requiredness;
 /**
  * DeviceGroupBean is a mapping of fl_device_group Table.
  * <br>Meta Data Information (in progress):
@@ -18,11 +15,10 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * </ul>
  * @author guyadong
 */
-@ThriftStruct
-public final class DeviceGroupBean
+public  class DeviceGroupBean
     implements Serializable,BaseBean<DeviceGroupBean>,Comparable<DeviceGroupBean>,Constant,Cloneable
 {
-    private static final long serialVersionUID = 4625524271694791446L;
+    private static final long serialVersionUID = 7041764560829142328L;
     
     /** comments:设备组id */
     private Integer id;
@@ -43,7 +39,6 @@ public final class DeviceGroupBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -63,7 +58,6 @@ public final class DeviceGroupBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -71,7 +65,6 @@ public final class DeviceGroupBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -79,14 +72,12 @@ public final class DeviceGroupBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -94,7 +85,6 @@ public final class DeviceGroupBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
@@ -118,7 +108,6 @@ public final class DeviceGroupBean
      *
      * @return the value of id
      */
-    @ThriftField(value=4)
     public Integer getId(){
         return id;
     }
@@ -130,7 +119,6 @@ public final class DeviceGroupBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
@@ -187,7 +175,6 @@ public final class DeviceGroupBean
      *
      * @return the value of name
      */
-    @ThriftField(value=5)
     public String getName(){
         return name;
     }
@@ -199,7 +186,6 @@ public final class DeviceGroupBean
      *
      * @param newVal the new value (NOT NULL) to be assigned to name
      */
-    @ThriftField()
     public void setName(String newVal)
     {
         if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
@@ -246,7 +232,6 @@ public final class DeviceGroupBean
      *
      * @return the value of parent
      */
-    @ThriftField(value=6)
     public Integer getParent(){
         return parent;
     }
@@ -258,7 +243,6 @@ public final class DeviceGroupBean
      *
      * @param newVal the new value  to be assigned to parent
      */
-    @ThriftField()
     public void setParent(Integer newVal)
     {
         if ((newVal != null && parent != null && (newVal.compareTo(parent) == 0)) ||
@@ -311,12 +295,10 @@ public final class DeviceGroupBean
      */
     private DeviceGroupBean referencedByParent;
     /** Getter method for {@link #referencedByParent}. */
-    @ThriftField(value=7)
     public DeviceGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
     /** Setter method for {@link #referencedByParent}. */
-    @ThriftField()
     public void setReferencedByParent(DeviceGroupBean reference) {
         this.referencedByParent = reference;
     }

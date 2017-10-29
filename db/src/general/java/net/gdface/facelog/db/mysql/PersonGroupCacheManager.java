@@ -103,6 +103,17 @@ public class PersonGroupCacheManager extends PersonGroupManager
         return super.existsPrimaryKey(id);
     }
     
+    //////////////////////////////////////
+    // GET/SET FOREIGN KEY BEAN METHOD
+    //////////////////////////////////////
+
+    //5.1 GET REFERENCED VALUE override IPersonGroupManager
+    @Override 
+    public PersonGroupBean getReferencedByParent(PersonGroupBean bean){
+        if(null == bean)return null;
+        bean.setReferencedByParent(PersonGroupCacheManager.getInstance().loadByPrimaryKey(bean.getParent())); 
+        return bean.getReferencedByParent();
+    }
     private class CacheAction implements Action<PersonGroupBean>{
         final Action<PersonGroupBean> action;
         CacheAction(Action<PersonGroupBean>action){
@@ -128,6 +139,10 @@ public class PersonGroupCacheManager extends PersonGroupManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
+    //_____________________________________________________________________
+    //
+    // USING INDICES
+    //_____________________________________________________________________
 
     //_____________________________________________________________________
     //

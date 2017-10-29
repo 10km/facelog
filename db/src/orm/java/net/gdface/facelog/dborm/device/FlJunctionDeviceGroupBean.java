@@ -9,8 +9,6 @@ package net.gdface.facelog.dborm.device;
 import java.io.Serializable;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
-import net.gdface.facelog.dborm.device.FlDeviceBean;
-import net.gdface.facelog.dborm.device.FlDeviceGroupBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
 import net.gdface.facelog.dborm.EqualsBuilder;
 import net.gdface.facelog.dborm.HashCodeBuilder;
