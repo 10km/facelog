@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS fl_store (
 CREATE TABLE IF NOT EXISTS fl_device_group (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备组id',
   `name`        varchar(32) NOT NULL COMMENT '设备组名',
+  `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级设备组id',
   FOREIGN KEY (parent)  REFERENCES fl_device_group(id) ON DELETE SET NULL
 ) COMMENT '设备组信息' ;
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS fl_device_group (
 CREATE TABLE IF NOT EXISTS fl_person_group (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户组id',
   `name`        varchar(32) NOT NULL COMMENT '用户组名',
+  `leaf`        tinyint(1) DEFAULT NULL COMMENT '是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可',
   `parent`      int(11) DEFAULT NULL COMMENT '上一级用户组id',
   FOREIGN KEY (parent)  REFERENCES fl_person_group(id) ON DELETE SET NULL
 ) COMMENT '用户组信息' ;
