@@ -54,7 +54,7 @@ public class DeviceGroupCache extends TableLoadCaching<Integer, DeviceGroupBean>
         
     }
     @Override
-    public Integer returnKey(DeviceGroupBean bean) {
+    protected Integer returnKey(DeviceGroupBean bean) {
         return null == bean ? null : bean.getId();
     }
     @Override

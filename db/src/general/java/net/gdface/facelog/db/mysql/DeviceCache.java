@@ -41,7 +41,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 manager.unregisterListener(this.tableListener);
             }
             @Override
-            public String returnKey(DeviceBean bean) {
+            protected String returnKey(DeviceBean bean) {
                 return null == bean ? null : bean.getMac();
             }
             @Override
@@ -59,7 +59,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
                 manager.unregisterListener(this.tableListener);
             }
             @Override
-            public String returnKey(DeviceBean bean) {
+            protected String returnKey(DeviceBean bean) {
                 return null == bean ? null : bean.getSerialNo();
             }
             @Override
@@ -96,7 +96,7 @@ public class DeviceCache extends TableLoadCaching<Integer, DeviceBean> {
         serialNoCacher.unregisterListener();
     }
     @Override
-    public Integer returnKey(DeviceBean bean) {
+    protected Integer returnKey(DeviceBean bean) {
         return null == bean ? null : bean.getId();
     }
     @Override

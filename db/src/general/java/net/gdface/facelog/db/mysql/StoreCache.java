@@ -54,7 +54,7 @@ public class StoreCache extends TableLoadCaching<String, StoreBean> {
         
     }
     @Override
-    public String returnKey(StoreBean bean) {
+    protected String returnKey(StoreBean bean) {
         return null == bean ? null : bean.getMd5();
     }
     @Override

@@ -41,7 +41,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
                 manager.unregisterListener(this.tableListener);
             }
             @Override
-            public String returnKey(PersonBean bean) {
+            protected String returnKey(PersonBean bean) {
                 return null == bean ? null : bean.getImageMd5();
             }
             @Override
@@ -59,7 +59,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
                 manager.unregisterListener(this.tableListener);
             }
             @Override
-            public String returnKey(PersonBean bean) {
+            protected String returnKey(PersonBean bean) {
                 return null == bean ? null : bean.getPapersNum();
             }
             @Override
@@ -96,7 +96,7 @@ public class PersonCache extends TableLoadCaching<Integer, PersonBean> {
         papersNumCacher.unregisterListener();
     }
     @Override
-    public Integer returnKey(PersonBean bean) {
+    protected Integer returnKey(PersonBean bean) {
         return null == bean ? null : bean.getId();
     }
     @Override

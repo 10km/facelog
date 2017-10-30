@@ -54,7 +54,7 @@ public class LogCache extends TableLoadCaching<Integer, LogBean> {
         
     }
     @Override
-    public Integer returnKey(LogBean bean) {
+    protected Integer returnKey(LogBean bean) {
         return null == bean ? null : bean.getId();
     }
     @Override

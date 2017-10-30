@@ -54,7 +54,7 @@ public class PersonGroupCache extends TableLoadCaching<Integer, PersonGroupBean>
         
     }
     @Override
-    public Integer returnKey(PersonGroupBean bean) {
+    protected Integer returnKey(PersonGroupBean bean) {
         return null == bean ? null : bean.getId();
     }
     @Override
