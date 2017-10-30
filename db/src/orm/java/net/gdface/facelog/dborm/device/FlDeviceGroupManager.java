@@ -519,7 +519,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             return new java.util.ArrayList<FlDeviceGroupBean>();
         FlDeviceGroupBean other = new FlDeviceGroupBean();
         other.setParent(bean.getId());
-        return FlDeviceGroupManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlDeviceGroupBean} object array associate to FlDeviceGroupBean by the fl_device_group.parent field.<BR>
@@ -535,7 +535,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlDeviceGroupBean importBean : importedBeans ){
-                FlDeviceGroupManager.getInstance().setReferencedByParent(importBean , bean);
+                setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -555,7 +555,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlDeviceGroupBean importBean : importedBeans ){
-                FlDeviceGroupManager.getInstance().setReferencedByParent(importBean , bean);
+                setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -692,7 +692,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
         this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        FlDeviceGroupManager.getInstance().save( impDevicegroupByParent );
+        save( impDevicegroupByParent );
         this.setJunctionDeviceGroupBeansByGroupId(bean,impJunctiondevicegroupByGroupId);
         FlJunctionDeviceGroupManager.getInstance().save( impJunctiondevicegroupByGroupId );
         return bean;
@@ -732,7 +732,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
         this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        FlDeviceGroupManager.getInstance().save( impDevicegroupByParent );
+        save( impDevicegroupByParent );
         this.setJunctionDeviceGroupBeansByGroupId(bean,impJunctiondevicegroupByGroupId);
         FlJunctionDeviceGroupManager.getInstance().save( impJunctiondevicegroupByGroupId );
         return bean;
@@ -873,7 +873,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     public FlDeviceGroupBean getReferencedByParent(FlDeviceGroupBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByParent(FlDeviceGroupManager.getInstance().loadByPrimaryKey(bean.getParent())); 
+        bean.setReferencedByParent(loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
 
@@ -889,7 +889,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     public FlDeviceGroupBean setReferencedByParent(FlDeviceGroupBean bean, FlDeviceGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlDeviceGroupManager.getInstance().save(beanToSet);
+            save(beanToSet);
             bean.setReferencedByParent(beanToSet);
             if( null == beanToSet){
                 bean.setParent(null);

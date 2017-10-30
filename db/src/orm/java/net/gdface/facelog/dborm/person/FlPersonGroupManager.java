@@ -630,7 +630,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return new java.util.ArrayList<FlPersonGroupBean>();
         FlPersonGroupBean other = new FlPersonGroupBean();
         other.setParent(bean.getId());
-        return FlPersonGroupManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPersonGroupBean} object array associate to FlPersonGroupBean by the fl_person_group.parent field.<BR>
@@ -646,7 +646,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPersonGroupBean importBean : importedBeans ){
-                FlPersonGroupManager.getInstance().setReferencedByParent(importBean , bean);
+                setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -666,7 +666,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPersonGroupBean importBean : importedBeans ){
-                FlPersonGroupManager.getInstance().setReferencedByParent(importBean , bean);
+                setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -694,7 +694,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         this.setJunctionPersonGroupBeansByGroupId(bean,impJunctionpersongroupByGroupId);
         FlJunctionPersonGroupManager.getInstance().save( impJunctionpersongroupByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        FlPersonGroupManager.getInstance().save( impPersongroupByParent );
+        save( impPersongroupByParent );
         return bean;
     } 
 
@@ -734,7 +734,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         this.setJunctionPersonGroupBeansByGroupId(bean,impJunctionpersongroupByGroupId);
         FlJunctionPersonGroupManager.getInstance().save( impJunctionpersongroupByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        FlPersonGroupManager.getInstance().save( impPersongroupByParent );
+        save( impPersongroupByParent );
         return bean;
     }
 
@@ -873,7 +873,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     public FlPersonGroupBean getReferencedByParent(FlPersonGroupBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByParent(FlPersonGroupManager.getInstance().loadByPrimaryKey(bean.getParent())); 
+        bean.setReferencedByParent(loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
 
@@ -889,7 +889,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     public FlPersonGroupBean setReferencedByParent(FlPersonGroupBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonGroupManager.getInstance().save(beanToSet);
+            save(beanToSet);
             bean.setReferencedByParent(beanToSet);
             if( null == beanToSet){
                 bean.setParent(null);

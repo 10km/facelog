@@ -8,7 +8,6 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
-import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.FaceBean;
@@ -24,8 +23,6 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.face.FlFaceManager;
-import net.gdface.facelog.dborm.face.FlFaceBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_face table.<br>
@@ -35,9 +32,21 @@ import net.gdface.facelog.dborm.face.FlFaceBean;
  */
 public class FaceManager extends TableManager.Adapter<FaceBean> implements IFaceManager
 {
-    private FlFaceManager nativeManager = FlFaceManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
-    private IBeanConverter<FaceBean,FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
+    private net.gdface.facelog.dborm.face.FlFaceManager nativeManager = net.gdface.facelog.dborm.face.FlFaceManager.getInstance();
+    private IDbConverter<
+                        net.gdface.facelog.dborm.device.FlDeviceBean,
+                        net.gdface.facelog.dborm.device.FlDeviceGroupBean,
+                        net.gdface.facelog.dborm.face.FlFaceBean,
+                        net.gdface.facelog.dborm.face.FlFeatureBean,
+                        net.gdface.facelog.dborm.image.FlImageBean,
+                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
+                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
+                        net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.person.FlPersonBean,
+                        net.gdface.facelog.dborm.person.FlPersonGroupBean,
+                        net.gdface.facelog.dborm.image.FlStoreBean,
+                        net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
     private static FaceManager singleton = new FaceManager();
     protected FaceManager(){}
     /**
@@ -644,7 +653,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public FeatureBean setReferencedByFeatureMd5(FaceBean bean, FeatureBean beanToSet)
     {
         try{
-            FlFaceBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.face.FlFaceBean nativeBean = this.beanConverter.toRight(bean);
             IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> foreignConverter = this.dbConverter.getFeatureBeanConverter();
             net.gdface.facelog.dborm.face.FlFeatureBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByFeatureMd5(nativeBean,foreignNativeBean);
@@ -677,7 +686,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public ImageBean setReferencedByImageMd5(FaceBean bean, ImageBean beanToSet)
     {
         try{
-            FlFaceBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.face.FlFaceBean nativeBean = this.beanConverter.toRight(bean);
             IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> foreignConverter = this.dbConverter.getImageBeanConverter();
             net.gdface.facelog.dborm.image.FlImageBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByImageMd5(nativeBean,foreignNativeBean);
@@ -1007,40 +1016,40 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
      */
     public class WrapListener implements TableListener<FaceBean>{
         private final TableListener<FaceBean> listener;
-        private final net.gdface.facelog.dborm.TableListener<FlFaceBean> nativeListener;
+        private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.face.FlFaceBean> nativeListener;
         private WrapListener(final TableListener<FaceBean> listener) {
             if(null == listener)
                 throw new NullPointerException();
             this.listener = listener;
-            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlFaceBean> (){
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.face.FlFaceBean> (){
 
                 @Override
-                public void beforeInsert(FlFaceBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
                     listener.beforeInsert(FaceManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(FlFaceBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
                     listener.afterInsert(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(FlFaceBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
                     listener.beforeUpdate(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(FlFaceBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
                     listener.afterUpdate(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(FlFaceBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
                     listener.beforeDelete(FaceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(FlFaceBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.face.FlFaceBean bean) throws DAOException {
                     listener.afterDelete(FaceManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -1103,18 +1112,18 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
         }
     }
     
-    private net.gdface.facelog.dborm.TableManager.Action<FlFaceBean> toNative(final Action<FaceBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.face.FlFaceBean> toNative(final Action<FaceBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new net.gdface.facelog.dborm.TableManager.Action<FlFaceBean>(){
+        return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.face.FlFaceBean>(){
 
             @Override
-            public void call(FlFaceBean bean) {
+            public void call(net.gdface.facelog.dborm.face.FlFaceBean bean) {
                 action.call(FaceManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
-            public FlFaceBean getBean() {
+            public net.gdface.facelog.dborm.face.FlFaceBean getBean() {
                 return  FaceManager.this.beanConverter.toRight(action.getBean());
             }};
     }

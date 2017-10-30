@@ -8,7 +8,6 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
-import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.JunctionPersonGroupBean;
@@ -23,8 +22,6 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.person.FlJunctionPersonGroupManager;
-import net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_junction_person_group table.<br>
@@ -34,9 +31,21 @@ import net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean;
  */
 public class JunctionPersonGroupManager extends TableManager.Adapter<JunctionPersonGroupBean> implements IJunctionPersonGroupManager
 {
-    private FlJunctionPersonGroupManager nativeManager = FlJunctionPersonGroupManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
-    private IBeanConverter<JunctionPersonGroupBean,FlJunctionPersonGroupBean> beanConverter = dbConverter.getJunctionPersonGroupBeanConverter();
+    private net.gdface.facelog.dborm.person.FlJunctionPersonGroupManager nativeManager = net.gdface.facelog.dborm.person.FlJunctionPersonGroupManager.getInstance();
+    private IDbConverter<
+                        net.gdface.facelog.dborm.device.FlDeviceBean,
+                        net.gdface.facelog.dborm.device.FlDeviceGroupBean,
+                        net.gdface.facelog.dborm.face.FlFaceBean,
+                        net.gdface.facelog.dborm.face.FlFeatureBean,
+                        net.gdface.facelog.dborm.image.FlImageBean,
+                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
+                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
+                        net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.person.FlPersonBean,
+                        net.gdface.facelog.dborm.person.FlPersonGroupBean,
+                        net.gdface.facelog.dborm.image.FlStoreBean,
+                        net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<JunctionPersonGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean> beanConverter = dbConverter.getJunctionPersonGroupBeanConverter();
     private static JunctionPersonGroupManager singleton = new JunctionPersonGroupManager();
     protected JunctionPersonGroupManager(){}
     /**
@@ -408,7 +417,7 @@ public class JunctionPersonGroupManager extends TableManager.Adapter<JunctionPer
     public PersonBean setReferencedByPersonId(JunctionPersonGroupBean bean, PersonBean beanToSet)
     {
         try{
-            FlJunctionPersonGroupBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean nativeBean = this.beanConverter.toRight(bean);
             IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> foreignConverter = this.dbConverter.getPersonBeanConverter();
             net.gdface.facelog.dborm.person.FlPersonBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByPersonId(nativeBean,foreignNativeBean);
@@ -441,7 +450,7 @@ public class JunctionPersonGroupManager extends TableManager.Adapter<JunctionPer
     public PersonGroupBean setReferencedByGroupId(JunctionPersonGroupBean bean, PersonGroupBean beanToSet)
     {
         try{
-            FlJunctionPersonGroupBean nativeBean = this.beanConverter.toRight(bean);
+            net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean nativeBean = this.beanConverter.toRight(bean);
             IBeanConverter<PersonGroupBean,net.gdface.facelog.dborm.person.FlPersonGroupBean> foreignConverter = this.dbConverter.getPersonGroupBeanConverter();
             net.gdface.facelog.dborm.person.FlPersonGroupBean foreignNativeBean = foreignConverter.toRight(beanToSet);
             this.nativeManager.setReferencedByGroupId(nativeBean,foreignNativeBean);
@@ -665,40 +674,40 @@ public class JunctionPersonGroupManager extends TableManager.Adapter<JunctionPer
      */
     public class WrapListener implements TableListener<JunctionPersonGroupBean>{
         private final TableListener<JunctionPersonGroupBean> listener;
-        private final net.gdface.facelog.dborm.TableListener<FlJunctionPersonGroupBean> nativeListener;
+        private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean> nativeListener;
         private WrapListener(final TableListener<JunctionPersonGroupBean> listener) {
             if(null == listener)
                 throw new NullPointerException();
             this.listener = listener;
-            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlJunctionPersonGroupBean> (){
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean> (){
 
                 @Override
-                public void beforeInsert(FlJunctionPersonGroupBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) throws DAOException {
                     listener.beforeInsert(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(FlJunctionPersonGroupBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) throws DAOException {
                     listener.afterInsert(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(FlJunctionPersonGroupBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) throws DAOException {
                     listener.beforeUpdate(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(FlJunctionPersonGroupBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) throws DAOException {
                     listener.afterUpdate(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(FlJunctionPersonGroupBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) throws DAOException {
                     listener.beforeDelete(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(FlJunctionPersonGroupBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) throws DAOException {
                     listener.afterDelete(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -761,18 +770,18 @@ public class JunctionPersonGroupManager extends TableManager.Adapter<JunctionPer
         }
     }
     
-    private net.gdface.facelog.dborm.TableManager.Action<FlJunctionPersonGroupBean> toNative(final Action<JunctionPersonGroupBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean> toNative(final Action<JunctionPersonGroupBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new net.gdface.facelog.dborm.TableManager.Action<FlJunctionPersonGroupBean>(){
+        return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean>(){
 
             @Override
-            public void call(FlJunctionPersonGroupBean bean) {
+            public void call(net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean bean) {
                 action.call(JunctionPersonGroupManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
-            public FlJunctionPersonGroupBean getBean() {
+            public net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean getBean() {
                 return  JunctionPersonGroupManager.this.beanConverter.toRight(action.getBean());
             }};
     }

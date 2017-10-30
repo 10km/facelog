@@ -8,7 +8,6 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
-import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.DeviceBean;
@@ -25,8 +24,6 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.device.FlDeviceManager;
-import net.gdface.facelog.dborm.device.FlDeviceBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_device table.<br>
@@ -36,9 +33,21 @@ import net.gdface.facelog.dborm.device.FlDeviceBean;
  */
 public class DeviceManager extends TableManager.Adapter<DeviceBean> implements IDeviceManager
 {
-    private FlDeviceManager nativeManager = FlDeviceManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
-    private IBeanConverter<DeviceBean,FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
+    private net.gdface.facelog.dborm.device.FlDeviceManager nativeManager = net.gdface.facelog.dborm.device.FlDeviceManager.getInstance();
+    private IDbConverter<
+                        net.gdface.facelog.dborm.device.FlDeviceBean,
+                        net.gdface.facelog.dborm.device.FlDeviceGroupBean,
+                        net.gdface.facelog.dborm.face.FlFaceBean,
+                        net.gdface.facelog.dborm.face.FlFeatureBean,
+                        net.gdface.facelog.dborm.image.FlImageBean,
+                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
+                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
+                        net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.person.FlPersonBean,
+                        net.gdface.facelog.dborm.person.FlPersonGroupBean,
+                        net.gdface.facelog.dborm.image.FlStoreBean,
+                        net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
     protected DeviceManager(){}
     /**
@@ -1280,40 +1289,40 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
      */
     public class WrapListener implements TableListener<DeviceBean>{
         private final TableListener<DeviceBean> listener;
-        private final net.gdface.facelog.dborm.TableListener<FlDeviceBean> nativeListener;
+        private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceBean> nativeListener;
         private WrapListener(final TableListener<DeviceBean> listener) {
             if(null == listener)
                 throw new NullPointerException();
             this.listener = listener;
-            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlDeviceBean> (){
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.device.FlDeviceBean> (){
 
                 @Override
-                public void beforeInsert(FlDeviceBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DAOException {
                     listener.beforeInsert(DeviceManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(FlDeviceBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DAOException {
                     listener.afterInsert(DeviceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(FlDeviceBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DAOException {
                     listener.beforeUpdate(DeviceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(FlDeviceBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DAOException {
                     listener.afterUpdate(DeviceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(FlDeviceBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DAOException {
                     listener.beforeDelete(DeviceManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(FlDeviceBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.device.FlDeviceBean bean) throws DAOException {
                     listener.afterDelete(DeviceManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -1376,18 +1385,18 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         }
     }
     
-    private net.gdface.facelog.dborm.TableManager.Action<FlDeviceBean> toNative(final Action<DeviceBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceBean> toNative(final Action<DeviceBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new net.gdface.facelog.dborm.TableManager.Action<FlDeviceBean>(){
+        return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.device.FlDeviceBean>(){
 
             @Override
-            public void call(FlDeviceBean bean) {
+            public void call(net.gdface.facelog.dborm.device.FlDeviceBean bean) {
                 action.call(DeviceManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
-            public FlDeviceBean getBean() {
+            public net.gdface.facelog.dborm.device.FlDeviceBean getBean() {
                 return  DeviceManager.this.beanConverter.toRight(action.getBean());
             }};
     }

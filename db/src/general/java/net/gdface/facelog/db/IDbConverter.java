@@ -12,7 +12,19 @@ package net.gdface.facelog.db;
  * @author guyadong
  *
  */
-public interface IDbConverter<N_DEVICE,N_DEVICEGROUP,N_FACE,N_FEATURE,N_IMAGE,N_JUNCTIONDEVICEGROUP,N_JUNCTIONPERSONGROUP,N_LOG,N_PERSON,N_PERSONGROUP,N_STORE,N_LOGLIGHT> {
+public interface IDbConverter<
+                            N_DEVICE,
+                            N_DEVICEGROUP,
+                            N_FACE,
+                            N_FEATURE,
+                            N_IMAGE,
+                            N_JUNCTIONDEVICEGROUP,
+                            N_JUNCTIONPERSONGROUP,
+                            N_LOG,
+                            N_PERSON,
+                            N_PERSONGROUP,
+                            N_STORE,
+                            N_LOGLIGHT> {
     public abstract IBeanConverter<DeviceBean, N_DEVICE> getDeviceBeanConverter();
     public abstract IBeanConverter<DeviceGroupBean, N_DEVICEGROUP> getDeviceGroupBeanConverter();
     public abstract IBeanConverter<FaceBean, N_FACE> getFaceBeanConverter();

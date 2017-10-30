@@ -42,7 +42,19 @@ import net.gdface.facelog.db.LogLightBean;
  * @param <R_LOGLIGHT> native type for fl_log_light
  *
  */
-public abstract class DbConverterGeneric<R_DEVICE,R_DEVICEGROUP,R_FACE,R_FEATURE,R_IMAGE,R_JUNCTIONDEVICEGROUP,R_JUNCTIONPERSONGROUP,R_LOG,R_PERSON,R_PERSONGROUP,R_STORE,R_LOGLIGHT> 
+public abstract class DbConverterGeneric<
+                    R_DEVICE,
+                    R_DEVICEGROUP,
+                    R_FACE,
+                    R_FEATURE,
+                    R_IMAGE,
+                    R_JUNCTIONDEVICEGROUP,
+                    R_JUNCTIONPERSONGROUP,
+                    R_LOG,
+                    R_PERSON,
+                    R_PERSONGROUP,
+                    R_STORE,
+                    R_LOGLIGHT> 
     implements IDbConverter<R_DEVICE,R_DEVICEGROUP,R_FACE,R_FEATURE,R_IMAGE,R_JUNCTIONDEVICEGROUP,R_JUNCTIONPERSONGROUP,R_LOG,R_PERSON,R_PERSONGROUP,R_STORE,R_LOGLIGHT>, Constant{
     private final IBeanConverter<DeviceBean,R_DEVICE> converterDeviceBean;
     private final IBeanConverter<DeviceGroupBean,R_DEVICEGROUP> converterDeviceGroupBean;

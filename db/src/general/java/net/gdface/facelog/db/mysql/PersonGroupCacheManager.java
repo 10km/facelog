@@ -111,7 +111,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
     @Override 
     public PersonGroupBean getReferencedByParent(PersonGroupBean bean){
         if(null == bean)return null;
-        bean.setReferencedByParent(PersonGroupCacheManager.getInstance().loadByPrimaryKey(bean.getParent())); 
+        bean.setReferencedByParent(loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
     private class CacheAction implements Action<PersonGroupBean>{

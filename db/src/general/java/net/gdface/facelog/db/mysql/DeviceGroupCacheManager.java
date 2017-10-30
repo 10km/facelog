@@ -111,7 +111,7 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     @Override 
     public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean){
         if(null == bean)return null;
-        bean.setReferencedByParent(DeviceGroupCacheManager.getInstance().loadByPrimaryKey(bean.getParent())); 
+        bean.setReferencedByParent(loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
     private class CacheAction implements Action<DeviceGroupBean>{

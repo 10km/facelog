@@ -8,7 +8,6 @@
 package net.gdface.facelog.db.mysql;
 
 import java.util.concurrent.Callable;
-import java.util.List;
 
 import net.gdface.facelog.db.Constant;
 import net.gdface.facelog.db.StoreBean;
@@ -21,8 +20,6 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 import net.gdface.facelog.dborm.exception.DAOException;
-import net.gdface.facelog.dborm.image.FlStoreManager;
-import net.gdface.facelog.dborm.image.FlStoreBean;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_store table.<br>
@@ -32,9 +29,21 @@ import net.gdface.facelog.dborm.image.FlStoreBean;
  */
 public class StoreManager extends TableManager.Adapter<StoreBean> implements IStoreManager
 {
-    private FlStoreManager nativeManager = FlStoreManager.getInstance();
-    private IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
-    private IBeanConverter<StoreBean,FlStoreBean> beanConverter = dbConverter.getStoreBeanConverter();
+    private net.gdface.facelog.dborm.image.FlStoreManager nativeManager = net.gdface.facelog.dborm.image.FlStoreManager.getInstance();
+    private IDbConverter<
+                        net.gdface.facelog.dborm.device.FlDeviceBean,
+                        net.gdface.facelog.dborm.device.FlDeviceGroupBean,
+                        net.gdface.facelog.dborm.face.FlFaceBean,
+                        net.gdface.facelog.dborm.face.FlFeatureBean,
+                        net.gdface.facelog.dborm.image.FlImageBean,
+                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
+                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
+                        net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.person.FlPersonBean,
+                        net.gdface.facelog.dborm.person.FlPersonGroupBean,
+                        net.gdface.facelog.dborm.image.FlStoreBean,
+                        net.gdface.facelog.dborm.log.FlLogLightBean> dbConverter = DbConverter.INSTANCE;
+    private IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> beanConverter = dbConverter.getStoreBeanConverter();
     private static StoreManager singleton = new StoreManager();
     protected StoreManager(){}
     /**
@@ -516,40 +525,40 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
      */
     public class WrapListener implements TableListener<StoreBean>{
         private final TableListener<StoreBean> listener;
-        private final net.gdface.facelog.dborm.TableListener<FlStoreBean> nativeListener;
+        private final net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlStoreBean> nativeListener;
         private WrapListener(final TableListener<StoreBean> listener) {
             if(null == listener)
                 throw new NullPointerException();
             this.listener = listener;
-            this.nativeListener = new net.gdface.facelog.dborm.TableListener<FlStoreBean> (){
+            this.nativeListener = new net.gdface.facelog.dborm.TableListener<net.gdface.facelog.dborm.image.FlStoreBean> (){
 
                 @Override
-                public void beforeInsert(FlStoreBean bean) throws DAOException {
+                public void beforeInsert(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DAOException {
                     listener.beforeInsert(StoreManager.this.beanConverter.fromRight(bean));                
                 }
 
                 @Override
-                public void afterInsert(FlStoreBean bean) throws DAOException {
+                public void afterInsert(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DAOException {
                     listener.afterInsert(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeUpdate(FlStoreBean bean) throws DAOException {
+                public void beforeUpdate(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DAOException {
                     listener.beforeUpdate(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterUpdate(FlStoreBean bean) throws DAOException {
+                public void afterUpdate(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DAOException {
                     listener.afterUpdate(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void beforeDelete(FlStoreBean bean) throws DAOException {
+                public void beforeDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DAOException {
                     listener.beforeDelete(StoreManager.this.beanConverter.fromRight(bean));
                 }
 
                 @Override
-                public void afterDelete(FlStoreBean bean) throws DAOException {
+                public void afterDelete(net.gdface.facelog.dborm.image.FlStoreBean bean) throws DAOException {
                     listener.afterDelete(StoreManager.this.beanConverter.fromRight(bean));
                 }};
         }
@@ -612,18 +621,18 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
         }
     }
     
-    private net.gdface.facelog.dborm.TableManager.Action<FlStoreBean> toNative(final Action<StoreBean> action){
+    private net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlStoreBean> toNative(final Action<StoreBean> action){
         if(null == action)
             throw new NullPointerException();
-        return new net.gdface.facelog.dborm.TableManager.Action<FlStoreBean>(){
+        return new net.gdface.facelog.dborm.TableManager.Action<net.gdface.facelog.dborm.image.FlStoreBean>(){
 
             @Override
-            public void call(FlStoreBean bean) {
+            public void call(net.gdface.facelog.dborm.image.FlStoreBean bean) {
                 action.call(StoreManager.this.beanConverter.fromRight(bean));
             }
 
             @Override
-            public FlStoreBean getBean() {
+            public net.gdface.facelog.dborm.image.FlStoreBean getBean() {
                 return  StoreManager.this.beanConverter.toRight(action.getBean());
             }};
     }
