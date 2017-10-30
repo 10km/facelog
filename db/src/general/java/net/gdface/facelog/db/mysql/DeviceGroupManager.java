@@ -1241,4 +1241,72 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         }
         return list;
     }
+
+    //_____________________________________________________________________
+    //
+    // SELF-REFERENCE
+    //_____________________________________________________________________
+    //47 override IDeviceGroupManager
+    @Override
+    public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean){
+        final DeviceGroupBean start = null == bean ? null : bean.clone();
+        DeviceGroupBean parent = start;
+        java.util.List<DeviceGroupBean> list;
+        for(list = new java.util.ArrayList<DeviceGroupBean>();null != parent;list.add(parent)){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                return null;
+            }
+        }
+        java.util.Collections.reverse(list);
+        return list;
+    }
+    //48 IDeviceGroupManager
+    @Override
+    public int levelOfParent(DeviceGroupBean bean){
+        final DeviceGroupBean start = null == bean ? null : bean.clone();
+        DeviceGroupBean parent = start;
+        int count;
+        for(count = 0;null != parent;++count){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                return -1;
+            }
+        }
+        return count;
+    }
+    /**
+     * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
+     * @param bean
+     * @throws DAOException
+     * @see #levelOfParent(DeviceGroupBean)
+     */
+    //49 IDeviceGroupManager
+    @Override
+    public boolean isCycleOnParent(DeviceGroupBean bean){
+        return levelOfParent(bean) < 0;
+    }
+    /**
+     * return top bean that with {@code null} self-reference field  : {@code fl_device_group(parent) }
+     * @param bean
+     * @return top bean
+     * @throws NullPointerException if {@code bean} is {@code null}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws DAOException
+     */
+    // 50 IDeviceGroupManager
+    @Override
+    public DeviceGroupBean topOfParent(DeviceGroupBean bean){
+        if(null == bean)
+            throw new NullPointerException();
+        final DeviceGroupBean start = bean.clone();
+        DeviceGroupBean parent;
+        for(parent = start;null != parent.getParent();){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                throw new IllegalStateException("cycle on field: " + "parent");
+            }
+        }
+        return parent;
+    }
 }

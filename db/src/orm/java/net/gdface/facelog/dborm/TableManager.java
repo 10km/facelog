@@ -422,6 +422,9 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
                 }
             });
         }
+        protected static boolean equal(Object a, Object b) {
+            return a == b || (a != null && a.equals(b));
+        }
     }    
     
     public String getFields();

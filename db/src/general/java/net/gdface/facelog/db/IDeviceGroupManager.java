@@ -417,4 +417,46 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     /** @see #deleteJunction(DeviceGroupBean,DeviceBean) */
     //23.7 MANY TO MANY
     public int deleteJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans);
+
+    //_____________________________________________________________________
+    //
+    // SELF-REFERENCE
+    //_____________________________________________________________________
+    /**
+     * return bean list ( include {@code bean}) by the self-reference field : {@code fl_person_group(parent) }<br>
+     * first element is top bean
+     * @param bean
+     * @return  empty list if {@code bean} is {@code null}<br>
+     *         null if self-reference field is cycle
+     * @throws WrapDAOException
+     */
+    //47
+    public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean);
+    /**
+     * get level count on the self-reference field : {@code fl_device_group(parent) }
+     * @param bean
+     * @return  0 if {@code bean} is {@code null}<br>
+     *         -1 if self-reference field is cycle
+     * @throws WrapDAOException
+     */
+    //48
+    public int levelOfParent(DeviceGroupBean bean);
+    /**
+     * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
+     * @param bean
+     * @throws WrapDAOException
+     * @see #levelOfParent(DeviceGroupBean)
+     */
+    //49
+    public boolean isCycleOnParent(DeviceGroupBean bean);
+    /**
+     * return top bean that with {@code null} self-reference field  : {@code fl_device_group(parent) }
+     * @param bean
+     * @return top bean
+     * @throws NullPointerException if {@code bean} is {@code null}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws WrapDAOException
+     */
+    // 50
+    public DeviceGroupBean topOfParent(DeviceGroupBean bean);
 }

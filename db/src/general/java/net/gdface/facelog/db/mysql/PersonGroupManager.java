@@ -1241,4 +1241,72 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
         }
         return list;
     }
+
+    //_____________________________________________________________________
+    //
+    // SELF-REFERENCE
+    //_____________________________________________________________________
+    //47 override IPersonGroupManager
+    @Override
+    public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean){
+        final PersonGroupBean start = null == bean ? null : bean.clone();
+        PersonGroupBean parent = start;
+        java.util.List<PersonGroupBean> list;
+        for(list = new java.util.ArrayList<PersonGroupBean>();null != parent;list.add(parent)){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                return null;
+            }
+        }
+        java.util.Collections.reverse(list);
+        return list;
+    }
+    //48 IPersonGroupManager
+    @Override
+    public int levelOfParent(PersonGroupBean bean){
+        final PersonGroupBean start = null == bean ? null : bean.clone();
+        PersonGroupBean parent = start;
+        int count;
+        for(count = 0;null != parent;++count){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                return -1;
+            }
+        }
+        return count;
+    }
+    /**
+     * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
+     * @param bean
+     * @throws DAOException
+     * @see #levelOfParent(PersonGroupBean)
+     */
+    //49 IPersonGroupManager
+    @Override
+    public boolean isCycleOnParent(PersonGroupBean bean){
+        return levelOfParent(bean) < 0;
+    }
+    /**
+     * return top bean that with {@code null} self-reference field  : {@code fl_person_group(parent) }
+     * @param bean
+     * @return top bean
+     * @throws NullPointerException if {@code bean} is {@code null}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws DAOException
+     */
+    // 50 IPersonGroupManager
+    @Override
+    public PersonGroupBean topOfParent(PersonGroupBean bean){
+        if(null == bean)
+            throw new NullPointerException();
+        final PersonGroupBean start = bean.clone();
+        PersonGroupBean parent;
+        for(parent = start;null != parent.getParent();){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                throw new IllegalStateException("cycle on field: " + "parent");
+            }
+        }
+        return parent;
+    }
 }

@@ -2217,4 +2217,83 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         }
         return list;
     }
+
+    //_____________________________________________________________________
+    //
+    // SELF-REFERENCE
+    //_____________________________________________________________________
+    /**
+     * return bean list ( include {@code bean}) by the self-reference field : {@code fl_person_group(parent) }<br>
+     * first element is top bean
+     * @param bean
+     * @return  empty list if {@code bean} is {@code null}<br>
+     *         null if self-reference field is cycle
+     * @throws DAOException
+     */
+    //47
+    public java.util.List<FlPersonGroupBean> listOfParent(FlPersonGroupBean bean) throws DAOException{
+        final FlPersonGroupBean start = null == bean ? null : bean.clone();
+        FlPersonGroupBean parent = start;
+        java.util.List<FlPersonGroupBean> list;
+        for(list = new java.util.ArrayList<FlPersonGroupBean>();null != parent;list.add(parent)){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                return null;
+            }
+        }
+        java.util.Collections.reverse(list);
+        return list;
+    }
+    /**
+     * get level count on the self-reference field : {@code fl_person_group(parent) }
+     * @param bean
+     * @return  0 if {@code bean} is {@code null}<br>
+     *         -1 if self-reference field is cycle
+     * @throws DAOException
+     */
+    //48
+    public int levelOfParent(FlPersonGroupBean bean) throws DAOException{
+        final FlPersonGroupBean start = null == bean ? null : bean.clone();
+        FlPersonGroupBean parent = start;
+        int count;
+        for(count = 0;null != parent;++count){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                return -1;
+            }
+        }
+        return count;
+    }
+    /**
+     * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
+     * @param bean
+     * @throws DAOException
+     * @see #levelOfParent(FlPersonGroupBean)
+     */
+    //49
+    public boolean isCycleOnParent(FlPersonGroupBean bean) throws DAOException{
+        return levelOfParent(bean) < 0;
+    }
+    /**
+     * return top bean that with {@code null} self-reference field  : {@code fl_person_group(parent) }
+     * @param bean
+     * @return top bean
+     * @throws NullPointerException if {@code bean} is {@code null}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws DAOException
+     */
+    // 50
+    public FlPersonGroupBean topOfParent(FlPersonGroupBean bean) throws DAOException{
+        if(null == bean)
+            throw new NullPointerException();
+        final FlPersonGroupBean start = bean.clone();
+        FlPersonGroupBean parent;
+        for(parent = start;null != parent.getParent();){
+            parent = loadByPrimaryKey(parent.getParent());
+            if(equal(start.getId(),parent.getId())){
+                throw new IllegalStateException("cycle on field: " + "parent");
+            }
+        }
+        return parent;
+    }
 }
