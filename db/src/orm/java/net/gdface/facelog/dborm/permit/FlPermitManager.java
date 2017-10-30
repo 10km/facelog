@@ -31,7 +31,7 @@ import net.gdface.facelog.dborm.person.FlPersonGroupManager;
 
 /**
  * Handles database calls (save, load, count, etc...) for the fl_permit table.<br>
- * Remarks: 设备组信息关联表<br>
+ * Remarks: 通行权限关联表<br>
  * @author sql2java
  */
 public class FlPermitManager extends TableManager.Adapter<FlPermitBean>

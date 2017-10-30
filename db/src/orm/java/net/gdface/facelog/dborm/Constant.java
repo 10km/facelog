@@ -157,9 +157,12 @@ public interface Constant {
     /** Identify the fl_device_group.name field (ordinal:2). */
     public static final int FL_DEVICE_GROUP_ID_NAME = 1;
     public static final long FL_DEVICE_GROUP_ID_NAME_MASK = 1L << 1;
-    /** Identify the fl_device_group.parent field (ordinal:3). */
-    public static final int FL_DEVICE_GROUP_ID_PARENT = 2;
-    public static final long FL_DEVICE_GROUP_ID_PARENT_MASK = 1L << 2;
+    /** Identify the fl_device_group.leaf field (ordinal:3). */
+    public static final int FL_DEVICE_GROUP_ID_LEAF = 2;
+    public static final long FL_DEVICE_GROUP_ID_LEAF_MASK = 1L << 2;
+    /** Identify the fl_device_group.parent field (ordinal:4). */
+    public static final int FL_DEVICE_GROUP_ID_PARENT = 3;
+    public static final long FL_DEVICE_GROUP_ID_PARENT_MASK = 1L << 3;
     /** Identify the fl_face.id field (ordinal:1). */
     public static final int FL_FACE_ID_ID = 0;
     public static final long FL_FACE_ID_ID_MASK = 1L << 0;
@@ -328,9 +331,12 @@ public interface Constant {
     /** Identify the fl_person_group.name field (ordinal:2). */
     public static final int FL_PERSON_GROUP_ID_NAME = 1;
     public static final long FL_PERSON_GROUP_ID_NAME_MASK = 1L << 1;
-    /** Identify the fl_person_group.parent field (ordinal:3). */
-    public static final int FL_PERSON_GROUP_ID_PARENT = 2;
-    public static final long FL_PERSON_GROUP_ID_PARENT_MASK = 1L << 2;
+    /** Identify the fl_person_group.leaf field (ordinal:3). */
+    public static final int FL_PERSON_GROUP_ID_LEAF = 2;
+    public static final long FL_PERSON_GROUP_ID_LEAF_MASK = 1L << 2;
+    /** Identify the fl_person_group.parent field (ordinal:4). */
+    public static final int FL_PERSON_GROUP_ID_PARENT = 3;
+    public static final long FL_PERSON_GROUP_ID_PARENT_MASK = 1L << 3;
     /** Identify the fl_store.md5 field (ordinal:1). */
     public static final int FL_STORE_ID_MD5 = 0;
     public static final long FL_STORE_ID_MD5_MASK = 1L << 0;
@@ -395,15 +401,18 @@ public interface Constant {
     /** Contains all the full fields of the fl_device_group table.*/
     public static final String FL_DEVICE_GROUP_FULL_FIELDS ="fl_device_group.id"
                             + ",fl_device_group.name"
+                            + ",fl_device_group.leaf"
                             + ",fl_device_group.parent";
     /** Field that contains the comma separated fields of the fl_device_group table. */
     public static final String FL_DEVICE_GROUP_FIELDS = "id"
                             + ",name"
+                            + ",leaf"
                             + ",parent";
     public static final java.util.List<String> FL_DEVICE_GROUP_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_device_group table. */
     public static final String FL_DEVICE_GROUP_JAVA_FIELDS = "id"
                             + ",name"
+                            + ",leaf"
                             + ",parent";
     public static final java.util.List<String> FL_DEVICE_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_DEVICE_GROUP_JAVA_FIELDS.split(","));
     /////////////////// fl_face ////////////
@@ -608,15 +617,18 @@ public interface Constant {
     /** Contains all the full fields of the fl_person_group table.*/
     public static final String FL_PERSON_GROUP_FULL_FIELDS ="fl_person_group.id"
                             + ",fl_person_group.name"
+                            + ",fl_person_group.leaf"
                             + ",fl_person_group.parent";
     /** Field that contains the comma separated fields of the fl_person_group table. */
     public static final String FL_PERSON_GROUP_FIELDS = "id"
                             + ",name"
+                            + ",leaf"
                             + ",parent";
     public static final java.util.List<String> FL_PERSON_GROUP_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_FIELDS.split(","));
     /** Field that contains the comma separated java fields of the fl_person_group table. */
     public static final String FL_PERSON_GROUP_JAVA_FIELDS = "id"
                             + ",name"
+                            + ",leaf"
                             + ",parent";
     public static final java.util.List<String> FL_PERSON_GROUP_JAVA_FIELDS_LIST = java.util.Arrays.asList(FL_PERSON_GROUP_JAVA_FIELDS.split(","));
     /////////////////// fl_store ////////////

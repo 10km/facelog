@@ -1121,6 +1121,14 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                 _dirtyCount++;
             }
 
+            if (bean.checkLeafModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("leaf");
+                _dirtyCount++;
+            }
+
             if (bean.checkParentModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
@@ -1221,6 +1229,15 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                     useComma=true;
                 }
                 sql.append("name=?");
+            }
+
+            if (bean.checkLeafModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("leaf=?");
             }
 
             if (bean.checkParentModified()) {
@@ -1760,6 +1777,14 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("name ").append(sqlEqualsOperation).append("?");
                 }
             }
+            if (bean.checkLeafModified()) {
+                _dirtyCount ++;
+                if (bean.getLeaf() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("leaf IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("leaf = ?");
+                }
+            }
             if (bean.checkParentModified()) {
                 _dirtyCount ++;
                 if (bean.getParent() == null) {
@@ -1817,6 +1842,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                     default:
                         throw new DAOException("Unknown search type " + searchType);
                 }
+            }
+            if (bean.checkLeafModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getLeaf() + "]");
+                if (bean.getLeaf() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getLeaf()); }
             }
             if (bean.checkParentModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getParent() + "]");
@@ -1929,7 +1958,8 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         {
             bean.setId(Manager.getInteger(rs, 1));
             bean.setName(rs.getString(2));
-            bean.setParent(Manager.getInteger(rs, 3));
+            bean.setLeaf(Manager.getInteger(rs, 3));
+            bean.setParent(Manager.getInteger(rs, 4));
         }
         catch(SQLException e)
         {
@@ -1969,6 +1999,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                         ++pos;
                         bean.setName(rs.getString(pos));
                         break;
+                    case FL_DEVICE_GROUP_ID_LEAF:
+                        ++pos;
+                        bean.setLeaf(Manager.getInteger(rs, pos));
+                        break;
                     case FL_DEVICE_GROUP_ID_PARENT:
                         ++pos;
                         bean.setParent(Manager.getInteger(rs, pos));
@@ -2003,6 +2037,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         {
             bean.setId(Manager.getInteger(rs, "id"));
             bean.setName(rs.getString("name"));
+            bean.setLeaf(Manager.getInteger(rs, "leaf"));
             bean.setParent(Manager.getInteger(rs, "parent"));
         }
         catch(SQLException e)

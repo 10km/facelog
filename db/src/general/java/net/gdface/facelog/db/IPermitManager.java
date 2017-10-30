@@ -11,7 +11,7 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * Interface to handle database calls (save, load, count, etc...) for the fl_permit table.<br>
- * Remarks: 设备组信息关联表
+ * Remarks: 通行权限关联表
  * @author guyadong
  */
 public interface IPermitManager extends TableManager<PermitBean>

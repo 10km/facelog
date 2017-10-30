@@ -14,7 +14,7 @@ import com.facebook.swift.codec.ThriftField.Requiredness;
  * PermitBean is a mapping of fl_permit Table.
  * <br>Meta Data Information (in progress):
  * <ul>
- *    <li>comments: 设备组信息关联表 </li>
+ *    <li>comments: 通行权限关联表 </li>
  * </ul>
  * @author guyadong
 */

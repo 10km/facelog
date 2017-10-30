@@ -31,6 +31,9 @@ public  class FlPersonGroupBean
     /** comments:用户组名 */
     private String name;
 
+    /** comments:是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可 */
+    private Integer leaf;
+
     /** comments:上一级用户组id */
     private Integer parent;
 
@@ -226,6 +229,72 @@ public  class FlPersonGroupBean
         return 0L !=  (initialized & FL_PERSON_GROUP_ID_NAME_MASK);
     }
     /**
+     * Getter method for {@link #leaf}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person_group.leaf</li>
+     * <li>comments: 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可</li>
+     * <li>column size: 3</li>
+     * <li>JDBC type returned by the driver: Types.TINYINT</li>
+     * </ul>
+     *
+     * @return the value of leaf
+     */
+    public Integer getLeaf(){
+        return leaf;
+    }
+    /**
+     * Setter method for {@link #leaf}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value  to be assigned to leaf
+     */
+    public void setLeaf(Integer newVal)
+    {
+        if ((newVal != null && leaf != null && (newVal.compareTo(leaf) == 0)) ||
+            (newVal == null && leaf == null && checkLeafInitialized())) {
+            return;
+        }
+        leaf = newVal;
+
+        modified |= FL_PERSON_GROUP_ID_LEAF_MASK;
+        initialized |= FL_PERSON_GROUP_ID_LEAF_MASK;
+    }
+
+    /**
+     * Setter method for {@link #leaf}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to leaf
+     */
+    public void setLeaf(int newVal)
+    {
+        setLeaf(new Integer(newVal));
+    }
+    /**
+     * Determines if the leaf has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkLeafModified()
+    {
+        return 0L !=  (modified & FL_PERSON_GROUP_ID_LEAF_MASK);
+    }
+
+    /**
+     * Determines if the leaf has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkLeafInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_GROUP_ID_LEAF_MASK);
+    }
+    /**
      * Getter method for {@link #parent}.<br>
      * Meta Data Information (in progress):
      * <ul>
@@ -333,6 +402,8 @@ public  class FlPersonGroupBean
             return checkIdModified();
         case FL_PERSON_GROUP_ID_NAME:
             return checkNameModified();
+        case FL_PERSON_GROUP_ID_LEAF:
+            return checkLeafModified();
         case FL_PERSON_GROUP_ID_PARENT:
             return checkParentModified();
         }
@@ -352,6 +423,8 @@ public  class FlPersonGroupBean
             return checkIdInitialized();
         case FL_PERSON_GROUP_ID_NAME:
             return checkNameInitialized();
+        case FL_PERSON_GROUP_ID_LEAF:
+            return checkLeafInitialized();
         case FL_PERSON_GROUP_ID_PARENT:
             return checkParentInitialized();
         }
@@ -400,6 +473,7 @@ public  class FlPersonGroupBean
     public void resetModifiedExceptPrimaryKeys()
     {
         modified &= (~(FL_PERSON_GROUP_ID_NAME_MASK |
+            FL_PERSON_GROUP_ID_LEAF_MASK |
             FL_PERSON_GROUP_ID_PARENT_MASK));
     }
     /**
@@ -420,6 +494,7 @@ public  class FlPersonGroupBean
         return new EqualsBuilder()
             .append(getId(), obj.getId())
             .append(getName(), obj.getName())
+            .append(getLeaf(), obj.getLeaf())
             .append(getParent(), obj.getParent())
             .isEquals();
     }
@@ -437,6 +512,7 @@ public  class FlPersonGroupBean
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tid=").append(getId()).append("\n")
             .append("\tname=").append(getName()).append("\n")
+            .append("\tleaf=").append(getLeaf()).append("\n")
             .append("\tparent=").append(getParent()).append("\n")
             .append("]\n")
             .toString();
@@ -447,6 +523,7 @@ public  class FlPersonGroupBean
         return new CompareToBuilder()
             .append(getId(), object.getId())
             .append(getName(), object.getName())
+            .append(getLeaf(), object.getLeaf())
             .append(getParent(), object.getParent())
             .toComparison();
     }
@@ -467,6 +544,7 @@ public  class FlPersonGroupBean
     {
         setId(null);
         setName(null);
+        setLeaf(null);
         setParent(null);
         isNew(true);
         resetInitialized();
@@ -483,7 +561,7 @@ public  class FlPersonGroupBean
     public void copy(FlPersonGroupBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 3; ++i) {
+            for (int i = 0; i < 4; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -525,6 +603,8 @@ public  class FlPersonGroupBean
             return (T)getId();        
         case FL_PERSON_GROUP_ID_NAME: 
             return (T)getName();        
+        case FL_PERSON_GROUP_ID_LEAF: 
+            return (T)getLeaf();        
         case FL_PERSON_GROUP_ID_PARENT: 
             return (T)getParent();        
         }
@@ -541,6 +621,8 @@ public  class FlPersonGroupBean
             setId((Integer)value);
         case FL_PERSON_GROUP_ID_NAME:        
             setName((String)value);
+        case FL_PERSON_GROUP_ID_LEAF:        
+            setLeaf((Integer)value);
         case FL_PERSON_GROUP_ID_PARENT:        
             setParent((Integer)value);
         }

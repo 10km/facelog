@@ -39,6 +39,7 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
      * <ul>
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_ID}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_NAME}
+     *   <li>{@link Constant#FL_PERSON_GROUP_ID_LEAF}
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_PARENT}
      * </ul>
      */
@@ -60,6 +61,7 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
      * <ul>
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_ID})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_NAME})
+     *   <li>{@link Constant#FL_PERSON_GROUP_ID_LEAF})
      *   <li>{@link Constant#FL_PERSON_GROUP_ID_PARENT})
      * </ul>
      *
@@ -97,6 +99,17 @@ public class FlPersonGroupComparator implements Comparator<FlPersonGroupBean>,Co
                     iReturn = 1;
                 } else {
                     iReturn = b1.getName().compareTo(b2.getName());
+                }
+                break;
+            case FL_PERSON_GROUP_ID_LEAF:
+                if (b1.getLeaf() == null && b2.getLeaf() != null) {
+                    iReturn = -1;
+                } else if (b1.getLeaf() == null && b2.getLeaf() == null) {
+                    iReturn = 0;
+                } else if (b1.getLeaf() != null && b2.getLeaf() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getLeaf().compareTo(b2.getLeaf());
                 }
                 break;
             case FL_PERSON_GROUP_ID_PARENT:

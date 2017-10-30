@@ -454,6 +454,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setName");
             getSetterNoThrow("setName",String.class); 
+            getGetter("setLeaf");
+            getSetterNoThrow("setLeaf",Integer.class,int.class);                    
             getGetter("setParent");
             getSetterNoThrow("setParent",Integer.class,int.class);                    
         }
@@ -471,6 +473,8 @@ public class BeanConverterUtils implements Constant {
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
                     left.setName(cast(String.class,getterMethod.invoke(right)));
+                if( bitCheck("leaf",modified) && (null != (getterMethod = methods.get("getLeaf"))))
+                    left.setLeaf(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("parent",modified) && (null != (getterMethod = methods.get("getParent"))))
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                 left.isNew((Boolean)methods.get("isNew").invoke(right));
@@ -497,6 +501,12 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setLeaf")) && left.checkLeafInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setLeaf"),left.getLeaf()));
+                        bitOR("leaf",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
                if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){
@@ -2015,6 +2025,8 @@ public class BeanConverterUtils implements Constant {
             getSetterNoThrow("setId",Integer.class,int.class);                    
             getGetter("setName");
             getSetterNoThrow("setName",String.class); 
+            getGetter("setLeaf");
+            getSetterNoThrow("setLeaf",Integer.class,int.class);                    
             getGetter("setParent");
             getSetterNoThrow("setParent",Integer.class,int.class);                    
         }
@@ -2032,6 +2044,8 @@ public class BeanConverterUtils implements Constant {
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
                     left.setName(cast(String.class,getterMethod.invoke(right)));
+                if( bitCheck("leaf",modified) && (null != (getterMethod = methods.get("getLeaf"))))
+                    left.setLeaf(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("parent",modified) && (null != (getterMethod = methods.get("getParent"))))
                     left.setParent(cast(Integer.class,getterMethod.invoke(right)));
                 left.isNew((Boolean)methods.get("isNew").invoke(right));
@@ -2058,6 +2072,12 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
                         bitOR("name",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setLeaf")) && left.checkLeafInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setLeaf"),left.getLeaf()));
+                        bitOR("leaf",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
                if(null != (setterMethod = methods.get("setParent")) && left.checkParentInitialized()){

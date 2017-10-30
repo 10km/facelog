@@ -96,6 +96,8 @@ public class DbConverter implements IDbConverter<
                 left.setId(right.getId());
             if(right.checkNameInitialized())
                 left.setName(right.getName());
+            if(right.checkLeafInitialized())
+                left.setLeaf(right.getLeaf());
             if(right.checkParentInitialized())
                 left.setParent(right.getParent());
             left.setNew(right.isNew());
@@ -108,6 +110,8 @@ public class DbConverter implements IDbConverter<
                 right.setId(left.getId());
             if(left.checkNameInitialized() )
                 right.setName(left.getName());
+            if(left.checkLeafInitialized() )
+                right.setLeaf(left.getLeaf());
             if(left.checkParentInitialized() )
                 right.setParent(left.getParent());
             right.setNew(left.isNew());
@@ -428,6 +432,8 @@ public class DbConverter implements IDbConverter<
                 left.setId(right.getId());
             if(right.checkNameInitialized())
                 left.setName(right.getName());
+            if(right.checkLeafInitialized())
+                left.setLeaf(right.getLeaf());
             if(right.checkParentInitialized())
                 left.setParent(right.getParent());
             left.setNew(right.isNew());
@@ -440,6 +446,8 @@ public class DbConverter implements IDbConverter<
                 right.setId(left.getId());
             if(left.checkNameInitialized() )
                 right.setName(left.getName());
+            if(left.checkLeafInitialized() )
+                right.setLeaf(left.getLeaf());
             if(left.checkParentInitialized() )
                 right.setParent(left.getParent());
             right.setNew(left.isNew());

@@ -26,7 +26,7 @@ import net.gdface.facelog.dborm.exception.DAOException;
 /**
  * Handles database calls (save, load, count, etc...) for the fl_permit table.<br>
  * all {@link DAOException} be wrapped as {@link WrapDAOException} to throw.<br>
- * Remarks: 设备组信息关联表<br>
+ * Remarks: 通行权限关联表<br>
  * @author guyadong
  */
 public class PermitManager extends TableManager.Adapter<PermitBean> implements IPermitManager
