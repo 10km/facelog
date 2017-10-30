@@ -2223,7 +2223,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
                 protected List<FlPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonGroupManager.getInstance().getPersonGroupBeansByParentAsList(bean);
+                            : getPersonGroupBeansByParentAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlPersonGroupBean> effectBeans) throws DAOException {
@@ -2239,7 +2239,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlPersonGroupManager.getInstance().registerListener(foreignKeyListenerByParent);
+        registerListener(foreignKeyListenerByParent);
         
     }
     /**
@@ -2248,7 +2248,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlPersonGroupManager.getInstance().unregisterListener(foreignKeyListenerByParent);
+        unregisterListener(foreignKeyListenerByParent);
         
     }
     //_____________________________________________________________________

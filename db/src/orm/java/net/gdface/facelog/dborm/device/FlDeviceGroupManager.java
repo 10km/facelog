@@ -2223,7 +2223,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                 protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlDeviceGroupManager.getInstance().getDeviceGroupBeansByParentAsList(bean);
+                            : getDeviceGroupBeansByParentAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlDeviceGroupBean> effectBeans) throws DAOException {
@@ -2239,7 +2239,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlDeviceGroupManager.getInstance().registerListener(foreignKeyListenerByParent);
+        registerListener(foreignKeyListenerByParent);
         
     }
     /**
@@ -2248,7 +2248,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlDeviceGroupManager.getInstance().unregisterListener(foreignKeyListenerByParent);
+        unregisterListener(foreignKeyListenerByParent);
         
     }
     //_____________________________________________________________________
