@@ -97,7 +97,8 @@ public  class DeviceGroupBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device_group.id</li>
-     * <li> imported key: fl_junction_device_group.group_id</li>
+     * <li> imported key: fl_permit.device_group_id</li>
+     * <li> imported key: fl_device.group_id</li>
      * <li> imported key: fl_device_group.parent</li>
      * <li>comments: 设备组id</li>
      * <li>AUTO_INCREMENT</li>

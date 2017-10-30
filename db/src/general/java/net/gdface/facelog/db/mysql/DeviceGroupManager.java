@@ -15,8 +15,9 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IDeviceGroupManager;
-import net.gdface.facelog.db.JunctionDeviceGroupBean;
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.PermitBean;
+import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -38,9 +39,8 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
                         net.gdface.facelog.dborm.face.FlFaceBean,
                         net.gdface.facelog.dborm.face.FlFeatureBean,
                         net.gdface.facelog.dborm.image.FlImageBean,
-                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
-                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
                         net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.permit.FlPermitBean,
                         net.gdface.facelog.dborm.person.FlPersonBean,
                         net.gdface.facelog.dborm.person.FlPersonGroupBean,
                         net.gdface.facelog.dborm.image.FlStoreBean,
@@ -88,7 +88,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         return DeviceGroupBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.permit.FlPermitBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -316,7 +316,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{DeviceGroupBean.class,JunctionDeviceGroupBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{DeviceBean.class,DeviceGroupBean.class,PermitBean.class};
 
     /**
      * @see #getImportedBeansAsList(DeviceGroupBean,int)
@@ -331,21 +331,24 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link DeviceBean}</li>
      *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID} -> {@link JunctionDeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PermitBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID}
+     * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> java.util.List<T> getImportedBeansAsList(DeviceGroupBean bean,int ikIndex){
         switch(ikIndex){
+        case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID:
+            return (java.util.List<T>)this.getDeviceBeansByGroupIdAsList(bean);
         case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT:
             return (java.util.List<T>)this.getDeviceGroupBeansByParentAsList(bean);
-        case FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID:
-            return (java.util.List<T>)this.getJunctionDeviceGroupBeansByGroupIdAsList(bean);
+        case FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID:
+            return (java.util.List<T>)this.getPermitBeansByDeviceGroupIdAsList(bean);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -354,22 +357,25 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
      * @param <T>
      * 
      * <ul>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link DeviceBean}</li>
      *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID} -> {@link JunctionDeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PermitBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
-     * @param importedBeans the FlJunctionDeviceGroupBean array to associate to the {@link DeviceGroupBean}
-     * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID}
+     * @param importedBeans the FlPermitBean array to associate to the {@link DeviceGroupBean}
+     * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] setImportedBeans(DeviceGroupBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
+        case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID:
+            return (T[])setDeviceBeansByGroupId(bean,(DeviceBean[])importedBeans);
         case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT:
             return (T[])setDeviceGroupBeansByParent(bean,(DeviceGroupBean[])importedBeans);
-        case FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID:
-            return (T[])setJunctionDeviceGroupBeansByGroupId(bean,(JunctionDeviceGroupBean[])importedBeans);
+        case FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID:
+            return (T[])setPermitBeansByDeviceGroupId(bean,(PermitBean[])importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -377,22 +383,25 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link DeviceBean}</li>
      *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link DeviceGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID} -> {@link JunctionDeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PermitBean}</li>
      * </ul>
      * @param bean the {@link DeviceGroupBean} object to use
      * @param importedBeans the <T> object to associate to the {@link DeviceGroupBean}
-     * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID}
+     * @param ikIndex valid values: {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT},{@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(DeviceGroupBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
+        case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID:
+            return (C)setDeviceBeansByGroupId(bean,(java.util.Collection<DeviceBean>)importedBeans);
         case FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT:
             return (C)setDeviceGroupBeansByParent(bean,(java.util.Collection<DeviceGroupBean>)importedBeans);
-        case FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID:
-            return (C)setJunctionDeviceGroupBeansByGroupId(bean,(java.util.Collection<JunctionDeviceGroupBean>)importedBeans);
+        case FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID:
+            return (C)setPermitBeansByDeviceGroupId(bean,(java.util.Collection<PermitBean>)importedBeans);
         }
         throw new IllegalArgumentException(String.format("invalid ikIndex %d", ikIndex));
     }
@@ -401,6 +410,77 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //////////////////////////////////////
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
+    //3.1 GET IMPORTED override IDeviceGroupManager
+    @Override 
+    public DeviceBean[] getDeviceBeansByGroupId(DeviceGroupBean bean)
+    {
+        return this.getDeviceBeansByGroupIdAsList(bean).toArray(new DeviceBean[0]);
+    }
+    //3.1.2 GET IMPORTED override IDeviceGroupManager
+    @Override
+    public DeviceBean[] getDeviceBeansByGroupId(Integer devicegroupId)
+    {
+        DeviceGroupBean bean = new DeviceGroupBean();
+        bean.setId(devicegroupId);
+        return getDeviceBeansByGroupId(bean);
+    }
+    //3.2 GET IMPORTED override IDeviceGroupManager
+    @Override 
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean)
+    {
+        return getDeviceBeansByGroupIdAsList(bean,1,-1);
+    }
+    //3.2.2 GET IMPORTED override IDeviceGroupManager
+    @Override
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer devicegroupId)
+    {
+         DeviceGroupBean bean = new DeviceGroupBean();
+        bean.setId(devicegroupId);
+        return getDeviceBeansByGroupIdAsList(bean);
+    }
+    //3.2.3 DELETE IMPORTED override IDeviceGroupManager
+    @Override
+    public int deleteDeviceBeansByGroupId(Integer devicegroupId)
+    {
+        java.util.List<DeviceBean> list =getDeviceBeansByGroupIdAsList(devicegroupId);
+        return DeviceManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IDeviceGroupManager
+    @Override 
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getDeviceBeanConverter().fromRight(nativeManager.getDeviceBeansByGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    //3.3 SET IMPORTED override IDeviceGroupManager
+    @Override 
+    public DeviceBean[] setDeviceBeansByGroupId(DeviceGroupBean bean , DeviceBean[] importedBeans)
+    {
+        if(null != importedBeans){
+            for( DeviceBean importBean : importedBeans ){
+                DeviceManager.getInstance().setReferencedByGroupId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    //3.4 SET IMPORTED override IDeviceGroupManager
+    @Override 
+    public <C extends java.util.Collection<DeviceBean>> C setDeviceBeansByGroupId(DeviceGroupBean bean , C importedBeans)
+    {
+        if(null != importedBeans){
+            for( DeviceBean importBean : importedBeans ){
+                DeviceManager.getInstance().setReferencedByGroupId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
     //3.1 GET IMPORTED override IDeviceGroupManager
     @Override 
     public DeviceGroupBean[] getDeviceGroupBeansByParent(DeviceGroupBean bean)
@@ -474,45 +554,45 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
 
     //3.1 GET IMPORTED override IDeviceGroupManager
     @Override 
-    public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByGroupId(DeviceGroupBean bean)
+    public PermitBean[] getPermitBeansByDeviceGroupId(DeviceGroupBean bean)
     {
-        return this.getJunctionDeviceGroupBeansByGroupIdAsList(bean).toArray(new JunctionDeviceGroupBean[0]);
+        return this.getPermitBeansByDeviceGroupIdAsList(bean).toArray(new PermitBean[0]);
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByGroupId(Integer devicegroupId)
+    public PermitBean[] getPermitBeansByDeviceGroupId(Integer devicegroupId)
     {
         DeviceGroupBean bean = new DeviceGroupBean();
         bean.setId(devicegroupId);
-        return getJunctionDeviceGroupBeansByGroupId(bean);
+        return getPermitBeansByDeviceGroupId(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
     @Override 
-    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean)
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean)
     {
-        return getJunctionDeviceGroupBeansByGroupIdAsList(bean,1,-1);
+        return getPermitBeansByDeviceGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(Integer devicegroupId)
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer devicegroupId)
     {
          DeviceGroupBean bean = new DeviceGroupBean();
         bean.setId(devicegroupId);
-        return getJunctionDeviceGroupBeansByGroupIdAsList(bean);
+        return getPermitBeansByDeviceGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
     @Override
-    public int deleteJunctionDeviceGroupBeansByGroupId(Integer devicegroupId)
+    public int deletePermitBeansByDeviceGroupId(Integer devicegroupId)
     {
-        java.util.List<JunctionDeviceGroupBean> list =getJunctionDeviceGroupBeansByGroupIdAsList(devicegroupId);
-        return JunctionDeviceGroupManager.getInstance().delete(list);
+        java.util.List<PermitBean> list =getPermitBeansByDeviceGroupIdAsList(devicegroupId);
+        return PermitManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager
     @Override 
-    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean,int startRow, int numRows)
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean,int startRow, int numRows)
     {
         try {
-            return this.dbConverter.getJunctionDeviceGroupBeanConverter().fromRight(nativeManager.getJunctionDeviceGroupBeansByGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+            return this.dbConverter.getPermitBeanConverter().fromRight(nativeManager.getPermitBeansByDeviceGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -521,11 +601,11 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.3 SET IMPORTED override IDeviceGroupManager
     @Override 
-    public JunctionDeviceGroupBean[] setJunctionDeviceGroupBeansByGroupId(DeviceGroupBean bean , JunctionDeviceGroupBean[] importedBeans)
+    public PermitBean[] setPermitBeansByDeviceGroupId(DeviceGroupBean bean , PermitBean[] importedBeans)
     {
         if(null != importedBeans){
-            for( JunctionDeviceGroupBean importBean : importedBeans ){
-                JunctionDeviceGroupManager.getInstance().setReferencedByGroupId(importBean , bean);
+            for( PermitBean importBean : importedBeans ){
+                PermitManager.getInstance().setReferencedByDeviceGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -533,11 +613,11 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
 
     //3.4 SET IMPORTED override IDeviceGroupManager
     @Override 
-    public <C extends java.util.Collection<JunctionDeviceGroupBean>> C setJunctionDeviceGroupBeansByGroupId(DeviceGroupBean bean , C importedBeans)
+    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByDeviceGroupId(DeviceGroupBean bean , C importedBeans)
     {
         if(null != importedBeans){
-            for( JunctionDeviceGroupBean importBean : importedBeans ){
-                JunctionDeviceGroupManager.getInstance().setReferencedByGroupId(importBean , bean);
+            for( PermitBean importBean : importedBeans ){
+                PermitManager.getInstance().setReferencedByDeviceGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -549,16 +629,18 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override  
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
-        , DeviceGroupBean[] impDevicegroupByParent , JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId )
+        , DeviceBean[] impDeviceByGroupId , DeviceGroupBean[] impDevicegroupByParent , PermitBean[] impPermitByDeviceGroupId )
     {
         if(null == bean) return null;
         if(null != refDevicegroupByParent)
             this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
+        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+        DeviceManager.getInstance().save( impDeviceByGroupId );
         this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
         DeviceGroupManager.getInstance().save( impDevicegroupByParent );
-        this.setJunctionDeviceGroupBeansByGroupId(bean,impJunctiondevicegroupByGroupId);
-        JunctionDeviceGroupManager.getInstance().save( impJunctiondevicegroupByGroupId );
+        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+        PermitManager.getInstance().save( impPermitByDeviceGroupId );
         return bean;
     } 
 
@@ -566,27 +648,29 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override 
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
-        ,final DeviceGroupBean[] impDevicegroupByParent ,final JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId )
+        ,final DeviceBean[] impDeviceByGroupId ,final DeviceGroupBean[] impDevicegroupByParent ,final PermitBean[] impPermitByDeviceGroupId )
     {
         return this.runAsTransaction(new Callable<DeviceGroupBean>(){
             @Override
             public DeviceGroupBean call() throws Exception {
-                return save(bean , refDevicegroupByParent , impDevicegroupByParent , impJunctiondevicegroupByGroupId );
+                return save(bean , refDevicegroupByParent , impDeviceByGroupId , impDevicegroupByParent , impPermitByDeviceGroupId );
             }});
     }
     //3.7 SYNC SAVE override IDeviceGroupManager
     @Override 
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
-        , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId )
+        , java.util.Collection<DeviceBean> impDeviceByGroupId , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<PermitBean> impPermitByDeviceGroupId )
     {
         if(null == bean) return null;
         this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
+        this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
+        DeviceManager.getInstance().save( impDeviceByGroupId );
         this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
         DeviceGroupManager.getInstance().save( impDevicegroupByParent );
-        this.setJunctionDeviceGroupBeansByGroupId(bean,impJunctiondevicegroupByGroupId);
-        JunctionDeviceGroupManager.getInstance().save( impJunctiondevicegroupByGroupId );
+        this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
+        PermitManager.getInstance().save( impPermitByDeviceGroupId );
         return bean;
     }   
 
@@ -594,12 +678,12 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override 
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
-        ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId )
+        ,final  java.util.Collection<DeviceBean> impDeviceByGroupId ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<PermitBean> impPermitByDeviceGroupId )
     {
         return this.runAsTransaction(new Callable<DeviceGroupBean>(){
             @Override
             public DeviceGroupBean call() throws Exception {
-                return save(bean , refDevicegroupByParent , impDevicegroupByParent , impJunctiondevicegroupByGroupId );
+                return save(bean , refDevicegroupByParent , impDeviceByGroupId , impDevicegroupByParent , impPermitByDeviceGroupId );
             }});
     }
      /**
@@ -607,7 +691,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceGroupBean[] , JunctionDeviceGroupBean[] )}
+     *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceBean[] , DeviceGroupBean[] , PermitBean[] )}
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     //3.9 SYNC SAVE 
@@ -616,18 +700,21 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     {
         if(null == args)
             return save(bean);
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof DeviceGroupBean[])){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:DeviceGroupBean[]");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof DeviceBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:DeviceBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof JunctionDeviceGroupBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:JunctionDeviceGroupBean[]");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof DeviceGroupBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:DeviceGroupBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(DeviceGroupBean[])args[1],(args.length < 3 || null == args[2])?null:(JunctionDeviceGroupBean[])args[2]);
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof PermitBean[])){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:PermitBean[]");
+        }
+        return save(bean,(args.length < 1 || null == args[0])?null:(DeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(DeviceBean[])args[1],(args.length < 3 || null == args[2])?null:(DeviceGroupBean[])args[2],(args.length < 4 || null == args[3])?null:(PermitBean[])args[3]);
     } 
 
     /**
@@ -635,7 +722,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     //3.10 SYNC SAVE 
@@ -645,20 +732,23 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     {
         if(null == inputs)
             return save(bean);
-        if(inputs.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
-        Object[] args = new Object[3];
-        System.arraycopy(inputs,0,args,0,3);
+        if(inputs.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        Object[] args = new Object[4];
+        System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof DeviceGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:DeviceGroupBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<DeviceGroupBean>");
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<DeviceBean>");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<JunctionDeviceGroupBean>");
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<DeviceGroupBean>");
         }
-        return save(bean,null == args[0]?null:(DeviceGroupBean)args[0],null == args[1]?null:(java.util.Collection<DeviceGroupBean>)args[1],null == args[2]?null:(java.util.Collection<JunctionDeviceGroupBean>)args[2]);
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<PermitBean>");
+        }
+        return save(bean,null == args[0]?null:(DeviceGroupBean)args[0],null == args[1]?null:(java.util.Collection<DeviceBean>)args[1],null == args[2]?null:(java.util.Collection<DeviceGroupBean>)args[2],null == args[3]?null:(java.util.Collection<PermitBean>)args[3]);
     }
 
      //////////////////////////////////////
@@ -928,19 +1018,19 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //_____________________________________________________________________
     //22 MANY TO MANY override IDeviceGroupManager
     @Override
-    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean)
+    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean)
     {
-         return this.loadViaJunctionDeviceGroupAsList(bean, 1, -1);
+         return this.loadViaPermitAsList(bean, 1, -1);
     }
 
     //23 MANY TO MANY override IDeviceGroupManager
     @Override
-    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean, int startRow, int numRows)
+    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows)
     {
         try{
             return this.beanConverter.fromRight(
-                this.nativeManager.loadViaJunctionDeviceGroupAsList(
-                    this.dbConverter.getDeviceBeanConverter().toRight(bean),
+                this.nativeManager.loadViaPermitAsList(
+                    this.dbConverter.getPersonGroupBeanConverter().toRight(bean),
                     startRow,
                     numRows));
         }catch(DAOException e){
@@ -949,59 +1039,59 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //23.2 MANY TO MANY override IDeviceGroupManager
     @Override
-    public void addJunction(DeviceGroupBean bean,DeviceBean linked){
+    public void addJunction(DeviceGroupBean bean,PersonGroupBean linked){
         if(null == bean || null == bean.getId())
             return ;
         if(null == linked || null ==bean.getId())
             return ;
-        if(!JunctionDeviceGroupManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
-            JunctionDeviceGroupBean junction = new JunctionDeviceGroupBean();
-            junction.setDeviceId(linked.getId());
-            junction.setGroupId(bean.getId());
-            JunctionDeviceGroupManager.getInstance().save(junction);
+        if(!PermitManager.getInstance().existsPrimaryKey(bean.getId(),linked.getId())){
+            PermitBean junction = new PermitBean();
+            junction.setDeviceGroupId(bean.getId());
+            junction.setPersonGroupId(linked.getId());
+            PermitManager.getInstance().save(junction);
         }
     }
     //23.3 MANY TO MANY override IDeviceGroupManager
     @Override
-    public int deleteJunction(DeviceGroupBean bean,DeviceBean linked){
+    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean linked){
         if(null == bean || null == bean.getId())
             return 0;
         if(null == linked || null ==bean.getId())
             return 0;
-        return JunctionDeviceGroupManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
+        return PermitManager.getInstance().deleteByPrimaryKey(bean.getId(),linked.getId());
     }
     //23.4 MANY TO MANY override IDeviceGroupManager
     @Override
-    public void addJunction(DeviceGroupBean bean,DeviceBean... linkedBeans){
+    public void addJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans){
         if(null == linkedBeans)return;
-        for(DeviceBean linked:linkedBeans){
+        for(PersonGroupBean linked:linkedBeans){
             addJunction(bean,linked);
         }
     }
     //23.5 MANY TO MANY override IDeviceGroupManager
     @Override
-    public void addJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans){
+    public void addJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
         if(null == linkedBeans)return;
-        for(DeviceBean linked:linkedBeans){
+        for(PersonGroupBean linked:linkedBeans){
             addJunction(bean,linked);
         }
     }
     //23.6 MANY TO MANY override IDeviceGroupManager
     @Override
-    public int deleteJunction(DeviceGroupBean bean,DeviceBean... linkedBeans){
+    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans){
         if(null == linkedBeans)return 0;
         int count = 0;
-        for(DeviceBean linked:linkedBeans){
+        for(PersonGroupBean linked:linkedBeans){
             count += deleteJunction(bean,linked);
         }
         return count;
     }
     //23.7 MANY TO MANY override IDeviceGroupManager
     @Override
-    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans){
+    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans){
         if(null == linkedBeans)return 0;
         int count = 0;
-        for(DeviceBean linked:linkedBeans){
+        for(PersonGroupBean linked:linkedBeans){
             count += deleteJunction(bean,linked);
         }
         return count;

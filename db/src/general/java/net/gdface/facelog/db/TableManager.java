@@ -529,12 +529,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *          PK# 1 fl_feature.md5 type String<br>
      *      for fl_image table<br>
      *          PK# 1 fl_image.md5 type String<br>
-     *      for fl_junction_device_group table<br>
-     *          PK# 1 fl_junction_device_group.device_id type Integer,PK# 2 fl_junction_device_group.group_id type Integer<br>
-     *      for fl_junction_person_group table<br>
-     *          PK# 1 fl_junction_person_group.person_id type Integer,PK# 2 fl_junction_person_group.group_id type Integer<br>
      *      for fl_log table<br>
      *          PK# 1 fl_log.id type Integer<br>
+     *      for fl_permit table<br>
+     *          PK# 1 fl_permit.device_group_id type Integer,PK# 2 fl_permit.person_group_id type Integer<br>
      *      for fl_person table<br>
      *          PK# 1 fl_person.id type Integer<br>
      *      for fl_person_group table<br>
@@ -644,12 +642,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *          PK# 1 fl_feature.md5 type String<br>
      *      for fl_image table<br>
      *          PK# 1 fl_image.md5 type String<br>
-     *      for fl_junction_device_group table<br>
-     *          PK# 1 fl_junction_device_group.device_id type Integer,PK# 2 fl_junction_device_group.group_id type Integer<br>
-     *      for fl_junction_person_group table<br>
-     *          PK# 1 fl_junction_person_group.person_id type Integer,PK# 2 fl_junction_person_group.group_id type Integer<br>
      *      for fl_log table<br>
      *          PK# 1 fl_log.id type Integer<br>
+     *      for fl_permit table<br>
+     *          PK# 1 fl_permit.device_group_id type Integer,PK# 2 fl_permit.person_group_id type Integer<br>
      *      for fl_person table<br>
      *          PK# 1 fl_person.id type Integer<br>
      *      for fl_person_group table<br>
@@ -978,7 +974,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        for fl_log table<br>
      *        {@link Constant#FL_LOG_INDEX_COMPARE_FACE},{@link Constant#FL_LOG_INDEX_DEVICE_ID},{@link Constant#FL_LOG_INDEX_PERSON_ID},{@link Constant#FL_LOG_INDEX_VERIFY_FEATURE}<br>     
      *        for fl_person table<br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}<br>     
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}<br>     
      *        for fl_person_group table<br>
      *        {@link Constant#FL_PERSON_GROUP_INDEX_PARENT}<br>     
      * @param keys key values of index
@@ -1079,25 +1075,23 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
             for fl_device table:<br>
-                {@code  ImageBean[] JunctionDeviceGroupBean[] LogBean[]}<br>
+                {@code  DeviceGroupBean ImageBean[] LogBean[]}<br>
             for fl_device_group table:<br>
-                {@code  DeviceGroupBean DeviceGroupBean[] JunctionDeviceGroupBean[]}<br>
+                {@code  DeviceGroupBean DeviceBean[] DeviceGroupBean[] PermitBean[]}<br>
             for fl_face table:<br>
                 {@code  FeatureBean ImageBean LogBean[]}<br>
             for fl_feature table:<br>
                 {@code  PersonBean FaceBean[] LogBean[]}<br>
             for fl_image table:<br>
                 {@code  DeviceBean FaceBean[] PersonBean[]}<br>
-            for fl_junction_device_group table:<br>
-                {@code  DeviceBean DeviceGroupBean}<br>
-            for fl_junction_person_group table:<br>
-                {@code  PersonBean PersonGroupBean}<br>
             for fl_log table:<br>
                 {@code  DeviceBean FaceBean FeatureBean PersonBean}<br>
+            for fl_permit table:<br>
+                {@code  DeviceGroupBean PersonGroupBean}<br>
             for fl_person table:<br>
-                {@code  ImageBean FeatureBean[] JunctionPersonGroupBean[] LogBean[]}<br>
+                {@code  ImageBean PersonGroupBean FeatureBean[] LogBean[]}<br>
             for fl_person_group table:<br>
-                {@code  PersonGroupBean JunctionPersonGroupBean[] PersonGroupBean[]}<br>
+                {@code  PersonGroupBean PermitBean[] PersonBean[] PersonGroupBean[]}<br>
      * @return the inserted or updated B bean
       */
     //3.9 SYNC SAVE 
@@ -1109,25 +1103,23 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @param bean the B bean to be saved
      * @param args referenced beans or imported beans,for each table,each argument's type is different:<br>
             for fl_device table:<br>
-                {@code  Collection<ImageBean> Collection<JunctionDeviceGroupBean> Collection<LogBean>}<br>
+                {@code  DeviceGroupBean Collection<ImageBean> Collection<LogBean>}<br>
             for fl_device_group table:<br>
-                {@code  DeviceGroupBean Collection<DeviceGroupBean> Collection<JunctionDeviceGroupBean>}<br>
+                {@code  DeviceGroupBean Collection<DeviceBean> Collection<DeviceGroupBean> Collection<PermitBean>}<br>
             for fl_face table:<br>
                 {@code  FeatureBean ImageBean Collection<LogBean>}<br>
             for fl_feature table:<br>
                 {@code  PersonBean Collection<FaceBean> Collection<LogBean>}<br>
             for fl_image table:<br>
                 {@code  DeviceBean Collection<FaceBean> Collection<PersonBean>}<br>
-            for fl_junction_device_group table:<br>
-                {@code  DeviceBean DeviceGroupBean}<br>
-            for fl_junction_person_group table:<br>
-                {@code  PersonBean PersonGroupBean}<br>
             for fl_log table:<br>
                 {@code  DeviceBean FaceBean FeatureBean PersonBean}<br>
+            for fl_permit table:<br>
+                {@code  DeviceGroupBean PersonGroupBean}<br>
             for fl_person table:<br>
-                {@code  ImageBean Collection<FeatureBean> Collection<JunctionPersonGroupBean> Collection<LogBean>}<br>
+                {@code  ImageBean PersonGroupBean Collection<FeatureBean> Collection<LogBean>}<br>
             for fl_person_group table:<br>
-                {@code  PersonGroupBean Collection<JunctionPersonGroupBean> Collection<PersonGroupBean>}<br>
+                {@code  PersonGroupBean Collection<PermitBean> Collection<PersonBean> Collection<PersonGroupBean>}<br>
      * @return the inserted or updated B bean
      */
     //3.10 SYNC SAVE 
@@ -1204,6 +1196,10 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * Retrieves the T object referenced by fkName.<br>
      * @param <T>
      * <ul>
+     *     <li> for fl_device:
+     *     <li> {@link Constant#FL_DEVICE_FK_GROUP_ID} -> {@link DeviceGroupBean}</li>
+     * </ul>
+     * <ul>
      *     <li> for fl_device_group:
      *     <li> {@link Constant#FL_DEVICE_GROUP_FK_PARENT} -> {@link DeviceGroupBean}</li>
      * </ul>
@@ -1221,16 +1217,6 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *     <li> {@link Constant#FL_IMAGE_FK_DEVICE_ID} -> {@link DeviceBean}</li>
      * </ul>
      * <ul>
-     *     <li> for fl_junction_device_group:
-     *     <li> {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_DEVICE_ID} -> {@link DeviceBean}</li>
-     *     <li> {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_GROUP_ID} -> {@link DeviceGroupBean}</li>
-     * </ul>
-     * <ul>
-     *     <li> for fl_junction_person_group:
-     *     <li> {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID} -> {@link PersonBean}</li>
-     *     <li> {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID} -> {@link PersonGroupBean}</li>
-     * </ul>
-     * <ul>
      *     <li> for fl_log:
      *     <li> {@link Constant#FL_LOG_FK_DEVICE_ID} -> {@link DeviceBean}</li>
      *     <li> {@link Constant#FL_LOG_FK_COMPARE_FACE} -> {@link FaceBean}</li>
@@ -1238,8 +1224,14 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *     <li> {@link Constant#FL_LOG_FK_PERSON_ID} -> {@link PersonBean}</li>
      * </ul>
      * <ul>
+     *     <li> for fl_permit:
+     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} -> {@link DeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
+     * </ul>
+     * <ul>
      *     <li> for fl_person:
      *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link ImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} -> {@link PersonGroupBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_person_group:
@@ -1247,6 +1239,8 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * </ul>
      * @param bean the B object to use
      * @param fkIndex foreign key name.<br>
+     *        for for fl_device table:<br>
+     *        {@link Constant#FL_DEVICE_FK_GROUP_ID}<br>
      *        for for fl_device_group table:<br>
      *        {@link Constant#FL_DEVICE_GROUP_FK_PARENT}<br>
      *        for for fl_face table:<br>
@@ -1255,14 +1249,12 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        {@link Constant#FL_FEATURE_FK_PERSON_ID}<br>
      *        for for fl_image table:<br>
      *        {@link Constant#FL_IMAGE_FK_DEVICE_ID}<br>
-     *        for for fl_junction_device_group table:<br>
-     *        {@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_DEVICE_ID},{@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_GROUP_ID}<br>
-     *        for for fl_junction_person_group table:<br>
-     *        {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID},{@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID}<br>
      *        for for fl_log table:<br>
      *        {@link Constant#FL_LOG_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_COMPARE_FACE},{@link Constant#FL_LOG_FK_VERIFY_FEATURE},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        for for fl_permit table:<br>
+     *        {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID},{@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID}<br>
      *        for for fl_person table:<br>
-     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
+     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_GROUP_ID}<br>
      *        for for fl_person_group table:<br>
      *        {@link Constant#FL_PERSON_GROUP_FK_PARENT}<br>
      * @return the associated <T> bean or {@code null} if {@code bean}  is {@code null}
@@ -1285,13 +1277,13 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * <ul>
      *     <li> for fl_device table:
      *     <li> {@link Constant#FL_DEVICE_IK_FL_IMAGE_DEVICE_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_IK_FL_JUNCTION_DEVICE_GROUP_DEVICE_ID} -> {@link PersonGroupBean}</li>
      *     <li> {@link Constant#FL_DEVICE_IK_FL_LOG_DEVICE_ID} -> {@link PersonGroupBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_device_group table:
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_ID} -> {@link PersonGroupBean}</li>
      *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_DEVICE_GROUP_PARENT} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_JUNCTION_DEVICE_GROUP_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_DEVICE_GROUP_IK_FL_PERMIT_DEVICE_GROUP_ID} -> {@link PersonGroupBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_face table:
@@ -1310,20 +1302,20 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * <ul>
      *     <li> for fl_person table:
      *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link PersonGroupBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID} -> {@link PersonGroupBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link PersonGroupBean}</li>
      * </ul>
      * <ul>
      *     <li> for fl_person_group table:
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonGroupBean}</li>
      *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the B object to use
      * @param ikIndex foreign key name.<br>
      *        for fl_device table:<br>
-     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
+     *        {@link Constant#FL_IMAGE_FK_DEVICE_ID},{@link Constant#FL_LOG_FK_DEVICE_ID}<br>
      *        for fl_device_group table:<br>
-     *        {@link Constant#FL_DEVICE_GROUP_FK_PARENT},{@link Constant#FL_JUNCTION_DEVICE_GROUP_FK_GROUP_ID}<br>
+     *        {@link Constant#FL_DEVICE_FK_GROUP_ID},{@link Constant#FL_DEVICE_GROUP_FK_PARENT},{@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID}<br>
      *        for fl_face table:<br>
      *        {@link Constant#FL_LOG_FK_COMPARE_FACE}<br>
      *        for fl_feature table:<br>
@@ -1331,9 +1323,9 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      *        for fl_image table:<br>
      *        {@link Constant#FL_FACE_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_IMAGE_MD5}<br>
      *        for fl_person table:<br>
-     *        {@link Constant#FL_FEATURE_FK_PERSON_ID},{@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
+     *        {@link Constant#FL_FEATURE_FK_PERSON_ID},{@link Constant#FL_LOG_FK_PERSON_ID}<br>
      *        for fl_person_group table:<br>
-     *        {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID},{@link Constant#FL_PERSON_GROUP_FK_PARENT}<br>
+     *        {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID},{@link Constant#FL_PERSON_FK_GROUP_ID},{@link Constant#FL_PERSON_GROUP_FK_PARENT}<br>
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     public <T extends BaseBean<T>> T[] getImportedBeans(B bean,int ikIndex);

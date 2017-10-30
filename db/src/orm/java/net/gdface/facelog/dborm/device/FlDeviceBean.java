@@ -28,11 +28,11 @@ public  class FlDeviceBean
     /** comments:设备id */
     private Integer id;
 
+    /** comments:所属设备组id */
+    private Integer groupId = new Integer(0)/* DEFAULT:'0'*/;
+
     /** comments:设备名称 */
     private String name;
-
-    /** comments:设备所属组id */
-    private Integer groupId;
 
     /** comments:设备版本号 */
     private String version;
@@ -115,7 +115,6 @@ public  class FlDeviceBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.id</li>
-     * <li> imported key: fl_junction_device_group.device_id</li>
      * <li> imported key: fl_log.device_id</li>
      * <li> imported key: fl_image.device_id</li>
      * <li>comments: 设备id</li>
@@ -182,67 +181,13 @@ public  class FlDeviceBean
         return 0L !=  (initialized & FL_DEVICE_ID_ID_MASK);
     }
     /**
-     * Getter method for {@link #name}.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_device.name</li>
-     * <li>comments: 设备名称</li>
-     * <li>column size: 32</li>
-     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
-     * </ul>
-     *
-     * @return the value of name
-     */
-    public String getName(){
-        return name;
-    }
-    /**
-     * Setter method for {@link #name}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value  to be assigned to name
-     */
-    public void setName(String newVal)
-    {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && checkNameInitialized())) {
-            return;
-        }
-        name = newVal;
-
-        modified |= FL_DEVICE_ID_NAME_MASK;
-        initialized |= FL_DEVICE_ID_NAME_MASK;
-    }
-
-    /**
-     * Determines if the name has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkNameModified()
-    {
-        return 0L !=  (modified & FL_DEVICE_ID_NAME_MASK);
-    }
-
-    /**
-     * Determines if the name has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkNameInitialized()
-    {
-        return 0L !=  (initialized & FL_DEVICE_ID_NAME_MASK);
-    }
-    /**
      * Getter method for {@link #groupId}.<br>
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device.group_id</li>
-     * <li>comments: 设备所属组id</li>
+     * <li> foreign key: fl_device_group.id</li>
+     * <li>comments: 所属设备组id</li>
+     * <li>default value: '0'</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
@@ -302,6 +247,62 @@ public  class FlDeviceBean
     public boolean checkGroupIdInitialized()
     {
         return 0L !=  (initialized & FL_DEVICE_ID_GROUP_ID_MASK);
+    }
+    /**
+     * Getter method for {@link #name}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_device.name</li>
+     * <li>comments: 设备名称</li>
+     * <li>column size: 32</li>
+     * <li>JDBC type returned by the driver: Types.VARCHAR</li>
+     * </ul>
+     *
+     * @return the value of name
+     */
+    public String getName(){
+        return name;
+    }
+    /**
+     * Setter method for {@link #name}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value  to be assigned to name
+     */
+    public void setName(String newVal)
+    {
+        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
+            (newVal == null && name == null && checkNameInitialized())) {
+            return;
+        }
+        name = newVal;
+
+        modified |= FL_DEVICE_ID_NAME_MASK;
+        initialized |= FL_DEVICE_ID_NAME_MASK;
+    }
+
+    /**
+     * Determines if the name has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkNameModified()
+    {
+        return 0L !=  (modified & FL_DEVICE_ID_NAME_MASK);
+    }
+
+    /**
+     * Determines if the name has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkNameInitialized()
+    {
+        return 0L !=  (initialized & FL_DEVICE_ID_NAME_MASK);
     }
     /**
      * Getter method for {@link #version}.<br>
@@ -605,6 +606,22 @@ public  class FlDeviceBean
     {
         return 0L !=  (initialized & FL_DEVICE_ID_UPDATE_TIME_MASK);
     }
+    //////////////////////////////////////
+    // referenced bean for FOREIGN KEYS
+    //////////////////////////////////////
+    /** 
+     * The referenced {@link FlDeviceGroupBean} by {@link #groupId} . <br>
+     * FOREIGN KEY (group_id) REFERENCES fl_device_group(id)
+     */
+    private FlDeviceGroupBean referencedByGroupId;
+    /** Getter method for {@link #referencedByGroupId}. */
+    public FlDeviceGroupBean getReferencedByGroupId() {
+        return this.referencedByGroupId;
+    }
+    /** Setter method for {@link #referencedByGroupId}. */
+    public void setReferencedByGroupId(FlDeviceGroupBean reference) {
+        this.referencedByGroupId = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -628,10 +645,10 @@ public  class FlDeviceBean
         switch ( columnID ){
         case FL_DEVICE_ID_ID:
             return checkIdModified();
-        case FL_DEVICE_ID_NAME:
-            return checkNameModified();
         case FL_DEVICE_ID_GROUP_ID:
             return checkGroupIdModified();
+        case FL_DEVICE_ID_NAME:
+            return checkNameModified();
         case FL_DEVICE_ID_VERSION:
             return checkVersionModified();
         case FL_DEVICE_ID_SERIAL_NO:
@@ -657,10 +674,10 @@ public  class FlDeviceBean
         switch(columnID) {
         case FL_DEVICE_ID_ID:
             return checkIdInitialized();
-        case FL_DEVICE_ID_NAME:
-            return checkNameInitialized();
         case FL_DEVICE_ID_GROUP_ID:
             return checkGroupIdInitialized();
+        case FL_DEVICE_ID_NAME:
+            return checkNameInitialized();
         case FL_DEVICE_ID_VERSION:
             return checkVersionInitialized();
         case FL_DEVICE_ID_SERIAL_NO:
@@ -716,8 +733,8 @@ public  class FlDeviceBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_DEVICE_ID_NAME_MASK |
-            FL_DEVICE_ID_GROUP_ID_MASK |
+        modified &= (~(FL_DEVICE_ID_GROUP_ID_MASK |
+            FL_DEVICE_ID_NAME_MASK |
             FL_DEVICE_ID_VERSION_MASK |
             FL_DEVICE_ID_SERIAL_NO_MASK |
             FL_DEVICE_ID_MAC_MASK |
@@ -741,8 +758,8 @@ public  class FlDeviceBean
         FlDeviceBean obj = (FlDeviceBean) object;
         return new EqualsBuilder()
             .append(getId(), obj.getId())
-            .append(getName(), obj.getName())
             .append(getGroupId(), obj.getGroupId())
+            .append(getName(), obj.getName())
             .append(getVersion(), obj.getVersion())
             .append(getSerialNo(), obj.getSerialNo())
             .append(getMac(), obj.getMac())
@@ -763,8 +780,8 @@ public  class FlDeviceBean
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tid=").append(getId()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
             .append("\tgroup_id=").append(getGroupId()).append("\n")
+            .append("\tname=").append(getName()).append("\n")
             .append("\tversion=").append(getVersion()).append("\n")
             .append("\tserial_no=").append(getSerialNo()).append("\n")
             .append("\tmac=").append(getMac()).append("\n")
@@ -778,8 +795,8 @@ public  class FlDeviceBean
     public int compareTo(FlDeviceBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
-            .append(getName(), object.getName())
             .append(getGroupId(), object.getGroupId())
+            .append(getName(), object.getName())
             .append(getVersion(), object.getVersion())
             .append(getSerialNo(), object.getSerialNo())
             .append(getMac(), object.getMac())
@@ -803,8 +820,8 @@ public  class FlDeviceBean
     public FlDeviceBean clean()
     {
         setId(null);
-        setName(null);
         setGroupId(null);
+        setName(null);
         setVersion(null);
         setSerialNo(null);
         setMac(null);
@@ -865,10 +882,10 @@ public  class FlDeviceBean
         switch( columnID ){
         case FL_DEVICE_ID_ID: 
             return (T)getId();        
-        case FL_DEVICE_ID_NAME: 
-            return (T)getName();        
         case FL_DEVICE_ID_GROUP_ID: 
             return (T)getGroupId();        
+        case FL_DEVICE_ID_NAME: 
+            return (T)getName();        
         case FL_DEVICE_ID_VERSION: 
             return (T)getVersion();        
         case FL_DEVICE_ID_SERIAL_NO: 
@@ -891,10 +908,10 @@ public  class FlDeviceBean
         switch( columnID ) {
         case FL_DEVICE_ID_ID:        
             setId((Integer)value);
-        case FL_DEVICE_ID_NAME:        
-            setName((String)value);
         case FL_DEVICE_ID_GROUP_ID:        
             setGroupId((Integer)value);
+        case FL_DEVICE_ID_NAME:        
+            setName((String)value);
         case FL_DEVICE_ID_VERSION:        
             setVersion((String)value);
         case FL_DEVICE_ID_SERIAL_NO:        

@@ -22,16 +22,15 @@ import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.JunctionDeviceGroupBean;
-import net.gdface.facelog.db.JunctionPersonGroupBean;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.LogLightBean;
 
 /**
- * generic type converter classes of {@link IBeanConverter} implementation for fl_device,fl_device_group,fl_face,fl_feature,fl_image,fl_junction_device_group,fl_junction_person_group,fl_log,fl_person,fl_person_group,fl_store,fl_log_light<br>
+ * generic type converter classes of {@link IBeanConverter} implementation for fl_device,fl_device_group,fl_face,fl_feature,fl_image,fl_log,fl_permit,fl_person,fl_person_group,fl_store,fl_log_light<br>
  * @author guyadong
  *
  */
@@ -228,10 +227,10 @@ public class BeanConverterUtils implements Constant {
 
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
-            getGetter("setName");
-            getSetterNoThrow("setName",String.class); 
             getGetter("setGroupId");
             getSetterNoThrow("setGroupId",Integer.class,int.class);                    
+            getGetter("setName");
+            getSetterNoThrow("setName",String.class); 
             getGetter("setVersion");
             getSetterNoThrow("setVersion",String.class); 
             getGetter("setSerialNo");
@@ -255,10 +254,10 @@ public class BeanConverterUtils implements Constant {
                     modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
-                if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
-                    left.setName(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("groupId",modified) && (null != (getterMethod = methods.get("getGroupId"))))
                     left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
+                if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
+                    left.setName(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("version",modified) && (null != (getterMethod = methods.get("getVersion"))))
                     left.setVersion(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("serialNo",modified) && (null != (getterMethod = methods.get("getSerialNo"))))
@@ -289,16 +288,16 @@ public class BeanConverterUtils implements Constant {
                         bitOR("id",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
-               if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
-                        bitOR("name",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
                if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
                         bitOR("groupId",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setName"),left.getName()));
+                        bitOR("name",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
                if(null != (setterMethod = methods.get("setVersion")) && left.checkVersionInitialized()){
@@ -1269,350 +1268,6 @@ public class BeanConverterUtils implements Constant {
     }; 
     /**
      * implementation of {@link IBeanConverter} by reflect<br>
-     * generic type converter between {@link JunctionDeviceGroupBean} and R_JUNCTIONDEVICEGROUP <br>
-     * @author guyadong
-     * @param <R_JUNCTIONDEVICEGROUP> right type
-     *
-     */
-    public static class JunctionDeviceGroupBeanConverter<R_JUNCTIONDEVICEGROUP> extends IBeanConverter.AbstractHandle<JunctionDeviceGroupBean,R_JUNCTIONDEVICEGROUP>{
-        private final Map<String,Method> methods = new Hashtable<String,Method>();
-        private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
-        private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
-
-        private boolean bitCheck(String name,long...bits){
-            Integer id = rightIndexs.get(name);
-            return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
-        }
-        private long[] bitOR(String name,long... bits){
-            return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
-        }
-        private void getGetter(String name){
-            try{
-                methods.put(name,rightType.getMethod(name));
-            }catch(NoSuchMethodException e){}
-        }
-        private void getSetter(String name, Class<?>...types) throws NoSuchMethodException{
-            for(Class<?>paramType:types){
-                try{
-                    methods.put(name,rightType.getMethod(name,paramType));
-                    setterParams.put(name, paramType);
-                    return;
-                }catch(NoSuchMethodException e){
-                    continue;
-                }
-            }
-            throw new NoSuchMethodException();
-        }
-        private void getSetterNoThrow(String name, Class<?>...types){
-            try{
-                getSetter(name,types);
-            }catch(NoSuchMethodException e){}
-        }
-        /** 
-         * usage: <pre>new JunctionDeviceGroupBeanConverter&lt;Model&gt;(javaFields){};</pre>
-         * @param javaFields a comma splice string,including all field name of R_JUNCTIONDEVICEGROUP,<br>
-         *                   if null or empty, use default string:{@link Constant#FL_JUNCTION_DEVICE_GROUP_JAVA_FIELDS}
-         */
-        public JunctionDeviceGroupBeanConverter(String javaFields){
-            super();
-            init(javaFields);
-        }
-        /** @see #JunctionDeviceGroupBeanConverter(String) */
-        public JunctionDeviceGroupBeanConverter(){
-            this(null);
-        }
-        /**
-         * constructor
-         * @param leftClass
-         * @param rightClass
-         * @param javaFields see also {@link #JunctionDeviceGroupBeanConverter(String)}
-         */
-        public JunctionDeviceGroupBeanConverter (Class<JunctionDeviceGroupBean> leftClass, Class<R_JUNCTIONDEVICEGROUP> rightClass,String javaFields){
-            super(leftClass,rightClass);
-            init(javaFields);
-        }
-        /** @see #JunctionDeviceGroupBeanConverter(Class,Class,String) */
-        public JunctionDeviceGroupBeanConverter (Class<JunctionDeviceGroupBean> leftClass, Class<R_JUNCTIONDEVICEGROUP> rightClass){
-            this(leftClass,rightClass,null);
-        }
-        private void init(String javaFields){
-            if(null == javaFields || javaFields.isEmpty()){
-                javaFields = FL_JUNCTION_DEVICE_GROUP_JAVA_FIELDS;
-            }
-            String []rightFields = javaFields.split(",");
-            for(int i = 0 ; i < rightFields.length; ++i){
-                String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
-                    throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
-                rightIndexs.put(field,i);
-            }
-            try{
-                methods.put("isNew",rightType.getMethod("isNew"));
-                methods.put("getModified",rightType.getMethod("getModified"));
-                getSetter("setNew",boolean.class);
-                if(rightIndexs.size() > 64)
-                    getSetter("setModified",long[].class,List.class);
-                else
-                    getSetter("setModified",long.class);
-            }catch(NoSuchMethodException e){
-                throw new RuntimeException(e);
-            }
-            getGetter("getInitialized");
-            if(rightIndexs.size() > 64)
-                getSetterNoThrow("setInitialized",long[].class,List.class);
-            else
-                getSetterNoThrow("setInitialized",long.class);
-
-            getGetter("setDeviceId");
-            getSetterNoThrow("setDeviceId",Integer.class,int.class);                    
-            getGetter("setGroupId");
-            getSetterNoThrow("setGroupId",Integer.class,int.class);                    
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
-        }
-        @Override
-        protected void _fromRight(JunctionDeviceGroupBean left, R_JUNCTIONDEVICEGROUP right) {
-            try{
-                Method getterMethod;
-                left.resetIsModified();
-                long[] modified;
-                if(rightIndexs.size() > 64)
-                    modified = (long[])methods.get("getModified").invoke(right);
-                else
-                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
-                if( bitCheck("deviceId",modified) && (null != (getterMethod = methods.get("getDeviceId"))))
-                    left.setDeviceId(cast(Integer.class,getterMethod.invoke(right)));
-                if( bitCheck("groupId",modified) && (null != (getterMethod = methods.get("getGroupId"))))
-                    left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                if( bitCheck("createTime",modified) && (null != (getterMethod = methods.get("getCreateTime"))))
-                    left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((Boolean)methods.get("isNew").invoke(right));
-            }catch(RuntimeException e){
-                throw e;
-            }catch(Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        protected void _toRight(JunctionDeviceGroupBean left, R_JUNCTIONDEVICEGROUP right) {
-            try{
-                Method setterMethod;
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
-                for(int i = 0 ;i < modified.length; ++i)modified[i] = 0L;
-               if(null != (setterMethod = methods.get("setDeviceId")) && left.checkDeviceIdInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setDeviceId"),left.getDeviceId()));
-                        bitOR("deviceId",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
-               if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
-                        bitOR("groupId",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
-// IGNORE field fl_junction_device_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-/*
-               if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
-*/
-                if(null != (setterMethod = methods.get("setInitialized"))){
-                    if( modified.length > 1)
-                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
-                    else
-                        setterMethod.invoke(right,modified[0]);
-                }
-                methods.get("setNew").invoke(right,left.isNew());
-                if( modified.length > 1)
-                    methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
-                else
-                    methods.get("setModified").invoke(right,modified[0]);
-            }catch(RuntimeException e){
-                throw e;
-            }catch(Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-    }; 
-    /**
-     * implementation of {@link IBeanConverter} by reflect<br>
-     * generic type converter between {@link JunctionPersonGroupBean} and R_JUNCTIONPERSONGROUP <br>
-     * @author guyadong
-     * @param <R_JUNCTIONPERSONGROUP> right type
-     *
-     */
-    public static class JunctionPersonGroupBeanConverter<R_JUNCTIONPERSONGROUP> extends IBeanConverter.AbstractHandle<JunctionPersonGroupBean,R_JUNCTIONPERSONGROUP>{
-        private final Map<String,Method> methods = new Hashtable<String,Method>();
-        private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
-        private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
-
-        private boolean bitCheck(String name,long...bits){
-            Integer id = rightIndexs.get(name);
-            return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
-        }
-        private long[] bitOR(String name,long... bits){
-            return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
-        }
-        private void getGetter(String name){
-            try{
-                methods.put(name,rightType.getMethod(name));
-            }catch(NoSuchMethodException e){}
-        }
-        private void getSetter(String name, Class<?>...types) throws NoSuchMethodException{
-            for(Class<?>paramType:types){
-                try{
-                    methods.put(name,rightType.getMethod(name,paramType));
-                    setterParams.put(name, paramType);
-                    return;
-                }catch(NoSuchMethodException e){
-                    continue;
-                }
-            }
-            throw new NoSuchMethodException();
-        }
-        private void getSetterNoThrow(String name, Class<?>...types){
-            try{
-                getSetter(name,types);
-            }catch(NoSuchMethodException e){}
-        }
-        /** 
-         * usage: <pre>new JunctionPersonGroupBeanConverter&lt;Model&gt;(javaFields){};</pre>
-         * @param javaFields a comma splice string,including all field name of R_JUNCTIONPERSONGROUP,<br>
-         *                   if null or empty, use default string:{@link Constant#FL_JUNCTION_PERSON_GROUP_JAVA_FIELDS}
-         */
-        public JunctionPersonGroupBeanConverter(String javaFields){
-            super();
-            init(javaFields);
-        }
-        /** @see #JunctionPersonGroupBeanConverter(String) */
-        public JunctionPersonGroupBeanConverter(){
-            this(null);
-        }
-        /**
-         * constructor
-         * @param leftClass
-         * @param rightClass
-         * @param javaFields see also {@link #JunctionPersonGroupBeanConverter(String)}
-         */
-        public JunctionPersonGroupBeanConverter (Class<JunctionPersonGroupBean> leftClass, Class<R_JUNCTIONPERSONGROUP> rightClass,String javaFields){
-            super(leftClass,rightClass);
-            init(javaFields);
-        }
-        /** @see #JunctionPersonGroupBeanConverter(Class,Class,String) */
-        public JunctionPersonGroupBeanConverter (Class<JunctionPersonGroupBean> leftClass, Class<R_JUNCTIONPERSONGROUP> rightClass){
-            this(leftClass,rightClass,null);
-        }
-        private void init(String javaFields){
-            if(null == javaFields || javaFields.isEmpty()){
-                javaFields = FL_JUNCTION_PERSON_GROUP_JAVA_FIELDS;
-            }
-            String []rightFields = javaFields.split(",");
-            for(int i = 0 ; i < rightFields.length; ++i){
-                String field = rightFields[i].trim();
-                if(!field.matches("\\w+"))
-                    throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
-                rightIndexs.put(field,i);
-            }
-            try{
-                methods.put("isNew",rightType.getMethod("isNew"));
-                methods.put("getModified",rightType.getMethod("getModified"));
-                getSetter("setNew",boolean.class);
-                if(rightIndexs.size() > 64)
-                    getSetter("setModified",long[].class,List.class);
-                else
-                    getSetter("setModified",long.class);
-            }catch(NoSuchMethodException e){
-                throw new RuntimeException(e);
-            }
-            getGetter("getInitialized");
-            if(rightIndexs.size() > 64)
-                getSetterNoThrow("setInitialized",long[].class,List.class);
-            else
-                getSetterNoThrow("setInitialized",long.class);
-
-            getGetter("setPersonId");
-            getSetterNoThrow("setPersonId",Integer.class,int.class);                    
-            getGetter("setGroupId");
-            getSetterNoThrow("setGroupId",Integer.class,int.class);                    
-            getGetter("setCreateTime");
-            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
-        }
-        @Override
-        protected void _fromRight(JunctionPersonGroupBean left, R_JUNCTIONPERSONGROUP right) {
-            try{
-                Method getterMethod;
-                left.resetIsModified();
-                long[] modified;
-                if(rightIndexs.size() > 64)
-                    modified = (long[])methods.get("getModified").invoke(right);
-                else
-                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
-                if( bitCheck("personId",modified) && (null != (getterMethod = methods.get("getPersonId"))))
-                    left.setPersonId(cast(Integer.class,getterMethod.invoke(right)));
-                if( bitCheck("groupId",modified) && (null != (getterMethod = methods.get("getGroupId"))))
-                    left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
-                if( bitCheck("createTime",modified) && (null != (getterMethod = methods.get("getCreateTime"))))
-                    left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
-                left.isNew((Boolean)methods.get("isNew").invoke(right));
-            }catch(RuntimeException e){
-                throw e;
-            }catch(Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        protected void _toRight(JunctionPersonGroupBean left, R_JUNCTIONPERSONGROUP right) {
-            try{
-                Method setterMethod;
-                long[] modified = new long[(rightIndexs.size() + 63)>>6];
-                for(int i = 0 ;i < modified.length; ++i)modified[i] = 0L;
-               if(null != (setterMethod = methods.get("setPersonId")) && left.checkPersonIdInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setPersonId"),left.getPersonId()));
-                        bitOR("personId",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
-               if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
-                        bitOR("groupId",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
-// IGNORE field fl_junction_person_group.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
-/*
-               if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
-                    try{
-                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
-                        bitOR("createTime",modified);
-                    }catch(NullCastPrimitiveException e){}
-                }
-*/
-                if(null != (setterMethod = methods.get("setInitialized"))){
-                    if( modified.length > 1)
-                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
-                    else
-                        setterMethod.invoke(right,modified[0]);
-                }
-                methods.get("setNew").invoke(right,left.isNew());
-                if( modified.length > 1)
-                    methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
-                else
-                    methods.get("setModified").invoke(right,modified[0]);
-            }catch(RuntimeException e){
-                throw e;
-            }catch(Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-    }; 
-    /**
-     * implementation of {@link IBeanConverter} by reflect<br>
      * generic type converter between {@link LogBean} and R_LOG <br>
      * @author guyadong
      * @param <R_LOG> right type
@@ -1835,6 +1490,178 @@ public class BeanConverterUtils implements Constant {
     }; 
     /**
      * implementation of {@link IBeanConverter} by reflect<br>
+     * generic type converter between {@link PermitBean} and R_PERMIT <br>
+     * @author guyadong
+     * @param <R_PERMIT> right type
+     *
+     */
+    public static class PermitBeanConverter<R_PERMIT> extends IBeanConverter.AbstractHandle<PermitBean,R_PERMIT>{
+        private final Map<String,Method> methods = new Hashtable<String,Method>();
+        private final Map<String,Integer> rightIndexs = new Hashtable<String,Integer>();
+        private final Map<String, Class<?>> setterParams = new Hashtable<String,Class<?>>();
+
+        private boolean bitCheck(String name,long...bits){
+            Integer id = rightIndexs.get(name);
+            return (null == id)?false:BeanConverterUtils.bitCheck(id.intValue(),bits);
+        }
+        private long[] bitOR(String name,long... bits){
+            return BeanConverterUtils.bitOR(rightIndexs.get(name),bits);
+        }
+        private void getGetter(String name){
+            try{
+                methods.put(name,rightType.getMethod(name));
+            }catch(NoSuchMethodException e){}
+        }
+        private void getSetter(String name, Class<?>...types) throws NoSuchMethodException{
+            for(Class<?>paramType:types){
+                try{
+                    methods.put(name,rightType.getMethod(name,paramType));
+                    setterParams.put(name, paramType);
+                    return;
+                }catch(NoSuchMethodException e){
+                    continue;
+                }
+            }
+            throw new NoSuchMethodException();
+        }
+        private void getSetterNoThrow(String name, Class<?>...types){
+            try{
+                getSetter(name,types);
+            }catch(NoSuchMethodException e){}
+        }
+        /** 
+         * usage: <pre>new PermitBeanConverter&lt;Model&gt;(javaFields){};</pre>
+         * @param javaFields a comma splice string,including all field name of R_PERMIT,<br>
+         *                   if null or empty, use default string:{@link Constant#FL_PERMIT_JAVA_FIELDS}
+         */
+        public PermitBeanConverter(String javaFields){
+            super();
+            init(javaFields);
+        }
+        /** @see #PermitBeanConverter(String) */
+        public PermitBeanConverter(){
+            this(null);
+        }
+        /**
+         * constructor
+         * @param leftClass
+         * @param rightClass
+         * @param javaFields see also {@link #PermitBeanConverter(String)}
+         */
+        public PermitBeanConverter (Class<PermitBean> leftClass, Class<R_PERMIT> rightClass,String javaFields){
+            super(leftClass,rightClass);
+            init(javaFields);
+        }
+        /** @see #PermitBeanConverter(Class,Class,String) */
+        public PermitBeanConverter (Class<PermitBean> leftClass, Class<R_PERMIT> rightClass){
+            this(leftClass,rightClass,null);
+        }
+        private void init(String javaFields){
+            if(null == javaFields || javaFields.isEmpty()){
+                javaFields = FL_PERMIT_JAVA_FIELDS;
+            }
+            String []rightFields = javaFields.split(",");
+            for(int i = 0 ; i < rightFields.length; ++i){
+                String field = rightFields[i].trim();
+                if(!field.matches("\\w+"))
+                    throw new IllegalArgumentException("invalid 'javaFields':" + javaFields);
+                rightIndexs.put(field,i);
+            }
+            try{
+                methods.put("isNew",rightType.getMethod("isNew"));
+                methods.put("getModified",rightType.getMethod("getModified"));
+                getSetter("setNew",boolean.class);
+                if(rightIndexs.size() > 64)
+                    getSetter("setModified",long[].class,List.class);
+                else
+                    getSetter("setModified",long.class);
+            }catch(NoSuchMethodException e){
+                throw new RuntimeException(e);
+            }
+            getGetter("getInitialized");
+            if(rightIndexs.size() > 64)
+                getSetterNoThrow("setInitialized",long[].class,List.class);
+            else
+                getSetterNoThrow("setInitialized",long.class);
+
+            getGetter("setDeviceGroupId");
+            getSetterNoThrow("setDeviceGroupId",Integer.class,int.class);                    
+            getGetter("setPersonGroupId");
+            getSetterNoThrow("setPersonGroupId",Integer.class,int.class);                    
+            getGetter("setCreateTime");
+            getSetterNoThrow("setCreateTime",java.util.Date.class,Long.class,long.class);  
+        }
+        @Override
+        protected void _fromRight(PermitBean left, R_PERMIT right) {
+            try{
+                Method getterMethod;
+                left.resetIsModified();
+                long[] modified;
+                if(rightIndexs.size() > 64)
+                    modified = (long[])methods.get("getModified").invoke(right);
+                else
+                    modified = new long[]{(Long)methods.get("getModified").invoke(right)};
+                if( bitCheck("deviceGroupId",modified) && (null != (getterMethod = methods.get("getDeviceGroupId"))))
+                    left.setDeviceGroupId(cast(Integer.class,getterMethod.invoke(right)));
+                if( bitCheck("personGroupId",modified) && (null != (getterMethod = methods.get("getPersonGroupId"))))
+                    left.setPersonGroupId(cast(Integer.class,getterMethod.invoke(right)));
+                if( bitCheck("createTime",modified) && (null != (getterMethod = methods.get("getCreateTime"))))
+                    left.setCreateTime(cast(java.util.Date.class,getterMethod.invoke(right)));
+                left.isNew((Boolean)methods.get("isNew").invoke(right));
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        protected void _toRight(PermitBean left, R_PERMIT right) {
+            try{
+                Method setterMethod;
+                long[] modified = new long[(rightIndexs.size() + 63)>>6];
+                for(int i = 0 ;i < modified.length; ++i)modified[i] = 0L;
+               if(null != (setterMethod = methods.get("setDeviceGroupId")) && left.checkDeviceGroupIdInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setDeviceGroupId"),left.getDeviceGroupId()));
+                        bitOR("deviceGroupId",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setPersonGroupId")) && left.checkPersonGroupIdInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setPersonGroupId"),left.getPersonGroupId()));
+                        bitOR("personGroupId",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+// IGNORE field fl_permit.create_time , controlled by 'general.beanconverter.tonative.ignore' in properties file
+/*
+               if(null != (setterMethod = methods.get("setCreateTime")) && left.checkCreateTimeInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setCreateTime"),left.getCreateTime()));
+                        bitOR("createTime",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+*/
+                if(null != (setterMethod = methods.get("setInitialized"))){
+                    if( modified.length > 1)
+                        setterMethod.invoke(right,cast(setterParams.get("setInitialized"),modified));
+                    else
+                        setterMethod.invoke(right,modified[0]);
+                }
+                methods.get("setNew").invoke(right,left.isNew());
+                if( modified.length > 1)
+                    methods.get("setModified").invoke(right,cast(setterParams.get("setModified"),modified));
+                else
+                    methods.get("setModified").invoke(right,modified[0]);
+            }catch(RuntimeException e){
+                throw e;
+            }catch(Exception e){
+                throw new RuntimeException(e);
+            }
+        }
+    }; 
+    /**
+     * implementation of {@link IBeanConverter} by reflect<br>
      * generic type converter between {@link PersonBean} and R_PERSON <br>
      * @author guyadong
      * @param <R_PERSON> right type
@@ -1931,6 +1758,8 @@ public class BeanConverterUtils implements Constant {
 
             getGetter("setId");
             getSetterNoThrow("setId",Integer.class,int.class);                    
+            getGetter("setGroupId");
+            getSetterNoThrow("setGroupId",Integer.class,int.class);                    
             getGetter("setName");
             getSetterNoThrow("setName",String.class); 
             getGetter("setSex");
@@ -1962,6 +1791,8 @@ public class BeanConverterUtils implements Constant {
                     modified = new long[]{(Long)methods.get("getModified").invoke(right)};
                 if( bitCheck("id",modified) && (null != (getterMethod = methods.get("getId"))))
                     left.setId(cast(Integer.class,getterMethod.invoke(right)));
+                if( bitCheck("groupId",modified) && (null != (getterMethod = methods.get("getGroupId"))))
+                    left.setGroupId(cast(Integer.class,getterMethod.invoke(right)));
                 if( bitCheck("name",modified) && (null != (getterMethod = methods.get("getName"))))
                     left.setName(cast(String.class,getterMethod.invoke(right)));
                 if( bitCheck("sex",modified) && (null != (getterMethod = methods.get("getSex"))))
@@ -1998,6 +1829,12 @@ public class BeanConverterUtils implements Constant {
                     try{
                         setterMethod.invoke(right,cast(setterParams.get("setId"),left.getId()));
                         bitOR("id",modified);
+                    }catch(NullCastPrimitiveException e){}
+                }
+               if(null != (setterMethod = methods.get("setGroupId")) && left.checkGroupIdInitialized()){
+                    try{
+                        setterMethod.invoke(right,cast(setterParams.get("setGroupId"),left.getGroupId()));
+                        bitOR("groupId",modified);
                     }catch(NullCastPrimitiveException e){}
                 }
                if(null != (setterMethod = methods.get("setName")) && left.checkNameInitialized()){

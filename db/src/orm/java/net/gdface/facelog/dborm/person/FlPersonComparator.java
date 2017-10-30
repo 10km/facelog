@@ -38,6 +38,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_PERSON_ID_ID}
+     *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID}
      *   <li>{@link Constant#FL_PERSON_ID_NAME}
      *   <li>{@link Constant#FL_PERSON_ID_SEX}
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE}
@@ -66,6 +67,7 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_PERSON_ID_ID})
+     *   <li>{@link Constant#FL_PERSON_ID_GROUP_ID})
      *   <li>{@link Constant#FL_PERSON_ID_NAME})
      *   <li>{@link Constant#FL_PERSON_ID_SEX})
      *   <li>{@link Constant#FL_PERSON_ID_BIRTHDATE})
@@ -100,6 +102,17 @@ public class FlPersonComparator implements Comparator<FlPersonBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getId().compareTo(b2.getId());
+                }
+                break;
+            case FL_PERSON_ID_GROUP_ID:
+                if (b1.getGroupId() == null && b2.getGroupId() != null) {
+                    iReturn = -1;
+                } else if (b1.getGroupId() == null && b2.getGroupId() == null) {
+                    iReturn = 0;
+                } else if (b1.getGroupId() != null && b2.getGroupId() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getGroupId().compareTo(b2.getGroupId());
                 }
                 break;
             case FL_PERSON_ID_NAME:

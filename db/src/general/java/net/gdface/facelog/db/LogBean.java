@@ -697,12 +697,10 @@ public final class LogBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @ThriftField(value=12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
-    @ThriftField()
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }
@@ -712,12 +710,10 @@ public final class LogBean
      */
     private FaceBean referencedByCompareFace;
     /** Getter method for {@link #referencedByCompareFace}. */
-    @ThriftField(value=13)
     public FaceBean getReferencedByCompareFace() {
         return this.referencedByCompareFace;
     }
     /** Setter method for {@link #referencedByCompareFace}. */
-    @ThriftField()
     public void setReferencedByCompareFace(FaceBean reference) {
         this.referencedByCompareFace = reference;
     }
@@ -727,12 +723,10 @@ public final class LogBean
      */
     private FeatureBean referencedByVerifyFeature;
     /** Getter method for {@link #referencedByVerifyFeature}. */
-    @ThriftField(value=14)
     public FeatureBean getReferencedByVerifyFeature() {
         return this.referencedByVerifyFeature;
     }
     /** Setter method for {@link #referencedByVerifyFeature}. */
-    @ThriftField()
     public void setReferencedByVerifyFeature(FeatureBean reference) {
         this.referencedByVerifyFeature = reference;
     }
@@ -742,12 +736,10 @@ public final class LogBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @ThriftField(value=15)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
-    @ThriftField()
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }

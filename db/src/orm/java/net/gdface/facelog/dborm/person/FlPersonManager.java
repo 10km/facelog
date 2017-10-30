@@ -376,7 +376,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFeatureBean.class,FlJunctionPersonGroupBean.class,FlLogBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{FlFeatureBean.class,FlLogBean.class};
 
     /**
      * @see #getImportedBeansAsList(FlPersonBean,int)
@@ -392,11 +392,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID} -> {@link FlFeatureBean}</li>
-     *     <li> {@link Constant#FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID} -> {@link FlJunctionPersonGroupBean}</li>
      *     <li> {@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID} -> {@link FlLogBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_IK_FL_FEATURE_PERSON_ID},{@link Constant#FL_PERSON_IK_FL_LOG_PERSON_ID}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
@@ -406,8 +405,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (List<T>)this.getFeatureBeansByPersonIdAsList(bean);
-        case FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID:
-            return (List<T>)this.getJunctionPersonGroupBeansByPersonIdAsList(bean);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (List<T>)this.getLogBeansByPersonIdAsList(bean);
         }
@@ -429,8 +426,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (T[])setFeatureBeansByPersonId(bean,(FlFeatureBean[])importedBeans);
-        case FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID:
-            return (T[])setJunctionPersonGroupBeansByPersonId(bean,(FlJunctionPersonGroupBean[])importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (T[])setLogBeansByPersonId(bean,(FlLogBean[])importedBeans);
         }
@@ -452,8 +447,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(ikIndex){
         case FL_PERSON_IK_FL_FEATURE_PERSON_ID:
             return (C)setFeatureBeansByPersonId(bean,(java.util.Collection<FlFeatureBean>)importedBeans);
-        case FL_PERSON_IK_FL_JUNCTION_PERSON_GROUP_PERSON_ID:
-            return (C)setJunctionPersonGroupBeansByPersonId(bean,(java.util.Collection<FlJunctionPersonGroupBean>)importedBeans);
         case FL_PERSON_IK_FL_LOG_PERSON_ID:
             return (C)setLogBeansByPersonId(bean,(java.util.Collection<FlLogBean>)importedBeans);
         }
@@ -575,117 +568,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
 
     /**
-     * Retrieves the {@link FlJunctionPersonGroupBean} object from the fl_junction_person_group.person_id field.<BR>
-     * FK_NAME : fl_junction_person_group_ibfk_1 
-     * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlJunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1 GET IMPORTED
-    public FlJunctionPersonGroupBean[] getJunctionPersonGroupBeansByPersonId(FlPersonBean bean) throws DAOException
-    {
-        return getJunctionPersonGroupBeansByPersonIdAsList(bean).toArray(new FlJunctionPersonGroupBean[0]);
-    }
-    /**
-     * Retrieves the {@link FlJunctionPersonGroupBean} object from the fl_junction_person_group.person_id field.<BR>
-     * FK_NAME : fl_junction_person_group_ibfk_1 
-     * @param id Integer - PK# 1
-     * @return the associated {@link FlJunctionPersonGroupBean} beans or {@code null} if {@code bean} is {@code null}
-     * @throws DAOException
-     */
-    //3.1.2 GET IMPORTED
-    public FlJunctionPersonGroupBean[] getJunctionPersonGroupBeansByPersonId(Integer personId) throws DAOException
-    {
-        FlPersonBean bean = createBean();
-        bean.setId(personId);
-        return getJunctionPersonGroupBeansByPersonId(bean);
-    }
-    /**
-     * Retrieves the {@link FlJunctionPersonGroupBean} object from fl_junction_person_group.person_id field.<BR>
-     * FK_NAME:fl_junction_person_group_ibfk_1
-     * @param bean the {@link FlPersonBean}
-     * @return the associated {@link FlJunctionPersonGroupBean} beans 
-     * @throws DAOException
-     */
-    //3.2 GET IMPORTED
-    public List<FlJunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(FlPersonBean bean) throws DAOException
-    {
-        return getJunctionPersonGroupBeansByPersonIdAsList(bean,1,-1);
-    }
-    /**
-     * Retrieves the {@link FlJunctionPersonGroupBean} object from fl_junction_person_group.person_id field.<BR>
-     * FK_NAME:fl_junction_person_group_ibfk_1
-     * @param id Integer - PK# 1
-     * @return the associated {@link FlJunctionPersonGroupBean} beans 
-     * @throws DAOException
-     */
-    //3.2.2 GET IMPORTED
-    public List<FlJunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(Integer personId) throws DAOException
-    {
-         FlPersonBean bean = createBean();
-        bean.setId(personId);
-        return getJunctionPersonGroupBeansByPersonIdAsList(bean);
-    }
-    /**
-     * Retrieves the {@link FlJunctionPersonGroupBean} object from fl_junction_person_group.person_id field, 
-     * given the start row and number of rows.<BR>
-     * FK_NAME:fl_junction_person_group_ibfk_1
-     * @param bean the {@link FlPersonBean}
-     * @param startRow the start row to be used (first row = 1, last row=-1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the associated {@link FlJunctionPersonGroupBean} beans 
-     * @throws DAOException
-     */
-    //3.2.4 GET IMPORTED
-    public List<FlJunctionPersonGroupBean> getJunctionPersonGroupBeansByPersonIdAsList(FlPersonBean bean,int startRow, int numRows) throws DAOException
-    {
-        if(null == bean)
-            return new java.util.ArrayList<FlJunctionPersonGroupBean>();
-        FlJunctionPersonGroupBean other = new FlJunctionPersonGroupBean();
-        other.setPersonId(bean.getId());
-        return FlJunctionPersonGroupManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
-    }
-    /**
-     * set  the {@link FlJunctionPersonGroupBean} object array associate to FlPersonBean by the fl_junction_person_group.person_id field.<BR>
-     * FK_NAME : fl_junction_person_group_ibfk_1 
-     * @param bean the referenced {@link FlPersonBean}
-     * @param importedBeans imported beans from fl_junction_person_group
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlJunctionPersonGroupManager#setReferencedByPersonId(FlJunctionPersonGroupBean, FlPersonBean)
-     */
-    //3.3 SET IMPORTED
-    public FlJunctionPersonGroupBean[] setJunctionPersonGroupBeansByPersonId(FlPersonBean bean , FlJunctionPersonGroupBean[] importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlJunctionPersonGroupBean importBean : importedBeans ){
-                FlJunctionPersonGroupManager.getInstance().setReferencedByPersonId(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
-     * set  the {@link FlJunctionPersonGroupBean} object collection associate to FlPersonBean by the fl_junction_person_group.person_id field.<BR>
-     * FK_NAME:fl_junction_person_group_ibfk_1
-     * @param bean the referenced {@link FlPersonBean} 
-     * @param importedBeans imported beans from fl_junction_person_group 
-     * @return importedBeans always
-     * @throws DAOException
-     * @see {@link FlJunctionPersonGroupManager#setReferencedByPersonId(FlJunctionPersonGroupBean, FlPersonBean)
-     */
-    //3.4 SET IMPORTED
-    public <C extends java.util.Collection<FlJunctionPersonGroupBean>> C setJunctionPersonGroupBeansByPersonId(FlPersonBean bean , C importedBeans) throws DAOException
-    {
-        if(null != importedBeans){
-            for( FlJunctionPersonGroupBean importBean : importedBeans ){
-                FlJunctionPersonGroupManager.getInstance().setReferencedByPersonId(importBean , bean);
-            }
-        }
-        return importedBeans;
-    }
-
-    /**
      * Retrieves the {@link FlLogBean} object from the fl_log.person_id field.<BR>
      * FK_NAME : fl_log_ibfk_1 
      * @param bean the {@link FlPersonBean}
@@ -801,25 +683,25 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param refImageByImageMd5 the {@link FlImageBean} bean referenced by {@link FlPersonBean} 
+     * @param refPersongroupByGroupId the {@link FlPersonGroupBean} bean referenced by {@link FlPersonBean} 
      * @param impFeatureByPersonId the {@link FlFeatureBean} beans refer to {@link FlPersonBean} 
-     * @param impJunctionpersongroupByPersonId the {@link FlJunctionPersonGroupBean} beans refer to {@link FlPersonBean} 
      * @param impLogByPersonId the {@link FlLogBean} beans refer to {@link FlPersonBean} 
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
-        , FlImageBean refImageByImageMd5 
-        , FlFeatureBean[] impFeatureByPersonId , FlJunctionPersonGroupBean[] impJunctionpersongroupByPersonId , FlLogBean[] impLogByPersonId ) throws DAOException
+        , FlImageBean refImageByImageMd5 , FlPersonGroupBean refPersongroupByGroupId 
+        , FlFeatureBean[] impFeatureByPersonId , FlLogBean[] impLogByPersonId ) throws DAOException
     {
         if(null == bean) return null;
         if(null != refImageByImageMd5)
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        if(null != refPersongroupByGroupId)
+            this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
         FlFeatureManager.getInstance().save( impFeatureByPersonId );
-        this.setJunctionPersonGroupBeansByPersonId(bean,impJunctionpersongroupByPersonId);
-        FlJunctionPersonGroupManager.getInstance().save( impJunctionpersongroupByPersonId );
         this.setLogBeansByPersonId(bean,impLogByPersonId);
         FlLogManager.getInstance().save( impLogByPersonId );
         return bean;
@@ -827,17 +709,17 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , FlFeatureBean[] , FlJunctionPersonGroupBean[] , FlLogBean[] )}
+     * @see {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , FlFeatureBean[] , FlLogBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
-        ,final FlImageBean refImageByImageMd5 
-        ,final FlFeatureBean[] impFeatureByPersonId ,final FlJunctionPersonGroupBean[] impJunctionpersongroupByPersonId ,final FlLogBean[] impLogByPersonId ) throws DAOException
+        ,final FlImageBean refImageByImageMd5 ,final FlPersonGroupBean refPersongroupByGroupId 
+        ,final FlFeatureBean[] impFeatureByPersonId ,final FlLogBean[] impLogByPersonId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlPersonBean>(){
             @Override
             public FlPersonBean call() throws Exception {
-                return save(bean , refImageByImageMd5 , impFeatureByPersonId , impJunctionpersongroupByPersonId , impLogByPersonId );
+                return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
     /**
@@ -845,24 +727,23 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param refImageByImageMd5 the {@link FlImageBean} bean referenced by {@link FlPersonBean} 
+     * @param refPersongroupByGroupId the {@link FlPersonGroupBean} bean referenced by {@link FlPersonBean} 
      * @param impFeatureByPersonId the {@link FlFeatureBean} bean refer to {@link FlPersonBean} 
-     * @param impJunctionpersongroupByPersonId the {@link FlJunctionPersonGroupBean} bean refer to {@link FlPersonBean} 
      * @param impLogByPersonId the {@link FlLogBean} bean refer to {@link FlPersonBean} 
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
     //3.7 SYNC SAVE 
     public FlPersonBean save(FlPersonBean bean
-        , FlImageBean refImageByImageMd5 
-        , java.util.Collection<FlFeatureBean> impFeatureByPersonId , java.util.Collection<FlJunctionPersonGroupBean> impJunctionpersongroupByPersonId , java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
+        , FlImageBean refImageByImageMd5 , FlPersonGroupBean refPersongroupByGroupId 
+        , java.util.Collection<FlFeatureBean> impFeatureByPersonId , java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
     {
         if(null == bean) return null;
         this.setReferencedByImageMd5(bean,refImageByImageMd5);
+        this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
         FlFeatureManager.getInstance().save( impFeatureByPersonId );
-        this.setJunctionPersonGroupBeansByPersonId(bean,impJunctionpersongroupByPersonId);
-        FlJunctionPersonGroupManager.getInstance().save( impJunctionpersongroupByPersonId );
         this.setLogBeansByPersonId(bean,impLogByPersonId);
         FlLogManager.getInstance().save( impLogByPersonId );
         return bean;
@@ -870,17 +751,17 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlPersonBean , FlImageBean , java.util.Collection , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public FlPersonBean saveAsTransaction(final FlPersonBean bean
-        ,final FlImageBean refImageByImageMd5 
-        ,final  java.util.Collection<FlFeatureBean> impFeatureByPersonId ,final  java.util.Collection<FlJunctionPersonGroupBean> impJunctionpersongroupByPersonId ,final  java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
+        ,final FlImageBean refImageByImageMd5 ,final FlPersonGroupBean refPersongroupByGroupId 
+        ,final  java.util.Collection<FlFeatureBean> impFeatureByPersonId ,final  java.util.Collection<FlLogBean> impLogByPersonId ) throws DAOException
     {
         return this.runAsTransaction(new Callable<FlPersonBean>(){
             @Override
             public FlPersonBean call() throws Exception {
-                return save(bean , refImageByImageMd5 , impFeatureByPersonId , impJunctionpersongroupByPersonId , impLogByPersonId );
+                return save(bean , refImageByImageMd5 , refPersongroupByGroupId , impFeatureByPersonId , impLogByPersonId );
             }});
     }
     /**
@@ -888,7 +769,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlPersonBean , FlImageBean , FlFeatureBean[] , FlJunctionPersonGroupBean[] , FlLogBean[] )}
+     *      see also {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , FlFeatureBean[] , FlLogBean[] )}
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
@@ -903,16 +784,16 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlFeatureBean[])){
-            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlFeatureBean[]");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonGroupBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonGroupBean");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlJunctionPersonGroupBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlJunctionPersonGroupBean[]");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof FlFeatureBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 dynamic argument,expected type:FlFeatureBean[]");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof FlLogBean[])){
             throw new IllegalArgumentException("invalid type for the No.4 dynamic argument,expected type:FlLogBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlFeatureBean[])args[1],(args.length < 3 || null == args[2])?null:(FlJunctionPersonGroupBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1],(args.length < 3 || null == args[2])?null:(FlFeatureBean[])args[2],(args.length < 4 || null == args[3])?null:(FlLogBean[])args[3]);
     } 
 
     /**
@@ -920,7 +801,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      *
      * @param bean the {@link FlPersonBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlPersonBean , FlImageBean , java.util.Collection , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(FlPersonBean , FlImageBean , FlPersonGroupBean , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link FlPersonBean} bean
      * @throws DAOException
      */
@@ -936,16 +817,16 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         if( args.length > 0 && null != args[0] && !(args[0] instanceof FlImageBean)){
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlImageBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<FlFeatureBean>");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonGroupBean)){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonGroupBean");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlJunctionPersonGroupBean>");
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<FlFeatureBean>");
         }
         if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
             throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<FlLogBean>");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(java.util.Collection<FlFeatureBean>)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlJunctionPersonGroupBean>)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlLogBean>)args[3]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlImageBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1],(args.length < 3 || null == args[2])?null:(java.util.Collection<FlFeatureBean>)args[2],(args.length < 4 || null == args[3])?null:(java.util.Collection<FlLogBean>)args[3]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -956,10 +837,11 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @param <T>
      * <ul>
      *     <li> {@link Constant#FL_PERSON_FK_IMAGE_MD5} -> {@link FlImageBean}</li>
+     *     <li> {@link Constant#FL_PERSON_FK_GROUP_ID} -> {@link FlPersonGroupBean}</li>
      * </ul>
      * @param bean the {@link FlPersonBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5}
+     *        {@link Constant#FL_PERSON_FK_IMAGE_MD5},{@link Constant#FL_PERSON_FK_GROUP_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
@@ -969,6 +851,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.getReferencedByImageMd5(bean);
+        case FL_PERSON_FK_GROUP_ID:
+            return  (T)this.getReferencedByGroupId(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -989,6 +873,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         switch(fkIndex){
         case FL_PERSON_FK_IMAGE_MD5:
             return  (T)this.setReferencedByImageMd5(bean, (FlImageBean)beanToSet);
+        case FL_PERSON_FK_GROUP_ID:
+            return  (T)this.setReferencedByGroupId(bean, (FlPersonGroupBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -1000,7 +886,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * Retrieves the {@link FlImageBean} object referenced by {@link FlPersonBean#getImageMd5}() field.<br>
-     * FK_NAME : fl_person_ibfk_1
+     * FK_NAME : fl_person_ibfk_2
      * @param bean the {@link FlPersonBean}
      * @return the associated {@link FlImageBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
@@ -1031,6 +917,44 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 bean.setImageMd5(null);
             }else{
                 bean.setImageMd5(beanToSet.getMd5());
+            }
+        }
+        return beanToSet;
+    }
+
+    /**
+     * Retrieves the {@link FlPersonGroupBean} object referenced by {@link FlPersonBean#getGroupId}() field.<br>
+     * FK_NAME : fl_person_ibfk_1
+     * @param bean the {@link FlPersonBean}
+     * @return the associated {@link FlPersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //5.1 GET REFERENCED VALUE
+    public FlPersonGroupBean getReferencedByGroupId(FlPersonBean bean) throws DAOException
+    {
+        if(null == bean)return null;
+        bean.setReferencedByGroupId(FlPersonGroupManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
+        return bean.getReferencedByGroupId();
+    }
+
+    /**
+     * Associates the {@link FlPersonBean} object to the {@link FlPersonGroupBean} object by {@link FlPersonBean#getGroupId}() field.
+     *
+     * @param bean the {@link FlPersonBean} object to use
+     * @param beanToSet the {@link FlPersonGroupBean} object to associate to the {@link FlPersonBean} .
+     * @return always beanToSet saved
+     * @throws Exception
+     */
+    //5.2 SET REFERENCED 
+    public FlPersonGroupBean setReferencedByGroupId(FlPersonBean bean, FlPersonGroupBean beanToSet) throws DAOException
+    {
+        if(null != bean){
+            FlPersonGroupManager.getInstance().save(beanToSet);
+            bean.setReferencedByGroupId(beanToSet);
+            if( null == beanToSet){
+                bean.setGroupId(null);
+            }else{
+                bean.setGroupId(beanToSet.getId());
             }
         }
         return beanToSet;
@@ -1112,6 +1036,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sql.append(",");
                 }
                 sql.append("id");
+                _dirtyCount++;
+            }
+
+            if (bean.checkGroupIdModified()) {
+                if (_dirtyCount>0) {
+                    sql.append(",");
+                }
+                sql.append("group_id");
                 _dirtyCount++;
             }
 
@@ -1270,6 +1202,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     useComma=true;
                 }
                 sql.append("id=?");
+            }
+
+            if (bean.checkGroupIdModified()) {
+                if (useComma) {
+                    sql.append(", ");
+                } else {
+                    useComma=true;
+                }
+                sql.append("group_id=?");
             }
 
             if (bean.checkNameModified()) {
@@ -1787,11 +1728,51 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return deleteUsingTemplate(bean);
     }
     
+
+    /**
+     * Retrieves an array of FlPersonBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return an array of FlPersonBean
+     * @throws DAOException
+     */
+    public FlPersonBean[] loadByIndexGroupId(Integer groupId) throws DAOException
+    {
+        return (FlPersonBean[])this.loadByIndexGroupIdAsList(groupId).toArray(new FlPersonBean[0]);
+    }
+    
+    /**
+     * Retrieves a list of FlPersonBean using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return a list of FlPersonBean
+     * @throws DAOException
+     */
+    public List<FlPersonBean> loadByIndexGroupIdAsList(Integer groupId) throws DAOException
+    {
+        FlPersonBean bean = this.createBean();
+        bean.setGroupId(groupId);
+        return loadUsingTemplateAsList(bean);
+    }
+    /**
+     * Deletes rows using the group_id index.
+     *
+     * @param groupId the group_id column's value filter.
+     * @return the number of deleted objects
+     * @throws DAOException
+     */
+    public int deleteByIndexGroupId(Integer groupId) throws DAOException
+    {
+        FlPersonBean bean = this.createBean();
+        bean.setGroupId(groupId);
+        return deleteUsingTemplate(bean);
+    }
+    
     
     /**
      * Retrieves a list of FlPersonBean using the index specified by keyIndex.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return a list of FlPersonBean
      * @throws DAOException
@@ -1830,6 +1811,15 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
             return this.loadByIndexExpiryDateAsList((java.util.Date)keys[0]);        
         }
+        case FL_PERSON_INDEX_GROUP_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+
+            return this.loadByIndexGroupIdAsList((Integer)keys[0]);        
+        }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
         }
@@ -1838,7 +1828,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     /**
      * Deletes rows using key.
      * @param keyIndex valid values: <br>
-     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE}
+     *        {@link Constant#FL_PERSON_INDEX_IMAGE_MD5},{@link Constant#FL_PERSON_INDEX_PAPERS_NUM},{@link Constant#FL_PERSON_INDEX_EXPIRY_DATE},{@link Constant#FL_PERSON_INDEX_GROUP_ID}
      * @param keys key values of index
      * @return the number of deleted objects
      * @throws DAOException
@@ -1872,135 +1862,19 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:java.util.Date");
             return this.deleteByIndexExpiryDate((java.util.Date)keys[0]);
         }
+        case FL_PERSON_INDEX_GROUP_ID:{
+            if(keys.length != 1)
+                throw new IllegalArgumentException("argument number mismatch with index 'group_id' column number");
+            
+            if(null != keys[0] && !(keys[0] instanceof Integer))
+                throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:Integer");
+            return this.deleteByIndexGroupId((Integer)keys[0]);
+        }
         default:
             throw new IllegalArgumentException(String.format("invalid keyIndex %d", keyIndex));
         }        
     }
 
-    //_____________________________________________________________________
-    //
-    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
-    //_____________________________________________________________________
-    /**
-     * @see #loadViaJunctionPersonGroupAsList(FlPersonBean,int,int)
-     */
-    //22 MANY TO MANY
-    public List<FlPersonBean> loadViaJunctionPersonGroupAsList(FlPersonGroupBean bean) throws DAOException
-    {
-         return this.loadViaJunctionPersonGroupAsList(bean, 1, -1);
-    }
-
-    /**
-     * Retrieves an list of FlPersonBean using the junction table FlJunctionPersonGroup, given a FlPersonGroupBean, 
-     * specifying the start row and the number of rows.
-     *
-     * @param bean the FlPersonGroupBean bean to be used
-     * @param startRow the start row to be used (first row = 1, last row = -1)
-     * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return a list of FlPersonBean
-     * @throws DAOException
-     */
-    //23 MANY TO MANY
-    public List<FlPersonBean> loadViaJunctionPersonGroupAsList(FlPersonGroupBean bean, int startRow, int numRows) throws DAOException
-    {
-        if(null == bean || null == bean.getId())
-            return java.util.Arrays.<FlPersonBean>asList();
-        Connection c = null;
-        PreparedStatement ps = null;
-        String sql = " SELECT " + FL_PERSON_FULL_FIELDS
-                        + " FROM fl_junction_person_group, fl_person"
-                        + " WHERE "
-                        + "     fl_junction_person_group.group_id=?"
-                        + " AND fl_junction_person_group.person_id=fl_person.id";
-        try
-        {
-            c = this.getConnection();
-            ps = c.prepareStatement(sql,
-                                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                    ResultSet.CONCUR_READ_ONLY);
-            if (bean.getId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getId()); }
-            return loadByPreparedStatementAsList(ps, null, startRow, numRows);
-        }
-        catch (SQLException e)
-        {
-            throw new DAOException(e.getMessage(), e);
-        }
-        finally
-        {
-           this.getManager().close(ps);
-           this.freeConnection(c);
-           sql = null;
-        }
-    }
-    /**
-     * add junction between {@link FlPersonBean} and {@link FlPersonGroupBean} if junction not exists
-     * @param bean
-     * @param linked
-     * @throws DAOException
-     */
-    //23.2 MANY TO MANY
-    public void addJunction(FlPersonBean bean,FlPersonGroupBean linked) throws DAOException{
-        if(null == bean || null == bean.getId())
-            return ;
-        if(null == linked || null ==bean.getId())
-            return ;
-        if(!FlJunctionPersonGroupManager.getInstance().existsPrimaryKey(bean.getId(),linked.getId())){
-            FlJunctionPersonGroupBean junction = new FlJunctionPersonGroupBean();
-            junction.setPersonId(bean.getId());
-            junction.setGroupId(linked.getId());
-            FlJunctionPersonGroupManager.getInstance().save(junction);
-        }
-    }
-    /**
-     * remove junction between {@link FlPersonBean} and {@link FlPersonGroupBean}
-     * @param bean
-     * @param linked
-     * @throws DAOException
-     */
-    //23.3 MANY TO MANY
-    public int deleteJunction(FlPersonBean bean,FlPersonGroupBean linked) throws DAOException{
-        if(null == bean || null == bean.getId())
-            return 0;
-        if(null == linked || null ==bean.getId())
-            return 0;
-        return FlJunctionPersonGroupManager.getInstance().deleteByPrimaryKey(bean.getId(),linked.getId());
-    }
-    /** @see #addJunction(FlPersonBean,FlPersonGroupBean) */
-    //23.4 MANY TO MANY
-    public void addJunction(FlPersonBean bean,FlPersonGroupBean... linkedBeans) throws DAOException{
-        if(null == linkedBeans)return;
-        for(FlPersonGroupBean linked:linkedBeans){
-            addJunction(bean,linked);
-        }
-    }
-    /** @see #addJunction(FlPersonBean,FlPersonGroupBean) */
-    //23.5 MANY TO MANY
-    public void addJunction(FlPersonBean bean,java.util.Collection<FlPersonGroupBean> linkedBeans) throws DAOException{
-        if(null == linkedBeans)return;
-        for(FlPersonGroupBean linked:linkedBeans){
-            addJunction(bean,linked);
-        }
-    }
-    /** @see #deleteJunction(FlPersonBean,FlPersonGroupBean) */
-    //23.6 MANY TO MANY
-    public int deleteJunction(FlPersonBean bean,FlPersonGroupBean... linkedBeans) throws DAOException{
-        if(null == linkedBeans)return 0;
-        int count = 0;
-        for(FlPersonGroupBean linked:linkedBeans){
-            count += deleteJunction(bean,linked);
-        }
-        return count;
-    }
-    /** @see #deleteJunction(FlPersonBean,FlPersonGroupBean) */
-    //23.7 MANY TO MANY
-    public int deleteJunction(FlPersonBean bean,java.util.Collection<FlPersonGroupBean> linkedBeans) throws DAOException{
-        if(null == linkedBeans)return 0;
-        int count = 0;
-        for(FlPersonGroupBean linked:linkedBeans){
-            count += deleteJunction(bean,linked);
-        }
-        return count;
-    }
 
     //_____________________________________________________________________
     //
@@ -2155,6 +2029,14 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("id = ?");
                 }
             }
+            if (bean.checkGroupIdModified()) {
+                _dirtyCount ++;
+                if (bean.getGroupId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
+                } else {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id = ?");
+                }
+            }
             if (bean.checkNameModified()) {
                 _dirtyCount ++;
                 if (bean.getName() == null) {
@@ -2254,6 +2136,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
                 if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+            }
+            if (bean.checkGroupIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
+                if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
             }
             if (bean.checkNameModified()) {
                 switch (searchType) {
@@ -2451,15 +2337,16 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         try
         {
             bean.setId(Manager.getInteger(rs, 1));
-            bean.setName(rs.getString(2));
-            bean.setSex(Manager.getInteger(rs, 3));
-            bean.setBirthdate(rs.getDate(4));
-            bean.setPapersType(Manager.getInteger(rs, 5));
-            bean.setPapersNum(rs.getString(6));
-            bean.setImageMd5(rs.getString(7));
-            bean.setExpiryDate(rs.getDate(8));
-            bean.setCreateTime(rs.getTimestamp(9));
-            bean.setUpdateTime(rs.getTimestamp(10));
+            bean.setGroupId(Manager.getInteger(rs, 2));
+            bean.setName(rs.getString(3));
+            bean.setSex(Manager.getInteger(rs, 4));
+            bean.setBirthdate(rs.getDate(5));
+            bean.setPapersType(Manager.getInteger(rs, 6));
+            bean.setPapersNum(rs.getString(7));
+            bean.setImageMd5(rs.getString(8));
+            bean.setExpiryDate(rs.getDate(9));
+            bean.setCreateTime(rs.getTimestamp(10));
+            bean.setUpdateTime(rs.getTimestamp(11));
         }
         catch(SQLException e)
         {
@@ -2494,6 +2381,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                     case FL_PERSON_ID_ID:
                         ++pos;
                         bean.setId(Manager.getInteger(rs, pos));
+                        break;
+                    case FL_PERSON_ID_GROUP_ID:
+                        ++pos;
+                        bean.setGroupId(Manager.getInteger(rs, pos));
                         break;
                     case FL_PERSON_ID_NAME:
                         ++pos;
@@ -2560,6 +2451,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         try
         {
             bean.setId(Manager.getInteger(rs, "id"));
+            bean.setGroupId(Manager.getInteger(rs, "group_id"));
             bean.setName(rs.getString("name"));
             bean.setSex(Manager.getInteger(rs, "sex"));
             bean.setBirthdate(rs.getDate("birthdate"));
@@ -2746,6 +2638,24 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     }
 
     /** foreign key listener for DEELTE RULE : SET_NULL */
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPersonBean> foreignKeyListenerByGroupId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPersonBean>(){
+                @SuppressWarnings("unchecked")
+                @Override
+                protected List<FlPersonBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
+                    return listenerContainer.isEmpty() 
+                            ? java.util.Collections.EMPTY_LIST
+                            : FlPersonGroupManager.getInstance().getPersonBeansByGroupIdAsList(bean);
+                }
+                @Override
+                protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
+                    for(FlPersonBean bean:effectBeans){
+                        bean.setGroupId(null);
+                        Event.UPDATE.fire(listenerContainer, bean);
+                    }
+                }};
+
+    /** foreign key listener for DEELTE RULE : SET_NULL */
     private final net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlPersonBean> foreignKeyListenerByImageMd5 = 
             new net.gdface.facelog.dborm.ForeignKeyListener<FlImageBean,FlPersonBean>(){
                 @SuppressWarnings("unchecked")
@@ -2765,10 +2675,12 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
 
     /**
      * bind foreign key listener to foreign table: <br>
+     * DELETE RULE : SET_NULL {@code fl_person(group_id)-> fl_person_group(id)} <br>
      * DELETE RULE : SET_NULL {@code fl_person(image_md5)-> fl_image(md5)} <br>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
+        FlPersonGroupManager.getInstance().registerListener(foreignKeyListenerByGroupId);
         FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
         
     }
@@ -2778,6 +2690,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
+        FlPersonGroupManager.getInstance().unregisterListener(foreignKeyListenerByGroupId);
         FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
         
     }

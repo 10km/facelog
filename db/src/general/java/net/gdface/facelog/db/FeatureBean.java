@@ -385,12 +385,10 @@ public final class FeatureBean
      */
     private PersonBean referencedByPersonId;
     /** Getter method for {@link #referencedByPersonId}. */
-    @ThriftField(value=8)
     public PersonBean getReferencedByPersonId() {
         return this.referencedByPersonId;
     }
     /** Setter method for {@link #referencedByPersonId}. */
-    @ThriftField()
     public void setReferencedByPersonId(PersonBean reference) {
         this.referencedByPersonId = reference;
     }

@@ -100,14 +100,6 @@ public final class ImageBean
     @ThriftField
     public void setDeviceId(final int deviceId) { this.deviceId = deviceId; }
 
-    private DeviceBean referencedByDeviceId;
-
-    @ThriftField(value=12, name="referencedByDeviceId", requiredness=Requiredness.NONE)
-    public DeviceBean getReferencedByDeviceId() { return referencedByDeviceId; }
-
-    @ThriftField
-    public void setReferencedByDeviceId(final DeviceBean referencedByDeviceId) { this.referencedByDeviceId = referencedByDeviceId; }
-
     @Override
     public String toString()
     {
@@ -123,7 +115,6 @@ public final class ImageBean
             .add("faceNum", faceNum)
             .add("thumbMd5", thumbMd5)
             .add("deviceId", deviceId)
-            .add("referencedByDeviceId", referencedByDeviceId)
             .toString();
     }
 }

@@ -15,7 +15,6 @@ import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.JunctionPersonGroupBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonGroupBean;
@@ -117,6 +116,13 @@ public class PersonCacheManager extends PersonManager
         bean.setReferencedByImageMd5(ImageCacheManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
+    //5.1 GET REFERENCED VALUE override IPersonManager
+    @Override 
+    public PersonGroupBean getReferencedByGroupId(PersonBean bean){
+        if(null == bean)return null;
+        bean.setReferencedByGroupId(PersonGroupCacheManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
+        return bean.getReferencedByGroupId();
+    }
     private class CacheAction implements Action<PersonBean>{
         final Action<PersonBean> action;
         CacheAction(Action<PersonBean>action){
@@ -185,23 +191,4 @@ public class PersonCacheManager extends PersonManager
         }
     }
 
-    //_____________________________________________________________________
-    //
-    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
-    //_____________________________________________________________________
-    //23 MANY TO MANY
-    // override PersonManager
-    @Override 
-    public java.util.List<PersonBean> loadViaJunctionPersonGroupAsList(PersonGroupBean bean, int startRow, int numRows)
-    {
-        java.util.List<JunctionPersonGroupBean> junctions = 
-            PersonGroupManager.getInstance().getJunctionPersonGroupBeansByGroupIdAsList(bean,startRow,numRows);
-        java.util.ArrayList<PersonBean> lbeans = new java.util.ArrayList<PersonBean>(junctions.size());
-        for(JunctionPersonGroupBean jbean:junctions){
-        	try{
-        		lbeans.add(loadByPrimaryKeyChecked(jbean.getPersonId()));
-        	}catch(ObjectRetrievalException  e){}
-        }
-        return lbeans;
-    }
 }

@@ -44,21 +44,21 @@ public final class DeviceBean
     @ThriftField
     public void setId(final int id) { this.id = id; }
 
-    private String name;
-
-    @ThriftField(value=5, name="name", requiredness=Requiredness.NONE)
-    public String getName() { return name; }
-
-    @ThriftField
-    public void setName(final String name) { this.name = name; }
-
     private int groupId;
 
-    @ThriftField(value=6, name="groupId", requiredness=Requiredness.NONE)
+    @ThriftField(value=5, name="groupId", requiredness=Requiredness.NONE)
     public int getGroupId() { return groupId; }
 
     @ThriftField
     public void setGroupId(final int groupId) { this.groupId = groupId; }
+
+    private String name;
+
+    @ThriftField(value=6, name="name", requiredness=Requiredness.NONE)
+    public String getName() { return name; }
+
+    @ThriftField
+    public void setName(final String name) { this.name = name; }
 
     private String version;
 
@@ -108,8 +108,8 @@ public final class DeviceBean
             .add("modified", modified)
             .add("initialized", initialized)
             .add("id", id)
-            .add("name", name)
             .add("groupId", groupId)
+            .add("name", name)
             .add("version", version)
             .add("serialNo", serialNo)
             .add("mac", mac)

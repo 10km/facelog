@@ -650,12 +650,10 @@ public final class ImageBean
      */
     private DeviceBean referencedByDeviceId;
     /** Getter method for {@link #referencedByDeviceId}. */
-    @ThriftField(value=12)
     public DeviceBean getReferencedByDeviceId() {
         return this.referencedByDeviceId;
     }
     /** Setter method for {@link #referencedByDeviceId}. */
-    @ThriftField()
     public void setReferencedByDeviceId(DeviceBean reference) {
         this.referencedByDeviceId = reference;
     }

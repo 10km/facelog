@@ -38,8 +38,8 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_DEVICE_ID_ID}
-     *   <li>{@link Constant#FL_DEVICE_ID_NAME}
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID}
+     *   <li>{@link Constant#FL_DEVICE_ID_NAME}
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION}
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO}
      *   <li>{@link Constant#FL_DEVICE_ID_MAC}
@@ -64,8 +64,8 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
      * Possible values are:
      * <ul>
      *   <li>{@link Constant#FL_DEVICE_ID_ID})
-     *   <li>{@link Constant#FL_DEVICE_ID_NAME})
      *   <li>{@link Constant#FL_DEVICE_ID_GROUP_ID})
+     *   <li>{@link Constant#FL_DEVICE_ID_NAME})
      *   <li>{@link Constant#FL_DEVICE_ID_VERSION})
      *   <li>{@link Constant#FL_DEVICE_ID_SERIAL_NO})
      *   <li>{@link Constant#FL_DEVICE_ID_MAC})
@@ -98,17 +98,6 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = b1.getId().compareTo(b2.getId());
                 }
                 break;
-            case FL_DEVICE_ID_NAME:
-                if (b1.getName() == null && b2.getName() != null) {
-                    iReturn = -1;
-                } else if (b1.getName() == null && b2.getName() == null) {
-                    iReturn = 0;
-                } else if (b1.getName() != null && b2.getName() == null) {
-                    iReturn = 1;
-                } else {
-                    iReturn = b1.getName().compareTo(b2.getName());
-                }
-                break;
             case FL_DEVICE_ID_GROUP_ID:
                 if (b1.getGroupId() == null && b2.getGroupId() != null) {
                     iReturn = -1;
@@ -118,6 +107,17 @@ public class FlDeviceComparator implements Comparator<FlDeviceBean>,Constant
                     iReturn = 1;
                 } else {
                     iReturn = b1.getGroupId().compareTo(b2.getGroupId());
+                }
+                break;
+            case FL_DEVICE_ID_NAME:
+                if (b1.getName() == null && b2.getName() != null) {
+                    iReturn = -1;
+                } else if (b1.getName() == null && b2.getName() == null) {
+                    iReturn = 0;
+                } else if (b1.getName() != null && b2.getName() == null) {
+                    iReturn = 1;
+                } else {
+                    iReturn = b1.getName().compareTo(b2.getName());
                 }
                 break;
             case FL_DEVICE_ID_VERSION:

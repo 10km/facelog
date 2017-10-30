@@ -115,6 +115,80 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     // GET/SET IMPORTED KEY BEAN METHOD
     //////////////////////////////////////
     /**
+     * Retrieves the {@link DeviceBean} object from the fl_device.group_id field.<BR>
+     * FK_NAME : fl_device_ibfk_1 
+     * @param bean the {@link DeviceGroupBean}
+     * @return the associated {@link DeviceBean} beans or {@code null} if {@code bean} is {@code null}
+     */
+    //3.1 GET IMPORTED
+    public DeviceBean[] getDeviceBeansByGroupId(DeviceGroupBean bean);
+    
+    /**
+     * Retrieves the {@link DeviceBean} object from the fl_device.group_id field.<BR>
+     * FK_NAME : fl_device_ibfk_1 
+     * @param id Integer - PK# 1
+     * @return the associated {@link DeviceBean} beans or {@code null} if {@code bean} is {@code null}
+     * @throws DAOException
+     */
+    //3.1.2 GET IMPORTED
+    public DeviceBean[] getDeviceBeansByGroupId(Integer devicegroupId);
+    
+    /**
+     * @see #getDeviceBeansByGroupIdAsList(DeviceGroupBean,int,int)
+     */
+    //3.2 GET IMPORTED
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean);
+
+    /**
+     * Retrieves the {@link DeviceBean} object from fl_device.group_id field.<BR>
+     * FK_NAME:fl_device_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the associated {@link DeviceBean} beans 
+     * @throws DAOException
+     */
+    //3.2.2 GET IMPORTED
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer devicegroupId);
+    /**
+     * delete the associated {@link DeviceBean} objects from fl_device.group_id field.<BR>
+     * FK_NAME:fl_device_ibfk_1
+     * @param id Integer - PK# 1
+     * @return the number of deleted rows
+     */
+    //3.2.3 DELETE IMPORTED
+    public int deleteDeviceBeansByGroupId(Integer devicegroupId);
+    /**
+     * Retrieves the {@link DeviceBean} object from fl_device.group_id field.<BR>
+     * FK_NAME:fl_device_ibfk_1
+     * @param bean the {@link DeviceGroupBean}
+     * @param startRow the start row to be used (first row = 1, last row=-1)
+     * @param numRows the number of rows to be retrieved (all rows = a negative number)
+     * @return the associated {@link DeviceBean} beans or empty list if {@code bean} is {@code null}
+     */
+    //3.2.4 GET IMPORTED
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows);    
+    /**
+     * set  the {@link DeviceBean} object array associate to DeviceGroupBean by the fl_device.group_id field.<BR>
+     * FK_NAME : fl_device_ibfk_1 
+     * @param bean the referenced {@link DeviceGroupBean}
+     * @param importedBeans imported beans from fl_device
+     * @return importedBeans always
+     * @see {@link DeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
+     */
+    //3.3 SET IMPORTED
+    public DeviceBean[] setDeviceBeansByGroupId(DeviceGroupBean bean , DeviceBean[] importedBeans);
+
+    /**
+     * set  the {@link DeviceBean} object java.util.Collection associate to DeviceGroupBean by the fl_device.group_id field.<BR>
+     * FK_NAME:fl_device_ibfk_1
+     * @param bean the referenced {@link DeviceGroupBean} 
+     * @param importedBeans imported beans from fl_device 
+     * @return importedBeans always
+     * @see {@link DeviceManager#setReferencedByGroupId(DeviceBean, DeviceGroupBean)
+     */
+    //3.4 SET IMPORTED
+    public <C extends java.util.Collection<DeviceBean>> C setDeviceBeansByGroupId(DeviceGroupBean bean , C importedBeans);
+
+    /**
      * Retrieves the {@link DeviceGroupBean} object from the fl_device_group.parent field.<BR>
      * FK_NAME : fl_device_group_ibfk_1 
      * @param bean the {@link DeviceGroupBean}
@@ -189,121 +263,123 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     public <C extends java.util.Collection<DeviceGroupBean>> C setDeviceGroupBeansByParent(DeviceGroupBean bean , C importedBeans);
 
     /**
-     * Retrieves the {@link JunctionDeviceGroupBean} object from the fl_junction_device_group.group_id field.<BR>
-     * FK_NAME : fl_junction_device_group_ibfk_2 
+     * Retrieves the {@link PermitBean} object from the fl_permit.device_group_id field.<BR>
+     * FK_NAME : fl_permit_ibfk_1 
      * @param bean the {@link DeviceGroupBean}
-     * @return the associated {@link JunctionDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
      */
     //3.1 GET IMPORTED
-    public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByGroupId(DeviceGroupBean bean);
+    public PermitBean[] getPermitBeansByDeviceGroupId(DeviceGroupBean bean);
     
     /**
-     * Retrieves the {@link JunctionDeviceGroupBean} object from the fl_junction_device_group.group_id field.<BR>
-     * FK_NAME : fl_junction_device_group_ibfk_2 
+     * Retrieves the {@link PermitBean} object from the fl_permit.device_group_id field.<BR>
+     * FK_NAME : fl_permit_ibfk_1 
      * @param id Integer - PK# 1
-     * @return the associated {@link JunctionDeviceGroupBean} beans or {@code null} if {@code bean} is {@code null}
+     * @return the associated {@link PermitBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public JunctionDeviceGroupBean[] getJunctionDeviceGroupBeansByGroupId(Integer devicegroupId);
+    public PermitBean[] getPermitBeansByDeviceGroupId(Integer devicegroupId);
     
     /**
-     * @see #getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean,int,int)
+     * @see #getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean,int,int)
      */
     //3.2 GET IMPORTED
-    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean);
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean);
 
     /**
-     * Retrieves the {@link JunctionDeviceGroupBean} object from fl_junction_device_group.group_id field.<BR>
-     * FK_NAME:fl_junction_device_group_ibfk_2
+     * Retrieves the {@link PermitBean} object from fl_permit.device_group_id field.<BR>
+     * FK_NAME:fl_permit_ibfk_1
      * @param id Integer - PK# 1
-     * @return the associated {@link JunctionDeviceGroupBean} beans 
+     * @return the associated {@link PermitBean} beans 
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(Integer devicegroupId);
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer devicegroupId);
     /**
-     * delete the associated {@link JunctionDeviceGroupBean} objects from fl_junction_device_group.group_id field.<BR>
-     * FK_NAME:fl_junction_device_group_ibfk_2
+     * delete the associated {@link PermitBean} objects from fl_permit.device_group_id field.<BR>
+     * FK_NAME:fl_permit_ibfk_1
      * @param id Integer - PK# 1
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteJunctionDeviceGroupBeansByGroupId(Integer devicegroupId);
+    public int deletePermitBeansByDeviceGroupId(Integer devicegroupId);
     /**
-     * Retrieves the {@link JunctionDeviceGroupBean} object from fl_junction_device_group.group_id field.<BR>
-     * FK_NAME:fl_junction_device_group_ibfk_2
+     * Retrieves the {@link PermitBean} object from fl_permit.device_group_id field.<BR>
+     * FK_NAME:fl_permit_ibfk_1
      * @param bean the {@link DeviceGroupBean}
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the associated {@link JunctionDeviceGroupBean} beans or empty list if {@code bean} is {@code null}
+     * @return the associated {@link PermitBean} beans or empty list if {@code bean} is {@code null}
      */
     //3.2.4 GET IMPORTED
-    public java.util.List<JunctionDeviceGroupBean> getJunctionDeviceGroupBeansByGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows);    
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean bean,int startRow,int numRows);    
     /**
-     * set  the {@link JunctionDeviceGroupBean} object array associate to DeviceGroupBean by the fl_junction_device_group.group_id field.<BR>
-     * FK_NAME : fl_junction_device_group_ibfk_2 
+     * set  the {@link PermitBean} object array associate to DeviceGroupBean by the fl_permit.device_group_id field.<BR>
+     * FK_NAME : fl_permit_ibfk_1 
      * @param bean the referenced {@link DeviceGroupBean}
-     * @param importedBeans imported beans from fl_junction_device_group
+     * @param importedBeans imported beans from fl_permit
      * @return importedBeans always
-     * @see {@link JunctionDeviceGroupManager#setReferencedByGroupId(JunctionDeviceGroupBean, DeviceGroupBean)
+     * @see {@link PermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
      */
     //3.3 SET IMPORTED
-    public JunctionDeviceGroupBean[] setJunctionDeviceGroupBeansByGroupId(DeviceGroupBean bean , JunctionDeviceGroupBean[] importedBeans);
+    public PermitBean[] setPermitBeansByDeviceGroupId(DeviceGroupBean bean , PermitBean[] importedBeans);
 
     /**
-     * set  the {@link JunctionDeviceGroupBean} object java.util.Collection associate to DeviceGroupBean by the fl_junction_device_group.group_id field.<BR>
-     * FK_NAME:fl_junction_device_group_ibfk_2
+     * set  the {@link PermitBean} object java.util.Collection associate to DeviceGroupBean by the fl_permit.device_group_id field.<BR>
+     * FK_NAME:fl_permit_ibfk_1
      * @param bean the referenced {@link DeviceGroupBean} 
-     * @param importedBeans imported beans from fl_junction_device_group 
+     * @param importedBeans imported beans from fl_permit 
      * @return importedBeans always
-     * @see {@link JunctionDeviceGroupManager#setReferencedByGroupId(JunctionDeviceGroupBean, DeviceGroupBean)
+     * @see {@link PermitManager#setReferencedByDeviceGroupId(PermitBean, DeviceGroupBean)
      */
     //3.4 SET IMPORTED
-    public <C extends java.util.Collection<JunctionDeviceGroupBean>> C setJunctionDeviceGroupBeansByGroupId(DeviceGroupBean bean , C importedBeans);
+    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByDeviceGroupId(DeviceGroupBean bean , C importedBeans);
 
     /**
      * Save the DeviceGroupBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
      * @param refDevicegroupByParent the {@link DeviceGroupBean} bean referenced by {@link DeviceGroupBean} 
+     * @param impDeviceByGroupId the {@link DeviceBean} bean refer to {@link DeviceGroupBean} 
      * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
-     * @param impJunctiondevicegroupByGroupId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceGroupBean} 
+     * @param impPermitByDeviceGroupId the {@link PermitBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     //3.5 SYNC SAVE 
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
-        , DeviceGroupBean[] impDevicegroupByParent , JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId );
+        , DeviceBean[] impDeviceByGroupId , DeviceGroupBean[] impDevicegroupByParent , PermitBean[] impPermitByDeviceGroupId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceGroupBean[] , JunctionDeviceGroupBean[] )}
+     * @see {@link #save(DeviceGroupBean , DeviceGroupBean , DeviceBean[] , DeviceGroupBean[] , PermitBean[] )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
-        ,final DeviceGroupBean[] impDevicegroupByParent ,final JunctionDeviceGroupBean[] impJunctiondevicegroupByGroupId );
+        ,final DeviceBean[] impDeviceByGroupId ,final DeviceGroupBean[] impDevicegroupByParent ,final PermitBean[] impPermitByDeviceGroupId );
     /**
      * Save the DeviceGroupBean bean and referenced beans and imported beans into the database.
      *
      * @param bean the {@link DeviceGroupBean} bean to be saved
      * @param refDevicegroupByParent the {@link DeviceGroupBean} bean referenced by {@link DeviceGroupBean} 
+     * @param impDeviceByGroupId the {@link DeviceBean} bean refer to {@link DeviceGroupBean} 
      * @param impDevicegroupByParent the {@link DeviceGroupBean} bean refer to {@link DeviceGroupBean} 
-     * @param impJunctiondevicegroupByGroupId the {@link JunctionDeviceGroupBean} bean refer to {@link DeviceGroupBean} 
+     * @param impPermitByDeviceGroupId the {@link PermitBean} bean refer to {@link DeviceGroupBean} 
      * @return the inserted or updated {@link DeviceGroupBean} bean
      */
     //3.7 SYNC SAVE 
     public DeviceGroupBean save(DeviceGroupBean bean
         , DeviceGroupBean refDevicegroupByParent 
-        , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId );
+        , java.util.Collection<DeviceBean> impDeviceByGroupId , java.util.Collection<DeviceGroupBean> impDevicegroupByParent , java.util.Collection<PermitBean> impPermitByDeviceGroupId );
     /**
      * Transaction version for sync save
-     * @see {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection )}
+     * @see {@link #save(DeviceGroupBean , DeviceGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      */
     //3.8 SYNC SAVE AS TRANSACTION
     public DeviceGroupBean saveAsTransaction(final DeviceGroupBean bean
         ,final DeviceGroupBean refDevicegroupByParent 
-        ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<JunctionDeviceGroupBean> impJunctiondevicegroupByGroupId );
+        ,final  java.util.Collection<DeviceBean> impDeviceByGroupId ,final  java.util.Collection<DeviceGroupBean> impDevicegroupByParent ,final  java.util.Collection<PermitBean> impPermitByDeviceGroupId );
       //////////////////////////////////////
     // GET/SET FOREIGN KEY BEAN METHOD
     //////////////////////////////////////
@@ -375,48 +451,48 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
     // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
     //_____________________________________________________________________
     /**
-     * @see #loadViaJunctionDeviceGroupAsList(DeviceGroupBean,int,int)
+     * @see #loadViaPermitAsList(DeviceGroupBean,int,int)
      */
     //22 MANY TO MANY
-    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean);
+    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean);
 
     /**
-     * Retrieves an list of DeviceGroupBean using the junction table JunctionDeviceGroup, given a DeviceBean, 
+     * Retrieves an list of DeviceGroupBean using the junction table Permit, given a PersonGroupBean, 
      * specifying the start row and the number of rows.
      *
-     * @param bean the DeviceBean bean to be used
+     * @param bean the PersonGroupBean bean to be used
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @return a list of DeviceGroupBean
      */
     //23 MANY TO MANY
-    public java.util.List<DeviceGroupBean> loadViaJunctionDeviceGroupAsList(DeviceBean bean, int startRow, int numRows);
+    public java.util.List<DeviceGroupBean> loadViaPermitAsList(PersonGroupBean bean, int startRow, int numRows);
     /**
-     * add junction between {@link DeviceGroupBean} and {@link DeviceBean} if junction not exists
+     * add junction between {@link DeviceGroupBean} and {@link PersonGroupBean} if junction not exists
      * @param bean
      * @param linked
      */
     //23.2 MANY TO MANY
-    public void addJunction(DeviceGroupBean bean,DeviceBean linked);
+    public void addJunction(DeviceGroupBean bean,PersonGroupBean linked);
     /**
-     * remove junction between {@link DeviceGroupBean} and {@link DeviceBean}
+     * remove junction between {@link DeviceGroupBean} and {@link PersonGroupBean}
      * @param bean
      * @param linked
      */
     //23.3 MANY TO MANY
-    public int deleteJunction(DeviceGroupBean bean,DeviceBean linked);
-    /** @see #addJunction(DeviceGroupBean,DeviceBean) */
+    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean linked);
+    /** @see #addJunction(DeviceGroupBean,PersonGroupBean) */
     //23.4 MANY TO MANY
-    public void addJunction(DeviceGroupBean bean,DeviceBean... linkedBeans);
-    /** @see #addJunction(DeviceGroupBean,DeviceBean) */
+    public void addJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans);
+    /** @see #addJunction(DeviceGroupBean,PersonGroupBean) */
     //23.5 MANY TO MANY
-    public void addJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans);
-    /** @see #deleteJunction(DeviceGroupBean,DeviceBean) */
+    public void addJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans);
+    /** @see #deleteJunction(DeviceGroupBean,PersonGroupBean) */
     //23.6 MANY TO MANY
-    public int deleteJunction(DeviceGroupBean bean,DeviceBean... linkedBeans);
-    /** @see #deleteJunction(DeviceGroupBean,DeviceBean) */
+    public int deleteJunction(DeviceGroupBean bean,PersonGroupBean... linkedBeans);
+    /** @see #deleteJunction(DeviceGroupBean,PersonGroupBean) */
     //23.7 MANY TO MANY
-    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<DeviceBean> linkedBeans);
+    public int deleteJunction(DeviceGroupBean bean,java.util.Collection<PersonGroupBean> linkedBeans);
 
     //_____________________________________________________________________
     //

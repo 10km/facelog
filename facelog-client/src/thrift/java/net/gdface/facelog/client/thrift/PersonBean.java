@@ -44,9 +44,17 @@ public final class PersonBean
     @ThriftField
     public void setId(final int id) { this.id = id; }
 
+    private int groupId;
+
+    @ThriftField(value=5, name="groupId", requiredness=Requiredness.NONE)
+    public int getGroupId() { return groupId; }
+
+    @ThriftField
+    public void setGroupId(final int groupId) { this.groupId = groupId; }
+
     private String name;
 
-    @ThriftField(value=5, name="name", requiredness=Requiredness.NONE)
+    @ThriftField(value=6, name="name", requiredness=Requiredness.NONE)
     public String getName() { return name; }
 
     @ThriftField
@@ -54,7 +62,7 @@ public final class PersonBean
 
     private int sex;
 
-    @ThriftField(value=6, name="sex", requiredness=Requiredness.NONE)
+    @ThriftField(value=7, name="sex", requiredness=Requiredness.NONE)
     public int getSex() { return sex; }
 
     @ThriftField
@@ -62,7 +70,7 @@ public final class PersonBean
 
     private long birthdate;
 
-    @ThriftField(value=7, name="birthdate", requiredness=Requiredness.NONE)
+    @ThriftField(value=8, name="birthdate", requiredness=Requiredness.NONE)
     public long getBirthdate() { return birthdate; }
 
     @ThriftField
@@ -70,7 +78,7 @@ public final class PersonBean
 
     private int papersType;
 
-    @ThriftField(value=8, name="papersType", requiredness=Requiredness.NONE)
+    @ThriftField(value=9, name="papersType", requiredness=Requiredness.NONE)
     public int getPapersType() { return papersType; }
 
     @ThriftField
@@ -78,7 +86,7 @@ public final class PersonBean
 
     private String papersNum;
 
-    @ThriftField(value=9, name="papersNum", requiredness=Requiredness.NONE)
+    @ThriftField(value=10, name="papersNum", requiredness=Requiredness.NONE)
     public String getPapersNum() { return papersNum; }
 
     @ThriftField
@@ -86,7 +94,7 @@ public final class PersonBean
 
     private String imageMd5;
 
-    @ThriftField(value=10, name="imageMd5", requiredness=Requiredness.NONE)
+    @ThriftField(value=11, name="imageMd5", requiredness=Requiredness.NONE)
     public String getImageMd5() { return imageMd5; }
 
     @ThriftField
@@ -94,7 +102,7 @@ public final class PersonBean
 
     private long expiryDate;
 
-    @ThriftField(value=11, name="expiryDate", requiredness=Requiredness.NONE)
+    @ThriftField(value=12, name="expiryDate", requiredness=Requiredness.NONE)
     public long getExpiryDate() { return expiryDate; }
 
     @ThriftField
@@ -102,7 +110,7 @@ public final class PersonBean
 
     private long createTime;
 
-    @ThriftField(value=12, name="createTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=13, name="createTime", requiredness=Requiredness.NONE)
     public long getCreateTime() { return createTime; }
 
     @ThriftField
@@ -110,19 +118,11 @@ public final class PersonBean
 
     private long updateTime;
 
-    @ThriftField(value=13, name="updateTime", requiredness=Requiredness.NONE)
+    @ThriftField(value=14, name="updateTime", requiredness=Requiredness.NONE)
     public long getUpdateTime() { return updateTime; }
 
     @ThriftField
     public void setUpdateTime(final long updateTime) { this.updateTime = updateTime; }
-
-    private ImageBean referencedByImageMd5;
-
-    @ThriftField(value=14, name="referencedByImageMd5", requiredness=Requiredness.NONE)
-    public ImageBean getReferencedByImageMd5() { return referencedByImageMd5; }
-
-    @ThriftField
-    public void setReferencedByImageMd5(final ImageBean referencedByImageMd5) { this.referencedByImageMd5 = referencedByImageMd5; }
 
     @Override
     public String toString()
@@ -132,6 +132,7 @@ public final class PersonBean
             .add("modified", modified)
             .add("initialized", initialized)
             .add("id", id)
+            .add("groupId", groupId)
             .add("name", name)
             .add("sex", sex)
             .add("birthdate", birthdate)
@@ -141,7 +142,6 @@ public final class PersonBean
             .add("expiryDate", expiryDate)
             .add("createTime", createTime)
             .add("updateTime", updateTime)
-            .add("referencedByImageMd5", referencedByImageMd5)
             .toString();
     }
 }

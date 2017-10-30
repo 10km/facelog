@@ -100,38 +100,6 @@ public final class LogBean
     @ThriftField
     public void setCreateTime(final long createTime) { this.createTime = createTime; }
 
-    private DeviceBean referencedByDeviceId;
-
-    @ThriftField(value=12, name="referencedByDeviceId", requiredness=Requiredness.NONE)
-    public DeviceBean getReferencedByDeviceId() { return referencedByDeviceId; }
-
-    @ThriftField
-    public void setReferencedByDeviceId(final DeviceBean referencedByDeviceId) { this.referencedByDeviceId = referencedByDeviceId; }
-
-    private FaceBean referencedByCompareFace;
-
-    @ThriftField(value=13, name="referencedByCompareFace", requiredness=Requiredness.NONE)
-    public FaceBean getReferencedByCompareFace() { return referencedByCompareFace; }
-
-    @ThriftField
-    public void setReferencedByCompareFace(final FaceBean referencedByCompareFace) { this.referencedByCompareFace = referencedByCompareFace; }
-
-    private FeatureBean referencedByVerifyFeature;
-
-    @ThriftField(value=14, name="referencedByVerifyFeature", requiredness=Requiredness.NONE)
-    public FeatureBean getReferencedByVerifyFeature() { return referencedByVerifyFeature; }
-
-    @ThriftField
-    public void setReferencedByVerifyFeature(final FeatureBean referencedByVerifyFeature) { this.referencedByVerifyFeature = referencedByVerifyFeature; }
-
-    private PersonBean referencedByPersonId;
-
-    @ThriftField(value=15, name="referencedByPersonId", requiredness=Requiredness.NONE)
-    public PersonBean getReferencedByPersonId() { return referencedByPersonId; }
-
-    @ThriftField
-    public void setReferencedByPersonId(final PersonBean referencedByPersonId) { this.referencedByPersonId = referencedByPersonId; }
-
     @Override
     public String toString()
     {
@@ -147,10 +115,6 @@ public final class LogBean
             .add("similarty", similarty)
             .add("verifyTime", verifyTime)
             .add("createTime", createTime)
-            .add("referencedByDeviceId", referencedByDeviceId)
-            .add("referencedByCompareFace", referencedByCompareFace)
-            .add("referencedByVerifyFeature", referencedByVerifyFeature)
-            .add("referencedByPersonId", referencedByPersonId)
             .toString();
     }
 }

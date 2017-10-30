@@ -1486,12 +1486,10 @@ public final class FaceBean
      */
     private FeatureBean referencedByFeatureMd5;
     /** Getter method for {@link #referencedByFeatureMd5}. */
-    @ThriftField(value=24)
     public FeatureBean getReferencedByFeatureMd5() {
         return this.referencedByFeatureMd5;
     }
     /** Setter method for {@link #referencedByFeatureMd5}. */
-    @ThriftField()
     public void setReferencedByFeatureMd5(FeatureBean reference) {
         this.referencedByFeatureMd5 = reference;
     }
@@ -1501,12 +1499,10 @@ public final class FaceBean
      */
     private ImageBean referencedByImageMd5;
     /** Getter method for {@link #referencedByImageMd5}. */
-    @ThriftField(value=25)
     public ImageBean getReferencedByImageMd5() {
         return this.referencedByImageMd5;
     }
     /** Setter method for {@link #referencedByImageMd5}. */
-    @ThriftField()
     public void setReferencedByImageMd5(ImageBean reference) {
         this.referencedByImageMd5 = reference;
     }

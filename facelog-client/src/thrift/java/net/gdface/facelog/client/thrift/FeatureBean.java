@@ -68,14 +68,6 @@ public final class FeatureBean
     @ThriftField
     public void setUpdateTime(final long updateTime) { this.updateTime = updateTime; }
 
-    private PersonBean referencedByPersonId;
-
-    @ThriftField(value=8, name="referencedByPersonId", requiredness=Requiredness.NONE)
-    public PersonBean getReferencedByPersonId() { return referencedByPersonId; }
-
-    @ThriftField
-    public void setReferencedByPersonId(final PersonBean referencedByPersonId) { this.referencedByPersonId = referencedByPersonId; }
-
     @Override
     public String toString()
     {
@@ -87,7 +79,6 @@ public final class FeatureBean
             .add("personId", personId)
             .add("feature", feature)
             .add("updateTime", updateTime)
-            .add("referencedByPersonId", referencedByPersonId)
             .toString();
     }
 }

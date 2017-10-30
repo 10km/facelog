@@ -40,9 +40,8 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
                         net.gdface.facelog.dborm.face.FlFaceBean,
                         net.gdface.facelog.dborm.face.FlFeatureBean,
                         net.gdface.facelog.dborm.image.FlImageBean,
-                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
-                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
                         net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.permit.FlPermitBean,
                         net.gdface.facelog.dborm.person.FlPersonBean,
                         net.gdface.facelog.dborm.person.FlPersonGroupBean,
                         net.gdface.facelog.dborm.image.FlStoreBean,
@@ -90,7 +89,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
         return LogBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.permit.FlPermitBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 

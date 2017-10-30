@@ -190,7 +190,7 @@ public interface IImageManager extends TableManager<ImageBean>
 
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_1 
+     * FK_NAME : fl_person_ibfk_2 
      * @param bean the {@link ImageBean}
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      */
@@ -199,7 +199,7 @@ public interface IImageManager extends TableManager<ImageBean>
     
     /**
      * Retrieves the {@link PersonBean} object from the fl_person.image_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_1 
+     * FK_NAME : fl_person_ibfk_2 
      * @param md5 String - PK# 1
      * @return the associated {@link PersonBean} beans or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
@@ -215,7 +215,7 @@ public interface IImageManager extends TableManager<ImageBean>
 
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_1
+     * FK_NAME:fl_person_ibfk_2
      * @param md5 String - PK# 1
      * @return the associated {@link PersonBean} beans 
      * @throws DAOException
@@ -224,7 +224,7 @@ public interface IImageManager extends TableManager<ImageBean>
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String imageMd5);
     /**
      * delete the associated {@link PersonBean} objects from fl_person.image_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_1
+     * FK_NAME:fl_person_ibfk_2
      * @param md5 String - PK# 1
      * @return the number of deleted rows
      */
@@ -232,7 +232,7 @@ public interface IImageManager extends TableManager<ImageBean>
     public int deletePersonBeansByImageMd5(String imageMd5);
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_1
+     * FK_NAME:fl_person_ibfk_2
      * @param bean the {@link ImageBean}
      * @param startRow the start row to be used (first row = 1, last row=-1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
@@ -242,7 +242,7 @@ public interface IImageManager extends TableManager<ImageBean>
     public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(ImageBean bean,int startRow,int numRows);    
     /**
      * set  the {@link PersonBean} object array associate to ImageBean by the fl_person.image_md5 field.<BR>
-     * FK_NAME : fl_person_ibfk_1 
+     * FK_NAME : fl_person_ibfk_2 
      * @param bean the referenced {@link ImageBean}
      * @param importedBeans imported beans from fl_person
      * @return importedBeans always
@@ -253,7 +253,7 @@ public interface IImageManager extends TableManager<ImageBean>
 
     /**
      * set  the {@link PersonBean} object java.util.Collection associate to ImageBean by the fl_person.image_md5 field.<BR>
-     * FK_NAME:fl_person_ibfk_1
+     * FK_NAME:fl_person_ibfk_2
      * @param bean the referenced {@link ImageBean} 
      * @param importedBeans imported beans from fl_person 
      * @return importedBeans always

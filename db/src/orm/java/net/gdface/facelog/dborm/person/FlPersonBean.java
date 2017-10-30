@@ -29,6 +29,9 @@ public  class FlPersonBean
     /** comments:用户id */
     private Integer id;
 
+    /** comments:所属用户组id */
+    private Integer groupId = new Integer(0)/* DEFAULT:'0'*/;
+
     /** comments:姓名 */
     private String name;
 
@@ -122,7 +125,6 @@ public  class FlPersonBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person.id</li>
-     * <li> imported key: fl_junction_person_group.person_id</li>
      * <li> imported key: fl_feature.person_id</li>
      * <li> imported key: fl_log.person_id</li>
      * <li>comments: 用户id</li>
@@ -187,6 +189,74 @@ public  class FlPersonBean
     public boolean checkIdInitialized()
     {
         return 0L !=  (initialized & FL_PERSON_ID_ID_MASK);
+    }
+    /**
+     * Getter method for {@link #groupId}.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_person.group_id</li>
+     * <li> foreign key: fl_person_group.id</li>
+     * <li>comments: 所属用户组id</li>
+     * <li>default value: '0'</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of groupId
+     */
+    public Integer getGroupId(){
+        return groupId;
+    }
+    /**
+     * Setter method for {@link #groupId}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value  to be assigned to groupId
+     */
+    public void setGroupId(Integer newVal)
+    {
+        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
+            (newVal == null && groupId == null && checkGroupIdInitialized())) {
+            return;
+        }
+        groupId = newVal;
+
+        modified |= FL_PERSON_ID_GROUP_ID_MASK;
+        initialized |= FL_PERSON_ID_GROUP_ID_MASK;
+    }
+
+    /**
+     * Setter method for {@link #groupId}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to groupId
+     */
+    public void setGroupId(int newVal)
+    {
+        setGroupId(new Integer(newVal));
+    }
+    /**
+     * Determines if the groupId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkGroupIdModified()
+    {
+        return 0L !=  (modified & FL_PERSON_ID_GROUP_ID_MASK);
+    }
+
+    /**
+     * Determines if the groupId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkGroupIdInitialized()
+    {
+        return 0L !=  (initialized & FL_PERSON_ID_GROUP_ID_MASK);
     }
     /**
      * Getter method for {@link #name}.<br>
@@ -773,6 +843,19 @@ public  class FlPersonBean
     public void setReferencedByImageMd5(FlImageBean reference) {
         this.referencedByImageMd5 = reference;
     }
+    /** 
+     * The referenced {@link FlPersonGroupBean} by {@link #groupId} . <br>
+     * FOREIGN KEY (group_id) REFERENCES fl_person_group(id)
+     */
+    private FlPersonGroupBean referencedByGroupId;
+    /** Getter method for {@link #referencedByGroupId}. */
+    public FlPersonGroupBean getReferencedByGroupId() {
+        return this.referencedByGroupId;
+    }
+    /** Setter method for {@link #referencedByGroupId}. */
+    public void setReferencedByGroupId(FlPersonGroupBean reference) {
+        this.referencedByGroupId = reference;
+    }
 
     /**
      * Determines if the object has been modified since the last time this method was called.
@@ -796,6 +879,8 @@ public  class FlPersonBean
         switch ( columnID ){
         case FL_PERSON_ID_ID:
             return checkIdModified();
+        case FL_PERSON_ID_GROUP_ID:
+            return checkGroupIdModified();
         case FL_PERSON_ID_NAME:
             return checkNameModified();
         case FL_PERSON_ID_SEX:
@@ -829,6 +914,8 @@ public  class FlPersonBean
         switch(columnID) {
         case FL_PERSON_ID_ID:
             return checkIdInitialized();
+        case FL_PERSON_ID_GROUP_ID:
+            return checkGroupIdInitialized();
         case FL_PERSON_ID_NAME:
             return checkNameInitialized();
         case FL_PERSON_ID_SEX:
@@ -892,7 +979,8 @@ public  class FlPersonBean
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_PERSON_ID_NAME_MASK |
+        modified &= (~(FL_PERSON_ID_GROUP_ID_MASK |
+            FL_PERSON_ID_NAME_MASK |
             FL_PERSON_ID_SEX_MASK |
             FL_PERSON_ID_BIRTHDATE_MASK |
             FL_PERSON_ID_PAPERS_TYPE_MASK |
@@ -919,6 +1007,7 @@ public  class FlPersonBean
         FlPersonBean obj = (FlPersonBean) object;
         return new EqualsBuilder()
             .append(getId(), obj.getId())
+            .append(getGroupId(), obj.getGroupId())
             .append(getName(), obj.getName())
             .append(getSex(), obj.getSex())
             .append(getBirthdate(), obj.getBirthdate())
@@ -943,6 +1032,7 @@ public  class FlPersonBean
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
             .append("\tid=").append(getId()).append("\n")
+            .append("\tgroup_id=").append(getGroupId()).append("\n")
             .append("\tname=").append(getName()).append("\n")
             .append("\tsex=").append(getSex()).append("\n")
             .append("\tbirthdate=").append(getBirthdate()).append("\n")
@@ -960,6 +1050,7 @@ public  class FlPersonBean
     public int compareTo(FlPersonBean object){
         return new CompareToBuilder()
             .append(getId(), object.getId())
+            .append(getGroupId(), object.getGroupId())
             .append(getName(), object.getName())
             .append(getSex(), object.getSex())
             .append(getBirthdate(), object.getBirthdate())
@@ -987,6 +1078,7 @@ public  class FlPersonBean
     public FlPersonBean clean()
     {
         setId(null);
+        setGroupId(null);
         setName(null);
         setSex(null);
         setBirthdate(null);
@@ -1011,7 +1103,7 @@ public  class FlPersonBean
     public void copy(FlPersonBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
-            for (int i = 0; i < 10; ++i) {
+            for (int i = 0; i < 11; ++i) {
                 if( bean.isInitialized(i))
                     setValue(i, bean.getValue(i));
             }
@@ -1051,6 +1143,8 @@ public  class FlPersonBean
         switch( columnID ){
         case FL_PERSON_ID_ID: 
             return (T)getId();        
+        case FL_PERSON_ID_GROUP_ID: 
+            return (T)getGroupId();        
         case FL_PERSON_ID_NAME: 
             return (T)getName();        
         case FL_PERSON_ID_SEX: 
@@ -1081,6 +1175,8 @@ public  class FlPersonBean
         switch( columnID ) {
         case FL_PERSON_ID_ID:        
             setId((Integer)value);
+        case FL_PERSON_ID_GROUP_ID:        
+            setGroupId((Integer)value);
         case FL_PERSON_ID_NAME:        
             setName((String)value);
         case FL_PERSON_ID_SEX:        

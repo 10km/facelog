@@ -107,7 +107,8 @@ public final class DeviceGroupBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_device_group.id</li>
-     * <li> imported key: fl_junction_device_group.group_id</li>
+     * <li> imported key: fl_permit.device_group_id</li>
+     * <li> imported key: fl_device.group_id</li>
      * <li> imported key: fl_device_group.parent</li>
      * <li>comments: 设备组id</li>
      * <li>AUTO_INCREMENT</li>
@@ -311,12 +312,10 @@ public final class DeviceGroupBean
      */
     private DeviceGroupBean referencedByParent;
     /** Getter method for {@link #referencedByParent}. */
-    @ThriftField(value=7)
     public DeviceGroupBean getReferencedByParent() {
         return this.referencedByParent;
     }
     /** Setter method for {@link #referencedByParent}. */
-    @ThriftField()
     public void setReferencedByParent(DeviceGroupBean reference) {
         this.referencedByParent = reference;
     }

@@ -5,30 +5,33 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: bean.java.vm
 // ______________________________________________________
-package net.gdface.facelog.db;
+package net.gdface.facelog.dborm.permit;
 import java.io.Serializable;
-import com.facebook.swift.codec.ThriftStruct;
-import com.facebook.swift.codec.ThriftField;
-import com.facebook.swift.codec.ThriftField.Requiredness;
+import net.gdface.facelog.dborm.Constant;
+import net.gdface.facelog.dborm.BaseBean;
+import net.gdface.facelog.dborm.device.FlDeviceGroupBean;
+import net.gdface.facelog.dborm.person.FlPersonGroupBean;
+import net.gdface.facelog.dborm.CompareToBuilder;
+import net.gdface.facelog.dborm.EqualsBuilder;
+import net.gdface.facelog.dborm.HashCodeBuilder;
 /**
- * JunctionDeviceGroupBean is a mapping of fl_junction_device_group Table.
+ * FlPermitBean is a mapping of fl_permit Table.
  * <br>Meta Data Information (in progress):
  * <ul>
  *    <li>comments: 设备组信息关联表 </li>
  * </ul>
  * @author guyadong
 */
-@ThriftStruct
-public final class JunctionDeviceGroupBean
-    implements Serializable,BaseBean<JunctionDeviceGroupBean>,Comparable<JunctionDeviceGroupBean>,Constant,Cloneable
+public  class FlPermitBean
+    implements Serializable,BaseBean<FlPermitBean>,Comparable<FlPermitBean>,Constant,Cloneable
 {
-    private static final long serialVersionUID = -6778508817718382088L;
+    private static final long serialVersionUID = 6130251228058473821L;
     
-    /** comments:外键,设备id */
-    private Integer deviceId;
-
     /** comments:外键,设备组id */
-    private Integer groupId;
+    private Integer deviceGroupId;
+
+    /** comments:外键,人员组id */
+    private Integer personGroupId;
 
     private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
 
@@ -42,7 +45,6 @@ public final class JunctionDeviceGroupBean
      *
      * @return true if the current object is new, false if the object is not new
      */
-    @ThriftField(value=1,name="_new",requiredness=Requiredness.REQUIRED)
     public boolean isNew()
     {
         return _isNew;
@@ -62,7 +64,6 @@ public final class JunctionDeviceGroupBean
      *
      * @param isNew the boolean value to be assigned to the isNew field
      */
-    @ThriftField()
     public void setNew(boolean isNew)
     {
         this._isNew = isNew;
@@ -70,7 +71,6 @@ public final class JunctionDeviceGroupBean
     /**
      * @return the modified status of columns
      */
-    @ThriftField(value=2,requiredness=Requiredness.REQUIRED)
     public long getModified(){
         return modified;
     }
@@ -78,14 +78,12 @@ public final class JunctionDeviceGroupBean
     /**
      * @param modified the modified status bit to be assigned to {@link #modified}
      */
-    @ThriftField()
     public void setModified(long modified){
         this.modified = modified;
     }
     /**
      * @return the initialized status of columns
      */
-    @ThriftField(value=3,requiredness=Requiredness.REQUIRED)
     public long getInitialized(){
         return initialized;
     }
@@ -93,90 +91,18 @@ public final class JunctionDeviceGroupBean
     /**
      * @param initialized the initialized status bit to be assigned to {@link #initialized}
      */
-    @ThriftField()
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
-    public JunctionDeviceGroupBean(){
+    public FlPermitBean(){
         super();
     }
     /**
-     * Getter method for {@link #deviceId}.<br>
+     * Getter method for {@link #deviceGroupId}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_junction_device_group.device_id</li>
-     * <li> foreign key: fl_device.id</li>
-     * <li>comments: 外键,设备id</li>
-     * <li>NOT NULL</li>
-     * <li>column size: 10</li>
-     * <li>JDBC type returned by the driver: Types.INTEGER</li>
-     * </ul>
-     *
-     * @return the value of deviceId
-     */
-    @ThriftField(value=4)
-    public Integer getDeviceId(){
-        return deviceId;
-    }
-    /**
-     * Setter method for {@link #deviceId}.<br>
-     * The new value is set only if compareTo() says it is different,
-     * or if one of either the new value or the current value is null.
-     * In case the new value is different, it is set and the field is marked as 'modified'.
-     *
-     * @param newVal the new value (NOT NULL) to be assigned to deviceId
-     */
-    @ThriftField()
-    public void setDeviceId(Integer newVal)
-    {
-        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
-            return;
-        }
-        deviceId = newVal;
-
-        modified |= FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID_MASK;
-        initialized |= FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID_MASK;
-    }
-
-    /**
-     * Setter method for {@link #deviceId}.<br>
-     * Convenient for those who do not want to deal with Objects for primary types.
-     *
-     * @param newVal the new value to be assigned to deviceId
-     */
-    public void setDeviceId(int newVal)
-    {
-        setDeviceId(new Integer(newVal));
-    }
-    /**
-     * Determines if the deviceId has been modified.
-     *
-     * @return true if the field has been modified, false if the field has not been modified
-     */
-    public boolean checkDeviceIdModified()
-    {
-        return 0L !=  (modified & FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID_MASK);
-    }
-
-    /**
-     * Determines if the deviceId has been initialized.<br>
-     *
-     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
-     *
-     * @return true if the field has been initialized, false otherwise
-     */
-    public boolean checkDeviceIdInitialized()
-    {
-        return 0L !=  (initialized & FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID_MASK);
-    }
-    /**
-     * Getter method for {@link #groupId}.<br>
-     * PRIMARY KEY.<br>
-     * Meta Data Information (in progress):
-     * <ul>
-     * <li>full name: fl_junction_device_group.group_id</li>
+     * <li>full name: fl_permit.device_group_id</li>
      * <li> foreign key: fl_device_group.id</li>
      * <li>comments: 外键,设备组id</li>
      * <li>NOT NULL</li>
@@ -184,69 +110,136 @@ public final class JunctionDeviceGroupBean
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>
      *
-     * @return the value of groupId
+     * @return the value of deviceGroupId
      */
-    @ThriftField(value=5)
-    public Integer getGroupId(){
-        return groupId;
+    public Integer getDeviceGroupId(){
+        return deviceGroupId;
     }
     /**
-     * Setter method for {@link #groupId}.<br>
+     * Setter method for {@link #deviceGroupId}.<br>
      * The new value is set only if compareTo() says it is different,
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to groupId
+     * @param newVal the new value (NOT NULL) to be assigned to deviceGroupId
      */
-    @ThriftField()
-    public void setGroupId(Integer newVal)
+    public void setDeviceGroupId(Integer newVal)
     {
-        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && checkGroupIdInitialized())) {
+        if ((newVal != null && deviceGroupId != null && (newVal.compareTo(deviceGroupId) == 0)) ||
+            (newVal == null && deviceGroupId == null && checkDeviceGroupIdInitialized())) {
             return;
         }
-        groupId = newVal;
+        deviceGroupId = newVal;
 
-        modified |= FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID_MASK;
-        initialized |= FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID_MASK;
+        modified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
+        initialized |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
     }
 
     /**
-     * Setter method for {@link #groupId}.<br>
+     * Setter method for {@link #deviceGroupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
      *
-     * @param newVal the new value to be assigned to groupId
+     * @param newVal the new value to be assigned to deviceGroupId
      */
-    public void setGroupId(int newVal)
+    public void setDeviceGroupId(int newVal)
     {
-        setGroupId(new Integer(newVal));
+        setDeviceGroupId(new Integer(newVal));
     }
     /**
-     * Determines if the groupId has been modified.
+     * Determines if the deviceGroupId has been modified.
      *
      * @return true if the field has been modified, false if the field has not been modified
      */
-    public boolean checkGroupIdModified()
+    public boolean checkDeviceGroupIdModified()
     {
-        return 0L !=  (modified & FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID_MASK);
+        return 0L !=  (modified & FL_PERMIT_ID_DEVICE_GROUP_ID_MASK);
     }
 
     /**
-     * Determines if the groupId has been initialized.<br>
+     * Determines if the deviceGroupId has been initialized.<br>
      *
      * It is useful to determine if a field is null on purpose or just because it has not been initialized.
      *
      * @return true if the field has been initialized, false otherwise
      */
-    public boolean checkGroupIdInitialized()
+    public boolean checkDeviceGroupIdInitialized()
     {
-        return 0L !=  (initialized & FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID_MASK);
+        return 0L !=  (initialized & FL_PERMIT_ID_DEVICE_GROUP_ID_MASK);
+    }
+    /**
+     * Getter method for {@link #personGroupId}.<br>
+     * PRIMARY KEY.<br>
+     * Meta Data Information (in progress):
+     * <ul>
+     * <li>full name: fl_permit.person_group_id</li>
+     * <li> foreign key: fl_person_group.id</li>
+     * <li>comments: 外键,人员组id</li>
+     * <li>NOT NULL</li>
+     * <li>column size: 10</li>
+     * <li>JDBC type returned by the driver: Types.INTEGER</li>
+     * </ul>
+     *
+     * @return the value of personGroupId
+     */
+    public Integer getPersonGroupId(){
+        return personGroupId;
+    }
+    /**
+     * Setter method for {@link #personGroupId}.<br>
+     * The new value is set only if compareTo() says it is different,
+     * or if one of either the new value or the current value is null.
+     * In case the new value is different, it is set and the field is marked as 'modified'.
+     *
+     * @param newVal the new value (NOT NULL) to be assigned to personGroupId
+     */
+    public void setPersonGroupId(Integer newVal)
+    {
+        if ((newVal != null && personGroupId != null && (newVal.compareTo(personGroupId) == 0)) ||
+            (newVal == null && personGroupId == null && checkPersonGroupIdInitialized())) {
+            return;
+        }
+        personGroupId = newVal;
+
+        modified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
+        initialized |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
+    }
+
+    /**
+     * Setter method for {@link #personGroupId}.<br>
+     * Convenient for those who do not want to deal with Objects for primary types.
+     *
+     * @param newVal the new value to be assigned to personGroupId
+     */
+    public void setPersonGroupId(int newVal)
+    {
+        setPersonGroupId(new Integer(newVal));
+    }
+    /**
+     * Determines if the personGroupId has been modified.
+     *
+     * @return true if the field has been modified, false if the field has not been modified
+     */
+    public boolean checkPersonGroupIdModified()
+    {
+        return 0L !=  (modified & FL_PERMIT_ID_PERSON_GROUP_ID_MASK);
+    }
+
+    /**
+     * Determines if the personGroupId has been initialized.<br>
+     *
+     * It is useful to determine if a field is null on purpose or just because it has not been initialized.
+     *
+     * @return true if the field has been initialized, false otherwise
+     */
+    public boolean checkPersonGroupIdInitialized()
+    {
+        return 0L !=  (initialized & FL_PERMIT_ID_PERSON_GROUP_ID_MASK);
     }
     /**
      * Getter method for {@link #createTime}.<br>
      * Meta Data Information (in progress):
      * <ul>
-     * <li>full name: fl_junction_device_group.create_time</li>
+     * <li>full name: fl_permit.create_time</li>
      * <li>default value: 'CURRENT_TIMESTAMP'</li>
      * <li>NOT NULL</li>
      * <li>column size: 19</li>
@@ -257,14 +250,6 @@ public final class JunctionDeviceGroupBean
      */
     public java.util.Date getCreateTime(){
         return createTime;
-    }
-    /** 
-     * use Long to represent date type for thrift:swift support 
-     * @see #getCreateTime()
-     */
-    @ThriftField(name = "createTime",value = 6)
-    public Long readCreateTime(){
-        return null == createTime ? null:createTime.getTime();
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -282,18 +267,10 @@ public final class JunctionDeviceGroupBean
         }
         createTime = newVal;
 
-        modified |= FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME_MASK;
-        initialized |= FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME_MASK;
+        modified |= FL_PERMIT_ID_CREATE_TIME_MASK;
+        initialized |= FL_PERMIT_ID_CREATE_TIME_MASK;
     }
 
-    /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setCreateTime(java.util.Date)  
-     */
-    @ThriftField(name = "createTime",value = 6)
-    public void writeCreateTime(Long newVal){
-        setCreateTime(null == newVal?null:new java.util.Date(newVal));
-    }
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -311,7 +288,7 @@ public final class JunctionDeviceGroupBean
      */
     public boolean checkCreateTimeModified()
     {
-        return 0L !=  (modified & FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME_MASK);
+        return 0L !=  (modified & FL_PERMIT_ID_CREATE_TIME_MASK);
     }
 
     /**
@@ -323,40 +300,36 @@ public final class JunctionDeviceGroupBean
      */
     public boolean checkCreateTimeInitialized()
     {
-        return 0L !=  (initialized & FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME_MASK);
+        return 0L !=  (initialized & FL_PERMIT_ID_CREATE_TIME_MASK);
     }
     //////////////////////////////////////
     // referenced bean for FOREIGN KEYS
     //////////////////////////////////////
     /** 
-     * The referenced {@link DeviceBean} by {@link #deviceId} . <br>
-     * FOREIGN KEY (device_id) REFERENCES fl_device(id)
+     * The referenced {@link FlDeviceGroupBean} by {@link #deviceGroupId} . <br>
+     * FOREIGN KEY (device_group_id) REFERENCES fl_device_group(id)
      */
-    private DeviceBean referencedByDeviceId;
-    /** Getter method for {@link #referencedByDeviceId}. */
-    @ThriftField(value=7)
-    public DeviceBean getReferencedByDeviceId() {
-        return this.referencedByDeviceId;
+    private FlDeviceGroupBean referencedByDeviceGroupId;
+    /** Getter method for {@link #referencedByDeviceGroupId}. */
+    public FlDeviceGroupBean getReferencedByDeviceGroupId() {
+        return this.referencedByDeviceGroupId;
     }
-    /** Setter method for {@link #referencedByDeviceId}. */
-    @ThriftField()
-    public void setReferencedByDeviceId(DeviceBean reference) {
-        this.referencedByDeviceId = reference;
+    /** Setter method for {@link #referencedByDeviceGroupId}. */
+    public void setReferencedByDeviceGroupId(FlDeviceGroupBean reference) {
+        this.referencedByDeviceGroupId = reference;
     }
     /** 
-     * The referenced {@link DeviceGroupBean} by {@link #groupId} . <br>
-     * FOREIGN KEY (group_id) REFERENCES fl_device_group(id)
+     * The referenced {@link FlPersonGroupBean} by {@link #personGroupId} . <br>
+     * FOREIGN KEY (person_group_id) REFERENCES fl_person_group(id)
      */
-    private DeviceGroupBean referencedByGroupId;
-    /** Getter method for {@link #referencedByGroupId}. */
-    @ThriftField(value=8)
-    public DeviceGroupBean getReferencedByGroupId() {
-        return this.referencedByGroupId;
+    private FlPersonGroupBean referencedByPersonGroupId;
+    /** Getter method for {@link #referencedByPersonGroupId}. */
+    public FlPersonGroupBean getReferencedByPersonGroupId() {
+        return this.referencedByPersonGroupId;
     }
-    /** Setter method for {@link #referencedByGroupId}. */
-    @ThriftField()
-    public void setReferencedByGroupId(DeviceGroupBean reference) {
-        this.referencedByGroupId = reference;
+    /** Setter method for {@link #referencedByPersonGroupId}. */
+    public void setReferencedByPersonGroupId(FlPersonGroupBean reference) {
+        this.referencedByPersonGroupId = reference;
     }
 
     /**
@@ -379,11 +352,11 @@ public final class JunctionDeviceGroupBean
      */
     public boolean isModified(int columnID){
         switch ( columnID ){
-        case FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID:
-            return checkDeviceIdModified();
-        case FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID:
-            return checkGroupIdModified();
-        case FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME:
+        case FL_PERMIT_ID_DEVICE_GROUP_ID:
+            return checkDeviceGroupIdModified();
+        case FL_PERMIT_ID_PERSON_GROUP_ID:
+            return checkPersonGroupIdModified();
+        case FL_PERMIT_ID_CREATE_TIME:
             return checkCreateTimeModified();
         }
         return false;
@@ -398,11 +371,11 @@ public final class JunctionDeviceGroupBean
      */
     public boolean isInitialized(int columnID){
         switch(columnID) {
-        case FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID:
-            return checkDeviceIdInitialized();
-        case FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID:
-            return checkGroupIdInitialized();
-        case FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME:
+        case FL_PERMIT_ID_DEVICE_GROUP_ID:
+            return checkDeviceGroupIdInitialized();
+        case FL_PERMIT_ID_PERSON_GROUP_ID:
+            return checkPersonGroupIdInitialized();
+        case FL_PERMIT_ID_CREATE_TIME:
             return checkCreateTimeInitialized();
         }
         return false;
@@ -438,19 +411,19 @@ public final class JunctionDeviceGroupBean
         modified = 0L;
     }
     /**
-     * Resets the primary keys ( {@link #deviceId},{@link #groupId} ) modification status to 'not modified'.
+     * Resets the primary keys ( {@link #deviceGroupId},{@link #personGroupId} ) modification status to 'not modified'.
      */
     public void resetPrimaryKeysModified()
     {
-        modified &= (~(FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID_MASK |
-            FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID_MASK));
+        modified &= (~(FL_PERMIT_ID_DEVICE_GROUP_ID_MASK |
+            FL_PERMIT_ID_PERSON_GROUP_ID_MASK));
     }
     /**
      * Resets columns modification status except primary keys to 'not modified'.
      */
     public void resetModifiedExceptPrimaryKeys()
     {
-        modified &= (~(FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME_MASK));
+        modified &= (~(FL_PERMIT_ID_CREATE_TIME_MASK));
     }
     /**
      * Resets the object initialization status to 'not initialized'.
@@ -462,14 +435,14 @@ public final class JunctionDeviceGroupBean
     @Override
     public boolean equals(Object object)
     {
-        if (!(object instanceof JunctionDeviceGroupBean)) {
+        if (!(object instanceof FlPermitBean)) {
             return false;
         }
 
-        JunctionDeviceGroupBean obj = (JunctionDeviceGroupBean) object;
+        FlPermitBean obj = (FlPermitBean) object;
         return new EqualsBuilder()
-            .append(getDeviceId(), obj.getDeviceId())
-            .append(getGroupId(), obj.getGroupId())
+            .append(getDeviceGroupId(), obj.getDeviceGroupId())
+            .append(getPersonGroupId(), obj.getPersonGroupId())
             .append(getCreateTime(), obj.getCreateTime())
             .isEquals();
     }
@@ -478,33 +451,33 @@ public final class JunctionDeviceGroupBean
     public int hashCode()
     {
         return new HashCodeBuilder(-82280557, -700257973)
-            .append(getDeviceId())
-            .append(getGroupId())
+            .append(getDeviceGroupId())
+            .append(getPersonGroupId())
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tdevice_id=").append(getDeviceId()).append("\n")
-            .append("\tgroup_id=").append(getGroupId()).append("\n")
+            .append("\tdevice_group_id=").append(getDeviceGroupId()).append("\n")
+            .append("\tperson_group_id=").append(getPersonGroupId()).append("\n")
             .append("\tcreate_time=").append(getCreateTime()).append("\n")
             .append("]\n")
             .toString();
     }
 
     @Override
-    public int compareTo(JunctionDeviceGroupBean object){
+    public int compareTo(FlPermitBean object){
         return new CompareToBuilder()
-            .append(getDeviceId(), object.getDeviceId())
-            .append(getGroupId(), object.getGroupId())
+            .append(getDeviceGroupId(), object.getDeviceGroupId())
+            .append(getPersonGroupId(), object.getPersonGroupId())
             .append(getCreateTime(), object.getCreateTime())
             .toComparison();
     }
     @Override
-    public JunctionDeviceGroupBean clone(){
+    public FlPermitBean clone(){
         try {
-            return (JunctionDeviceGroupBean) super.clone();
+            return (FlPermitBean) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -514,10 +487,10 @@ public final class JunctionDeviceGroupBean
     *
     * @author guyadong
     */
-    public JunctionDeviceGroupBean clean()
+    public FlPermitBean clean()
     {
-        setDeviceId(null);
-        setGroupId(null);
+        setDeviceGroupId(null);
+        setPersonGroupId(null);
         setCreateTime(null);
         isNew(true);
         resetInitialized();
@@ -531,7 +504,7 @@ public final class JunctionDeviceGroupBean
      * @param bean the bean to copy into the current bean
      * @param fieldList the column id list to copy into the current bean
      */
-    public void copy(JunctionDeviceGroupBean bean, int... fieldList)
+    public void copy(FlPermitBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             for (int i = 0; i < 3; ++i) {
@@ -551,7 +524,7 @@ public final class JunctionDeviceGroupBean
      * @param bean the bean to copy into the current bean
      * @param fieldList the column name list to copy into the current bean
      */
-    public void copy(JunctionDeviceGroupBean bean, String... fieldList)
+    public void copy(FlPermitBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             copy(bean,(int[])null);
@@ -572,11 +545,11 @@ public final class JunctionDeviceGroupBean
     public <T>T getValue(int columnID)
     {
         switch( columnID ){
-        case FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID: 
-            return (T)getDeviceId();        
-        case FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID: 
-            return (T)getGroupId();        
-        case FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME: 
+        case FL_PERMIT_ID_DEVICE_GROUP_ID: 
+            return (T)getDeviceGroupId();        
+        case FL_PERMIT_ID_PERSON_GROUP_ID: 
+            return (T)getPersonGroupId();        
+        case FL_PERMIT_ID_CREATE_TIME: 
             return (T)getCreateTime();        
         }
         return null;
@@ -588,11 +561,11 @@ public final class JunctionDeviceGroupBean
     public <T> void setValue(int columnID,T value)
     {
         switch( columnID ) {
-        case FL_JUNCTION_DEVICE_GROUP_ID_DEVICE_ID:        
-            setDeviceId((Integer)value);
-        case FL_JUNCTION_DEVICE_GROUP_ID_GROUP_ID:        
-            setGroupId((Integer)value);
-        case FL_JUNCTION_DEVICE_GROUP_ID_CREATE_TIME:        
+        case FL_PERMIT_ID_DEVICE_GROUP_ID:        
+            setDeviceGroupId((Integer)value);
+        case FL_PERMIT_ID_PERSON_GROUP_ID:        
+            setPersonGroupId((Integer)value);
+        case FL_PERMIT_ID_CREATE_TIME:        
             setCreateTime((java.util.Date)value);
         }
     }
@@ -614,9 +587,9 @@ public final class JunctionDeviceGroupBean
     }
 
     public static int columnIDOf(String column){
-        int index = FL_JUNCTION_DEVICE_GROUP_FIELDS_LIST.indexOf(column);
+        int index = FL_PERMIT_FIELDS_LIST.indexOf(column);
         if( 0 > index ) 
-            index = FL_JUNCTION_DEVICE_GROUP_JAVA_FIELDS_LIST.indexOf(column);
+            index = FL_PERMIT_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
 }

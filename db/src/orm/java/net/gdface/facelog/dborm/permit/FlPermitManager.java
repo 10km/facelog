@@ -5,7 +5,7 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: manager.java.vm
 // ______________________________________________________
-package net.gdface.facelog.dborm.person;
+package net.gdface.facelog.dborm.permit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,26 +24,30 @@ import net.gdface.facelog.dborm.exception.DAOException;
 import net.gdface.facelog.dborm.exception.DataAccessException;
 import net.gdface.facelog.dborm.exception.DataRetrievalException;
 import net.gdface.facelog.dborm.exception.ObjectRetrievalException;
+import net.gdface.facelog.dborm.device.FlDeviceGroupBean;
+import net.gdface.facelog.dborm.device.FlDeviceGroupManager;
+import net.gdface.facelog.dborm.person.FlPersonGroupBean;
+import net.gdface.facelog.dborm.person.FlPersonGroupManager;
 
 /**
- * Handles database calls (save, load, count, etc...) for the fl_junction_person_group table.<br>
- * Remarks: 用户组信息关联表<br>
+ * Handles database calls (save, load, count, etc...) for the fl_permit table.<br>
+ * Remarks: 设备组信息关联表<br>
  * @author sql2java
  */
-public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctionPersonGroupBean>
+public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
 {
     /**
      * Tablename.
      */
-    public static final String TABLE_NAME="fl_junction_person_group";
+    public static final String TABLE_NAME="fl_permit";
 
    /**
-     * Contains all the primarykey fields of the fl_junction_person_group table.
+     * Contains all the primarykey fields of the fl_permit table.
      */
     public static final String[] PRIMARYKEY_NAMES =
     {
-        "person_id"
-        ,"group_id"
+        "device_group_id"
+        ,"person_group_id"
     };
 
     /**
@@ -54,11 +58,11 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     public String getFields() {
-        return FL_JUNCTION_PERSON_GROUP_FIELDS;
+        return FL_PERMIT_FIELDS;
     }
     
     public String getFullFields() {
-        return FL_JUNCTION_PERSON_GROUP_FULL_FIELDS;
+        return FL_PERMIT_FULL_FIELDS;
     }
     
     /**
@@ -68,32 +72,32 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         return PRIMARYKEY_NAMES;
     }
 
-    private static FlJunctionPersonGroupManager singleton = new FlJunctionPersonGroupManager();
-    protected FlJunctionPersonGroupManager(){}
+    private static FlPermitManager singleton = new FlPermitManager();
+    protected FlPermitManager(){}
     /**
-     * Get the FlJunctionPersonGroupManager singleton.
+     * Get the FlPermitManager singleton.
      *
-     * @return FlJunctionPersonGroupManager
+     * @return FlPermitManager
      */
-    public static FlJunctionPersonGroupManager getInstance()
+    public static FlPermitManager getInstance()
     {
         return singleton;
     }
 
 
     /**
-     * Creates a new FlJunctionPersonGroupBean instance.
+     * Creates a new FlPermitBean instance.
      *
-     * @return the new FlJunctionPersonGroupBean
+     * @return the new FlPermitBean
      */
-    public FlJunctionPersonGroupBean createBean()
+    public FlPermitBean createBean()
     {
-        return new FlJunctionPersonGroupBean();
+        return new FlPermitBean();
     }
     
     @Override
-    protected Class<FlJunctionPersonGroupBean> _beanType(){
-        return FlJunctionPersonGroupBean.class;
+    protected Class<FlPermitBean> _beanType(){
+        return FlPermitBean.class;
     }
     
     //////////////////////////////////////
@@ -101,21 +105,21 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     //////////////////////////////////////
 
     /**
-     * Loads a {@link FlJunctionPersonGroupBean} from the fl_junction_person_group using primary key fields.
+     * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      *
-     * @param personId Integer - PK# 1
-     * @param groupId Integer - PK# 2
-     * @return a unique FlJunctionPersonGroupBean or {@code null} if not found or have null argument
+     * @param deviceGroupId Integer - PK# 1
+     * @param personGroupId Integer - PK# 2
+     * @return a unique FlPermitBean or {@code null} if not found or have null argument
      * @throws DAOException
      */
     //1
-    public FlJunctionPersonGroupBean loadByPrimaryKey(Integer personId,Integer groupId) throws DAOException
+    public FlPermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        if(null == personId || null == groupId){
+        if(null == deviceGroupId || null == personGroupId){
             return null;
         }
         try{
-            return loadByPrimaryKeyChecked(personId,groupId);
+            return loadByPrimaryKeyChecked(deviceGroupId,personGroupId);
         }catch(ObjectRetrievalException e){
             // not found
             return null;
@@ -123,19 +127,19 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
     
     /**
-     * Loads a {@link FlJunctionPersonGroupBean} from the fl_junction_person_group using primary key fields.
+     * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      *
-     * @param personId Integer - PK# 1
-     * @param groupId Integer - PK# 2
-     * @return a unique FlJunctionPersonGroupBean
+     * @param deviceGroupId Integer - PK# 1
+     * @param personGroupId Integer - PK# 2
+     * @return a unique FlPermitBean
      * @throws ObjectRetrievalException if not found
      * @throws DAOException
      */
     //1.1
     @SuppressWarnings("unused")
-    public FlJunctionPersonGroupBean loadByPrimaryKeyChecked(Integer personId,Integer groupId) throws DAOException
+    public FlPermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        if(null == personId || null == groupId){
+        if(null == deviceGroupId || null == personGroupId){
             throw new NullPointerException();
         }
         Connection c = null;
@@ -143,14 +147,14 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT " + FL_JUNCTION_PERSON_GROUP_FIELDS + " FROM fl_junction_person_group WHERE person_id=? and group_id=?");
+            StringBuilder sql = new StringBuilder("SELECT " + FL_PERMIT_FIELDS + " FROM fl_permit WHERE device_group_id=? and person_group_id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (personId == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, personId); }
-            if (groupId == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, groupId); }
-            List<FlJunctionPersonGroupBean> pReturn = this.loadByPreparedStatementAsList(ps);
+            if (deviceGroupId == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, deviceGroupId); }
+            if (personGroupId == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, personGroupId); }
+            List<FlPermitBean> pReturn = this.loadByPreparedStatementAsList(ps);
             if (1 == pReturn.size()) {
                 return pReturn.get(0);
             } else {
@@ -174,29 +178,29 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
 
     //1.2
     @Override
-    public FlJunctionPersonGroupBean loadByPrimaryKey(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean loadByPrimaryKey(FlPermitBean bean) throws DAOException
     {
-        return bean==null?null:loadByPrimaryKey(bean.getPersonId(),bean.getGroupId());
+        return bean==null?null:loadByPrimaryKey(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     
     //1.2.2
     @Override
-    public FlJunctionPersonGroupBean loadByPrimaryKeyChecked(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean loadByPrimaryKeyChecked(FlPermitBean bean) throws DAOException
     {
         if(null == bean)
             throw new NullPointerException();
-        return loadByPrimaryKeyChecked(bean.getPersonId(),bean.getGroupId());
+        return loadByPrimaryKeyChecked(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     
     /**
-     * Loads a {@link FlJunctionPersonGroupBean} from the fl_junction_person_group using primary key fields.
+     * Loads a {@link FlPermitBean} from the fl_permit using primary key fields.
      * @param keys primary keys value:<br> 
-     * @return a unique {@link FlJunctionPersonGroupBean} or {@code null} if not found
-     * @see {@link #loadByPrimaryKey(Integer personId,Integer groupId)}
+     * @return a unique {@link FlPermitBean} or {@code null} if not found
+     * @see {@link #loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)}
      */
     //1.3
     @Override
-    public FlJunctionPersonGroupBean loadByPrimaryKey(Object ...keys) throws DAOException{
+    public FlPermitBean loadByPrimaryKey(Object ...keys) throws DAOException{
         if(null == keys)
             throw new NullPointerException();
         if(keys.length != 2 )
@@ -209,7 +213,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
     //1.3.2
     @Override
-    public FlJunctionPersonGroupBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
+    public FlPermitBean loadByPrimaryKeyChecked(Object ...keys) throws DAOException{
         if(null == keys)
             throw new NullPointerException();
         if(keys.length != 2 )
@@ -223,29 +227,29 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         return loadByPrimaryKeyChecked((Integer)keys[0],(Integer)keys[1]);
     }
     /**
-     * Returns true if this fl_junction_person_group contains row with primary key fields.
-     * @param personId Integer - PK# 1
-     * @param groupId Integer - PK# 2
+     * Returns true if this fl_permit contains row with primary key fields.
+     * @param deviceGroupId Integer - PK# 1
+     * @param personGroupId Integer - PK# 2
      * @throws DAOException
      */
     //1.4
     @SuppressWarnings("unused")
-    public boolean existsPrimaryKey(Integer personId,Integer groupId) throws DAOException
+    public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        if(null == personId || null == groupId){
+        if(null == deviceGroupId || null == personGroupId){
             return false;
         }
         Connection c = null;
         PreparedStatement ps = null;
         try{
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_junction_person_group WHERE person_id=? and group_id=?");
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_permit WHERE device_group_id=? and person_group_id=?");
             // System.out.println("loadByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (personId == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, personId); }
-            if (groupId == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, groupId); }
+            if (deviceGroupId == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, deviceGroupId); }
+            if (personGroupId == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, personGroupId); }
             return 1 == this.countByPreparedStatement(ps);
         }catch(SQLException e){
             throw new ObjectRetrievalException(e);
@@ -255,17 +259,17 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         }
     }
     /**
-     * Return true if this fl_junction_person_group contains row with primary key fields.
+     * Return true if this fl_permit contains row with primary key fields.
      * @param bean  
      * @throws DAOException
      * @return false if primary kes has null
-     * @see #countUsingTemplate(FlJunctionPersonGroupBean)
+     * @see #countUsingTemplate(FlPermitBean)
      */
     //1.6
     @Override
-    public boolean existsByPrimaryKey(FlJunctionPersonGroupBean bean) throws DAOException
+    public boolean existsByPrimaryKey(FlPermitBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getPersonId() || null == bean.getGroupId())
+        if(null == bean  || null == bean.getDeviceGroupId() || null == bean.getPersonGroupId())
             return false;
         long modified = bean.getModified();
         try{
@@ -277,27 +281,27 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
     //1.7
     @Override
-    public FlJunctionPersonGroupBean checkDuplicate(FlJunctionPersonGroupBean bean) throws DAOException{
+    public FlPermitBean checkDuplicate(FlPermitBean bean) throws DAOException{
         if(!existsByPrimaryKey(bean))
-            throw new ObjectRetrievalException("Duplicate entry ("+ bean.getPersonId() + " " +bean.getGroupId() +") for key 'PRIMARY'");
+            throw new ObjectRetrievalException("Duplicate entry ("+ bean.getDeviceGroupId() + " " +bean.getPersonGroupId() +") for key 'PRIMARY'");
         return bean;
     }
     /**
      * Delete row according to its primary keys.<br>
      * all keys must not be null
      * 
-     * @param personId Integer - PK# 1
-     * @param groupId Integer - PK# 2
+     * @param deviceGroupId Integer - PK# 1
+     * @param personGroupId Integer - PK# 2
      * @return the number of deleted rows
      * @throws DAOException
-     * @see {@link #delete(FlJunctionPersonGroupBean)}
+     * @see {@link #delete(FlPermitBean)}
      */
     //2
-    public int deleteByPrimaryKey(Integer personId,Integer groupId) throws DAOException
+    public int deleteByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        FlJunctionPersonGroupBean bean=createBean();
-        bean.setPersonId(personId);
-        bean.setGroupId(groupId);
+        FlPermitBean bean=createBean();
+        bean.setDeviceGroupId(deviceGroupId);
+        bean.setPersonGroupId(personGroupId);
         return this.delete(bean);
     }
 
@@ -310,9 +314,9 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      */
     //2
     @Override
-    public int delete(FlJunctionPersonGroupBean bean) throws DAOException
+    public int delete(FlPermitBean bean) throws DAOException
     {
-        if(null == bean  || null == bean.getPersonId() || null == bean.getGroupId()){
+        if(null == bean  || null == bean.getDeviceGroupId() || null == bean.getPersonGroupId()){
             return 0;
         }
         Connection c = null;
@@ -321,13 +325,13 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         {
             this.listenerContainer.beforeDelete(bean); // listener callback
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("DELETE FROM fl_junction_person_group WHERE person_id=? and group_id=?");
+            StringBuilder sql = new StringBuilder("DELETE FROM fl_permit WHERE device_group_id=? and person_group_id=?");
             // System.out.println("deleteByPrimaryKey: " + sql);
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            if (bean.getPersonId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getPersonId()); }
-            if (bean.getGroupId() == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, bean.getGroupId()); }
+            if (bean.getDeviceGroupId() == null) { ps.setNull(1, Types.INTEGER); } else { Manager.setInteger(ps, 1, bean.getDeviceGroupId()); }
+            if (bean.getPersonGroupId() == null) { ps.setNull(2, Types.INTEGER); } else { Manager.setInteger(ps, 2, bean.getPersonGroupId()); }
             int _rows=ps.executeUpdate();
             if(_rows>0)
                 this.listenerContainer.afterDelete(bean); // listener callback
@@ -349,7 +353,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      *
      * @param keys primary keys value:<br> 
      * @return the number of deleted rows
-     * @see {@link #delete(FlJunctionPersonGroupBean)}
+     * @see {@link #delete(FlPermitBean)}
      */   
     //2.1
     @Override
@@ -358,107 +362,107 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
             throw new NullPointerException();
         if(keys.length != 2 )
             throw new IllegalArgumentException("argument number mismatch with primary key number");
-        FlJunctionPersonGroupBean bean = createBean();   
+        FlPermitBean bean = createBean();   
         
         if(null != keys[0] && !(keys[0] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:$pk.getJavaType()");
-        bean.setPersonId((Integer)keys[0]);
+        bean.setDeviceGroupId((Integer)keys[0]);
         if(null != keys[1] && !(keys[1] instanceof Integer))
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:$pk.getJavaType()");
-        bean.setGroupId((Integer)keys[1]);
+        bean.setPersonGroupId((Integer)keys[1]);
         return delete(bean);
     }
     
  
      /**
-     * Save the FlJunctionPersonGroupBean bean and referenced beans and imported beans into the database.
+     * Save the FlPermitBean bean and referenced beans and imported beans into the database.
      *
-     * @param bean the {@link FlJunctionPersonGroupBean} bean to be saved
-     * @param refPersonByPersonId the {@link FlPersonBean} bean referenced by {@link FlJunctionPersonGroupBean} 
-     * @param refPersongroupByGroupId the {@link FlPersonGroupBean} bean referenced by {@link FlJunctionPersonGroupBean} 
-         * @return the inserted or updated {@link FlJunctionPersonGroupBean} bean
+     * @param bean the {@link FlPermitBean} bean to be saved
+     * @param refDevicegroupByDeviceGroupId the {@link FlDeviceGroupBean} bean referenced by {@link FlPermitBean} 
+     * @param refPersongroupByPersonGroupId the {@link FlPersonGroupBean} bean referenced by {@link FlPermitBean} 
+         * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DAOException
      */
     //3.5 SYNC SAVE 
-    public FlJunctionPersonGroupBean save(FlJunctionPersonGroupBean bean
-        , FlPersonBean refPersonByPersonId , FlPersonGroupBean refPersongroupByGroupId 
+    public FlPermitBean save(FlPermitBean bean
+        , FlDeviceGroupBean refDevicegroupByDeviceGroupId , FlPersonGroupBean refPersongroupByPersonGroupId 
         ) throws DAOException
     {
         if(null == bean) return null;
-        if(null != refPersonByPersonId)
-            this.setReferencedByPersonId(bean,refPersonByPersonId);
-        if(null != refPersongroupByGroupId)
-            this.setReferencedByGroupId(bean,refPersongroupByGroupId);
+        if(null != refDevicegroupByDeviceGroupId)
+            this.setReferencedByDeviceGroupId(bean,refDevicegroupByDeviceGroupId);
+        if(null != refPersongroupByPersonGroupId)
+            this.setReferencedByPersonGroupId(bean,refPersongroupByPersonGroupId);
         bean = this.save( bean );
         return bean;
     } 
 
     /**
      * Transaction version for sync save
-     * @see {@link #save(FlJunctionPersonGroupBean , FlPersonBean , FlPersonGroupBean )}
+     * @see {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
      */
     //3.6 SYNC SAVE AS TRANSACTION
-    public FlJunctionPersonGroupBean saveAsTransaction(final FlJunctionPersonGroupBean bean
-        ,final FlPersonBean refPersonByPersonId ,final FlPersonGroupBean refPersongroupByGroupId 
+    public FlPermitBean saveAsTransaction(final FlPermitBean bean
+        ,final FlDeviceGroupBean refDevicegroupByDeviceGroupId ,final FlPersonGroupBean refPersongroupByPersonGroupId 
         ) throws DAOException
     {
-        return this.runAsTransaction(new Callable<FlJunctionPersonGroupBean>(){
+        return this.runAsTransaction(new Callable<FlPermitBean>(){
             @Override
-            public FlJunctionPersonGroupBean call() throws Exception {
-                return save(bean , refPersonByPersonId , refPersongroupByGroupId );
+            public FlPermitBean call() throws Exception {
+                return save(bean , refDevicegroupByDeviceGroupId , refPersongroupByPersonGroupId );
             }});
     }
     /**
-     * Save the FlJunctionPersonGroupBean bean and referenced beans and imported beans (array) into the database.
+     * Save the FlPermitBean bean and referenced beans and imported beans (array) into the database.
      *
-     * @param bean the {@link FlJunctionPersonGroupBean} bean to be saved
+     * @param bean the {@link FlPermitBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlJunctionPersonGroupBean , FlPersonBean , FlPersonGroupBean )}
-     * @return the inserted or updated {@link FlJunctionPersonGroupBean} bean
+     *      see also {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
+     * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DAOException
      */
     //3.9 SYNC SAVE 
     @Override
-    public FlJunctionPersonGroupBean save(FlJunctionPersonGroupBean bean,Object ...args) throws DAOException
+    public FlPermitBean save(FlPermitBean bean,Object ...args) throws DAOException
     {
         if(null == args)
             save(bean);
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlPersonBean");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:FlDeviceGroupBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.2 dynamic argument,expected type:FlPersonGroupBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlPersonBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1]);
     } 
 
     /**
-     * Save the FlJunctionPersonGroupBean bean and referenced beans and imported beans (collection) into the database.
+     * Save the FlPermitBean bean and referenced beans and imported beans (collection) into the database.
      *
-     * @param bean the {@link FlJunctionPersonGroupBean} bean to be saved
+     * @param bean the {@link FlPermitBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(FlJunctionPersonGroupBean , FlPersonBean , FlPersonGroupBean )}
-     * @return the inserted or updated {@link FlJunctionPersonGroupBean} bean
+     *      see also {@link #save(FlPermitBean , FlDeviceGroupBean , FlPersonGroupBean )}
+     * @return the inserted or updated {@link FlPermitBean} bean
      * @throws DAOException
      */
     //3.10 SYNC SAVE 
     @SuppressWarnings("unchecked")
     @Override
-    public FlJunctionPersonGroupBean saveCollection(FlJunctionPersonGroupBean bean,Object ...args) throws DAOException
+    public FlPermitBean saveCollection(FlPermitBean bean,Object ...args) throws DAOException
     {
         if(null == args)
             save(bean);
         if(args.length > 2)
             throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 2");
-        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlPersonBean)){
-            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlPersonBean");
+        if( args.length > 0 && null != args[0] && !(args[0] instanceof FlDeviceGroupBean)){
+            throw new IllegalArgumentException("invalid type for the No.1 argument,expected type:FlDeviceGroupBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof FlPersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:FlPersonGroupBean");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(FlPersonBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1]);
+        return save(bean,(args.length < 1 || null == args[0])?null:(FlDeviceGroupBean)args[0],(args.length < 2 || null == args[1])?null:(FlPersonGroupBean)args[1]);
     } 
     //////////////////////////////////////
     // FOREIGN KEY GENERIC METHOD
@@ -468,45 +472,45 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * Retrieves the bean object referenced by fkIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID} -> {@link FlPersonBean}</li>
-     *     <li> {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID} -> {@link FlPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID} -> {@link FlDeviceGroupBean}</li>
+     *     <li> {@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID} -> {@link FlPersonGroupBean}</li>
      * </ul>
-     * @param bean the {@link FlJunctionPersonGroupBean} object to use
+     * @param bean the {@link FlPermitBean} object to use
      * @param fkIndex valid values: <br>
-     *        {@link Constant#FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID},{@link Constant#FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID}
+     *        {@link Constant#FL_PERMIT_FK_DEVICE_GROUP_ID},{@link Constant#FL_PERMIT_FK_PERSON_GROUP_ID}
      * @return the associated <T> bean or {@code null} if {@code bean} or {@code beanToSet} is {@code null}
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlJunctionPersonGroupBean bean,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T getReferencedBean(FlPermitBean bean,int fkIndex)throws DAOException{
         switch(fkIndex){
-        case FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID:
-            return  (T)this.getReferencedByPersonId(bean);
-        case FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID:
-            return  (T)this.getReferencedByGroupId(bean);
+        case FL_PERMIT_FK_DEVICE_GROUP_ID:
+            return  (T)this.getReferencedByDeviceGroupId(bean);
+        case FL_PERMIT_FK_PERSON_GROUP_ID:
+            return  (T)this.getReferencedByPersonGroupId(bean);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
     
     /**
-     * Associates the {@link FlJunctionPersonGroupBean} object to the bean object by fkIndex field.<br>
+     * Associates the {@link FlPermitBean} object to the bean object by fkIndex field.<br>
      * 
-     * @param <T> see also {@link #getReferencedBean(FlJunctionPersonGroupBean,int)}
-     * @param bean the {@link FlJunctionPersonGroupBean} object to use
-     * @param beanToSet the <T> object to associate to the {@link FlJunctionPersonGroupBean}
-     * @param fkIndex valid values: see also {@link #getReferencedBean(FlJunctionPersonGroupBean,int)}
+     * @param <T> see also {@link #getReferencedBean(FlPermitBean,int)}
+     * @param bean the {@link FlPermitBean} object to use
+     * @param beanToSet the <T> object to associate to the {@link FlPermitBean}
+     * @param fkIndex valid values: see also {@link #getReferencedBean(FlPermitBean,int)}
      * @return always beanToSet saved
      * @throws DAOException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlJunctionPersonGroupBean bean,T beanToSet,int fkIndex)throws DAOException{
+    public <T extends net.gdface.facelog.dborm.BaseBean<T>> T setReferencedBean(FlPermitBean bean,T beanToSet,int fkIndex)throws DAOException{
         switch(fkIndex){
-        case FL_JUNCTION_PERSON_GROUP_FK_PERSON_ID:
-            return  (T)this.setReferencedByPersonId(bean, (FlPersonBean)beanToSet);
-        case FL_JUNCTION_PERSON_GROUP_FK_GROUP_ID:
-            return  (T)this.setReferencedByGroupId(bean, (FlPersonGroupBean)beanToSet);
+        case FL_PERMIT_FK_DEVICE_GROUP_ID:
+            return  (T)this.setReferencedByDeviceGroupId(bean, (FlDeviceGroupBean)beanToSet);
+        case FL_PERMIT_FK_PERSON_GROUP_ID:
+            return  (T)this.setReferencedByPersonGroupId(bean, (FlPersonGroupBean)beanToSet);
         }
         throw new IllegalArgumentException(String.format("invalid fkIndex %d", fkIndex));
     }
@@ -517,76 +521,76 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
 
 
     /**
-     * Retrieves the {@link FlPersonBean} object referenced by {@link FlJunctionPersonGroupBean#getPersonId}() field.<br>
-     * FK_NAME : fl_junction_person_group_ibfk_1
-     * @param bean the {@link FlJunctionPersonGroupBean}
-     * @return the associated {@link FlPersonBean} bean or {@code null} if {@code bean} is {@code null}
+     * Retrieves the {@link FlDeviceGroupBean} object referenced by {@link FlPermitBean#getDeviceGroupId}() field.<br>
+     * FK_NAME : fl_permit_ibfk_1
+     * @param bean the {@link FlPermitBean}
+     * @return the associated {@link FlDeviceGroupBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //5.1 GET REFERENCED VALUE
-    public FlPersonBean getReferencedByPersonId(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlDeviceGroupBean getReferencedByDeviceGroupId(FlPermitBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
-        return bean.getReferencedByPersonId();
+        bean.setReferencedByDeviceGroupId(FlDeviceGroupManager.getInstance().loadByPrimaryKey(bean.getDeviceGroupId())); 
+        return bean.getReferencedByDeviceGroupId();
     }
 
     /**
-     * Associates the {@link FlJunctionPersonGroupBean} object to the {@link FlPersonBean} object by {@link FlJunctionPersonGroupBean#getPersonId}() field.
+     * Associates the {@link FlPermitBean} object to the {@link FlDeviceGroupBean} object by {@link FlPermitBean#getDeviceGroupId}() field.
      *
-     * @param bean the {@link FlJunctionPersonGroupBean} object to use
-     * @param beanToSet the {@link FlPersonBean} object to associate to the {@link FlJunctionPersonGroupBean} (NOT NULL).
+     * @param bean the {@link FlPermitBean} object to use
+     * @param beanToSet the {@link FlDeviceGroupBean} object to associate to the {@link FlPermitBean} (NOT NULL).
      * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FlPersonBean setReferencedByPersonId(FlJunctionPersonGroupBean bean, FlPersonBean beanToSet) throws DAOException
+    public FlDeviceGroupBean setReferencedByDeviceGroupId(FlPermitBean bean, FlDeviceGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonManager.getInstance().save(beanToSet);
-            bean.setReferencedByPersonId(beanToSet);
+            FlDeviceGroupManager.getInstance().save(beanToSet);
+            bean.setReferencedByDeviceGroupId(beanToSet);
             if( null == beanToSet){
-               // foreign key ( person_id ) is not nullable , nothing to do
+               // foreign key ( device_group_id ) is not nullable , nothing to do
             }else{
-                bean.setPersonId(beanToSet.getId());
+                bean.setDeviceGroupId(beanToSet.getId());
             }
         }
         return beanToSet;
     }
 
     /**
-     * Retrieves the {@link FlPersonGroupBean} object referenced by {@link FlJunctionPersonGroupBean#getGroupId}() field.<br>
-     * FK_NAME : fl_junction_person_group_ibfk_2
-     * @param bean the {@link FlJunctionPersonGroupBean}
+     * Retrieves the {@link FlPersonGroupBean} object referenced by {@link FlPermitBean#getPersonGroupId}() field.<br>
+     * FK_NAME : fl_permit_ibfk_2
+     * @param bean the {@link FlPermitBean}
      * @return the associated {@link FlPersonGroupBean} bean or {@code null} if {@code bean} is {@code null}
      * @throws DAOException
      */
     //5.1 GET REFERENCED VALUE
-    public FlPersonGroupBean getReferencedByGroupId(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPersonGroupBean getReferencedByPersonGroupId(FlPermitBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByGroupId(FlPersonGroupManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
-        return bean.getReferencedByGroupId();
+        bean.setReferencedByPersonGroupId(FlPersonGroupManager.getInstance().loadByPrimaryKey(bean.getPersonGroupId())); 
+        return bean.getReferencedByPersonGroupId();
     }
 
     /**
-     * Associates the {@link FlJunctionPersonGroupBean} object to the {@link FlPersonGroupBean} object by {@link FlJunctionPersonGroupBean#getGroupId}() field.
+     * Associates the {@link FlPermitBean} object to the {@link FlPersonGroupBean} object by {@link FlPermitBean#getPersonGroupId}() field.
      *
-     * @param bean the {@link FlJunctionPersonGroupBean} object to use
-     * @param beanToSet the {@link FlPersonGroupBean} object to associate to the {@link FlJunctionPersonGroupBean} (NOT NULL).
+     * @param bean the {@link FlPermitBean} object to use
+     * @param beanToSet the {@link FlPersonGroupBean} object to associate to the {@link FlPermitBean} (NOT NULL).
      * @return always beanToSet saved
      * @throws Exception
      */
     //5.2 SET REFERENCED 
-    public FlPersonGroupBean setReferencedByGroupId(FlJunctionPersonGroupBean bean, FlPersonGroupBean beanToSet) throws DAOException
+    public FlPersonGroupBean setReferencedByPersonGroupId(FlPermitBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
             FlPersonGroupManager.getInstance().save(beanToSet);
-            bean.setReferencedByGroupId(beanToSet);
+            bean.setReferencedByPersonGroupId(beanToSet);
             if( null == beanToSet){
-               // foreign key ( group_id ) is not nullable , nothing to do
+               // foreign key ( person_group_id ) is not nullable , nothing to do
             }else{
-                bean.setGroupId(beanToSet.getId());
+                bean.setPersonGroupId(beanToSet.getId());
             }
         }
         return beanToSet;
@@ -596,7 +600,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     // SQL 'WHERE' METHOD
     //////////////////////////////////////
     /**
-     * Deletes rows from the fl_junction_person_group table using a 'where' clause.
+     * Deletes rows from the fl_permit table using a 'where' clause.
      * It is up to you to pass the 'WHERE' in your where clauses.
      * <br>Attention, if 'WHERE' is omitted it will delete all records.
      *
@@ -619,7 +623,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         try
         {
             c = this.getConnection();
-            StringBuilder sql = new StringBuilder("DELETE FROM fl_junction_person_group " + where);
+            StringBuilder sql = new StringBuilder("DELETE FROM fl_permit " + where);
             // System.out.println("deleteByWhere: " + sql);
             ps = c.prepareStatement(sql.toString());
             return ps.executeUpdate();
@@ -642,7 +646,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
 
     //13
     @Override
-    public FlJunctionPersonGroupBean insert(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean insert(FlPermitBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -661,21 +665,21 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
             c = this.getConnection();
             this.listenerContainer.beforeInsert(bean); // listener callback
             int _dirtyCount = 0;
-            sql = new StringBuilder("INSERT into fl_junction_person_group (");
+            sql = new StringBuilder("INSERT into fl_permit (");
 
-            if (bean.checkPersonIdModified()) {
+            if (bean.checkDeviceGroupIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("person_id");
+                sql.append("device_group_id");
                 _dirtyCount++;
             }
 
-            if (bean.checkGroupIdModified()) {
+            if (bean.checkPersonGroupIdModified()) {
                 if (_dirtyCount>0) {
                     sql.append(",");
                 }
-                sql.append("group_id");
+                sql.append("person_group_id");
                 _dirtyCount++;
             }
 
@@ -724,7 +728,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
 
     //14
     @Override
-    public FlJunctionPersonGroupBean update(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean update(FlPermitBean bean) throws DAOException
     {
         // mini checks
         if (null == bean || !bean.isModified()) {
@@ -743,25 +747,25 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
             c = this.getConnection();
 
             this.listenerContainer.beforeUpdate(bean); // listener callback
-            sql = new StringBuilder("UPDATE fl_junction_person_group SET ");
+            sql = new StringBuilder("UPDATE fl_permit SET ");
             boolean useComma=false;
 
-            if (bean.checkPersonIdModified()) {
+            if (bean.checkDeviceGroupIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("person_id=?");
+                sql.append("device_group_id=?");
             }
 
-            if (bean.checkGroupIdModified()) {
+            if (bean.checkPersonGroupIdModified()) {
                 if (useComma) {
                     sql.append(", ");
                 } else {
                     useComma=true;
                 }
-                sql.append("group_id=?");
+                sql.append("person_group_id=?");
             }
 
             if (bean.checkCreateTimeModified()) {
@@ -773,7 +777,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
                 sql.append("create_time=?");
             }
             sql.append(" WHERE ");
-            sql.append("person_id=? AND group_id=?");
+            sql.append("device_group_id=? AND person_group_id=?");
             // System.out.println("update : " + sql.toString());
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -786,8 +790,8 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
                 return bean;
             }
 
-            if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
-            if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
+            if (bean.getDeviceGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceGroupId()); }
+            if (bean.getPersonGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonGroupId()); }
             ps.executeUpdate();
             bean.resetIsModified();
             this.listenerContainer.afterUpdate(bean); // listener callback
@@ -812,9 +816,9 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     //_____________________________________________________________________
     //18
     @Override
-    public FlJunctionPersonGroupBean loadUniqueUsingTemplate(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean loadUniqueUsingTemplate(FlPermitBean bean) throws DAOException
     {
-         List<FlJunctionPersonGroupBean> beans = this.loadUsingTemplateAsList(bean);
+         List<FlPermitBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
          case 0:
              return null;
@@ -826,9 +830,9 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
     //18-1
     @Override
-    public FlJunctionPersonGroupBean loadUniqueUsingTemplateChecked(FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean loadUniqueUsingTemplateChecked(FlPermitBean bean) throws DAOException
     {
-         List<FlJunctionPersonGroupBean> beans = this.loadUsingTemplateAsList(bean);
+         List<FlPermitBean> beans = this.loadUsingTemplateAsList(bean);
          switch(beans.size()){
          case 0:
              throw new ObjectRetrievalException("Not found element !!");
@@ -840,7 +844,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
     //20-5
     @Override
-    public int loadUsingTemplate(FlJunctionPersonGroupBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlJunctionPersonGroupBean> action) throws DAOException
+    public int loadUsingTemplate(FlPermitBean bean, int[] fieldList, int startRow, int numRows,int searchType, Action<FlPermitBean> action) throws DAOException
     {
         // System.out.println("loadUsingTemplate startRow:" + startRow + ", numRows:" + numRows + ", searchType:" + searchType);
         StringBuilder sqlWhere = new StringBuilder("");
@@ -867,10 +871,10 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
 
     //21
     @Override
-    public int deleteUsingTemplate(FlJunctionPersonGroupBean bean) throws DAOException
+    public int deleteUsingTemplate(FlPermitBean bean) throws DAOException
     {
-        if(bean.checkPersonIdInitialized() && null != bean.getPersonId() && bean.checkGroupIdInitialized() && null != bean.getGroupId()){
-            return this.deleteByPrimaryKey(bean.getPersonId(), bean.getGroupId());
+        if(bean.checkDeviceGroupIdInitialized() && null != bean.getDeviceGroupId() && bean.checkPersonGroupIdInitialized() && null != bean.getPersonGroupId()){
+            return this.deleteByPrimaryKey(bean.getDeviceGroupId(), bean.getPersonGroupId());
         }
         if( !this.listenerContainer.isEmpty()){
             final DeleteBeanAction action=new DeleteBeanAction(); 
@@ -879,7 +883,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         }
         Connection c = null;
         PreparedStatement ps = null;
-        StringBuilder sql = new StringBuilder("DELETE FROM fl_junction_person_group ");
+        StringBuilder sql = new StringBuilder("DELETE FROM fl_permit ");
         StringBuilder sqlWhere = new StringBuilder("");
 
         try
@@ -927,7 +931,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     @Override
     public int countWhere(String where) throws DAOException
     {
-        String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_junction_person_group " + where;
+        String sql = "SELECT COUNT(*) AS MCOUNT FROM fl_permit " + where;
         // System.out.println("countWhere: " + sql);
         Connection c = null;
         Statement st = null;
@@ -960,7 +964,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     /**
-     * Retrieves the number of rows of the table fl_junction_person_group with a prepared statement.
+     * Retrieves the number of rows of the table fl_permit with a prepared statement.
      *
      * @param ps the PreparedStatement to be used
      * @return the number of rows returned
@@ -993,19 +997,19 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     /**
-     * count the number of elements of a specific FlJunctionPersonGroupBean bean given the search type
+     * count the number of elements of a specific FlPermitBean bean given the search type
      *
-     * @param bean the FlJunctionPersonGroupBean template to look for
+     * @param bean the FlPermitBean template to look for
      * @param searchType exact ?  like ? starting like ?
      * @return the number of rows returned
      * @throws DAOException
      */
     //20
-    public int countUsingTemplate(FlJunctionPersonGroupBean bean, int searchType) throws DAOException
+    public int countUsingTemplate(FlPermitBean bean, int searchType) throws DAOException
     {
         Connection c = null;
         PreparedStatement ps = null;
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_junction_person_group");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS MCOUNT FROM fl_permit");
         StringBuilder sqlWhere = new StringBuilder("");
 
         try
@@ -1051,7 +1055,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * @param searchType exact ?  like ? starting like ?
      * @return the number of clauses returned
      */
-    protected int fillWhere(StringBuilder sqlWhere, FlJunctionPersonGroupBean bean, int searchType)
+    protected int fillWhere(StringBuilder sqlWhere, FlPermitBean bean, int searchType)
     {
         if (bean == null) {
             return 0;
@@ -1063,20 +1067,20 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         }
         try
         {
-            if (bean.checkPersonIdModified()) {
+            if (bean.checkDeviceGroupIdModified()) {
                 _dirtyCount ++;
-                if (bean.getPersonId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id IS NULL");
+                if (bean.getDeviceGroupId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_group_id IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_id = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("device_group_id = ?");
                 }
             }
-            if (bean.checkGroupIdModified()) {
+            if (bean.checkPersonGroupIdModified()) {
                 _dirtyCount ++;
-                if (bean.getGroupId() == null) {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id IS NULL");
+                if (bean.getPersonGroupId() == null) {
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_group_id IS NULL");
                 } else {
-                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("group_id = ?");
+                    sqlWhere.append((sqlWhere.length() == 0) ? " " : " AND ").append("person_group_id = ?");
                 }
             }
             if (bean.checkCreateTimeModified()) {
@@ -1103,7 +1107,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * @return the number of clauses returned
      * @throws DAOException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlJunctionPersonGroupBean bean, int searchType) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlPermitBean bean, int searchType) throws DAOException
     {
         if (bean == null) {
             return 0;
@@ -1111,13 +1115,13 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         int _dirtyCount = 0;
         try
         {
-            if (bean.checkPersonIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
+            if (bean.checkDeviceGroupIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceGroupId() + "]");
+                if (bean.getDeviceGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceGroupId()); }
             }
-            if (bean.checkGroupIdModified()) {
-                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getGroupId() + "]");
-                if (bean.getGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getGroupId()); }
+            if (bean.checkPersonGroupIdModified()) {
+                // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonGroupId() + "]");
+                if (bean.getPersonGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonGroupId()); }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
@@ -1138,33 +1142,33 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     //_____________________________________________________________________
 
     /**
-     * decode a resultset in an array of FlJunctionPersonGroupBean objects
+     * decode a resultset in an array of FlPermitBean objects
      *
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlJunctionPersonGroupBean table
+     * @return the resulting FlPermitBean table
      * @throws DAOException
      */
     //28
-    public FlJunctionPersonGroupBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FlPermitBean[] decodeResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-        return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlJunctionPersonGroupBean[0]);
+        return this.decodeResultSetAsList(rs, fieldList, startRow, numRows).toArray(new FlPermitBean[0]);
     }
 
     /**
-     * decode a resultset in a list of FlJunctionPersonGroupBean objects
+     * decode a resultset in a list of FlPermitBean objects
      *
      * @param rs the resultset to decode
      * @param fieldList table of the field's associated constants
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
-     * @return the resulting FlJunctionPersonGroupBean table
+     * @return the resulting FlPermitBean table
      * @throws DAOException
      */
     //28-1
-    public List<FlJunctionPersonGroupBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FlPermitBean> decodeResultSetAsList(ResultSet rs, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         actionOnResultSet(rs, fieldList, numRows, numRows, action);
@@ -1181,7 +1185,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * @throws IllegalArgumentException
      */
     //28-2
-    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlJunctionPersonGroupBean> action) throws DAOException{
+    public int actionOnResultSet(ResultSet rs, int[] fieldList, int startRow, int numRows, Action<FlPermitBean> action) throws DAOException{
         try{
             int count = 0;
             if(0!=numRows){
@@ -1215,21 +1219,21 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     /**
-     * Transforms a ResultSet iterating on the fl_junction_person_group on a FlJunctionPersonGroupBean bean.
+     * Transforms a ResultSet iterating on the fl_permit on a FlPermitBean bean.
      *
      * @param rs the ResultSet to be transformed
-     * @return bean resulting FlJunctionPersonGroupBean bean
+     * @return bean resulting FlPermitBean bean
      * @throws DAOException
      */
     //29
-    public FlJunctionPersonGroupBean decodeRow(ResultSet rs,FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean decodeRow(ResultSet rs,FlPermitBean bean) throws DAOException
     {
         if(null==bean)
             bean = this.createBean();
         try
         {
-            bean.setPersonId(Manager.getInteger(rs, 1));
-            bean.setGroupId(Manager.getInteger(rs, 2));
+            bean.setDeviceGroupId(Manager.getInteger(rs, 1));
+            bean.setPersonGroupId(Manager.getInteger(rs, 2));
             bean.setCreateTime(rs.getTimestamp(3));
         }
         catch(SQLException e)
@@ -1243,15 +1247,15 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     /**
-     * Transforms a ResultSet iterating on the fl_junction_person_group table on a FlJunctionPersonGroupBean bean according to a list of fields.
+     * Transforms a ResultSet iterating on the fl_permit table on a FlPermitBean bean according to a list of fields.
      *
      * @param rs the ResultSet to be transformed
      * @param fieldList table of the field's associated constants
-     * @return bean resulting FlJunctionPersonGroupBean bean
+     * @return bean resulting FlPermitBean bean
      * @throws DAOException
      */
     //30
-    public FlJunctionPersonGroupBean decodeRow(ResultSet rs, int[] fieldList,FlJunctionPersonGroupBean bean) throws DAOException
+    public FlPermitBean decodeRow(ResultSet rs, int[] fieldList,FlPermitBean bean) throws DAOException
     {
         if(null==bean)
             bean = this.createBean();
@@ -1262,15 +1266,15 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
             {
                 switch(fieldList[i])
                 {
-                    case FL_JUNCTION_PERSON_GROUP_ID_PERSON_ID:
+                    case FL_PERMIT_ID_DEVICE_GROUP_ID:
                         ++pos;
-                        bean.setPersonId(Manager.getInteger(rs, pos));
+                        bean.setDeviceGroupId(Manager.getInteger(rs, pos));
                         break;
-                    case FL_JUNCTION_PERSON_GROUP_ID_GROUP_ID:
+                    case FL_PERMIT_ID_PERSON_GROUP_ID:
                         ++pos;
-                        bean.setGroupId(Manager.getInteger(rs, pos));
+                        bean.setPersonGroupId(Manager.getInteger(rs, pos));
                         break;
-                    case FL_JUNCTION_PERSON_GROUP_ID_CREATE_TIME:
+                    case FL_PERMIT_ID_CREATE_TIME:
                         ++pos;
                         bean.setCreateTime(rs.getTimestamp(pos));
                         break;
@@ -1290,20 +1294,20 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     /**
-     * Transforms a ResultSet iterating on the fl_junction_person_group on a FlJunctionPersonGroupBean bean using the names of the columns
+     * Transforms a ResultSet iterating on the fl_permit on a FlPermitBean bean using the names of the columns
      *
      * @param rs the ResultSet to be transformed
-     * @return bean resulting FlJunctionPersonGroupBean bean
+     * @return bean resulting FlPermitBean bean
      * @throws DAOException
      */
     //31
-    public FlJunctionPersonGroupBean metaDataDecodeRow(ResultSet rs) throws DAOException
+    public FlPermitBean metaDataDecodeRow(ResultSet rs) throws DAOException
     {
-        FlJunctionPersonGroupBean bean = this.createBean();
+        FlPermitBean bean = this.createBean();
         try
         {
-            bean.setPersonId(Manager.getInteger(rs, "person_id"));
-            bean.setGroupId(Manager.getInteger(rs, "group_id"));
+            bean.setDeviceGroupId(Manager.getInteger(rs, "device_group_id"));
+            bean.setPersonGroupId(Manager.getInteger(rs, "person_group_id"));
             bean.setCreateTime(rs.getTimestamp("create_time"));
         }
         catch(SQLException e)
@@ -1325,11 +1329,11 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * Loads all the elements using a prepared statement.
      *
      * @param ps the PreparedStatement to be used
-     * @return an array of FlJunctionPersonGroupBean
+     * @return an array of FlPermitBean
      * @throws DAOException
      */
     //32
-    public FlJunctionPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
+    public FlPermitBean[] loadByPreparedStatement(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatement(ps, null);
     }
@@ -1338,11 +1342,11 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * Loads all the elements using a prepared statement.
      *
      * @param ps the PreparedStatement to be used
-     * @return an array of FlJunctionPersonGroupBean
+     * @return an array of FlPermitBean
      * @throws DAOException
      */
     //32
-    public List<FlJunctionPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
+    public List<FlPermitBean> loadByPreparedStatementAsList(PreparedStatement ps) throws DAOException
     {
         return this.loadByPreparedStatementAsList(ps, null);
     }
@@ -1352,13 +1356,13 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      *
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
-     * @return an array of FlJunctionPersonGroupBean
+     * @return an array of FlPermitBean
      * @throws DAOException
      */
     //33
-    public FlJunctionPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
+    public FlPermitBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList) throws DAOException
     {
-        return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlJunctionPersonGroupBean[0]);
+        return this.loadByPreparedStatementAsList(ps, fieldList).toArray(new FlPermitBean[0]);
     }
 
     /**
@@ -1366,11 +1370,11 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      *
      * @param ps the PreparedStatement to be used
      * @param fieldList table of the field's associated constants
-     * @return an array of FlJunctionPersonGroupBean
+     * @return an array of FlPermitBean
      * @throws DAOException
      */
     //33
-    public List<FlJunctionPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
+    public List<FlPermitBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList) throws DAOException
     { 
         return loadByPreparedStatementAsList(ps,fieldList,1,-1);
     }
@@ -1383,13 +1387,13 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
-     * @return an array of FlJunctionPersonGroupBean
+     * @return an array of FlPermitBean
      * @throws DAOException
      */
     //34
-    public FlJunctionPersonGroupBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
+    public FlPermitBean[] loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
-        return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlJunctionPersonGroupBean[0]);
+        return loadByPreparedStatementAsList(ps,fieldList,startRow,numRows).toArray(new FlPermitBean[0]);
     }
 
     /**
@@ -1400,11 +1404,11 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * @param startRow the start row to be used (first row = 1, last row = -1)
      * @param numRows the number of rows to be retrieved (all rows = a negative number)
      * @param fieldList table of the field's associated constants
-     * @return an array of FlJunctionPersonGroupBean
+     * @return an array of FlPermitBean
      * @throws DAOException
      */
     //34-1
-    public List<FlJunctionPersonGroupBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
+    public List<FlPermitBean> loadByPreparedStatementAsList(PreparedStatement ps, int[] fieldList, int startRow, int numRows) throws DAOException
     {
         ListAction action = new ListAction();
         loadByPreparedStatement(ps,fieldList,startRow,numRows,action);
@@ -1424,7 +1428,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      * @throws DAOException
      */     
     //34-2
-    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlJunctionPersonGroupBean> action) throws DAOException
+    public int loadByPreparedStatement(PreparedStatement ps, int[] fieldList, int startRow, int numRows,Action<FlPermitBean> action) throws DAOException
     {
         ResultSet rs =  null;
         try {
@@ -1444,10 +1448,10 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     // LISTENER
     //_____________________________________________________________________
 
-    private final TableListener.ListenerContainer<FlJunctionPersonGroupBean> listenerContainer = new TableListener.ListenerContainer<FlJunctionPersonGroupBean>();
+    private final TableListener.ListenerContainer<FlPermitBean> listenerContainer = new TableListener.ListenerContainer<FlPermitBean>();
     //35
     @Override
-    public TableListener<FlJunctionPersonGroupBean> registerListener(TableListener<FlJunctionPersonGroupBean> listener)
+    public TableListener<FlPermitBean> registerListener(TableListener<FlPermitBean> listener)
     {
         this.listenerContainer.add(listener);
         return listener;
@@ -1458,14 +1462,14 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      */
     //36
     @Override
-    public void unregisterListener(TableListener<FlJunctionPersonGroupBean> listener)
+    public void unregisterListener(TableListener<FlPermitBean> listener)
     {
         this.listenerContainer.remove(listener);
     }
 
     //37
     @Override
-    public void fire(TableListener.Event event, FlJunctionPersonGroupBean bean) throws DAOException{
+    public void fire(TableListener.Event event, FlPermitBean bean) throws DAOException{
         if(null == event)
             throw new NullPointerException();
         event.fire(listenerContainer, bean);
@@ -1473,7 +1477,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     
     //37-1
     @Override
-    public void fire(int event, FlJunctionPersonGroupBean bean) throws DAOException{
+    public void fire(int event, FlPermitBean bean) throws DAOException{
         try{
             fire(TableListener.Event.values()[event],bean);
         }catch(ArrayIndexOutOfBoundsException e){
@@ -1482,48 +1486,48 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
 
     /** foreign key listener for DEELTE RULE : CASCADE */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlJunctionPersonGroupBean> foreignKeyListenerByPersonId = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonBean,FlJunctionPersonGroupBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlPermitBean> foreignKeyListenerByDeviceGroupId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlDeviceGroupBean,FlPermitBean>(){
                 @SuppressWarnings("unchecked")
                 @Override
-                protected List<FlJunctionPersonGroupBean> getImportedBeans(FlPersonBean bean) throws DAOException {
+                protected List<FlPermitBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonManager.getInstance().getJunctionPersonGroupBeansByPersonIdAsList(bean);
+                            : FlDeviceGroupManager.getInstance().getPermitBeansByDeviceGroupIdAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlJunctionPersonGroupBean> effectBeans) throws DAOException {
-                    for(FlJunctionPersonGroupBean bean:effectBeans){
+                protected void onRemove(List<FlPermitBean> effectBeans) throws DAOException {
+                    for(FlPermitBean bean:effectBeans){
                         Event.DELETE.fire(listenerContainer, bean);
                     }
                 }};
 
     /** foreign key listener for DEELTE RULE : CASCADE */
-    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlJunctionPersonGroupBean> foreignKeyListenerByGroupId = 
-            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlJunctionPersonGroupBean>(){
+    private final net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPermitBean> foreignKeyListenerByPersonGroupId = 
+            new net.gdface.facelog.dborm.ForeignKeyListener<FlPersonGroupBean,FlPermitBean>(){
                 @SuppressWarnings("unchecked")
                 @Override
-                protected List<FlJunctionPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
+                protected List<FlPermitBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonGroupManager.getInstance().getJunctionPersonGroupBeansByGroupIdAsList(bean);
+                            : FlPersonGroupManager.getInstance().getPermitBeansByPersonGroupIdAsList(bean);
                 }
                 @Override
-                protected void onRemove(List<FlJunctionPersonGroupBean> effectBeans) throws DAOException {
-                    for(FlJunctionPersonGroupBean bean:effectBeans){
+                protected void onRemove(List<FlPermitBean> effectBeans) throws DAOException {
+                    for(FlPermitBean bean:effectBeans){
                         Event.DELETE.fire(listenerContainer, bean);
                     }
                 }};
 
     /**
      * bind foreign key listener to foreign table: <br>
-     * DELETE RULE : CASCADE {@code fl_junction_person_group(person_id)-> fl_person(id)} <br>
-     * DELETE RULE : CASCADE {@code fl_junction_person_group(group_id)-> fl_person_group(id)} <br>
+     * DELETE RULE : CASCADE {@code fl_permit(device_group_id)-> fl_device_group(id)} <br>
+     * DELETE RULE : CASCADE {@code fl_permit(person_group_id)-> fl_person_group(id)} <br>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
-        FlPersonGroupManager.getInstance().registerListener(foreignKeyListenerByGroupId);
+        FlDeviceGroupManager.getInstance().registerListener(foreignKeyListenerByDeviceGroupId);
+        FlPersonGroupManager.getInstance().registerListener(foreignKeyListenerByPersonGroupId);
         
     }
     /**
@@ -1532,8 +1536,8 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlPersonManager.getInstance().unregisterListener(foreignKeyListenerByPersonId);
-        FlPersonGroupManager.getInstance().unregisterListener(foreignKeyListenerByGroupId);
+        FlDeviceGroupManager.getInstance().unregisterListener(foreignKeyListenerByDeviceGroupId);
+        FlPersonGroupManager.getInstance().unregisterListener(foreignKeyListenerByPersonGroupId);
         
     }
     //_____________________________________________________________________
@@ -1608,7 +1612,7 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
     }
     
     @Override    
-    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlJunctionPersonGroupBean> action) throws DAOException{
+    public int loadBySqlForAction(String sql, Object[] argList, int[] fieldList,int startRow, int numRows,Action<FlPermitBean> action) throws DAOException{
         PreparedStatement ps = null;
         Connection connection = null;
         // logger.debug("sql string:\n" + sql + "\n");
@@ -1634,11 +1638,11 @@ public class FlJunctionPersonGroupManager extends TableManager.Adapter<FlJunctio
         return Manager.getInstance().runAsTransaction(fun);
     }
     
-    class DeleteBeanAction extends Action.Adapter<FlJunctionPersonGroupBean>{
+    class DeleteBeanAction extends Action.Adapter<FlPermitBean>{
         private final AtomicInteger count=new AtomicInteger(0);
         @Override
-        public void call(FlJunctionPersonGroupBean bean) throws DAOException {
-                FlJunctionPersonGroupManager.this.delete(bean);
+        public void call(FlPermitBean bean) throws DAOException {
+                FlPermitManager.this.delete(bean);
                 count.incrementAndGet();
         }
         int getCount(){

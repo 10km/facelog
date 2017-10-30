@@ -196,22 +196,6 @@ public final class FaceBean
     @ThriftField
     public void setCreateTime(final long createTime) { this.createTime = createTime; }
 
-    private FeatureBean referencedByFeatureMd5;
-
-    @ThriftField(value=24, name="referencedByFeatureMd5", requiredness=Requiredness.NONE)
-    public FeatureBean getReferencedByFeatureMd5() { return referencedByFeatureMd5; }
-
-    @ThriftField
-    public void setReferencedByFeatureMd5(final FeatureBean referencedByFeatureMd5) { this.referencedByFeatureMd5 = referencedByFeatureMd5; }
-
-    private ImageBean referencedByImageMd5;
-
-    @ThriftField(value=25, name="referencedByImageMd5", requiredness=Requiredness.NONE)
-    public ImageBean getReferencedByImageMd5() { return referencedByImageMd5; }
-
-    @ThriftField
-    public void setReferencedByImageMd5(final ImageBean referencedByImageMd5) { this.referencedByImageMd5 = referencedByImageMd5; }
-
     @Override
     public String toString()
     {
@@ -239,8 +223,6 @@ public final class FaceBean
             .add("extInfo", extInfo)
             .add("featureMd5", featureMd5)
             .add("createTime", createTime)
-            .add("referencedByFeatureMd5", referencedByFeatureMd5)
-            .add("referencedByImageMd5", referencedByImageMd5)
             .toString();
     }
 }

@@ -5,17 +5,17 @@
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
 // template: comparator.java.vm
 // ______________________________________________________
-package net.gdface.facelog.dborm.person;
+package net.gdface.facelog.dborm.permit;
 
 import java.util.Comparator;
 import net.gdface.facelog.dborm.Constant;
 
 
 /**
- * Comparator class is used to sort the FlJunctionPersonGroupBean objects.
+ * Comparator class is used to sort the FlPermitBean objects.
  * @author sql2java
  */
-public class FlJunctionPersonGroupComparator implements Comparator<FlJunctionPersonGroupBean>,Constant
+public class FlPermitComparator implements Comparator<FlPermitBean>,Constant
 {
     /**
      * Holds the field on which the comparison is performed.
@@ -27,79 +27,79 @@ public class FlJunctionPersonGroupComparator implements Comparator<FlJunctionPer
     private boolean bReverse;
 
     /**
-     * Constructor class for FlJunctionPersonGroupComparator.
+     * Constructor class for FlPermitComparator.
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlJunctionPersonGroupComparator(Constant.FL_JUNCTION_PERSON_GROUP_ID_PERSON_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlPermitComparator(Constant.FL_PERMIT_ID_DEVICE_GROUP_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>{@link Constant#FL_JUNCTION_PERSON_GROUP_ID_PERSON_ID}
-     *   <li>{@link Constant#FL_JUNCTION_PERSON_GROUP_ID_GROUP_ID}
-     *   <li>{@link Constant#FL_JUNCTION_PERSON_GROUP_ID_CREATE_TIME}
+     *   <li>{@link Constant#FL_PERMIT_ID_DEVICE_GROUP_ID}
+     *   <li>{@link Constant#FL_PERMIT_ID_PERSON_GROUP_ID}
+     *   <li>{@link Constant#FL_PERMIT_ID_CREATE_TIME}
      * </ul>
      */
-    public FlJunctionPersonGroupComparator(int iType)
+    public FlPermitComparator(int iType)
     {
         this(iType, false);
     }
 
     /**
-     * Constructor class for FlJunctionPersonGroupComparator.
+     * Constructor class for FlPermitComparator.
      * <br>
      * Example:
      * <br>
-     * <code>Arrays.sort(pArray, new FlJunctionPersonGroupComparator(Constant.FL_JUNCTION_PERSON_GROUP_ID_PERSON_ID, bReverse));<code>
+     * <code>Arrays.sort(pArray, new FlPermitComparator(Constant.FL_PERMIT_ID_DEVICE_GROUP_ID, bReverse));<code>
      *
      * @param iType the field from which you want to sort.
      * <br>
      * Possible values are:
      * <ul>
-     *   <li>{@link Constant#FL_JUNCTION_PERSON_GROUP_ID_PERSON_ID})
-     *   <li>{@link Constant#FL_JUNCTION_PERSON_GROUP_ID_GROUP_ID})
-     *   <li>{@link Constant#FL_JUNCTION_PERSON_GROUP_ID_CREATE_TIME})
+     *   <li>{@link Constant#FL_PERMIT_ID_DEVICE_GROUP_ID})
+     *   <li>{@link Constant#FL_PERMIT_ID_PERSON_GROUP_ID})
+     *   <li>{@link Constant#FL_PERMIT_ID_CREATE_TIME})
      * </ul>
      *
      * @param bReverse set this value to true, if you want to reverse the sorting results
      */
-    public FlJunctionPersonGroupComparator(int iType, boolean bReverse)
+    public FlPermitComparator(int iType, boolean bReverse)
     {
         this.iType = iType;
         this.bReverse = bReverse;
     }
 
     @Override
-    public int compare(FlJunctionPersonGroupBean b1, FlJunctionPersonGroupBean b2)
+    public int compare(FlPermitBean b1, FlPermitBean b2)
     {
         int iReturn = 0;
         switch(iType)
         {
-            case FL_JUNCTION_PERSON_GROUP_ID_PERSON_ID:
-                if (b1.getPersonId() == null && b2.getPersonId() != null) {
+            case FL_PERMIT_ID_DEVICE_GROUP_ID:
+                if (b1.getDeviceGroupId() == null && b2.getDeviceGroupId() != null) {
                     iReturn = -1;
-                } else if (b1.getPersonId() == null && b2.getPersonId() == null) {
+                } else if (b1.getDeviceGroupId() == null && b2.getDeviceGroupId() == null) {
                     iReturn = 0;
-                } else if (b1.getPersonId() != null && b2.getPersonId() == null) {
+                } else if (b1.getDeviceGroupId() != null && b2.getDeviceGroupId() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getPersonId().compareTo(b2.getPersonId());
+                    iReturn = b1.getDeviceGroupId().compareTo(b2.getDeviceGroupId());
                 }
                 break;
-            case FL_JUNCTION_PERSON_GROUP_ID_GROUP_ID:
-                if (b1.getGroupId() == null && b2.getGroupId() != null) {
+            case FL_PERMIT_ID_PERSON_GROUP_ID:
+                if (b1.getPersonGroupId() == null && b2.getPersonGroupId() != null) {
                     iReturn = -1;
-                } else if (b1.getGroupId() == null && b2.getGroupId() == null) {
+                } else if (b1.getPersonGroupId() == null && b2.getPersonGroupId() == null) {
                     iReturn = 0;
-                } else if (b1.getGroupId() != null && b2.getGroupId() == null) {
+                } else if (b1.getPersonGroupId() != null && b2.getPersonGroupId() == null) {
                     iReturn = 1;
                 } else {
-                    iReturn = b1.getGroupId().compareTo(b2.getGroupId());
+                    iReturn = b1.getPersonGroupId().compareTo(b2.getPersonGroupId());
                 }
                 break;
-            case FL_JUNCTION_PERSON_GROUP_ID_CREATE_TIME:
+            case FL_PERMIT_ID_CREATE_TIME:
                 if (b1.getCreateTime() == null && b2.getCreateTime() != null) {
                     iReturn = -1;
                 } else if (b1.getCreateTime() == null && b2.getCreateTime() == null) {

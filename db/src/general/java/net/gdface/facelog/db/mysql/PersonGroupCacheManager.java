@@ -14,8 +14,9 @@ import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
-import net.gdface.facelog.db.JunctionPersonGroupBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.mysql.PersonGroupManager;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.mysql.PersonGroupCache;
@@ -151,14 +152,14 @@ public class PersonGroupCacheManager extends PersonGroupManager
     //23 MANY TO MANY
     // override PersonGroupManager
     @Override 
-    public java.util.List<PersonGroupBean> loadViaJunctionPersonGroupAsList(PersonBean bean, int startRow, int numRows)
+    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)
     {
-        java.util.List<JunctionPersonGroupBean> junctions = 
-            PersonManager.getInstance().getJunctionPersonGroupBeansByPersonIdAsList(bean,startRow,numRows);
+        java.util.List<PermitBean> junctions = 
+            DeviceGroupManager.getInstance().getPermitBeansByDeviceGroupIdAsList(bean,startRow,numRows);
         java.util.ArrayList<PersonGroupBean> lbeans = new java.util.ArrayList<PersonGroupBean>(junctions.size());
-        for(JunctionPersonGroupBean jbean:junctions){
+        for(PermitBean jbean:junctions){
         	try{
-        		lbeans.add(loadByPrimaryKeyChecked(jbean.getGroupId()));
+        		lbeans.add(loadByPrimaryKeyChecked(jbean.getPersonGroupId()));
         	}catch(ObjectRetrievalException  e){}
         }
         return lbeans;

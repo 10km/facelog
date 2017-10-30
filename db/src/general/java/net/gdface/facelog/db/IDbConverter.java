@@ -18,9 +18,8 @@ public interface IDbConverter<
                             N_FACE,
                             N_FEATURE,
                             N_IMAGE,
-                            N_JUNCTIONDEVICEGROUP,
-                            N_JUNCTIONPERSONGROUP,
                             N_LOG,
+                            N_PERMIT,
                             N_PERSON,
                             N_PERSONGROUP,
                             N_STORE,
@@ -30,9 +29,8 @@ public interface IDbConverter<
     public abstract IBeanConverter<FaceBean, N_FACE> getFaceBeanConverter();
     public abstract IBeanConverter<FeatureBean, N_FEATURE> getFeatureBeanConverter();
     public abstract IBeanConverter<ImageBean, N_IMAGE> getImageBeanConverter();
-    public abstract IBeanConverter<JunctionDeviceGroupBean, N_JUNCTIONDEVICEGROUP> getJunctionDeviceGroupBeanConverter();
-    public abstract IBeanConverter<JunctionPersonGroupBean, N_JUNCTIONPERSONGROUP> getJunctionPersonGroupBeanConverter();
     public abstract IBeanConverter<LogBean, N_LOG> getLogBeanConverter();
+    public abstract IBeanConverter<PermitBean, N_PERMIT> getPermitBeanConverter();
     public abstract IBeanConverter<PersonBean, N_PERSON> getPersonBeanConverter();
     public abstract IBeanConverter<PersonGroupBean, N_PERSONGROUP> getPersonGroupBeanConverter();
     public abstract IBeanConverter<StoreBean, N_STORE> getStoreBeanConverter();

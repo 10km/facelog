@@ -5,75 +5,6 @@ namespace cpp gdface
 
 
 
-struct DeviceBean {
-  1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
-  4:  i32 id;
-  5:  string name;
-  6:  i32 groupId;
-  7:  string version;
-  8:  string serialNo;
-  9:  string mac;
-  10:  i64 createTime;
-  11:  i64 updateTime;
-}
-
-struct LogLightBean {
-  1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
-  4:  i32 id;
-  5:  i32 personId;
-  6:  string name;
-  7:  i32 papersType;
-  8:  string papersNum;
-  9:  i64 verifyTime;
-}
-
-struct ImageBean {
-  1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
-  4:  string md5;
-  5:  string format;
-  6:  i32 width;
-  7:  i32 height;
-  8:  i32 depth;
-  9:  i32 faceNum;
-  10:  string thumbMd5;
-  11:  i32 deviceId;
-  12:  DeviceBean referencedByDeviceId;
-}
-
-struct PersonBean {
-  1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
-  4:  i32 id;
-  5:  string name;
-  6:  i32 sex;
-  7:  i64 birthdate;
-  8:  i32 papersType;
-  9:  string papersNum;
-  10:  string imageMd5;
-  11:  i64 expiryDate;
-  12:  i64 createTime;
-  13:  i64 updateTime;
-  14:  ImageBean referencedByImageMd5;
-}
-
-struct FeatureBean {
-  1: required bool _new;
-  2: required i64 modified;
-  3: required i64 initialized;
-  4:  string md5;
-  5:  i32 personId;
-  6:  binary feature;
-  7:  i64 updateTime;
-  8:  PersonBean referencedByPersonId;
-}
-
 struct FaceBean {
   1: required bool _new;
   2: required i64 modified;
@@ -98,8 +29,30 @@ struct FaceBean {
   21:  binary extInfo;
   22:  string featureMd5;
   23:  i64 createTime;
-  24:  FeatureBean referencedByFeatureMd5;
-  25:  ImageBean referencedByImageMd5;
+}
+
+struct FeatureBean {
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
+  4:  string md5;
+  5:  i32 personId;
+  6:  binary feature;
+  7:  i64 updateTime;
+}
+
+struct ImageBean {
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
+  4:  string md5;
+  5:  string format;
+  6:  i32 width;
+  7:  i32 height;
+  8:  i32 depth;
+  9:  i32 faceNum;
+  10:  string thumbMd5;
+  11:  i32 deviceId;
 }
 
 struct LogBean {
@@ -114,10 +67,49 @@ struct LogBean {
   9:  double similarty;
   10:  i64 verifyTime;
   11:  i64 createTime;
-  12:  DeviceBean referencedByDeviceId;
-  13:  FaceBean referencedByCompareFace;
-  14:  FeatureBean referencedByVerifyFeature;
-  15:  PersonBean referencedByPersonId;
+}
+
+struct DeviceBean {
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
+  4:  i32 id;
+  5:  i32 groupId;
+  6:  string name;
+  7:  string version;
+  8:  string serialNo;
+  9:  string mac;
+  10:  i64 createTime;
+  11:  i64 updateTime;
+}
+
+struct PersonBean {
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
+  4:  i32 id;
+  5:  i32 groupId;
+  6:  string name;
+  7:  i32 sex;
+  8:  i64 birthdate;
+  9:  i32 papersType;
+  10:  string papersNum;
+  11:  string imageMd5;
+  12:  i64 expiryDate;
+  13:  i64 createTime;
+  14:  i64 updateTime;
+}
+
+struct LogLightBean {
+  1: required bool _new;
+  2: required i64 modified;
+  3: required i64 initialized;
+  4:  i32 id;
+  5:  i32 personId;
+  6:  string name;
+  7:  i32 papersType;
+  8:  string papersNum;
+  9:  i64 verifyTime;
 }
 
 service IFaceLog {

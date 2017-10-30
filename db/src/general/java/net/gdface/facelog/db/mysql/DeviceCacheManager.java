@@ -15,7 +15,6 @@ import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.ImageBean;
-import net.gdface.facelog.db.JunctionDeviceGroupBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.mysql.DeviceManager;
@@ -105,6 +104,17 @@ public class DeviceCacheManager extends DeviceManager
         return super.existsPrimaryKey(id);
     }
     
+    //////////////////////////////////////
+    // GET/SET FOREIGN KEY BEAN METHOD
+    //////////////////////////////////////
+
+    //5.1 GET REFERENCED VALUE override IDeviceManager
+    @Override 
+    public DeviceGroupBean getReferencedByGroupId(DeviceBean bean){
+        if(null == bean)return null;
+        bean.setReferencedByGroupId(DeviceGroupCacheManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
+        return bean.getReferencedByGroupId();
+    }
     private class CacheAction implements Action<DeviceBean>{
         final Action<DeviceBean> action;
         CacheAction(Action<DeviceBean>action){
@@ -173,23 +183,4 @@ public class DeviceCacheManager extends DeviceManager
         }
     }
 
-    //_____________________________________________________________________
-    //
-    // MANY TO MANY: LOAD OTHER BEAN VIA JUNCTION TABLE
-    //_____________________________________________________________________
-    //23 MANY TO MANY
-    // override DeviceManager
-    @Override 
-    public java.util.List<DeviceBean> loadViaJunctionDeviceGroupAsList(DeviceGroupBean bean, int startRow, int numRows)
-    {
-        java.util.List<JunctionDeviceGroupBean> junctions = 
-            DeviceGroupManager.getInstance().getJunctionDeviceGroupBeansByGroupIdAsList(bean,startRow,numRows);
-        java.util.ArrayList<DeviceBean> lbeans = new java.util.ArrayList<DeviceBean>(junctions.size());
-        for(JunctionDeviceGroupBean jbean:junctions){
-        	try{
-        		lbeans.add(loadByPrimaryKeyChecked(jbean.getDeviceId()));
-        	}catch(ObjectRetrievalException  e){}
-        }
-        return lbeans;
-    }
 }

@@ -15,8 +15,9 @@ import net.gdface.facelog.db.IBeanConverter;
 import net.gdface.facelog.db.IDbConverter;
 import net.gdface.facelog.db.TableManager;
 import net.gdface.facelog.db.IPersonGroupManager;
-import net.gdface.facelog.db.JunctionPersonGroupBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.TableListener;
 import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -38,9 +39,8 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
                         net.gdface.facelog.dborm.face.FlFaceBean,
                         net.gdface.facelog.dborm.face.FlFeatureBean,
                         net.gdface.facelog.dborm.image.FlImageBean,
-                        net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,
-                        net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,
                         net.gdface.facelog.dborm.log.FlLogBean,
+                        net.gdface.facelog.dborm.permit.FlPermitBean,
                         net.gdface.facelog.dborm.person.FlPersonBean,
                         net.gdface.facelog.dborm.person.FlPersonGroupBean,
                         net.gdface.facelog.dborm.image.FlStoreBean,
@@ -88,7 +88,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
         return PersonGroupBean.class;
     }
     
-    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.device.FlJunctionDeviceGroupBean,net.gdface.facelog.dborm.person.FlJunctionPersonGroupBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
+    public IDbConverter<net.gdface.facelog.dborm.device.FlDeviceBean,net.gdface.facelog.dborm.device.FlDeviceGroupBean,net.gdface.facelog.dborm.face.FlFaceBean,net.gdface.facelog.dborm.face.FlFeatureBean,net.gdface.facelog.dborm.image.FlImageBean,net.gdface.facelog.dborm.log.FlLogBean,net.gdface.facelog.dborm.permit.FlPermitBean,net.gdface.facelog.dborm.person.FlPersonBean,net.gdface.facelog.dborm.person.FlPersonGroupBean,net.gdface.facelog.dborm.image.FlStoreBean,net.gdface.facelog.dborm.log.FlLogLightBean> getDbConverter() {
         return dbConverter;
     }
 
@@ -316,7 +316,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     // IMPORT KEY GENERIC METHOD
     //////////////////////////////////////
     
-    private static final Class<?>[] importedBeanTypes = new Class<?>[]{JunctionPersonGroupBean.class,PersonGroupBean.class};
+    private static final Class<?>[] importedBeanTypes = new Class<?>[]{PermitBean.class,PersonBean.class,PersonGroupBean.class};
 
     /**
      * @see #getImportedBeansAsList(PersonGroupBean,int)
@@ -331,19 +331,22 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
      * Retrieves imported T objects by ikIndex.<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID} -> {@link JunctionPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonBean}</li>
      *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
      * @return the associated T beans or {@code null} if {@code bean} is {@code null}
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> java.util.List<T> getImportedBeansAsList(PersonGroupBean bean,int ikIndex){
         switch(ikIndex){
-        case FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID:
-            return (java.util.List<T>)this.getJunctionPersonGroupBeansByGroupIdAsList(bean);
+        case FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID:
+            return (java.util.List<T>)this.getPermitBeansByPersonGroupIdAsList(bean);
+        case FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID:
+            return (java.util.List<T>)this.getPersonBeansByGroupIdAsList(bean);
         case FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT:
             return (java.util.List<T>)this.getPersonGroupBeansByParentAsList(bean);
         }
@@ -354,20 +357,23 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
      * @param <T>
      * 
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID} -> {@link JunctionPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonBean}</li>
      *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
      * @param importedBeans the FlPersonGroupBean array to associate to the {@link PersonGroupBean}
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>> T[] setImportedBeans(PersonGroupBean bean,T[] importedBeans,int ikIndex){
         switch(ikIndex){
-        case FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID:
-            return (T[])setJunctionPersonGroupBeansByGroupId(bean,(JunctionPersonGroupBean[])importedBeans);
+        case FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID:
+            return (T[])setPermitBeansByPersonGroupId(bean,(PermitBean[])importedBeans);
+        case FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID:
+            return (T[])setPersonBeansByGroupId(bean,(PersonBean[])importedBeans);
         case FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT:
             return (T[])setPersonGroupBeansByParent(bean,(PersonGroupBean[])importedBeans);
         }
@@ -377,20 +383,23 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
      * Set the importedBeans associates to the bean by ikIndex<br>
      * @param <T>
      * <ul>
-     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID} -> {@link JunctionPersonGroupBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID} -> {@link PermitBean}</li>
+     *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID} -> {@link PersonBean}</li>
      *     <li> {@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT} -> {@link PersonGroupBean}</li>
      * </ul>
      * @param bean the {@link PersonGroupBean} object to use
      * @param importedBeans the <T> object to associate to the {@link PersonGroupBean}
-     * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
+     * @param ikIndex valid values: {@link Constant#FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID},{@link Constant#FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT}
      * @return importedBeans always
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T extends net.gdface.facelog.db.BaseBean<T>,C extends java.util.Collection<T>> C setImportedBeans(PersonGroupBean bean,C importedBeans,int ikIndex){
         switch(ikIndex){
-        case FL_PERSON_GROUP_IK_FL_JUNCTION_PERSON_GROUP_GROUP_ID:
-            return (C)setJunctionPersonGroupBeansByGroupId(bean,(java.util.Collection<JunctionPersonGroupBean>)importedBeans);
+        case FL_PERSON_GROUP_IK_FL_PERMIT_PERSON_GROUP_ID:
+            return (C)setPermitBeansByPersonGroupId(bean,(java.util.Collection<PermitBean>)importedBeans);
+        case FL_PERSON_GROUP_IK_FL_PERSON_GROUP_ID:
+            return (C)setPersonBeansByGroupId(bean,(java.util.Collection<PersonBean>)importedBeans);
         case FL_PERSON_GROUP_IK_FL_PERSON_GROUP_PARENT:
             return (C)setPersonGroupBeansByParent(bean,(java.util.Collection<PersonGroupBean>)importedBeans);
         }
@@ -403,45 +412,45 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     //////////////////////////////////////
     //3.1 GET IMPORTED override IPersonGroupManager
     @Override 
-    public JunctionPersonGroupBean[] getJunctionPersonGroupBeansByGroupId(PersonGroupBean bean)
+    public PermitBean[] getPermitBeansByPersonGroupId(PersonGroupBean bean)
     {
-        return this.getJunctionPersonGroupBeansByGroupIdAsList(bean).toArray(new JunctionPersonGroupBean[0]);
+        return this.getPermitBeansByPersonGroupIdAsList(bean).toArray(new PermitBean[0]);
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public JunctionPersonGroupBean[] getJunctionPersonGroupBeansByGroupId(Integer persongroupId)
+    public PermitBean[] getPermitBeansByPersonGroupId(Integer persongroupId)
     {
         PersonGroupBean bean = new PersonGroupBean();
         bean.setId(persongroupId);
-        return getJunctionPersonGroupBeansByGroupId(bean);
+        return getPermitBeansByPersonGroupId(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
     @Override 
-    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(PersonGroupBean bean)
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean)
     {
-        return getJunctionPersonGroupBeansByGroupIdAsList(bean,1,-1);
+        return getPermitBeansByPersonGroupIdAsList(bean,1,-1);
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(Integer persongroupId)
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer persongroupId)
     {
          PersonGroupBean bean = new PersonGroupBean();
         bean.setId(persongroupId);
-        return getJunctionPersonGroupBeansByGroupIdAsList(bean);
+        return getPermitBeansByPersonGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
     @Override
-    public int deleteJunctionPersonGroupBeansByGroupId(Integer persongroupId)
+    public int deletePermitBeansByPersonGroupId(Integer persongroupId)
     {
-        java.util.List<JunctionPersonGroupBean> list =getJunctionPersonGroupBeansByGroupIdAsList(persongroupId);
-        return JunctionPersonGroupManager.getInstance().delete(list);
+        java.util.List<PermitBean> list =getPermitBeansByPersonGroupIdAsList(persongroupId);
+        return PermitManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
     @Override 
-    public java.util.List<JunctionPersonGroupBean> getJunctionPersonGroupBeansByGroupIdAsList(PersonGroupBean bean,int startRow, int numRows)
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(PersonGroupBean bean,int startRow, int numRows)
     {
         try {
-            return this.dbConverter.getJunctionPersonGroupBeanConverter().fromRight(nativeManager.getJunctionPersonGroupBeansByGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+            return this.dbConverter.getPermitBeanConverter().fromRight(nativeManager.getPermitBeansByPersonGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
         }
         catch(DAOException e)
         {
@@ -450,11 +459,11 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.3 SET IMPORTED override IPersonGroupManager
     @Override 
-    public JunctionPersonGroupBean[] setJunctionPersonGroupBeansByGroupId(PersonGroupBean bean , JunctionPersonGroupBean[] importedBeans)
+    public PermitBean[] setPermitBeansByPersonGroupId(PersonGroupBean bean , PermitBean[] importedBeans)
     {
         if(null != importedBeans){
-            for( JunctionPersonGroupBean importBean : importedBeans ){
-                JunctionPersonGroupManager.getInstance().setReferencedByGroupId(importBean , bean);
+            for( PermitBean importBean : importedBeans ){
+                PermitManager.getInstance().setReferencedByPersonGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -462,11 +471,82 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
 
     //3.4 SET IMPORTED override IPersonGroupManager
     @Override 
-    public <C extends java.util.Collection<JunctionPersonGroupBean>> C setJunctionPersonGroupBeansByGroupId(PersonGroupBean bean , C importedBeans)
+    public <C extends java.util.Collection<PermitBean>> C setPermitBeansByPersonGroupId(PersonGroupBean bean , C importedBeans)
     {
         if(null != importedBeans){
-            for( JunctionPersonGroupBean importBean : importedBeans ){
-                JunctionPersonGroupManager.getInstance().setReferencedByGroupId(importBean , bean);
+            for( PermitBean importBean : importedBeans ){
+                PermitManager.getInstance().setReferencedByPersonGroupId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    //3.1 GET IMPORTED override IPersonGroupManager
+    @Override 
+    public PersonBean[] getPersonBeansByGroupId(PersonGroupBean bean)
+    {
+        return this.getPersonBeansByGroupIdAsList(bean).toArray(new PersonBean[0]);
+    }
+    //3.1.2 GET IMPORTED override IPersonGroupManager
+    @Override
+    public PersonBean[] getPersonBeansByGroupId(Integer persongroupId)
+    {
+        PersonGroupBean bean = new PersonGroupBean();
+        bean.setId(persongroupId);
+        return getPersonBeansByGroupId(bean);
+    }
+    //3.2 GET IMPORTED override IPersonGroupManager
+    @Override 
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean)
+    {
+        return getPersonBeansByGroupIdAsList(bean,1,-1);
+    }
+    //3.2.2 GET IMPORTED override IPersonGroupManager
+    @Override
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer persongroupId)
+    {
+         PersonGroupBean bean = new PersonGroupBean();
+        bean.setId(persongroupId);
+        return getPersonBeansByGroupIdAsList(bean);
+    }
+    //3.2.3 DELETE IMPORTED override IPersonGroupManager
+    @Override
+    public int deletePersonBeansByGroupId(Integer persongroupId)
+    {
+        java.util.List<PersonBean> list =getPersonBeansByGroupIdAsList(persongroupId);
+        return PersonManager.getInstance().delete(list);
+    }
+    //3.2.4 GET IMPORTED override IPersonGroupManager
+    @Override 
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(PersonGroupBean bean,int startRow, int numRows)
+    {
+        try {
+            return this.dbConverter.getPersonBeanConverter().fromRight(nativeManager.getPersonBeansByGroupIdAsList( this.beanConverter.toRight(bean),startRow,numRows));
+        }
+        catch(DAOException e)
+        {
+            throw new WrapDAOException(e);
+        }
+    }
+    //3.3 SET IMPORTED override IPersonGroupManager
+    @Override 
+    public PersonBean[] setPersonBeansByGroupId(PersonGroupBean bean , PersonBean[] importedBeans)
+    {
+        if(null != importedBeans){
+            for( PersonBean importBean : importedBeans ){
+                PersonManager.getInstance().setReferencedByGroupId(importBean , bean);
+            }
+        }
+        return importedBeans;
+    }
+
+    //3.4 SET IMPORTED override IPersonGroupManager
+    @Override 
+    public <C extends java.util.Collection<PersonBean>> C setPersonBeansByGroupId(PersonGroupBean bean , C importedBeans)
+    {
+        if(null != importedBeans){
+            for( PersonBean importBean : importedBeans ){
+                PersonManager.getInstance().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -549,14 +629,16 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     @Override  
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
-        , JunctionPersonGroupBean[] impJunctionpersongroupByGroupId , PersonGroupBean[] impPersongroupByParent )
+        , PermitBean[] impPermitByPersonGroupId , PersonBean[] impPersonByGroupId , PersonGroupBean[] impPersongroupByParent )
     {
         if(null == bean) return null;
         if(null != refPersongroupByParent)
             this.setReferencedByParent(bean,refPersongroupByParent);
         bean = this.save( bean );
-        this.setJunctionPersonGroupBeansByGroupId(bean,impJunctionpersongroupByGroupId);
-        JunctionPersonGroupManager.getInstance().save( impJunctionpersongroupByGroupId );
+        this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
+        PermitManager.getInstance().save( impPermitByPersonGroupId );
+        this.setPersonBeansByGroupId(bean,impPersonByGroupId);
+        PersonManager.getInstance().save( impPersonByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
         PersonGroupManager.getInstance().save( impPersongroupByParent );
         return bean;
@@ -566,25 +648,27 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     @Override 
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
-        ,final JunctionPersonGroupBean[] impJunctionpersongroupByGroupId ,final PersonGroupBean[] impPersongroupByParent )
+        ,final PermitBean[] impPermitByPersonGroupId ,final PersonBean[] impPersonByGroupId ,final PersonGroupBean[] impPersongroupByParent )
     {
         return this.runAsTransaction(new Callable<PersonGroupBean>(){
             @Override
             public PersonGroupBean call() throws Exception {
-                return save(bean , refPersongroupByParent , impJunctionpersongroupByGroupId , impPersongroupByParent );
+                return save(bean , refPersongroupByParent , impPermitByPersonGroupId , impPersonByGroupId , impPersongroupByParent );
             }});
     }
     //3.7 SYNC SAVE override IPersonGroupManager
     @Override 
     public PersonGroupBean save(PersonGroupBean bean
         , PersonGroupBean refPersongroupByParent 
-        , java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByGroupId , java.util.Collection<PersonGroupBean> impPersongroupByParent )
+        , java.util.Collection<PermitBean> impPermitByPersonGroupId , java.util.Collection<PersonBean> impPersonByGroupId , java.util.Collection<PersonGroupBean> impPersongroupByParent )
     {
         if(null == bean) return null;
         this.setReferencedByParent(bean,refPersongroupByParent);
         bean = this.save( bean );
-        this.setJunctionPersonGroupBeansByGroupId(bean,impJunctionpersongroupByGroupId);
-        JunctionPersonGroupManager.getInstance().save( impJunctionpersongroupByGroupId );
+        this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
+        PermitManager.getInstance().save( impPermitByPersonGroupId );
+        this.setPersonBeansByGroupId(bean,impPersonByGroupId);
+        PersonManager.getInstance().save( impPersonByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
         PersonGroupManager.getInstance().save( impPersongroupByParent );
         return bean;
@@ -594,12 +678,12 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     @Override 
     public PersonGroupBean saveAsTransaction(final PersonGroupBean bean
         ,final PersonGroupBean refPersongroupByParent 
-        ,final  java.util.Collection<JunctionPersonGroupBean> impJunctionpersongroupByGroupId ,final  java.util.Collection<PersonGroupBean> impPersongroupByParent )
+        ,final  java.util.Collection<PermitBean> impPermitByPersonGroupId ,final  java.util.Collection<PersonBean> impPersonByGroupId ,final  java.util.Collection<PersonGroupBean> impPersongroupByParent )
     {
         return this.runAsTransaction(new Callable<PersonGroupBean>(){
             @Override
             public PersonGroupBean call() throws Exception {
-                return save(bean , refPersongroupByParent , impJunctionpersongroupByGroupId , impPersongroupByParent );
+                return save(bean , refPersongroupByParent , impPermitByPersonGroupId , impPersonByGroupId , impPersongroupByParent );
             }});
     }
      /**
@@ -607,7 +691,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(PersonGroupBean , PersonGroupBean , JunctionPersonGroupBean[] , PersonGroupBean[] )}
+     *      see also {@link #save(PersonGroupBean , PersonGroupBean , PermitBean[] , PersonBean[] , PersonGroupBean[] )}
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
     //3.9 SYNC SAVE 
@@ -616,18 +700,21 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null == args)
             return save(bean);
-        if(args.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
+        if(args.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonGroupBean");
         }
-        if( args.length > 1 && null != args[1] && !(args[1] instanceof JunctionPersonGroupBean[])){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:JunctionPersonGroupBean[]");
+        if( args.length > 1 && null != args[1] && !(args[1] instanceof PermitBean[])){
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:PermitBean[]");
         }
-        if( args.length > 2 && null != args[2] && !(args[2] instanceof PersonGroupBean[])){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:PersonGroupBean[]");
+        if( args.length > 2 && null != args[2] && !(args[2] instanceof PersonBean[])){
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:PersonBean[]");
         }
-        return save(bean,(args.length < 1 || null == args[0])?null:(PersonGroupBean)args[0],(args.length < 2 || null == args[1])?null:(JunctionPersonGroupBean[])args[1],(args.length < 3 || null == args[2])?null:(PersonGroupBean[])args[2]);
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof PersonGroupBean[])){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:PersonGroupBean[]");
+        }
+        return save(bean,(args.length < 1 || null == args[0])?null:(PersonGroupBean)args[0],(args.length < 2 || null == args[1])?null:(PermitBean[])args[1],(args.length < 3 || null == args[2])?null:(PersonBean[])args[2],(args.length < 4 || null == args[3])?null:(PersonGroupBean[])args[3]);
     } 
 
     /**
@@ -635,7 +722,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
      *
      * @param bean the {@link PersonGroupBean} bean to be saved
      * @param args referenced beans or imported beans<br>
-     *      see also {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection )}
+     *      see also {@link #save(PersonGroupBean , PersonGroupBean , java.util.Collection , java.util.Collection , java.util.Collection )}
      * @return the inserted or updated {@link PersonGroupBean} bean
      */
     //3.10 SYNC SAVE 
@@ -645,20 +732,23 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null == inputs)
             return save(bean);
-        if(inputs.length > 3)
-            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 3");
-        Object[] args = new Object[3];
-        System.arraycopy(inputs,0,args,0,3);
+        if(inputs.length > 4)
+            throw new IllegalArgumentException("too many dynamic arguments,max dynamic arguments number: 4");
+        Object[] args = new Object[4];
+        System.arraycopy(inputs,0,args,0,4);
         if( args.length > 0 && null != args[0] && !(args[0] instanceof PersonGroupBean)){
             throw new IllegalArgumentException("invalid type for the No.1 dynamic argument,expected type:PersonGroupBean");
         }
         if( args.length > 1 && null != args[1] && !(args[1] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<JunctionPersonGroupBean>");
+            throw new IllegalArgumentException("invalid type for the No.2 argument,expected type:java.util.Collection<PermitBean>");
         }
         if( args.length > 2 && null != args[2] && !(args[2] instanceof java.util.Collection)){
-            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<PersonGroupBean>");
+            throw new IllegalArgumentException("invalid type for the No.3 argument,expected type:java.util.Collection<PersonBean>");
         }
-        return save(bean,null == args[0]?null:(PersonGroupBean)args[0],null == args[1]?null:(java.util.Collection<JunctionPersonGroupBean>)args[1],null == args[2]?null:(java.util.Collection<PersonGroupBean>)args[2]);
+        if( args.length > 3 && null != args[3] && !(args[3] instanceof java.util.Collection)){
+            throw new IllegalArgumentException("invalid type for the No.4 argument,expected type:java.util.Collection<PersonGroupBean>");
+        }
+        return save(bean,null == args[0]?null:(PersonGroupBean)args[0],null == args[1]?null:(java.util.Collection<PermitBean>)args[1],null == args[2]?null:(java.util.Collection<PersonBean>)args[2],null == args[3]?null:(java.util.Collection<PersonGroupBean>)args[3]);
     }
 
      //////////////////////////////////////
@@ -928,19 +1018,19 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     //_____________________________________________________________________
     //22 MANY TO MANY override IPersonGroupManager
     @Override
-    public java.util.List<PersonGroupBean> loadViaJunctionPersonGroupAsList(PersonBean bean)
+    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean)
     {
-         return this.loadViaJunctionPersonGroupAsList(bean, 1, -1);
+         return this.loadViaPermitAsList(bean, 1, -1);
     }
 
     //23 MANY TO MANY override IPersonGroupManager
     @Override
-    public java.util.List<PersonGroupBean> loadViaJunctionPersonGroupAsList(PersonBean bean, int startRow, int numRows)
+    public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)
     {
         try{
             return this.beanConverter.fromRight(
-                this.nativeManager.loadViaJunctionPersonGroupAsList(
-                    this.dbConverter.getPersonBeanConverter().toRight(bean),
+                this.nativeManager.loadViaPermitAsList(
+                    this.dbConverter.getDeviceGroupBeanConverter().toRight(bean),
                     startRow,
                     numRows));
         }catch(DAOException e){
@@ -949,59 +1039,59 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //23.2 MANY TO MANY override IPersonGroupManager
     @Override
-    public void addJunction(PersonGroupBean bean,PersonBean linked){
+    public void addJunction(PersonGroupBean bean,DeviceGroupBean linked){
         if(null == bean || null == bean.getId())
             return ;
         if(null == linked || null ==bean.getId())
             return ;
-        if(!JunctionPersonGroupManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
-            JunctionPersonGroupBean junction = new JunctionPersonGroupBean();
-            junction.setPersonId(linked.getId());
-            junction.setGroupId(bean.getId());
-            JunctionPersonGroupManager.getInstance().save(junction);
+        if(!PermitManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
+            PermitBean junction = new PermitBean();
+            junction.setDeviceGroupId(linked.getId());
+            junction.setPersonGroupId(bean.getId());
+            PermitManager.getInstance().save(junction);
         }
     }
     //23.3 MANY TO MANY override IPersonGroupManager
     @Override
-    public int deleteJunction(PersonGroupBean bean,PersonBean linked){
+    public int deleteJunction(PersonGroupBean bean,DeviceGroupBean linked){
         if(null == bean || null == bean.getId())
             return 0;
         if(null == linked || null ==bean.getId())
             return 0;
-        return JunctionPersonGroupManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
+        return PermitManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
     }
     //23.4 MANY TO MANY override IPersonGroupManager
     @Override
-    public void addJunction(PersonGroupBean bean,PersonBean... linkedBeans){
+    public void addJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans){
         if(null == linkedBeans)return;
-        for(PersonBean linked:linkedBeans){
+        for(DeviceGroupBean linked:linkedBeans){
             addJunction(bean,linked);
         }
     }
     //23.5 MANY TO MANY override IPersonGroupManager
     @Override
-    public void addJunction(PersonGroupBean bean,java.util.Collection<PersonBean> linkedBeans){
+    public void addJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans){
         if(null == linkedBeans)return;
-        for(PersonBean linked:linkedBeans){
+        for(DeviceGroupBean linked:linkedBeans){
             addJunction(bean,linked);
         }
     }
     //23.6 MANY TO MANY override IPersonGroupManager
     @Override
-    public int deleteJunction(PersonGroupBean bean,PersonBean... linkedBeans){
+    public int deleteJunction(PersonGroupBean bean,DeviceGroupBean... linkedBeans){
         if(null == linkedBeans)return 0;
         int count = 0;
-        for(PersonBean linked:linkedBeans){
+        for(DeviceGroupBean linked:linkedBeans){
             count += deleteJunction(bean,linked);
         }
         return count;
     }
     //23.7 MANY TO MANY override IPersonGroupManager
     @Override
-    public int deleteJunction(PersonGroupBean bean,java.util.Collection<PersonBean> linkedBeans){
+    public int deleteJunction(PersonGroupBean bean,java.util.Collection<DeviceGroupBean> linkedBeans){
         if(null == linkedBeans)return 0;
         int count = 0;
-        for(PersonBean linked:linkedBeans){
+        for(DeviceGroupBean linked:linkedBeans){
             count += deleteJunction(bean,linked);
         }
         return count;

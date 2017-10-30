@@ -102,7 +102,8 @@ public  class FlPersonGroupBean
      * Meta Data Information (in progress):
      * <ul>
      * <li>full name: fl_person_group.id</li>
-     * <li> imported key: fl_junction_person_group.group_id</li>
+     * <li> imported key: fl_permit.person_group_id</li>
+     * <li> imported key: fl_person.group_id</li>
      * <li> imported key: fl_person_group.parent</li>
      * <li>comments: 用户组id</li>
      * <li>AUTO_INCREMENT</li>
