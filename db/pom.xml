@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>facelog-db</artifactId>
-  <packaging>jar</packaging>
-  <name>facelog-db</name>
-  <dependencies>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>facelog-db</artifactId>
+	<packaging>jar</packaging>
+	<name>facelog-db</name>
+	<dependencies>
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>5.1.43</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.43</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
 		<dependency>
-		    <groupId>commons-lang</groupId>
-		    <artifactId>commons-lang</artifactId>
-		    <version>2.1</version>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/c3p0/c3p0 -->
 		<dependency>
-		    <groupId>c3p0</groupId>
-		    <artifactId>c3p0</artifactId>
-		    <version>0.9.0.4</version>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.0.4</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-annotations -->
 		<dependency>
-		    <groupId>com.facebook.swift</groupId>
-		    <artifactId>swift-annotations</artifactId>
-		    <version>0.14.2</version>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift-annotations</artifactId>
+			<version>0.14.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
@@ -36,37 +36,46 @@
 			<artifactId>guava</artifactId>
 			<version>20.0</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
 	<build>
-	    <plugins>        
-	        <plugin>
-	            <groupId>org.codehaus.mojo</groupId>
-	            <artifactId>build-helper-maven-plugin</artifactId>
-	            <version>3.0.0</version>
-	                        
-	            <executions>
-	                <!-- 配置orm,general文件夹,用于保存sql2java生成的ORM代码 -->
-	                <execution>
-	                    <id>add-source</id>
-	                    <phase>generate-sources</phase>
-	                    <goals>
-	                        <goal>add-source</goal>
-	                    </goals>
-	                    <configuration>
-	                        <sources>
-	                            <source>src/orm/java</source>
-	                            <source>src/general/java</source>
-	                        </sources>
-	                    </configuration>
-	                </execution> 
-	            </executions>
-	        </plugin>
-	    </plugins>
+		<!-- properties 配置文件打入jar包 -->
+		<resources>
+			<resource>
+				<directory>src/orm/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+
+				<executions>
+					<!-- 配置orm,general文件夹,用于保存sql2java生成的ORM代码 -->
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/orm/java</source>
+								<source>src/general/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
-  <parent>
-  	  <groupId>net.gdface.facelog</groupId>
-      <artifactId>facelog</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <relativePath>..</relativePath>
-  </parent>  
+	<parent>
+		<groupId>net.gdface.facelog</groupId>
+		<artifactId>facelog</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 </project>
