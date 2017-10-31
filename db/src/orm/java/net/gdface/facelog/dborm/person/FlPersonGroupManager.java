@@ -2434,7 +2434,8 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     public int levelOfParent(Integer id) throws DAOException{
         FlPersonGroupBean parent = (null == id)
             ? null
-            : new FlPersonGroupBean(id);        int count;
+            : new FlPersonGroupBean(id);
+        int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){

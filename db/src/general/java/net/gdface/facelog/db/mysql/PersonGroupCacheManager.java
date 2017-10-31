@@ -142,8 +142,14 @@ public class PersonGroupCacheManager extends PersonGroupManager
 
     //_____________________________________________________________________
     //
-    // USING INDICES
+    // SAVE
     //_____________________________________________________________________
+    //12
+    @Override
+    public PersonGroupBean save(PersonGroupBean bean){
+        checkCycleOfParent(bean);
+        return super.save(bean);
+    }
 
     //_____________________________________________________________________
     //

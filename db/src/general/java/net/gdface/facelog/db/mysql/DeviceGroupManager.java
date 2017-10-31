@@ -1365,7 +1365,8 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     public int levelOfParent(Integer id){
         DeviceGroupBean parent = (null == id)
             ? null
-            : new DeviceGroupBean(id);        int count;
+            : new DeviceGroupBean(id);
+        int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){

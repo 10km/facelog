@@ -162,9 +162,5 @@ public class LogCacheManager extends LogManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
-    //_____________________________________________________________________
-    //
-    // USING INDICES
-    //_____________________________________________________________________
 
 }

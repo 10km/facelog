@@ -140,9 +140,5 @@ public class ImageCacheManager extends ImageManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
-    //_____________________________________________________________________
-    //
-    // USING INDICES
-    //_____________________________________________________________________
 
 }

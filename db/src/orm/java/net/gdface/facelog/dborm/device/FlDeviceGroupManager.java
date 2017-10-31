@@ -2434,7 +2434,8 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     public int levelOfParent(Integer id) throws DAOException{
         FlDeviceGroupBean parent = (null == id)
             ? null
-            : new FlDeviceGroupBean(id);        int count;
+            : new FlDeviceGroupBean(id);
+        int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){

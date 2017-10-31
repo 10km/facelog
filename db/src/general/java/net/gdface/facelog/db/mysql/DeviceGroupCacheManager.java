@@ -142,8 +142,14 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
 
     //_____________________________________________________________________
     //
-    // USING INDICES
+    // SAVE
     //_____________________________________________________________________
+    //12
+    @Override
+    public DeviceGroupBean save(DeviceGroupBean bean){
+        checkCycleOfParent(bean);
+        return super.save(bean);
+    }
 
     //_____________________________________________________________________
     //

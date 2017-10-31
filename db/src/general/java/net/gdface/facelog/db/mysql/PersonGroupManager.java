@@ -1365,7 +1365,8 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     public int levelOfParent(Integer id){
         PersonGroupBean parent = (null == id)
             ? null
-            : new PersonGroupBean(id);        int count;
+            : new PersonGroupBean(id);
+        int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){

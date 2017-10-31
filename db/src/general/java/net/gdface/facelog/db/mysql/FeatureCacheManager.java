@@ -140,9 +140,5 @@ public class FeatureCacheManager extends FeatureManager
         return super.loadUsingTemplate(bean,fieldList,startRow,numRows,searchType,action);
     }
 
-    //_____________________________________________________________________
-    //
-    // USING INDICES
-    //_____________________________________________________________________
 
 }
