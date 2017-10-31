@@ -133,6 +133,14 @@ public  class FlFaceBean
         super();
     }
     /**
+     * construct a new instance filled with primary keys
+     * @param id PK# 1 
+     */
+    public FlFaceBean(Integer id){
+        super();
+        setId(id);
+    }
+    /**
      * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):

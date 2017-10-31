@@ -116,6 +116,14 @@ public final class LogBean
         super();
     }
     /**
+     * construct a new instance filled with primary keys
+     * @param id PK# 1 
+     */
+    public LogBean(Integer id){
+        super();
+        setId(id);
+    }
+    /**
      * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):

@@ -372,7 +372,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
-    
  
      /**
      * Save the FlLogBean bean and referenced beans and imported beans into the database.

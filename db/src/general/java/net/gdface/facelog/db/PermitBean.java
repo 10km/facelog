@@ -101,6 +101,16 @@ public final class PermitBean
         super();
     }
     /**
+     * construct a new instance filled with primary keys
+     * @param deviceGroupId PK# 1 
+     @param personGroupId PK# 2 
+     */
+    public PermitBean(Integer deviceGroupId,Integer personGroupId){
+        super();
+        setDeviceGroupId(deviceGroupId);
+        setPersonGroupId(personGroupId);
+    }
+    /**
      * Getter method for {@link #deviceGroupId}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):

@@ -100,6 +100,14 @@ public  class FlFeatureBean
         super();
     }
     /**
+     * construct a new instance filled with primary keys
+     * @param md5 PK# 1 
+     */
+    public FlFeatureBean(String md5){
+        super();
+        setMd5(md5);
+    }
+    /**
      * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):

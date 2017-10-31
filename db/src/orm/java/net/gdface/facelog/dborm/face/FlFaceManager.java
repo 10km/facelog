@@ -368,7 +368,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
-    
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

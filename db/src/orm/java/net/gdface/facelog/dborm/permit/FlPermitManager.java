@@ -372,7 +372,6 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         bean.setPersonGroupId((Integer)keys[1]);
         return delete(bean);
     }
-    
  
      /**
      * Save the FlPermitBean bean and referenced beans and imported beans into the database.

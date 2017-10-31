@@ -368,7 +368,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
-    
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

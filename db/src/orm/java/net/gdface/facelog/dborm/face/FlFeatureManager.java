@@ -368,7 +368,6 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         bean.setMd5((String)keys[0]);
         return delete(bean);
     }
-    
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

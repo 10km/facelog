@@ -370,7 +370,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         bean.setId((Integer)keys[0]);
         return delete(bean);
     }
-    
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

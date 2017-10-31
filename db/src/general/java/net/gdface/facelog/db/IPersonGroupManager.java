@@ -501,38 +501,61 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     /**
      * return bean list ( include {@code bean}) by the self-reference field : {@code fl_person_group(parent) }<br>
      * first element is top bean
-     * @param bean
-     * @return  empty list if {@code bean} is {@code null}<br>
+     * @param id PK# 1 
+     * @return  empty list if input primary key is {@code null}<br>
      *         null if self-reference field is cycle
      * @throws WrapDAOException
      */
     //47
+    public java.util.List<PersonGroupBean> listOfParent(Integer id);
+    /**
+     * @see #listOfParent(Integer)
+     */
+    //48
     public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean);
     /**
      * get level count on the self-reference field : {@code fl_person_group(parent) }
-     * @param bean
-     * @return  0 if {@code bean} is {@code null}<br>
+     * @param id PK# 1 
+     * @return  0 if input primary key is {@code null}<br>
      *         -1 if self-reference field is cycle
      * @throws WrapDAOException
      */
-    //48
+    //49
+    public int levelOfParent(Integer id);
+    /**
+     * @see #levelOfParent(Integer)
+     */
+    //50
     public int levelOfParent(PersonGroupBean bean);
+    /**
+     * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
+     * @param id PK# 1 
+     * @throws WrapDAOException
+     * @see #levelOfParent(PersonGroupBean)
+     */
+    //51
+    public boolean isCycleOnParent(Integer id);
     /**
      * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
      * @param bean
      * @throws WrapDAOException
      * @see #levelOfParent(PersonGroupBean)
      */
-    //49
+    //52
     public boolean isCycleOnParent(PersonGroupBean bean);
     /**
      * return top bean that with {@code null} self-reference field  : {@code fl_person_group(parent) }
-     * @param bean
+     * @param id PK# 1 
      * @return top bean
-     * @throws NullPointerException if {@code bean} is {@code null}
+     * @throws NullPointerException if input primary key is {@code null}
      * @throws IllegalStateException if self-reference field is cycle
      * @throws WrapDAOException
      */
-    // 50
+    //53
+    public PersonGroupBean topOfParent(Integer id);
+    /**
+     * @see #topOfParent(Integer)
+     */
+    //54
     public PersonGroupBean topOfParent(PersonGroupBean bean);
 }

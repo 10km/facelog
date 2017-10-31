@@ -1336,15 +1336,16 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     //
     // SELF-REFERENCE
     //_____________________________________________________________________
-    //47 override IDeviceGroupManager
+    //47 IDeviceGroupManager
     @Override
-    public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean){
-        final DeviceGroupBean start = null == bean ? null : bean.clone();
-        DeviceGroupBean parent = start;
+    public java.util.List<DeviceGroupBean> listOfParent(Integer id){
+        DeviceGroupBean parent = (null == id)
+            ? null
+            : new DeviceGroupBean(id);
         java.util.List<DeviceGroupBean> list;
         for(list = new java.util.ArrayList<DeviceGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(start.getId(),parent.getId())){
+            if(equal(id,parent.getId())){
                 return null;
             }
         }
@@ -1353,50 +1354,62 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //48 IDeviceGroupManager
     @Override
-    public int levelOfParent(DeviceGroupBean bean){
-        final DeviceGroupBean start = null == bean ? null : bean.clone();
-        DeviceGroupBean parent = start;
-        int count;
+    @SuppressWarnings("unchecked")
+    public java.util.List<DeviceGroupBean> listOfParent(DeviceGroupBean bean){
+        return null == bean
+                ? java.util.Collections.EMPTY_LIST
+                : listOfParent(bean.getId());
+    }
+    //49 IDeviceGroupManager
+    @Override
+    public int levelOfParent(Integer id){
+        DeviceGroupBean parent = (null == id)
+            ? null
+            : new DeviceGroupBean(id);        int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(start.getId(),parent.getId())){
+            if(equal(id,parent.getId())){
                 return -1;
             }
         }
         return count;
     }
-    /**
-     * test whether the self-reference field is cycle : {@code fl_device_group(parent) }
-     * @param bean
-     * @throws DAOException
-     * @see #levelOfParent(DeviceGroupBean)
-     */
-    //49 IDeviceGroupManager
+    //50 IDeviceGroupManager
+    @Override
+    public int levelOfParent(DeviceGroupBean bean){
+        return null == bean
+                ? 0
+                : levelOfParent(bean.getId());
+    }
+    //51 IDeviceGroupManager
+    @Override
+    public boolean isCycleOnParent(Integer id){
+        return levelOfParent(id) < 0;
+    }
+    //52 IDeviceGroupManager
     @Override
     public boolean isCycleOnParent(DeviceGroupBean bean){
         return levelOfParent(bean) < 0;
     }
-    /**
-     * return top bean that with {@code null} self-reference field  : {@code fl_device_group(parent) }
-     * @param bean
-     * @return top bean
-     * @throws NullPointerException if {@code bean} is {@code null}
-     * @throws IllegalStateException if self-reference field is cycle
-     * @throws DAOException
-     */
-    // 50 IDeviceGroupManager
+    //53 IDeviceGroupManager
     @Override
-    public DeviceGroupBean topOfParent(DeviceGroupBean bean){
-        if(null == bean)
+    public DeviceGroupBean topOfParent(Integer id){
+        if(null == id)
             throw new NullPointerException();
-        final DeviceGroupBean start = bean.clone();
-        DeviceGroupBean parent;
-        for(parent = start;null != parent.getParent();){
+        DeviceGroupBean parent = new DeviceGroupBean(id);
+        for(;null != parent.getParent();){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(start.getId(),parent.getId())){
+            if(equal(id,parent.getId())){
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
         }
         return parent;
+    }
+    //54 IDeviceGroupManager
+    @Override
+    public DeviceGroupBean topOfParent(DeviceGroupBean bean){
+        if(null == bean)
+            throw new NullPointerException();
+        return topOfParent(bean.getId());
     }
 }

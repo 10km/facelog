@@ -1336,15 +1336,16 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     //
     // SELF-REFERENCE
     //_____________________________________________________________________
-    //47 override IPersonGroupManager
+    //47 IPersonGroupManager
     @Override
-    public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean){
-        final PersonGroupBean start = null == bean ? null : bean.clone();
-        PersonGroupBean parent = start;
+    public java.util.List<PersonGroupBean> listOfParent(Integer id){
+        PersonGroupBean parent = (null == id)
+            ? null
+            : new PersonGroupBean(id);
         java.util.List<PersonGroupBean> list;
         for(list = new java.util.ArrayList<PersonGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(start.getId(),parent.getId())){
+            if(equal(id,parent.getId())){
                 return null;
             }
         }
@@ -1353,50 +1354,62 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //48 IPersonGroupManager
     @Override
-    public int levelOfParent(PersonGroupBean bean){
-        final PersonGroupBean start = null == bean ? null : bean.clone();
-        PersonGroupBean parent = start;
-        int count;
+    @SuppressWarnings("unchecked")
+    public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean){
+        return null == bean
+                ? java.util.Collections.EMPTY_LIST
+                : listOfParent(bean.getId());
+    }
+    //49 IPersonGroupManager
+    @Override
+    public int levelOfParent(Integer id){
+        PersonGroupBean parent = (null == id)
+            ? null
+            : new PersonGroupBean(id);        int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(start.getId(),parent.getId())){
+            if(equal(id,parent.getId())){
                 return -1;
             }
         }
         return count;
     }
-    /**
-     * test whether the self-reference field is cycle : {@code fl_person_group(parent) }
-     * @param bean
-     * @throws DAOException
-     * @see #levelOfParent(PersonGroupBean)
-     */
-    //49 IPersonGroupManager
+    //50 IPersonGroupManager
+    @Override
+    public int levelOfParent(PersonGroupBean bean){
+        return null == bean
+                ? 0
+                : levelOfParent(bean.getId());
+    }
+    //51 IPersonGroupManager
+    @Override
+    public boolean isCycleOnParent(Integer id){
+        return levelOfParent(id) < 0;
+    }
+    //52 IPersonGroupManager
     @Override
     public boolean isCycleOnParent(PersonGroupBean bean){
         return levelOfParent(bean) < 0;
     }
-    /**
-     * return top bean that with {@code null} self-reference field  : {@code fl_person_group(parent) }
-     * @param bean
-     * @return top bean
-     * @throws NullPointerException if {@code bean} is {@code null}
-     * @throws IllegalStateException if self-reference field is cycle
-     * @throws DAOException
-     */
-    // 50 IPersonGroupManager
+    //53 IPersonGroupManager
     @Override
-    public PersonGroupBean topOfParent(PersonGroupBean bean){
-        if(null == bean)
+    public PersonGroupBean topOfParent(Integer id){
+        if(null == id)
             throw new NullPointerException();
-        final PersonGroupBean start = bean.clone();
-        PersonGroupBean parent;
-        for(parent = start;null != parent.getParent();){
+        PersonGroupBean parent = new PersonGroupBean(id);
+        for(;null != parent.getParent();){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(start.getId(),parent.getId())){
+            if(equal(id,parent.getId())){
                 throw new IllegalStateException("cycle on field: " + "parent");
             }
         }
         return parent;
+    }
+    //54 IPersonGroupManager
+    @Override
+    public PersonGroupBean topOfParent(PersonGroupBean bean){
+        if(null == bean)
+            throw new NullPointerException();
+        return topOfParent(bean.getId());
     }
 }

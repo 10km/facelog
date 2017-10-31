@@ -364,7 +364,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
         bean.setMd5((String)keys[0]);
         return delete(bean);
     }
-    
  
       
 

@@ -370,7 +370,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         bean.setMd5((String)keys[0]);
         return delete(bean);
     }
-    
  
     //////////////////////////////////////
     // IMPORT KEY GENERIC METHOD

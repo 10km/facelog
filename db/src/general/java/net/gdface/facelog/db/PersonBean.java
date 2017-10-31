@@ -124,6 +124,14 @@ public final class PersonBean
         super();
     }
     /**
+     * construct a new instance filled with primary keys
+     * @param id PK# 1 
+     */
+    public PersonBean(Integer id){
+        super();
+        setId(id);
+    }
+    /**
      * Getter method for {@link #id}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):

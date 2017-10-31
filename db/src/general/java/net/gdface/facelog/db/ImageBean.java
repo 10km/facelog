@@ -117,6 +117,14 @@ public final class ImageBean
         super();
     }
     /**
+     * construct a new instance filled with primary keys
+     * @param md5 PK# 1 
+     */
+    public ImageBean(String md5){
+        super();
+        setMd5(md5);
+    }
+    /**
      * Getter method for {@link #md5}.<br>
      * PRIMARY KEY.<br>
      * Meta Data Information (in progress):
