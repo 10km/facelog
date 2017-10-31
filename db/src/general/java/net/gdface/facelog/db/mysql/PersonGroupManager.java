@@ -1346,7 +1346,9 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
         for(list = new java.util.ArrayList<PersonGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){
-                return null;
+                // cycle reference
+                list.add(parent);
+                break;
             }
         }
         java.util.Collections.reverse(list);

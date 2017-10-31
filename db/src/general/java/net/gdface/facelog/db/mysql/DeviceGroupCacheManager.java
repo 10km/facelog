@@ -145,6 +145,9 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     // SAVE
     //_____________________________________________________________________
     //12
+    /**
+     * check cycle for the self-reference field before save
+     */
     @Override
     public DeviceGroupBean save(DeviceGroupBean bean){
         checkCycleOfParent(bean);

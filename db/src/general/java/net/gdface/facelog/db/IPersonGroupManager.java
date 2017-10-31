@@ -503,7 +503,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * first element is top bean
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
-     *         null if self-reference field is cycle
+     *         first element equal last if self-reference field is cycle
      * @throws WrapDAOException
      */
     //47

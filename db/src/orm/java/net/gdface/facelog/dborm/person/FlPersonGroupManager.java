@@ -2395,7 +2395,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * first element is top bean
      * @param id PK# 1 
      * @return  empty list if input primary key is {@code null}<br>
-     *         null if self-reference field is cycle
+     *         first element equal last if self-reference field is cycle
      * @throws DAOException
      */
     //47
@@ -2407,7 +2407,9 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         for(list = new java.util.ArrayList<FlPersonGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){
-                return null;
+                // cycle reference
+                list.add(parent);
+                break;
             }
         }
         java.util.Collections.reverse(list);

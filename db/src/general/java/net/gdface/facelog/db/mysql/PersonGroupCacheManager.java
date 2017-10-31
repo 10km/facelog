@@ -145,6 +145,9 @@ public class PersonGroupCacheManager extends PersonGroupManager
     // SAVE
     //_____________________________________________________________________
     //12
+    /**
+     * check cycle for the self-reference field before save
+     */
     @Override
     public PersonGroupBean save(PersonGroupBean bean){
         checkCycleOfParent(bean);

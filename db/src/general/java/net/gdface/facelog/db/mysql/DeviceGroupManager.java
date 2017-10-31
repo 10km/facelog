@@ -1346,7 +1346,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
         for(list = new java.util.ArrayList<DeviceGroupBean>();null != parent;list.add(parent)){
             parent = loadByPrimaryKey(parent.getParent());
             if(equal(id,parent.getId())){
-                return null;
+                // cycle reference
+                list.add(parent);
+                break;
             }
         }
         java.util.Collections.reverse(list);
