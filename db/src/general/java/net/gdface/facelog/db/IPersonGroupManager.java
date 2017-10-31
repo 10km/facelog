@@ -509,7 +509,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     //47
     public java.util.List<PersonGroupBean> listOfParent(Integer id);
     /**
-     * @see #listOfParent(Integer)
+     * see also {@link #listOfParent(Integer)}
      */
     //48
     public java.util.List<PersonGroupBean> listOfParent(PersonGroupBean bean);
@@ -523,7 +523,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     //49
     public int levelOfParent(Integer id);
     /**
-     * @see #levelOfParent(Integer)
+     * see also {@link #levelOfParent(Integer)}
      */
     //50
     public int levelOfParent(PersonGroupBean bean);
@@ -554,8 +554,28 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
     //53
     public PersonGroupBean topOfParent(Integer id);
     /**
-     * @see #topOfParent(Integer)
+     * see also {@link #topOfParent(Integer)}
      */
     //54
     public PersonGroupBean topOfParent(PersonGroupBean bean);
+    /**
+     * Ensures the self-reference field is not cycle : {@code fl_person_group(parent) }
+     * @param id PK# 1
+     * @return always {@code id}
+     * @throws IllegalStateException if self-reference field is cycle 
+     * @throws WrapDAOException
+     * @see #isCycleOnParent(Integer)
+     */
+    //55
+    public Integer checkCycleOfParent(Integer id);
+    /**
+     * Ensures the self-reference field is not cycle : {@code fl_person_group(parent) }<br>
+     * @param bean
+     * @return always {@code bean}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws WrapDAOException
+     * @see #isCycleOnParent(PersonGroupBean)
+     */
+    //56
+    public PersonGroupBean checkCycleOfParent(PersonGroupBean bean);
 }

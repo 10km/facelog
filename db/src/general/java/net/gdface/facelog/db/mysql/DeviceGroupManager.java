@@ -1412,4 +1412,18 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
             throw new NullPointerException();
         return topOfParent(bean.getId());
     }
+    //55 IDeviceGroupManager
+    @Override
+    public Integer checkCycleOfParent(Integer id){
+        if(isCycleOnParent(id))
+            throw new IllegalStateException("cycle on field: " + "parent");
+        return id;
+    }
+    //56 IDeviceGroupManager
+    @Override
+    public DeviceGroupBean checkCycleOfParent(DeviceGroupBean bean){
+        if(isCycleOnParent(bean))
+            throw new IllegalStateException("cycle on field: " + "parent");
+        return bean;
+    }
 }

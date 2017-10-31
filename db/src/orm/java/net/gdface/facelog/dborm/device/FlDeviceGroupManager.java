@@ -2414,7 +2414,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         return list;
     }
     /**
-     * @see #listOfParent(Integer)
+     * see also {@link #listOfParent(Integer)}
      */
     //48
     @SuppressWarnings("unchecked")
@@ -2444,7 +2444,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         return count;
     }
     /**
-     * @see #levelOfParent(Integer)
+     * see also {@link #levelOfParent(Integer)}
      */
     //50
     public int levelOfParent(FlDeviceGroupBean bean) throws DAOException{
@@ -2494,12 +2494,40 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         return parent;
     }
     /**
-     * @see #topOfParent(Integer)
+     * see also {@link #topOfParent(Integer)}
      */
     //54
     public FlDeviceGroupBean topOfParent(FlDeviceGroupBean bean) throws DAOException{
         if(null == bean)
             throw new NullPointerException();
         return topOfParent(bean.getId());
+    }
+    /**
+     * Ensures the self-reference field is not cycle : {@code fl_device_group(parent) }
+     * @param id PK# 1
+     * @return always {@code id}
+     * @throws IllegalStateException if self-reference field is cycle 
+     * @throws DAOException
+     * @see #isCycleOnParent(Integer)
+     */
+    //55
+    public Integer checkCycleOfParent(Integer id) throws DAOException{
+        if(isCycleOnParent(id))
+            throw new IllegalStateException("cycle on field: " + "parent");
+        return id;
+    }
+    /**
+     * Ensures the self-reference field is not cycle : {@code fl_device_group(parent) }<br>
+     * @param bean
+     * @return always {@code bean}
+     * @throws IllegalStateException if self-reference field is cycle
+     * @throws DAOException
+     * @see #isCycleOnParent(FlDeviceGroupBean)
+     */
+    //56
+    public FlDeviceGroupBean checkCycleOfParent(FlDeviceGroupBean bean) throws DAOException{
+        if(isCycleOnParent(bean))
+            throw new IllegalStateException("cycle on field: " + "parent");
+        return bean;
     }
 }

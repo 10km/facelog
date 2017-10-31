@@ -1412,4 +1412,18 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
             throw new NullPointerException();
         return topOfParent(bean.getId());
     }
+    //55 IPersonGroupManager
+    @Override
+    public Integer checkCycleOfParent(Integer id){
+        if(isCycleOnParent(id))
+            throw new IllegalStateException("cycle on field: " + "parent");
+        return id;
+    }
+    //56 IPersonGroupManager
+    @Override
+    public PersonGroupBean checkCycleOfParent(PersonGroupBean bean){
+        if(isCycleOnParent(bean))
+            throw new IllegalStateException("cycle on field: " + "parent");
+        return bean;
+    }
 }
