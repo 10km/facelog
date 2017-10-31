@@ -15,13 +15,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.javatuples.Pair;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
@@ -72,6 +78,95 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	}
 	protected static int _deleteDevice(Integer deviceId){
 		return deviceManager.deleteByPrimaryKey(deviceId);
+	}
+	////////////////////////////////DeviceGroupBean/////////////
+	protected static DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+		return deviceGroupManager.save(deviceGroupBean);
+	}
+	protected static DeviceGroupBean _getDeviceGroup(Integer deviceGroupId){
+		return deviceGroupManager.loadByPrimaryKey(deviceGroupId); 
+	}
+	protected static List<DeviceGroupBean> _getDeviceGroup(Collection<Integer> collection){
+		return deviceGroupManager.loadByPrimaryKey(collection); 
+	}
+	protected static int _deleteDeviceGroup(Integer deviceGroupId){
+		return deviceGroupManager.deleteByPrimaryKey(deviceGroupId);
+	}
+	protected static List<DeviceGroupBean> _getSubDeviceGroup(Integer deviceGroupId){
+		return deviceGroupManager.getDeviceGroupBeansByParentAsList(deviceGroupId);
+	}
+	protected static List<DeviceBean> _getDevicesOfGroup(Integer deviceGroupId){
+		return deviceGroupManager.getDeviceBeansByGroupIdAsList(deviceGroupId);
+	}
+	////////////////////////////////PersonGroupBean/////////////
+	protected static PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean){
+		return personGroupManager.save(personGroupBean);
+	}
+	protected static PersonGroupBean _getPersonGroup(Integer personGroupId){
+		return personGroupManager.loadByPrimaryKey(personGroupId); 
+	}
+	protected static List<PersonGroupBean> _getPersonGroup(Collection<Integer> collection){
+		return personGroupManager.loadByPrimaryKey(collection);
+	}
+	protected static int _deletePersonGroup(Integer personGroupId){
+		return personGroupManager.deleteByPrimaryKey(personGroupId);
+	}
+	protected static List<PersonGroupBean> _getSubPersonGroup(Integer personGroupId){
+		return personGroupManager.getPersonGroupBeansByParentAsList(personGroupId);
+	}
+	protected static List<PersonBean> _getPersonsOfGroup(Integer personGroupId){
+		return personGroupManager.getPersonBeansByGroupIdAsList(personGroupId);
+	}
+	/////////////////////PERMIT/////
+	protected static void _addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+		deviceGroupManager.addJunction(deviceGroup, personGroup);
+	}
+	protected static void _removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+		deviceGroupManager.deleteJunction(deviceGroup, personGroup);
+	}
+	protected static boolean _getGroupPermit(Integer deviceId,Integer personGroupId){
+		PersonGroupBean personGroup;
+		DeviceBean device;
+		if(null == deviceId
+			|| null == personGroupId 
+			|| null ==(device = _getDevice(deviceId))
+			|| null == (personGroup = _getPersonGroup(personGroupId)))
+			return false;
+		DeviceGroupBean deviceGroup = _getDeviceGroup(device.getGroupId());
+		List<PersonGroupBean> personGroupList = personGroupManager.listOfParent(personGroup);
+		
+		if(null == deviceGroup || personGroupList.isEmpty())
+			return false;
+		// person group 及其parent,任何一个在permit表中就返回true
+		for(PersonGroupBean group:personGroupList){
+			if(permitManager.existsPrimaryKey(deviceGroup.getId(), group.getId()))
+				return true;
+		}
+		return false;
+	}
+	protected static boolean _getPermit(Integer deviceId,Integer personId){
+		PersonBean person;
+		if( null == personId || null == (person = _getPerson(personId)))
+			return false;
+		return _getGroupPermit(deviceId,person.getGroupId());
+	}
+	protected static List<Boolean> _getGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
+		if(null == deviceId || null == personGroupIdList)
+			return ImmutableList.<Boolean>of();
+		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
+			@Override
+			public Boolean apply(Integer input) {
+				return _getGroupPermit(deviceId,input);
+			}}));
+	}
+	protected static List<Boolean> _getPermit(final Integer deviceId,List<Integer> personIdList){
+		if(null == deviceId || null == personIdList)
+			return ImmutableList.<Boolean>of();
+		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
+			@Override
+			public Boolean apply(Integer input) {
+				return _getPermit(deviceId,input);
+			}}));
 	}
 	protected static Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
 		if(Judge.isEmpty(imageBytes))return null;

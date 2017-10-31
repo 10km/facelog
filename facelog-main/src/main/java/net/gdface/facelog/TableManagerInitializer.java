@@ -2,22 +2,28 @@ package net.gdface.facelog;
 
 import java.util.concurrent.TimeUnit;
 
+import net.gdface.facelog.db.IDeviceGroupManager;
 import net.gdface.facelog.db.IDeviceManager;
 import net.gdface.facelog.db.IFaceManager;
 import net.gdface.facelog.db.IFeatureManager;
 import net.gdface.facelog.db.IImageManager;
 import net.gdface.facelog.db.ILogLightManager;
 import net.gdface.facelog.db.ILogManager;
+import net.gdface.facelog.db.IPermitManager;
+import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.IPersonManager;
 import net.gdface.facelog.db.IStoreManager;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.mysql.DeviceCacheManager;
+import net.gdface.facelog.db.mysql.DeviceGroupCacheManager;
 import net.gdface.facelog.db.mysql.FaceCacheManager;
 import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.mysql.ImageCacheManager;
 import net.gdface.facelog.db.mysql.PersonCacheManager;
+import net.gdface.facelog.db.mysql.PersonGroupCacheManager;
 import net.gdface.facelog.db.mysql.StoreCacheManager;
 import net.gdface.facelog.db.mysql.TableInstance;
 
@@ -29,27 +35,32 @@ import net.gdface.facelog.db.mysql.TableInstance;
 public class TableManagerInitializer {
 	
 	public final IDeviceManager deviceManager;
+	public final IDeviceGroupManager deviceGroupManager;
 	public final IFaceManager faceManager ;
 	public final IImageManager imageManager ;
 	public final ILogManager logManager ;
 	public final ILogLightManager logLightManager ;
 	public final IPersonManager personManager ;
+	public final IPersonGroupManager personGroupManager;
 	public final IStoreManager storeManager ;
 	public final IFeatureManager featureManager ;
+	public final IPermitManager permitManager;
 	
 	public static final TableManagerInitializer instance = new TableManagerInitializer();
 	private TableManagerInitializer() {
 		// 配置cache参数
 		// log,log_light 表因为不会被修改，也不会被设备频繁读取，不需要使用cache对象
 		deviceManager = DeviceCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
+		deviceGroupManager = DeviceGroupCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
 		faceManager = FaceCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
 		imageManager = ImageCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);		 
 		logManager = (ILogManager) TableInstance.getInstance(LogBean.class);
 		logLightManager = (ILogLightManager) TableInstance.getInstance(LogLightBean.class);
 		personManager = PersonCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
+		personGroupManager = PersonGroupCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
 		storeManager = StoreCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
 		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
- 
+		permitManager = (IPermitManager) TableInstance.getInstance(PermitBean.class);
 		
 /*		deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
 		faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);
