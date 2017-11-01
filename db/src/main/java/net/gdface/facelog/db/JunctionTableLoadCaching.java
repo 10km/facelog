@@ -7,17 +7,21 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Function;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
@@ -25,26 +29,41 @@ import net.gdface.facelog.db.exception.ObjectRetrievalException;
 
 /**
  * 
- * 基于 {@link LoadingCache}实现表数据缓存,并可以通过{@link TableListener}实现缓存数据自动更新
+ * 基于 {@link LoadingCache}实现MANY-TO-MANY 联接表(junction table)数据缓存,并可以通过{@link TableListener}实现缓存数据自动更新<br>
+ * 联接表(junction table)定义:主键为两个字段K1,K2,并且两个字段又各是联接另外两张表的外键
  * @author guyadong
  *
- * @param <K1> 主键类型(Primary or Unique)
+ * @param <K1> 外键1类型(Foreign Key)
+ * @param <K2> 外键2类型(Foreign Key)
  * @param <B> 数据库记录对象类型(Java Bean)
  */
 public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
-    private final LoadingCache<K1, Set<B>> cache1;
-    protected final ConcurrentMap<K1, Set<B>> cacheMap1;
-    protected final  TableListener.Adapter<B> tableListener;
+    private final LoadingCache<K1, Map<K2,B>> cache1;
+    private final ConcurrentMap<K1, Map<K2,B>> cacheMap1;
+	protected final  TableListener.Adapter<B> tableListener;
     /** 当前更新策略 */
     private final UpdateStrategy updateStragey;
-	private final LoadingCache<K2, Set<B>> cache2;
-	private final ConcurrentMap<K2, Set<B>> cacheMap2;
-    /** 返回bean中主键值 */
+	private final Function<B, K1> funReturnK1 =new Function<B,K1>(){
+		@Override
+		public K1 apply(B input) {
+			return returnK1(input);
+		}};
+	private final Function<B, K2> funReturnK2 = new Function<B,K2>(){
+		@Override
+		public K2 apply(B input) {
+			return returnK2(input);
+		}};
+    /** 返回bean中外键K1值 */
     protected abstract K1 returnK1(B bean);
+    /** 返回bean中外键K2值 */
     protected abstract K2 returnK2(B bean);
-    /** 从数据库中加载主键(pk)指定的记录 */
-    protected abstract Set<B> loadfromDatabaseByK1(K1 key)throws Exception;
-    protected abstract Set<B> loadfromDatabaseByK2(K2 key)throws Exception;
+    /** 从数据库中加载外键(K1)指定的记录,没有找到指定的记录则抛出异常 */
+    protected abstract Collection<B> loadfromDatabaseByK1(K1 key)throws Exception;
+
+    /** 注册侦听器 */
+    public abstract void registerListener();
+    /** 注销侦听器 */
+    public abstract void unregisterListener();
     public JunctionTableLoadCaching(){
         this(ITableCache.DEFAULT_CACHE_MAXIMUMSIZE,
         		ITableCache.DEFAULT_DURATION,
@@ -78,22 +97,16 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
             .maximumSize(maximumSize)
             .expireAfterWrite(duration, unit)
             .build(
-                new CacheLoader<K1,Set<B>>() {
+                new CacheLoader<K1,Map<K2,B>>() {
                     @Override
-                    public Set<B> load(K1 key) throws Exception {
-                        return loadfromDatabaseByK1(key);
+                    public Map<K2,B> load(K1 key) throws Exception {
+                    	ImmutableMap<K2, B> m = Maps.uniqueIndex(loadfromDatabaseByK1(key),funReturnK2);
+                    	if(m.isEmpty())
+                    		throw new ObjectRetrievalException();
+						return m;
                     }});
         cacheMap1 = cache1.asMap();
-        cache2 = CacheBuilder.newBuilder()
-                .maximumSize(maximumSize)
-                .expireAfterWrite(duration, unit)
-                .build(
-                    new CacheLoader<K2,Set<B>>() {
-                        @Override
-                        public Set<B> load(K2 key) throws Exception {
-                            return loadfromDatabaseByK2(key);
-                        }});
-            cacheMap2 = cache2.asMap();
+        
         // 初始化侦听器,当表数据改变时自动更新缓存
         tableListener = new TableListener.Adapter<B>(){
             @Override
@@ -108,21 +121,16 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
             
             @Override
             public void afterDelete(B bean) {
-                // the remove method allow null key
-                // see also com.google.common.cache.LocalCache.remove(Object key)
-                cacheMap1.remove(returnK1(bean));
+                remove(bean);
             }};
-    }
-    /**
-     * @see {@link com.google.common.cache.LoadingCache#get(Object)}
-     */
-    public Set<B> getBean(K1 key)throws ExecutionException{
+    }   
+    public Map<K2,B> getBeansByK1(K1 key)throws ExecutionException{
         return cache1.get(key);
     }
-    public Set<B> getBeanIfPresent(K1 key){
+    public Map<K2,B> getBeansByK1IfPresent(K1 key){
         return null == key ? null : cache1.getIfPresent(key);
     }
-    public Set<B> getBeanUnchecked(K1 key){
+    public Map<K2,B> getBeansByK1Unchecked(K1 key){
         try{
             return cache1.getUnchecked(key);
         }catch(UncheckedExecutionException e){
@@ -130,17 +138,62 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
                 return null;
             }
             throw e;
-        }        
+        } 
     }
+    public B getBean(K1 k1,K2 k2) throws ExecutionException{
+    	Map<K2, B> beans1 = getBeansByK1(k1);
+    	B bean = beans1.get(k2);
+    	if(null == bean)
+    		throw new ExecutionException(new ObjectRetrievalException());
+    	return bean;
+    }
+    public B getBeanIfPresent(K1 k1,K2 k2){
+    	Map<K2, B> beans1 = getBeansByK1IfPresent(k1);
+    	return null == beans1 ? null : beans1.get(k2);
+    }
+    public B getBeanUnchecked(K1 k1,K2 k2){
+        try{
+            Map<K2, B> beans1 = cache1.getUnchecked(k1);
+        	return null == beans1 ? null : beans1.get(k2);
+        }catch(UncheckedExecutionException e){
+            if(e.getCause() instanceof ObjectRetrievalException){
+                return null;
+            }
+            throw e;
+        } 
+    }
+
+    /** 从缓存中删除{@code bean}指定的记录 */
     public void remove(B bean){
-        cacheMap1.remove(returnK1(bean));
+    	K1 k1 = returnK1(bean);
+    	K2 k2 = returnK2(bean);
+    	Map<K2, B> beans;
+    	if(null != (beans = cacheMap1.get(k1)) && null != k2){
+    		beans.remove(k2);
+    	}
     }
     /**
-     * 根据当前更新策略({@link UpdateStrategy})将{@code bean}更新到缓存
-     * @see ITableCache#update(net.gdface.facelog.db.BaseBean)
+     * 将{@code bean}更新到缓存
      */
     public void update(B bean){
-        //updateStragey.update(cacheMap1, returnKey(bean), bean);
+    	update(bean,cacheMap1);
+    }
+    /**
+     * 更新{@code bean}到指定的缓存对象{@code cacheMap}
+     * @param bean
+     * @param cacheMap
+     */
+    protected void update(B bean,ConcurrentMap<K1,Map<K2,B>>cacheMap){
+    	K1 k1 = returnK1(bean);
+    	K2 k2 = returnK2(bean);
+    	if(null !=k1 && null != k2){
+    		Map<K2, B> old;
+			Map<K2,B> map = Maps.newConcurrentMap();
+			map.put(k2, bean);
+			if(null != (old = cacheMap.putIfAbsent(k1, map))){
+    			old.put(k2, bean);
+    		}
+    	}
     }
 }
 
