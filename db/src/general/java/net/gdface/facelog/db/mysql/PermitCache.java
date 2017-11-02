@@ -22,8 +22,8 @@ import net.gdface.facelog.db.JunctionTableCache;
 import net.gdface.facelog.db.PermitBean;
 
 /**
- * cache manager for PermitBean base {@link com.google.common.cache.LoadingCache}<br>
- * primary key (device_group_id,person_group_id) is key
+ * cache manager for PermitBean base {@link JunctionTableCache}<br>
+ * primary key {@code(device_group_id ->K1,person_group_id -> K2)}
  * @author guyadong
  *
  */
@@ -82,23 +82,40 @@ public class PermitCache extends JunctionTableCache<Integer,Integer, PermitBean>
             throw new ObjectRetrievalException();
         return list;
     }
+    /** 
+     * return all matched beans on field fl_permit(device_group_id) with deviceGroupId 
+     * @see JunctionTableCache#getBeansByK1(Integer)
+     */
     public Set<PermitBean> getBeanByDeviceGroupId(Integer deviceGroupId) throws ExecutionException{
         return getBeansByK1(deviceGroupId);
     }
+    /** 
+     * return all matched beans on field fl_permit(device_group_id) with deviceGroupId 
+     * @see JunctionTableCache#getBeansByK1Unchecked(Integer)
+     */
     public Set<PermitBean> getBeanByDeviceGroupIdUnchecked(Integer deviceGroupId){
         return getBeansByK1Unchecked(deviceGroupId);
     }
+    /** 
+     * return all matched beans on field fl_permit(person_group_id) with personGroupId 
+     * @see JunctionTableCache#getBeansByK2(Integer)
+     */
     public Set<PermitBean> getBeanByPersonGroupId(Integer personGroupId) throws ExecutionException{
-        return getBeansByK1(personGroupId);
+        return getBeansByK2(personGroupId);
     }
+    /** 
+     * return all matched beans on field fl_permit(person_group_id) with personGroupId 
+     * @see JunctionTableCache#getBeansByK2Unchecked(Integer)
+     */
     public Set<PermitBean> getBeanByPersonGroupIdUnchecked(Integer personGroupId){
-        return getBeansByK1Unchecked(personGroupId);
+        return getBeansByK2Unchecked(personGroupId);
     }
+    /** see also {@link JunctionTableCache#getBean(Integer,Integer)} */
     public PermitBean getBeanByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws ExecutionException{
         return getBean(deviceGroupId,personGroupId);
     }
+    /** see also {@link JunctionTableCache#getBeanUnchecked(Integer,Integer)} */
     public PermitBean getBeanByPrimaryKeyUnchecked(Integer deviceGroupId,Integer personGroupId){
         return getBeanUnchecked(deviceGroupId,personGroupId);
     }
-
 }

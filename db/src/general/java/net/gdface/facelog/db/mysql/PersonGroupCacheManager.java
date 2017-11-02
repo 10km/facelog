@@ -164,12 +164,24 @@ public class PersonGroupCacheManager extends PersonGroupManager
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)
     {
         java.util.List<PermitBean> junctions = 
-            DeviceGroupCacheManager.getInstance().getPermitBeansByDeviceGroupIdAsList(bean,startRow,numRows);
+            com.google.common.collect.Lists.newArrayList(PermitCacheManager.getInstance().getBeanByDeviceGroupIdUnchecked(bean.getId()));
+        startRow = Math.min(Math.max(0, startRow - 1), junctions.size() - 1);
+        numRows = numRows < 0 ? junctions.size():Math.min(junctions.size(), numRows);
+        numRows = Math.min(junctions.size() - startRow , numRows) ;
+        junctions = com.google.common.collect.Ordering
+                    .natural()
+                    .onResultOf(new com.google.common.base.Function<PermitBean,Integer>(){
+                        @Override
+                        public Integer apply(PermitBean input) {
+                            return input.getPersonGroupId();
+                        }})
+                    .sortedCopy(junctions)
+                    .subList(startRow, startRow + numRows);
         java.util.ArrayList<PersonGroupBean> lbeans = new java.util.ArrayList<PersonGroupBean>(junctions.size());
         for(PermitBean jbean:junctions){
-        	try{
-        		lbeans.add(loadByPrimaryKeyChecked(jbean.getPersonGroupId()));
-        	}catch(ObjectRetrievalException  e){}
+            try{
+                lbeans.add(loadByPrimaryKeyChecked(jbean.getPersonGroupId()));
+            }catch(ObjectRetrievalException  e){}
         }
         return lbeans;
     }

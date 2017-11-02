@@ -147,4 +147,24 @@ public class PermitCacheManager extends PermitManager
     }
 
 
+    //_____________________________________________________________________
+    //
+    // SIMPLE JUNCTION TABLE
+    //_____________________________________________________________________
+    /** see also {@link PermitCache#getBeanByDeviceGroupId(Integer)} */
+    public java.util.Set<PermitBean> getBeanByDeviceGroupId(Integer deviceGroupId) throws ExecutionException{
+        return cache.getBeanByDeviceGroupId(deviceGroupId);
+    }
+    /** see also {@link PermitCache#getBeanByDeviceGroupIdUnchecked(Integer)} */
+    public java.util.Set<PermitBean> getBeanByDeviceGroupIdUnchecked(Integer deviceGroupId){
+        return cache.getBeanByDeviceGroupIdUnchecked(deviceGroupId);
+    }
+    /** see also {@link PermitCache#getBeanByPersonGroupId(Integer)} */
+    public java.util.Set<PermitBean> getBeanByPersonGroupId(Integer personGroupId) throws ExecutionException{
+        return cache.getBeanByPersonGroupId(personGroupId);
+    }
+    /** see also {@link PermitCache#getBeanByPersonGroupIdUnchecked(Integer)} */
+    public java.util.Set<PermitBean> getBeanByPersonGroupIdUnchecked(Integer personGroupId){
+        return cache.getBeanByPersonGroupIdUnchecked(personGroupId);
+    }
 }
