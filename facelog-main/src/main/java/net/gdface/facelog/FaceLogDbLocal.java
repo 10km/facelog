@@ -168,6 +168,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 				return _getPermit(deviceId,input);
 			}}));
 	}
+	////////////////////////////////////////////
 	protected static Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
 		if(Judge.isEmpty(imageBytes))return null;
 		LazyImage image = LazyImage.create(imageBytes);
@@ -1064,12 +1065,67 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 
 	@Override
 	public List<DeviceBean> getDevice(List<Integer> idList)throws ServiceRuntime{
-    	try{
-		return _getDevice(idList);
+		try{
+			return _getDevice(idList);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
+	}
+	////////////////////////////////DeviceGroupBean/////////////
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+		try{
+			return _saveDeviceGroup(deviceGroupBean);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public DeviceGroupBean getDeviceGroup(int deviceGroupId){
+		try{
+			return _getDeviceGroup(deviceGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public List<DeviceGroupBean> getDeviceGroup(Collection<Integer> collection){
+		try{
+			return _getDeviceGroup(collection); 
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public int deleteDeviceGroup(int deviceGroupId){
+		try{
+			return _deleteDeviceGroup(deviceGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
+		try{
+			return _getSubDeviceGroup(deviceGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
+		try{
+			return _getDevicesOfGroup(deviceGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
 	}
 }

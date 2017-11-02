@@ -16,12 +16,12 @@ import net.gdface.facelog.db.IStoreManager;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
-import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.mysql.DeviceCacheManager;
 import net.gdface.facelog.db.mysql.DeviceGroupCacheManager;
 import net.gdface.facelog.db.mysql.FaceCacheManager;
 import net.gdface.facelog.db.mysql.FeatureCacheManager;
 import net.gdface.facelog.db.mysql.ImageCacheManager;
+import net.gdface.facelog.db.mysql.PermitCacheManager;
 import net.gdface.facelog.db.mysql.PersonCacheManager;
 import net.gdface.facelog.db.mysql.PersonGroupCacheManager;
 import net.gdface.facelog.db.mysql.StoreCacheManager;
@@ -60,7 +60,7 @@ public class TableManagerInitializer {
 		personGroupManager = PersonGroupCacheManager.makeInstance(UpdateStrategy.always,10000,60,TimeUnit.MINUTES);
 		storeManager = StoreCacheManager.makeInstance(UpdateStrategy.always,1000,10,TimeUnit.MINUTES);
 		featureManager = FeatureCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
-		permitManager = (IPermitManager) TableInstance.getInstance(PermitBean.class);
+		permitManager = PermitCacheManager.makeInstance(UpdateStrategy.always,10000,10,TimeUnit.MINUTES);
 		
 /*		deviceManager = (IDeviceManager) TableInstance.getInstance(DeviceBean.class);
 		faceManager = (IFaceManager) TableInstance.getInstance(FaceBean.class);
