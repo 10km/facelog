@@ -653,4 +653,33 @@ public  class PersonGroupBean
             index = FL_PERSON_GROUP_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.PersonGroupBean}
+     * @see {@link ThriftConverter#converterPersonGroupBean}
+     */
+    public net.gdface.facelog.client.thrift.PersonGroupBean toThrift(){
+        return ThriftConverter.converterPersonGroupBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.PersonGroupBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterPersonGroupBean}
+     */
+    public PersonGroupBean fromThrift(net.gdface.facelog.client.thrift.PersonGroupBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterPersonGroupBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.PersonGroupBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterPersonGroupBean}
+     */
+    public PersonGroupBean(net.gdface.facelog.client.thrift.PersonGroupBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterPersonGroupBean.fromRight(this,thriftBean);
+    }
 }

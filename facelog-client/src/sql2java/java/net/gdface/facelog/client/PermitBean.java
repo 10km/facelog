@@ -595,4 +595,33 @@ public  class PermitBean
             index = FL_PERMIT_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.PermitBean}
+     * @see {@link ThriftConverter#converterPermitBean}
+     */
+    public net.gdface.facelog.client.thrift.PermitBean toThrift(){
+        return ThriftConverter.converterPermitBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.PermitBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterPermitBean}
+     */
+    public PermitBean fromThrift(net.gdface.facelog.client.thrift.PermitBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterPermitBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.PermitBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterPermitBean}
+     */
+    public PermitBean(net.gdface.facelog.client.thrift.PermitBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterPermitBean.fromRight(this,thriftBean);
+    }
 }

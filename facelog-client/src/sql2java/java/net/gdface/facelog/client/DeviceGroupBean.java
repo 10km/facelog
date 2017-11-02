@@ -653,4 +653,33 @@ public  class DeviceGroupBean
             index = FL_DEVICE_GROUP_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    /////// FOR THRIFT //////
+    /** 
+     * cast {@code this} to {@link net.gdface.facelog.client.thrift.DeviceGroupBean}
+     * @see {@link ThriftConverter#converterDeviceGroupBean}
+     */
+    public net.gdface.facelog.client.thrift.DeviceGroupBean toThrift(){
+        return ThriftConverter.converterDeviceGroupBean.toRight(this);
+    }
+    /** 
+     * copy all fields from {@link net.gdface.facelog.client.thrift.DeviceGroupBean},do nothing if {@code thriftBean} is null
+     * @return current object {@code this}
+     * @see {@link ThriftConverter#converterDeviceGroupBean}
+     */
+    public DeviceGroupBean fromThrift(net.gdface.facelog.client.thrift.DeviceGroupBean thriftBean){
+        if(null != thriftBean){
+            return ThriftConverter.converterDeviceGroupBean.fromRight(this,thriftBean);
+        }
+        return this;
+    }
+    /** 
+     * construct new instance from {@link net.gdface.facelog.client.thrift.DeviceGroupBean}
+     * @param thriftBean must not be null
+     * @see {@link ThriftConverter#converterDeviceGroupBean}
+     */
+    public DeviceGroupBean(net.gdface.facelog.client.thrift.DeviceGroupBean thriftBean){
+        if(null != thriftBean)
+            throw new NullPointerException();
+        ThriftConverter.converterDeviceGroupBean.fromRight(this,thriftBean);
+    }
 }
