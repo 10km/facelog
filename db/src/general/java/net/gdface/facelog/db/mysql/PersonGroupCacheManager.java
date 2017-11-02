@@ -164,7 +164,7 @@ public class PersonGroupCacheManager extends PersonGroupManager
     public java.util.List<PersonGroupBean> loadViaPermitAsList(DeviceGroupBean bean, int startRow, int numRows)
     {
         java.util.List<PermitBean> junctions = 
-            DeviceGroupManager.getInstance().getPermitBeansByDeviceGroupIdAsList(bean,startRow,numRows);
+            DeviceGroupCacheManager.getInstance().getPermitBeansByDeviceGroupIdAsList(bean,startRow,numRows);
         java.util.ArrayList<PersonGroupBean> lbeans = new java.util.ArrayList<PersonGroupBean>(junctions.size());
         for(PermitBean jbean:junctions){
         	try{
