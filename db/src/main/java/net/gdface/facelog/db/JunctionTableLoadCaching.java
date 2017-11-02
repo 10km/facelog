@@ -16,10 +16,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.UncheckedExecutionException;
@@ -38,8 +42,39 @@ import net.gdface.facelog.db.exception.ObjectRetrievalException;
  * @param <B> 数据库记录对象类型(Java Bean)
  */
 public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
-    private final LoadingCache<K1, Map<K2,B>> cache1;
-    private final ConcurrentMap<K1, Map<K2,B>> cacheMap1;
+	private class Key{
+		K1 k1;
+		K2 k2;
+		Key(K1 k1, K2 k2) {
+			this.k1 = k1;
+			this.k2 = k2;
+		}
+		@Override
+		public int hashCode() {			
+			return new HashCodeBuilder(-82280557, -700257973)
+					.append(k1)
+					.append(k2)
+					.hashCode();
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			@SuppressWarnings("unchecked")
+			Key other = (Key) obj;
+			return new EqualsBuilder()
+					.append(k1, other.k1)
+					.append(k2, other.k2)
+					.isEquals();
+		}
+
+	}
+    private final LoadingCache<Key, B> cache1;
+    private final ConcurrentMap<Key, B> cacheMap1;
 	protected final  TableListener.Adapter<B> tableListener;
     /** 当前更新策略 */
     private final UpdateStrategy updateStragey;
@@ -97,13 +132,11 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
             .maximumSize(maximumSize)
             .expireAfterWrite(duration, unit)
             .build(
-                new CacheLoader<K1,Map<K2,B>>() {
+                new CacheLoader<Key,B>() {
                     @Override
-                    public Map<K2,B> load(K1 key) throws Exception {
-                    	ImmutableMap<K2, B> m = Maps.uniqueIndex(loadfromDatabaseByK1(key),funReturnK2);
-                    	if(m.isEmpty())
-                    		throw new ObjectRetrievalException();
-						return m;
+                    public B load(Key key) throws Exception {
+						return null;
+
                     }});
         cacheMap1 = cache1.asMap();
         
@@ -124,15 +157,19 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
                 remove(bean);
             }};
     }   
-    public Map<K2,B> getBeansByK1(K1 key)throws ExecutionException{
-        return cache1.get(key);
+    public Collection<B> getBeansByK1(final K1 key)throws ExecutionException{
+        return Collections2.filter(cacheMap1.values(), new Predicate<B>(){
+			@Override
+			public boolean apply(B input) {
+				return Objects.equal(key, returnK1(input));
+			}});
     }
-    public Map<K2,B> getBeansByK1IfPresent(K1 key){
+    public B getBeansByK1IfPresent(K1 key){
         return null == key ? null : cache1.getIfPresent(key);
     }
-    public Map<K2,B> getBeansByK1Unchecked(K1 key){
+    public B getBeansByK1Unchecked(K1 k1){
         try{
-            return cache1.getUnchecked(key);
+            return cache1.getUnchecked(new Key(k1,null));
         }catch(UncheckedExecutionException e){
             if(e.getCause() instanceof ObjectRetrievalException){
                 return null;
@@ -141,20 +178,14 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
         } 
     }
     public B getBean(K1 k1,K2 k2) throws ExecutionException{
-    	Map<K2, B> beans1 = getBeansByK1(k1);
-    	B bean = beans1.get(k2);
-    	if(null == bean)
-    		throw new ExecutionException(new ObjectRetrievalException());
-    	return bean;
+    	return null ==k1 || null == k2? null : cache1.get(new Key(k1,k2));
     }
     public B getBeanIfPresent(K1 k1,K2 k2){
-    	Map<K2, B> beans1 = getBeansByK1IfPresent(k1);
-    	return null == beans1 ? null : beans1.get(k2);
+    	return null ==k1 || null == k2? null : cache1.getIfPresent(new Key(k1,k2));
     }
     public B getBeanUnchecked(K1 k1,K2 k2){
         try{
-            Map<K2, B> beans1 = cache1.getUnchecked(k1);
-        	return null == beans1 ? null : beans1.get(k2);
+        	return null ==k1 || null == k2? null : cache1.getUnchecked(new Key(k1,k2));
         }catch(UncheckedExecutionException e){
             if(e.getCause() instanceof ObjectRetrievalException){
                 return null;
@@ -167,32 +198,20 @@ public abstract class JunctionTableLoadCaching<K1 ,K2,B extends BaseBean<B>> {
     public void remove(B bean){
     	K1 k1 = returnK1(bean);
     	K2 k2 = returnK2(bean);
-    	Map<K2, B> beans;
-    	if(null != (beans = cacheMap1.get(k1)) && null != k2){
-    		beans.remove(k2);
+    	if(null !=k1 && null != k2){
+    		cacheMap1.remove(new Key(k1,k2));
     	}
-    }
-    /**
-     * 将{@code bean}更新到缓存
-     */
-    public void update(B bean){
-    	update(bean,cacheMap1);
     }
     /**
      * 更新{@code bean}到指定的缓存对象{@code cacheMap}
      * @param bean
      * @param cacheMap
      */
-    protected void update(B bean,ConcurrentMap<K1,Map<K2,B>>cacheMap){
+    protected void update(B bean){
     	K1 k1 = returnK1(bean);
     	K2 k2 = returnK2(bean);
     	if(null !=k1 && null != k2){
-    		Map<K2, B> old;
-			Map<K2,B> map = Maps.newConcurrentMap();
-			map.put(k2, bean);
-			if(null != (old = cacheMap.putIfAbsent(k1, map))){
-    			old.put(k2, bean);
-    		}
+    		this.updateStragey.update(cacheMap1, new Key(k1,k2), bean);
     	}
     }
 }
