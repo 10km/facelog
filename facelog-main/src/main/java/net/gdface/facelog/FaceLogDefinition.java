@@ -1,6 +1,7 @@
 package net.gdface.facelog;
 
 import java.nio.ByteBuffer;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -8,12 +9,16 @@ import com.facebook.swift.service.ThriftMethod;
 import com.facebook.swift.service.ThriftService;
 
 import net.gdface.facelog.db.DeviceBean;
+import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
+import net.gdface.facelog.db.PersonGroupBean;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 // 由于Java语言的限制,导致swift无法从interface中获取参数名信息，所以采用interface定义生成的thrift IDL文件中service中的方法
 // 无法生成正确的参数名称(只能是无意义的arg0,arg1...)<br>
@@ -339,7 +344,7 @@ public abstract class FaceLogDefinition {
 
 	/**
 	 * (主动更新机制实现)<br>
-	 * 返回fl_person.update_time字段大于指定时间戳( timestamp )的所有fl_person记录<br>
+	 * 返回fl_person.update_time字段大于指定时间戳( {@code timestamp} )的所有fl_person记录<br>
 	 * 同时包含fl_feature更新记录引用的fl_person记录
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
@@ -352,7 +357,7 @@ public abstract class FaceLogDefinition {
 
 	/**
 	 * (主动更新机制实现)<br>
-	 * 返回 fl_person.update_time 字段大于指定时间戳( timestamp )的所有fl_person记录
+	 * 返回 fl_person.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_person记录
 	 * @param timestamp
 	 * @return 返回fl_person.id 列表
 	 * @throws ServiceRuntime
@@ -364,7 +369,7 @@ public abstract class FaceLogDefinition {
 
 	/**
 	 * (主动更新机制实现)<br>
-	 * 返回 fl_feature.update_time 字段大于指定时间戳( timestamp )的所有fl_feature记录
+	 * 返回 fl_feature.update_time 字段大于指定时间戳( {@code timestamp} )的所有fl_feature记录
 	 * @param timestamp
 	 * @return 返回 fl_feature.md5 列表
 	 * @throws ServiceRuntime
@@ -613,7 +618,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public DeviceBean getDevice(Integer deviceId) throws ServiceRuntime {
+	public DeviceBean getDevice(int deviceId) throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -624,6 +629,214 @@ public abstract class FaceLogDefinition {
 	 */
 	@ThriftMethod("getDeviceList")
 	public List<DeviceBean> getDevice(List<Integer> idList) throws ServiceRuntime {
+		return null;
+	}
+	////////////////////////////////DeviceGroupBean/////////////
+	/**
+	 * 保存设备组记录
+	 * @param deviceGroupBean
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+		return deviceGroupBean;
+	}
+	/**
+	 * 根据设备组id返回数据库记录
+	 * @param deviceGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public DeviceGroupBean getDeviceGroup(int deviceGroupId){
+		return null;
+	}
+	/**
+	 * 返回设备组id列表指定的数据库记录
+	 * @param groupIdList
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod("getDeviceGroupList")
+	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList){
+		return null;
+	}
+	/**
+	 * 删除{@code deviceGroupId}指定的设备组<br>
+	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+	 * @param deviceGroupId
+	 * @return 
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public int deleteDeviceGroup(int deviceGroupId){
+		return deviceGroupId;
+	}
+	/**
+	 * 返回{@code deviceGroupId}指定的设备组下的所有子节点<br>
+	 * 如果没有子节点则返回空表
+	 * @param deviceGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
+		return null;
+	}
+	/**
+	 * 返回{@code deviceGroupId}指定的设备组下属的所有设备记录<br>
+	 * 如果没有下属设备记录则返回空表
+	 * @param deviceGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
+		return null;
+	}
+	////////////////////////////////PersonGroupBean/////////////
+	/**
+	 * 保存人员组记录
+	 * @param personGroupBean
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
+		return personGroupBean;
+	}
+	/**
+	 * 根据人员组id返回数据库记录
+	 * @param personGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public PersonGroupBean getPersonGroup(int personGroupId){
+		return null;
+	}
+	/**
+	 * 返回人员组id列表指定的数据库记录
+	 * @param groupIdList
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod("getPersonGroupList")
+	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList){
+		return null;
+	}
+	/**
+	 * 删除{@code personGroupId}指定的人员组<br>
+	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
+	 * @param personGroupId
+	 * @return 
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public int deletePersonGroup(int personGroupId){
+		return personGroupId;
+	}
+	/**
+	 * 返回{@code personGroupId}指定的人员组下的所有子节点<br>
+	 * 如果没有子节点则返回空表
+	 * @param personGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
+		return null;
+	}
+	/**
+	 * 返回{@code deviceGroupId}指定的人员组下属的所有人员记录<br>
+	 * 如果没有下属人员记录则返回空表
+	 * @param deviceGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public List<PersonBean> getPersonsOfGroup(int personGroupId){
+		return null;
+	}
+	/////////////////////PERMIT/////
+	/**
+	 * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
+	 * {@code deviceGroup}指定的设备组下属的所有设备通行
+	 * @param deviceGroup
+	 * @param personGroup
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){}
+	/**
+	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
+	 * @param deviceGroup
+	 * @param personGroup
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){}
+	/**
+	 * 获取人员组通行权限<br>
+	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
+	 * @param deviceId
+	 * @param personGroupId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public boolean getGroupPermit(int deviceId,int personGroupId){
+		return false;
+	}
+	/**
+	 * 获取人员通行权限<br>
+	 * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
+	 * @param deviceId
+	 * @param personId
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws RuntimeException
+	 */
+	@ThriftMethod
+	public boolean getPermit(int deviceId,int personId){
+		return false;
+	}
+	/** 参见 {@link #getGroupPermit(Integer, Integer) } */
+	@ThriftMethod("getGroupPermitList")
+	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList){
+		return null;		
+	}
+	/** 参见 {@link #getPermit(Integer, Integer) } */
+	@ThriftMethod("getPermitList")
+	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList){
+		return null;
+	}
+	/**
+	 * (主动更新机制实现)<br>
+	 * 返回 fl_permit.create_time 字段大于指定时间戳( {@code timestamp} )的所有fl_permit记录
+	 * @param timestamp
+	 * @return
+	 * @throws WrapDAOException
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public List<PermitBean> loadPermitByUpdate(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntime {
 		return null;
 	}
 }

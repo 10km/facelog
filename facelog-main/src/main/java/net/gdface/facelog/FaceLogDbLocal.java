@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.javatuples.Pair;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -26,9 +27,11 @@ import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
+import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
+import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
 import net.gdface.image.UnsupportedFormat;
@@ -67,9 +70,17 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	protected static StoreBean _getStore(String md5){
 		return storeManager.loadByPrimaryKey(md5);
 	}
+	protected static DeviceBean _checkGroup(DeviceBean deviceBean){
+		if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
+			_saveDefaultPersonGroupIfAbsent();
+		}
+		return deviceBean;
+	}
 	protected static DeviceBean _saveDevice(DeviceBean deviceBean){
+		_checkGroup(deviceBean);
 		return deviceManager.save(deviceBean);
 	}
+
 	protected static DeviceBean _getDevice(Integer deviceId){
 		return deviceManager.loadByPrimaryKey(deviceId); 
 	}
@@ -83,11 +94,28 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	protected static DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean){
 		return deviceGroupManager.save(deviceGroupBean);
 	}
+	/** 
+	 * 如果没有默认设备组则向fl_device_group表中增加默认设备组,失败则抛出异常 
+	 * 
+	 * @throws IllegalStateException 创建失败
+	 */
+	protected static void _saveDefaultDeviceGroupIfAbsent(){
+		if(!deviceGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
+			try{
+				DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
+				bean.setName(DEFAULT_GROUP_NAME);
+				deviceGroupManager.save(bean);
+			}catch(WrapDAOException e){}
+			if(!deviceGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
+				throw new IllegalStateException("can't create default device group"); 
+			}
+		}
+	}
 	protected static DeviceGroupBean _getDeviceGroup(Integer deviceGroupId){
 		return deviceGroupManager.loadByPrimaryKey(deviceGroupId); 
 	}
-	protected static List<DeviceGroupBean> _getDeviceGroup(Collection<Integer> collection){
-		return deviceGroupManager.loadByPrimaryKey(collection); 
+	protected static List<DeviceGroupBean> _getDeviceGroup(Collection<Integer> groupIdList){
+		return deviceGroupManager.loadByPrimaryKey(groupIdList); 
 	}
 	protected static int _deleteDeviceGroup(Integer deviceGroupId){
 		return deviceGroupManager.deleteByPrimaryKey(deviceGroupId);
@@ -102,11 +130,28 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	protected static PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean){
 		return personGroupManager.save(personGroupBean);
 	}
+	/** 
+	 * 如果没有默认设备组则向fl_person_group表中增加默认设备组,失败则抛出异常 
+	 * 
+	 * @throws IllegalStateException 创建失败
+	 */
+	protected static void _saveDefaultPersonGroupIfAbsent(){
+		if(!personGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
+			try{
+				PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
+				bean.setName(DEFAULT_GROUP_NAME);
+				personGroupManager.save(bean);
+			}catch(WrapDAOException e){}
+			if(!personGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
+				throw new IllegalStateException("can't create default person group"); 
+			}
+		}
+	}
 	protected static PersonGroupBean _getPersonGroup(Integer personGroupId){
 		return personGroupManager.loadByPrimaryKey(personGroupId); 
 	}
-	protected static List<PersonGroupBean> _getPersonGroup(Collection<Integer> collection){
-		return personGroupManager.loadByPrimaryKey(collection);
+	protected static List<PersonGroupBean> _getPersonGroup(Collection<Integer> groupIdList){
+		return personGroupManager.loadByPrimaryKey(groupIdList);
 	}
 	protected static int _deletePersonGroup(Integer personGroupId){
 		return personGroupManager.deleteByPrimaryKey(personGroupId);
@@ -167,6 +212,13 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			public Boolean apply(Integer input) {
 				return _getPermit(deviceId,input);
 			}}));
+	}
+	protected static  List<PermitBean> _loadPermitByWhere(String where){
+		return permitManager.loadByWhereAsList(where);
+}
+	protected static List<PermitBean> _loadPermitByUpdate(Date timestamp) {
+		String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));		
+		return _loadPermitByWhere(where);
 	}
 	////////////////////////////////////////////
 	protected static Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
@@ -312,10 +364,17 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 		return count;
 	}
-	protected static PersonBean _savePerson(PersonBean bean, ImageBean idPhotoBean,
+	protected static PersonBean _checkGroup(PersonBean personBean){
+		if(null != personBean && Objects.equal(personBean.getGroupId(), DEFAULT_GROUP_ID)){
+			_saveDefaultPersonGroupIfAbsent();
+		}
+		return personBean;
+	}
+	protected static PersonBean _savePerson(PersonBean personBean, ImageBean idPhotoBean,
 			Collection<FeatureBean> featureBean) {
-		_deleteImage(personManager.getReferencedByImageMd5(bean));// delete old photo if exists
-		return personManager.save(bean, idPhotoBean, featureBean, null);
+		_checkGroup(personBean);
+		_deleteImage(personManager.getReferencedByImageMd5(personBean));// delete old photo if exists
+		return personManager.save(personBean, idPhotoBean, featureBean, null);
 	}
 
 	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
@@ -437,9 +496,6 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	protected static  List<PersonBean> _loadPersonByWhere(String where){
 			return personManager.loadByWhereAsList(where);
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getPerson(int)
-	 */
 	@Override
 	public PersonBean getPerson(int personId)throws ServiceRuntime {
 		try{
@@ -448,9 +504,6 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getPersons(java.util.List)
-	 */
 	@Override
 	public List<PersonBean> getPersons(List<Integer> idList)throws ServiceRuntime {
 		try{
@@ -461,9 +514,6 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getPersonByPapersNum(java.lang.String)
-	 */
 	@Override
 	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
 		try{
@@ -473,9 +523,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#getFeatureBeansByPersonId(int)
-	 */
+
 	@Override
 	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
@@ -484,9 +532,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deletePerson(int)
-	 */
+
 	@Override
 	public int deletePerson(final int personId)throws ServiceRuntime {
 		try{
@@ -501,9 +547,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deletePersons(java.util.List)
-	 */
+
 	@Override
 	public int deletePersons(final List<Integer> personIdList)throws ServiceRuntime {
 		try{
@@ -518,9 +562,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deletePersonByPapersNum(java.lang.String)
-	 */
+
 	@Override
 	public int deletePersonByPapersNum(final String papersNum)throws ServiceRuntime  {
 		try{	
@@ -535,9 +577,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#deletePersonsByPapersNum(java.util.List)
-	 */
+
 	@Override
 	public  int deletePersonsByPapersNum(final List<String> papersNumlist)throws ServiceRuntime {
 		try{		
@@ -552,9 +592,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#existsPerson(int)
-	 */
+
 	@Override
 	public boolean existsPerson(int persionId)throws ServiceRuntime {
 		try{
@@ -563,9 +601,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		} 
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#isDisable(int)
-	 */
+
 	@Override
 	public boolean isDisable(int personId)throws ServiceRuntime{
 		try{
@@ -576,9 +612,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			throw new ServiceRuntime(e);
 		}
 	}
-	/* （非 Javadoc）
-	 * @see net.gdface.facelog.IFaceLog#disablePerson(int)
-	 */
+
 	@Override
 	public void disablePerson(int personId)throws ServiceRuntime{
 		try{
@@ -1047,16 +1081,20 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		return _saveDevice(deviceBean);
 		} catch (ServiceRuntime e) {
 			throw e;
+		} catch(RuntimeException e){
+			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
 
 	@Override
-	public DeviceBean getDevice(Integer deviceId)throws ServiceRuntime{
+	public DeviceBean getDevice(int deviceId)throws ServiceRuntime{
     	try{
 		return _getDevice(deviceId);
 		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
@@ -1069,60 +1107,238 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 			return _getDevice(idList);
 		} catch (ServiceRuntime e) {
 			throw e;
+		} catch(RuntimeException e){
+			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
 	////////////////////////////////DeviceGroupBean/////////////
+	@Override
 	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
 		try{
 			return _saveDeviceGroup(deviceGroupBean);
 		} catch (ServiceRuntime e) {
 			throw e;
+		} catch(RuntimeException e){
+			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
+	@Override
 	public DeviceGroupBean getDeviceGroup(int deviceGroupId){
 		try{
 			return _getDeviceGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
 			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		}
-	}
-	public List<DeviceGroupBean> getDeviceGroup(Collection<Integer> collection){
-		try{
-			return _getDeviceGroup(collection); 
-		} catch (ServiceRuntime e) {
+		} catch(RuntimeException e){
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
+	@Override
+	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList){
+		try{
+			return _getDeviceGroup(groupIdList); 
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
 	public int deleteDeviceGroup(int deviceGroupId){
 		try{
 			return _deleteDeviceGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
 			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		}
-	}
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
-		try{
-			return _getSubDeviceGroup(deviceGroupId);
-		} catch (ServiceRuntime e) {
+		} catch(RuntimeException e){
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
 	}
+	@Override
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
+		try{
+			return _getSubDeviceGroup(deviceGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
 	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
 		try{
 			return _getDevicesOfGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	////////////////////////////////PersonGroupBean/////////////
+	@Override
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
+		try{
+			return _savePersonGroup(personGroupBean);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public PersonGroupBean getPersonGroup(int personGroupId){
+		try{
+			return _getPersonGroup(personGroupId); 
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList){
+		try{
+			return _getPersonGroup(groupIdList);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public int deletePersonGroup(int personGroupId){
+		try{
+			return _deletePersonGroup(personGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
+		try{
+			return personGroupManager.getPersonGroupBeansByParentAsList(personGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<PersonBean> getPersonsOfGroup(int personGroupId){
+		try{
+			return personGroupManager.getPersonBeansByGroupIdAsList(personGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	/////////////////////PERMIT/////
+	@Override
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+		try{
+			_addPermit(deviceGroup, personGroup);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+		try{
+			_removePermit(deviceGroup, personGroup);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public boolean getGroupPermit(int deviceId,int personGroupId){
+		try{
+			return _getGroupPermit(deviceId,personGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public boolean getPermit(int deviceId,int personId){
+		try{
+			return _getPermit(deviceId,personId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList){
+		try{
+			return _getGroupPermit(deviceId, personGroupIdList);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList){
+		try{
+			return _getPermit(deviceId, personIdList);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<PermitBean> loadPermitByUpdate(long timestamp){
+		try{
+			return _loadPermitByUpdate(new Date(timestamp));
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
 			throw e;
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);

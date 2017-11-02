@@ -29,6 +29,11 @@ public interface CommonConstant {
 	public static final int DEFAULT_HEARTBEAT_INTERVAL = 8;
 	/** 心跳包失效时间(秒) */
 	public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
+	/** 默认(设备/人员)组id */
+	public static final int DEFAULT_GROUP_ID = 0;
+	/** 默认(设备/人员)组名 */
+	public static final String DEFAULT_GROUP_NAME = "DEFAULT_GROUP";
+
 	public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){};
 	public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
 	public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){};
