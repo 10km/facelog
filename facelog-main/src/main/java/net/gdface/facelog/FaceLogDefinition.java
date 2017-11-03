@@ -26,6 +26,14 @@ import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * 定义 FaceLog 服务接口<br>
+ * <ul>
+ * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link net.gdface.facelog.db.exception.WrapDAOException}抛出，
+ * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntime}抛出</li>
+ * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
+ * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
+ * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，所以请在执行save时特别注意{@code isNew()}状态</li>
+ * </ul>
  * @author guyadong
  */
 @ThriftService("IFaceLog")
@@ -396,16 +404,40 @@ public abstract class FaceLogDefinition {
 	@ThriftMethod("addLogList")
 	public void addLog(List<LogBean> beans) throws ServiceRuntime {
 	}
+	/**
+	 * 日志查询<br>
+	 * 根据{@code where}指定的查询条件查询日志记录
+	 * @param where
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod
 	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows)
 			throws ServiceRuntime {
 		return null;
 	}
 	
+	/**
+	 * 日志查询<br>
+	 * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
+	 * @param where
+	 * @param startRow
+	 * @param numRows
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod
 	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		return null;
 	}
+	/**
+	 * 返回符合{@code where}条件的记录条数
+	 * @param where
+	 * @return
+	 * @throws ServiceRuntime
+	 */
 	@ThriftMethod
 	public int countLogLightWhere(String where) throws ServiceRuntime {
 		return 0;
@@ -439,8 +471,8 @@ public abstract class FaceLogDefinition {
 	 * @param faceBean 关联的人脸信息对象,可为null
 	 * @param personId 关联的人员id(fl_person.id),可为null
 	 * @return
+	 * @throws DuplicateReord 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntime
-	 * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
 	 */
 	@ThriftMethod
 	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId)
@@ -479,6 +511,7 @@ public abstract class FaceLogDefinition {
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
 	 * @param deviceId 图像来源设备id,可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
+	 * @throws DuplicateReord 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod("addFeatureMulti")
@@ -637,21 +670,21 @@ public abstract class FaceLogDefinition {
 	 * @param deviceGroupBean
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
-		return deviceGroupBean;
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntime {
+		return null;
 	}
 	/**
 	 * 根据设备组id返回数据库记录
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public DeviceGroupBean getDeviceGroup(int deviceGroupId){
+	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -659,23 +692,23 @@ public abstract class FaceLogDefinition {
 	 * @param groupIdList
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod("getDeviceGroupList")
-	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList){
+	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**
 	 * 删除{@code deviceGroupId}指定的设备组<br>
 	 * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
 	 * @param deviceGroupId
-	 * @return 
+	 * @return  返回删除的记录条数
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public int deleteDeviceGroup(int deviceGroupId){
-		return deviceGroupId;
+	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntime {
+		return 0;
 	}
 	/**
 	 * 返回{@code deviceGroupId}指定的设备组下的所有子节点<br>
@@ -683,10 +716,10 @@ public abstract class FaceLogDefinition {
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -695,10 +728,10 @@ public abstract class FaceLogDefinition {
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
+	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntime {
 		return null;
 	}
 	////////////////////////////////PersonGroupBean/////////////
@@ -707,10 +740,10 @@ public abstract class FaceLogDefinition {
 	 * @param personGroupBean
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntime {
 		return personGroupBean;
 	}
 	/**
@@ -718,10 +751,10 @@ public abstract class FaceLogDefinition {
 	 * @param personGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public PersonGroupBean getPersonGroup(int personGroupId){
+	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -729,10 +762,10 @@ public abstract class FaceLogDefinition {
 	 * @param groupIdList
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod("getPersonGroupList")
-	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList){
+	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -741,10 +774,10 @@ public abstract class FaceLogDefinition {
 	 * @param personGroupId
 	 * @return 
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public int deletePersonGroup(int personGroupId){
+	public int deletePersonGroup(int personGroupId)throws ServiceRuntime {
 		return personGroupId;
 	}
 	/**
@@ -753,10 +786,10 @@ public abstract class FaceLogDefinition {
 	 * @param personGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
+	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -765,10 +798,10 @@ public abstract class FaceLogDefinition {
 	 * @param deviceGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<PersonBean> getPersonsOfGroup(int personGroupId){
+	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
 		return null;
 	}
 	/////////////////////PERMIT/////
@@ -778,19 +811,19 @@ public abstract class FaceLogDefinition {
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){}
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
 	/**
 	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
 	 * @param deviceGroup
 	 * @param personGroup
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){}
+	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
 	/**
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -798,10 +831,10 @@ public abstract class FaceLogDefinition {
 	 * @param personGroupId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public boolean getGroupPermit(int deviceId,int personGroupId){
+	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntime {
 		return false;
 	}
 	/**
@@ -811,20 +844,20 @@ public abstract class FaceLogDefinition {
 	 * @param personId
 	 * @return
 	 * @throws WrapDAOException
-	 * @throws RuntimeException
+	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public boolean getPermit(int deviceId,int personId){
+	public boolean getPermit(int deviceId,int personId)throws ServiceRuntime {
 		return false;
 	}
 	/** 参见 {@link #getGroupPermit(Integer, Integer) } */
 	@ThriftMethod("getGroupPermitList")
-	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList){
+	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
 		return null;		
 	}
 	/** 参见 {@link #getPermit(Integer, Integer) } */
 	@ThriftMethod("getPermitList")
-	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList){
+	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**

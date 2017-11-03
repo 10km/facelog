@@ -41,9 +41,10 @@ import net.gdface.utils.Judge;
 
 public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		net.gdface.facelog.db.Constant {
-	private final  RedisPersonListener redisPersonListener = new RedisPersonListener();
+	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
+	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
 	public FaceLogDbLocal() {
 		init();
@@ -52,6 +53,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		personManager.registerListener(redisPersonListener);
 		imageManager.registerListener(redisImageListener);
 		featureManager.registerListener(redisFeatureListener);
+		permitManager.registerListener(redisPermitListener);
 	}
 	protected static StoreBean _makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
 		if(Judge.isEmpty(imageBytes))return null;
@@ -1115,7 +1117,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	}
 	////////////////////////////////DeviceGroupBean/////////////
 	@Override
-	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntime {
 		try{
 			return _saveDeviceGroup(deviceGroupBean);
 		} catch (ServiceRuntime e) {
@@ -1127,7 +1129,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public DeviceGroupBean getDeviceGroup(int deviceGroupId){
+	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _getDeviceGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
@@ -1139,7 +1141,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList){
+	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList)throws ServiceRuntime {
 		try{
 			return _getDeviceGroup(groupIdList); 
 		} catch (ServiceRuntime e) {
@@ -1151,7 +1153,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public int deleteDeviceGroup(int deviceGroupId){
+	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _deleteDeviceGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
@@ -1163,7 +1165,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
+	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _getSubDeviceGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
@@ -1175,7 +1177,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
+	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _getDevicesOfGroup(deviceGroupId);
 		} catch (ServiceRuntime e) {
@@ -1188,7 +1190,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	}
 	////////////////////////////////PersonGroupBean/////////////
 	@Override
-	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
+	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntime {
 		try{
 			return _savePersonGroup(personGroupBean);
 		} catch (ServiceRuntime e) {
@@ -1200,7 +1202,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public PersonGroupBean getPersonGroup(int personGroupId){
+	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return _getPersonGroup(personGroupId); 
 		} catch (ServiceRuntime e) {
@@ -1212,7 +1214,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList){
+	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList)throws ServiceRuntime {
 		try{
 			return _getPersonGroup(groupIdList);
 		} catch (ServiceRuntime e) {
@@ -1224,7 +1226,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public int deletePersonGroup(int personGroupId){
+	public int deletePersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return _deletePersonGroup(personGroupId);
 		} catch (ServiceRuntime e) {
@@ -1236,7 +1238,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
+	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return personGroupManager.getPersonGroupBeansByParentAsList(personGroupId);
 		} catch (ServiceRuntime e) {
@@ -1248,7 +1250,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<PersonBean> getPersonsOfGroup(int personGroupId){
+	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return personGroupManager.getPersonBeansByGroupIdAsList(personGroupId);
 		} catch (ServiceRuntime e) {
@@ -1261,7 +1263,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 	}
 	/////////////////////PERMIT/////
 	@Override
-	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
 		try{
 			_addPermit(deviceGroup, personGroup);
 		} catch (ServiceRuntime e) {
@@ -1273,7 +1275,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
 		try{
 			_removePermit(deviceGroup, personGroup);
 		} catch (ServiceRuntime e) {
@@ -1285,7 +1287,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public boolean getGroupPermit(int deviceId,int personGroupId){
+	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntime {
 		try{
 			return _getGroupPermit(deviceId,personGroupId);
 		} catch (ServiceRuntime e) {
@@ -1297,7 +1299,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public boolean getPermit(int deviceId,int personId){
+	public boolean getPermit(int deviceId,int personId)throws ServiceRuntime {
 		try{
 			return _getPermit(deviceId,personId);
 		} catch (ServiceRuntime e) {
@@ -1309,7 +1311,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList){
+	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
 		try{
 			return _getGroupPermit(deviceId, personGroupIdList);
 		} catch (ServiceRuntime e) {
@@ -1321,7 +1323,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList){
+	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		try{
 			return _getPermit(deviceId, personIdList);
 		} catch (ServiceRuntime e) {
@@ -1333,7 +1335,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements CommonConstant,
 		}
 	}
 	@Override
-	public List<PermitBean> loadPermitByUpdate(long timestamp){
+	public List<PermitBean> loadPermitByUpdate(long timestamp)throws ServiceRuntime {
 		try{
 			return _loadPermitByUpdate(new Date(timestamp));
 		} catch (ServiceRuntime e) {

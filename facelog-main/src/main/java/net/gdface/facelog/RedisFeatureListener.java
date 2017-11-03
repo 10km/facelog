@@ -6,6 +6,12 @@ import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.db.FeatureBean;
 import net.gdface.facelog.db.TableListener;
 
+/**
+ * 特征表({@code fl_feature})变动侦听器<br>
+ * 当{@code fl_feature}记录增删改时发布 redis 订阅消息
+ * @author guyadong
+ *
+ */
 public class RedisFeatureListener extends TableListener.Adapter<FeatureBean> implements CommonConstant{
 
 	private final RedisPublisher publisher;

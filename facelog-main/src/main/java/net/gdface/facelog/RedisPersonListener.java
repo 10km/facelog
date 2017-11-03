@@ -6,6 +6,12 @@ import gu.simplemq.redis.RedisPublisher;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.TableListener;
 
+/**
+ * 人员表({@code fl_person})变动侦听器<br>
+ * 当{@code fl_person}记录增删改时发布 redis 订阅消息
+ * @author guyadong
+ *
+ */
 public class RedisPersonListener extends TableListener.Adapter<PersonBean> implements CommonConstant{
 
 	private final RedisPublisher publisher;

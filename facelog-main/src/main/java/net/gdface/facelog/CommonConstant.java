@@ -19,6 +19,7 @@ import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.IPersonManager;
 import net.gdface.facelog.db.IStoreManager;
 import net.gdface.facelog.db.LogBean;
+import net.gdface.facelog.db.PermitBean;
 
 public interface CommonConstant {
 	public static final Logger logger = LoggerFactory.getLogger(CommonConstant.class);
@@ -37,9 +38,15 @@ public interface CommonConstant {
 	public static final Channel<Integer> PUBSUB_PERSON_INSERT = new Channel<Integer>("PersonInsert"){};
 	public static final Channel<Integer> PUBSUB_PERSON_UPDATE = new Channel<Integer>("PersonUpdate"){};
 	public static final Channel<Integer> PUBSUB_PERSON_DELETE = new Channel<Integer>("PersonDelete"){};
+	
 	public static final Channel<String> PUBSUB_FEATURE_INSERT = new Channel<String>("FeatureInsert"){};
 	public static final Channel<String> PUBSUB_FEATURE_UPDATE = new Channel<String>("FeatureUpdate"){};
 	public static final Channel<String> PUBSUB_FEATURE_DELETE = new Channel<String>("FeatureDelete"){};
+	
+	public static final Channel<PermitBean> PUBSUB_PERMIT_INSERT = new Channel<PermitBean>("PermitInsert"){};
+	public static final Channel<PermitBean> PUBSUB_PERMIT_UPDATE = new Channel<PermitBean>("PermitUpdate"){};
+	public static final Channel<PermitBean> PUBSUB_PERMIT_DELETE = new Channel<PermitBean>("PermitDelete"){};
+
 	public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("logQueue"){};
 	
 	public static final SimpleDateFormat timestampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

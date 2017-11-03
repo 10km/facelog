@@ -13,6 +13,14 @@ import java.nio.ByteBuffer;
 import java.util.*;
 /**
  * 定义 FaceLog 服务接口<br>
+ * <ul>
+ * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link net.gdface.facelog.db.exception.WrapDAOException}抛出，
+ * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntime}抛出</li>
+ * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
+ * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
+ * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，所以请在执行save时特别注意{@code isNew()}状态</li>
+ * </ul>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
  * <b>NOTE:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.<br>
@@ -156,7 +164,6 @@ class IFaceLogClientAsync implements Constant{
      * @param faceBean 关联的人脸信息对象,可为null
      * @param personId 关联的人员id(fl_person.id),可为null
      * @return 
-     * @see {@link #_addImage(ByteBuffer, DeviceBean, List, List)}
      */
     // 3 SERIVCE PORT : addImage
     public ListenableFuture<ImageBean> addImage(
@@ -232,7 +239,11 @@ class IFaceLogClientAsync implements Constant{
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup));
     }
-
+    /**
+     * 返回符合{@code where}条件的记录条数
+     * @param where
+     * @return 
+     */
     // 7 SERIVCE PORT : countLogLightWhere
     public ListenableFuture<Integer> countLogLightWhere(String where){
         return service.countLogLightWhere(where);
@@ -265,7 +276,7 @@ class IFaceLogClientAsync implements Constant{
      * 删除{@code deviceGroupId}指定的设备组<br>
      * 组删除后，所有子节点记录不会被删除，但parent字段会被自动默认为{@code null}
      * @param deviceGroupId
-     * @return 
+     * @return 返回删除的记录条数
      */
     // 10 SERIVCE PORT : deleteDeviceGroup
     public ListenableFuture<Integer> deleteDeviceGroup(int deviceGroupId){
@@ -787,7 +798,14 @@ class IFaceLogClientAsync implements Constant{
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(Date timestamp){
         return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
-
+    /**
+     * 日志查询<br>
+     * 根据{@code where}指定的查询条件查询日志记录
+     * @param where
+     * @param startRow 记录起始行号 (first row = 1, last row = -1)
+     * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+     * @return 
+     */
     // 52 SERIVCE PORT : loadLogByWhere
     public ListenableFuture<List<LogBean>> loadLogByWhere(
             String where,
@@ -805,7 +823,14 @@ class IFaceLogClientAsync implements Constant{
                     }
                 });
     }
-
+    /**
+     * 日志查询<br>
+     * 根据{@code where}指定的查询条件查询日志记录{@link LogLightBean}
+     * @param where
+     * @param startRow
+     * @param numRows
+     * @return 
+     */
     // 53 SERIVCE PORT : loadLogLightByWhere
     public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(
             String where,
