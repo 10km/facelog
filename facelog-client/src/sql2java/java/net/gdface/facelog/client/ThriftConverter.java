@@ -8,7 +8,7 @@
 package net.gdface.facelog.client;
 
 public class ThriftConverter implements Constant{
-    /** {@link IBeanConverter} implemention for convert between {@link DeviceBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link DeviceBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceBean} */
     public static final IBeanConverter<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean> converterDeviceBean
             = new IBeanConverter.AbstractHandle<DeviceBean,net.gdface.facelog.client.thrift.DeviceBean>(){
         @Override
@@ -70,7 +70,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link DeviceGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceGroupBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link DeviceGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.DeviceGroupBean} */
     public static final IBeanConverter<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean> converterDeviceGroupBean
             = new IBeanConverter.AbstractHandle<DeviceGroupBean,net.gdface.facelog.client.thrift.DeviceGroupBean>(){
         @Override
@@ -106,7 +106,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link FaceBean} and thrift beans {@link net.gdface.facelog.client.thrift.FaceBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link FaceBean} and thrift beans {@link net.gdface.facelog.client.thrift.FaceBean} */
     public static final IBeanConverter<FaceBean,net.gdface.facelog.client.thrift.FaceBean> converterFaceBean
             = new IBeanConverter.AbstractHandle<FaceBean,net.gdface.facelog.client.thrift.FaceBean>(){
         @Override
@@ -225,7 +225,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link FeatureBean} and thrift beans {@link net.gdface.facelog.client.thrift.FeatureBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link FeatureBean} and thrift beans {@link net.gdface.facelog.client.thrift.FeatureBean} */
     public static final IBeanConverter<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean> converterFeatureBean
             = new IBeanConverter.AbstractHandle<FeatureBean,net.gdface.facelog.client.thrift.FeatureBean>(){
         @Override
@@ -264,7 +264,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link ImageBean} and thrift beans {@link net.gdface.facelog.client.thrift.ImageBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link ImageBean} and thrift beans {@link net.gdface.facelog.client.thrift.ImageBean} */
     public static final IBeanConverter<ImageBean,net.gdface.facelog.client.thrift.ImageBean> converterImageBean
             = new IBeanConverter.AbstractHandle<ImageBean,net.gdface.facelog.client.thrift.ImageBean>(){
         @Override
@@ -320,7 +320,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link LogBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link LogBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogBean} */
     public static final IBeanConverter<LogBean,net.gdface.facelog.client.thrift.LogBean> converterLogBean
             = new IBeanConverter.AbstractHandle<LogBean,net.gdface.facelog.client.thrift.LogBean>(){
         @Override
@@ -379,7 +379,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link PermitBean} and thrift beans {@link net.gdface.facelog.client.thrift.PermitBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link PermitBean} and thrift beans {@link net.gdface.facelog.client.thrift.PermitBean} */
     public static final IBeanConverter<PermitBean,net.gdface.facelog.client.thrift.PermitBean> converterPermitBean
             = new IBeanConverter.AbstractHandle<PermitBean,net.gdface.facelog.client.thrift.PermitBean>(){
         @Override
@@ -413,7 +413,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link PersonBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link PersonBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonBean} */
     public static final IBeanConverter<PersonBean,net.gdface.facelog.client.thrift.PersonBean> converterPersonBean
             = new IBeanConverter.AbstractHandle<PersonBean,net.gdface.facelog.client.thrift.PersonBean>(){
         @Override
@@ -490,7 +490,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link PersonGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonGroupBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link PersonGroupBean} and thrift beans {@link net.gdface.facelog.client.thrift.PersonGroupBean} */
     public static final IBeanConverter<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean> converterPersonGroupBean
             = new IBeanConverter.AbstractHandle<PersonGroupBean,net.gdface.facelog.client.thrift.PersonGroupBean>(){
         @Override
@@ -526,7 +526,7 @@ public class ThriftConverter implements Constant{
             right.setModified(left.getModified());
             right.setInitialized(left.getInitialized());
         }};
-    /** {@link IBeanConverter} implemention for convert between {@link LogLightBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogLightBean} */
+    /** {@link IBeanConverter} implementation for convert between {@link LogLightBean} and thrift beans {@link net.gdface.facelog.client.thrift.LogLightBean} */
     public static final IBeanConverter<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean> converterLogLightBean
             = new IBeanConverter.AbstractHandle<LogLightBean,net.gdface.facelog.client.thrift.LogLightBean>(){
         @Override
