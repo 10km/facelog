@@ -1,5 +1,0 @@
-#parse( "header.include.vm" )
-#set ( $javaClassName = 'TestPerschema' )
-$codewriter.setCurrentJavaFilename($schemaPkg, "${javaClassName}.java")
-package $schemaPkg;
-public class $javaClassName{}
