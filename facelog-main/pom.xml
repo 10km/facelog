@@ -61,4 +61,38 @@
 		    <version>20.0</version>
 		</dependency>
   </dependencies>
+	<build>
+		<!-- properties 配置文件打入jar包 -->
+		<resources>
+			<resource>
+				<directory>src/orm/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+
+				<executions>
+					<!-- 配置sql2java文件夹,用于保存sql2java生成的代码 -->
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/sql2java/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

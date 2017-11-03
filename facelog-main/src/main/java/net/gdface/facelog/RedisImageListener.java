@@ -10,7 +10,7 @@ import net.gdface.facelog.db.TableListener;
  * @author guyadong
  *
  */
-public class RedisImageListener extends TableListener.Adapter<ImageBean> implements CommonConstant{
+public class RedisImageListener extends TableListener.Adapter<ImageBean> implements AppConstant{
 	private final TableListener<PersonBean> personListner;
 	
 	public RedisImageListener() {
