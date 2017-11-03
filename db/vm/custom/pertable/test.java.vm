@@ -1,0 +1,5 @@
+#parse( "table.include.vm" )
+#parse( "header.include.vm" )
+#set($beanClass = "$table.asBeanClass($isGeneral)Test")
+$codewriter.setCurrentJavaFilename($table.getPackage(false), "${beanClass}.java")
+class $beanClass{}
