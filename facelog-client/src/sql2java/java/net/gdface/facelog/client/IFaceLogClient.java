@@ -74,7 +74,7 @@ class IFaceLogClient implements Constant{
                     converterFaceBean.toRight(faecBeans)));
     }
     /** 
-     * Generic version of {@link #addFeature(feature,personId,faecBeans)}<br>
+     * Generic version of {@link #addFeature(byte[],int,List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -110,7 +110,7 @@ class IFaceLogClient implements Constant{
                     deviceId));
     }
     /** 
-     * Generic version of {@link #addFeature(feature,personId,faceInfo,deviceId)}<br>
+     * Generic version of {@link #addFeature(byte[],int,Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -148,7 +148,7 @@ class IFaceLogClient implements Constant{
                     personId));
     }
     /** 
-     * Generic version of {@link #addImage(imageData,deviceId,faceBean,personId)}<br>
+     * Generic version of {@link #addImage(byte[],int,FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -793,7 +793,7 @@ class IFaceLogClient implements Constant{
                     deviceId));
     }
     /** 
-     * Generic version of {@link #savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,deviceId)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],byte[],FaceBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -855,7 +855,7 @@ class IFaceLogClient implements Constant{
                     idPhoto));
     }
     /** 
-     * Generic version of {@link #savePerson(bean,idPhoto)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[])}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -889,7 +889,7 @@ class IFaceLogClient implements Constant{
                     deviceId));
     }
     /** 
-     * Generic version of {@link #savePerson(bean,idPhoto,featureBean,deviceId)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],FeatureBean,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -927,7 +927,7 @@ class IFaceLogClient implements Constant{
                     converterFaceBean.toRight(faceBeans)));
     }
     /** 
-     * Generic version of {@link #savePerson(bean,idPhoto,feature,faceBeans)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],List)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
@@ -968,7 +968,7 @@ class IFaceLogClient implements Constant{
                     deviceId));
     }
     /** 
-     * Generic version of {@link #savePerson(bean,idPhoto,feature,faceInfo,deviceId)}<br>
+     * Generic version of {@link #savePerson(PersonBean,byte[],byte[],Map,int)}<br>
      * {@code Object} type instead of all argument with {@code byte[]} type,which can read binary data,
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
