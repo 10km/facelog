@@ -12,7 +12,12 @@ import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.IPersonManager;
 import net.gdface.facelog.db.IStoreManager;
 
-public interface AppConstant extends CommonConstant {
+/**
+ * 系统常量定义
+ * @author guyadong
+ *
+ */
+public interface ServiceConstant extends CommonConstant {
 	public static final IDeviceManager deviceManager = TableManagerInitializer.instance.deviceManager;
 	public static final IDeviceGroupManager deviceGroupManager = TableManagerInitializer.instance.deviceGroupManager;
 	public static final IFaceManager faceManager = TableManagerInitializer.instance.faceManager;

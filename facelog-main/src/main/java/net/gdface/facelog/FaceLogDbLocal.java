@@ -39,7 +39,7 @@ import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
 
-public class FaceLogDbLocal extends FaceLogDefinition implements AppConstant,
+public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant,
 		net.gdface.facelog.db.Constant {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
