@@ -3,11 +3,14 @@ package net.gdface.facelog.device;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.weakref.jmx.com.google.common.base.Preconditions;
+
+import com.google.common.base.Strings;
+
 import gu.simplemq.redis.JedisPoolLazy;
 import gu.simplemq.redis.RedisFactory;
 import gu.simplemq.redis.RedisTable;
-import net.gdface.facelog.CommonConstant;
-import net.gdface.utils.Assert;
+import net.gdface.facelog.client.CommonConstant;
 
 /**
  * 设备心跳包redis实现<br>
@@ -38,10 +41,11 @@ public class Heartbeat extends Thread implements CommonConstant{
 	private final String deivceID;
 	private Heartbeat(String deviceID,JedisPoolLazy pool) {
 		super();
-		Assert.notEmpty(deviceID, "deviceID");
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(deviceID),"deviceID is null or empty");
 		this.deivceID = deviceID;
 		this.table =  RedisFactory.getTable(TABLE_HEARTBEAT, pool);
 		this.table.setExpire(DEFAULT_HEARTBEAT_EXPIRE, TimeUnit.SECONDS);
+		// 设置为守护线程
 		this.setDaemon(true);
 		this.setName(TABLE_HEARTBEAT.name);
 	}
@@ -70,7 +74,7 @@ public class Heartbeat extends Thread implements CommonConstant{
 	 * @return
 	 */
 	public Heartbeat setExpire(long time){
-		if(time > 0 )
+		if(time > 0)
 			this.table.setExpire(time, TimeUnit.SECONDS);
 		return this;
 	}
