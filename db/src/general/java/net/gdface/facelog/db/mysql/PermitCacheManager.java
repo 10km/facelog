@@ -97,10 +97,8 @@ public class PermitCacheManager extends PermitManager
     }
     //1.4 override IPermitManager
     @Override 
-    public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId)
-    {
-        if(null != cache.getBeanIfPresent(deviceGroupId,personGroupId))return true;
-        return super.existsPrimaryKey(deviceGroupId,personGroupId);
+    public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId){
+        return null != loadByPrimaryKey(deviceGroupId,personGroupId);
     }
     
     //////////////////////////////////////

@@ -98,10 +98,8 @@ public class PersonGroupCacheManager extends PersonGroupManager
     }
     //1.4 override IPersonGroupManager
     @Override 
-    public boolean existsPrimaryKey(Integer id)
-    {
-        if(null != cache.getBeanIfPresent(id))return true;
-        return super.existsPrimaryKey(id);
+    public boolean existsPrimaryKey(Integer id){
+        return null != loadByPrimaryKey(id);
     }
     
     //////////////////////////////////////

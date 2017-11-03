@@ -74,7 +74,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	}
 	protected static DeviceBean _checkGroup(DeviceBean deviceBean){
 		if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
-			_saveDefaultPersonGroupIfAbsent();
+			_saveDefaultDeviceGroupIfAbsent();
 		}
 		return deviceBean;
 	}

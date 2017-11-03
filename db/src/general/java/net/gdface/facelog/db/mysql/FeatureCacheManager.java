@@ -98,10 +98,8 @@ public class FeatureCacheManager extends FeatureManager
     }
     //1.4 override IFeatureManager
     @Override 
-    public boolean existsPrimaryKey(String md5)
-    {
-        if(null != cache.getBeanIfPresent(md5))return true;
-        return super.existsPrimaryKey(md5);
+    public boolean existsPrimaryKey(String md5){
+        return null != loadByPrimaryKey(md5);
     }
     
     //////////////////////////////////////
