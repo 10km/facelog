@@ -86,6 +86,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	protected static DeviceBean _getDevice(Integer deviceId){
 		return deviceManager.loadByPrimaryKey(deviceId); 
 	}
+	protected static boolean _existsDevice(Integer id) {
+		return deviceManager.existsPrimaryKey(id);
+	}
 	protected static List<DeviceBean> _getDevice(Collection<Integer> collection){
 		return deviceManager.loadByPrimaryKey(collection); 
 	}
@@ -1071,16 +1074,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
     @Override
 	public boolean existsDevice(int id) throws ServiceRuntime {
 		try{
-			return deviceManager.existsPrimaryKey(id);
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
-		}
-	}
-
-    @Override
-	public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntime{
-    	try{
-		return _saveDevice(deviceBean);
+			return _existsDevice(id);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){
@@ -1089,6 +1083,19 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 			throw new ServiceRuntime(e);
 		} 
 	}
+
+    @Override
+    public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntime{
+    	try{
+    		return _saveDevice(deviceBean);
+    	} catch (ServiceRuntime e) {
+    		throw e;
+    	} catch(RuntimeException e){
+    		throw e;
+    	} catch (Exception e) {
+    		throw new ServiceRuntime(e);
+    	} 
+    }
 
 	@Override
 	public DeviceBean getDevice(int deviceId)throws ServiceRuntime{
@@ -1240,7 +1247,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
-			return personGroupManager.getPersonGroupBeansByParentAsList(personGroupId);
+			return _getSubPersonGroup(personGroupId);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){
