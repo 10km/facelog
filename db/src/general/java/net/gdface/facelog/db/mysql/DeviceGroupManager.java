@@ -420,10 +420,10 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public DeviceBean[] getDeviceBeansByGroupId(Integer devicegroupId)
+    public DeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup)
     {
         DeviceGroupBean bean = new DeviceGroupBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceBeansByGroupId(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
@@ -434,17 +434,17 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer devicegroupId)
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup)
     {
          DeviceGroupBean bean = new DeviceGroupBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceBeansByGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
     @Override
-    public int deleteDeviceBeansByGroupId(Integer devicegroupId)
+    public int deleteDeviceBeansByGroupId(Integer idOfDeviceGroup)
     {
-        java.util.List<DeviceBean> list =getDeviceBeansByGroupIdAsList(devicegroupId);
+        java.util.List<DeviceBean> list =getDeviceBeansByGroupIdAsList(idOfDeviceGroup);
         return DeviceManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager
@@ -491,10 +491,10 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer devicegroupId)
+    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup)
     {
         DeviceGroupBean bean = new DeviceGroupBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceGroupBeansByParent(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
@@ -505,17 +505,17 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer devicegroupId)
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup)
     {
          DeviceGroupBean bean = new DeviceGroupBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceGroupBeansByParentAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
     @Override
-    public int deleteDeviceGroupBeansByParent(Integer devicegroupId)
+    public int deleteDeviceGroupBeansByParent(Integer idOfDeviceGroup)
     {
-        java.util.List<DeviceGroupBean> list =getDeviceGroupBeansByParentAsList(devicegroupId);
+        java.util.List<DeviceGroupBean> list =getDeviceGroupBeansByParentAsList(idOfDeviceGroup);
         return DeviceGroupManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager
@@ -562,10 +562,10 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.1.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public PermitBean[] getPermitBeansByDeviceGroupId(Integer devicegroupId)
+    public PermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup)
     {
         DeviceGroupBean bean = new DeviceGroupBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getPermitBeansByDeviceGroupId(bean);
     }
     //3.2 GET IMPORTED override IDeviceGroupManager
@@ -576,17 +576,17 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //3.2.2 GET IMPORTED override IDeviceGroupManager
     @Override
-    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer devicegroupId)
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup)
     {
          DeviceGroupBean bean = new DeviceGroupBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getPermitBeansByDeviceGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceGroupManager
     @Override
-    public int deletePermitBeansByDeviceGroupId(Integer devicegroupId)
+    public int deletePermitBeansByDeviceGroupId(Integer idOfDeviceGroup)
     {
-        java.util.List<PermitBean> list =getPermitBeansByDeviceGroupIdAsList(devicegroupId);
+        java.util.List<PermitBean> list =getPermitBeansByDeviceGroupIdAsList(idOfDeviceGroup);
         return PermitManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceGroupManager

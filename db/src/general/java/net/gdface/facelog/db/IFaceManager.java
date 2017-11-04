@@ -131,7 +131,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getLogBeansByCompareFace(Integer faceId);
+    public LogBean[] getLogBeansByCompareFace(Integer idOfFace);
     
     /**
      * @see #getLogBeansByCompareFaceAsList(FaceBean,int,int)
@@ -147,7 +147,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer faceId);
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace);
     /**
      * delete the associated {@link LogBean} objects from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4
@@ -155,7 +155,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteLogBeansByCompareFace(Integer faceId);
+    public int deleteLogBeansByCompareFace(Integer idOfFace);
     /**
      * Retrieves the {@link LogBean} object from fl_log.compare_face field.<BR>
      * FK_NAME:fl_log_ibfk_4

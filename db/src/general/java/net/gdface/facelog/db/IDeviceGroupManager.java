@@ -131,7 +131,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public DeviceBean[] getDeviceBeansByGroupId(Integer devicegroupId);
+    public DeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup);
     
     /**
      * @see #getDeviceBeansByGroupIdAsList(DeviceGroupBean,int,int)
@@ -147,7 +147,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer devicegroupId);
+    public java.util.List<DeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup);
     /**
      * delete the associated {@link DeviceBean} objects from fl_device.group_id field.<BR>
      * FK_NAME:fl_device_ibfk_1
@@ -155,7 +155,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteDeviceBeansByGroupId(Integer devicegroupId);
+    public int deleteDeviceBeansByGroupId(Integer idOfDeviceGroup);
     /**
      * Retrieves the {@link DeviceBean} object from fl_device.group_id field.<BR>
      * FK_NAME:fl_device_ibfk_1
@@ -205,7 +205,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer devicegroupId);
+    public DeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup);
     
     /**
      * @see #getDeviceGroupBeansByParentAsList(DeviceGroupBean,int,int)
@@ -221,7 +221,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer devicegroupId);
+    public java.util.List<DeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup);
     /**
      * delete the associated {@link DeviceGroupBean} objects from fl_device_group.parent field.<BR>
      * FK_NAME:fl_device_group_ibfk_1
@@ -229,7 +229,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteDeviceGroupBeansByParent(Integer devicegroupId);
+    public int deleteDeviceGroupBeansByParent(Integer idOfDeviceGroup);
     /**
      * Retrieves the {@link DeviceGroupBean} object from fl_device_group.parent field.<BR>
      * FK_NAME:fl_device_group_ibfk_1
@@ -279,7 +279,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public PermitBean[] getPermitBeansByDeviceGroupId(Integer devicegroupId);
+    public PermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup);
     
     /**
      * @see #getPermitBeansByDeviceGroupIdAsList(DeviceGroupBean,int,int)
@@ -295,7 +295,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer devicegroupId);
+    public java.util.List<PermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup);
     /**
      * delete the associated {@link PermitBean} objects from fl_permit.device_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_1
@@ -303,7 +303,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deletePermitBeansByDeviceGroupId(Integer devicegroupId);
+    public int deletePermitBeansByDeviceGroupId(Integer idOfDeviceGroup);
     /**
      * Retrieves the {@link PermitBean} object from fl_permit.device_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_1

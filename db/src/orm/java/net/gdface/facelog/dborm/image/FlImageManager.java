@@ -475,10 +475,10 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlFaceBean[] getFaceBeansByImageMd5(String imageMd5) throws DAOException
+    public FlFaceBean[] getFaceBeansByImageMd5(String md5OfImage) throws DAOException
     {
         FlImageBean bean = createBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getFaceBeansByImageMd5(bean);
     }
     /**
@@ -501,10 +501,10 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlFaceBean> getFaceBeansByImageMd5AsList(String imageMd5) throws DAOException
+    public List<FlFaceBean> getFaceBeansByImageMd5AsList(String md5OfImage) throws DAOException
     {
          FlImageBean bean = createBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getFaceBeansByImageMd5AsList(bean);
     }
     /**
@@ -586,10 +586,10 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlPersonBean[] getPersonBeansByImageMd5(String imageMd5) throws DAOException
+    public FlPersonBean[] getPersonBeansByImageMd5(String md5OfImage) throws DAOException
     {
         FlImageBean bean = createBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getPersonBeansByImageMd5(bean);
     }
     /**
@@ -612,10 +612,10 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlPersonBean> getPersonBeansByImageMd5AsList(String imageMd5) throws DAOException
+    public List<FlPersonBean> getPersonBeansByImageMd5AsList(String md5OfImage) throws DAOException
     {
          FlImageBean bean = createBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getPersonBeansByImageMd5AsList(bean);
     }
     /**

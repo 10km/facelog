@@ -411,10 +411,10 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.1.2 GET IMPORTED override IImageManager
     @Override
-    public FaceBean[] getFaceBeansByImageMd5(String imageMd5)
+    public FaceBean[] getFaceBeansByImageMd5(String md5OfImage)
     {
         ImageBean bean = new ImageBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getFaceBeansByImageMd5(bean);
     }
     //3.2 GET IMPORTED override IImageManager
@@ -425,17 +425,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.2.2 GET IMPORTED override IImageManager
     @Override
-    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String imageMd5)
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String md5OfImage)
     {
          ImageBean bean = new ImageBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getFaceBeansByImageMd5AsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IImageManager
     @Override
-    public int deleteFaceBeansByImageMd5(String imageMd5)
+    public int deleteFaceBeansByImageMd5(String md5OfImage)
     {
-        java.util.List<FaceBean> list =getFaceBeansByImageMd5AsList(imageMd5);
+        java.util.List<FaceBean> list =getFaceBeansByImageMd5AsList(md5OfImage);
         return FaceManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IImageManager
@@ -482,10 +482,10 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.1.2 GET IMPORTED override IImageManager
     @Override
-    public PersonBean[] getPersonBeansByImageMd5(String imageMd5)
+    public PersonBean[] getPersonBeansByImageMd5(String md5OfImage)
     {
         ImageBean bean = new ImageBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getPersonBeansByImageMd5(bean);
     }
     //3.2 GET IMPORTED override IImageManager
@@ -496,17 +496,17 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //3.2.2 GET IMPORTED override IImageManager
     @Override
-    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String imageMd5)
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String md5OfImage)
     {
          ImageBean bean = new ImageBean();
-        bean.setMd5(imageMd5);
+        bean.setMd5(md5OfImage);
         return getPersonBeansByImageMd5AsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IImageManager
     @Override
-    public int deletePersonBeansByImageMd5(String imageMd5)
+    public int deletePersonBeansByImageMd5(String md5OfImage)
     {
-        java.util.List<PersonBean> list =getPersonBeansByImageMd5AsList(imageMd5);
+        java.util.List<PersonBean> list =getPersonBeansByImageMd5AsList(md5OfImage);
         return PersonManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IImageManager

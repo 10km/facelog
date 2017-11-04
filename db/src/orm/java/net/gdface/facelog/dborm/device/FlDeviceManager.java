@@ -473,10 +473,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlImageBean[] getImageBeansByDeviceId(Integer deviceId) throws DAOException
+    public FlImageBean[] getImageBeansByDeviceId(Integer idOfDevice) throws DAOException
     {
         FlDeviceBean bean = createBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getImageBeansByDeviceId(bean);
     }
     /**
@@ -499,10 +499,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlImageBean> getImageBeansByDeviceIdAsList(Integer deviceId) throws DAOException
+    public List<FlImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice) throws DAOException
     {
          FlDeviceBean bean = createBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getImageBeansByDeviceIdAsList(bean);
     }
     /**
@@ -584,10 +584,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlLogBean[] getLogBeansByDeviceId(Integer deviceId) throws DAOException
+    public FlLogBean[] getLogBeansByDeviceId(Integer idOfDevice) throws DAOException
     {
         FlDeviceBean bean = createBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getLogBeansByDeviceId(bean);
     }
     /**
@@ -610,10 +610,10 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlLogBean> getLogBeansByDeviceIdAsList(Integer deviceId) throws DAOException
+    public List<FlLogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice) throws DAOException
     {
          FlDeviceBean bean = createBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getLogBeansByDeviceIdAsList(bean);
     }
     /**

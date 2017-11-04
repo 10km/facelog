@@ -131,7 +131,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public ImageBean[] getImageBeansByDeviceId(Integer deviceId);
+    public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice);
     
     /**
      * @see #getImageBeansByDeviceIdAsList(DeviceBean,int,int)
@@ -147,7 +147,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer deviceId);
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice);
     /**
      * delete the associated {@link ImageBean} objects from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
@@ -155,7 +155,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteImageBeansByDeviceId(Integer deviceId);
+    public int deleteImageBeansByDeviceId(Integer idOfDevice);
     /**
      * Retrieves the {@link ImageBean} object from fl_image.device_id field.<BR>
      * FK_NAME:fl_image_ibfk_1
@@ -205,7 +205,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getLogBeansByDeviceId(Integer deviceId);
+    public LogBean[] getLogBeansByDeviceId(Integer idOfDevice);
     
     /**
      * @see #getLogBeansByDeviceIdAsList(DeviceBean,int,int)
@@ -221,7 +221,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer deviceId);
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice);
     /**
      * delete the associated {@link LogBean} objects from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2
@@ -229,7 +229,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteLogBeansByDeviceId(Integer deviceId);
+    public int deleteLogBeansByDeviceId(Integer idOfDevice);
     /**
      * Retrieves the {@link LogBean} object from fl_log.device_id field.<BR>
      * FK_NAME:fl_log_ibfk_2

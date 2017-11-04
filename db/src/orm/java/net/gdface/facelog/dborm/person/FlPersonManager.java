@@ -475,10 +475,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlFeatureBean[] getFeatureBeansByPersonId(Integer personId) throws DAOException
+    public FlFeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson) throws DAOException
     {
         FlPersonBean bean = createBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getFeatureBeansByPersonId(bean);
     }
     /**
@@ -501,10 +501,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlFeatureBean> getFeatureBeansByPersonIdAsList(Integer personId) throws DAOException
+    public List<FlFeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson) throws DAOException
     {
          FlPersonBean bean = createBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getFeatureBeansByPersonIdAsList(bean);
     }
     /**
@@ -586,10 +586,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlLogBean[] getLogBeansByPersonId(Integer personId) throws DAOException
+    public FlLogBean[] getLogBeansByPersonId(Integer idOfPerson) throws DAOException
     {
         FlPersonBean bean = createBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getLogBeansByPersonId(bean);
     }
     /**
@@ -612,10 +612,10 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlLogBean> getLogBeansByPersonIdAsList(Integer personId) throws DAOException
+    public List<FlLogBean> getLogBeansByPersonIdAsList(Integer idOfPerson) throws DAOException
     {
          FlPersonBean bean = createBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getLogBeansByPersonIdAsList(bean);
     }
     /**

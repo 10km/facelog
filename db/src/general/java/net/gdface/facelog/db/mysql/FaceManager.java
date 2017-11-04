@@ -402,10 +402,10 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     }
     //3.1.2 GET IMPORTED override IFaceManager
     @Override
-    public LogBean[] getLogBeansByCompareFace(Integer faceId)
+    public LogBean[] getLogBeansByCompareFace(Integer idOfFace)
     {
         FaceBean bean = new FaceBean();
-        bean.setId(faceId);
+        bean.setId(idOfFace);
         return getLogBeansByCompareFace(bean);
     }
     //3.2 GET IMPORTED override IFaceManager
@@ -416,17 +416,17 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     }
     //3.2.2 GET IMPORTED override IFaceManager
     @Override
-    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer faceId)
+    public java.util.List<LogBean> getLogBeansByCompareFaceAsList(Integer idOfFace)
     {
          FaceBean bean = new FaceBean();
-        bean.setId(faceId);
+        bean.setId(idOfFace);
         return getLogBeansByCompareFaceAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IFaceManager
     @Override
-    public int deleteLogBeansByCompareFace(Integer faceId)
+    public int deleteLogBeansByCompareFace(Integer idOfFace)
     {
-        java.util.List<LogBean> list =getLogBeansByCompareFaceAsList(faceId);
+        java.util.List<LogBean> list =getLogBeansByCompareFaceAsList(idOfFace);
         return LogManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IFaceManager

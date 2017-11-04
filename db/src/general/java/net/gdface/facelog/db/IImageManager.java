@@ -131,7 +131,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FaceBean[] getFaceBeansByImageMd5(String imageMd5);
+    public FaceBean[] getFaceBeansByImageMd5(String md5OfImage);
     
     /**
      * @see #getFaceBeansByImageMd5AsList(ImageBean,int,int)
@@ -147,7 +147,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String imageMd5);
+    public java.util.List<FaceBean> getFaceBeansByImageMd5AsList(String md5OfImage);
     /**
      * delete the associated {@link FaceBean} objects from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
@@ -155,7 +155,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteFaceBeansByImageMd5(String imageMd5);
+    public int deleteFaceBeansByImageMd5(String md5OfImage);
     /**
      * Retrieves the {@link FaceBean} object from fl_face.image_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_1
@@ -205,7 +205,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public PersonBean[] getPersonBeansByImageMd5(String imageMd5);
+    public PersonBean[] getPersonBeansByImageMd5(String md5OfImage);
     
     /**
      * @see #getPersonBeansByImageMd5AsList(ImageBean,int,int)
@@ -221,7 +221,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String imageMd5);
+    public java.util.List<PersonBean> getPersonBeansByImageMd5AsList(String md5OfImage);
     /**
      * delete the associated {@link PersonBean} objects from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2
@@ -229,7 +229,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deletePersonBeansByImageMd5(String imageMd5);
+    public int deletePersonBeansByImageMd5(String md5OfImage);
     /**
      * Retrieves the {@link PersonBean} object from fl_person.image_md5 field.<BR>
      * FK_NAME:fl_person_ibfk_2

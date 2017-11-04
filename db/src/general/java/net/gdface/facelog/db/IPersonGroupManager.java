@@ -131,7 +131,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public PermitBean[] getPermitBeansByPersonGroupId(Integer persongroupId);
+    public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup);
     
     /**
      * @see #getPermitBeansByPersonGroupIdAsList(PersonGroupBean,int,int)
@@ -147,7 +147,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer persongroupId);
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup);
     /**
      * delete the associated {@link PermitBean} objects from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
@@ -155,7 +155,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deletePermitBeansByPersonGroupId(Integer persongroupId);
+    public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup);
     /**
      * Retrieves the {@link PermitBean} object from fl_permit.person_group_id field.<BR>
      * FK_NAME:fl_permit_ibfk_2
@@ -205,7 +205,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public PersonBean[] getPersonBeansByGroupId(Integer persongroupId);
+    public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup);
     
     /**
      * @see #getPersonBeansByGroupIdAsList(PersonGroupBean,int,int)
@@ -221,7 +221,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer persongroupId);
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup);
     /**
      * delete the associated {@link PersonBean} objects from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
@@ -229,7 +229,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deletePersonBeansByGroupId(Integer persongroupId);
+    public int deletePersonBeansByGroupId(Integer idOfPersonGroup);
     /**
      * Retrieves the {@link PersonBean} object from fl_person.group_id field.<BR>
      * FK_NAME:fl_person_ibfk_1
@@ -279,7 +279,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public PersonGroupBean[] getPersonGroupBeansByParent(Integer persongroupId);
+    public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup);
     
     /**
      * @see #getPersonGroupBeansByParentAsList(PersonGroupBean,int,int)
@@ -295,7 +295,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer persongroupId);
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup);
     /**
      * delete the associated {@link PersonGroupBean} objects from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1
@@ -303,7 +303,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deletePersonGroupBeansByParent(Integer persongroupId);
+    public int deletePersonGroupBeansByParent(Integer idOfPersonGroup);
     /**
      * Retrieves the {@link PersonGroupBean} object from fl_person_group.parent field.<BR>
      * FK_NAME:fl_person_group_ibfk_1

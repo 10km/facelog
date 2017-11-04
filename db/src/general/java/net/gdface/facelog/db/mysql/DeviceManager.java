@@ -411,10 +411,10 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.1.2 GET IMPORTED override IDeviceManager
     @Override
-    public ImageBean[] getImageBeansByDeviceId(Integer deviceId)
+    public ImageBean[] getImageBeansByDeviceId(Integer idOfDevice)
     {
         DeviceBean bean = new DeviceBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getImageBeansByDeviceId(bean);
     }
     //3.2 GET IMPORTED override IDeviceManager
@@ -425,17 +425,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.2.2 GET IMPORTED override IDeviceManager
     @Override
-    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer deviceId)
+    public java.util.List<ImageBean> getImageBeansByDeviceIdAsList(Integer idOfDevice)
     {
          DeviceBean bean = new DeviceBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getImageBeansByDeviceIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceManager
     @Override
-    public int deleteImageBeansByDeviceId(Integer deviceId)
+    public int deleteImageBeansByDeviceId(Integer idOfDevice)
     {
-        java.util.List<ImageBean> list =getImageBeansByDeviceIdAsList(deviceId);
+        java.util.List<ImageBean> list =getImageBeansByDeviceIdAsList(idOfDevice);
         return ImageManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceManager
@@ -482,10 +482,10 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.1.2 GET IMPORTED override IDeviceManager
     @Override
-    public LogBean[] getLogBeansByDeviceId(Integer deviceId)
+    public LogBean[] getLogBeansByDeviceId(Integer idOfDevice)
     {
         DeviceBean bean = new DeviceBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getLogBeansByDeviceId(bean);
     }
     //3.2 GET IMPORTED override IDeviceManager
@@ -496,17 +496,17 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     }
     //3.2.2 GET IMPORTED override IDeviceManager
     @Override
-    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer deviceId)
+    public java.util.List<LogBean> getLogBeansByDeviceIdAsList(Integer idOfDevice)
     {
          DeviceBean bean = new DeviceBean();
-        bean.setId(deviceId);
+        bean.setId(idOfDevice);
         return getLogBeansByDeviceIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IDeviceManager
     @Override
-    public int deleteLogBeansByDeviceId(Integer deviceId)
+    public int deleteLogBeansByDeviceId(Integer idOfDevice)
     {
-        java.util.List<LogBean> list =getLogBeansByDeviceIdAsList(deviceId);
+        java.util.List<LogBean> list =getLogBeansByDeviceIdAsList(idOfDevice);
         return LogManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceManager

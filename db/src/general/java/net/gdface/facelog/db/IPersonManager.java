@@ -131,7 +131,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FeatureBean[] getFeatureBeansByPersonId(Integer personId);
+    public FeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson);
     
     /**
      * @see #getFeatureBeansByPersonIdAsList(PersonBean,int,int)
@@ -147,7 +147,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer personId);
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson);
     /**
      * delete the associated {@link FeatureBean} objects from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -155,7 +155,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteFeatureBeansByPersonId(Integer personId);
+    public int deleteFeatureBeansByPersonId(Integer idOfPerson);
     /**
      * Retrieves the {@link FeatureBean} object from fl_feature.person_id field.<BR>
      * FK_NAME:fl_feature_ibfk_1
@@ -205,7 +205,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getLogBeansByPersonId(Integer personId);
+    public LogBean[] getLogBeansByPersonId(Integer idOfPerson);
     
     /**
      * @see #getLogBeansByPersonIdAsList(PersonBean,int,int)
@@ -221,7 +221,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer personId);
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer idOfPerson);
     /**
      * delete the associated {@link LogBean} objects from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1
@@ -229,7 +229,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteLogBeansByPersonId(Integer personId);
+    public int deleteLogBeansByPersonId(Integer idOfPerson);
     /**
      * Retrieves the {@link LogBean} object from fl_log.person_id field.<BR>
      * FK_NAME:fl_log_ibfk_1

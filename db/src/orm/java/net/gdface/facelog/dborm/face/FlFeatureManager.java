@@ -473,10 +473,10 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlFaceBean[] getFaceBeansByFeatureMd5(String featureMd5) throws DAOException
+    public FlFaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature) throws DAOException
     {
         FlFeatureBean bean = createBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getFaceBeansByFeatureMd5(bean);
     }
     /**
@@ -499,10 +499,10 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5) throws DAOException
+    public List<FlFaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature) throws DAOException
     {
          FlFeatureBean bean = createBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getFaceBeansByFeatureMd5AsList(bean);
     }
     /**
@@ -584,10 +584,10 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlLogBean[] getLogBeansByVerifyFeature(String featureMd5) throws DAOException
+    public FlLogBean[] getLogBeansByVerifyFeature(String md5OfFeature) throws DAOException
     {
         FlFeatureBean bean = createBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getLogBeansByVerifyFeature(bean);
     }
     /**
@@ -610,10 +610,10 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlLogBean> getLogBeansByVerifyFeatureAsList(String featureMd5) throws DAOException
+    public List<FlLogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature) throws DAOException
     {
          FlFeatureBean bean = createBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getLogBeansByVerifyFeatureAsList(bean);
     }
     /**

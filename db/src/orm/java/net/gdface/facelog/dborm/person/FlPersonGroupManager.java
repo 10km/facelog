@@ -480,10 +480,10 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlPermitBean[] getPermitBeansByPersonGroupId(Integer persongroupId) throws DAOException
+    public FlPermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup) throws DAOException
     {
         FlPersonGroupBean bean = createBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPermitBeansByPersonGroupId(bean);
     }
     /**
@@ -506,10 +506,10 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(Integer persongroupId) throws DAOException
+    public List<FlPermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup) throws DAOException
     {
          FlPersonGroupBean bean = createBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPermitBeansByPersonGroupIdAsList(bean);
     }
     /**
@@ -591,10 +591,10 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlPersonBean[] getPersonBeansByGroupId(Integer persongroupId) throws DAOException
+    public FlPersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup) throws DAOException
     {
         FlPersonGroupBean bean = createBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonBeansByGroupId(bean);
     }
     /**
@@ -617,10 +617,10 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlPersonBean> getPersonBeansByGroupIdAsList(Integer persongroupId) throws DAOException
+    public List<FlPersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup) throws DAOException
     {
          FlPersonGroupBean bean = createBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonBeansByGroupIdAsList(bean);
     }
     /**
@@ -702,10 +702,10 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlPersonGroupBean[] getPersonGroupBeansByParent(Integer persongroupId) throws DAOException
+    public FlPersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup) throws DAOException
     {
         FlPersonGroupBean bean = createBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonGroupBeansByParent(bean);
     }
     /**
@@ -728,10 +728,10 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(Integer persongroupId) throws DAOException
+    public List<FlPersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup) throws DAOException
     {
          FlPersonGroupBean bean = createBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonGroupBeansByParentAsList(bean);
     }
     /**

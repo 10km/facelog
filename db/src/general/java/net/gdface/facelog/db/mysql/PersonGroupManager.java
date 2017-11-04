@@ -420,10 +420,10 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public PermitBean[] getPermitBeansByPersonGroupId(Integer persongroupId)
+    public PermitBean[] getPermitBeansByPersonGroupId(Integer idOfPersonGroup)
     {
         PersonGroupBean bean = new PersonGroupBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPermitBeansByPersonGroupId(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
@@ -434,17 +434,17 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer persongroupId)
+    public java.util.List<PermitBean> getPermitBeansByPersonGroupIdAsList(Integer idOfPersonGroup)
     {
          PersonGroupBean bean = new PersonGroupBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPermitBeansByPersonGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
     @Override
-    public int deletePermitBeansByPersonGroupId(Integer persongroupId)
+    public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup)
     {
-        java.util.List<PermitBean> list =getPermitBeansByPersonGroupIdAsList(persongroupId);
+        java.util.List<PermitBean> list =getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
         return PermitManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
@@ -491,10 +491,10 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public PersonBean[] getPersonBeansByGroupId(Integer persongroupId)
+    public PersonBean[] getPersonBeansByGroupId(Integer idOfPersonGroup)
     {
         PersonGroupBean bean = new PersonGroupBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonBeansByGroupId(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
@@ -505,17 +505,17 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer persongroupId)
+    public java.util.List<PersonBean> getPersonBeansByGroupIdAsList(Integer idOfPersonGroup)
     {
          PersonGroupBean bean = new PersonGroupBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonBeansByGroupIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
     @Override
-    public int deletePersonBeansByGroupId(Integer persongroupId)
+    public int deletePersonBeansByGroupId(Integer idOfPersonGroup)
     {
-        java.util.List<PersonBean> list =getPersonBeansByGroupIdAsList(persongroupId);
+        java.util.List<PersonBean> list =getPersonBeansByGroupIdAsList(idOfPersonGroup);
         return PersonManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
@@ -562,10 +562,10 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.1.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public PersonGroupBean[] getPersonGroupBeansByParent(Integer persongroupId)
+    public PersonGroupBean[] getPersonGroupBeansByParent(Integer idOfPersonGroup)
     {
         PersonGroupBean bean = new PersonGroupBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonGroupBeansByParent(bean);
     }
     //3.2 GET IMPORTED override IPersonGroupManager
@@ -576,17 +576,17 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //3.2.2 GET IMPORTED override IPersonGroupManager
     @Override
-    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer persongroupId)
+    public java.util.List<PersonGroupBean> getPersonGroupBeansByParentAsList(Integer idOfPersonGroup)
     {
          PersonGroupBean bean = new PersonGroupBean();
-        bean.setId(persongroupId);
+        bean.setId(idOfPersonGroup);
         return getPersonGroupBeansByParentAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonGroupManager
     @Override
-    public int deletePersonGroupBeansByParent(Integer persongroupId)
+    public int deletePersonGroupBeansByParent(Integer idOfPersonGroup)
     {
-        java.util.List<PersonGroupBean> list =getPersonGroupBeansByParentAsList(persongroupId);
+        java.util.List<PersonGroupBean> list =getPersonGroupBeansByParentAsList(idOfPersonGroup);
         return PersonGroupManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager

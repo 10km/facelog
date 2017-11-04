@@ -412,10 +412,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.1.2 GET IMPORTED override IPersonManager
     @Override
-    public FeatureBean[] getFeatureBeansByPersonId(Integer personId)
+    public FeatureBean[] getFeatureBeansByPersonId(Integer idOfPerson)
     {
         PersonBean bean = new PersonBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getFeatureBeansByPersonId(bean);
     }
     //3.2 GET IMPORTED override IPersonManager
@@ -426,17 +426,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
-    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer personId)
+    public java.util.List<FeatureBean> getFeatureBeansByPersonIdAsList(Integer idOfPerson)
     {
          PersonBean bean = new PersonBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getFeatureBeansByPersonIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonManager
     @Override
-    public int deleteFeatureBeansByPersonId(Integer personId)
+    public int deleteFeatureBeansByPersonId(Integer idOfPerson)
     {
-        java.util.List<FeatureBean> list =getFeatureBeansByPersonIdAsList(personId);
+        java.util.List<FeatureBean> list =getFeatureBeansByPersonIdAsList(idOfPerson);
         return FeatureManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonManager
@@ -483,10 +483,10 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.1.2 GET IMPORTED override IPersonManager
     @Override
-    public LogBean[] getLogBeansByPersonId(Integer personId)
+    public LogBean[] getLogBeansByPersonId(Integer idOfPerson)
     {
         PersonBean bean = new PersonBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getLogBeansByPersonId(bean);
     }
     //3.2 GET IMPORTED override IPersonManager
@@ -497,17 +497,17 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //3.2.2 GET IMPORTED override IPersonManager
     @Override
-    public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer personId)
+    public java.util.List<LogBean> getLogBeansByPersonIdAsList(Integer idOfPerson)
     {
          PersonBean bean = new PersonBean();
-        bean.setId(personId);
+        bean.setId(idOfPerson);
         return getLogBeansByPersonIdAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IPersonManager
     @Override
-    public int deleteLogBeansByPersonId(Integer personId)
+    public int deleteLogBeansByPersonId(Integer idOfPerson)
     {
-        java.util.List<LogBean> list =getLogBeansByPersonIdAsList(personId);
+        java.util.List<LogBean> list =getLogBeansByPersonIdAsList(idOfPerson);
         return LogManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonManager

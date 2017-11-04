@@ -131,7 +131,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FaceBean[] getFaceBeansByFeatureMd5(String featureMd5);
+    public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature);
     
     /**
      * @see #getFaceBeansByFeatureMd5AsList(FeatureBean,int,int)
@@ -147,7 +147,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5);
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature);
     /**
      * delete the associated {@link FaceBean} objects from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -155,7 +155,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteFaceBeansByFeatureMd5(String featureMd5);
+    public int deleteFaceBeansByFeatureMd5(String md5OfFeature);
     /**
      * Retrieves the {@link FaceBean} object from fl_face.feature_md5 field.<BR>
      * FK_NAME:fl_face_ibfk_2
@@ -205,7 +205,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public LogBean[] getLogBeansByVerifyFeature(String featureMd5);
+    public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature);
     
     /**
      * @see #getLogBeansByVerifyFeatureAsList(FeatureBean,int,int)
@@ -221,7 +221,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String featureMd5);
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature);
     /**
      * delete the associated {@link LogBean} objects from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3
@@ -229,7 +229,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @return the number of deleted rows
      */
     //3.2.3 DELETE IMPORTED
-    public int deleteLogBeansByVerifyFeature(String featureMd5);
+    public int deleteLogBeansByVerifyFeature(String md5OfFeature);
     /**
      * Retrieves the {@link LogBean} object from fl_log.verify_feature field.<BR>
      * FK_NAME:fl_log_ibfk_3

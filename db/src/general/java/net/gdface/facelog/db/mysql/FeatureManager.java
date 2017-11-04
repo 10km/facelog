@@ -411,10 +411,10 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.1.2 GET IMPORTED override IFeatureManager
     @Override
-    public FaceBean[] getFaceBeansByFeatureMd5(String featureMd5)
+    public FaceBean[] getFaceBeansByFeatureMd5(String md5OfFeature)
     {
         FeatureBean bean = new FeatureBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getFaceBeansByFeatureMd5(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
@@ -425,17 +425,17 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
-    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String featureMd5)
+    public java.util.List<FaceBean> getFaceBeansByFeatureMd5AsList(String md5OfFeature)
     {
          FeatureBean bean = new FeatureBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getFaceBeansByFeatureMd5AsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IFeatureManager
     @Override
-    public int deleteFaceBeansByFeatureMd5(String featureMd5)
+    public int deleteFaceBeansByFeatureMd5(String md5OfFeature)
     {
-        java.util.List<FaceBean> list =getFaceBeansByFeatureMd5AsList(featureMd5);
+        java.util.List<FaceBean> list =getFaceBeansByFeatureMd5AsList(md5OfFeature);
         return FaceManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IFeatureManager
@@ -482,10 +482,10 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.1.2 GET IMPORTED override IFeatureManager
     @Override
-    public LogBean[] getLogBeansByVerifyFeature(String featureMd5)
+    public LogBean[] getLogBeansByVerifyFeature(String md5OfFeature)
     {
         FeatureBean bean = new FeatureBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getLogBeansByVerifyFeature(bean);
     }
     //3.2 GET IMPORTED override IFeatureManager
@@ -496,17 +496,17 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //3.2.2 GET IMPORTED override IFeatureManager
     @Override
-    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String featureMd5)
+    public java.util.List<LogBean> getLogBeansByVerifyFeatureAsList(String md5OfFeature)
     {
          FeatureBean bean = new FeatureBean();
-        bean.setMd5(featureMd5);
+        bean.setMd5(md5OfFeature);
         return getLogBeansByVerifyFeatureAsList(bean);
     }
     //3.2.3 DELETE IMPORTED override IFeatureManager
     @Override
-    public int deleteLogBeansByVerifyFeature(String featureMd5)
+    public int deleteLogBeansByVerifyFeature(String md5OfFeature)
     {
-        java.util.List<LogBean> list =getLogBeansByVerifyFeatureAsList(featureMd5);
+        java.util.List<LogBean> list =getLogBeansByVerifyFeatureAsList(md5OfFeature);
         return LogManager.getInstance().delete(list);
     }
     //3.2.4 GET IMPORTED override IFeatureManager

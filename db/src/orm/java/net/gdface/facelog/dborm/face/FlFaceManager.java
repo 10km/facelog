@@ -466,10 +466,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlLogBean[] getLogBeansByCompareFace(Integer faceId) throws DAOException
+    public FlLogBean[] getLogBeansByCompareFace(Integer idOfFace) throws DAOException
     {
         FlFaceBean bean = createBean();
-        bean.setId(faceId);
+        bean.setId(idOfFace);
         return getLogBeansByCompareFace(bean);
     }
     /**
@@ -492,10 +492,10 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlLogBean> getLogBeansByCompareFaceAsList(Integer faceId) throws DAOException
+    public List<FlLogBean> getLogBeansByCompareFaceAsList(Integer idOfFace) throws DAOException
     {
          FlFaceBean bean = createBean();
-        bean.setId(faceId);
+        bean.setId(idOfFace);
         return getLogBeansByCompareFaceAsList(bean);
     }
     /**

@@ -480,10 +480,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlDeviceBean[] getDeviceBeansByGroupId(Integer devicegroupId) throws DAOException
+    public FlDeviceBean[] getDeviceBeansByGroupId(Integer idOfDeviceGroup) throws DAOException
     {
         FlDeviceGroupBean bean = createBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceBeansByGroupId(bean);
     }
     /**
@@ -506,10 +506,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(Integer devicegroupId) throws DAOException
+    public List<FlDeviceBean> getDeviceBeansByGroupIdAsList(Integer idOfDeviceGroup) throws DAOException
     {
          FlDeviceGroupBean bean = createBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceBeansByGroupIdAsList(bean);
     }
     /**
@@ -591,10 +591,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlDeviceGroupBean[] getDeviceGroupBeansByParent(Integer devicegroupId) throws DAOException
+    public FlDeviceGroupBean[] getDeviceGroupBeansByParent(Integer idOfDeviceGroup) throws DAOException
     {
         FlDeviceGroupBean bean = createBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceGroupBeansByParent(bean);
     }
     /**
@@ -617,10 +617,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer devicegroupId) throws DAOException
+    public List<FlDeviceGroupBean> getDeviceGroupBeansByParentAsList(Integer idOfDeviceGroup) throws DAOException
     {
          FlDeviceGroupBean bean = createBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getDeviceGroupBeansByParentAsList(bean);
     }
     /**
@@ -702,10 +702,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      * @throws DAOException
      */
     //3.1.2 GET IMPORTED
-    public FlPermitBean[] getPermitBeansByDeviceGroupId(Integer devicegroupId) throws DAOException
+    public FlPermitBean[] getPermitBeansByDeviceGroupId(Integer idOfDeviceGroup) throws DAOException
     {
         FlDeviceGroupBean bean = createBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getPermitBeansByDeviceGroupId(bean);
     }
     /**
@@ -728,10 +728,10 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      * @throws DAOException
      */
     //3.2.2 GET IMPORTED
-    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(Integer devicegroupId) throws DAOException
+    public List<FlPermitBean> getPermitBeansByDeviceGroupIdAsList(Integer idOfDeviceGroup) throws DAOException
     {
          FlDeviceGroupBean bean = createBean();
-        bean.setId(devicegroupId);
+        bean.setId(idOfDeviceGroup);
         return getPermitBeansByDeviceGroupIdAsList(bean);
     }
     /**
