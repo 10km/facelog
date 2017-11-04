@@ -51,7 +51,7 @@ public interface IPersonManager extends TableManager<PersonBean>
      * @param id Integer
      */
     //1.4.1
-    public Integer checkDuplicate(Integer id);
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
     /**
      * Loads {@link PersonBean} from the fl_person using primary key fields.
      *

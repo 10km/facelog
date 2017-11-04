@@ -115,7 +115,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
             return null!=loadByPrimaryKey(bean);
         }
         @Override
-        public B checkDuplicate(B bean){
+        public B checkDuplicate(B bean) throws ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
@@ -689,7 +689,7 @@ public interface TableManager<B extends BaseBean<?>> extends Constant {
      * @see {@link #existsPrimaryKey(B bean)}
      */
     //1.7
-    public B checkDuplicate(B bean);
+    public B checkDuplicate(B bean) throws ObjectRetrievalException;
    
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

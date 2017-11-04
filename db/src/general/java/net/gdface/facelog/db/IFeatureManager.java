@@ -51,7 +51,7 @@ public interface IFeatureManager extends TableManager<FeatureBean>
      * @param md5 String
      */
     //1.4.1
-    public String checkDuplicate(String md5);
+    public String checkDuplicate(String md5)throws ObjectRetrievalException;
     /**
      * Loads {@link FeatureBean} from the fl_feature using primary key fields.
      *

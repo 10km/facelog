@@ -51,7 +51,7 @@ public interface IPersonGroupManager extends TableManager<PersonGroupBean>
      * @param id Integer
      */
     //1.4.1
-    public Integer checkDuplicate(Integer id);
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
     /**
      * Loads {@link PersonGroupBean} from the fl_person_group using primary key fields.
      *

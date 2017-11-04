@@ -193,16 +193,18 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     }
     //1.7
     @Override
-    public ImageBean checkDuplicate(ImageBean bean){
+    public ImageBean checkDuplicate(ImageBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getMd5());            
         return bean;   
     }
     //1.4.1 override IImageManager
     @Override 
-    public String checkDuplicate(String md5){
+    public String checkDuplicate(String md5)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(md5);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

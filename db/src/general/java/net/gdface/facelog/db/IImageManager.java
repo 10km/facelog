@@ -51,7 +51,7 @@ public interface IImageManager extends TableManager<ImageBean>
      * @param md5 String
      */
     //1.4.1
-    public String checkDuplicate(String md5);
+    public String checkDuplicate(String md5)throws ObjectRetrievalException;
     /**
      * Loads {@link ImageBean} from the fl_image using primary key fields.
      *

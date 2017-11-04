@@ -51,7 +51,7 @@ public interface IDeviceGroupManager extends TableManager<DeviceGroupBean>
      * @param id Integer
      */
     //1.4.1
-    public Integer checkDuplicate(Integer id);
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
     /**
      * Loads {@link DeviceGroupBean} from the fl_device_group using primary key fields.
      *

@@ -190,16 +190,18 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     }
     //1.7
     @Override
-    public StoreBean checkDuplicate(StoreBean bean){
+    public StoreBean checkDuplicate(StoreBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getMd5());            
         return bean;   
     }
     //1.4.1 override IStoreManager
     @Override 
-    public String checkDuplicate(String md5){
+    public String checkDuplicate(String md5)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(md5);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

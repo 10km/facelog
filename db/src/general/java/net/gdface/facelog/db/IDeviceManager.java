@@ -51,7 +51,7 @@ public interface IDeviceManager extends TableManager<DeviceBean>
      * @param id Integer
      */
     //1.4.1
-    public Integer checkDuplicate(Integer id);
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
     /**
      * Loads {@link DeviceBean} from the fl_device using primary key fields.
      *

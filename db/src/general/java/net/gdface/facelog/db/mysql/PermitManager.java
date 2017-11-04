@@ -194,7 +194,7 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     }
     //1.7
     @Override
-    public PermitBean checkDuplicate(PermitBean bean){
+    public PermitBean checkDuplicate(PermitBean bean)throws ObjectRetrievalException{
         try{
             nativeManager.checkDuplicate(this.beanConverter.toRight(bean));            
         }catch(DAOException e){

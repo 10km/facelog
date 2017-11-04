@@ -51,7 +51,7 @@ public interface IFaceManager extends TableManager<FaceBean>
      * @param id Integer
      */
     //1.4.1
-    public Integer checkDuplicate(Integer id);
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
     /**
      * Loads {@link FaceBean} from the fl_face using primary key fields.
      *

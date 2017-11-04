@@ -193,16 +193,18 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     }
     //1.7
     @Override
-    public DeviceGroupBean checkDuplicate(DeviceGroupBean bean){
+    public DeviceGroupBean checkDuplicate(DeviceGroupBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getId());            
         return bean;   
     }
     //1.4.1 override IDeviceGroupManager
     @Override 
-    public Integer checkDuplicate(Integer id){
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(id);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

@@ -193,16 +193,18 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     }
     //1.7
     @Override
-    public FeatureBean checkDuplicate(FeatureBean bean){
+    public FeatureBean checkDuplicate(FeatureBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getMd5());            
         return bean;   
     }
     //1.4.1 override IFeatureManager
     @Override 
-    public String checkDuplicate(String md5){
+    public String checkDuplicate(String md5)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(md5);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

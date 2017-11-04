@@ -1,0 +1,255 @@
+#parse( "header.include.vm" )
+#parse( "schema.include.vm" )
+#parse( "macros.include.vm" )
+#macro(varMgr $t)$t.asVar("","_Manager")#end
+#set ( $javaClassName = 'DaoUtils' )
+$codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
+package $extensionPkg;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
+#join($tables '
+import ${schemaPkg}.${e.asManagerInterfaceNSP()};
+import ${schemaPkg}.${e.asBeanClassNSP()};' '')
+
+import ${schemaPkg}.exception.ObjectRetrievalException;
+
+/**
+ * 数据库访问基础方法
+ * @author guyadong
+ *
+ */
+class DaoUtils implements CommonConstant {
+    #join($tables '
+    static final $e.asManagerInterfaceNSP() #varMgr($e) = TableManagerInitializer.instance.#varMgr($e);' '')
+
+#macro(defineMethod $table $onlyAdd)
+    //////////// $table.name.toUpperCase() /////////
+#set ($beanClass = $table.asBeanClassNSP())
+#set ($coreClass = $table.asCoreClassNSP())
+#set ($primaryKeys = $table.primaryKeys)
+#if($table.hasPrimaryKey())
+    /** 
+     * 根据主键从数据库读取记录
+     * #join($primaryKeys '
+     * @param $e.varName $e.remarks' '')
+
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(#join($primaryKeys '$e.javaType' ','))}
+     */
+    static $beanClass _get${coreClass}(#join($primaryKeys '$e.javaType $e.varName' ',')){
+        return #varMgr($table).loadByPrimaryKey(#join($primaryKeys '$e.varName' ','));
+    }
+#if($table.countPrimaryKeys() == 1)
+    /** 
+     * 根据主键从数据库读取记录
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)}
+     */    
+    static List<$beanClass> _get${coreClass}(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
+        return #varMgr($table).loadByPrimaryKey(${table.primaryKey.varName}Collection);
+    }
+    /** 
+     * 删除主键列表({@code ${table.primaryKey.varName}Collection})指定的记录
+     * @return 返回删除的记录条数
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)}
+     */    
+    static int _delete${coreClass}ByPrimaryKey(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
+        return #varMgr($table).deleteByPrimaryKey(${table.primaryKey.varName}Collection);
+    }
+#end
+    /** 
+     *　判断主键指定的记录是否存在
+     * #join($primaryKeys '
+     * @param $e.varName $e.remarks' '')
+
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey(#join($primaryKeys '$e.javaType' ','))}
+     */  
+    static boolean _exists${coreClass}(#join($primaryKeys '$e.javaType $e.varName' ',')){
+        return #varMgr($table).existsPrimaryKey(#join($primaryKeys '$e.varName' ','));
+    }
+    /**
+     * 删除主键指定的记录
+#join($primaryKeys '
+     * @param $e.varName $e.remarks' '')
+ 
+     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(#join($primaryKeys '$e.javaType' ','))}
+     */
+    static int _delete${coreClass}(#join($primaryKeys '$e.javaType $e.varName' ',')){
+        return #varMgr($table).deleteByPrimaryKey(#join($primaryKeys '$e.varName' ','));
+    }
+    /**
+     * 删除{@code ${table.asVar()}Collection}列表指定的记录
+#join($primaryKeys '
+     * @param $e.varName $e.remarks' '')
+ 
+     * @return 返回删除的记录条数
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}delete(Collection)}
+     */
+    static int _delete${coreClass}(Collection<$beanClass> ${table.asVar()}Collection){
+        return #varMgr($table).delete(${table.asVar()}Collection);
+    }
+    /** 
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @throws ObjectRetrievalException if exists duplicated row
+     */
+    static $beanClass _checkDuplicate($beanClass $table.asVar())throws ObjectRetrievalException{
+        return #varMgr($table).checkDuplicate($table.asVar());
+    }
+#end
+#if($table.type == "TABLE")
+#if($onlyAdd)
+    /** 
+     * 添加新记录<br>
+     * $table.name 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
+     * @param $table.asVar() 要添加的新记录
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @throws ObjectRetrievalException if exists duplicated row
+     * @throws IllegalArgumentException if {@code ${table.asVar()}.isNew()} is {@code false}
+     */
+    static $beanClass _add($beanClass $table.asVar())throws ObjectRetrievalException{
+        checkArgument(${table.asVar()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
+        return #varMgr($table).save(#varMgr($table).checkDuplicate($table.asVar()));
+    }
+#if( $table.hasForeignTables() || $table.hasImportedTables() )
+    /** 
+     * 添加新记录(同步保存)<br>
+     * $table.name 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
+     * @param $table.asVar() 要添加的新记录
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @throws ObjectRetrievalException if exists duplicated row
+     * @throws IllegalArgumentException if {@code ${table.asVar()}.isNew()} is {@code false}
+     */
+    static $beanClass _save($beanClass $table.asVar()
+        #foreachForeignTables('native' $table  ", $m_foreignClass $table.asRefArg($m_fkName) " '
+        ' '')
+
+        #foreachImportedTables('native' $table  ", Collection<${m_importedClass}> $m_importedTable.asImpArg($m_fkName) " '
+        ' ''))throws ObjectRetrievalException{
+        checkArgument(${table.asVar()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
+        #varMgr($table).checkDuplicate($table.asVar());
+        return #varMgr($table).save($table.asVar()
+            #foreachForeignTables('native' $table  ", $table.asRefArg($m_fkName) " '
+            ' '')
+
+            #foreachImportedTables('native' $table  ", $m_importedTable.asImpArg($m_fkName) " '
+            ' ''));
+    }
+#end
+#else
+    /** 
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
+     */
+    static $beanClass _save($beanClass $table.asVar()){
+        return #varMgr($table).save($table.asVar());
+    }
+#if( $table.hasForeignTables() || $table.hasImportedTables() )
+    /** 同步保存 */
+    static $beanClass _save($beanClass $table.asVar()
+        #foreachForeignTables('native' $table  ", $m_foreignClass $table.asRefArg($m_fkName) " '
+        ' '')
+
+        #foreachImportedTables('native' $table  ", Collection<${m_importedClass}> $m_importedTable.asImpArg($m_fkName) " '
+        ' '')){
+        return #varMgr($table).save($table.asVar()
+            #foreachForeignTables('native' $table  ", $table.asRefArg($m_fkName) " '
+            ' '')
+
+            #foreachImportedTables('native' $table  ", $m_importedTable.asImpArg($m_fkName) " '
+            ' ''));
+    }
+#end
+#end###if($onlyAdd)
+######################
+#end###if($table.type == "TALBE")
+    /**
+     * 查询{@code where}条件指定的记录
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)}
+     */
+    static List<$beanClass> _load${coreClass}ByWhere(String where,int startRow, int numRows){
+        return #varMgr($table).loadByWhereAsList(where,null,startRow,numRows);
+    }
+    /**
+     * 返回 $table.name 表的所有记录
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadAllAsList()}
+     */
+    static List<$beanClass> _load${coreClass}All(){
+        return #varMgr($table).loadAllAsList();
+    }
+#if($table.countPrimaryKeys() == 1)
+#set ($pkName = $strUtil.convertName($table.primaryKey.name,false))
+    /** 
+     * 查询{@code where}条件指定的记录
+     * @return 返回查询结果记录的主键
+     * @see ${esc.hash}_load${coreClass}ByWhere(String,int,int)
+     */
+    static List<$table.primaryKey.javaType> _load${coreClass}${pkName}ByWhere(String where){
+        return Lists.transform(_load${coreClass}ByWhere(where,1,-1),
+            new Function<$beanClass,$table.primaryKey.javaType>(){
+                @Override
+                public $table.primaryKey.javaType apply($beanClass input) {
+                    return input.${table.primaryKey.getGetMethod()}();
+                }});
+    }
+#end
+#### 生成 loadByTimestamp方法
+#define($defineLoadByTimestamp)
+#if($table.getColumn($timestampColumn))
+#set ( $m_suffix = $strUtil.convertName($timestampColumn,false))
+    /**
+     * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see ${esc.hash}_load${coreClass}ByWhere(String,int,int)
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     */
+    static List<$beanClass> _load${coreClass}By${m_suffix}(Date timestamp,int startRow, int numRows){
+        checkNotNull(timestamp);
+        String where = String.format("WHERE $timestampColumn >'%s'", timestampFormatter.format(timestamp));
+        return _load${coreClass}ByWhere(where,startRow,numRows);
+    }
+    /** 参见 {@link ${esc.hash}_load${coreClass}By${m_suffix}(Date,int,int)} */
+    static List<$beanClass> _load${coreClass}By${m_suffix}(Date timestamp){
+        return _load${coreClass}By${m_suffix}(timestamp,1,-1);
+    }
+#if($table.countPrimaryKeys() == 1)
+#set ($pkName = $strUtil.convertName($table.primaryKey.name,false))
+    /** 
+     * @return 返回查询结果记录的主键
+     * @see {@link ${esc.hash}_load${coreClass}By${m_suffix}(Date,int,int)} 
+     */
+    static List<$table.primaryKey.javaType> _load${coreClass}${pkName}By${m_suffix}(Date timestamp){
+        return Lists.transform(_load${coreClass}By${m_suffix}(timestamp,1,-1),
+            new Function<$beanClass,$table.primaryKey.javaType>(){
+                @Override
+                public $table.primaryKey.javaType apply($beanClass input) {
+                    return input.${table.primaryKey.getGetMethod()}();
+                }});
+    }
+#end
+#end
+#end##define
+#set($timestampColumn = 'create_time') 
+$defineLoadByTimestamp
+#set($timestampColumn = 'update_time') 
+$defineLoadByTimestamp
+#set($timestampColumn = 'verify_time') 
+$defineLoadByTimestamp
+#end###macro(defineMethod $table $onlyAdd)
+##join($tables '#defineMethod($e false)' '')
+#foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group'])
+#set($table = $db.getTable($tname))
+#defineMethod($table false)
+#end
+#foreach($tname in ['fl_face','fl_feature','fl_image','fl_log','fl_permit','fl_store','fl_log_light'])
+#set($table = $db.getTable($tname))
+#defineMethod($table true)
+#end
+}

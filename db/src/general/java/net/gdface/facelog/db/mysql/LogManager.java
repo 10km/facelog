@@ -194,16 +194,18 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     }
     //1.7
     @Override
-    public LogBean checkDuplicate(LogBean bean){
+    public LogBean checkDuplicate(LogBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getId());            
         return bean;   
     }
     //1.4.1 override ILogManager
     @Override 
-    public Integer checkDuplicate(Integer id){
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(id);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

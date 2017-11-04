@@ -51,7 +51,7 @@ public interface IStoreManager extends TableManager<StoreBean>
      * @param md5 String
      */
     //1.4.1
-    public String checkDuplicate(String md5);
+    public String checkDuplicate(String md5)throws ObjectRetrievalException;
     /**
      * Loads {@link StoreBean} from the fl_store using primary key fields.
      *

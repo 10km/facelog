@@ -193,16 +193,18 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     }
     //1.7
     @Override
-    public PersonGroupBean checkDuplicate(PersonGroupBean bean){
+    public PersonGroupBean checkDuplicate(PersonGroupBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getId());            
         return bean;   
     }
     //1.4.1 override IPersonGroupManager
     @Override 
-    public Integer checkDuplicate(Integer id){
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(id);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

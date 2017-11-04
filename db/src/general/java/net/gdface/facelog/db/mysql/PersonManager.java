@@ -194,16 +194,18 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     }
     //1.7
     @Override
-    public PersonBean checkDuplicate(PersonBean bean){
+    public PersonBean checkDuplicate(PersonBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getId());            
         return bean;   
     }
     //1.4.1 override IPersonManager
     @Override 
-    public Integer checkDuplicate(Integer id){
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(id);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

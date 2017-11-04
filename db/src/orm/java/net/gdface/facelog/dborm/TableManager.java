@@ -118,7 +118,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
             return null!=loadByPrimaryKey(bean);
         }
         @Override
-        public B checkDuplicate(B bean)throws DAOException{
+        public B checkDuplicate(B bean)throws DAOException,ObjectRetrievalException{
             throw new UnsupportedOperationException();
         }
         @Override
@@ -714,7 +714,7 @@ public interface TableManager<B extends BaseBean<B>> extends Constant {
      * @throws DAOException
      */
     //1.7
-    public B checkDuplicate(B bean)throws DAOException;
+    public B checkDuplicate(B bean)throws DAOException,ObjectRetrievalException;
    
     //////////////////////////////////////
     // SQL 'WHERE' METHOD

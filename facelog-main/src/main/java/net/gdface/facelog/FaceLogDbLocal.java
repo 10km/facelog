@@ -220,7 +220,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	}
 	protected static  List<PermitBean> _loadPermitByWhere(String where){
 		return permitManager.loadByWhereAsList(where);
-}
+	}
 	protected static List<PermitBean> _loadPermitByUpdate(Date timestamp) {
 		String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));		
 		return _loadPermitByWhere(where);
@@ -280,7 +280,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		return featureBean;
 	}
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5){
-		return featureManager.save(featureManager.checkDuplicate(_makeFeature(feature)), refPersonByPersonId, impFaceByFeatureMd5, null);
+		return featureManager.save(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
 	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean){
 		if(null != faceInfo){

@@ -193,16 +193,18 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     }
     //1.7
     @Override
-    public FaceBean checkDuplicate(FaceBean bean){
+    public FaceBean checkDuplicate(FaceBean bean)throws ObjectRetrievalException{
         if(null != bean)
             checkDuplicate(bean.getId());            
         return bean;   
     }
     //1.4.1 override IFaceManager
     @Override 
-    public Integer checkDuplicate(Integer id){
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException{
         try{
             return this.nativeManager.checkDuplicate(id);
+        }catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e){
+        	throw new ObjectRetrievalException(e);
         }catch(DAOException e){
             throw new WrapDAOException(e);
         }

@@ -51,7 +51,7 @@ public interface ILogManager extends TableManager<LogBean>
      * @param id Integer
      */
     //1.4.1
-    public Integer checkDuplicate(Integer id);
+    public Integer checkDuplicate(Integer id)throws ObjectRetrievalException;
     /**
      * Loads {@link LogBean} from the fl_log using primary key fields.
      *
