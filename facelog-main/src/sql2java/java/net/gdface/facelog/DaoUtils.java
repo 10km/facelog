@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 
@@ -41,6 +42,7 @@ import net.gdface.facelog.db.StoreBean;
 import net.gdface.facelog.db.ILogLightManager;
 import net.gdface.facelog.db.LogLightBean;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
+import net.gdface.facelog.db.exception.WrapDAOException;
 
 /**
  * 数据库访问基础方法
@@ -64,7 +66,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param id 设备id
+     * @param id 设备id 
      * @see {@link IDeviceManager#loadByPrimaryKey(Integer)}
      */
     static DeviceBean _getDevice(Integer id){
@@ -88,7 +90,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param id 设备id
+     * @param id 设备id 
      * @see {@link IDeviceManager#existsPrimaryKey(Integer)}
      */  
     static boolean _existsDevice(Integer id){
@@ -96,8 +98,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param id 设备id 
+     * 
+     * @param id 设备id  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IDeviceManager#deleteByPrimaryKey(Integer)}
      */
@@ -105,34 +107,55 @@ class DaoUtils implements CommonConstant {
         return deviceManager.deleteByPrimaryKey(id);
     }
     /**
-     * 删除{@code deviceCollection}列表指定的记录
-
-     * @param id 设备id 
+     * 删除{@code deviceBeanCollection}列表指定的记录
+     * 
+     * @param id 设备id  
      * @return 返回删除的记录条数
      * @see {@link IDeviceManager#delete(Collection)}
      */
-    static int _deleteDevice(Collection<DeviceBean> deviceCollection){
-        return deviceManager.delete(deviceCollection);
+    static int _deleteDevice(Collection<DeviceBean> deviceBeanCollection){
+        return deviceManager.delete(deviceBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static DeviceBean _checkDuplicate(DeviceBean device)throws ObjectRetrievalException{
-        return deviceManager.checkDuplicate(device);
+    static DeviceBean _checkDuplicate(DeviceBean deviceBean)throws ObjectRetrievalException{
+        return deviceManager.checkDuplicate(deviceBean);
+    }
+    /**
+     * 返回外键(idOfDevice))引用指定记录(fl_device.id)的所有{@code fl_image}记录
+     * 
+     * @param idOfDevice 设备id 
+     * @see {@link IDeviceManager#getImageBeansByDeviceIdAsList(Integer)}
+     */
+    static List<ImageBean> _getImageBeansByDeviceIdOnDevice(Integer idOfDevice){
+        return deviceManager.getImageBeansByDeviceIdAsList(idOfDevice);
+    }
+    /**
+     * 返回外键(idOfDevice))引用指定记录(fl_device.id)的所有{@code fl_log}记录
+     * 
+     * @param idOfDevice 设备id 
+     * @see {@link IDeviceManager#getLogBeansByDeviceIdAsList(Integer)}
+     */
+    static List<LogBean> _getLogBeansByDeviceIdOnDevice(Integer idOfDevice){
+        return deviceManager.getLogBeansByDeviceIdAsList(idOfDevice);
     }
     /** 
      * @see {@link IDeviceManager#save(DeviceBean)}
      */
-    static DeviceBean _save(DeviceBean device){
-        return deviceManager.save(device);
+    static DeviceBean _saveDevice(DeviceBean deviceBean){
+        _checkGroup(deviceBean);
+        return deviceManager.save(deviceBean);
     }
     /** 同步保存 */
-    static DeviceBean _save(DeviceBean device
+    static DeviceBean _saveDevice(DeviceBean deviceBean
         , DeviceGroupBean refDevicegroupByGroupId 
         , Collection<ImageBean> impImageByDeviceId 
         , Collection<LogBean> impLogByDeviceId ){
-        return deviceManager.save(device
+        _checkGroup(deviceBean);
+        return deviceManager.save(deviceBean
             , refDevicegroupByGroupId 
             , impImageByDeviceId 
             , impLogByDeviceId );
@@ -223,7 +246,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param id 设备组id
+     * @param id 设备组id 
      * @see {@link IDeviceGroupManager#loadByPrimaryKey(Integer)}
      */
     static DeviceGroupBean _getDeviceGroup(Integer id){
@@ -247,7 +270,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param id 设备组id
+     * @param id 设备组id 
      * @see {@link IDeviceGroupManager#existsPrimaryKey(Integer)}
      */  
     static boolean _existsDeviceGroup(Integer id){
@@ -255,8 +278,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param id 设备组id 
+     * 
+     * @param id 设备组id  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IDeviceGroupManager#deleteByPrimaryKey(Integer)}
      */
@@ -264,35 +287,100 @@ class DaoUtils implements CommonConstant {
         return deviceGroupManager.deleteByPrimaryKey(id);
     }
     /**
-     * 删除{@code deviceGroupCollection}列表指定的记录
-
-     * @param id 设备组id 
+     * 删除{@code deviceGroupBeanCollection}列表指定的记录
+     * 
+     * @param id 设备组id  
      * @return 返回删除的记录条数
      * @see {@link IDeviceGroupManager#delete(Collection)}
      */
-    static int _deleteDeviceGroup(Collection<DeviceGroupBean> deviceGroupCollection){
-        return deviceGroupManager.delete(deviceGroupCollection);
+    static int _deleteDeviceGroup(Collection<DeviceGroupBean> deviceGroupBeanCollection){
+        return deviceGroupManager.delete(deviceGroupBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static DeviceGroupBean _checkDuplicate(DeviceGroupBean deviceGroup)throws ObjectRetrievalException{
-        return deviceGroupManager.checkDuplicate(deviceGroup);
+    static DeviceGroupBean _checkDuplicate(DeviceGroupBean deviceGroupBean)throws ObjectRetrievalException{
+        return deviceGroupManager.checkDuplicate(deviceGroupBean);
+    }
+    /**
+     * 返回属于{@code idOfDeviceGroup}指定组的所有{@code fl_device}记录
+     * 
+     * @param idOfDeviceGroup 设备组id 
+     * @see {@link IDeviceGroupManager#getDeviceBeansByGroupIdAsList(Integer)}
+     */
+    static List<DeviceBean> _getDevicesOfGroup(Integer idOfDeviceGroup){
+        return deviceGroupManager.getDeviceBeansByGroupIdAsList(idOfDeviceGroup);
+    }
+    /**
+     * 返回{@code idOfDeviceGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
+     * 
+     * @param idOfDeviceGroup 设备组id 
+     * @see {@link IDeviceGroupManager#getDeviceGroupBeansByParentAsList(Integer)}
+     */
+    static List<DeviceGroupBean> _getSubDeviceGroup(Integer idOfDeviceGroup){
+        return deviceGroupManager.getDeviceGroupBeansByParentAsList(idOfDeviceGroup);
+    }
+    /**
+     * 返回外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_permit}记录
+     * 
+     * @param idOfDeviceGroup 设备组id 
+     * @see {@link IDeviceGroupManager#getPermitBeansByDeviceGroupIdAsList(Integer)}
+     */
+    static List<PermitBean> _getPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
+        return deviceGroupManager.getPermitBeansByDeviceGroupIdAsList(idOfDeviceGroup);
+    }
+    /**
+     * 返回(idOfDeviceGroup))指定的fl_device_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_device_group(parent)
+     * @see IDeviceGroupManager#listOfParent(Integer)
+     */
+    static java.util.List<DeviceGroupBean> _listOfParentForDeviceGroup(Integer idOfDeviceGroup){
+        return deviceGroupManager.listOfParent(idOfDeviceGroup);
+    }
+    /** 
+     * 如果没有默认组则向 fl_device_group 表中增加默认组,失败则抛出异常 
+     * 
+     * @throws IllegalStateException 创建失败
+     */
+    static void _saveDefaultDeviceGroupIfAbsent(){
+        if(!_existsDeviceGroup(DEFAULT_GROUP_ID)){
+            try{
+                DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
+                bean.setName(DEFAULT_GROUP_NAME);
+                _saveDeviceGroup(bean);
+            }catch(WrapDAOException e){}
+            if(!_existsDeviceGroup(DEFAULT_GROUP_ID)){
+                throw new IllegalStateException("can't create default group for device_group"); 
+            }
+        }
+    }
+    /**
+     * 检查{@link DeviceBean}的'group_id'字段是否为默认组{@link CommonConstant#DEFAULT_GROUP_ID},
+     * 如果是,且默认组记录不存在则创建默认组
+     * @return {@code deviceBean}
+     * @see #_saveDefaultDeviceGroupIfAbsent()
+     */
+    static DeviceBean _checkGroup(DeviceBean deviceBean){
+        if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
+            _saveDefaultDeviceGroupIfAbsent();
+        }
+        return deviceBean;
     }
     /** 
      * @see {@link IDeviceGroupManager#save(DeviceGroupBean)}
      */
-    static DeviceGroupBean _save(DeviceGroupBean deviceGroup){
-        return deviceGroupManager.save(deviceGroup);
+    static DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean){
+        return deviceGroupManager.save(deviceGroupBean);
     }
     /** 同步保存 */
-    static DeviceGroupBean _save(DeviceGroupBean deviceGroup
+    static DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean
         , DeviceGroupBean refDevicegroupByParent 
         , Collection<DeviceBean> impDeviceByGroupId 
         , Collection<DeviceGroupBean> impDevicegroupByParent 
         , Collection<PermitBean> impPermitByDeviceGroupId ){
-        return deviceGroupManager.save(deviceGroup
+        return deviceGroupManager.save(deviceGroupBean
             , refDevicegroupByParent 
             , impDeviceByGroupId 
             , impDevicegroupByParent 
@@ -332,7 +420,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param id 用户id
+     * @param id 用户id 
      * @see {@link IPersonManager#loadByPrimaryKey(Integer)}
      */
     static PersonBean _getPerson(Integer id){
@@ -356,7 +444,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param id 用户id
+     * @param id 用户id 
      * @see {@link IPersonManager#existsPrimaryKey(Integer)}
      */  
     static boolean _existsPerson(Integer id){
@@ -364,8 +452,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param id 用户id 
+     * 
+     * @param id 用户id  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IPersonManager#deleteByPrimaryKey(Integer)}
      */
@@ -373,35 +461,56 @@ class DaoUtils implements CommonConstant {
         return personManager.deleteByPrimaryKey(id);
     }
     /**
-     * 删除{@code personCollection}列表指定的记录
-
-     * @param id 用户id 
+     * 删除{@code personBeanCollection}列表指定的记录
+     * 
+     * @param id 用户id  
      * @return 返回删除的记录条数
      * @see {@link IPersonManager#delete(Collection)}
      */
-    static int _deletePerson(Collection<PersonBean> personCollection){
-        return personManager.delete(personCollection);
+    static int _deletePerson(Collection<PersonBean> personBeanCollection){
+        return personManager.delete(personBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPersonManager#checkDuplicate(PersonBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static PersonBean _checkDuplicate(PersonBean person)throws ObjectRetrievalException{
-        return personManager.checkDuplicate(person);
+    static PersonBean _checkDuplicate(PersonBean personBean)throws ObjectRetrievalException{
+        return personManager.checkDuplicate(personBean);
+    }
+    /**
+     * 返回外键(idOfPerson))引用指定记录(fl_person.id)的所有{@code fl_feature}记录
+     * 
+     * @param idOfPerson 用户id 
+     * @see {@link IPersonManager#getFeatureBeansByPersonIdAsList(Integer)}
+     */
+    static List<FeatureBean> _getFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
+        return personManager.getFeatureBeansByPersonIdAsList(idOfPerson);
+    }
+    /**
+     * 返回外键(idOfPerson))引用指定记录(fl_person.id)的所有{@code fl_log}记录
+     * 
+     * @param idOfPerson 用户id 
+     * @see {@link IPersonManager#getLogBeansByPersonIdAsList(Integer)}
+     */
+    static List<LogBean> _getLogBeansByPersonIdOnPerson(Integer idOfPerson){
+        return personManager.getLogBeansByPersonIdAsList(idOfPerson);
     }
     /** 
      * @see {@link IPersonManager#save(PersonBean)}
      */
-    static PersonBean _save(PersonBean person){
-        return personManager.save(person);
+    static PersonBean _savePerson(PersonBean personBean){
+        _checkGroup(personBean);
+        return personManager.save(personBean);
     }
     /** 同步保存 */
-    static PersonBean _save(PersonBean person
+    static PersonBean _savePerson(PersonBean personBean
         , ImageBean refImageByImageMd5 
         , PersonGroupBean refPersongroupByGroupId 
         , Collection<FeatureBean> impFeatureByPersonId 
         , Collection<LogBean> impLogByPersonId ){
-        return personManager.save(person
+        _checkGroup(personBean);
+        return personManager.save(personBean
             , refImageByImageMd5 
             , refPersongroupByGroupId 
             , impFeatureByPersonId 
@@ -493,7 +602,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param id 用户组id
+     * @param id 用户组id 
      * @see {@link IPersonGroupManager#loadByPrimaryKey(Integer)}
      */
     static PersonGroupBean _getPersonGroup(Integer id){
@@ -517,7 +626,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param id 用户组id
+     * @param id 用户组id 
      * @see {@link IPersonGroupManager#existsPrimaryKey(Integer)}
      */  
     static boolean _existsPersonGroup(Integer id){
@@ -525,8 +634,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param id 用户组id 
+     * 
+     * @param id 用户组id  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IPersonGroupManager#deleteByPrimaryKey(Integer)}
      */
@@ -534,35 +643,100 @@ class DaoUtils implements CommonConstant {
         return personGroupManager.deleteByPrimaryKey(id);
     }
     /**
-     * 删除{@code personGroupCollection}列表指定的记录
-
-     * @param id 用户组id 
+     * 删除{@code personGroupBeanCollection}列表指定的记录
+     * 
+     * @param id 用户组id  
      * @return 返回删除的记录条数
      * @see {@link IPersonGroupManager#delete(Collection)}
      */
-    static int _deletePersonGroup(Collection<PersonGroupBean> personGroupCollection){
-        return personGroupManager.delete(personGroupCollection);
+    static int _deletePersonGroup(Collection<PersonGroupBean> personGroupBeanCollection){
+        return personGroupManager.delete(personGroupBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static PersonGroupBean _checkDuplicate(PersonGroupBean personGroup)throws ObjectRetrievalException{
-        return personGroupManager.checkDuplicate(personGroup);
+    static PersonGroupBean _checkDuplicate(PersonGroupBean personGroupBean)throws ObjectRetrievalException{
+        return personGroupManager.checkDuplicate(personGroupBean);
+    }
+    /**
+     * 返回外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_permit}记录
+     * 
+     * @param idOfPersonGroup 用户组id 
+     * @see {@link IPersonGroupManager#getPermitBeansByPersonGroupIdAsList(Integer)}
+     */
+    static List<PermitBean> _getPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
+        return personGroupManager.getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
+    }
+    /**
+     * 返回属于{@code idOfPersonGroup}指定组的所有{@code fl_person}记录
+     * 
+     * @param idOfPersonGroup 用户组id 
+     * @see {@link IPersonGroupManager#getPersonBeansByGroupIdAsList(Integer)}
+     */
+    static List<PersonBean> _getPersonsOfGroup(Integer idOfPersonGroup){
+        return personGroupManager.getPersonBeansByGroupIdAsList(idOfPersonGroup);
+    }
+    /**
+     * 返回{@code idOfPersonGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
+     * 
+     * @param idOfPersonGroup 用户组id 
+     * @see {@link IPersonGroupManager#getPersonGroupBeansByParentAsList(Integer)}
+     */
+    static List<PersonGroupBean> _getSubPersonGroup(Integer idOfPersonGroup){
+        return personGroupManager.getPersonGroupBeansByParentAsList(idOfPersonGroup);
+    }
+    /**
+     * 返回(idOfPersonGroup))指定的fl_person_group记录的所有的父节点(包括自己)<br>
+     * 自引用字段:fl_person_group(parent)
+     * @see IPersonGroupManager#listOfParent(Integer)
+     */
+    static java.util.List<PersonGroupBean> _listOfParentForPersonGroup(Integer idOfPersonGroup){
+        return personGroupManager.listOfParent(idOfPersonGroup);
+    }
+    /** 
+     * 如果没有默认组则向 fl_person_group 表中增加默认组,失败则抛出异常 
+     * 
+     * @throws IllegalStateException 创建失败
+     */
+    static void _saveDefaultPersonGroupIfAbsent(){
+        if(!_existsPersonGroup(DEFAULT_GROUP_ID)){
+            try{
+                PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
+                bean.setName(DEFAULT_GROUP_NAME);
+                _savePersonGroup(bean);
+            }catch(WrapDAOException e){}
+            if(!_existsPersonGroup(DEFAULT_GROUP_ID)){
+                throw new IllegalStateException("can't create default group for person_group"); 
+            }
+        }
+    }
+    /**
+     * 检查{@link PersonBean}的'group_id'字段是否为默认组{@link CommonConstant#DEFAULT_GROUP_ID},
+     * 如果是,且默认组记录不存在则创建默认组
+     * @return {@code personBean}
+     * @see #_saveDefaultPersonGroupIfAbsent()
+     */
+    static PersonBean _checkGroup(PersonBean personBean){
+        if(null != personBean && Objects.equal(personBean.getGroupId(), DEFAULT_GROUP_ID)){
+            _saveDefaultPersonGroupIfAbsent();
+        }
+        return personBean;
     }
     /** 
      * @see {@link IPersonGroupManager#save(PersonGroupBean)}
      */
-    static PersonGroupBean _save(PersonGroupBean personGroup){
-        return personGroupManager.save(personGroup);
+    static PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean){
+        return personGroupManager.save(personGroupBean);
     }
     /** 同步保存 */
-    static PersonGroupBean _save(PersonGroupBean personGroup
+    static PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean
         , PersonGroupBean refPersongroupByParent 
         , Collection<PermitBean> impPermitByPersonGroupId 
         , Collection<PersonBean> impPersonByGroupId 
         , Collection<PersonGroupBean> impPersongroupByParent ){
-        return personGroupManager.save(personGroup
+        return personGroupManager.save(personGroupBean
             , refPersongroupByParent 
             , impPermitByPersonGroupId 
             , impPersonByGroupId 
@@ -602,7 +776,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param id 主键
+     * @param id 主键 
      * @see {@link IFaceManager#loadByPrimaryKey(Integer)}
      */
     static FaceBean _getFace(Integer id){
@@ -626,7 +800,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param id 主键
+     * @param id 主键 
      * @see {@link IFaceManager#existsPrimaryKey(Integer)}
      */  
     static boolean _existsFace(Integer id){
@@ -634,8 +808,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param id 主键 
+     * 
+     * @param id 主键  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IFaceManager#deleteByPrimaryKey(Integer)}
      */
@@ -643,51 +817,61 @@ class DaoUtils implements CommonConstant {
         return faceManager.deleteByPrimaryKey(id);
     }
     /**
-     * 删除{@code faceCollection}列表指定的记录
-
-     * @param id 主键 
+     * 删除{@code faceBeanCollection}列表指定的记录
+     * 
+     * @param id 主键  
      * @return 返回删除的记录条数
      * @see {@link IFaceManager#delete(Collection)}
      */
-    static int _deleteFace(Collection<FaceBean> faceCollection){
-        return faceManager.delete(faceCollection);
+    static int _deleteFace(Collection<FaceBean> faceBeanCollection){
+        return faceManager.delete(faceBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static FaceBean _checkDuplicate(FaceBean face)throws ObjectRetrievalException{
-        return faceManager.checkDuplicate(face);
+    static FaceBean _checkDuplicate(FaceBean faceBean)throws ObjectRetrievalException{
+        return faceManager.checkDuplicate(faceBean);
+    }
+    /**
+     * 返回外键(idOfFace))引用指定记录(fl_face.id)的所有{@code fl_log}记录
+     * 
+     * @param idOfFace 主键 
+     * @see {@link IFaceManager#getLogBeansByCompareFaceAsList(Integer)}
+     */
+    static List<LogBean> _getLogBeansByCompareFaceOnFace(Integer idOfFace){
+        return faceManager.getLogBeansByCompareFaceAsList(idOfFace);
     }
     /** 
      * 添加新记录<br>
      * fl_face 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
-     * @param face 要添加的新记录
+     * @param faceBean 要添加的新记录
      * @see {@link IFaceManager#save(FaceBean)}
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code face.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
      */
-    static FaceBean _add(FaceBean face)throws ObjectRetrievalException{
-        checkArgument(face.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
-        return faceManager.save(faceManager.checkDuplicate(face));
+    static FaceBean _addFace(FaceBean faceBean)throws ObjectRetrievalException{
+        checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
+        return faceManager.save(_checkDuplicate(faceBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
      * fl_face 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
-     * @param face 要添加的新记录
+     * @param faceBean 要添加的新记录
      * @see {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code face.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code faceBean.isNew()} is {@code false}
      */
-    static FaceBean _save(FaceBean face
+    static FaceBean _addFace(FaceBean faceBean
         , FeatureBean refFeatureByFeatureMd5 
         , ImageBean refImageByImageMd5 
         , Collection<LogBean> impLogByCompareFace )throws ObjectRetrievalException{
-        checkArgument(face.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
-        faceManager.checkDuplicate(face);
-        return faceManager.save(face
+        checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
+        _checkDuplicate(faceBean);
+        return faceManager.save(faceBean
             , refFeatureByFeatureMd5 
             , refImageByImageMd5 
             , impLogByCompareFace );
@@ -752,7 +936,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param md5 主键,特征码md5校验码
+     * @param md5 主键,特征码md5校验码 
      * @see {@link IFeatureManager#loadByPrimaryKey(String)}
      */
     static FeatureBean _getFeature(String md5){
@@ -776,7 +960,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param md5 主键,特征码md5校验码
+     * @param md5 主键,特征码md5校验码 
      * @see {@link IFeatureManager#existsPrimaryKey(String)}
      */  
     static boolean _existsFeature(String md5){
@@ -784,8 +968,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param md5 主键,特征码md5校验码 
+     * 
+     * @param md5 主键,特征码md5校验码  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IFeatureManager#deleteByPrimaryKey(String)}
      */
@@ -793,51 +977,70 @@ class DaoUtils implements CommonConstant {
         return featureManager.deleteByPrimaryKey(md5);
     }
     /**
-     * 删除{@code featureCollection}列表指定的记录
-
-     * @param md5 主键,特征码md5校验码 
+     * 删除{@code featureBeanCollection}列表指定的记录
+     * 
+     * @param md5 主键,特征码md5校验码  
      * @return 返回删除的记录条数
      * @see {@link IFeatureManager#delete(Collection)}
      */
-    static int _deleteFeature(Collection<FeatureBean> featureCollection){
-        return featureManager.delete(featureCollection);
+    static int _deleteFeature(Collection<FeatureBean> featureBeanCollection){
+        return featureManager.delete(featureBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static FeatureBean _checkDuplicate(FeatureBean feature)throws ObjectRetrievalException{
-        return featureManager.checkDuplicate(feature);
+    static FeatureBean _checkDuplicate(FeatureBean featureBean)throws ObjectRetrievalException{
+        return featureManager.checkDuplicate(featureBean);
+    }
+    /**
+     * 返回外键(md5OfFeature))引用指定记录(fl_feature.md5)的所有{@code fl_face}记录
+     * 
+     * @param md5OfFeature 主键,特征码md5校验码 
+     * @see {@link IFeatureManager#getFaceBeansByFeatureMd5AsList(String)}
+     */
+    static List<FaceBean> _getFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
+        return featureManager.getFaceBeansByFeatureMd5AsList(md5OfFeature);
+    }
+    /**
+     * 返回外键(md5OfFeature))引用指定记录(fl_feature.md5)的所有{@code fl_log}记录
+     * 
+     * @param md5OfFeature 主键,特征码md5校验码 
+     * @see {@link IFeatureManager#getLogBeansByVerifyFeatureAsList(String)}
+     */
+    static List<LogBean> _getLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
+        return featureManager.getLogBeansByVerifyFeatureAsList(md5OfFeature);
     }
     /** 
      * 添加新记录<br>
      * fl_feature 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
-     * @param feature 要添加的新记录
+     * @param featureBean 要添加的新记录
      * @see {@link IFeatureManager#save(FeatureBean)}
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code feature.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
      */
-    static FeatureBean _add(FeatureBean feature)throws ObjectRetrievalException{
-        checkArgument(feature.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
-        return featureManager.save(featureManager.checkDuplicate(feature));
+    static FeatureBean _addFeature(FeatureBean featureBean)throws ObjectRetrievalException{
+        checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
+        return featureManager.save(_checkDuplicate(featureBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
      * fl_feature 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
-     * @param feature 要添加的新记录
+     * @param featureBean 要添加的新记录
      * @see {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code feature.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code featureBean.isNew()} is {@code false}
      */
-    static FeatureBean _save(FeatureBean feature
+    static FeatureBean _addFeature(FeatureBean featureBean
         , PersonBean refPersonByPersonId 
         , Collection<FaceBean> impFaceByFeatureMd5 
         , Collection<LogBean> impLogByVerifyFeature )throws ObjectRetrievalException{
-        checkArgument(feature.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
-        featureManager.checkDuplicate(feature);
-        return featureManager.save(feature
+        checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
+        _checkDuplicate(featureBean);
+        return featureManager.save(featureBean
             , refPersonByPersonId 
             , impFaceByFeatureMd5 
             , impLogByVerifyFeature );
@@ -902,7 +1105,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key
+     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#loadByPrimaryKey(String)}
      */
     static ImageBean _getImage(String md5){
@@ -926,7 +1129,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key
+     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
      * @see {@link IImageManager#existsPrimaryKey(String)}
      */  
     static boolean _existsImage(String md5){
@@ -934,8 +1137,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * 
+     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IImageManager#deleteByPrimaryKey(String)}
      */
@@ -943,51 +1146,70 @@ class DaoUtils implements CommonConstant {
         return imageManager.deleteByPrimaryKey(md5);
     }
     /**
-     * 删除{@code imageCollection}列表指定的记录
-
-     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * 删除{@code imageBeanCollection}列表指定的记录
+     * 
+     * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key  
      * @return 返回删除的记录条数
      * @see {@link IImageManager#delete(Collection)}
      */
-    static int _deleteImage(Collection<ImageBean> imageCollection){
-        return imageManager.delete(imageCollection);
+    static int _deleteImage(Collection<ImageBean> imageBeanCollection){
+        return imageManager.delete(imageBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static ImageBean _checkDuplicate(ImageBean image)throws ObjectRetrievalException{
-        return imageManager.checkDuplicate(image);
+    static ImageBean _checkDuplicate(ImageBean imageBean)throws ObjectRetrievalException{
+        return imageManager.checkDuplicate(imageBean);
+    }
+    /**
+     * 返回外键(md5OfImage))引用指定记录(fl_image.md5)的所有{@code fl_face}记录
+     * 
+     * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * @see {@link IImageManager#getFaceBeansByImageMd5AsList(String)}
+     */
+    static List<FaceBean> _getFaceBeansByImageMd5OnImage(String md5OfImage){
+        return imageManager.getFaceBeansByImageMd5AsList(md5OfImage);
+    }
+    /**
+     * 返回外键(md5OfImage))引用指定记录(fl_image.md5)的所有{@code fl_person}记录
+     * 
+     * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * @see {@link IImageManager#getPersonBeansByImageMd5AsList(String)}
+     */
+    static List<PersonBean> _getPersonBeansByImageMd5OnImage(String md5OfImage){
+        return imageManager.getPersonBeansByImageMd5AsList(md5OfImage);
     }
     /** 
      * 添加新记录<br>
      * fl_image 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
-     * @param image 要添加的新记录
+     * @param imageBean 要添加的新记录
      * @see {@link IImageManager#save(ImageBean)}
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code image.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
      */
-    static ImageBean _add(ImageBean image)throws ObjectRetrievalException{
-        checkArgument(image.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
-        return imageManager.save(imageManager.checkDuplicate(image));
+    static ImageBean _addImage(ImageBean imageBean)throws ObjectRetrievalException{
+        checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
+        return imageManager.save(_checkDuplicate(imageBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
      * fl_image 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
-     * @param image 要添加的新记录
+     * @param imageBean 要添加的新记录
      * @see {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code image.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code imageBean.isNew()} is {@code false}
      */
-    static ImageBean _save(ImageBean image
+    static ImageBean _addImage(ImageBean imageBean
         , DeviceBean refDeviceByDeviceId 
         , Collection<FaceBean> impFaceByImageMd5 
         , Collection<PersonBean> impPersonByImageMd5 )throws ObjectRetrievalException{
-        checkArgument(image.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
-        imageManager.checkDuplicate(image);
-        return imageManager.save(image
+        checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
+        _checkDuplicate(imageBean);
+        return imageManager.save(imageBean
             , refDeviceByDeviceId 
             , impFaceByImageMd5 
             , impPersonByImageMd5 );
@@ -1026,7 +1248,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param id 日志id
+     * @param id 日志id 
      * @see {@link ILogManager#loadByPrimaryKey(Integer)}
      */
     static LogBean _getLog(Integer id){
@@ -1050,7 +1272,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param id 日志id
+     * @param id 日志id 
      * @see {@link ILogManager#existsPrimaryKey(Integer)}
      */  
     static boolean _existsLog(Integer id){
@@ -1058,8 +1280,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param id 日志id 
+     * 
+     * @param id 日志id  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link ILogManager#deleteByPrimaryKey(Integer)}
      */
@@ -1067,53 +1289,54 @@ class DaoUtils implements CommonConstant {
         return logManager.deleteByPrimaryKey(id);
     }
     /**
-     * 删除{@code logCollection}列表指定的记录
-
-     * @param id 日志id 
+     * 删除{@code logBeanCollection}列表指定的记录
+     * 
+     * @param id 日志id  
      * @return 返回删除的记录条数
      * @see {@link ILogManager#delete(Collection)}
      */
-    static int _deleteLog(Collection<LogBean> logCollection){
-        return logManager.delete(logCollection);
+    static int _deleteLog(Collection<LogBean> logBeanCollection){
+        return logManager.delete(logBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static LogBean _checkDuplicate(LogBean log)throws ObjectRetrievalException{
-        return logManager.checkDuplicate(log);
+    static LogBean _checkDuplicate(LogBean logBean)throws ObjectRetrievalException{
+        return logManager.checkDuplicate(logBean);
     }
     /** 
      * 添加新记录<br>
      * fl_log 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
-     * @param log 要添加的新记录
+     * @param logBean 要添加的新记录
      * @see {@link ILogManager#save(LogBean)}
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code log.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
      */
-    static LogBean _add(LogBean log)throws ObjectRetrievalException{
-        checkArgument(log.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
-        return logManager.save(logManager.checkDuplicate(log));
+    static LogBean _addLog(LogBean logBean)throws ObjectRetrievalException{
+        checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
+        return logManager.save(_checkDuplicate(logBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
      * fl_log 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
-     * @param log 要添加的新记录
+     * @param logBean 要添加的新记录
      * @see {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}
      * @see {@link ILogManager#checkDuplicate(LogBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code log.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code logBean.isNew()} is {@code false}
      */
-    static LogBean _save(LogBean log
+    static LogBean _addLog(LogBean logBean
         , DeviceBean refDeviceByDeviceId 
         , FaceBean refFaceByCompareFace 
         , FeatureBean refFeatureByVerifyFeature 
         , PersonBean refPersonByPersonId 
         )throws ObjectRetrievalException{
-        checkArgument(log.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
-        logManager.checkDuplicate(log);
-        return logManager.save(log
+        checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
+        _checkDuplicate(logBean);
+        return logManager.save(logBean
             , refDeviceByDeviceId 
             , refFaceByCompareFace 
             , refFeatureByVerifyFeature 
@@ -1206,8 +1429,8 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
      * @see {@link IPermitManager#loadByPrimaryKey(Integer,Integer)}
      */
     static PermitBean _getPermit(Integer deviceGroupId,Integer personGroupId){
@@ -1216,8 +1439,8 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id 
      * @see {@link IPermitManager#existsPrimaryKey(Integer,Integer)}
      */  
     static boolean _existsPermit(Integer deviceGroupId,Integer personGroupId){
@@ -1225,9 +1448,9 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id 
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IPermitManager#deleteByPrimaryKey(Integer,Integer)}
      */
@@ -1235,52 +1458,53 @@ class DaoUtils implements CommonConstant {
         return permitManager.deleteByPrimaryKey(deviceGroupId,personGroupId);
     }
     /**
-     * 删除{@code permitCollection}列表指定的记录
-
-     * @param deviceGroupId 外键,设备组id
-     * @param personGroupId 外键,人员组id 
+     * 删除{@code permitBeanCollection}列表指定的记录
+     * 
+     * @param deviceGroupId 外键,设备组id 
+     * @param personGroupId 外键,人员组id  
      * @return 返回删除的记录条数
      * @see {@link IPermitManager#delete(Collection)}
      */
-    static int _deletePermit(Collection<PermitBean> permitCollection){
-        return permitManager.delete(permitCollection);
+    static int _deletePermit(Collection<PermitBean> permitBeanCollection){
+        return permitManager.delete(permitBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static PermitBean _checkDuplicate(PermitBean permit)throws ObjectRetrievalException{
-        return permitManager.checkDuplicate(permit);
+    static PermitBean _checkDuplicate(PermitBean permitBean)throws ObjectRetrievalException{
+        return permitManager.checkDuplicate(permitBean);
     }
     /** 
      * 添加新记录<br>
      * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
-     * @param permit 要添加的新记录
+     * @param permitBean 要添加的新记录
      * @see {@link IPermitManager#save(PermitBean)}
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code permit.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
      */
-    static PermitBean _add(PermitBean permit)throws ObjectRetrievalException{
-        checkArgument(permit.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
-        return permitManager.save(permitManager.checkDuplicate(permit));
+    static PermitBean _addPermit(PermitBean permitBean)throws ObjectRetrievalException{
+        checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
+        return permitManager.save(_checkDuplicate(permitBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
      * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
-     * @param permit 要添加的新记录
+     * @param permitBean 要添加的新记录
      * @see {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code permit.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code permitBean.isNew()} is {@code false}
      */
-    static PermitBean _save(PermitBean permit
+    static PermitBean _addPermit(PermitBean permitBean
         , DeviceGroupBean refDevicegroupByDeviceGroupId 
         , PersonGroupBean refPersongroupByPersonGroupId 
         )throws ObjectRetrievalException{
-        checkArgument(permit.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
-        permitManager.checkDuplicate(permit);
-        return permitManager.save(permit
+        checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
+        _checkDuplicate(permitBean);
+        return permitManager.save(permitBean
             , refDevicegroupByDeviceGroupId 
             , refPersongroupByPersonGroupId 
             );
@@ -1320,7 +1544,7 @@ class DaoUtils implements CommonConstant {
     /** 
      * 根据主键从数据库读取记录
      * 
-     * @param md5 主键,md5检验码
+     * @param md5 主键,md5检验码 
      * @see {@link IStoreManager#loadByPrimaryKey(String)}
      */
     static StoreBean _getStore(String md5){
@@ -1344,7 +1568,7 @@ class DaoUtils implements CommonConstant {
     /** 
      *　判断主键指定的记录是否存在
      * 
-     * @param md5 主键,md5检验码
+     * @param md5 主键,md5检验码 
      * @see {@link IStoreManager#existsPrimaryKey(String)}
      */  
     static boolean _existsStore(String md5){
@@ -1352,8 +1576,8 @@ class DaoUtils implements CommonConstant {
     }
     /**
      * 删除主键指定的记录
-
-     * @param md5 主键,md5检验码 
+     * 
+     * @param md5 主键,md5检验码  
      * @return 返回删除的记录条数(1),如果记录不存在返回0
      * @see {@link IStoreManager#deleteByPrimaryKey(String)}
      */
@@ -1361,34 +1585,35 @@ class DaoUtils implements CommonConstant {
         return storeManager.deleteByPrimaryKey(md5);
     }
     /**
-     * 删除{@code storeCollection}列表指定的记录
-
-     * @param md5 主键,md5检验码 
+     * 删除{@code storeBeanCollection}列表指定的记录
+     * 
+     * @param md5 主键,md5检验码  
      * @return 返回删除的记录条数
      * @see {@link IStoreManager#delete(Collection)}
      */
-    static int _deleteStore(Collection<StoreBean> storeCollection){
-        return storeManager.delete(storeCollection);
+    static int _deleteStore(Collection<StoreBean> storeBeanCollection){
+        return storeManager.delete(storeBeanCollection);
     }
     /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
      * @throws ObjectRetrievalException if exists duplicated row
      */
-    static StoreBean _checkDuplicate(StoreBean store)throws ObjectRetrievalException{
-        return storeManager.checkDuplicate(store);
+    static StoreBean _checkDuplicate(StoreBean storeBean)throws ObjectRetrievalException{
+        return storeManager.checkDuplicate(storeBean);
     }
     /** 
      * 添加新记录<br>
      * fl_store 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link StoreBean#isNew()}返回{@code false},则抛出异常
-     * @param store 要添加的新记录
+     * @param storeBean 要添加的新记录
      * @see {@link IStoreManager#save(StoreBean)}
      * @see {@link IStoreManager#checkDuplicate(StoreBean)}
      * @throws ObjectRetrievalException if exists duplicated row
-     * @throws IllegalArgumentException if {@code store.isNew()} is {@code false}
+     * @throws IllegalArgumentException if {@code storeBean.isNew()} is {@code false}
      */
-    static StoreBean _add(StoreBean store)throws ObjectRetrievalException{
-        checkArgument(store.isNew(),"can be add,delete,but modify record for fl_store,so the _isNew field must be true");
-        return storeManager.save(storeManager.checkDuplicate(store));
+    static StoreBean _addStore(StoreBean storeBean)throws ObjectRetrievalException{
+        checkArgument(null == storeBean || storeBean.isNew(),"can be add,delete,but modify record for fl_store,so the _isNew field must be true");
+        return storeManager.save(_checkDuplicate(storeBean));
     }
     /**
      * 查询{@code where}条件指定的记录
