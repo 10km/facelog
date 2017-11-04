@@ -167,7 +167,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	protected static List<PersonBean> _getPersonsOfGroup(Integer personGroupId){
 		return personGroupManager.getPersonBeansByGroupIdAsList(personGroupId);
 	}
-	/////////////////////PERMIT/////
+	/////////////////////PERMIT////////////////////
 	protected static void _addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
 		deviceGroupManager.addJunction(deviceGroup, personGroup);
 	}
