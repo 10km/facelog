@@ -725,14 +725,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public PersonBean getReferencedByPersonId(FeatureBean bean)
     {
-        try{
-            return this.dbConverter.getPersonBeanConverter().fromRight(this.nativeManager.getReferencedByPersonId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
+        return bean.getReferencedByPersonId();
     }
 
     //5.2 SET REFERENCED override IFeatureManager

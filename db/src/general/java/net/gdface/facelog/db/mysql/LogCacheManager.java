@@ -118,39 +118,6 @@ public class LogCacheManager extends LogManager
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override ILogManager
-    @Override 
-    public DeviceBean getReferencedByDeviceId(LogBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
-        return bean.getReferencedByDeviceId();
-    }
-    //5.1 GET REFERENCED VALUE override ILogManager
-    @Override 
-    public FaceBean getReferencedByCompareFace(LogBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByCompareFace(instanceOfFaceManager().loadByPrimaryKey(bean.getCompareFace())); 
-        return bean.getReferencedByCompareFace();
-    }
-    //5.1 GET REFERENCED VALUE override ILogManager
-    @Override 
-    public FeatureBean getReferencedByVerifyFeature(LogBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByVerifyFeature(instanceOfFeatureManager().loadByPrimaryKey(bean.getVerifyFeature())); 
-        return bean.getReferencedByVerifyFeature();
-    }
-    //5.1 GET REFERENCED VALUE override ILogManager
-    @Override 
-    public PersonBean getReferencedByPersonId(LogBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
-        return bean.getReferencedByPersonId();
-    }
     private class CacheAction implements Action<LogBean>{
         final Action<LogBean> action;
         CacheAction(Action<LogBean>action){

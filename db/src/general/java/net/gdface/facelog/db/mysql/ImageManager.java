@@ -725,14 +725,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     @Override 
     public DeviceBean getReferencedByDeviceId(ImageBean bean)
     {
-        try{
-            return this.dbConverter.getDeviceBeanConverter().fromRight(this.nativeManager.getReferencedByDeviceId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
+        return bean.getReferencedByDeviceId();
     }
 
     //5.2 SET REFERENCED override IImageManager

@@ -108,25 +108,6 @@ public class PermitCacheManager extends PermitManager
     public boolean existsPrimaryKey(Integer deviceGroupId,Integer personGroupId){
         return null != loadByPrimaryKey(deviceGroupId,personGroupId);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override IPermitManager
-    @Override 
-    public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByDeviceGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getDeviceGroupId())); 
-        return bean.getReferencedByDeviceGroupId();
-    }
-    //5.1 GET REFERENCED VALUE override IPermitManager
-    @Override 
-    public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByPersonGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getPersonGroupId())); 
-        return bean.getReferencedByPersonGroupId();
-    }
     private class CacheAction implements Action<PermitBean>{
         final Action<PermitBean> action;
         CacheAction(Action<PermitBean>action){

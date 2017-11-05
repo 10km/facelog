@@ -117,18 +117,6 @@ public class PersonGroupCacheManager extends PersonGroupManager
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override IPersonGroupManager
-    @Override 
-    public PersonGroupBean getReferencedByParent(PersonGroupBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByParent(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getParent())); 
-        return bean.getReferencedByParent();
-    }
     private class CacheAction implements Action<PersonGroupBean>{
         final Action<PersonGroupBean> action;
         CacheAction(Action<PersonGroupBean>action){

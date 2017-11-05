@@ -818,14 +818,9 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override 
     public DeviceGroupBean getReferencedByParent(DeviceGroupBean bean)
     {
-        try{
-            return this.dbConverter.getDeviceGroupBeanConverter().fromRight(this.nativeManager.getReferencedByParent(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByParent(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getParent())); 
+        return bean.getReferencedByParent();
     }
 
     //5.2 SET REFERENCED override IDeviceGroupManager

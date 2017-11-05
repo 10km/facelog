@@ -408,14 +408,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override 
     public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean)
     {
-        try{
-            return this.dbConverter.getDeviceGroupBeanConverter().fromRight(this.nativeManager.getReferencedByDeviceGroupId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByDeviceGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getDeviceGroupId())); 
+        return bean.getReferencedByDeviceGroupId();
     }
 
     //5.2 SET REFERENCED override IPermitManager
@@ -441,14 +436,9 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override 
     public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean)
     {
-        try{
-            return this.dbConverter.getPersonGroupBeanConverter().fromRight(this.nativeManager.getReferencedByPersonGroupId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByPersonGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getPersonGroupId())); 
+        return bean.getReferencedByPersonGroupId();
     }
 
     //5.2 SET REFERENCED override IPermitManager

@@ -98,7 +98,6 @@ public class StoreCacheManager extends StoreManager
     public boolean existsPrimaryKey(String md5){
         return null != loadByPrimaryKey(md5);
     }
-    
     private class CacheAction implements Action<StoreBean>{
         final Action<StoreBean> action;
         CacheAction(Action<StoreBean>action){

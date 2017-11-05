@@ -494,14 +494,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public DeviceBean getReferencedByDeviceId(LogBean bean)
     {
-        try{
-            return this.dbConverter.getDeviceBeanConverter().fromRight(this.nativeManager.getReferencedByDeviceId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
+        return bean.getReferencedByDeviceId();
     }
 
     //5.2 SET REFERENCED override ILogManager
@@ -527,14 +522,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public FaceBean getReferencedByCompareFace(LogBean bean)
     {
-        try{
-            return this.dbConverter.getFaceBeanConverter().fromRight(this.nativeManager.getReferencedByCompareFace(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByCompareFace(instanceOfFaceManager().loadByPrimaryKey(bean.getCompareFace())); 
+        return bean.getReferencedByCompareFace();
     }
 
     //5.2 SET REFERENCED override ILogManager
@@ -560,14 +550,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public FeatureBean getReferencedByVerifyFeature(LogBean bean)
     {
-        try{
-            return this.dbConverter.getFeatureBeanConverter().fromRight(this.nativeManager.getReferencedByVerifyFeature(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByVerifyFeature(instanceOfFeatureManager().loadByPrimaryKey(bean.getVerifyFeature())); 
+        return bean.getReferencedByVerifyFeature();
     }
 
     //5.2 SET REFERENCED override ILogManager
@@ -593,14 +578,9 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public PersonBean getReferencedByPersonId(LogBean bean)
     {
-        try{
-            return this.dbConverter.getPersonBeanConverter().fromRight(this.nativeManager.getReferencedByPersonId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
+        return bean.getReferencedByPersonId();
     }
 
     //5.2 SET REFERENCED override ILogManager

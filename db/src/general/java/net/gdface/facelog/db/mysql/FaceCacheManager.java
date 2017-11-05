@@ -113,25 +113,6 @@ public class FaceCacheManager extends FaceManager
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override IFaceManager
-    @Override 
-    public FeatureBean getReferencedByFeatureMd5(FaceBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByFeatureMd5(instanceOfFeatureManager().loadByPrimaryKey(bean.getFeatureMd5())); 
-        return bean.getReferencedByFeatureMd5();
-    }
-    //5.1 GET REFERENCED VALUE override IFaceManager
-    @Override 
-    public ImageBean getReferencedByImageMd5(FaceBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByImageMd5(instanceOfImageManager().loadByPrimaryKey(bean.getImageMd5())); 
-        return bean.getReferencedByImageMd5();
-    }
     private class CacheAction implements Action<FaceBean>{
         final Action<FaceBean> action;
         CacheAction(Action<FaceBean>action){

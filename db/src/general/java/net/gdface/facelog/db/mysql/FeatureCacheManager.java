@@ -113,18 +113,6 @@ public class FeatureCacheManager extends FeatureManager
     public boolean existsPrimaryKey(String md5){
         return null != loadByPrimaryKey(md5);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override IFeatureManager
-    @Override 
-    public PersonBean getReferencedByPersonId(FeatureBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
-        return bean.getReferencedByPersonId();
-    }
     private class CacheAction implements Action<FeatureBean>{
         final Action<FeatureBean> action;
         CacheAction(Action<FeatureBean>action){

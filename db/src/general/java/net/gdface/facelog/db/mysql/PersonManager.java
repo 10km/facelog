@@ -743,14 +743,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public ImageBean getReferencedByImageMd5(PersonBean bean)
     {
-        try{
-            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.getReferencedByImageMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByImageMd5(instanceOfImageManager().loadByPrimaryKey(bean.getImageMd5())); 
+        return bean.getReferencedByImageMd5();
     }
 
     //5.2 SET REFERENCED override IPersonManager
@@ -776,14 +771,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public PersonGroupBean getReferencedByGroupId(PersonBean bean)
     {
-        try{
-            return this.dbConverter.getPersonGroupBeanConverter().fromRight(this.nativeManager.getReferencedByGroupId(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getGroupId())); 
+        return bean.getReferencedByGroupId();
     }
 
     //5.2 SET REFERENCED override IPersonManager

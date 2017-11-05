@@ -818,14 +818,9 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     @Override 
     public PersonGroupBean getReferencedByParent(PersonGroupBean bean)
     {
-        try{
-            return this.dbConverter.getPersonGroupBeanConverter().fromRight(this.nativeManager.getReferencedByParent(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByParent(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getParent())); 
+        return bean.getReferencedByParent();
     }
 
     //5.2 SET REFERENCED override IPersonGroupManager

@@ -113,18 +113,6 @@ public class ImageCacheManager extends ImageManager
     public boolean existsPrimaryKey(String md5){
         return null != loadByPrimaryKey(md5);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override IImageManager
-    @Override 
-    public DeviceBean getReferencedByDeviceId(ImageBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
-        return bean.getReferencedByDeviceId();
-    }
     private class CacheAction implements Action<ImageBean>{
         final Action<ImageBean> action;
         CacheAction(Action<ImageBean>action){

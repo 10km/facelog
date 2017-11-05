@@ -649,14 +649,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override 
     public FeatureBean getReferencedByFeatureMd5(FaceBean bean)
     {
-        try{
-            return this.dbConverter.getFeatureBeanConverter().fromRight(this.nativeManager.getReferencedByFeatureMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByFeatureMd5(instanceOfFeatureManager().loadByPrimaryKey(bean.getFeatureMd5())); 
+        return bean.getReferencedByFeatureMd5();
     }
 
     //5.2 SET REFERENCED override IFaceManager
@@ -682,14 +677,9 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override 
     public ImageBean getReferencedByImageMd5(FaceBean bean)
     {
-        try{
-            return this.dbConverter.getImageBeanConverter().fromRight(this.nativeManager.getReferencedByImageMd5(this.beanConverter.toRight(bean)));
-        }
-        catch(DAOException e)
-        {
-            throw new WrapDAOException(e);
-        }
-        
+        if(null == bean)return null;
+        bean.setReferencedByImageMd5(instanceOfImageManager().loadByPrimaryKey(bean.getImageMd5())); 
+        return bean.getReferencedByImageMd5();
     }
 
     //5.2 SET REFERENCED override IFaceManager

@@ -113,18 +113,6 @@ public class DeviceCacheManager extends DeviceManager
     public boolean existsPrimaryKey(Integer id){
         return null != loadByPrimaryKey(id);
     }
-    
-    //////////////////////////////////////
-    // GET/SET FOREIGN KEY BEAN METHOD
-    //////////////////////////////////////
-
-    //5.1 GET REFERENCED VALUE override IDeviceManager
-    @Override 
-    public DeviceGroupBean getReferencedByGroupId(DeviceBean bean){
-        if(null == bean)return null;
-        bean.setReferencedByGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getGroupId())); 
-        return bean.getReferencedByGroupId();
-    }
     private class CacheAction implements Action<DeviceBean>{
         final Action<DeviceBean> action;
         CacheAction(Action<DeviceBean>action){
