@@ -84,6 +84,12 @@ public interface IFaceLog
             @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.NONE) final String imageMd5
         );
 
+        @ThriftMethod(value = "deletePermit")
+        ListenableFuture<Void> deletePermit(
+            @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
+            @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
+        );
+
         @ThriftMethod(value = "deletePerson")
         ListenableFuture<Integer> deletePerson(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
@@ -216,12 +222,6 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "getPermit")
-        ListenableFuture<Boolean> getPermit(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
-        );
-
         @ThriftMethod(value = "getPermitList")
         ListenableFuture<List<Boolean>> getPermitList(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
@@ -246,6 +246,12 @@ public interface IFaceLog
         @ThriftMethod(value = "getPersonGroupList")
         ListenableFuture<List<PersonGroupBean>> getPersonGroupList(
             @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
+        );
+
+        @ThriftMethod(value = "getPersonPermit")
+        ListenableFuture<Boolean> getPersonPermit(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
         @ThriftMethod(value = "getPersons")
@@ -310,15 +316,9 @@ public interface IFaceLog
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
-        @ThriftMethod(value = "loadUpdatePersons")
-        ListenableFuture<List<Integer>> loadUpdatePersons(
+        @ThriftMethod(value = "loadUpdatedPersons")
+        ListenableFuture<List<Integer>> loadUpdatedPersons(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-        );
-
-        @ThriftMethod(value = "removePermit")
-        ListenableFuture<Void> removePermit(
-            @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
-            @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
         );
 
         @ThriftMethod(value = "replaceFeature")
@@ -501,6 +501,13 @@ public interface IFaceLog
     );
 
 
+    @ThriftMethod(value = "deletePermit")
+    void deletePermit(
+        @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
+        @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
+    );
+
+
     @ThriftMethod(value = "deletePerson")
     int deletePerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
@@ -659,13 +666,6 @@ public interface IFaceLog
     );
 
 
-    @ThriftMethod(value = "getPermit")
-    boolean getPermit(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
-
-
     @ThriftMethod(value = "getPermitList")
     List<Boolean> getPermitList(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
@@ -694,6 +694,13 @@ public interface IFaceLog
     @ThriftMethod(value = "getPersonGroupList")
     List<PersonGroupBean> getPersonGroupList(
         @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
+    );
+
+
+    @ThriftMethod(value = "getPersonPermit")
+    boolean getPersonPermit(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
     );
 
 
@@ -771,16 +778,9 @@ public interface IFaceLog
     );
 
 
-    @ThriftMethod(value = "loadUpdatePersons")
-    List<Integer> loadUpdatePersons(
+    @ThriftMethod(value = "loadUpdatedPersons")
+    List<Integer> loadUpdatedPersons(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-    );
-
-
-    @ThriftMethod(value = "removePermit")
-    void removePermit(
-        @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
-        @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
     );
 
 

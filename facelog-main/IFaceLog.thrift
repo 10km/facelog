@@ -154,6 +154,7 @@ service IFaceLog {
   i32 deleteDeviceGroup(1:  i32 deviceGroupId);
   list<string> deleteFeature(1:  string featureMd5, 2:  bool deleteImage);
   i32 deleteImage(1:  string imageMd5);
+  void deletePermit(1:  DeviceGroupBean deviceGroup, 2:  PersonGroupBean personGroup);
   i32 deletePerson(1:  i32 personId);
   i32 deletePersonByPapersNum(1:  string papersNum);
   i32 deletePersonGroup(1:  i32 personGroupId);
@@ -180,12 +181,12 @@ service IFaceLog {
   binary getImageBytes(1:  string imageMD5);
   list<string> getImagesAssociatedByFeature(1:  string featureMd5);
   list<LogBean> getLogBeansByPersonId(1:  i32 personId);
-  bool getPermit(1:  i32 deviceId, 2:  i32 personId);
   list<bool> getPermitList(1:  i32 deviceId, 2:  list<i32> personIdList);
   PersonBean getPerson(1:  i32 personId);
   PersonBean getPersonByPapersNum(1:  string papersNum);
   PersonGroupBean getPersonGroup(1:  i32 personGroupId);
   list<PersonGroupBean> getPersonGroupList(1:  list<i32> groupIdList);
+  bool getPersonPermit(1:  i32 deviceId, 2:  i32 personId);
   list<PersonBean> getPersons(1:  list<i32> idList);
   list<PersonBean> getPersonsOfGroup(1:  i32 personGroupId);
   list<DeviceGroupBean> getSubDeviceGroup(1:  i32 deviceGroupId);
@@ -198,8 +199,7 @@ service IFaceLog {
   list<PermitBean> loadPermitByUpdate(1:  i64 timestamp);
   list<i32> loadPersonByWhere(1:  string where);
   list<i32> loadPersonIdByUpdate(1:  i64 timestamp);
-  list<i32> loadUpdatePersons(1:  i64 timestamp);
-  void removePermit(1:  DeviceGroupBean deviceGroup, 2:  PersonGroupBean personGroup);
+  list<i32> loadUpdatedPersons(1:  i64 timestamp);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage);
   DeviceBean saveDevice(1:  DeviceBean deviceBean);
   DeviceGroupBean saveDeviceGroup(1:  DeviceGroupBean deviceGroupBean);
