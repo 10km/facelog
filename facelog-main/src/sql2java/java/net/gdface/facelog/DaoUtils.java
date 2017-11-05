@@ -13,6 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
@@ -66,6 +67,10 @@ class DaoUtils implements CommonConstant {
     static private String makeWhere(Date timestamp,String field){
         checkNotNull(timestamp);
         return String.format("WHERE %s > '%s'", field,timestampFormatter.format(timestamp));    
+    }
+    /** 事务执行 */
+    protected static <T> T _runAsTransaction(Callable<T> fun){
+        return personManager.runAsTransaction(checkNotNull(fun));
     }
     //////////// FL_DEVICE /////////
     /** 

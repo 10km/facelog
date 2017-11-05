@@ -642,7 +642,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final ByteBuffer featureImage, final FaceBean featureFaceBean, final Integer deviceId)throws ServiceRuntime {
 		try{
-			return personManager.runAsTransaction(new Callable<PersonBean>(){
+			return _runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
 					return _savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,_getDevice(deviceId));
