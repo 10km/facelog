@@ -263,11 +263,24 @@ class IFaceLogClient implements Constant{
         return service.deleteImage(imageMd5);
     }
     /**
+     * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
+     * @param deviceGroup
+     * @param personGroup
+     */
+    // 13 SERIVCE PORT : deletePermit
+    public void deletePermit(
+            DeviceGroupBean deviceGroup,
+            PersonGroupBean personGroup){
+        service.deletePermit(
+                    converterDeviceGroupBean.toRight(deviceGroup),
+                    converterPersonGroupBean.toRight(personGroup));
+    }
+    /**
      * 删除personId指定的人员(person)记录及关联的所有记录
      * @param personId
      * @return 
      */
-    // 13 SERIVCE PORT : deletePerson
+    // 14 SERIVCE PORT : deletePerson
     public int deletePerson(int personId){
         return service.deletePerson(personId);
     }
@@ -277,7 +290,7 @@ class IFaceLogClient implements Constant{
      * @return 返回删除的 person 记录数量
      * @see {@link #deletePerson(int)}
      */
-    // 14 SERIVCE PORT : deletePersonByPapersNum
+    // 15 SERIVCE PORT : deletePersonByPapersNum
     public int deletePersonByPapersNum(String papersNum){
         return service.deletePersonByPapersNum(papersNum);
     }
@@ -287,7 +300,7 @@ class IFaceLogClient implements Constant{
      * @param personGroupId
      * @return 
      */
-    // 15 SERIVCE PORT : deletePersonGroup
+    // 16 SERIVCE PORT : deletePersonGroup
     public int deletePersonGroup(int personGroupId){
         return service.deletePersonGroup(personGroupId);
     }
@@ -296,7 +309,7 @@ class IFaceLogClient implements Constant{
      * @param personIdList 人员id列表
      * @return 返回删除的 person 记录数量
      */
-    // 16 SERIVCE PORT : deletePersons
+    // 17 SERIVCE PORT : deletePersons
     public int deletePersons(List<Integer> personIdList){
         return service.deletePersons(personIdList);
     }
@@ -305,7 +318,7 @@ class IFaceLogClient implements Constant{
      * @param papersNumlist 证件号码列表
      * @return 返回删除的 person 记录数量
      */
-    // 17 SERIVCE PORT : deletePersonsByPapersNum
+    // 18 SERIVCE PORT : deletePersonsByPapersNum
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         return service.deletePersonsByPapersNum(papersNumlist);
     }
@@ -314,7 +327,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @see #setPersonExpiryDate(int, long)
      */
-    // 18 SERIVCE PORT : disablePerson
+    // 19 SERIVCE PORT : disablePerson
     public void disablePerson(int personId){
         service.disablePerson(personId);
     }
@@ -322,7 +335,7 @@ class IFaceLogClient implements Constant{
      * 设置 personIdList 指定的人员为禁止状态
      * @param personIdList 人员id列表
      */
-    // 19 SERIVCE PORT : disablePersonList
+    // 20 SERIVCE PORT : disablePersonList
     public void disablePerson(List<Integer> personIdList){
         service.disablePersonList(personIdList);
     }
@@ -331,7 +344,7 @@ class IFaceLogClient implements Constant{
      * @param id
      * @return 
      */
-    // 20 SERIVCE PORT : existsDevice
+    // 21 SERIVCE PORT : existsDevice
     public boolean existsDevice(int id){
         return service.existsDevice(id);
     }
@@ -340,7 +353,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 
      */
-    // 21 SERIVCE PORT : existsFeature
+    // 22 SERIVCE PORT : existsFeature
     public boolean existsFeature(String md5){
         return service.existsFeature(md5);
     }
@@ -349,7 +362,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 
      */
-    // 22 SERIVCE PORT : existsImage
+    // 23 SERIVCE PORT : existsImage
     public boolean existsImage(String md5){
         return service.existsImage(md5);
     }
@@ -358,7 +371,7 @@ class IFaceLogClient implements Constant{
      * @param persionId
      * @return 
      */
-    // 23 SERIVCE PORT : existsPerson
+    // 24 SERIVCE PORT : existsPerson
     public boolean existsPerson(int persionId){
         return service.existsPerson(persionId);
     }
@@ -367,7 +380,7 @@ class IFaceLogClient implements Constant{
      * @param deviceId
      * @return 
      */
-    // 24 SERIVCE PORT : getDevice
+    // 25 SERIVCE PORT : getDevice
     public DeviceBean getDevice(int deviceId){
         return converterDeviceBean.fromRight(service.getDevice(deviceId));
     }
@@ -376,7 +389,7 @@ class IFaceLogClient implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 25 SERIVCE PORT : getDeviceGroup
+    // 26 SERIVCE PORT : getDeviceGroup
     public DeviceGroupBean getDeviceGroup(int deviceGroupId){
         return converterDeviceGroupBean.fromRight(service.getDeviceGroup(deviceGroupId));
     }
@@ -385,7 +398,7 @@ class IFaceLogClient implements Constant{
      * @param groupIdList
      * @return 
      */
-    // 26 SERIVCE PORT : getDeviceGroupList
+    // 27 SERIVCE PORT : getDeviceGroupList
     public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList){
         return converterDeviceGroupBean.fromRight(service.getDeviceGroupList(groupIdList));
     }
@@ -394,7 +407,7 @@ class IFaceLogClient implements Constant{
      * @param idList
      * @return 
      */
-    // 27 SERIVCE PORT : getDeviceList
+    // 28 SERIVCE PORT : getDeviceList
     public List<DeviceBean> getDevice(List<Integer> idList){
         return converterDeviceBean.fromRight(service.getDeviceList(idList));
     }
@@ -404,7 +417,7 @@ class IFaceLogClient implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 28 SERIVCE PORT : getDevicesOfGroup
+    // 29 SERIVCE PORT : getDevicesOfGroup
     public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
         return converterDeviceBean.fromRight(service.getDevicesOfGroup(deviceGroupId));
     }
@@ -413,7 +426,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
      */
-    // 29 SERIVCE PORT : getFeature
+    // 30 SERIVCE PORT : getFeature
     public FeatureBean getFeature(String md5){
         return converterFeatureBean.fromRight(service.getFeature(md5));
     }
@@ -422,7 +435,7 @@ class IFaceLogClient implements Constant{
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
      */
-    // 30 SERIVCE PORT : getFeatureBeansByPersonId
+    // 31 SERIVCE PORT : getFeatureBeansByPersonId
     public List<String> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
@@ -431,7 +444,7 @@ class IFaceLogClient implements Constant{
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
-    // 31 SERIVCE PORT : getFeatureBytes
+    // 32 SERIVCE PORT : getFeatureBytes
     public byte[] getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
@@ -440,7 +453,7 @@ class IFaceLogClient implements Constant{
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
      */
-    // 32 SERIVCE PORT : getFeatureList
+    // 33 SERIVCE PORT : getFeatureList
     public List<FeatureBean> getFeature(List<String> md5){
         return converterFeatureBean.fromRight(service.getFeatureList(md5));
     }
@@ -451,7 +464,7 @@ class IFaceLogClient implements Constant{
      * @param personGroupId
      * @return 
      */
-    // 33 SERIVCE PORT : getGroupPermit
+    // 34 SERIVCE PORT : getGroupPermit
     public boolean getGroupPermit(
             int deviceId,
             int personGroupId){
@@ -462,7 +475,7 @@ class IFaceLogClient implements Constant{
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
-    // 34 SERIVCE PORT : getGroupPermitList
+    // 35 SERIVCE PORT : getGroupPermitList
     public List<Boolean> getGroupPermit(
             int deviceId,
             List<Integer> personGroupIdList){
@@ -475,7 +488,7 @@ class IFaceLogClient implements Constant{
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
-    // 35 SERIVCE PORT : getImage
+    // 36 SERIVCE PORT : getImage
     public ImageBean getImage(String imageMD5){
         return converterImageBean.fromRight(service.getImage(imageMD5));
     }
@@ -485,7 +498,7 @@ class IFaceLogClient implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @see {@link #getBinary(String)}
      */
-    // 36 SERIVCE PORT : getImageBytes
+    // 37 SERIVCE PORT : getImageBytes
     public byte[] getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
@@ -494,7 +507,7 @@ class IFaceLogClient implements Constant{
      * @param featureMd5 人脸特征id(MD5)
      * @return 
      */
-    // 37 SERIVCE PORT : getImagesAssociatedByFeature
+    // 38 SERIVCE PORT : getImagesAssociatedByFeature
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
@@ -503,27 +516,12 @@ class IFaceLogClient implements Constant{
      * @param personId fl_person.id
      * @return 
      */
-    // 38 SERIVCE PORT : getLogBeansByPersonId
+    // 39 SERIVCE PORT : getLogBeansByPersonId
     public List<LogBean> getLogBeansByPersonId(int personId){
         return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
     }
     /**
-     * 获取人员通行权限<br>
-     * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
-     * @param deviceId
-     * @param personId
-     * @return 
-     */
-    // 39 SERIVCE PORT : getPermit
-    public boolean getPermit(
-            int deviceId,
-            int personId){
-        return service.getPermit(
-                    deviceId,
-                    personId);
-    }
-    /**
-     * 参见 {@link #getPermit(Integer, Integer) }
+     * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
     // 40 SERIVCE PORT : getPermitList
     public List<Boolean> getPermit(
@@ -570,11 +568,26 @@ class IFaceLogClient implements Constant{
         return converterPersonGroupBean.fromRight(service.getPersonGroupList(groupIdList));
     }
     /**
+     * 获取人员通行权限<br>
+     * 返回{@code personId}指定的人员在{@code deviceId}设备上是否允许通行
+     * @param deviceId
+     * @param personId
+     * @return 
+     */
+    // 45 SERIVCE PORT : getPersonPermit
+    public boolean getPersonPermit(
+            int deviceId,
+            int personId){
+        return service.getPersonPermit(
+                    deviceId,
+                    personId);
+    }
+    /**
      * 返回 list 指定的人员记录
      * @param idList 人员id列表
      * @return 
      */
-    // 45 SERIVCE PORT : getPersons
+    // 46 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         return converterPersonBean.fromRight(service.getPersons(idList));
     }
@@ -584,7 +597,7 @@ class IFaceLogClient implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 46 SERIVCE PORT : getPersonsOfGroup
+    // 47 SERIVCE PORT : getPersonsOfGroup
     public List<PersonBean> getPersonsOfGroup(int personGroupId){
         return converterPersonBean.fromRight(service.getPersonsOfGroup(personGroupId));
     }
@@ -594,7 +607,7 @@ class IFaceLogClient implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 47 SERIVCE PORT : getSubDeviceGroup
+    // 48 SERIVCE PORT : getSubDeviceGroup
     public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
         return converterDeviceGroupBean.fromRight(service.getSubDeviceGroup(deviceGroupId));
     }
@@ -604,7 +617,7 @@ class IFaceLogClient implements Constant{
      * @param personGroupId
      * @return 
      */
-    // 48 SERIVCE PORT : getSubPersonGroup
+    // 49 SERIVCE PORT : getSubPersonGroup
     public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
         return converterPersonGroupBean.fromRight(service.getSubPersonGroup(personGroupId));
     }
@@ -613,7 +626,7 @@ class IFaceLogClient implements Constant{
      * @param personId
      * @return 
      */
-    // 49 SERIVCE PORT : isDisable
+    // 50 SERIVCE PORT : isDisable
     public boolean isDisable(int personId){
         return service.isDisable(personId);
     }
@@ -621,7 +634,7 @@ class IFaceLogClient implements Constant{
      * 返回所有人员记录
      * @return 
      */
-    // 50 SERIVCE PORT : loadAllPerson
+    // 51 SERIVCE PORT : loadAllPerson
     public List<Integer> loadAllPerson(){
         return service.loadAllPerson();
     }
@@ -631,7 +644,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
      */
-    // 51 SERIVCE PORT : loadFeatureMd5ByUpdate
+    // 52 SERIVCE PORT : loadFeatureMd5ByUpdate
     public List<String> loadFeatureMd5ByUpdate(Date timestamp){
         return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
@@ -643,7 +656,7 @@ class IFaceLogClient implements Constant{
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
      */
-    // 52 SERIVCE PORT : loadLogByWhere
+    // 53 SERIVCE PORT : loadLogByWhere
     public List<LogBean> loadLogByWhere(
             String where,
             int startRow,
@@ -661,7 +674,7 @@ class IFaceLogClient implements Constant{
      * @param numRows
      * @return 
      */
-    // 53 SERIVCE PORT : loadLogLightByWhere
+    // 54 SERIVCE PORT : loadLogLightByWhere
     public List<LogLightBean> loadLogLightByWhere(
             String where,
             int startRow,
@@ -677,7 +690,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 
      */
-    // 54 SERIVCE PORT : loadPermitByUpdate
+    // 55 SERIVCE PORT : loadPermitByUpdate
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
         return converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)));
     }
@@ -686,7 +699,7 @@ class IFaceLogClient implements Constant{
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
      */
-    // 55 SERIVCE PORT : loadPersonByWhere
+    // 56 SERIVCE PORT : loadPersonByWhere
     public List<Integer> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
@@ -696,7 +709,7 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 56 SERIVCE PORT : loadPersonIdByUpdate
+    // 57 SERIVCE PORT : loadPersonIdByUpdate
     public List<Integer> loadPersonIdByUpdate(Date timestamp){
         return service.loadPersonIdByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
@@ -707,22 +720,9 @@ class IFaceLogClient implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 57 SERIVCE PORT : loadUpdatePersons
-    public List<Integer> loadUpdatePersons(Date timestamp){
-        return service.loadUpdatePersons(GenericUtils.toLong(timestamp,Date.class));
-    }
-    /**
-     * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
-     * @param deviceGroup
-     * @param personGroup
-     */
-    // 58 SERIVCE PORT : removePermit
-    public void removePermit(
-            DeviceGroupBean deviceGroup,
-            PersonGroupBean personGroup){
-        service.removePermit(
-                    converterDeviceGroupBean.toRight(deviceGroup),
-                    converterPersonGroupBean.toRight(personGroup));
+    // 58 SERIVCE PORT : loadUpdatedPersons
+    public List<Integer> loadUpdatedPersons(Date timestamp){
+        return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
     }
     /**
      * 替换personId指定的人员记录的人脸特征数据,同时删除原特征数据记录(fl_feature)及关联的fl_face表记录
