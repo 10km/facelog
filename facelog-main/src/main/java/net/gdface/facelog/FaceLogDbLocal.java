@@ -65,15 +65,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		return storeBean;
 	}
 
-	////////////////////////////////DeviceGroupBean/////////////
-	////////////////////////////////PersonGroupBean/////////////
 	/////////////////////PERMIT////////////////////
-	protected void _addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
-		deviceGroupManager.addJunction(deviceGroup, personGroup);
-	}
-	protected void _removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
-		deviceGroupManager.deleteJunction(deviceGroup, personGroup);
-	}
 	protected boolean _getGroupPermit(Integer deviceId,Integer personGroupId){
 		PersonGroupBean personGroup;
 		DeviceBean device;
@@ -83,13 +75,13 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 			|| null == (personGroup = _getPersonGroup(personGroupId)))
 			return false;
 		DeviceGroupBean deviceGroup = _getDeviceGroup(device.getGroupId());
-		List<PersonGroupBean> personGroupList = personGroupManager.listOfParent(personGroup);
+		List<PersonGroupBean> personGroupList = _listOfParentForPersonGroup(personGroup);
 		
 		if(null == deviceGroup || personGroupList.isEmpty())
 			return false;
 		// person group 及其parent,任何一个在permit表中就返回true
 		for(PersonGroupBean group:personGroupList){
-			if(permitManager.existsPrimaryKey(deviceGroup.getId(), group.getId()))
+			if(_existsPermit(deviceGroup.getId(), group.getId()))
 				return true;
 		}
 		return false;
@@ -157,7 +149,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	protected int _deleteImage(String imageMd5){
 		if(Judge.isEmpty(imageMd5))return 0;
-		storeManager.deleteByPrimaryKey(imageMd5);
+		_deleteStore(imageMd5);
 		ImageBean imageBean = _getImage(imageMd5);
 		if(null == imageBean)return 0;
 		_deleteImage(imageBean.getThumbMd5());
@@ -1117,9 +1109,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+	public void deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
 		try{
-			_removePermit(deviceGroup, personGroup);
+			_deletePermit(deviceGroup, personGroup);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){

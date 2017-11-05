@@ -823,7 +823,7 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public void removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
+	public void deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
 	/**
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行

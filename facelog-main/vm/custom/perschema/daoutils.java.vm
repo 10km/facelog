@@ -93,6 +93,14 @@ class DaoUtils implements CommonConstant {
     $!{modifier}boolean _exists${coreClass}($params){
         return ${table.asVarManager()}.existsPrimaryKey($varNames);
     }
+    /** 
+     *　判断主键指定的记录是否存在
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($beanClass)}
+     */
+    //4-2
+    $!{modifier}boolean _exists${coreClass}($beanClass bean){
+        return ${table.asVarManager()}.existsPrimaryKey(bean);
+    }
     /**
      * 删除主键指定的记录
      * $paramComments 
@@ -131,11 +139,15 @@ class DaoUtils implements CommonConstant {
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
-     * @throws ObjectRetrievalException if exists duplicated row
+     * @throws DuplicateReord if exists duplicated row
      */
     //7
-    $!{modifier}$beanClass _checkDuplicate($beanClass $table.asVarBean())throws ObjectRetrievalException{
-        return ${table.asVarManager()}.checkDuplicate($table.asVarBean());
+    $!{modifier}$beanClass _checkDuplicate($beanClass $table.asVarBean())throws DuplicateReord{
+        try{
+            return ${table.asVarManager()}.checkDuplicate($table.asVarBean());
+        }catch(ObjectRetrievalException e){
+            throw new DuplicateReord();
+        }
     }
 #end
 ######################### IMPORTED KEYS########
@@ -219,6 +231,15 @@ class DaoUtils implements CommonConstant {
     $!{modifier}java.util.List<$beanClass> _$table.getListMethod($selfFk)For${coreClass}($fullParams){
         return ${table.asVarManager()}.$table.getListMethod($selfFk)($fullVarNames);
     }
+    /**
+     * 返回{@code $selfFk.foreignTable.asVarBean()}指定的${table.name}记录的所有的父节点(包括自己)<br>
+     * 自引用字段:${table.name}(#join($selfFk.columns '$e.name'))
+     * @see $table.asManagerInterfaceNSP()${esc.hash}$table.getListMethod($selfFk)($selfFk.foreignTable.asBeanClassNSP())
+     */
+    //9-2
+    $!{modifier}java.util.List<$beanClass> _$table.getListMethod($selfFk)For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean()){
+        return ${table.asVarManager()}.$table.getListMethod($selfFk)($selfFk.foreignTable.asVarBean());
+    }
 #end###foreach($selfFk in $table.selfRefKeys)
 ######################## SAVE #################
 #if($table.type == "TABLE")
@@ -265,16 +286,53 @@ class DaoUtils implements CommonConstant {
      * @param $table.asVarBean() 要添加的新记录
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
-     * @throws ObjectRetrievalException if exists duplicated row
+     * @throws DuplicateReord if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
      */
     //12
-    $!{modifier}$beanClass _add${coreClass}($beanClass $table.asVarBean())throws ObjectRetrievalException{
+    $!{modifier}$beanClass _add${coreClass}($beanClass $table.asVarBean())throws DuplicateReord{
         checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         return ${table.asVarManager()}.save(_checkDuplicate($table.asVarBean()));
     }
-#if($table.isJunctionTable())
-#end###if($table.isJunctionTable())
+#####  连接表方法 ######
+#if($table.isSampleJunctionTable())
+#set ( $leftFk  = $table.getForeignKeysAsList()[0])
+#set ( $rightFk = $table.getForeignKeysAsList()[1])
+#set ( $leftTable = $leftFk.foreignTable)
+#set ( $rightTable = $rightFk.foreignTable)
+#set ( $leftClass  = $leftTable.asBeanClassNSP())
+#set ( $rightClass = $rightTable.asBeanClassNSP())
+#set ( $leftVar   = $leftTable.asVarBean())
+#set ( $rightVar = $rightTable.asVarBean())
+#define($pkParams)${leftVar}.${leftTable.primaryKey.getGetMethod()}(),${rightVar}.${rightTable.primaryKey.getGetMethod()}()#end
+    /**
+     * 创建$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     */
+    //12-3
+    $!{modifier}$beanClass _add${coreClass}($leftClass $leftVar,$rightClass $rightVar){
+        if(_exists${leftTable.asCoreClassNSP()}($leftVar) && _exists${rightTable.asCoreClassNSP()}($rightVar)){
+            $beanClass $table.asVarBean() = new ${beanClass}($pkParams);
+            try{
+                return _add${coreClass}($table.asVarBean(),$leftVar,$rightVar);
+            }catch(DuplicateReord e){
+                return _get${coreClass}($pkParams);
+            }
+        }
+        return null; 
+    }
+    /**
+     * 删除$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
+     * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
+     */
+    //12-4
+    $!{modifier}int _delete${coreClass}($leftClass $leftVar,$rightClass $rightVar){
+        if(_exists${leftTable.asCoreClassNSP()}($leftVar) && _exists${rightTable.asCoreClassNSP()}($rightVar)){
+            return _delete${coreClass}($pkParams);
+        }
+        return 0;
+    }
+#end###if($table.isSampleJunctionTable())
 #if( $table.hasForeignTables() || $table.hasImportedTables() )
     /** 
      * 添加新记录(同步保存)<br>
@@ -282,7 +340,7 @@ class DaoUtils implements CommonConstant {
      * @param $table.asVarBean() 要添加的新记录
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
-     * @throws ObjectRetrievalException if exists duplicated row
+     * @throws DuplicateReord if exists duplicated row
      * @throws IllegalArgumentException if {@code ${table.asVarBean()}.isNew()} is {@code false}
      */
     //13
@@ -291,7 +349,7 @@ class DaoUtils implements CommonConstant {
         ' '')
 
         #foreachImportedTables('native' $table  ", Collection<${m_importedClass}> $m_importedTable.asImpArg($m_fkName) " '
-        ' ''))throws ObjectRetrievalException{
+        ' ''))throws DuplicateReord{
         checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         _checkDuplicate($table.asVarBean());
         return ${table.asVarManager()}.save($table.asVarBean()
