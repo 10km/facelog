@@ -847,7 +847,7 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public boolean getPermit(int deviceId,int personId)throws ServiceRuntime {
+	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntime {
 		return false;
 	}
 	/** 参见 {@link #getGroupPermit(Integer, Integer) } */
@@ -855,7 +855,7 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
 		return null;		
 	}
-	/** 参见 {@link #getPermit(Integer, Integer) } */
+	/** 参见 {@link #getPersonPermit(Integer, Integer) } */
 	@ThriftMethod("getPermitList")
 	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		return null;

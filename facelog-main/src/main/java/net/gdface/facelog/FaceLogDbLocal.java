@@ -60,7 +60,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		StoreBean storeBean = new StoreBean();
 		storeBean.setData(imageBytes);
 		storeBean.setMd5(md5);
-		if(!Judge.isEmpty(encodeing))
+		if(!Strings.isNullOrEmpty(encodeing))
 			storeBean.setEncoding(encodeing);
 		return storeBean;
 	}
@@ -148,7 +148,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	 */
 	@Override
 	protected int _deleteImage(String imageMd5){
-		if(Judge.isEmpty(imageMd5))return 0;
+		if(Strings.isNullOrEmpty(imageMd5))return 0;
 		_deleteStore(imageMd5);
 		ImageBean imageBean = _getImage(imageMd5);
 		if(null == imageBean)return 0;
@@ -1133,7 +1133,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public boolean getPermit(int deviceId,int personId)throws ServiceRuntime {
+	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntime {
 		try{
 			return _getPersonPermit(deviceId,personId);
 		} catch (ServiceRuntime e) {
