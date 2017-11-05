@@ -376,7 +376,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public int deletePerson(final int personId)throws ServiceRuntime {
 		try{
-			return personManager.runAsTransaction(new Callable<Integer>(){
+			return _runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
 					return _deletePerson(personId);
@@ -391,7 +391,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public int deletePersons(final List<Integer> personIdList)throws ServiceRuntime {
 		try{
-			return personManager.runAsTransaction(new Callable<Integer>(){
+			return _runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
 					return _deletePersonByPrimaryKey(personIdList);
@@ -406,7 +406,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public int deletePersonByPapersNum(final String papersNum)throws ServiceRuntime  {
 		try{	
-			return personManager.runAsTransaction(new Callable<Integer>(){
+			return _runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
 					return _deletePersonByPapersNum(papersNum);
@@ -421,7 +421,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public  int deletePersonsByPapersNum(final List<String> papersNumlist)throws ServiceRuntime {
 		try{		
-			return personManager.runAsTransaction(new Callable<Integer>(){
+			return _runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
 					return _deletePersonByPapersNum(papersNumlist);
@@ -478,7 +478,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public  void setPersonExpiryDate(final List<Integer> personIdList,final long expiryDate)throws ServiceRuntime{
 		try{		
-			personManager.runAsTransaction(new Runnable(){
+			_runAsTransaction(new Runnable(){
 				@Override
 				public void run() {
 					_setPersonExpiryDate(personIdList,new Date(expiryDate));
@@ -543,7 +543,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto)throws ServiceRuntime {
 		try{
-			return personManager.runAsTransaction(new Callable<PersonBean>(){
+			return _runAsTransaction(new Callable<PersonBean>(){
 				@Override
 				public PersonBean call() throws Exception {
 					return _savePerson(bean, idPhoto, null,null);
@@ -558,7 +558,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public Integer savePerson(final Map<ByteBuffer,PersonBean> persons)throws ServiceRuntime {
 		try{
-			return personManager.runAsTransaction(new Callable<Integer>(){
+			return _runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
 					return _savePerson(persons);
@@ -574,7 +574,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	public PersonBean savePerson(final PersonBean bean, final String idPhotoMd5, final String featureMd5)
 			throws ServiceRuntime {
 		try {
-			return personManager.runAsTransaction(new Callable<PersonBean>() {
+			return _runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
 					return _savePerson(bean, _getImage(idPhotoMd5), Arrays.asList(_getFeature(featureMd5)));
@@ -591,7 +591,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final FeatureBean featureBean,
 			final Integer deviceId) throws ServiceRuntime {
 		try {
-			return personManager.runAsTransaction(new Callable<PersonBean>() {
+			return _runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
 					return _savePerson(bean, idPhoto, featureBean, _getDevice(deviceId));
@@ -608,7 +608,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final List<FaceBean> faceBeans) throws ServiceRuntime {
 		try {
-			return personManager.runAsTransaction(new Callable<PersonBean>() {
+			return _runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
 					return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceBeans), null);

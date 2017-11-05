@@ -72,6 +72,10 @@ class DaoUtils implements CommonConstant {
     protected static <T> T _runAsTransaction(Callable<T> fun){
         return personManager.runAsTransaction(checkNotNull(fun));
     }
+    /** 事务执行 */
+    protected static void _runAsTransaction(Runnable fun){
+        personManager.runAsTransaction(checkNotNull(fun));
+    }
     //////////// FL_DEVICE /////////
     /** 
      * 根据主键从数据库读取记录
