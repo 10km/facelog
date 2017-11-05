@@ -37,7 +37,7 @@ import net.gdface.facelog.db.exception.WrapDAOException;
  * @author guyadong
  */
 @ThriftService("IFaceLog")
-public abstract class FaceLogDefinition {
+public abstract class FaceLogDefinition extends DaoUtils{
 
 	/**
 	 * 返回personId指定的人员记录
@@ -359,7 +359,7 @@ public abstract class FaceLogDefinition {
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<Integer> loadUpdatePersons(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
+	public List<Integer> loadUpdatedPersons(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
 		return null;
 	}
 

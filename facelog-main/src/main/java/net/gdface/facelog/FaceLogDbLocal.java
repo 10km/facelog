@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.javatuples.Pair;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
@@ -31,7 +30,6 @@ import net.gdface.facelog.db.PermitBean;
 import net.gdface.facelog.db.PersonBean;
 import net.gdface.facelog.db.PersonGroupBean;
 import net.gdface.facelog.db.StoreBean;
-import net.gdface.facelog.db.exception.WrapDAOException;
 import net.gdface.image.LazyImage;
 import net.gdface.image.NotImage;
 import net.gdface.image.UnsupportedFormat;
@@ -39,7 +37,7 @@ import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
 
-public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant,
+public class FaceLogDbLocal extends FaceLogDefinition implements 
 		net.gdface.facelog.db.Constant {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
@@ -55,7 +53,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		featureManager.registerListener(redisFeatureListener);
 		permitManager.registerListener(redisPermitListener);
 	}
-	protected static StoreBean _makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
+	protected StoreBean _makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
 		if(Judge.isEmpty(imageBytes))return null;
 		if(null == md5)
 			md5 = FaceUtilits.getMD5String(imageBytes);
@@ -66,115 +64,17 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 			storeBean.setEncoding(encodeing);
 		return storeBean;
 	}
-	protected static StoreBean _addStore(StoreBean storeBean){
-		return storeManager.save(storeBean);
-	}
-	protected static StoreBean _getStore(String md5){
-		return storeManager.loadByPrimaryKey(md5);
-	}
-	protected static DeviceBean _checkGroup(DeviceBean deviceBean){
-		if(null != deviceBean && Objects.equal(deviceBean.getGroupId(), DEFAULT_GROUP_ID)){
-			_saveDefaultDeviceGroupIfAbsent();
-		}
-		return deviceBean;
-	}
-	protected static DeviceBean _saveDevice(DeviceBean deviceBean){
-		_checkGroup(deviceBean);
-		return deviceManager.save(deviceBean);
-	}
 
-	protected static DeviceBean _getDevice(Integer deviceId){
-		return deviceManager.loadByPrimaryKey(deviceId); 
-	}
-	protected static boolean _existsDevice(Integer id) {
-		return deviceManager.existsPrimaryKey(id);
-	}
-	protected static List<DeviceBean> _getDevice(Collection<Integer> collection){
-		return deviceManager.loadByPrimaryKey(collection); 
-	}
-	protected static int _deleteDevice(Integer deviceId){
-		return deviceManager.deleteByPrimaryKey(deviceId);
-	}
 	////////////////////////////////DeviceGroupBean/////////////
-	protected static DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean){
-		return deviceGroupManager.save(deviceGroupBean);
-	}
-	/** 
-	 * 如果没有默认设备组则向fl_device_group表中增加默认设备组,失败则抛出异常 
-	 * 
-	 * @throws IllegalStateException 创建失败
-	 */
-	protected static void _saveDefaultDeviceGroupIfAbsent(){
-		if(!deviceGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
-			try{
-				DeviceGroupBean bean = new DeviceGroupBean(DEFAULT_GROUP_ID);
-				bean.setName(DEFAULT_GROUP_NAME);
-				deviceGroupManager.save(bean);
-			}catch(WrapDAOException e){}
-			if(!deviceGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
-				throw new IllegalStateException("can't create default device group"); 
-			}
-		}
-	}
-	protected static DeviceGroupBean _getDeviceGroup(Integer deviceGroupId){
-		return deviceGroupManager.loadByPrimaryKey(deviceGroupId); 
-	}
-	protected static List<DeviceGroupBean> _getDeviceGroup(Collection<Integer> groupIdList){
-		return deviceGroupManager.loadByPrimaryKey(groupIdList); 
-	}
-	protected static int _deleteDeviceGroup(Integer deviceGroupId){
-		return deviceGroupManager.deleteByPrimaryKey(deviceGroupId);
-	}
-	protected static List<DeviceGroupBean> _getSubDeviceGroup(Integer deviceGroupId){
-		return deviceGroupManager.getDeviceGroupBeansByParentAsList(deviceGroupId);
-	}
-	protected static List<DeviceBean> _getDevicesOfGroup(Integer deviceGroupId){
-		return deviceGroupManager.getDeviceBeansByGroupIdAsList(deviceGroupId);
-	}
 	////////////////////////////////PersonGroupBean/////////////
-	protected static PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean){
-		return personGroupManager.save(personGroupBean);
-	}
-	/** 
-	 * 如果没有默认设备组则向fl_person_group表中增加默认设备组,失败则抛出异常 
-	 * 
-	 * @throws IllegalStateException 创建失败
-	 */
-	protected static void _saveDefaultPersonGroupIfAbsent(){
-		if(!personGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
-			try{
-				PersonGroupBean bean = new PersonGroupBean(DEFAULT_GROUP_ID);
-				bean.setName(DEFAULT_GROUP_NAME);
-				personGroupManager.save(bean);
-			}catch(WrapDAOException e){}
-			if(!personGroupManager.existsPrimaryKey(DEFAULT_GROUP_ID)){
-				throw new IllegalStateException("can't create default person group"); 
-			}
-		}
-	}
-	protected static PersonGroupBean _getPersonGroup(Integer personGroupId){
-		return personGroupManager.loadByPrimaryKey(personGroupId); 
-	}
-	protected static List<PersonGroupBean> _getPersonGroup(Collection<Integer> groupIdList){
-		return personGroupManager.loadByPrimaryKey(groupIdList);
-	}
-	protected static int _deletePersonGroup(Integer personGroupId){
-		return personGroupManager.deleteByPrimaryKey(personGroupId);
-	}
-	protected static List<PersonGroupBean> _getSubPersonGroup(Integer personGroupId){
-		return personGroupManager.getPersonGroupBeansByParentAsList(personGroupId);
-	}
-	protected static List<PersonBean> _getPersonsOfGroup(Integer personGroupId){
-		return personGroupManager.getPersonBeansByGroupIdAsList(personGroupId);
-	}
 	/////////////////////PERMIT////////////////////
-	protected static void _addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+	protected void _addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
 		deviceGroupManager.addJunction(deviceGroup, personGroup);
 	}
-	protected static void _removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
+	protected void _removePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup){
 		deviceGroupManager.deleteJunction(deviceGroup, personGroup);
 	}
-	protected static boolean _getGroupPermit(Integer deviceId,Integer personGroupId){
+	protected boolean _getGroupPermit(Integer deviceId,Integer personGroupId){
 		PersonGroupBean personGroup;
 		DeviceBean device;
 		if(null == deviceId
@@ -194,13 +94,13 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		}
 		return false;
 	}
-	protected static boolean _getPermit(Integer deviceId,Integer personId){
+	protected boolean _getPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
 		if( null == personId || null == (person = _getPerson(personId)))
 			return false;
 		return _getGroupPermit(deviceId,person.getGroupId());
 	}
-	protected static List<Boolean> _getGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
+	protected List<Boolean> _getGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
 		if(null == deviceId || null == personGroupIdList)
 			return ImmutableList.<Boolean>of();
 		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
@@ -209,24 +109,17 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 				return _getGroupPermit(deviceId,input);
 			}}));
 	}
-	protected static List<Boolean> _getPermit(final Integer deviceId,List<Integer> personIdList){
+	protected List<Boolean> _getPermit(final Integer deviceId,List<Integer> personIdList){
 		if(null == deviceId || null == personIdList)
 			return ImmutableList.<Boolean>of();
 		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
 			@Override
 			public Boolean apply(Integer input) {
-				return _getPermit(deviceId,input);
+				return _getPersonPermit(deviceId,input);
 			}}));
 	}
-	protected static  List<PermitBean> _loadPermitByWhere(String where){
-		return permitManager.loadByWhereAsList(where);
-	}
-	protected static List<PermitBean> _loadPermitByUpdate(Date timestamp) {
-		String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));		
-		return _loadPermitByWhere(where);
-	}
 	////////////////////////////////////////////
-	protected static Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
+	protected Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
 		if(Judge.isEmpty(imageBytes))return null;
 		LazyImage image = LazyImage.create(imageBytes);
 		if(null == md5)
@@ -239,7 +132,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		StoreBean storeBean = _makeStoreBean(imageBytes, md5, null);
 		return Pair.with(imageBean, storeBean);
 	}
-	protected static ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
+	protected ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
 	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5){
 		if(Judge.isEmpty(imageBytes))return null;
 		String md5 = FaceUtilits.getMD5String(imageBytes);
@@ -254,35 +147,34 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 			throw new ServiceRuntime(e);
 		}
 		_addStore(pair.getValue1());
-		return imageManager.save(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
+		return _addImage(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
 	}
 	/**
 	 * (递归)删除imageMd5指定图像及其缩略图
 	 * @param imageMd5
 	 * @return
 	 */
-	protected static int _deleteImage(String imageMd5){
+	@Override
+	protected int _deleteImage(String imageMd5){
 		if(Judge.isEmpty(imageMd5))return 0;
 		storeManager.deleteByPrimaryKey(imageMd5);
 		ImageBean imageBean = _getImage(imageMd5);
 		if(null == imageBean)return 0;
 		_deleteImage(imageBean.getThumbMd5());
-		return imageManager.deleteByPrimaryKey(imageMd5);
+		return super._deleteImage(imageMd5);
 	}
-	protected static int _deleteImage(ImageBean imageBean){
-		return null == imageBean ? 0 : _deleteImage(imageBean.getMd5());
-	}
-	protected static FeatureBean _makeFeature(ByteBuffer feature){
+
+	protected FeatureBean _makeFeature(ByteBuffer feature){
 		Assert.notEmpty(feature, "feature");
 		FeatureBean featureBean = new FeatureBean();		
 		featureBean.setMd5(FaceUtilits.getMD5String(feature));
 		featureBean.setFeature(feature);
 		return featureBean;
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5){
-		return featureManager.save(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
+	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5){
+		return _addFeature(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
-	protected static FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean){
+	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean){
 		if(null != faceInfo){
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
@@ -292,17 +184,8 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		}
 		return _addFeature(feature, personBean, null == faceInfo?null:faceInfo.values());
 	}
-	protected static FeatureBean _getFeature(String md5){
-		return featureManager.loadByPrimaryKey(md5);
-	}
-	protected static List<FeatureBean> _getFeature(Collection<String> collection){
-		return featureManager.loadByPrimaryKey(collection); 
-	}
-	protected static List<FeatureBean> _getFeatureBeansByPersonId(Integer personId){
-		return personManager.getFeatureBeansByPersonIdAsList(personId);
-	}
 
-	protected static List<String> _deleteFeature(String featureMd5,boolean deleteImage){
+	protected List<String> _deleteFeature(String featureMd5,boolean deleteImage){
 		List<String> imageKeys = _getImageKeysImportedByFeatureMd5(featureMd5);
 		if(deleteImage){
 			for(Iterator<String> itor = imageKeys.iterator();itor.hasNext();){
@@ -311,55 +194,39 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 				itor.remove();
 			}
 		}else{
-			featureManager.deleteFaceBeansByFeatureMd5(featureMd5);
+			_deleteFaceBeansByFeatureMd5OnFeature(featureMd5);
 		}
-		featureManager.deleteByPrimaryKey(featureMd5);
+		_deleteFeature(featureMd5);
 		return imageKeys;
 	}
-	protected static int _deleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
+	protected int _deleteAllFeaturesByPersonId(Integer personId,boolean deleteImage){
 		int count = 0;
-		for(FeatureBean featureBean: _getFeatureBeansByPersonId(personId)){
+		for(FeatureBean featureBean: _getFeatureBeansByPersonIdOnPerson(personId)){
 			_deleteFeature(featureBean.getMd5(),deleteImage);
 			++count;
 		}
 		return count;
 	}
-	protected static PersonBean _setRefPersonOfFeature(String featureMd5,Integer personId){
+	protected PersonBean _setRefPersonOfFeature(String featureMd5,Integer personId){
 		PersonBean personBean = _getPerson(personId);
 		FeatureBean featureBean = _getFeature(featureMd5);
 		if(null == personBean || null == featureBean)return null;
-		return featureManager.setReferencedByPersonId(featureBean,personBean);
+		return _setReferencedByPersonIdOnFeature(featureBean, personBean);
 	}
-	protected static ImageBean _getImage(String md5){
-		return imageManager.loadByPrimaryKey(md5);
-	}
-	protected static List<ImageBean> _getImage(Collection<String> collection){
-		return imageManager.loadByPrimaryKey(collection); 
-	}
-	protected static List<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
+
+	protected List<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
 		ArrayList<String> imageBeans = new ArrayList<String>();
-		for(FaceBean faceBean:featureManager.getFaceBeansByFeatureMd5AsList(featureMd5)){
+		for(FaceBean faceBean:_getFaceBeansByFeatureMd5OnFeature(featureMd5)){
 			imageBeans.add(faceBean.getImageMd5());
 		}
 		return imageBeans;
 	}
-	protected static PersonBean _replaceFeature(Integer personId,String featureMd5,boolean deleteImage){		
+	protected PersonBean _replaceFeature(Integer personId,String featureMd5,boolean deleteImage){		
 		_deleteAllFeaturesByPersonId(personId, deleteImage);
 		return _setRefPersonOfFeature(featureMd5,personId);
 	}
-	protected static PersonBean _getPerson(Integer personId){
-		return personManager.loadByPrimaryKey(personId); 
-	}
-	protected static List<PersonBean> _getPerson(Collection<Integer> collection){
-		return personManager.loadByPrimaryKey(collection); 
-	}
-	protected static PersonBean _getPersonByPapersNum(String papersNum){
-		return personManager.loadByIndexPapersNum(papersNum);
-	}
-	protected static List<PersonBean> _getPersonByPapersNum(Collection<String> collection){
-		return personManager.loadByIndexPapersNum(collection);
-	}
-	protected static int _savePerson(Map<ByteBuffer,PersonBean> persons) {
+
+	protected int _savePerson(Map<ByteBuffer,PersonBean> persons) {
 		if(null == persons )return 0;
 		int count = 0;
 		PersonBean personBean ;
@@ -369,26 +236,19 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		}
 		return count;
 	}
-	protected static PersonBean _checkGroup(PersonBean personBean){
-		if(null != personBean && Objects.equal(personBean.getGroupId(), DEFAULT_GROUP_ID)){
-			_saveDefaultPersonGroupIfAbsent();
-		}
-		return personBean;
-	}
-	protected static PersonBean _savePerson(PersonBean personBean, ImageBean idPhotoBean,
+	protected PersonBean _savePerson(PersonBean personBean, ImageBean idPhotoBean,
 			Collection<FeatureBean> featureBean) {
-		_checkGroup(personBean);
-		_deleteImage(personManager.getReferencedByImageMd5(personBean));// delete old photo if exists
-		return personManager.save(personBean, idPhotoBean, featureBean, null);
+		_deleteImage(_getReferencedByImageMd5OnPerson(personBean));// delete old photo if exists
+		return _savePerson(personBean, idPhotoBean, null, featureBean, null);
 	}
 
-	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
+	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
 			DeviceBean deviceBean) throws ServiceRuntime {
 		ImageBean imageBean = _addImage(idPhoto, deviceBean, null, null);
 		return _savePerson(bean, imageBean, Arrays.asList(featureBean));
 	}
 
-	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
+	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
 			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) {
 		return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceInfo, deviceBean), null);
 	}
@@ -403,7 +263,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
 	 */
-	protected static PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
+	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
 			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
@@ -421,32 +281,20 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	 * @param personId
 	 * @return 返回删除的记录数量
 	 */
-	protected static int _deletePerson(Integer personId) {
+	@Override
+	protected int _deletePerson(Integer personId) {
 		PersonBean personBean = _getPerson(personId);
 		if(null == personBean)return 0;
 		// 删除标准照
 		_deleteImage(personBean.getImageMd5());
 		_deleteAllFeaturesByPersonId(personId,true);
-		return personManager.deleteByPrimaryKey(personId);
+		return super._deletePerson(personId);
 	}
-	/**
-	 *  删除collection指定的人员(person)记录及关联的所有记录
-	 * @param collection personId集合
-	 * @return 返回删除的 person 记录数量
-	 */
-	protected static int _deletePerson(Collection<Integer> collection) {
-		if(null == collection)return 0;
-		int count =0;
-		for(Integer personId:collection){
-			count += _deletePerson(personId);
-		}
-		return count;
-	}
-	protected static int _deletePersonByPapersNum(String papersNum) {
-		PersonBean personBean = _getPersonByPapersNum(papersNum);
+	protected int _deletePersonByPapersNum(String papersNum) {
+		PersonBean personBean = _loadPersonByIndexPapersNum(papersNum);
 		return null == personBean ? 0 : _deletePerson(personBean.getId());
 	}
-	protected static int _deletePersonByPapersNum(Collection<String> collection) {
+	protected int _deletePersonByPapersNum(Collection<String> collection) {
 		if(null == collection)return 0;
 		int count =0;
 		for(String papersNum:collection){
@@ -454,52 +302,39 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 		}
 		return count;
 	}
-	protected static boolean _isDisable(int personId){
+	protected boolean _isDisable(int personId){
 		PersonBean personBean = _getPerson(personId);
 		if(null == personBean)
 			return true;
 		Date expiryDate = personBean.getExpiryDate();
 		return null== expiryDate?false:expiryDate.before(new Date());
 	}
-	protected static  void _setPersonExpiryDate(PersonBean personBean,Date expiryDate){
+	protected  void _setPersonExpiryDate(PersonBean personBean,Date expiryDate){
 		if(null == personBean)
 			return ;
 		personBean.setExpiryDate(expiryDate);
-		personManager.save(personBean);
+		_savePerson(personBean);
 	}
-	protected static  void _setPersonExpiryDate(Collection<Integer> personIdList,Date expiryDate){
+	protected  void _setPersonExpiryDate(Collection<Integer> personIdList,Date expiryDate){
 		if(null == personIdList)return;
 		for(Integer personId : personIdList){
 			_setPersonExpiryDate(_getPerson(personId),expiryDate);
 		}
 	}
-	protected static List<PersonBean> _loadUpdatePersons(Date timestamp) {
-			List<PersonBean> persons =_loadPersonByUpdate(timestamp);
-			ConcurrentHashMap<Integer, PersonBean> m = new ConcurrentHashMap<Integer,PersonBean>(persons.size());
-			for(PersonBean person:persons){
-				m.put(person.getId(), person);
-			}
-			Integer refPerson;
-			for(FeatureBean feature:_loadFeatureByUpdate(timestamp)){
-				refPerson = feature.getPersonId();
-				if(null != refPerson)
-					m.putIfAbsent(refPerson, _getPerson(refPerson));
-			}
-			return new ArrayList<PersonBean>(m.values());
-	}
-	protected static List<PersonBean> _loadPersonByUpdate(Date timestamp) {
-		String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));		
-		return _loadPersonByWhere(where);
-	}
-	protected static List<FeatureBean> _loadFeatureByUpdate(Date timestamp) {
-		String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));
-		return _loadFeatureByWhere(where);
-	}
-	protected static List<FeatureBean> _loadFeatureByWhere(String where) {
-		return featureManager.loadByWhereAsList(where);
-}
-	protected static  List<PersonBean> _loadPersonByWhere(String where){
-			return personManager.loadByWhereAsList(where);
+	protected List<PersonBean> _loadUpdatedPersons(Date timestamp) {
+		List<PersonBean> persons =_loadPersonByUpdateTime(timestamp);		
+		Map<Integer,PersonBean>m = Maps.uniqueIndex(persons,new Function<PersonBean,Integer>(){
+			@Override
+			public Integer apply(PersonBean input) {
+				return input.getId();
+			}});
+		Integer refPerson;
+		for(FeatureBean feature:_loadFeatureByUpdateTime(timestamp)){
+			refPerson = feature.getPersonId();
+			if(null != refPerson && m.containsKey(refPerson))
+				m.put(refPerson, _getPerson(refPerson));
+		}
+		return new ArrayList<PersonBean>(m.values());
 	}
 	@Override
 	public PersonBean getPerson(int personId)throws ServiceRuntime {
@@ -522,8 +357,8 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
 		try{
-			if(Judge.isEmpty(papersNum))return null;
-			return _getPersonByPapersNum(papersNum);
+			if(Strings.isNullOrEmpty(papersNum))return null;
+			return _loadPersonByIndexPapersNum(papersNum);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -532,7 +367,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
-			return featureManager.toPrimaryKeyList(_getFeatureBeansByPersonId(personId));
+			return featureManager.toPrimaryKeyList(_getFeatureBeansByPersonIdOnPerson(personId));
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -559,7 +394,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 			return personManager.runAsTransaction(new Callable<Integer>(){
 				@Override
 				public Integer call() throws Exception {
-					return _deletePerson(personIdList);
+					return _deletePersonByPrimaryKey(personIdList);
 				}});
 		}catch(ServiceRuntime e){
 			throw e;
@@ -601,7 +436,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public boolean existsPerson(int persionId)throws ServiceRuntime {
 		try{
-			return personManager.existsPrimaryKey(persionId);
+			return _existsPerson(persionId);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -663,7 +498,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<LogBean> getLogBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
-			return personManager.getLogBeansByPersonIdAsList(personId);
+			return _getLogBeansByPersonIdOnPerson(personId);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -672,7 +507,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<Integer> loadAllPerson()throws ServiceRuntime {
 		try{
-			return personManager.toPrimaryKeyList(_loadPersonByWhere(null));
+			return _loadPersonIdByWhere(null);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -681,7 +516,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<Integer> loadPersonByWhere(String where)throws ServiceRuntime {
 		try{
-			return personManager.toPrimaryKeyList(personManager.loadByWhereAsList(where));
+			return _loadPersonIdByWhere(where);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -690,7 +525,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public PersonBean savePerson(PersonBean bean)throws ServiceRuntime {
 		try{
-			return personManager.save(bean);
+			return _savePerson(bean);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -837,9 +672,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	}
 
 	@Override
-	public List<Integer> loadUpdatePersons(long timestamp)throws ServiceRuntime {
+	public List<Integer> loadUpdatedPersons(long timestamp)throws ServiceRuntime {
 		try{
-			return personManager.toPrimaryKeyList(_loadUpdatePersons(new Date(timestamp)));
+			return personManager.toPrimaryKeyList(_loadUpdatedPersons(new Date(timestamp)));
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
@@ -850,7 +685,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<Integer> loadPersonIdByUpdate(long timestamp)throws ServiceRuntime {
 		try{
-			return personManager.toPrimaryKeyList(_loadPersonByUpdate(new Date(timestamp)));
+			return personManager.toPrimaryKeyList(_loadPersonByUpdateTime(new Date(timestamp)));
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
@@ -860,8 +695,8 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 
 	@Override
 	public List<String> loadFeatureMd5ByUpdate(long timestamp)throws ServiceRuntime {
-		try{
-			return featureManager.toPrimaryKeyList(_loadFeatureByUpdate(new Date(timestamp)));
+		try{		
+			return _loadFeatureMd5ByUpdateTime(new Date(timestamp));
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
@@ -872,7 +707,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public void addLog(LogBean bean)throws ServiceRuntime {
 		try{
-			logManager.save(bean);
+			_addLog(bean);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -890,7 +725,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		try{
-			return logManager.loadByWhereAsList(where, null, startRow, numRows);
+			return _loadLogByWhere(where, startRow, numRows);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -899,7 +734,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		try{
-			return logLightManager.loadByWhereAsList(where, null, startRow, numRows);
+			return _loadLogLightByWhere(where, startRow, numRows);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -908,7 +743,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public int countLogLightWhere(String where) throws ServiceRuntime {
 		try{
-			return logLightManager.countWhere(where);
+			return _countLogLightWhere(where);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -917,7 +752,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public int countLogWhere(String where) throws ServiceRuntime {
 		try{
-			return logManager.countWhere(where);
+			return _countLogWhere(where);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -926,7 +761,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
     @Override
 	public boolean existsImage(String md5) throws ServiceRuntime {
 		try{
-			return imageManager.existsPrimaryKey(md5);
+			return _existsImage(md5);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
@@ -947,7 +782,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
     @Override
 	public boolean existsFeature(String md5) throws ServiceRuntime {
 		try{
-			return featureManager.existsPrimaryKey(md5);
+			return _existsFeature(md5);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		}
@@ -1308,7 +1143,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public boolean getPermit(int deviceId,int personId)throws ServiceRuntime {
 		try{
-			return _getPermit(deviceId,personId);
+			return _getPersonPermit(deviceId,personId);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){
@@ -1344,7 +1179,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements ServiceConstant
 	@Override
 	public List<PermitBean> loadPermitByUpdate(long timestamp)throws ServiceRuntime {
 		try{
-			return _loadPermitByUpdate(new Date(timestamp));
+			return _loadPermitByCreateTime(new Date(timestamp));
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){
