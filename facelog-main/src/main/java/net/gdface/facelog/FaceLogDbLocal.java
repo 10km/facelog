@@ -259,7 +259,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
-			if (!Judge.isEmpty(featureImage))
+			if (Judge.isEmpty(featureImage))
 				featureImage = idPhoto;
 			if (!Judge.isEmpty(featureImage)) {
 				faceInfo = new HashMap<ByteBuffer, FaceBean>();
