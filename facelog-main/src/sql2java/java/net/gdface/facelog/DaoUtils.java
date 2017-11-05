@@ -62,6 +62,11 @@ class DaoUtils implements CommonConstant {
     static final IPersonGroupManager personGroupManager = TableManagerInitializer.instance.personGroupManager;
     static final IStoreManager storeManager = TableManagerInitializer.instance.storeManager;
     static final ILogLightManager logLightManager = TableManagerInitializer.instance.logLightManager;
+    /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
+    private static String makeWhere(Date timestamp,String field){
+        checkNotNull(timestamp);
+        return String.format("WHERE %s > '%s'", field,timestampFormatter.format(timestamp));    
+    }
     //////////// FL_DEVICE /////////
     /** 
      * 根据主键从数据库读取记录
@@ -161,7 +166,9 @@ class DaoUtils implements CommonConstant {
             , impLogByDeviceId );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IDeviceManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<DeviceBean> _loadDeviceByWhere(String where,int startRow, int numRows){
@@ -188,57 +195,49 @@ class DaoUtils implements CommonConstant {
                 }});
     }
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_device.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadDeviceByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<DeviceBean> _loadDeviceByCreateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadDeviceByWhere(where,startRow,numRows);
+        return _loadDeviceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadDeviceByCreateTime(Date,int,int)} */
     static List<DeviceBean> _loadDeviceByCreateTime(Date timestamp){
         return _loadDeviceByCreateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_device.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadDeviceByCreateTime(Date,int,int)} 
+     * @see {@link #_loadDeviceIdByWhere(String)} 
      */
     static List<Integer> _loadDeviceIdByCreateTime(Date timestamp){
-        return Lists.transform(_loadDeviceByCreateTime(timestamp,1,-1),
-            new Function<DeviceBean,Integer>(){
-                @Override
-                public Integer apply(DeviceBean input) {
-                    return input.getId();
-                }});
+        return _loadDeviceIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_device.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadDeviceByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<DeviceBean> _loadDeviceByUpdateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadDeviceByWhere(where,startRow,numRows);
+        return _loadDeviceByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadDeviceByUpdateTime(Date,int,int)} */
     static List<DeviceBean> _loadDeviceByUpdateTime(Date timestamp){
         return _loadDeviceByUpdateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_device.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadDeviceByUpdateTime(Date,int,int)} 
+     * @see {@link #_loadDeviceIdByWhere(String)} 
      */
     static List<Integer> _loadDeviceIdByUpdateTime(Date timestamp){
-        return Lists.transform(_loadDeviceByUpdateTime(timestamp,1,-1),
-            new Function<DeviceBean,Integer>(){
-                @Override
-                public Integer apply(DeviceBean input) {
-                    return input.getId();
-                }});
+        return _loadDeviceIdByWhere(makeWhere(timestamp,"update_time"));
     }
 
 
@@ -387,7 +386,9 @@ class DaoUtils implements CommonConstant {
             , impPermitByDeviceGroupId );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IDeviceGroupManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<DeviceGroupBean> _loadDeviceGroupByWhere(String where,int startRow, int numRows){
@@ -517,7 +518,9 @@ class DaoUtils implements CommonConstant {
             , impLogByPersonId );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPersonManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<PersonBean> _loadPersonByWhere(String where,int startRow, int numRows){
@@ -544,57 +547,49 @@ class DaoUtils implements CommonConstant {
                 }});
     }
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_person.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadPersonByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<PersonBean> _loadPersonByCreateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadPersonByWhere(where,startRow,numRows);
+        return _loadPersonByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadPersonByCreateTime(Date,int,int)} */
     static List<PersonBean> _loadPersonByCreateTime(Date timestamp){
         return _loadPersonByCreateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_person.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadPersonByCreateTime(Date,int,int)} 
+     * @see {@link #_loadPersonIdByWhere(String)} 
      */
     static List<Integer> _loadPersonIdByCreateTime(Date timestamp){
-        return Lists.transform(_loadPersonByCreateTime(timestamp,1,-1),
-            new Function<PersonBean,Integer>(){
-                @Override
-                public Integer apply(PersonBean input) {
-                    return input.getId();
-                }});
+        return _loadPersonIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_person.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadPersonByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<PersonBean> _loadPersonByUpdateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadPersonByWhere(where,startRow,numRows);
+        return _loadPersonByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadPersonByUpdateTime(Date,int,int)} */
     static List<PersonBean> _loadPersonByUpdateTime(Date timestamp){
         return _loadPersonByUpdateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_person.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadPersonByUpdateTime(Date,int,int)} 
+     * @see {@link #_loadPersonIdByWhere(String)} 
      */
     static List<Integer> _loadPersonIdByUpdateTime(Date timestamp){
-        return Lists.transform(_loadPersonByUpdateTime(timestamp,1,-1),
-            new Function<PersonBean,Integer>(){
-                @Override
-                public Integer apply(PersonBean input) {
-                    return input.getId();
-                }});
+        return _loadPersonIdByWhere(makeWhere(timestamp,"update_time"));
     }
 
 
@@ -743,7 +738,9 @@ class DaoUtils implements CommonConstant {
             , impPersongroupByParent );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPersonGroupManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<PersonGroupBean> _loadPersonGroupByWhere(String where,int startRow, int numRows){
@@ -858,7 +855,7 @@ class DaoUtils implements CommonConstant {
     }
     /** 
      * 添加新记录(同步保存)<br>
-     * fl_face 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
+     * fl_face 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
      * @param faceBean 要添加的新记录
      * @see {@link IFaceManager#save(FaceBean , FeatureBean, ImageBean , Collection )}
      * @see {@link IFaceManager#checkDuplicate(FaceBean)}
@@ -877,7 +874,9 @@ class DaoUtils implements CommonConstant {
             , impLogByCompareFace );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IFaceManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<FaceBean> _loadFaceByWhere(String where,int startRow, int numRows){
@@ -904,30 +903,26 @@ class DaoUtils implements CommonConstant {
                 }});
     }
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_face.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadFaceByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<FaceBean> _loadFaceByCreateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadFaceByWhere(where,startRow,numRows);
+        return _loadFaceByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadFaceByCreateTime(Date,int,int)} */
     static List<FaceBean> _loadFaceByCreateTime(Date timestamp){
         return _loadFaceByCreateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_face.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadFaceByCreateTime(Date,int,int)} 
+     * @see {@link #_loadFaceIdByWhere(String)} 
      */
     static List<Integer> _loadFaceIdByCreateTime(Date timestamp){
-        return Lists.transform(_loadFaceByCreateTime(timestamp,1,-1),
-            new Function<FaceBean,Integer>(){
-                @Override
-                public Integer apply(FaceBean input) {
-                    return input.getId();
-                }});
+        return _loadFaceIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
 
@@ -1027,7 +1022,7 @@ class DaoUtils implements CommonConstant {
     }
     /** 
      * 添加新记录(同步保存)<br>
-     * fl_feature 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
+     * fl_feature 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
      * @param featureBean 要添加的新记录
      * @see {@link IFeatureManager#save(FeatureBean , PersonBean , Collection, Collection )}
      * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
@@ -1046,7 +1041,9 @@ class DaoUtils implements CommonConstant {
             , impLogByVerifyFeature );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IFeatureManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<FeatureBean> _loadFeatureByWhere(String where,int startRow, int numRows){
@@ -1074,30 +1071,26 @@ class DaoUtils implements CommonConstant {
     }
 
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_feature.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadFeatureByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<FeatureBean> _loadFeatureByUpdateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE update_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadFeatureByWhere(where,startRow,numRows);
+        return _loadFeatureByWhere(makeWhere(timestamp,"update_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadFeatureByUpdateTime(Date,int,int)} */
     static List<FeatureBean> _loadFeatureByUpdateTime(Date timestamp){
         return _loadFeatureByUpdateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_feature.update_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadFeatureByUpdateTime(Date,int,int)} 
+     * @see {@link #_loadFeatureMd5ByWhere(String)} 
      */
     static List<String> _loadFeatureMd5ByUpdateTime(Date timestamp){
-        return Lists.transform(_loadFeatureByUpdateTime(timestamp,1,-1),
-            new Function<FeatureBean,String>(){
-                @Override
-                public String apply(FeatureBean input) {
-                    return input.getMd5();
-                }});
+        return _loadFeatureMd5ByWhere(makeWhere(timestamp,"update_time"));
     }
 
 
@@ -1196,7 +1189,7 @@ class DaoUtils implements CommonConstant {
     }
     /** 
      * 添加新记录(同步保存)<br>
-     * fl_image 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
+     * fl_image 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
      * @param imageBean 要添加的新记录
      * @see {@link IImageManager#save(ImageBean , DeviceBean , Collection, Collection )}
      * @see {@link IImageManager#checkDuplicate(ImageBean)}
@@ -1215,7 +1208,9 @@ class DaoUtils implements CommonConstant {
             , impPersonByImageMd5 );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IImageManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<ImageBean> _loadImageByWhere(String where,int startRow, int numRows){
@@ -1321,7 +1316,7 @@ class DaoUtils implements CommonConstant {
     }
     /** 
      * 添加新记录(同步保存)<br>
-     * fl_log 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
+     * fl_log 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
      * @param logBean 要添加的新记录
      * @see {@link ILogManager#save(LogBean , DeviceBean, FaceBean, FeatureBean, PersonBean  )}
      * @see {@link ILogManager#checkDuplicate(LogBean)}
@@ -1344,7 +1339,9 @@ class DaoUtils implements CommonConstant {
             );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link ILogManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<LogBean> _loadLogByWhere(String where,int startRow, int numRows){
@@ -1371,58 +1368,50 @@ class DaoUtils implements CommonConstant {
                 }});
     }
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_log.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadLogByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<LogBean> _loadLogByCreateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadLogByWhere(where,startRow,numRows);
+        return _loadLogByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadLogByCreateTime(Date,int,int)} */
     static List<LogBean> _loadLogByCreateTime(Date timestamp){
         return _loadLogByCreateTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_log.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadLogByCreateTime(Date,int,int)} 
+     * @see {@link #_loadLogIdByWhere(String)} 
      */
     static List<Integer> _loadLogIdByCreateTime(Date timestamp){
-        return Lists.transform(_loadLogByCreateTime(timestamp,1,-1),
-            new Function<LogBean,Integer>(){
-                @Override
-                public Integer apply(LogBean input) {
-                    return input.getId();
-                }});
+        return _loadLogIdByWhere(makeWhere(timestamp,"create_time"));
     }
 
 
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_log.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadLogByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<LogBean> _loadLogByVerifyTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE verify_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadLogByWhere(where,startRow,numRows);
+        return _loadLogByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadLogByVerifyTime(Date,int,int)} */
     static List<LogBean> _loadLogByVerifyTime(Date timestamp){
         return _loadLogByVerifyTime(timestamp,1,-1);
     }
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 fl_log.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link #_loadLogByVerifyTime(Date,int,int)} 
+     * @see {@link #_loadLogIdByWhere(String)} 
      */
     static List<Integer> _loadLogIdByVerifyTime(Date timestamp){
-        return Lists.transform(_loadLogByVerifyTime(timestamp,1,-1),
-            new Function<LogBean,Integer>(){
-                @Override
-                public Integer apply(LogBean input) {
-                    return input.getId();
-                }});
+        return _loadLogIdByWhere(makeWhere(timestamp,"verify_time"));
     }
 
     //////////// FL_PERMIT /////////
@@ -1491,7 +1480,7 @@ class DaoUtils implements CommonConstant {
     }
     /** 
      * 添加新记录(同步保存)<br>
-     * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
+     * fl_permit 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
      * @param permitBean 要添加的新记录
      * @see {@link IPermitManager#save(PermitBean , DeviceGroupBean, PersonGroupBean  )}
      * @see {@link IPermitManager#checkDuplicate(PermitBean)}
@@ -1510,7 +1499,9 @@ class DaoUtils implements CommonConstant {
             );
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPermitManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<PermitBean> _loadPermitByWhere(String where,int startRow, int numRows){
@@ -1524,14 +1515,13 @@ class DaoUtils implements CommonConstant {
         return permitManager.loadAllAsList();
     }
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_permit.create_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadPermitByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<PermitBean> _loadPermitByCreateTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE create_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadPermitByWhere(where,startRow,numRows);
+        return _loadPermitByWhere(makeWhere(timestamp,"create_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadPermitByCreateTime(Date,int,int)} */
     static List<PermitBean> _loadPermitByCreateTime(Date timestamp){
@@ -1616,7 +1606,9 @@ class DaoUtils implements CommonConstant {
         return storeManager.save(_checkDuplicate(storeBean));
     }
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IStoreManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<StoreBean> _loadStoreByWhere(String where,int startRow, int numRows){
@@ -1647,7 +1639,9 @@ class DaoUtils implements CommonConstant {
 
     //////////// FL_LOG_LIGHT /////////
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link ILogLightManager#loadByWhereAsList(String,int[],int,int)}
      */
     static List<LogLightBean> _loadLogLightByWhere(String where,int startRow, int numRows){
@@ -1663,14 +1657,13 @@ class DaoUtils implements CommonConstant {
 
 
     /**
+     * (主动更新机制实现)<br>
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #_loadLogLightByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<LogLightBean> _loadLogLightByVerifyTime(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE verify_time >'%s'", timestampFormatter.format(timestamp));
-        return _loadLogLightByWhere(where,startRow,numRows);
+        return _loadLogLightByWhere(makeWhere(timestamp,"verify_time"),startRow,numRows);
     }
     /** 参见 {@link #_loadLogLightByVerifyTime(Date,int,int)} */
     static List<LogLightBean> _loadLogLightByVerifyTime(Date timestamp){

@@ -72,7 +72,23 @@ public class LogCacheManager extends LogManager
         cache = new LogCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected DeviceCacheManager instanceOfDeviceManager(){
+        return DeviceCacheManager.getInstance();
+    }
+    @Override
+    protected FaceCacheManager instanceOfFaceManager(){
+        return FaceCacheManager.getInstance();
+    }
+    @Override
+    protected FeatureCacheManager instanceOfFeatureManager(){
+        return FeatureCacheManager.getInstance();
+    }
+    @Override
+    protected PersonCacheManager instanceOfPersonManager(){
+        return PersonCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -111,28 +127,28 @@ public class LogCacheManager extends LogManager
     @Override 
     public DeviceBean getReferencedByDeviceId(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByDeviceId(DeviceCacheManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
+        bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
     public FaceBean getReferencedByCompareFace(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByCompareFace(FaceCacheManager.getInstance().loadByPrimaryKey(bean.getCompareFace())); 
+        bean.setReferencedByCompareFace(instanceOfFaceManager().loadByPrimaryKey(bean.getCompareFace())); 
         return bean.getReferencedByCompareFace();
     }
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
     public FeatureBean getReferencedByVerifyFeature(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByVerifyFeature(FeatureCacheManager.getInstance().loadByPrimaryKey(bean.getVerifyFeature())); 
+        bean.setReferencedByVerifyFeature(instanceOfFeatureManager().loadByPrimaryKey(bean.getVerifyFeature())); 
         return bean.getReferencedByVerifyFeature();
     }
     //5.1 GET REFERENCED VALUE override ILogManager
     @Override 
     public PersonBean getReferencedByPersonId(LogBean bean){
         if(null == bean)return null;
-        bean.setReferencedByPersonId(PersonCacheManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
+        bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
     private class CacheAction implements Action<LogBean>{

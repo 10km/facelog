@@ -71,7 +71,19 @@ public class ImageCacheManager extends ImageManager
         cache = new ImageCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected FaceCacheManager instanceOfFaceManager(){
+        return FaceCacheManager.getInstance();
+    }
+    @Override
+    protected PersonCacheManager instanceOfPersonManager(){
+        return PersonCacheManager.getInstance();
+    }
+    @Override
+    protected DeviceCacheManager instanceOfDeviceManager(){
+        return DeviceCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -110,7 +122,7 @@ public class ImageCacheManager extends ImageManager
     @Override 
     public DeviceBean getReferencedByDeviceId(ImageBean bean){
         if(null == bean)return null;
-        bean.setReferencedByDeviceId(DeviceCacheManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
+        bean.setReferencedByDeviceId(instanceOfDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
     private class CacheAction implements Action<ImageBean>{

@@ -48,6 +48,16 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     private IBeanConverter<FeatureBean,net.gdface.facelog.dborm.face.FlFeatureBean> beanConverter = dbConverter.getFeatureBeanConverter();
     private static FeatureManager singleton = new FeatureManager();
     protected FeatureManager(){}
+    
+    protected FaceManager instanceOfFaceManager(){
+        return FaceManager.getInstance();
+    }
+    protected LogManager instanceOfLogManager(){
+        return LogManager.getInstance();
+    }
+    protected PersonManager instanceOfPersonManager(){
+        return PersonManager.getInstance();
+    }
     /**
     * @return table name
     */
@@ -436,7 +446,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public int deleteFaceBeansByFeatureMd5(String md5OfFeature)
     {
         java.util.List<FaceBean> list =getFaceBeansByFeatureMd5AsList(md5OfFeature);
-        return FaceManager.getInstance().delete(list);
+        return instanceOfFaceManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IFeatureManager
     @Override 
@@ -456,7 +466,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
-                FaceManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
+                instanceOfFaceManager().setReferencedByFeatureMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -468,7 +478,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
-                FaceManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
+                instanceOfFaceManager().setReferencedByFeatureMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -507,7 +517,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public int deleteLogBeansByVerifyFeature(String md5OfFeature)
     {
         java.util.List<LogBean> list =getLogBeansByVerifyFeatureAsList(md5OfFeature);
-        return LogManager.getInstance().delete(list);
+        return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IFeatureManager
     @Override 
@@ -527,7 +537,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByVerifyFeature(importBean , bean);
+                instanceOfLogManager().setReferencedByVerifyFeature(importBean , bean);
             }
         }
         return importedBeans;
@@ -539,7 +549,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByVerifyFeature(importBean , bean);
+                instanceOfLogManager().setReferencedByVerifyFeature(importBean , bean);
             }
         }
         return importedBeans;
@@ -558,9 +568,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
             this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        FaceManager.getInstance().save( impFaceByFeatureMd5 );
+        instanceOfFaceManager().save( impFaceByFeatureMd5 );
         this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        LogManager.getInstance().save( impLogByVerifyFeature );
+        instanceOfLogManager().save( impLogByVerifyFeature );
         return bean;
     } 
 
@@ -586,9 +596,9 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
         this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        FaceManager.getInstance().save( impFaceByFeatureMd5 );
+        instanceOfFaceManager().save( impFaceByFeatureMd5 );
         this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        LogManager.getInstance().save( impLogByVerifyFeature );
+        instanceOfLogManager().save( impLogByVerifyFeature );
         return bean;
     }   
 

@@ -49,6 +49,19 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     private IBeanConverter<LogBean,net.gdface.facelog.dborm.log.FlLogBean> beanConverter = dbConverter.getLogBeanConverter();
     private static LogManager singleton = new LogManager();
     protected LogManager(){}
+    
+    protected DeviceManager instanceOfDeviceManager(){
+        return DeviceManager.getInstance();
+    }
+    protected FaceManager instanceOfFaceManager(){
+        return FaceManager.getInstance();
+    }
+    protected FeatureManager instanceOfFeatureManager(){
+        return FeatureManager.getInstance();
+    }
+    protected PersonManager instanceOfPersonManager(){
+        return PersonManager.getInstance();
+    }
     /**
     * @return table name
     */

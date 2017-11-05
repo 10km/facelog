@@ -72,7 +72,23 @@ public class PersonCacheManager extends PersonManager
         cache = new PersonCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected FeatureCacheManager instanceOfFeatureManager(){
+        return FeatureCacheManager.getInstance();
+    }
+    @Override
+    protected LogCacheManager instanceOfLogManager(){
+        return LogCacheManager.getInstance();
+    }
+    @Override
+    protected ImageCacheManager instanceOfImageManager(){
+        return ImageCacheManager.getInstance();
+    }
+    @Override
+    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
+        return PersonGroupCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -111,14 +127,14 @@ public class PersonCacheManager extends PersonManager
     @Override 
     public ImageBean getReferencedByImageMd5(PersonBean bean){
         if(null == bean)return null;
-        bean.setReferencedByImageMd5(ImageCacheManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
+        bean.setReferencedByImageMd5(instanceOfImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
     //5.1 GET REFERENCED VALUE override IPersonManager
     @Override 
     public PersonGroupBean getReferencedByGroupId(PersonBean bean){
         if(null == bean)return null;
-        bean.setReferencedByGroupId(PersonGroupCacheManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
+        bean.setReferencedByGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
     private class CacheAction implements Action<PersonBean>{

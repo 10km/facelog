@@ -100,6 +100,12 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         return FlPermitBean.class;
     }
     
+    protected FlDeviceGroupManager instanceOfFlDeviceGroupManager(){
+        return FlDeviceGroupManager.getInstance();
+    }
+    protected FlPersonGroupManager instanceOfFlPersonGroupManager(){
+        return FlPersonGroupManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -530,7 +536,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     public FlDeviceGroupBean getReferencedByDeviceGroupId(FlPermitBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByDeviceGroupId(FlDeviceGroupManager.getInstance().loadByPrimaryKey(bean.getDeviceGroupId())); 
+        bean.setReferencedByDeviceGroupId(instanceOfFlDeviceGroupManager().loadByPrimaryKey(bean.getDeviceGroupId())); 
         return bean.getReferencedByDeviceGroupId();
     }
 
@@ -546,7 +552,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     public FlDeviceGroupBean setReferencedByDeviceGroupId(FlPermitBean bean, FlDeviceGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlDeviceGroupManager.getInstance().save(beanToSet);
+            instanceOfFlDeviceGroupManager().save(beanToSet);
             bean.setReferencedByDeviceGroupId(beanToSet);
             if( null == beanToSet){
                // foreign key ( device_group_id ) is not nullable , nothing to do
@@ -568,7 +574,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     public FlPersonGroupBean getReferencedByPersonGroupId(FlPermitBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByPersonGroupId(FlPersonGroupManager.getInstance().loadByPrimaryKey(bean.getPersonGroupId())); 
+        bean.setReferencedByPersonGroupId(instanceOfFlPersonGroupManager().loadByPrimaryKey(bean.getPersonGroupId())); 
         return bean.getReferencedByPersonGroupId();
     }
 
@@ -584,7 +590,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     public FlPersonGroupBean setReferencedByPersonGroupId(FlPermitBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonGroupManager.getInstance().save(beanToSet);
+            instanceOfFlPersonGroupManager().save(beanToSet);
             bean.setReferencedByPersonGroupId(beanToSet);
             if( null == beanToSet){
                // foreign key ( person_group_id ) is not nullable , nothing to do
@@ -1492,7 +1498,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                 protected List<FlPermitBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlDeviceGroupManager.getInstance().getPermitBeansByDeviceGroupIdAsList(bean);
+                            : instanceOfFlDeviceGroupManager().getPermitBeansByDeviceGroupIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlPermitBean> effectBeans) throws DAOException {
@@ -1509,7 +1515,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                 protected List<FlPermitBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonGroupManager.getInstance().getPermitBeansByPersonGroupIdAsList(bean);
+                            : instanceOfFlPersonGroupManager().getPermitBeansByPersonGroupIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlPermitBean> effectBeans) throws DAOException {
@@ -1525,8 +1531,8 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlDeviceGroupManager.getInstance().registerListener(foreignKeyListenerByDeviceGroupId);
-        FlPersonGroupManager.getInstance().registerListener(foreignKeyListenerByPersonGroupId);
+        instanceOfFlDeviceGroupManager().registerListener(foreignKeyListenerByDeviceGroupId);
+        instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByPersonGroupId);
         
     }
     /**
@@ -1535,8 +1541,8 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlDeviceGroupManager.getInstance().unregisterListener(foreignKeyListenerByDeviceGroupId);
-        FlPersonGroupManager.getInstance().unregisterListener(foreignKeyListenerByPersonGroupId);
+        instanceOfFlDeviceGroupManager().unregisterListener(foreignKeyListenerByDeviceGroupId);
+        instanceOfFlPersonGroupManager().unregisterListener(foreignKeyListenerByPersonGroupId);
         
     }
     //_____________________________________________________________________

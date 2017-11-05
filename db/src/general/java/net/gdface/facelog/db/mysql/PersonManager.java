@@ -49,6 +49,19 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     private IBeanConverter<PersonBean,net.gdface.facelog.dborm.person.FlPersonBean> beanConverter = dbConverter.getPersonBeanConverter();
     private static PersonManager singleton = new PersonManager();
     protected PersonManager(){}
+    
+    protected FeatureManager instanceOfFeatureManager(){
+        return FeatureManager.getInstance();
+    }
+    protected LogManager instanceOfLogManager(){
+        return LogManager.getInstance();
+    }
+    protected ImageManager instanceOfImageManager(){
+        return ImageManager.getInstance();
+    }
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        return PersonGroupManager.getInstance();
+    }
     /**
     * @return table name
     */
@@ -437,7 +450,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public int deleteFeatureBeansByPersonId(Integer idOfPerson)
     {
         java.util.List<FeatureBean> list =getFeatureBeansByPersonIdAsList(idOfPerson);
-        return FeatureManager.getInstance().delete(list);
+        return instanceOfFeatureManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonManager
     @Override 
@@ -457,7 +470,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         if(null != importedBeans){
             for( FeatureBean importBean : importedBeans ){
-                FeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfFeatureManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -469,7 +482,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         if(null != importedBeans){
             for( FeatureBean importBean : importedBeans ){
-                FeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfFeatureManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -508,7 +521,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public int deleteLogBeansByPersonId(Integer idOfPerson)
     {
         java.util.List<LogBean> list =getLogBeansByPersonIdAsList(idOfPerson);
-        return LogManager.getInstance().delete(list);
+        return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonManager
     @Override 
@@ -528,7 +541,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfLogManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -540,7 +553,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfLogManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -561,9 +574,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
             this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        FeatureManager.getInstance().save( impFeatureByPersonId );
+        instanceOfFeatureManager().save( impFeatureByPersonId );
         this.setLogBeansByPersonId(bean,impLogByPersonId);
-        LogManager.getInstance().save( impLogByPersonId );
+        instanceOfLogManager().save( impLogByPersonId );
         return bean;
     } 
 
@@ -590,9 +603,9 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
         this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        FeatureManager.getInstance().save( impFeatureByPersonId );
+        instanceOfFeatureManager().save( impFeatureByPersonId );
         this.setLogBeansByPersonId(bean,impLogByPersonId);
-        LogManager.getInstance().save( impLogByPersonId );
+        instanceOfLogManager().save( impLogByPersonId );
         return bean;
     }   
 

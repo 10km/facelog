@@ -48,6 +48,16 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     private IBeanConverter<FaceBean,net.gdface.facelog.dborm.face.FlFaceBean> beanConverter = dbConverter.getFaceBeanConverter();
     private static FaceManager singleton = new FaceManager();
     protected FaceManager(){}
+    
+    protected LogManager instanceOfLogManager(){
+        return LogManager.getInstance();
+    }
+    protected FeatureManager instanceOfFeatureManager(){
+        return FeatureManager.getInstance();
+    }
+    protected ImageManager instanceOfImageManager(){
+        return ImageManager.getInstance();
+    }
     /**
     * @return table name
     */
@@ -427,7 +437,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public int deleteLogBeansByCompareFace(Integer idOfFace)
     {
         java.util.List<LogBean> list =getLogBeansByCompareFaceAsList(idOfFace);
-        return LogManager.getInstance().delete(list);
+        return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IFaceManager
     @Override 
@@ -447,7 +457,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+                instanceOfLogManager().setReferencedByCompareFace(importBean , bean);
             }
         }
         return importedBeans;
@@ -459,7 +469,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+                instanceOfLogManager().setReferencedByCompareFace(importBean , bean);
             }
         }
         return importedBeans;
@@ -480,7 +490,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
         this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        LogManager.getInstance().save( impLogByCompareFace );
+        instanceOfLogManager().save( impLogByCompareFace );
         return bean;
     } 
 
@@ -507,7 +517,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
         this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
         this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        LogManager.getInstance().save( impLogByCompareFace );
+        instanceOfLogManager().save( impLogByCompareFace );
         return bean;
     }   
 

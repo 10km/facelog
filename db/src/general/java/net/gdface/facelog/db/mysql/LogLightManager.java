@@ -45,6 +45,7 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     private IBeanConverter<LogLightBean,net.gdface.facelog.dborm.log.FlLogLightBean> beanConverter = dbConverter.getLogLightBeanConverter();
     private static LogLightManager singleton = new LogLightManager();
     protected LogLightManager(){}
+    
     /**
     * @return table name
     */

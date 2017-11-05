@@ -48,6 +48,16 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     private IBeanConverter<ImageBean,net.gdface.facelog.dborm.image.FlImageBean> beanConverter = dbConverter.getImageBeanConverter();
     private static ImageManager singleton = new ImageManager();
     protected ImageManager(){}
+    
+    protected FaceManager instanceOfFaceManager(){
+        return FaceManager.getInstance();
+    }
+    protected PersonManager instanceOfPersonManager(){
+        return PersonManager.getInstance();
+    }
+    protected DeviceManager instanceOfDeviceManager(){
+        return DeviceManager.getInstance();
+    }
     /**
     * @return table name
     */
@@ -436,7 +446,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public int deleteFaceBeansByImageMd5(String md5OfImage)
     {
         java.util.List<FaceBean> list =getFaceBeansByImageMd5AsList(md5OfImage);
-        return FaceManager.getInstance().delete(list);
+        return instanceOfFaceManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IImageManager
     @Override 
@@ -456,7 +466,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
-                FaceManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfFaceManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -468,7 +478,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         if(null != importedBeans){
             for( FaceBean importBean : importedBeans ){
-                FaceManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfFaceManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -507,7 +517,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     public int deletePersonBeansByImageMd5(String md5OfImage)
     {
         java.util.List<PersonBean> list =getPersonBeansByImageMd5AsList(md5OfImage);
-        return PersonManager.getInstance().delete(list);
+        return instanceOfPersonManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IImageManager
     @Override 
@@ -527,7 +537,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         if(null != importedBeans){
             for( PersonBean importBean : importedBeans ){
-                PersonManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfPersonManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -539,7 +549,7 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
     {
         if(null != importedBeans){
             for( PersonBean importBean : importedBeans ){
-                PersonManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfPersonManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -558,9 +568,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
-        FaceManager.getInstance().save( impFaceByImageMd5 );
+        instanceOfFaceManager().save( impFaceByImageMd5 );
         this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
-        PersonManager.getInstance().save( impPersonByImageMd5 );
+        instanceOfPersonManager().save( impPersonByImageMd5 );
         return bean;
     } 
 
@@ -586,9 +596,9 @@ public class ImageManager extends TableManager.Adapter<ImageBean> implements IIm
         this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
-        FaceManager.getInstance().save( impFaceByImageMd5 );
+        instanceOfFaceManager().save( impFaceByImageMd5 );
         this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
-        PersonManager.getInstance().save( impPersonByImageMd5 );
+        instanceOfPersonManager().save( impPersonByImageMd5 );
         return bean;
     }   
 

@@ -71,7 +71,19 @@ public class FeatureCacheManager extends FeatureManager
         cache = new FeatureCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected FaceCacheManager instanceOfFaceManager(){
+        return FaceCacheManager.getInstance();
+    }
+    @Override
+    protected LogCacheManager instanceOfLogManager(){
+        return LogCacheManager.getInstance();
+    }
+    @Override
+    protected PersonCacheManager instanceOfPersonManager(){
+        return PersonCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -110,7 +122,7 @@ public class FeatureCacheManager extends FeatureManager
     @Override 
     public PersonBean getReferencedByPersonId(FeatureBean bean){
         if(null == bean)return null;
-        bean.setReferencedByPersonId(PersonCacheManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
+        bean.setReferencedByPersonId(instanceOfPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
     private class CacheAction implements Action<FeatureBean>{

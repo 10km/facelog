@@ -99,6 +99,18 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         return FlDeviceGroupBean.class;
     }
     
+    protected FlDeviceManager instanceOfFlDeviceManager(){
+        return FlDeviceManager.getInstance();
+    }
+    protected FlPermitManager instanceOfFlPermitManager(){
+        return FlPermitManager.getInstance();
+    }
+    protected FlPersonGroupManager instanceOfFlPersonGroupManager(){
+        return FlPersonGroupManager.getInstance();
+    }
+    protected FlDeviceGroupManager instanceOfFlDeviceGroupManager(){
+        return this;
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -529,7 +541,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             return new java.util.ArrayList<FlDeviceBean>();
         FlDeviceBean other = new FlDeviceBean();
         other.setGroupId(bean.getId());
-        return FlDeviceManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlDeviceManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlDeviceBean} object array associate to FlDeviceGroupBean by the fl_device.group_id field.<BR>
@@ -545,7 +557,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlDeviceBean importBean : importedBeans ){
-                FlDeviceManager.getInstance().setReferencedByGroupId(importBean , bean);
+                instanceOfFlDeviceManager().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -565,7 +577,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlDeviceBean importBean : importedBeans ){
-                FlDeviceManager.getInstance().setReferencedByGroupId(importBean , bean);
+                instanceOfFlDeviceManager().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -640,7 +652,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             return new java.util.ArrayList<FlDeviceGroupBean>();
         FlDeviceGroupBean other = new FlDeviceGroupBean();
         other.setParent(bean.getId());
-        return loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlDeviceGroupManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlDeviceGroupBean} object array associate to FlDeviceGroupBean by the fl_device_group.parent field.<BR>
@@ -656,7 +668,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlDeviceGroupBean importBean : importedBeans ){
-                setReferencedByParent(importBean , bean);
+                instanceOfFlDeviceGroupManager().setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -676,7 +688,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlDeviceGroupBean importBean : importedBeans ){
-                setReferencedByParent(importBean , bean);
+                instanceOfFlDeviceGroupManager().setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -751,7 +763,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             return new java.util.ArrayList<FlPermitBean>();
         FlPermitBean other = new FlPermitBean();
         other.setDeviceGroupId(bean.getId());
-        return FlPermitManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlPermitManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPermitBean} object array associate to FlDeviceGroupBean by the fl_permit.device_group_id field.<BR>
@@ -767,7 +779,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
-                FlPermitManager.getInstance().setReferencedByDeviceGroupId(importBean , bean);
+                instanceOfFlPermitManager().setReferencedByDeviceGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -787,7 +799,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
-                FlPermitManager.getInstance().setReferencedByDeviceGroupId(importBean , bean);
+                instanceOfFlPermitManager().setReferencedByDeviceGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -814,11 +826,11 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
         this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        FlDeviceManager.getInstance().save( impDeviceByGroupId );
+        instanceOfFlDeviceManager().save( impDeviceByGroupId );
         this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        save( impDevicegroupByParent );
+        instanceOfFlDeviceGroupManager().save( impDevicegroupByParent );
         this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        FlPermitManager.getInstance().save( impPermitByDeviceGroupId );
+        instanceOfFlPermitManager().save( impPermitByDeviceGroupId );
         return bean;
     } 
 
@@ -857,11 +869,11 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         this.setReferencedByParent(bean,refDevicegroupByParent);
         bean = this.save( bean );
         this.setDeviceBeansByGroupId(bean,impDeviceByGroupId);
-        FlDeviceManager.getInstance().save( impDeviceByGroupId );
+        instanceOfFlDeviceManager().save( impDeviceByGroupId );
         this.setDeviceGroupBeansByParent(bean,impDevicegroupByParent);
-        save( impDevicegroupByParent );
+        instanceOfFlDeviceGroupManager().save( impDevicegroupByParent );
         this.setPermitBeansByDeviceGroupId(bean,impPermitByDeviceGroupId);
-        FlPermitManager.getInstance().save( impPermitByDeviceGroupId );
+        instanceOfFlPermitManager().save( impPermitByDeviceGroupId );
         return bean;
     }
 
@@ -1006,7 +1018,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     public FlDeviceGroupBean getReferencedByParent(FlDeviceGroupBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByParent(loadByPrimaryKey(bean.getParent())); 
+        bean.setReferencedByParent(instanceOfFlDeviceGroupManager().loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
 
@@ -1022,7 +1034,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     public FlDeviceGroupBean setReferencedByParent(FlDeviceGroupBean bean, FlDeviceGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            save(beanToSet);
+            instanceOfFlDeviceGroupManager().save(beanToSet);
             bean.setReferencedByParent(beanToSet);
             if( null == beanToSet){
                 bean.setParent(null);
@@ -1557,11 +1569,11 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             return ;
         if(null == linked || null ==bean.getId())
             return ;
-        if(!FlPermitManager.getInstance().existsPrimaryKey(bean.getId(),linked.getId())){
+        if(!instanceOfFlPermitManager().existsPrimaryKey(bean.getId(),linked.getId())){
             FlPermitBean junction = new FlPermitBean();
             junction.setDeviceGroupId(bean.getId());
             junction.setPersonGroupId(linked.getId());
-            FlPermitManager.getInstance().save(junction);
+            instanceOfFlPermitManager().save(junction);
         }
     }
     /**
@@ -1576,7 +1588,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
             return 0;
         if(null == linked || null ==bean.getId())
             return 0;
-        return FlPermitManager.getInstance().deleteByPrimaryKey(bean.getId(),linked.getId());
+        return instanceOfFlPermitManager().deleteByPrimaryKey(bean.getId(),linked.getId());
     }
     /** @see #addJunction(FlDeviceGroupBean,FlPersonGroupBean) */
     //23.4 MANY TO MANY
@@ -2222,7 +2234,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
                 protected List<FlDeviceGroupBean> getImportedBeans(FlDeviceGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : getDeviceGroupBeansByParentAsList(bean);
+                            : instanceOfFlDeviceGroupManager().getDeviceGroupBeansByParentAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlDeviceGroupBean> effectBeans) throws DAOException {
@@ -2238,7 +2250,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        registerListener(foreignKeyListenerByParent);
+        instanceOfFlDeviceGroupManager().registerListener(foreignKeyListenerByParent);
         
     }
     /**
@@ -2247,7 +2259,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        unregisterListener(foreignKeyListenerByParent);
+        instanceOfFlDeviceGroupManager().unregisterListener(foreignKeyListenerByParent);
         
     }
     //_____________________________________________________________________

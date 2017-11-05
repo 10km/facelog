@@ -101,6 +101,15 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         return FlImageBean.class;
     }
     
+    protected FlFaceManager instanceOfFlFaceManager(){
+        return FlFaceManager.getInstance();
+    }
+    protected FlPersonManager instanceOfFlPersonManager(){
+        return FlPersonManager.getInstance();
+    }
+    protected FlDeviceManager instanceOfFlDeviceManager(){
+        return FlDeviceManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -524,7 +533,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             return new java.util.ArrayList<FlFaceBean>();
         FlFaceBean other = new FlFaceBean();
         other.setImageMd5(bean.getMd5());
-        return FlFaceManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlFaceManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlFaceBean} object array associate to FlImageBean by the fl_face.image_md5 field.<BR>
@@ -540,7 +549,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
-                FlFaceManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfFlFaceManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -560,7 +569,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
-                FlFaceManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfFlFaceManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -635,7 +644,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             return new java.util.ArrayList<FlPersonBean>();
         FlPersonBean other = new FlPersonBean();
         other.setImageMd5(bean.getMd5());
-        return FlPersonManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlPersonManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPersonBean} object array associate to FlImageBean by the fl_person.image_md5 field.<BR>
@@ -651,7 +660,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
-                FlPersonManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfFlPersonManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -671,7 +680,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
-                FlPersonManager.getInstance().setReferencedByImageMd5(importBean , bean);
+                instanceOfFlPersonManager().setReferencedByImageMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -697,9 +706,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
-        FlFaceManager.getInstance().save( impFaceByImageMd5 );
+        instanceOfFlFaceManager().save( impFaceByImageMd5 );
         this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
-        FlPersonManager.getInstance().save( impPersonByImageMd5 );
+        instanceOfFlPersonManager().save( impPersonByImageMd5 );
         return bean;
     } 
 
@@ -737,9 +746,9 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         this.setReferencedByDeviceId(bean,refDeviceByDeviceId);
         bean = this.save( bean );
         this.setFaceBeansByImageMd5(bean,impFaceByImageMd5);
-        FlFaceManager.getInstance().save( impFaceByImageMd5 );
+        instanceOfFlFaceManager().save( impFaceByImageMd5 );
         this.setPersonBeansByImageMd5(bean,impPersonByImageMd5);
-        FlPersonManager.getInstance().save( impPersonByImageMd5 );
+        instanceOfFlPersonManager().save( impPersonByImageMd5 );
         return bean;
     }
 
@@ -878,7 +887,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public FlDeviceBean getReferencedByDeviceId(FlImageBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByDeviceId(FlDeviceManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
+        bean.setReferencedByDeviceId(instanceOfFlDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
 
@@ -894,7 +903,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
     public FlDeviceBean setReferencedByDeviceId(FlImageBean bean, FlDeviceBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlDeviceManager.getInstance().save(beanToSet);
+            instanceOfFlDeviceManager().save(beanToSet);
             bean.setReferencedByDeviceId(beanToSet);
             if( null == beanToSet){
                 bean.setDeviceId(null);
@@ -2129,7 +2138,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 protected List<FlImageBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlDeviceManager.getInstance().getImageBeansByDeviceIdAsList(bean);
+                            : instanceOfFlDeviceManager().getImageBeansByDeviceIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlImageBean> effectBeans) throws DAOException {
@@ -2145,7 +2154,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
+        instanceOfFlDeviceManager().registerListener(foreignKeyListenerByDeviceId);
         
     }
     /**
@@ -2154,7 +2163,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlDeviceManager.getInstance().unregisterListener(foreignKeyListenerByDeviceId);
+        instanceOfFlDeviceManager().unregisterListener(foreignKeyListenerByDeviceId);
         
     }
     //_____________________________________________________________________

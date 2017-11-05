@@ -48,6 +48,16 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     private IBeanConverter<DeviceBean,net.gdface.facelog.dborm.device.FlDeviceBean> beanConverter = dbConverter.getDeviceBeanConverter();
     private static DeviceManager singleton = new DeviceManager();
     protected DeviceManager(){}
+    
+    protected ImageManager instanceOfImageManager(){
+        return ImageManager.getInstance();
+    }
+    protected LogManager instanceOfLogManager(){
+        return LogManager.getInstance();
+    }
+    protected DeviceGroupManager instanceOfDeviceGroupManager(){
+        return DeviceGroupManager.getInstance();
+    }
     /**
     * @return table name
     */
@@ -436,7 +446,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public int deleteImageBeansByDeviceId(Integer idOfDevice)
     {
         java.util.List<ImageBean> list =getImageBeansByDeviceIdAsList(idOfDevice);
-        return ImageManager.getInstance().delete(list);
+        return instanceOfImageManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceManager
     @Override 
@@ -456,7 +466,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
-                ImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
+                instanceOfImageManager().setReferencedByDeviceId(importBean , bean);
             }
         }
         return importedBeans;
@@ -468,7 +478,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         if(null != importedBeans){
             for( ImageBean importBean : importedBeans ){
-                ImageManager.getInstance().setReferencedByDeviceId(importBean , bean);
+                instanceOfImageManager().setReferencedByDeviceId(importBean , bean);
             }
         }
         return importedBeans;
@@ -507,7 +517,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public int deleteLogBeansByDeviceId(Integer idOfDevice)
     {
         java.util.List<LogBean> list =getLogBeansByDeviceIdAsList(idOfDevice);
-        return LogManager.getInstance().delete(list);
+        return instanceOfLogManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IDeviceManager
     @Override 
@@ -527,7 +537,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByDeviceId(importBean , bean);
+                instanceOfLogManager().setReferencedByDeviceId(importBean , bean);
             }
         }
         return importedBeans;
@@ -539,7 +549,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     {
         if(null != importedBeans){
             for( LogBean importBean : importedBeans ){
-                LogManager.getInstance().setReferencedByDeviceId(importBean , bean);
+                instanceOfLogManager().setReferencedByDeviceId(importBean , bean);
             }
         }
         return importedBeans;
@@ -558,9 +568,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
             this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
         bean = this.save( bean );
         this.setImageBeansByDeviceId(bean,impImageByDeviceId);
-        ImageManager.getInstance().save( impImageByDeviceId );
+        instanceOfImageManager().save( impImageByDeviceId );
         this.setLogBeansByDeviceId(bean,impLogByDeviceId);
-        LogManager.getInstance().save( impLogByDeviceId );
+        instanceOfLogManager().save( impLogByDeviceId );
         return bean;
     } 
 
@@ -586,9 +596,9 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
         this.setReferencedByGroupId(bean,refDevicegroupByGroupId);
         bean = this.save( bean );
         this.setImageBeansByDeviceId(bean,impImageByDeviceId);
-        ImageManager.getInstance().save( impImageByDeviceId );
+        instanceOfImageManager().save( impImageByDeviceId );
         this.setLogBeansByDeviceId(bean,impLogByDeviceId);
-        LogManager.getInstance().save( impLogByDeviceId );
+        instanceOfLogManager().save( impLogByDeviceId );
         return bean;
     }   
 

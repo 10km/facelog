@@ -68,7 +68,7 @@ public class StoreCacheManager extends StoreManager
         cache = new StoreCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////

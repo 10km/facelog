@@ -99,6 +99,15 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         return FlFaceBean.class;
     }
     
+    protected FlLogManager instanceOfFlLogManager(){
+        return FlLogManager.getInstance();
+    }
+    protected FlFeatureManager instanceOfFlFeatureManager(){
+        return FlFeatureManager.getInstance();
+    }
+    protected FlImageManager instanceOfFlImageManager(){
+        return FlImageManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -515,7 +524,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             return new java.util.ArrayList<FlLogBean>();
         FlLogBean other = new FlLogBean();
         other.setCompareFace(bean.getId());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlFaceBean by the fl_log.compare_face field.<BR>
@@ -531,7 +540,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+                instanceOfFlLogManager().setReferencedByCompareFace(importBean , bean);
             }
         }
         return importedBeans;
@@ -551,7 +560,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByCompareFace(importBean , bean);
+                instanceOfFlLogManager().setReferencedByCompareFace(importBean , bean);
             }
         }
         return importedBeans;
@@ -579,7 +588,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
         this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        FlLogManager.getInstance().save( impLogByCompareFace );
+        instanceOfFlLogManager().save( impLogByCompareFace );
         return bean;
     } 
 
@@ -618,7 +627,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         this.setReferencedByImageMd5(bean,refImageByImageMd5);
         bean = this.save( bean );
         this.setLogBeansByCompareFace(bean,impLogByCompareFace);
-        FlLogManager.getInstance().save( impLogByCompareFace );
+        instanceOfFlLogManager().save( impLogByCompareFace );
         return bean;
     }
 
@@ -762,7 +771,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlFeatureBean getReferencedByFeatureMd5(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByFeatureMd5(FlFeatureManager.getInstance().loadByPrimaryKey(bean.getFeatureMd5())); 
+        bean.setReferencedByFeatureMd5(instanceOfFlFeatureManager().loadByPrimaryKey(bean.getFeatureMd5())); 
         return bean.getReferencedByFeatureMd5();
     }
 
@@ -778,7 +787,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlFeatureBean setReferencedByFeatureMd5(FlFaceBean bean, FlFeatureBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlFeatureManager.getInstance().save(beanToSet);
+            instanceOfFlFeatureManager().save(beanToSet);
             bean.setReferencedByFeatureMd5(beanToSet);
             if( null == beanToSet){
                 bean.setFeatureMd5(null);
@@ -800,7 +809,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlImageBean getReferencedByImageMd5(FlFaceBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
+        bean.setReferencedByImageMd5(instanceOfFlImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
 
@@ -816,7 +825,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlImageBean setReferencedByImageMd5(FlFaceBean bean, FlImageBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlImageManager.getInstance().save(beanToSet);
+            instanceOfFlImageManager().save(beanToSet);
             bean.setReferencedByImageMd5(beanToSet);
             if( null == beanToSet){
                // foreign key ( image_md5 ) is not nullable , nothing to do
@@ -2527,7 +2536,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 protected List<FlFaceBean> getImportedBeans(FlImageBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlImageManager.getInstance().getFaceBeansByImageMd5AsList(bean);
+                            : instanceOfFlImageManager().getFaceBeansByImageMd5AsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
@@ -2544,7 +2553,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                 protected List<FlFaceBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlFeatureManager.getInstance().getFaceBeansByFeatureMd5AsList(bean);
+                            : instanceOfFlFeatureManager().getFaceBeansByFeatureMd5AsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlFaceBean> effectBeans) throws DAOException {
@@ -2561,8 +2570,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
-        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByFeatureMd5);
+        instanceOfFlImageManager().registerListener(foreignKeyListenerByImageMd5);
+        instanceOfFlFeatureManager().registerListener(foreignKeyListenerByFeatureMd5);
         
     }
     /**
@@ -2571,8 +2580,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
-        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByFeatureMd5);
+        instanceOfFlImageManager().unregisterListener(foreignKeyListenerByImageMd5);
+        instanceOfFlFeatureManager().unregisterListener(foreignKeyListenerByFeatureMd5);
         
     }
     //_____________________________________________________________________

@@ -103,6 +103,18 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         return FlLogBean.class;
     }
     
+    protected FlDeviceManager instanceOfFlDeviceManager(){
+        return FlDeviceManager.getInstance();
+    }
+    protected FlFaceManager instanceOfFlFaceManager(){
+        return FlFaceManager.getInstance();
+    }
+    protected FlFeatureManager instanceOfFlFeatureManager(){
+        return FlFeatureManager.getInstance();
+    }
+    protected FlPersonManager instanceOfFlPersonManager(){
+        return FlPersonManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -558,7 +570,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlDeviceBean getReferencedByDeviceId(FlLogBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByDeviceId(FlDeviceManager.getInstance().loadByPrimaryKey(bean.getDeviceId())); 
+        bean.setReferencedByDeviceId(instanceOfFlDeviceManager().loadByPrimaryKey(bean.getDeviceId())); 
         return bean.getReferencedByDeviceId();
     }
 
@@ -574,7 +586,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlDeviceBean setReferencedByDeviceId(FlLogBean bean, FlDeviceBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlDeviceManager.getInstance().save(beanToSet);
+            instanceOfFlDeviceManager().save(beanToSet);
             bean.setReferencedByDeviceId(beanToSet);
             if( null == beanToSet){
                 bean.setDeviceId(null);
@@ -596,7 +608,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlFaceBean getReferencedByCompareFace(FlLogBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByCompareFace(FlFaceManager.getInstance().loadByPrimaryKey(bean.getCompareFace())); 
+        bean.setReferencedByCompareFace(instanceOfFlFaceManager().loadByPrimaryKey(bean.getCompareFace())); 
         return bean.getReferencedByCompareFace();
     }
 
@@ -612,7 +624,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlFaceBean setReferencedByCompareFace(FlLogBean bean, FlFaceBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlFaceManager.getInstance().save(beanToSet);
+            instanceOfFlFaceManager().save(beanToSet);
             bean.setReferencedByCompareFace(beanToSet);
             if( null == beanToSet){
                 bean.setCompareFace(null);
@@ -634,7 +646,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlFeatureBean getReferencedByVerifyFeature(FlLogBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByVerifyFeature(FlFeatureManager.getInstance().loadByPrimaryKey(bean.getVerifyFeature())); 
+        bean.setReferencedByVerifyFeature(instanceOfFlFeatureManager().loadByPrimaryKey(bean.getVerifyFeature())); 
         return bean.getReferencedByVerifyFeature();
     }
 
@@ -650,7 +662,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlFeatureBean setReferencedByVerifyFeature(FlLogBean bean, FlFeatureBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlFeatureManager.getInstance().save(beanToSet);
+            instanceOfFlFeatureManager().save(beanToSet);
             bean.setReferencedByVerifyFeature(beanToSet);
             if( null == beanToSet){
                 bean.setVerifyFeature(null);
@@ -672,7 +684,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlPersonBean getReferencedByPersonId(FlLogBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
+        bean.setReferencedByPersonId(instanceOfFlPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
 
@@ -688,7 +700,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlPersonBean setReferencedByPersonId(FlLogBean bean, FlPersonBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonManager.getInstance().save(beanToSet);
+            instanceOfFlPersonManager().save(beanToSet);
             bean.setReferencedByPersonId(beanToSet);
             if( null == beanToSet){
                // foreign key ( person_id ) is not nullable , nothing to do
@@ -2075,7 +2087,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 protected List<FlLogBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonManager.getInstance().getLogBeansByPersonIdAsList(bean);
+                            : instanceOfFlPersonManager().getLogBeansByPersonIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
@@ -2092,7 +2104,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 protected List<FlLogBean> getImportedBeans(FlDeviceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlDeviceManager.getInstance().getLogBeansByDeviceIdAsList(bean);
+                            : instanceOfFlDeviceManager().getLogBeansByDeviceIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
@@ -2110,7 +2122,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 protected List<FlLogBean> getImportedBeans(FlFeatureBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlFeatureManager.getInstance().getLogBeansByVerifyFeatureAsList(bean);
+                            : instanceOfFlFeatureManager().getLogBeansByVerifyFeatureAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
@@ -2128,7 +2140,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                 protected List<FlLogBean> getImportedBeans(FlFaceBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlFaceManager.getInstance().getLogBeansByCompareFaceAsList(bean);
+                            : instanceOfFlFaceManager().getLogBeansByCompareFaceAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlLogBean> effectBeans) throws DAOException {
@@ -2147,10 +2159,10 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
-        FlDeviceManager.getInstance().registerListener(foreignKeyListenerByDeviceId);
-        FlFeatureManager.getInstance().registerListener(foreignKeyListenerByVerifyFeature);
-        FlFaceManager.getInstance().registerListener(foreignKeyListenerByCompareFace);
+        instanceOfFlPersonManager().registerListener(foreignKeyListenerByPersonId);
+        instanceOfFlDeviceManager().registerListener(foreignKeyListenerByDeviceId);
+        instanceOfFlFeatureManager().registerListener(foreignKeyListenerByVerifyFeature);
+        instanceOfFlFaceManager().registerListener(foreignKeyListenerByCompareFace);
         
     }
     /**
@@ -2159,10 +2171,10 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlPersonManager.getInstance().unregisterListener(foreignKeyListenerByPersonId);
-        FlDeviceManager.getInstance().unregisterListener(foreignKeyListenerByDeviceId);
-        FlFeatureManager.getInstance().unregisterListener(foreignKeyListenerByVerifyFeature);
-        FlFaceManager.getInstance().unregisterListener(foreignKeyListenerByCompareFace);
+        instanceOfFlPersonManager().unregisterListener(foreignKeyListenerByPersonId);
+        instanceOfFlDeviceManager().unregisterListener(foreignKeyListenerByDeviceId);
+        instanceOfFlFeatureManager().unregisterListener(foreignKeyListenerByVerifyFeature);
+        instanceOfFlFaceManager().unregisterListener(foreignKeyListenerByCompareFace);
         
     }
     //_____________________________________________________________________

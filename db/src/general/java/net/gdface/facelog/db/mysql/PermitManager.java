@@ -47,6 +47,13 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     private IBeanConverter<PermitBean,net.gdface.facelog.dborm.permit.FlPermitBean> beanConverter = dbConverter.getPermitBeanConverter();
     private static PermitManager singleton = new PermitManager();
     protected PermitManager(){}
+    
+    protected DeviceGroupManager instanceOfDeviceGroupManager(){
+        return DeviceGroupManager.getInstance();
+    }
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        return PersonGroupManager.getInstance();
+    }
     /**
     * @return table name
     */

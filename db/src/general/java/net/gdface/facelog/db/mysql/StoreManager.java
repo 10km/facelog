@@ -45,6 +45,7 @@ public class StoreManager extends TableManager.Adapter<StoreBean> implements ISt
     private IBeanConverter<StoreBean,net.gdface.facelog.dborm.image.FlStoreBean> beanConverter = dbConverter.getStoreBeanConverter();
     private static StoreManager singleton = new StoreManager();
     protected StoreManager(){}
+    
     /**
     * @return table name
     */

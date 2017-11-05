@@ -101,6 +101,18 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         return FlPersonBean.class;
     }
     
+    protected FlFeatureManager instanceOfFlFeatureManager(){
+        return FlFeatureManager.getInstance();
+    }
+    protected FlLogManager instanceOfFlLogManager(){
+        return FlLogManager.getInstance();
+    }
+    protected FlImageManager instanceOfFlImageManager(){
+        return FlImageManager.getInstance();
+    }
+    protected FlPersonGroupManager instanceOfFlPersonGroupManager(){
+        return FlPersonGroupManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -524,7 +536,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return new java.util.ArrayList<FlFeatureBean>();
         FlFeatureBean other = new FlFeatureBean();
         other.setPersonId(bean.getId());
-        return FlFeatureManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlFeatureManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlFeatureBean} object array associate to FlPersonBean by the fl_feature.person_id field.<BR>
@@ -540,7 +552,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         if(null != importedBeans){
             for( FlFeatureBean importBean : importedBeans ){
-                FlFeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfFlFeatureManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -560,7 +572,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         if(null != importedBeans){
             for( FlFeatureBean importBean : importedBeans ){
-                FlFeatureManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfFlFeatureManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -635,7 +647,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             return new java.util.ArrayList<FlLogBean>();
         FlLogBean other = new FlLogBean();
         other.setPersonId(bean.getId());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlPersonBean by the fl_log.person_id field.<BR>
@@ -651,7 +663,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfFlLogManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -671,7 +683,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByPersonId(importBean , bean);
+                instanceOfFlLogManager().setReferencedByPersonId(importBean , bean);
             }
         }
         return importedBeans;
@@ -700,9 +712,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
             this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        FlFeatureManager.getInstance().save( impFeatureByPersonId );
+        instanceOfFlFeatureManager().save( impFeatureByPersonId );
         this.setLogBeansByPersonId(bean,impLogByPersonId);
-        FlLogManager.getInstance().save( impLogByPersonId );
+        instanceOfFlLogManager().save( impLogByPersonId );
         return bean;
     } 
 
@@ -742,9 +754,9 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
         this.setReferencedByGroupId(bean,refPersongroupByGroupId);
         bean = this.save( bean );
         this.setFeatureBeansByPersonId(bean,impFeatureByPersonId);
-        FlFeatureManager.getInstance().save( impFeatureByPersonId );
+        instanceOfFlFeatureManager().save( impFeatureByPersonId );
         this.setLogBeansByPersonId(bean,impLogByPersonId);
-        FlLogManager.getInstance().save( impLogByPersonId );
+        instanceOfFlLogManager().save( impLogByPersonId );
         return bean;
     }
 
@@ -894,7 +906,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlImageBean getReferencedByImageMd5(FlPersonBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByImageMd5(FlImageManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
+        bean.setReferencedByImageMd5(instanceOfFlImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
 
@@ -910,7 +922,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlImageBean setReferencedByImageMd5(FlPersonBean bean, FlImageBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlImageManager.getInstance().save(beanToSet);
+            instanceOfFlImageManager().save(beanToSet);
             bean.setReferencedByImageMd5(beanToSet);
             if( null == beanToSet){
                 bean.setImageMd5(null);
@@ -932,7 +944,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonGroupBean getReferencedByGroupId(FlPersonBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByGroupId(FlPersonGroupManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
+        bean.setReferencedByGroupId(instanceOfFlPersonGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
 
@@ -948,7 +960,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonGroupBean setReferencedByGroupId(FlPersonBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonGroupManager.getInstance().save(beanToSet);
+            instanceOfFlPersonGroupManager().save(beanToSet);
             bean.setReferencedByGroupId(beanToSet);
             if( null == beanToSet){
                 bean.setGroupId(null);
@@ -2644,7 +2656,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 protected List<FlPersonBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonGroupManager.getInstance().getPersonBeansByGroupIdAsList(bean);
+                            : instanceOfFlPersonGroupManager().getPersonBeansByGroupIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
@@ -2662,7 +2674,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
                 protected List<FlPersonBean> getImportedBeans(FlImageBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlImageManager.getInstance().getPersonBeansByImageMd5AsList(bean);
+                            : instanceOfFlImageManager().getPersonBeansByImageMd5AsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlPersonBean> effectBeans) throws DAOException {
@@ -2679,8 +2691,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlPersonGroupManager.getInstance().registerListener(foreignKeyListenerByGroupId);
-        FlImageManager.getInstance().registerListener(foreignKeyListenerByImageMd5);
+        instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByGroupId);
+        instanceOfFlImageManager().registerListener(foreignKeyListenerByImageMd5);
         
     }
     /**
@@ -2689,8 +2701,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlPersonGroupManager.getInstance().unregisterListener(foreignKeyListenerByGroupId);
-        FlImageManager.getInstance().unregisterListener(foreignKeyListenerByImageMd5);
+        instanceOfFlPersonGroupManager().unregisterListener(foreignKeyListenerByGroupId);
+        instanceOfFlImageManager().unregisterListener(foreignKeyListenerByImageMd5);
         
     }
     //_____________________________________________________________________

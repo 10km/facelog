@@ -71,7 +71,19 @@ public class DeviceCacheManager extends DeviceManager
         cache = new DeviceCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected ImageCacheManager instanceOfImageManager(){
+        return ImageCacheManager.getInstance();
+    }
+    @Override
+    protected LogCacheManager instanceOfLogManager(){
+        return LogCacheManager.getInstance();
+    }
+    @Override
+    protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){
+        return DeviceGroupCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -110,7 +122,7 @@ public class DeviceCacheManager extends DeviceManager
     @Override 
     public DeviceGroupBean getReferencedByGroupId(DeviceBean bean){
         if(null == bean)return null;
-        bean.setReferencedByGroupId(DeviceGroupCacheManager.getInstance().loadByPrimaryKey(bean.getGroupId())); 
+        bean.setReferencedByGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getGroupId())); 
         return bean.getReferencedByGroupId();
     }
     private class CacheAction implements Action<DeviceBean>{

@@ -203,10 +203,12 @@ class DaoUtils implements CommonConstant {
         checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         return ${table.asVarManager()}.save(_checkDuplicate($table.asVarBean()));
     }
+#if($table.isJunctionTable())
+#end###if($table.isJunctionTable())
 #if( $table.hasForeignTables() || $table.hasImportedTables() )
     /** 
      * 添加新记录(同步保存)<br>
-     * $table.name 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
+     * $table.name 表只允许添加删除,不允许修改,所以如果数据库中已经存在相同记录或{@link $beanClass${esc.hash}isNew()}返回{@code false},则抛出异常
      * @param $table.asVarBean() 要添加的新记录
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass #foreachForeignTables('native' $table  ", $m_foreignClass" '' '') #foreachImportedTables('native' $table  ", Collection" '' '') )}
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
@@ -262,7 +264,9 @@ class DaoUtils implements CommonConstant {
 #end###if($table.type == "TALBE")
 ###################### LOAD ##################
     /**
-     * 查询{@code where}条件指定的记录
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)}
      */
     static List<$beanClass> _load${coreClass}ByWhere(String where,int startRow, int numRows){
@@ -296,14 +300,13 @@ class DaoUtils implements CommonConstant {
 #if($table.getColumn($timestampColumn))
 #set ( $m_suffix = $strUtil.convertName($timestampColumn,false))
     /**
+     * (主动更新机制实现)<br>
      * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
      * @see ${esc.hash}_load${coreClass}ByWhere(String,int,int)
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      */
     static List<$beanClass> _load${coreClass}By${m_suffix}(Date timestamp,int startRow, int numRows){
-        checkNotNull(timestamp);
-        String where = String.format("WHERE $timestampColumn >'%s'", timestampFormatter.format(timestamp));
-        return _load${coreClass}ByWhere(where,startRow,numRows);
+        return _load${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"),startRow,numRows);
     }
     /** 参见 {@link ${esc.hash}_load${coreClass}By${m_suffix}(Date,int,int)} */
     static List<$beanClass> _load${coreClass}By${m_suffix}(Date timestamp){
@@ -312,16 +315,13 @@ class DaoUtils implements CommonConstant {
 #if($table.countPrimaryKeys() == 1)
 #set ($pkName = $strUtil.convertName($table.primaryKey.name,false))
     /** 
+     * (主动更新机制实现)<br>
+     * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
      * @return 返回查询结果记录的主键
-     * @see {@link ${esc.hash}_load${coreClass}By${m_suffix}(Date,int,int)} 
+     * @see {@link ${esc.hash}_load${coreClass}${pkName}ByWhere(String)} 
      */
     static List<$table.primaryKey.javaType> _load${coreClass}${pkName}By${m_suffix}(Date timestamp){
-        return Lists.transform(_load${coreClass}By${m_suffix}(timestamp,1,-1),
-            new Function<$beanClass,$table.primaryKey.javaType>(){
-                @Override
-                public $table.primaryKey.javaType apply($beanClass input) {
-                    return input.${table.primaryKey.getGetMethod()}();
-                }});
+        return _load${coreClass}${pkName}ByWhere(makeWhere(timestamp,"$timestampColumn"));
     }
 #end
 #end
@@ -333,6 +333,11 @@ $defineLoadByTimestamp
 #set($timestampColumn = 'verify_time') 
 $defineLoadByTimestamp
 #end###macro(defineMethod $table $onlyAdd)
+    /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
+    private static String makeWhere(Date timestamp,String field){
+        checkNotNull(timestamp);
+        return String.format("WHERE %s > '%s'", field,timestampFormatter.format(timestamp));    
+    }
 ##join($tables '#defineMethod($e false)' '')
 #foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group'])
 #set($table = $db.getTable($tname))

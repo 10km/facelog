@@ -48,6 +48,19 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     private IBeanConverter<PersonGroupBean,net.gdface.facelog.dborm.person.FlPersonGroupBean> beanConverter = dbConverter.getPersonGroupBeanConverter();
     private static PersonGroupManager singleton = new PersonGroupManager();
     protected PersonGroupManager(){}
+    
+    protected PermitManager instanceOfPermitManager(){
+        return PermitManager.getInstance();
+    }
+    protected PersonManager instanceOfPersonManager(){
+        return PersonManager.getInstance();
+    }
+    protected DeviceGroupManager instanceOfDeviceGroupManager(){
+        return DeviceGroupManager.getInstance();
+    }
+    protected PersonGroupManager instanceOfPersonGroupManager(){
+        return this;
+    }
     /**
     * @return table name
     */
@@ -445,7 +458,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     public int deletePermitBeansByPersonGroupId(Integer idOfPersonGroup)
     {
         java.util.List<PermitBean> list =getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
-        return PermitManager.getInstance().delete(list);
+        return instanceOfPermitManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
     @Override 
@@ -465,7 +478,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null != importedBeans){
             for( PermitBean importBean : importedBeans ){
-                PermitManager.getInstance().setReferencedByPersonGroupId(importBean , bean);
+                instanceOfPermitManager().setReferencedByPersonGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -477,7 +490,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null != importedBeans){
             for( PermitBean importBean : importedBeans ){
-                PermitManager.getInstance().setReferencedByPersonGroupId(importBean , bean);
+                instanceOfPermitManager().setReferencedByPersonGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -516,7 +529,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     public int deletePersonBeansByGroupId(Integer idOfPersonGroup)
     {
         java.util.List<PersonBean> list =getPersonBeansByGroupIdAsList(idOfPersonGroup);
-        return PersonManager.getInstance().delete(list);
+        return instanceOfPersonManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
     @Override 
@@ -536,7 +549,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null != importedBeans){
             for( PersonBean importBean : importedBeans ){
-                PersonManager.getInstance().setReferencedByGroupId(importBean , bean);
+                instanceOfPersonManager().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -548,7 +561,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null != importedBeans){
             for( PersonBean importBean : importedBeans ){
-                PersonManager.getInstance().setReferencedByGroupId(importBean , bean);
+                instanceOfPersonManager().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -587,7 +600,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     public int deletePersonGroupBeansByParent(Integer idOfPersonGroup)
     {
         java.util.List<PersonGroupBean> list =getPersonGroupBeansByParentAsList(idOfPersonGroup);
-        return PersonGroupManager.getInstance().delete(list);
+        return instanceOfPersonGroupManager().delete(list);
     }
     //3.2.4 GET IMPORTED override IPersonGroupManager
     @Override 
@@ -607,7 +620,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null != importedBeans){
             for( PersonGroupBean importBean : importedBeans ){
-                PersonGroupManager.getInstance().setReferencedByParent(importBean , bean);
+                instanceOfPersonGroupManager().setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -619,7 +632,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     {
         if(null != importedBeans){
             for( PersonGroupBean importBean : importedBeans ){
-                PersonGroupManager.getInstance().setReferencedByParent(importBean , bean);
+                instanceOfPersonGroupManager().setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -638,11 +651,11 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
             this.setReferencedByParent(bean,refPersongroupByParent);
         bean = this.save( bean );
         this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
-        PermitManager.getInstance().save( impPermitByPersonGroupId );
+        instanceOfPermitManager().save( impPermitByPersonGroupId );
         this.setPersonBeansByGroupId(bean,impPersonByGroupId);
-        PersonManager.getInstance().save( impPersonByGroupId );
+        instanceOfPersonManager().save( impPersonByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        PersonGroupManager.getInstance().save( impPersongroupByParent );
+        instanceOfPersonGroupManager().save( impPersongroupByParent );
         return bean;
     } 
 
@@ -668,11 +681,11 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
         this.setReferencedByParent(bean,refPersongroupByParent);
         bean = this.save( bean );
         this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
-        PermitManager.getInstance().save( impPermitByPersonGroupId );
+        instanceOfPermitManager().save( impPermitByPersonGroupId );
         this.setPersonBeansByGroupId(bean,impPersonByGroupId);
-        PersonManager.getInstance().save( impPersonByGroupId );
+        instanceOfPersonManager().save( impPersonByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        PersonGroupManager.getInstance().save( impPersongroupByParent );
+        instanceOfPersonGroupManager().save( impPersongroupByParent );
         return bean;
     }   
 
@@ -1046,11 +1059,11 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
             return ;
         if(null == linked || null ==bean.getId())
             return ;
-        if(!PermitManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
+        if(!instanceOfPermitManager().existsPrimaryKey(linked.getId(),bean.getId())){
             PermitBean junction = new PermitBean();
             junction.setDeviceGroupId(linked.getId());
             junction.setPersonGroupId(bean.getId());
-            PermitManager.getInstance().save(junction);
+            instanceOfPermitManager().save(junction);
         }
     }
     //23.3 MANY TO MANY override IPersonGroupManager
@@ -1060,7 +1073,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
             return 0;
         if(null == linked || null ==bean.getId())
             return 0;
-        return PermitManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
+        return instanceOfPermitManager().deleteByPrimaryKey(linked.getId(),bean.getId());
     }
     //23.4 MANY TO MANY override IPersonGroupManager
     @Override

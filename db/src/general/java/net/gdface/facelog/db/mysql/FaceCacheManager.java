@@ -71,7 +71,19 @@ public class FaceCacheManager extends FaceManager
         cache = new FaceCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected LogCacheManager instanceOfLogManager(){
+        return LogCacheManager.getInstance();
+    }
+    @Override
+    protected FeatureCacheManager instanceOfFeatureManager(){
+        return FeatureCacheManager.getInstance();
+    }
+    @Override
+    protected ImageCacheManager instanceOfImageManager(){
+        return ImageCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -110,14 +122,14 @@ public class FaceCacheManager extends FaceManager
     @Override 
     public FeatureBean getReferencedByFeatureMd5(FaceBean bean){
         if(null == bean)return null;
-        bean.setReferencedByFeatureMd5(FeatureCacheManager.getInstance().loadByPrimaryKey(bean.getFeatureMd5())); 
+        bean.setReferencedByFeatureMd5(instanceOfFeatureManager().loadByPrimaryKey(bean.getFeatureMd5())); 
         return bean.getReferencedByFeatureMd5();
     }
     //5.1 GET REFERENCED VALUE override IFaceManager
     @Override 
     public ImageBean getReferencedByImageMd5(FaceBean bean){
         if(null == bean)return null;
-        bean.setReferencedByImageMd5(ImageCacheManager.getInstance().loadByPrimaryKey(bean.getImageMd5())); 
+        bean.setReferencedByImageMd5(instanceOfImageManager().loadByPrimaryKey(bean.getImageMd5())); 
         return bean.getReferencedByImageMd5();
     }
     private class CacheAction implements Action<FaceBean>{

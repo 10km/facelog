@@ -99,6 +99,15 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         return FlFeatureBean.class;
     }
     
+    protected FlFaceManager instanceOfFlFaceManager(){
+        return FlFaceManager.getInstance();
+    }
+    protected FlLogManager instanceOfFlLogManager(){
+        return FlLogManager.getInstance();
+    }
+    protected FlPersonManager instanceOfFlPersonManager(){
+        return FlPersonManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -522,7 +531,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             return new java.util.ArrayList<FlFaceBean>();
         FlFaceBean other = new FlFaceBean();
         other.setFeatureMd5(bean.getMd5());
-        return FlFaceManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlFaceManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlFaceBean} object array associate to FlFeatureBean by the fl_face.feature_md5 field.<BR>
@@ -538,7 +547,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
-                FlFaceManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
+                instanceOfFlFaceManager().setReferencedByFeatureMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -558,7 +567,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     {
         if(null != importedBeans){
             for( FlFaceBean importBean : importedBeans ){
-                FlFaceManager.getInstance().setReferencedByFeatureMd5(importBean , bean);
+                instanceOfFlFaceManager().setReferencedByFeatureMd5(importBean , bean);
             }
         }
         return importedBeans;
@@ -633,7 +642,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             return new java.util.ArrayList<FlLogBean>();
         FlLogBean other = new FlLogBean();
         other.setVerifyFeature(bean.getMd5());
-        return FlLogManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlLogManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlLogBean} object array associate to FlFeatureBean by the fl_log.verify_feature field.<BR>
@@ -649,7 +658,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByVerifyFeature(importBean , bean);
+                instanceOfFlLogManager().setReferencedByVerifyFeature(importBean , bean);
             }
         }
         return importedBeans;
@@ -669,7 +678,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     {
         if(null != importedBeans){
             for( FlLogBean importBean : importedBeans ){
-                FlLogManager.getInstance().setReferencedByVerifyFeature(importBean , bean);
+                instanceOfFlLogManager().setReferencedByVerifyFeature(importBean , bean);
             }
         }
         return importedBeans;
@@ -695,9 +704,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
             this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        FlFaceManager.getInstance().save( impFaceByFeatureMd5 );
+        instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
         this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        FlLogManager.getInstance().save( impLogByVerifyFeature );
+        instanceOfFlLogManager().save( impLogByVerifyFeature );
         return bean;
     } 
 
@@ -735,9 +744,9 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
         this.setReferencedByPersonId(bean,refPersonByPersonId);
         bean = this.save( bean );
         this.setFaceBeansByFeatureMd5(bean,impFaceByFeatureMd5);
-        FlFaceManager.getInstance().save( impFaceByFeatureMd5 );
+        instanceOfFlFaceManager().save( impFaceByFeatureMd5 );
         this.setLogBeansByVerifyFeature(bean,impLogByVerifyFeature);
-        FlLogManager.getInstance().save( impLogByVerifyFeature );
+        instanceOfFlLogManager().save( impLogByVerifyFeature );
         return bean;
     }
 
@@ -876,7 +885,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     public FlPersonBean getReferencedByPersonId(FlFeatureBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByPersonId(FlPersonManager.getInstance().loadByPrimaryKey(bean.getPersonId())); 
+        bean.setReferencedByPersonId(instanceOfFlPersonManager().loadByPrimaryKey(bean.getPersonId())); 
         return bean.getReferencedByPersonId();
     }
 
@@ -892,7 +901,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     public FlPersonBean setReferencedByPersonId(FlFeatureBean bean, FlPersonBean beanToSet) throws DAOException
     {
         if(null != bean){
-            FlPersonManager.getInstance().save(beanToSet);
+            instanceOfFlPersonManager().save(beanToSet);
             bean.setReferencedByPersonId(beanToSet);
             if( null == beanToSet){
                 bean.setPersonId(null);
@@ -1951,7 +1960,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
                 protected List<FlFeatureBean> getImportedBeans(FlPersonBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : FlPersonManager.getInstance().getFeatureBeansByPersonIdAsList(bean);
+                            : instanceOfFlPersonManager().getFeatureBeansByPersonIdAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlFeatureBean> effectBeans) throws DAOException {
@@ -1966,7 +1975,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        FlPersonManager.getInstance().registerListener(foreignKeyListenerByPersonId);
+        instanceOfFlPersonManager().registerListener(foreignKeyListenerByPersonId);
         
     }
     /**
@@ -1975,7 +1984,7 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        FlPersonManager.getInstance().unregisterListener(foreignKeyListenerByPersonId);
+        instanceOfFlPersonManager().unregisterListener(foreignKeyListenerByPersonId);
         
     }
     //_____________________________________________________________________

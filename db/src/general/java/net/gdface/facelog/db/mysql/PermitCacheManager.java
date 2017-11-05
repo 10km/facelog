@@ -70,7 +70,15 @@ public class PermitCacheManager extends PermitManager
         cache = new PermitCache(updateStragey,maximumSize,duration,unit);
         cache.registerListener();
     }
-
+    
+    @Override
+    protected DeviceGroupCacheManager instanceOfDeviceGroupManager(){
+        return DeviceGroupCacheManager.getInstance();
+    }
+    @Override
+    protected PersonGroupCacheManager instanceOfPersonGroupManager(){
+        return PersonGroupCacheManager.getInstance();
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -109,14 +117,14 @@ public class PermitCacheManager extends PermitManager
     @Override 
     public DeviceGroupBean getReferencedByDeviceGroupId(PermitBean bean){
         if(null == bean)return null;
-        bean.setReferencedByDeviceGroupId(DeviceGroupCacheManager.getInstance().loadByPrimaryKey(bean.getDeviceGroupId())); 
+        bean.setReferencedByDeviceGroupId(instanceOfDeviceGroupManager().loadByPrimaryKey(bean.getDeviceGroupId())); 
         return bean.getReferencedByDeviceGroupId();
     }
     //5.1 GET REFERENCED VALUE override IPermitManager
     @Override 
     public PersonGroupBean getReferencedByPersonGroupId(PermitBean bean){
         if(null == bean)return null;
-        bean.setReferencedByPersonGroupId(PersonGroupCacheManager.getInstance().loadByPrimaryKey(bean.getPersonGroupId())); 
+        bean.setReferencedByPersonGroupId(instanceOfPersonGroupManager().loadByPrimaryKey(bean.getPersonGroupId())); 
         return bean.getReferencedByPersonGroupId();
     }
     private class CacheAction implements Action<PermitBean>{

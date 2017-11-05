@@ -99,6 +99,18 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         return FlPersonGroupBean.class;
     }
     
+    protected FlPermitManager instanceOfFlPermitManager(){
+        return FlPermitManager.getInstance();
+    }
+    protected FlPersonManager instanceOfFlPersonManager(){
+        return FlPersonManager.getInstance();
+    }
+    protected FlDeviceGroupManager instanceOfFlDeviceGroupManager(){
+        return FlDeviceGroupManager.getInstance();
+    }
+    protected FlPersonGroupManager instanceOfFlPersonGroupManager(){
+        return this;
+    }
     //////////////////////////////////////
     // PRIMARY KEY METHODS
     //////////////////////////////////////
@@ -529,7 +541,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return new java.util.ArrayList<FlPermitBean>();
         FlPermitBean other = new FlPermitBean();
         other.setPersonGroupId(bean.getId());
-        return FlPermitManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlPermitManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPermitBean} object array associate to FlPersonGroupBean by the fl_permit.person_group_id field.<BR>
@@ -545,7 +557,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
-                FlPermitManager.getInstance().setReferencedByPersonGroupId(importBean , bean);
+                instanceOfFlPermitManager().setReferencedByPersonGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -565,7 +577,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPermitBean importBean : importedBeans ){
-                FlPermitManager.getInstance().setReferencedByPersonGroupId(importBean , bean);
+                instanceOfFlPermitManager().setReferencedByPersonGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -640,7 +652,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return new java.util.ArrayList<FlPersonBean>();
         FlPersonBean other = new FlPersonBean();
         other.setGroupId(bean.getId());
-        return FlPersonManager.getInstance().loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlPersonManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPersonBean} object array associate to FlPersonGroupBean by the fl_person.group_id field.<BR>
@@ -656,7 +668,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
-                FlPersonManager.getInstance().setReferencedByGroupId(importBean , bean);
+                instanceOfFlPersonManager().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -676,7 +688,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPersonBean importBean : importedBeans ){
-                FlPersonManager.getInstance().setReferencedByGroupId(importBean , bean);
+                instanceOfFlPersonManager().setReferencedByGroupId(importBean , bean);
             }
         }
         return importedBeans;
@@ -751,7 +763,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return new java.util.ArrayList<FlPersonGroupBean>();
         FlPersonGroupBean other = new FlPersonGroupBean();
         other.setParent(bean.getId());
-        return loadUsingTemplateAsList(other,startRow,numRows);
+        return instanceOfFlPersonGroupManager().loadUsingTemplateAsList(other,startRow,numRows);
     }
     /**
      * set  the {@link FlPersonGroupBean} object array associate to FlPersonGroupBean by the fl_person_group.parent field.<BR>
@@ -767,7 +779,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPersonGroupBean importBean : importedBeans ){
-                setReferencedByParent(importBean , bean);
+                instanceOfFlPersonGroupManager().setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -787,7 +799,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     {
         if(null != importedBeans){
             for( FlPersonGroupBean importBean : importedBeans ){
-                setReferencedByParent(importBean , bean);
+                instanceOfFlPersonGroupManager().setReferencedByParent(importBean , bean);
             }
         }
         return importedBeans;
@@ -814,11 +826,11 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             this.setReferencedByParent(bean,refPersongroupByParent);
         bean = this.save( bean );
         this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
-        FlPermitManager.getInstance().save( impPermitByPersonGroupId );
+        instanceOfFlPermitManager().save( impPermitByPersonGroupId );
         this.setPersonBeansByGroupId(bean,impPersonByGroupId);
-        FlPersonManager.getInstance().save( impPersonByGroupId );
+        instanceOfFlPersonManager().save( impPersonByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        save( impPersongroupByParent );
+        instanceOfFlPersonGroupManager().save( impPersongroupByParent );
         return bean;
     } 
 
@@ -857,11 +869,11 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         this.setReferencedByParent(bean,refPersongroupByParent);
         bean = this.save( bean );
         this.setPermitBeansByPersonGroupId(bean,impPermitByPersonGroupId);
-        FlPermitManager.getInstance().save( impPermitByPersonGroupId );
+        instanceOfFlPermitManager().save( impPermitByPersonGroupId );
         this.setPersonBeansByGroupId(bean,impPersonByGroupId);
-        FlPersonManager.getInstance().save( impPersonByGroupId );
+        instanceOfFlPersonManager().save( impPersonByGroupId );
         this.setPersonGroupBeansByParent(bean,impPersongroupByParent);
-        save( impPersongroupByParent );
+        instanceOfFlPersonGroupManager().save( impPersongroupByParent );
         return bean;
     }
 
@@ -1006,7 +1018,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     public FlPersonGroupBean getReferencedByParent(FlPersonGroupBean bean) throws DAOException
     {
         if(null == bean)return null;
-        bean.setReferencedByParent(loadByPrimaryKey(bean.getParent())); 
+        bean.setReferencedByParent(instanceOfFlPersonGroupManager().loadByPrimaryKey(bean.getParent())); 
         return bean.getReferencedByParent();
     }
 
@@ -1022,7 +1034,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     public FlPersonGroupBean setReferencedByParent(FlPersonGroupBean bean, FlPersonGroupBean beanToSet) throws DAOException
     {
         if(null != bean){
-            save(beanToSet);
+            instanceOfFlPersonGroupManager().save(beanToSet);
             bean.setReferencedByParent(beanToSet);
             if( null == beanToSet){
                 bean.setParent(null);
@@ -1557,11 +1569,11 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return ;
         if(null == linked || null ==bean.getId())
             return ;
-        if(!FlPermitManager.getInstance().existsPrimaryKey(linked.getId(),bean.getId())){
+        if(!instanceOfFlPermitManager().existsPrimaryKey(linked.getId(),bean.getId())){
             FlPermitBean junction = new FlPermitBean();
             junction.setDeviceGroupId(linked.getId());
             junction.setPersonGroupId(bean.getId());
-            FlPermitManager.getInstance().save(junction);
+            instanceOfFlPermitManager().save(junction);
         }
     }
     /**
@@ -1576,7 +1588,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return 0;
         if(null == linked || null ==bean.getId())
             return 0;
-        return FlPermitManager.getInstance().deleteByPrimaryKey(linked.getId(),bean.getId());
+        return instanceOfFlPermitManager().deleteByPrimaryKey(linked.getId(),bean.getId());
     }
     /** @see #addJunction(FlPersonGroupBean,FlDeviceGroupBean) */
     //23.4 MANY TO MANY
@@ -2222,7 +2234,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
                 protected List<FlPersonGroupBean> getImportedBeans(FlPersonGroupBean bean) throws DAOException {
                     return listenerContainer.isEmpty() 
                             ? java.util.Collections.EMPTY_LIST
-                            : getPersonGroupBeansByParentAsList(bean);
+                            : instanceOfFlPersonGroupManager().getPersonGroupBeansByParentAsList(bean);
                 }
                 @Override
                 protected void onRemove(List<FlPersonGroupBean> effectBeans) throws DAOException {
@@ -2238,7 +2250,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      */
     //37-2
     public void bindForeignKeyListenerForDeleteRule(){
-        registerListener(foreignKeyListenerByParent);
+        instanceOfFlPersonGroupManager().registerListener(foreignKeyListenerByParent);
         
     }
     /**
@@ -2247,7 +2259,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      */
     //37-3
     public void unbindForeignKeyListenerForDeleteRule(){
-        unregisterListener(foreignKeyListenerByParent);
+        instanceOfFlPersonGroupManager().unregisterListener(foreignKeyListenerByParent);
         
     }
     //_____________________________________________________________________
