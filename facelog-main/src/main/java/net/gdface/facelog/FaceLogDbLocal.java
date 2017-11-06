@@ -23,6 +23,8 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.IDeviceGroupManager;
+import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
@@ -37,8 +39,7 @@ import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
 
-public class FaceLogDbLocal extends FaceLogDefinition implements 
-		net.gdface.facelog.db.Constant {
+public class FaceLogDbLocal extends FaceLogDefinition  {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
@@ -359,7 +360,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
-			return featureManager.toPrimaryKeyList(_getFeatureBeansByPersonIdOnPerson(personId));
+			return _toPrimaryKeyListFromFeatures(_getFeatureBeansByPersonIdOnPerson(personId));
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -524,9 +525,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	}
 
 	@Override
-	public void savePerson(List<PersonBean> beans)throws ServiceRuntime  {
+	public void savePersons(List<PersonBean> beans)throws ServiceRuntime  {
 		try{
-			personManager.saveAsTransaction(beans);
+			_savePersonsAsTransaction(beans);
 		}catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -617,7 +618,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	public PersonBean savePerson(final PersonBean bean, final ByteBuffer idPhoto, final ByteBuffer feature,
 			final Map<ByteBuffer, FaceBean> faceInfo, final Integer deviceId) throws ServiceRuntime {
 		try {
-			return personManager.runAsTransaction(new Callable<PersonBean>() {
+			return _runAsTransaction(new Callable<PersonBean>() {
 				@Override
 				public PersonBean call() throws Exception {
 					return _savePerson(bean, idPhoto, feature, faceInfo, _getDevice(deviceId));
@@ -650,7 +651,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	public void replaceFeature(final Integer personId, final String featureMd5, final boolean deleteOldFeatureImage)
 			throws ServiceRuntime {
 		try {
-			personManager.runAsTransaction(new Runnable() {
+			_runAsTransaction(new Runnable() {
 				@Override
 				public void run() {
 					_replaceFeature(personId, featureMd5, deleteOldFeatureImage);
@@ -666,7 +667,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public List<Integer> loadUpdatedPersons(long timestamp)throws ServiceRuntime {
 		try{
-			return personManager.toPrimaryKeyList(_loadUpdatedPersons(new Date(timestamp)));
+			return _toPrimaryKeyListFromPersons(_loadUpdatedPersons(new Date(timestamp)));
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
@@ -675,9 +676,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	}
 
 	@Override
-	public List<Integer> loadPersonIdByUpdate(long timestamp)throws ServiceRuntime {
+	public List<Integer> loadPersonIdByUpdateTime(long timestamp)throws ServiceRuntime {
 		try{
-			return personManager.toPrimaryKeyList(_loadPersonByUpdateTime(new Date(timestamp)));
+			return _loadPersonIdByUpdateTime(new Date(timestamp));
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch (Exception e) {
@@ -706,9 +707,9 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	}
 
 	@Override
-	public void addLog(List<LogBean> beans)throws ServiceRuntime {
+	public void addLogs(List<LogBean> beans)throws ServiceRuntime {
 		try{
-			logManager.saveAsTransaction(beans);
+			_addLogsAsTransaction(beans);
 		} catch (Exception e) {
 			throw new ServiceRuntime(e);
 		} 
@@ -856,7 +857,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	}
 
 	@Override
-	public List<FeatureBean> getFeature(List<String> md5)throws ServiceRuntime{
+	public List<FeatureBean> getFeatures(List<String> md5)throws ServiceRuntime{
 		try{
 			return _getFeatures(md5);
 		}catch (ServiceRuntime e) {
@@ -957,7 +958,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	}
 
 	@Override
-	public List<DeviceBean> getDevice(List<Integer> idList)throws ServiceRuntime{
+	public List<DeviceBean> getDevices(List<Integer> idList)throws ServiceRuntime{
 		try{
 			return _getDevices(idList);
 		} catch (ServiceRuntime e) {
@@ -994,7 +995,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList)throws ServiceRuntime {
+	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntime {
 		try{
 			return _getDeviceGroups(groupIdList); 
 		} catch (ServiceRuntime e) {
@@ -1067,7 +1068,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList)throws ServiceRuntime {
+	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntime {
 		try{
 			return _getPersonGroups(groupIdList);
 		} catch (ServiceRuntime e) {
@@ -1105,7 +1106,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 	@Override
 	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
 		try{
-			return personGroupManager.getPersonBeansByGroupIdAsList(personGroupId);
+			return _getPersonsOfGroup(personGroupId);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){
@@ -1114,6 +1115,42 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 			throw new ServiceRuntime(e);
 		}
 	}
+    @Override
+    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+		try{
+			return _loadDeviceGroupByWhere(where, startRow, numRows);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+    }
+    @Override
+    public int countDeviceGroupByWhere(String where)throws ServiceRuntime{
+		try{
+			return _countDeviceGroupByWhere(where);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+    }
+    @Override
+    public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntime{
+    	try{
+    		return _loadDeviceGroupIdByWhere(where);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+    }
 	/////////////////////PERMIT/////
 	@Override
 	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
@@ -1128,9 +1165,21 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public void deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntime{
 		try{
-			_deletePermit(deviceGroup, personGroup);
+			_addPermit(deviceGroupId, personGroupId);
+		} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+		try{
+			return _deletePermit(deviceGroup, personGroup);
 		} catch (ServiceRuntime e) {
 			throw e;
 		} catch(RuntimeException e){
@@ -1164,7 +1213,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
+	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
 		try{
 			return _getGroupPermit(deviceId, personGroupIdList);
 		} catch (ServiceRuntime e) {
@@ -1176,7 +1225,7 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 		}
 	}
 	@Override
-	public List<Boolean> getPersonPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
+	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		try{
 			return _getPermit(deviceId, personIdList);
 		} catch (ServiceRuntime e) {
@@ -1199,4 +1248,40 @@ public class FaceLogDbLocal extends FaceLogDefinition implements
 			throw new ServiceRuntime(e);
 		}
 	}
+    @Override
+    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+    	try{
+    		return _loadPersonGroupByWhere(where, startRow, numRows);
+    	} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+    }
+    @Override
+    public int countPersonGroupByWhere(String where)throws ServiceRuntime{
+    	try{
+    		return _countPersonGroupByWhere(where);
+    	} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+    }
+    @Override
+    public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntime{
+    	try{
+    		return _loadPersonGroupIdByWhere(where);
+    	} catch (ServiceRuntime e) {
+			throw e;
+		} catch(RuntimeException e){
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceRuntime(e);
+		}
+    }
 }

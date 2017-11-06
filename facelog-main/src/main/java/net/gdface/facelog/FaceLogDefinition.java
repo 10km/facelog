@@ -12,6 +12,7 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
+import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
@@ -237,8 +238,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @param beans 
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod("savePersonList")
-	public void savePerson(List<PersonBean> beans) throws ServiceRuntime {
+	@ThriftMethod
+	public void savePersons(List<PersonBean> beans) throws ServiceRuntime {
 	}
 
 	/**
@@ -371,7 +372,7 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<Integer> loadPersonIdByUpdate(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
+	public List<Integer> loadPersonIdByUpdateTime(@TargetType(java.util.Date.class)long timestamp) throws ServiceRuntime {
 		return null;
 	}
 
@@ -401,8 +402,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @param beans
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod("addLogList")
-	public void addLog(List<LogBean> beans) throws ServiceRuntime {
+	@ThriftMethod
+	public void addLogs(List<LogBean> beans) throws ServiceRuntime {
 	}
 	/**
 	 * 日志查询<br>
@@ -582,8 +583,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @return {@link FeatureBean}列表
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod("getFeatureList")
-	public List<FeatureBean> getFeature(List<String> md5) throws ServiceRuntime {
+	@ThriftMethod
+	public List<FeatureBean> getFeatures(List<String> md5) throws ServiceRuntime {
 		return null;
 	}
 
@@ -679,8 +680,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @return
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod("getDeviceList")
-	public List<DeviceBean> getDevice(List<Integer> idList) throws ServiceRuntime {
+	@ThriftMethod
+	public List<DeviceBean> getDevices(List<Integer> idList) throws ServiceRuntime {
 		return null;
 	}
 	////////////////////////////////DeviceGroupBean/////////////
@@ -713,8 +714,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws WrapDAOException
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod("getDeviceGroupList")
-	public List<DeviceGroupBean> getDeviceGroup(List<Integer> groupIdList)throws ServiceRuntime {
+	@ThriftMethod()
+	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -783,8 +784,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws WrapDAOException
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod("getPersonGroupList")
-	public List<PersonGroupBean> getPersonGroup(Collection<Integer> groupIdList)throws ServiceRuntime {
+	@ThriftMethod
+	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -823,6 +824,29 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
 		return null;
 	}
+    /**
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
+     */
+    public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+		return null;
+    }
+    /**
+     * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
+     */
+    public int countDeviceGroupByWhere(String where)throws ServiceRuntime{
+		return 0;
+    }
+    /** 
+     * 查询{@code where}条件指定的记录
+     * @return 返回查询结果记录的主键
+     * @see #loadDeviceGroupByWhere(String,int,int)
+     */
+    public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntime{
+		return null;
+    }
 	/////////////////////PERMIT/////
 	/**
 	 * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
@@ -834,15 +858,27 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 */
 	@ThriftMethod
 	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
+    /**
+     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * @param deviceGroupId 外键,设备组id
+     * @param personGroupId 外键,人员组id
+     * @see #addPermit(DeviceGroupBean,PersonGroupBean)
+     */
+	@ThriftMethod("addPermitById")
+	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntime{}
 	/**
 	 * 删除通行关联记录,参见{@link #addPermit(DeviceGroupBean, PersonGroupBean)}
 	 * @param deviceGroup
 	 * @param personGroup
+	 * @return 删除成功返回1,否则返回0
 	 * @throws WrapDAOException
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public void deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {}
+	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
+		return 0;
+	}
 	/**
 	 * 获取人员组通行权限<br>
 	 * 返回{@code personGroupId}指定的人员组在{@code deviceId}设备上是否允许通行
@@ -870,13 +906,13 @@ public abstract class FaceLogDefinition extends DaoUtils{
 		return false;
 	}
 	/** 参见 {@link #getGroupPermit(Integer, Integer) } */
-	@ThriftMethod("getGroupPermitList")
-	public List<Boolean> getGroupPermit(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
+	@ThriftMethod
+	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
 		return null;		
 	}
 	/** 参见 {@link #getPersonPermit(Integer, Integer) } */
-	@ThriftMethod("getPersonPermitList")
-	public List<Boolean> getPersonPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
+	@ThriftMethod
+	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**
@@ -891,4 +927,28 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	public List<PermitBean> loadPermitByUpdate(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntime {
 		return null;
 	}
+    /**
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
+     */
+    public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+		return null;    	
+    }
+    /**
+     * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
+     * @see {@link IPersonGroupManager#Where(String)}
+     */
+    public int countPersonGroupByWhere(String where)throws ServiceRuntime{
+		return 0;
+    }
+    /** 
+     * 查询{@code where}条件指定的记录
+     * @return 返回查询结果记录的主键
+     * @see #loadPersonGroupByWhere(String,int,int)
+     */
+    public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntime{
+		return null;
+    }
 }

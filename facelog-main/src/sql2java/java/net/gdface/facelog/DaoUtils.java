@@ -258,8 +258,34 @@ class DaoUtils implements CommonConstant {
             , impImageByDeviceId 
             , impLogByDeviceId );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_saveDevice(DeviceBean)
+     */
+    //12-3-3
+    protected Collection<DeviceBean> _saveDevices(Collection<DeviceBean> beans){
+        if(null != beans){
+            for(DeviceBean bean : beans)
+                _saveDevice(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_saveDevice(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<DeviceBean> _saveDevicesAsTransaction(final Collection<DeviceBean> beans){
+        return _runAsTransaction(new Callable<Collection<DeviceBean>>(){      
+            @Override
+            public Collection<DeviceBean> call() throws Exception {
+                return _saveDevices(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_device 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IDeviceManager#loadByWhereAsList(String,int[],int,int)}
@@ -277,7 +303,7 @@ class DaoUtils implements CommonConstant {
         return deviceManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_device 记录总数
      * @see {@link IDeviceManager#Where(String)}
      */
     //17-2
@@ -634,8 +660,34 @@ class DaoUtils implements CommonConstant {
             , impDevicegroupByParent 
             , impPermitByDeviceGroupId );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_saveDeviceGroup(DeviceGroupBean)
+     */
+    //12-3-3
+    protected Collection<DeviceGroupBean> _saveDeviceGroups(Collection<DeviceGroupBean> beans){
+        if(null != beans){
+            for(DeviceGroupBean bean : beans)
+                _saveDeviceGroup(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_saveDeviceGroup(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<DeviceGroupBean> _saveDeviceGroupsAsTransaction(final Collection<DeviceGroupBean> beans){
+        return _runAsTransaction(new Callable<Collection<DeviceGroupBean>>(){      
+            @Override
+            public Collection<DeviceGroupBean> call() throws Exception {
+                return _saveDeviceGroups(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_device_group 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IDeviceGroupManager#loadByWhereAsList(String,int[],int,int)}
@@ -653,7 +705,7 @@ class DaoUtils implements CommonConstant {
         return deviceGroupManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_device_group 记录总数
      * @see {@link IDeviceGroupManager#Where(String)}
      */
     //17-2
@@ -878,8 +930,34 @@ class DaoUtils implements CommonConstant {
             , impFeatureByPersonId 
             , impLogByPersonId );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_savePerson(PersonBean)
+     */
+    //12-3-3
+    protected Collection<PersonBean> _savePersons(Collection<PersonBean> beans){
+        if(null != beans){
+            for(PersonBean bean : beans)
+                _savePerson(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_savePerson(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<PersonBean> _savePersonsAsTransaction(final Collection<PersonBean> beans){
+        return _runAsTransaction(new Callable<Collection<PersonBean>>(){      
+            @Override
+            public Collection<PersonBean> call() throws Exception {
+                return _savePersons(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_person 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPersonManager#loadByWhereAsList(String,int[],int,int)}
@@ -897,7 +975,7 @@ class DaoUtils implements CommonConstant {
         return personManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_person 记录总数
      * @see {@link IPersonManager#Where(String)}
      */
     //17-2
@@ -1254,8 +1332,34 @@ class DaoUtils implements CommonConstant {
             , impPersonByGroupId 
             , impPersongroupByParent );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_savePersonGroup(PersonGroupBean)
+     */
+    //12-3-3
+    protected Collection<PersonGroupBean> _savePersonGroups(Collection<PersonGroupBean> beans){
+        if(null != beans){
+            for(PersonGroupBean bean : beans)
+                _savePersonGroup(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_savePersonGroup(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<PersonGroupBean> _savePersonGroupsAsTransaction(final Collection<PersonGroupBean> beans){
+        return _runAsTransaction(new Callable<Collection<PersonGroupBean>>(){      
+            @Override
+            public Collection<PersonGroupBean> call() throws Exception {
+                return _savePersonGroups(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_person_group 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPersonGroupManager#loadByWhereAsList(String,int[],int,int)}
@@ -1273,7 +1377,7 @@ class DaoUtils implements CommonConstant {
         return personGroupManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
      */
     //17-2
@@ -1490,8 +1594,34 @@ class DaoUtils implements CommonConstant {
             , refImageByImageMd5 
             , impLogByCompareFace );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_addFace(FaceBean)
+     */
+    //12-3-3
+    protected Collection<FaceBean> _addFaces(Collection<FaceBean> beans)throws DuplicateReord{
+        if(null != beans){
+            for(FaceBean bean : beans)
+                _addFace(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_addFace(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<FaceBean> _addFacesAsTransaction(final Collection<FaceBean> beans)throws DuplicateReord{
+        return _runAsTransaction(new Callable<Collection<FaceBean>>(){      
+            @Override
+            public Collection<FaceBean> call() throws Exception {
+                return _addFaces(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_face 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IFaceManager#loadByWhereAsList(String,int[],int,int)}
@@ -1509,7 +1639,7 @@ class DaoUtils implements CommonConstant {
         return faceManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_face 记录总数
      * @see {@link IFaceManager#Where(String)}
      */
     //17-2
@@ -1759,8 +1889,34 @@ class DaoUtils implements CommonConstant {
             , impFaceByFeatureMd5 
             , impLogByVerifyFeature );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_addFeature(FeatureBean)
+     */
+    //12-3-3
+    protected Collection<FeatureBean> _addFeatures(Collection<FeatureBean> beans)throws DuplicateReord{
+        if(null != beans){
+            for(FeatureBean bean : beans)
+                _addFeature(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_addFeature(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<FeatureBean> _addFeaturesAsTransaction(final Collection<FeatureBean> beans)throws DuplicateReord{
+        return _runAsTransaction(new Callable<Collection<FeatureBean>>(){      
+            @Override
+            public Collection<FeatureBean> call() throws Exception {
+                return _addFeatures(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_feature 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IFeatureManager#loadByWhereAsList(String,int[],int,int)}
@@ -1778,7 +1934,7 @@ class DaoUtils implements CommonConstant {
         return featureManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_feature 记录总数
      * @see {@link IFeatureManager#Where(String)}
      */
     //17-2
@@ -2028,8 +2184,34 @@ class DaoUtils implements CommonConstant {
             , impFaceByImageMd5 
             , impPersonByImageMd5 );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_addImage(ImageBean)
+     */
+    //12-3-3
+    protected Collection<ImageBean> _addImages(Collection<ImageBean> beans)throws DuplicateReord{
+        if(null != beans){
+            for(ImageBean bean : beans)
+                _addImage(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_addImage(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<ImageBean> _addImagesAsTransaction(final Collection<ImageBean> beans)throws DuplicateReord{
+        return _runAsTransaction(new Callable<Collection<ImageBean>>(){      
+            @Override
+            public Collection<ImageBean> call() throws Exception {
+                return _addImages(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_image 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IImageManager#loadByWhereAsList(String,int[],int,int)}
@@ -2047,7 +2229,7 @@ class DaoUtils implements CommonConstant {
         return imageManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_image 记录总数
      * @see {@link IImageManager#Where(String)}
      */
     //17-2
@@ -2288,8 +2470,34 @@ class DaoUtils implements CommonConstant {
             , refPersonByPersonId 
             );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_addLog(LogBean)
+     */
+    //12-3-3
+    protected Collection<LogBean> _addLogs(Collection<LogBean> beans)throws DuplicateReord{
+        if(null != beans){
+            for(LogBean bean : beans)
+                _addLog(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_addLog(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<LogBean> _addLogsAsTransaction(final Collection<LogBean> beans)throws DuplicateReord{
+        return _runAsTransaction(new Callable<Collection<LogBean>>(){      
+            @Override
+            public Collection<LogBean> call() throws Exception {
+                return _addLogs(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_log 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link ILogManager#loadByWhereAsList(String,int[],int,int)}
@@ -2307,7 +2515,7 @@ class DaoUtils implements CommonConstant {
         return logManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_log 记录总数
      * @see {@link ILogManager#Where(String)}
      */
     //17-2
@@ -2529,8 +2737,21 @@ class DaoUtils implements CommonConstant {
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * @param deviceGroupId 外键,设备组id
+     * @param personGroupId 外键,人员组id
+     * @see #_addPermit(DeviceGroupBean,PersonGroupBean)
      */
     //12-5
+    protected PermitBean _addPermit(Integer deviceGroupId,Integer personGroupId){
+        return _addPermit(
+                    _getDeviceGroup(deviceGroupId),
+                    _getPersonGroup(personGroupId));
+    }
+    /**
+     * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     */
+    //12-6
     protected PermitBean _addPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
         if(_existsDeviceGroup(deviceGroupBean) && _existsPersonGroup(personGroupBean)){
             PermitBean permitBean = new PermitBean(deviceGroupBean.getId(),personGroupBean.getId());
@@ -2546,12 +2767,11 @@ class DaoUtils implements CommonConstant {
      * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
      */
-    //12-6
+    //12-7
     protected int _deletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
-        if(_existsDeviceGroup(deviceGroupBean) && _existsPersonGroup(personGroupBean)){
-            return _deletePermit(deviceGroupBean.getId(),personGroupBean.getId());
-        }
-        return 0;
+        return (null == deviceGroupBean || null == personGroupBean)
+            ? 0
+            : _deletePermit(deviceGroupBean.getId(),personGroupBean.getId());
     }
     /** 
      * 添加新记录(同步保存)<br>
@@ -2574,8 +2794,34 @@ class DaoUtils implements CommonConstant {
             , refPersongroupByPersonGroupId 
             );
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_addPermit(PermitBean)
+     */
+    //12-3-3
+    protected Collection<PermitBean> _addPermits(Collection<PermitBean> beans)throws DuplicateReord{
+        if(null != beans){
+            for(PermitBean bean : beans)
+                _addPermit(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_addPermit(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<PermitBean> _addPermitsAsTransaction(final Collection<PermitBean> beans)throws DuplicateReord{
+        return _runAsTransaction(new Callable<Collection<PermitBean>>(){      
+            @Override
+            public Collection<PermitBean> call() throws Exception {
+                return _addPermits(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_permit 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IPermitManager#loadByWhereAsList(String,int[],int,int)}
@@ -2593,7 +2839,7 @@ class DaoUtils implements CommonConstant {
         return permitManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_permit 记录总数
      * @see {@link IPermitManager#Where(String)}
      */
     //17-2
@@ -2743,8 +2989,34 @@ class DaoUtils implements CommonConstant {
     protected StoreBean _addStore(StoreBean storeBean)throws DuplicateReord{
         return storeManager.save(_checkDuplicate(storeBean));
     }
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see #_addStore(StoreBean)
+     */
+    //12-3-3
+    protected Collection<StoreBean> _addStores(Collection<StoreBean> beans)throws DuplicateReord{
+        if(null != beans){
+            for(StoreBean bean : beans)
+                _addStore(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link #_addStore(Collection)}的事务化版本
+     */
+    //12-3-5
+    protected Collection<StoreBean> _addStoresAsTransaction(final Collection<StoreBean> beans)throws DuplicateReord{
+        return _runAsTransaction(new Callable<Collection<StoreBean>>(){      
+            @Override
+            public Collection<StoreBean> call() throws Exception {
+                return _addStores(beans);
+            }});
+    }
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_store 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link IStoreManager#loadByWhereAsList(String,int[],int,int)}
@@ -2762,7 +3034,7 @@ class DaoUtils implements CommonConstant {
         return storeManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_store 记录总数
      * @see {@link IStoreManager#Where(String)}
      */
     //17-2
@@ -2783,7 +3055,8 @@ class DaoUtils implements CommonConstant {
 
     //////////// FL_LOG_LIGHT /////////
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 fl_log_light 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link ILogLightManager#loadByWhereAsList(String,int[],int,int)}
@@ -2801,7 +3074,7 @@ class DaoUtils implements CommonConstant {
         return logLightManager.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 fl_log_light 记录总数
      * @see {@link ILogLightManager#Where(String)}
      */
     //17-2

@@ -299,10 +299,27 @@ class DaoUtils implements CommonConstant {
 #if($table.isSampleJunctionTable())
 #set ( $leftFk  = $table.getForeignKeysAsList()[0])
 #set ( $rightFk = $table.getForeignKeysAsList()[1])
+#set ( $leftCol  = $leftFk.columns[0])
+#set ( $rightCol  = $rightFk.columns[0])
 #set ( $leftTable = $leftFk.foreignTable)
 #set ( $rightTable = $rightFk.foreignTable)
 #set ( $leftClass  = $leftTable.asBeanClassNSP())
 #set ( $rightClass = $rightTable.asBeanClassNSP())
+#set ( $leftVar   = "${leftCol.varName}")
+#set ( $rightVar   = "${rightCol.varName}")
+    /**
+     * 创建$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
+     * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
+     * @param $leftVar $leftCol.remarks
+     * @param $rightVar $rightCol.remarks
+     * @see ${esc.hash}_add${coreClass}($leftClass,$rightClass)
+     */
+    //12-5
+    $!{modifier}$beanClass _add${coreClass}($leftCol.javaType $leftVar,$rightCol.javaType $rightVar){
+        return _add${coreClass}(
+                    _get${leftTable.asCoreClassNSP()}($leftVar),
+                    _get${rightTable.asCoreClassNSP()}($rightVar));
+    }
 #set ( $leftVar   = $leftTable.asVarBean())
 #set ( $rightVar = $rightTable.asVarBean())
 #define($pkParams)${leftVar}.${leftTable.primaryKey.getGetMethod()}(),${rightVar}.${rightTable.primaryKey.getGetMethod()}()#end
@@ -310,7 +327,7 @@ class DaoUtils implements CommonConstant {
      * 创建$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      */
-    //12-5
+    //12-6
     $!{modifier}$beanClass _add${coreClass}($leftClass $leftVar,$rightClass $rightVar){
         if(_exists${leftTable.asCoreClassNSP()}($leftVar) && _exists${rightTable.asCoreClassNSP()}($rightVar)){
             $beanClass $table.asVarBean() = new ${beanClass}($pkParams);
@@ -326,12 +343,11 @@ class DaoUtils implements CommonConstant {
      * 删除$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
      * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
      */
-    //12-6
+    //12-7
     $!{modifier}int _delete${coreClass}($leftClass $leftVar,$rightClass $rightVar){
-        if(_exists${leftTable.asCoreClassNSP()}($leftVar) && _exists${rightTable.asCoreClassNSP()}($rightVar)){
-            return _delete${coreClass}($pkParams);
-        }
-        return 0;
+        return (null == $leftVar || null == $rightVar)
+            ? 0
+            : _delete${coreClass}($pkParams);
     }
 #end###if($table.isSampleJunctionTable())
 #if( $table.hasForeignTables() || $table.hasImportedTables() )
@@ -392,11 +408,44 @@ class DaoUtils implements CommonConstant {
             ' ''));
     }
 #end###if( $table.hasForeignTables() || $table.hasImportedTables() )
+########### COLLECTION SAVE (集合保存)##############
 #end###if($onlyAdd)
+#set($mprefix = '_save')
+#set($throwsStr = '')
+#if($onlyAdd)
+#set($mprefix = '_add')
+#set($throwsStr = 'throws DuplicateReord')
+#end
+    /** 
+     * 添加新记录<br>
+     * @param beans 要添加的新记录集合
+     * @return always {@code beans}
+     * @see ${esc.hash}${mprefix}${coreClass}($beanClass)
+     */
+    //12-3-3
+    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}s(Collection<$beanClass> beans)$!{throwsStr}{
+        if(null != beans){
+            for($beanClass bean : beans)
+                ${mprefix}${coreClass}(bean);
+        }
+        return beans;
+    }
+    /** 
+     * {@link ${esc.hash}${mprefix}${coreClass}(Collection)}的事务化版本
+     */
+    //12-3-5
+    $!{modifier}Collection<$beanClass> ${mprefix}${coreClass}sAsTransaction(final Collection<$beanClass> beans)$!{throwsStr}{
+        return _runAsTransaction(new Callable<Collection<$beanClass>>(){      
+            @Override
+            public Collection<$beanClass> call() throws Exception {
+                return ${mprefix}${coreClass}s(beans);
+            }});
+    }
 #end###if($table.type == "TABLE")
 ###################### LOAD ##################
     /**
-     * 查询{@code where} SQL条件语句指定的记录
+     * 查询{@code where} SQL条件语句指定的 $table.name 记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByWhereAsList(String,int[],int,int)}
@@ -414,7 +463,7 @@ class DaoUtils implements CommonConstant {
         return ${table.asVarManager()}.loadAllAsList();
     }
     /**
-     * 返回满足{@code where} SQL条件语句的记录总数
+     * 返回满足{@code where} SQL条件语句的 $table.name 记录总数
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}Where(String)}
      */
     //17-2
