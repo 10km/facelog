@@ -25,6 +25,10 @@ import gu.simplemq.json.ByteBufferCodec;
 import gu.simplemq.utils.TypeUtils;
 
 public class TestFastjson {
+	static{
+		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
+		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
+	}
 	public interface Person<T>{
 		
 	}
@@ -130,8 +134,6 @@ public class TestFastjson {
 
 		group.addUser(guestUser);
 		group.addUser(rootUser);
-		ParserConfig.global.putDeserializer(ByteBuffer.class, ByteBufferCodec.instance);
-		SerializeConfig.globalInstance.put(ByteBuffer.wrap(new byte[]{}).getClass(), ByteBufferCodec.instance);
 		
 		String serString = JSON.toJSONString(group.byteBuffer);
 		System.out.println(serString);
@@ -160,6 +162,8 @@ public class TestFastjson {
 
 		group.addUser(guestUser);
 		group.addUser(rootUser);
+
+
 		{
 			String jsonstr = JSON.toJSONString(group);
 			System.out.println(jsonstr);
@@ -207,8 +211,9 @@ public class TestFastjson {
 				deJsonMap.put(entry.getKey(), field);
 			}
 			//System.out.println(JSON.toJSONString(deJsonMap));
-			Group dgroup = com.alibaba.fastjson.util.TypeUtils.cast(deJsonMap, Group.class, ParserConfig.global);
-			System.out.println(JSON.toJSONString(dgroup));
+			//TypeUtils.cast 不支持 ByteBuffer 
+			//Group dgroup = com.alibaba.fastjson.util.TypeUtils.cast(deJsonMap, Group.class, ParserConfig.global);
+			//System.out.println(JSON.toJSONString(dgroup));
 		}
 		{
 			//String jsonString = JSON.toJSONString(group,SerializerFeature.WriteMapNullValue);

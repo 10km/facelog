@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS fl_permit (
 
 CREATE TABLE IF NOT EXISTS fl_device (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '设备id',
-  `group_id`    int(11) DEFAULT 0 COMMENT '所属设备组id',
+  `group_id`    int(11) DEFAULT 1 COMMENT '所属设备组id',
   `name`        varchar(32) DEFAULT NULL COMMENT '设备名称',
   `version`     varchar(32) DEFAULT NULL COMMENT '设备版本号',
   `serial_no`   varchar(32) DEFAULT NULL UNIQUE COMMENT '设备序列号',
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS fl_image (
 */
 CREATE TABLE IF NOT EXISTS fl_person (
   `id`          int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户id',
-  `group_id`    int(11) DEFAULT 0 COMMENT '所属用户组id',
+  `group_id`    int(11) DEFAULT 1 COMMENT '所属用户组id',
   `name`        varchar(32) NOT NULL COMMENT '姓名',
   `sex`         tinyint(1) DEFAULT NULL COMMENT '性别,0:女,1:男',
   `birthdate`   date DEFAULT NULL COMMENT '出生日期',

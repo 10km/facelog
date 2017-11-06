@@ -28,7 +28,7 @@ public interface CommonConstant {
     /** 心跳包失效时间(秒) */
     public static final int DEFAULT_HEARTBEAT_EXPIRE = 60;
     /** 默认(设备/人员)组id */
-    public static final int DEFAULT_GROUP_ID = 0;
+    public static final int DEFAULT_GROUP_ID = 1;
     /** 默认(设备/人员)组名 */
     public static final String DEFAULT_GROUP_NAME = "DEFAULT_GROUP";
 

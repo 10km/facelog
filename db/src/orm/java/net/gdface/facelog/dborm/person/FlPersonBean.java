@@ -30,7 +30,7 @@ public  class FlPersonBean
     private Integer id;
 
     /** comments:所属用户组id */
-    private Integer groupId = new Integer(0)/* DEFAULT:'0'*/;
+    private Integer groupId = new Integer(1)/* DEFAULT:'1'*/;
 
     /** comments:姓名 */
     private String name;
@@ -205,7 +205,7 @@ public  class FlPersonBean
      * <li>full name: fl_person.group_id</li>
      * <li> foreign key: fl_person_group.id</li>
      * <li>comments: 所属用户组id</li>
-     * <li>default value: '0'</li>
+     * <li>default value: '1'</li>
      * <li>column size: 10</li>
      * <li>JDBC type returned by the driver: Types.INTEGER</li>
      * </ul>

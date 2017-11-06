@@ -15,11 +15,12 @@ import java.util.*;
  * 定义 FaceLog 服务接口<br>
  * <ul>
  * <li>所有标明为图像数据的参数,是指具有特定图像格式的图像数据(如jpg,png...),而非无格式的原始点阵位图</li>
- * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link net.gdface.facelog.db.exception.WrapDAOException}抛出，
+ * <li>在执行涉及数据库操作的方法时如果数据库发生异常，则会被封装到{@link WrapDAOException}抛出，
  * 所有非{@link RuntimeException}异常会被封装在{@link ServiceRuntime}抛出</li>
  * <li>所有数据库对象(Java Bean,比如 {@link PersonBean}),在执行保存操作(save)时,
  * 如果为新增记录({@link PersonBean#isNew()}为true),则执行insert操作,否则执行update操作,
- * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，所以请在执行save时特别注意{@code isNew()}状态</li>
+ * 如果数据库已经存在指定的记录而{@code isNew()}为{@code true},则那么执行insert操作数据库就会抛出异常，
+ * 所以请在执行save时特别注意{@code isNew()}状态</li>
  * </ul>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
