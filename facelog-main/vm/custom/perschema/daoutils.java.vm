@@ -14,9 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 
 #join($tables '
 import ${schemaPkg}.${e.asManagerInterfaceNSP()};
@@ -66,7 +64,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)}
      */
     //2    
-    $!{modifier}List<$beanClass> _get${coreClass}(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
+    $!{modifier}List<$beanClass> _get${coreClass}s(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
         return ${table.asVarManager()}.loadByPrimaryKey(${table.primaryKey.varName}Collection);
     }
     /** 
@@ -75,13 +73,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)}
      */
     //3  
-    $!{modifier}int _delete${coreClass}ByPrimaryKey(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
+    $!{modifier}int _delete${coreClass}sByPrimaryKey(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
         if(null == ${table.primaryKey.varName}Collection)return 0;
         int count =0;
         for($table.primaryKey.javaType $table.primaryKey.varName:${table.primaryKey.varName}Collection){
             count += _delete${coreClass}($table.primaryKey.varName);
         }
         return count;
+    }
+    //3-5
+    $!{modifier}List<$table.primaryKey.javaType> _toPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
+        return ${table.asVarManager()}.toPrimaryKeyList(beans);
     }
 #end
     /** 
@@ -94,7 +96,7 @@ class DaoUtils implements CommonConstant {
         return ${table.asVarManager()}.existsPrimaryKey($varNames);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}existsPrimaryKey($beanClass)}
      */
     //4-2
@@ -127,10 +129,10 @@ class DaoUtils implements CommonConstant {
      * @see ${esc.hash}_delete${coreClass}($varTypes)
      */
     //6
-    $!{modifier}int _delete${coreClass}(Collection<$beanClass> ${table.asVarBean()}Collection){
-        if(null == ${table.asVarBean()}Collection)return 0;
+    $!{modifier}int _delete${coreClass}s(Collection<$beanClass> beans){
+        if(null == beans)return 0;
         int count =0;
-        for($beanClass bean:${table.asVarBean()}Collection){
+        for($beanClass bean:beans){
             if(null != bean)
                 count += _delete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
         }
@@ -243,6 +245,7 @@ class DaoUtils implements CommonConstant {
 #end###foreach($selfFk in $table.selfRefKeys)
 ######################## SAVE #################
 #if($table.type == "TABLE")
+########## DEFAULT GROUP ##############
 #if($table.name.endsWith('group'))
     /** 
      * 如果没有默认组则向 $table.name 表中增加默认组,失败则抛出异常 
@@ -257,9 +260,8 @@ class DaoUtils implements CommonConstant {
                 bean.setName(DEFAULT_GROUP_NAME);
                 _save${coreClass}(bean);
             }catch(WrapDAOException e){}
-            if(!_exists${coreClass}(DEFAULT_GROUP_ID)){
+            if(!_exists${coreClass}(DEFAULT_GROUP_ID))
                 throw new IllegalStateException("can't create default group for ${table.getBasename(true)}"); 
-            }
         }
     }
 #set( $ename = $table.name.replace('_group',''))
@@ -291,7 +293,6 @@ class DaoUtils implements CommonConstant {
      */
     //12
     $!{modifier}$beanClass _add${coreClass}($beanClass $table.asVarBean())throws DuplicateReord{
-        checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         return ${table.asVarManager()}.save(_checkDuplicate($table.asVarBean()));
     }
 #####  连接表方法 ######
@@ -309,7 +310,7 @@ class DaoUtils implements CommonConstant {
      * 创建$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      */
-    //12-3
+    //12-5
     $!{modifier}$beanClass _add${coreClass}($leftClass $leftVar,$rightClass $rightVar){
         if(_exists${leftTable.asCoreClassNSP()}($leftVar) && _exists${rightTable.asCoreClassNSP()}($rightVar)){
             $beanClass $table.asVarBean() = new ${beanClass}($pkParams);
@@ -325,7 +326,7 @@ class DaoUtils implements CommonConstant {
      * 删除$leftTable.name和$rightTable.name之间的MANY TO MANY 联接表($table.name)记录<br>
      * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
      */
-    //12-4
+    //12-6
     $!{modifier}int _delete${coreClass}($leftClass $leftVar,$rightClass $rightVar){
         if(_exists${leftTable.asCoreClassNSP()}($leftVar) && _exists${rightTable.asCoreClassNSP()}($rightVar)){
             return _delete${coreClass}($pkParams);
@@ -360,7 +361,7 @@ class DaoUtils implements CommonConstant {
             ' ''));
     }
 #end
-#else
+#else###if($onlyAdd)
     /** 
      * 参见 {@link $table.asManagerInterfaceNSP()${esc.hash}save($beanClass)}
      */
@@ -390,9 +391,9 @@ class DaoUtils implements CommonConstant {
             #foreachImportedTables('native' $table  ", $m_importedTable.asImpArg($m_fkName) " '
             ' ''));
     }
-#end
+#end###if( $table.hasForeignTables() || $table.hasImportedTables() )
 #end###if($onlyAdd)
-#end###if($table.type == "TALBE")
+#end###if($table.type == "TABLE")
 ###################### LOAD ##################
     /**
      * 查询{@code where} SQL条件语句指定的记录
@@ -417,7 +418,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}Where(String)}
      */
     //17-2
-    $!{modifier}int _count${coreClass}Where(String where){
+    $!{modifier}int _count${coreClass}ByWhere(String where){
         return ${table.asVarManager()}.countWhere(where);
     }
 #if($table.countPrimaryKeys() == 1)
@@ -429,12 +430,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     $!{modifier}List<$table.primaryKey.javaType> _load${coreClass}${pkName}ByWhere(String where){
-        return Lists.transform(_load${coreClass}ByWhere(where,1,-1),
-            new Function<$beanClass,$table.primaryKey.javaType>(){
-                @Override
-                public $table.primaryKey.javaType apply($beanClass input) {
-                    return input.${table.primaryKey.getGetMethod()}();
-                }});
+        return _toPrimaryKeyListFrom${coreClass}s(_load${coreClass}ByWhere(where,1,-1));
     }
 #end
 #foreach($index in $table.uniqueIndicesAsList)
@@ -469,6 +465,14 @@ class DaoUtils implements CommonConstant {
     //20
     $!{modifier}List<$beanClass> _load${coreClass}By${m_suffix}(Date timestamp){
         return _load${coreClass}By${m_suffix}(timestamp,1,-1);
+    }
+    /**
+     * 返回${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see ${esc.hash}_count${coreClass}ByWhere(String)
+     */
+    //20-5
+    $!{modifier}int _count${coreClass}By${m_suffix}(Date timestamp){
+        return _count${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"));
     }
 #if($table.countPrimaryKeys() == 1)
 #set ($pkName = $strUtil.convertName($table.primaryKey.name,false))

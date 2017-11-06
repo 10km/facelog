@@ -686,14 +686,24 @@ public  class FlLogLightBean
         resetIsModified();
         return this;
     }
-    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @return always {@code bean}
+     */
+    public FlLogLightBean copy(FlLogLightBean bean)
+    {
+        return copy(bean,new int[]{});
+    }
     /**
      * Copies the passed bean into the current bean.
      *
      * @param bean the bean to copy into the current bean
      * @param fieldList the column id list to copy into the current bean
+     * @return always {@code bean}
      */
-    public void copy(FlLogLightBean bean, int... fieldList)
+    public FlLogLightBean copy(FlLogLightBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             for (int i = 0; i < 6; ++i) {
@@ -705,6 +715,7 @@ public  class FlLogLightBean
                 if( bean.isInitialized(fieldList[i]))
                     setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
+        return this;
     }
         
     /**
@@ -712,8 +723,9 @@ public  class FlLogLightBean
      *
      * @param bean the bean to copy into the current bean
      * @param fieldList the column name list to copy into the current bean
+     * @return always {@code bean}
      */
-    public void copy(FlLogLightBean bean, String... fieldList)
+    public FlLogLightBean copy(FlLogLightBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             copy(bean,(int[])null);
@@ -725,6 +737,7 @@ public  class FlLogLightBean
                     setValue(field, bean.getValue(field));
             }
         }
+        return this;
     }
 
     /**

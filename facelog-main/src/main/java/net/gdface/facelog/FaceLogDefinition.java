@@ -439,7 +439,7 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public int countLogLightWhere(String where) throws ServiceRuntime {
+	public int countLogLightByWhere(String where) throws ServiceRuntime {
 		return 0;
 	}
 	/**
@@ -449,10 +449,29 @@ public abstract class FaceLogDefinition extends DaoUtils{
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public int countLogWhere(String where) throws ServiceRuntime {
+	public int countLogByWhere(String where) throws ServiceRuntime {
 		return 0;
 	}
-
+    /**
+     * (主动更新机制实现)<br>
+     * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
+     * @see #loadLogLightByWhere(String,int,int)
+     * @throws IllegalArgumentException {@code timestamp}为{@code null}时
+     * @throws ServiceRuntime
+     */
+	@ThriftMethod
+	public List<LogLightBean> loadLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp,int startRow, int numRows)throws ServiceRuntime{
+		return null;
+	}
+    /**
+     * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #countLogLightByWhere(String)
+     * @throws ServiceRuntime
+     */
+	@ThriftMethod
+	 public int countLogLightByVerifyTime(@TargetType(java.util.Date.class)long timestamp)throws ServiceRuntime{
+		return 0;
+	 }
 	/**
 	 * 判断md5指定的图像记录是否存在
 	 * @param md5
@@ -856,8 +875,8 @@ public abstract class FaceLogDefinition extends DaoUtils{
 		return null;		
 	}
 	/** 参见 {@link #getPersonPermit(Integer, Integer) } */
-	@ThriftMethod("getPermitList")
-	public List<Boolean> getPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
+	@ThriftMethod("getPersonPermitList")
+	public List<Boolean> getPersonPermit(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		return null;
 	}
 	/**

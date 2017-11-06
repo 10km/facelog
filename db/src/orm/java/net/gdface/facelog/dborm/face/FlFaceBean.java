@@ -1774,14 +1774,24 @@ public  class FlFaceBean
         resetIsModified();
         return this;
     }
-    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @return always {@code bean}
+     */
+    public FlFaceBean copy(FlFaceBean bean)
+    {
+        return copy(bean,new int[]{});
+    }
     /**
      * Copies the passed bean into the current bean.
      *
      * @param bean the bean to copy into the current bean
      * @param fieldList the column id list to copy into the current bean
+     * @return always {@code bean}
      */
-    public void copy(FlFaceBean bean, int... fieldList)
+    public FlFaceBean copy(FlFaceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             for (int i = 0; i < 20; ++i) {
@@ -1793,6 +1803,7 @@ public  class FlFaceBean
                 if( bean.isInitialized(fieldList[i]))
                     setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
+        return this;
     }
         
     /**
@@ -1800,8 +1811,9 @@ public  class FlFaceBean
      *
      * @param bean the bean to copy into the current bean
      * @param fieldList the column name list to copy into the current bean
+     * @return always {@code bean}
      */
-    public void copy(FlFaceBean bean, String... fieldList)
+    public FlFaceBean copy(FlFaceBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             copy(bean,(int[])null);
@@ -1813,6 +1825,7 @@ public  class FlFaceBean
                     setValue(field, bean.getValue(field));
             }
         }
+        return this;
     }
 
     /**

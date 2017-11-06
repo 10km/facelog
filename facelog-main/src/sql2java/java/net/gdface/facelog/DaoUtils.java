@@ -15,9 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 
 
 import net.gdface.facelog.db.IDeviceManager;
@@ -92,7 +90,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IDeviceManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<DeviceBean> _getDevice(Collection<Integer> idCollection){
+    protected List<DeviceBean> _getDevices(Collection<Integer> idCollection){
         return deviceManager.loadByPrimaryKey(idCollection);
     }
     /** 
@@ -101,13 +99,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IDeviceManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteDeviceByPrimaryKey(Collection<Integer> idCollection){
+    protected int _deleteDevicesByPrimaryKey(Collection<Integer> idCollection){
         if(null == idCollection)return 0;
         int count =0;
         for(Integer id:idCollection){
             count += _deleteDevice(id);
         }
         return count;
+    }
+    //3-5
+    protected List<Integer> _toPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
+        return deviceManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -120,7 +122,7 @@ class DaoUtils implements CommonConstant {
         return deviceManager.existsPrimaryKey(id);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IDeviceManager#existsPrimaryKey(DeviceBean)}
      */
     //4-2
@@ -154,10 +156,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteDevice(Integer)
      */
     //6
-    protected int _deleteDevice(Collection<DeviceBean> deviceBeanCollection){
-        if(null == deviceBeanCollection)return 0;
+    protected int _deleteDevices(Collection<DeviceBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(DeviceBean bean:deviceBeanCollection){
+        for(DeviceBean bean:beans){
             if(null != bean)
                 count += _deleteDevice(bean.getId());
         }
@@ -279,7 +281,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IDeviceManager#Where(String)}
      */
     //17-2
-    protected int _countDeviceWhere(String where){
+    protected int _countDeviceByWhere(String where){
         return deviceManager.countWhere(where);
     }
     /** 
@@ -289,12 +291,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<Integer> _loadDeviceIdByWhere(String where){
-        return Lists.transform(_loadDeviceByWhere(where,1,-1),
-            new Function<DeviceBean,Integer>(){
-                @Override
-                public Integer apply(DeviceBean input) {
-                    return input.getId();
-                }});
+        return _toPrimaryKeyListFromDevices(_loadDeviceByWhere(where,1,-1));
     }
     /** 
      * 索引(fl_device.mac)查询<br>
@@ -331,6 +328,14 @@ class DaoUtils implements CommonConstant {
     protected List<DeviceBean> _loadDeviceByCreateTime(Date timestamp){
         return _loadDeviceByCreateTime(timestamp,1,-1);
     }
+    /**
+     * 返回fl_device.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countDeviceByWhere(String)
+     */
+    //20-5
+    protected int _countDeviceByCreateTime(Date timestamp){
+        return _countDeviceByWhere(makeWhere(timestamp,"create_time"));
+    }
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_device.create_time 字段大于指定时间戳({@code timestamp})的所有记录
@@ -356,6 +361,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<DeviceBean> _loadDeviceByUpdateTime(Date timestamp){
         return _loadDeviceByUpdateTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_device.update_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countDeviceByWhere(String)
+     */
+    //20-5
+    protected int _countDeviceByUpdateTime(Date timestamp){
+        return _countDeviceByWhere(makeWhere(timestamp,"update_time"));
     }
     /** 
      * (主动更新机制实现)<br>
@@ -385,7 +398,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IDeviceGroupManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<DeviceGroupBean> _getDeviceGroup(Collection<Integer> idCollection){
+    protected List<DeviceGroupBean> _getDeviceGroups(Collection<Integer> idCollection){
         return deviceGroupManager.loadByPrimaryKey(idCollection);
     }
     /** 
@@ -394,13 +407,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IDeviceGroupManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteDeviceGroupByPrimaryKey(Collection<Integer> idCollection){
+    protected int _deleteDeviceGroupsByPrimaryKey(Collection<Integer> idCollection){
         if(null == idCollection)return 0;
         int count =0;
         for(Integer id:idCollection){
             count += _deleteDeviceGroup(id);
         }
         return count;
+    }
+    //3-5
+    protected List<Integer> _toPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
+        return deviceGroupManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -413,7 +430,7 @@ class DaoUtils implements CommonConstant {
         return deviceGroupManager.existsPrimaryKey(id);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IDeviceGroupManager#existsPrimaryKey(DeviceGroupBean)}
      */
     //4-2
@@ -447,10 +464,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteDeviceGroup(Integer)
      */
     //6
-    protected int _deleteDeviceGroup(Collection<DeviceGroupBean> deviceGroupBeanCollection){
-        if(null == deviceGroupBeanCollection)return 0;
+    protected int _deleteDeviceGroups(Collection<DeviceGroupBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(DeviceGroupBean bean:deviceGroupBeanCollection){
+        for(DeviceGroupBean bean:beans){
             if(null != bean)
                 count += _deleteDeviceGroup(bean.getId());
         }
@@ -580,9 +597,8 @@ class DaoUtils implements CommonConstant {
                 bean.setName(DEFAULT_GROUP_NAME);
                 _saveDeviceGroup(bean);
             }catch(WrapDAOException e){}
-            if(!_existsDeviceGroup(DEFAULT_GROUP_ID)){
+            if(!_existsDeviceGroup(DEFAULT_GROUP_ID))
                 throw new IllegalStateException("can't create default group for device_group"); 
-            }
         }
     }
     /**
@@ -641,7 +657,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IDeviceGroupManager#Where(String)}
      */
     //17-2
-    protected int _countDeviceGroupWhere(String where){
+    protected int _countDeviceGroupByWhere(String where){
         return deviceGroupManager.countWhere(where);
     }
     /** 
@@ -651,12 +667,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<Integer> _loadDeviceGroupIdByWhere(String where){
-        return Lists.transform(_loadDeviceGroupByWhere(where,1,-1),
-            new Function<DeviceGroupBean,Integer>(){
-                @Override
-                public Integer apply(DeviceGroupBean input) {
-                    return input.getId();
-                }});
+        return _toPrimaryKeyListFromDeviceGroups(_loadDeviceGroupByWhere(where,1,-1));
     }
 
 
@@ -677,7 +688,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPersonManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<PersonBean> _getPerson(Collection<Integer> idCollection){
+    protected List<PersonBean> _getPersons(Collection<Integer> idCollection){
         return personManager.loadByPrimaryKey(idCollection);
     }
     /** 
@@ -686,13 +697,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPersonManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deletePersonByPrimaryKey(Collection<Integer> idCollection){
+    protected int _deletePersonsByPrimaryKey(Collection<Integer> idCollection){
         if(null == idCollection)return 0;
         int count =0;
         for(Integer id:idCollection){
             count += _deletePerson(id);
         }
         return count;
+    }
+    //3-5
+    protected List<Integer> _toPrimaryKeyListFromPersons(Collection<PersonBean> beans){
+        return personManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -705,7 +720,7 @@ class DaoUtils implements CommonConstant {
         return personManager.existsPrimaryKey(id);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IPersonManager#existsPrimaryKey(PersonBean)}
      */
     //4-2
@@ -739,10 +754,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deletePerson(Integer)
      */
     //6
-    protected int _deletePerson(Collection<PersonBean> personBeanCollection){
-        if(null == personBeanCollection)return 0;
+    protected int _deletePersons(Collection<PersonBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(PersonBean bean:personBeanCollection){
+        for(PersonBean bean:beans){
             if(null != bean)
                 count += _deletePerson(bean.getId());
         }
@@ -886,7 +901,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPersonManager#Where(String)}
      */
     //17-2
-    protected int _countPersonWhere(String where){
+    protected int _countPersonByWhere(String where){
         return personManager.countWhere(where);
     }
     /** 
@@ -896,12 +911,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<Integer> _loadPersonIdByWhere(String where){
-        return Lists.transform(_loadPersonByWhere(where,1,-1),
-            new Function<PersonBean,Integer>(){
-                @Override
-                public Integer apply(PersonBean input) {
-                    return input.getId();
-                }});
+        return _toPrimaryKeyListFromPersons(_loadPersonByWhere(where,1,-1));
     }
     /** 
      * 索引(fl_person.image_md5)查询<br>
@@ -938,6 +948,14 @@ class DaoUtils implements CommonConstant {
     protected List<PersonBean> _loadPersonByCreateTime(Date timestamp){
         return _loadPersonByCreateTime(timestamp,1,-1);
     }
+    /**
+     * 返回fl_person.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countPersonByWhere(String)
+     */
+    //20-5
+    protected int _countPersonByCreateTime(Date timestamp){
+        return _countPersonByWhere(makeWhere(timestamp,"create_time"));
+    }
     /** 
      * (主动更新机制实现)<br>
      * 返回 fl_person.create_time 字段大于指定时间戳({@code timestamp})的所有记录
@@ -963,6 +981,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<PersonBean> _loadPersonByUpdateTime(Date timestamp){
         return _loadPersonByUpdateTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_person.update_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countPersonByWhere(String)
+     */
+    //20-5
+    protected int _countPersonByUpdateTime(Date timestamp){
+        return _countPersonByWhere(makeWhere(timestamp,"update_time"));
     }
     /** 
      * (主动更新机制实现)<br>
@@ -992,7 +1018,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPersonGroupManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<PersonGroupBean> _getPersonGroup(Collection<Integer> idCollection){
+    protected List<PersonGroupBean> _getPersonGroups(Collection<Integer> idCollection){
         return personGroupManager.loadByPrimaryKey(idCollection);
     }
     /** 
@@ -1001,13 +1027,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPersonGroupManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deletePersonGroupByPrimaryKey(Collection<Integer> idCollection){
+    protected int _deletePersonGroupsByPrimaryKey(Collection<Integer> idCollection){
         if(null == idCollection)return 0;
         int count =0;
         for(Integer id:idCollection){
             count += _deletePersonGroup(id);
         }
         return count;
+    }
+    //3-5
+    protected List<Integer> _toPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
+        return personGroupManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1020,7 +1050,7 @@ class DaoUtils implements CommonConstant {
         return personGroupManager.existsPrimaryKey(id);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IPersonGroupManager#existsPrimaryKey(PersonGroupBean)}
      */
     //4-2
@@ -1054,10 +1084,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deletePersonGroup(Integer)
      */
     //6
-    protected int _deletePersonGroup(Collection<PersonGroupBean> personGroupBeanCollection){
-        if(null == personGroupBeanCollection)return 0;
+    protected int _deletePersonGroups(Collection<PersonGroupBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(PersonGroupBean bean:personGroupBeanCollection){
+        for(PersonGroupBean bean:beans){
             if(null != bean)
                 count += _deletePersonGroup(bean.getId());
         }
@@ -1187,9 +1217,8 @@ class DaoUtils implements CommonConstant {
                 bean.setName(DEFAULT_GROUP_NAME);
                 _savePersonGroup(bean);
             }catch(WrapDAOException e){}
-            if(!_existsPersonGroup(DEFAULT_GROUP_ID)){
+            if(!_existsPersonGroup(DEFAULT_GROUP_ID))
                 throw new IllegalStateException("can't create default group for person_group"); 
-            }
         }
     }
     /**
@@ -1248,7 +1277,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPersonGroupManager#Where(String)}
      */
     //17-2
-    protected int _countPersonGroupWhere(String where){
+    protected int _countPersonGroupByWhere(String where){
         return personGroupManager.countWhere(where);
     }
     /** 
@@ -1258,12 +1287,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<Integer> _loadPersonGroupIdByWhere(String where){
-        return Lists.transform(_loadPersonGroupByWhere(where,1,-1),
-            new Function<PersonGroupBean,Integer>(){
-                @Override
-                public Integer apply(PersonGroupBean input) {
-                    return input.getId();
-                }});
+        return _toPrimaryKeyListFromPersonGroups(_loadPersonGroupByWhere(where,1,-1));
     }
 
 
@@ -1284,7 +1308,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IFaceManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<FaceBean> _getFace(Collection<Integer> idCollection){
+    protected List<FaceBean> _getFaces(Collection<Integer> idCollection){
         return faceManager.loadByPrimaryKey(idCollection);
     }
     /** 
@@ -1293,13 +1317,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IFaceManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteFaceByPrimaryKey(Collection<Integer> idCollection){
+    protected int _deleteFacesByPrimaryKey(Collection<Integer> idCollection){
         if(null == idCollection)return 0;
         int count =0;
         for(Integer id:idCollection){
             count += _deleteFace(id);
         }
         return count;
+    }
+    //3-5
+    protected List<Integer> _toPrimaryKeyListFromFaces(Collection<FaceBean> beans){
+        return faceManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1312,7 +1340,7 @@ class DaoUtils implements CommonConstant {
         return faceManager.existsPrimaryKey(id);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IFaceManager#existsPrimaryKey(FaceBean)}
      */
     //4-2
@@ -1346,10 +1374,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteFace(Integer)
      */
     //6
-    protected int _deleteFace(Collection<FaceBean> faceBeanCollection){
-        if(null == faceBeanCollection)return 0;
+    protected int _deleteFaces(Collection<FaceBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(FaceBean bean:faceBeanCollection){
+        for(FaceBean bean:beans){
             if(null != bean)
                 count += _deleteFace(bean.getId());
         }
@@ -1439,7 +1467,6 @@ class DaoUtils implements CommonConstant {
      */
     //12
     protected FaceBean _addFace(FaceBean faceBean)throws DuplicateReord{
-        checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
         return faceManager.save(_checkDuplicate(faceBean));
     }
     /** 
@@ -1486,7 +1513,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IFaceManager#Where(String)}
      */
     //17-2
-    protected int _countFaceWhere(String where){
+    protected int _countFaceByWhere(String where){
         return faceManager.countWhere(where);
     }
     /** 
@@ -1496,12 +1523,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<Integer> _loadFaceIdByWhere(String where){
-        return Lists.transform(_loadFaceByWhere(where,1,-1),
-            new Function<FaceBean,Integer>(){
-                @Override
-                public Integer apply(FaceBean input) {
-                    return input.getId();
-                }});
+        return _toPrimaryKeyListFromFaces(_loadFaceByWhere(where,1,-1));
     }
     /**
      * (主动更新机制实现)<br>
@@ -1517,6 +1539,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<FaceBean> _loadFaceByCreateTime(Date timestamp){
         return _loadFaceByCreateTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_face.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countFaceByWhere(String)
+     */
+    //20-5
+    protected int _countFaceByCreateTime(Date timestamp){
+        return _countFaceByWhere(makeWhere(timestamp,"create_time"));
     }
     /** 
      * (主动更新机制实现)<br>
@@ -1547,7 +1577,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IFeatureManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<FeatureBean> _getFeature(Collection<String> md5Collection){
+    protected List<FeatureBean> _getFeatures(Collection<String> md5Collection){
         return featureManager.loadByPrimaryKey(md5Collection);
     }
     /** 
@@ -1556,13 +1586,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IFeatureManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteFeatureByPrimaryKey(Collection<String> md5Collection){
+    protected int _deleteFeaturesByPrimaryKey(Collection<String> md5Collection){
         if(null == md5Collection)return 0;
         int count =0;
         for(String md5:md5Collection){
             count += _deleteFeature(md5);
         }
         return count;
+    }
+    //3-5
+    protected List<String> _toPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
+        return featureManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1575,7 +1609,7 @@ class DaoUtils implements CommonConstant {
         return featureManager.existsPrimaryKey(md5);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IFeatureManager#existsPrimaryKey(FeatureBean)}
      */
     //4-2
@@ -1609,10 +1643,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteFeature(String)
      */
     //6
-    protected int _deleteFeature(Collection<FeatureBean> featureBeanCollection){
-        if(null == featureBeanCollection)return 0;
+    protected int _deleteFeatures(Collection<FeatureBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(FeatureBean bean:featureBeanCollection){
+        for(FeatureBean bean:beans){
             if(null != bean)
                 count += _deleteFeature(bean.getMd5());
         }
@@ -1702,7 +1736,6 @@ class DaoUtils implements CommonConstant {
      */
     //12
     protected FeatureBean _addFeature(FeatureBean featureBean)throws DuplicateReord{
-        checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
         return featureManager.save(_checkDuplicate(featureBean));
     }
     /** 
@@ -1749,7 +1782,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IFeatureManager#Where(String)}
      */
     //17-2
-    protected int _countFeatureWhere(String where){
+    protected int _countFeatureByWhere(String where){
         return featureManager.countWhere(where);
     }
     /** 
@@ -1759,12 +1792,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<String> _loadFeatureMd5ByWhere(String where){
-        return Lists.transform(_loadFeatureByWhere(where,1,-1),
-            new Function<FeatureBean,String>(){
-                @Override
-                public String apply(FeatureBean input) {
-                    return input.getMd5();
-                }});
+        return _toPrimaryKeyListFromFeatures(_loadFeatureByWhere(where,1,-1));
     }
 
     /**
@@ -1781,6 +1809,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<FeatureBean> _loadFeatureByUpdateTime(Date timestamp){
         return _loadFeatureByUpdateTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_feature.update_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countFeatureByWhere(String)
+     */
+    //20-5
+    protected int _countFeatureByUpdateTime(Date timestamp){
+        return _countFeatureByWhere(makeWhere(timestamp,"update_time"));
     }
     /** 
      * (主动更新机制实现)<br>
@@ -1810,7 +1846,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IImageManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<ImageBean> _getImage(Collection<String> md5Collection){
+    protected List<ImageBean> _getImages(Collection<String> md5Collection){
         return imageManager.loadByPrimaryKey(md5Collection);
     }
     /** 
@@ -1819,13 +1855,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IImageManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteImageByPrimaryKey(Collection<String> md5Collection){
+    protected int _deleteImagesByPrimaryKey(Collection<String> md5Collection){
         if(null == md5Collection)return 0;
         int count =0;
         for(String md5:md5Collection){
             count += _deleteImage(md5);
         }
         return count;
+    }
+    //3-5
+    protected List<String> _toPrimaryKeyListFromImages(Collection<ImageBean> beans){
+        return imageManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1838,7 +1878,7 @@ class DaoUtils implements CommonConstant {
         return imageManager.existsPrimaryKey(md5);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IImageManager#existsPrimaryKey(ImageBean)}
      */
     //4-2
@@ -1872,10 +1912,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteImage(String)
      */
     //6
-    protected int _deleteImage(Collection<ImageBean> imageBeanCollection){
-        if(null == imageBeanCollection)return 0;
+    protected int _deleteImages(Collection<ImageBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(ImageBean bean:imageBeanCollection){
+        for(ImageBean bean:beans){
             if(null != bean)
                 count += _deleteImage(bean.getMd5());
         }
@@ -1965,7 +2005,6 @@ class DaoUtils implements CommonConstant {
      */
     //12
     protected ImageBean _addImage(ImageBean imageBean)throws DuplicateReord{
-        checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
         return imageManager.save(_checkDuplicate(imageBean));
     }
     /** 
@@ -2012,7 +2051,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IImageManager#Where(String)}
      */
     //17-2
-    protected int _countImageWhere(String where){
+    protected int _countImageByWhere(String where){
         return imageManager.countWhere(where);
     }
     /** 
@@ -2022,12 +2061,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<String> _loadImageMd5ByWhere(String where){
-        return Lists.transform(_loadImageByWhere(where,1,-1),
-            new Function<ImageBean,String>(){
-                @Override
-                public String apply(ImageBean input) {
-                    return input.getMd5();
-                }});
+        return _toPrimaryKeyListFromImages(_loadImageByWhere(where,1,-1));
     }
 
 
@@ -2048,7 +2082,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link ILogManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<LogBean> _getLog(Collection<Integer> idCollection){
+    protected List<LogBean> _getLogs(Collection<Integer> idCollection){
         return logManager.loadByPrimaryKey(idCollection);
     }
     /** 
@@ -2057,13 +2091,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link ILogManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteLogByPrimaryKey(Collection<Integer> idCollection){
+    protected int _deleteLogsByPrimaryKey(Collection<Integer> idCollection){
         if(null == idCollection)return 0;
         int count =0;
         for(Integer id:idCollection){
             count += _deleteLog(id);
         }
         return count;
+    }
+    //3-5
+    protected List<Integer> _toPrimaryKeyListFromLogs(Collection<LogBean> beans){
+        return logManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -2076,7 +2114,7 @@ class DaoUtils implements CommonConstant {
         return logManager.existsPrimaryKey(id);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link ILogManager#existsPrimaryKey(LogBean)}
      */
     //4-2
@@ -2110,10 +2148,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteLog(Integer)
      */
     //6
-    protected int _deleteLog(Collection<LogBean> logBeanCollection){
-        if(null == logBeanCollection)return 0;
+    protected int _deleteLogs(Collection<LogBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(LogBean bean:logBeanCollection){
+        for(LogBean bean:beans){
             if(null != bean)
                 count += _deleteLog(bean.getId());
         }
@@ -2223,7 +2261,6 @@ class DaoUtils implements CommonConstant {
      */
     //12
     protected LogBean _addLog(LogBean logBean)throws DuplicateReord{
-        checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
         return logManager.save(_checkDuplicate(logBean));
     }
     /** 
@@ -2274,7 +2311,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link ILogManager#Where(String)}
      */
     //17-2
-    protected int _countLogWhere(String where){
+    protected int _countLogByWhere(String where){
         return logManager.countWhere(where);
     }
     /** 
@@ -2284,12 +2321,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<Integer> _loadLogIdByWhere(String where){
-        return Lists.transform(_loadLogByWhere(where,1,-1),
-            new Function<LogBean,Integer>(){
-                @Override
-                public Integer apply(LogBean input) {
-                    return input.getId();
-                }});
+        return _toPrimaryKeyListFromLogs(_loadLogByWhere(where,1,-1));
     }
     /**
      * (主动更新机制实现)<br>
@@ -2305,6 +2337,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<LogBean> _loadLogByCreateTime(Date timestamp){
         return _loadLogByCreateTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_log.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countLogByWhere(String)
+     */
+    //20-5
+    protected int _countLogByCreateTime(Date timestamp){
+        return _countLogByWhere(makeWhere(timestamp,"create_time"));
     }
     /** 
      * (主动更新机制实现)<br>
@@ -2332,6 +2372,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<LogBean> _loadLogByVerifyTime(Date timestamp){
         return _loadLogByVerifyTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_log.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countLogByWhere(String)
+     */
+    //20-5
+    protected int _countLogByVerifyTime(Date timestamp){
+        return _countLogByWhere(makeWhere(timestamp,"verify_time"));
     }
     /** 
      * (主动更新机制实现)<br>
@@ -2368,7 +2416,7 @@ class DaoUtils implements CommonConstant {
         return permitManager.existsPrimaryKey(deviceGroupId,personGroupId);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IPermitManager#existsPrimaryKey(PermitBean)}
      */
     //4-2
@@ -2403,10 +2451,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deletePermit(Integer,Integer)
      */
     //6
-    protected int _deletePermit(Collection<PermitBean> permitBeanCollection){
-        if(null == permitBeanCollection)return 0;
+    protected int _deletePermits(Collection<PermitBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(PermitBean bean:permitBeanCollection){
+        for(PermitBean bean:beans){
             if(null != bean)
                 count += _deletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
         }
@@ -2476,14 +2524,13 @@ class DaoUtils implements CommonConstant {
      */
     //12
     protected PermitBean _addPermit(PermitBean permitBean)throws DuplicateReord{
-        checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
         return permitManager.save(_checkDuplicate(permitBean));
     }
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * 如果记录已经存在则返回已有记录,如果输入的参数为{@code null}或记录不存在则返回{@code null}
      */
-    //12-3
+    //12-5
     protected PermitBean _addPermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
         if(_existsDeviceGroup(deviceGroupBean) && _existsPersonGroup(personGroupBean)){
             PermitBean permitBean = new PermitBean(deviceGroupBean.getId(),personGroupBean.getId());
@@ -2499,7 +2546,7 @@ class DaoUtils implements CommonConstant {
      * 删除fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
      * @return 删除成功返回0,如果记录不存在或输入的参数为{@code null}则返回0
      */
-    //12-4
+    //12-6
     protected int _deletePermit(DeviceGroupBean deviceGroupBean,PersonGroupBean personGroupBean){
         if(_existsDeviceGroup(deviceGroupBean) && _existsPersonGroup(personGroupBean)){
             return _deletePermit(deviceGroupBean.getId(),personGroupBean.getId());
@@ -2550,7 +2597,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IPermitManager#Where(String)}
      */
     //17-2
-    protected int _countPermitWhere(String where){
+    protected int _countPermitByWhere(String where){
         return permitManager.countWhere(where);
     }
     /**
@@ -2567,6 +2614,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<PermitBean> _loadPermitByCreateTime(Date timestamp){
         return _loadPermitByCreateTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_permit.create_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countPermitByWhere(String)
+     */
+    //20-5
+    protected int _countPermitByCreateTime(Date timestamp){
+        return _countPermitByWhere(makeWhere(timestamp,"create_time"));
     }
 
 
@@ -2587,7 +2642,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IStoreManager#loadByPrimaryKey(Collection)}
      */
     //2    
-    protected List<StoreBean> _getStore(Collection<String> md5Collection){
+    protected List<StoreBean> _getStores(Collection<String> md5Collection){
         return storeManager.loadByPrimaryKey(md5Collection);
     }
     /** 
@@ -2596,13 +2651,17 @@ class DaoUtils implements CommonConstant {
      * @see {@link IStoreManager#deleteByPrimaryKey(Collection)}
      */
     //3  
-    protected int _deleteStoreByPrimaryKey(Collection<String> md5Collection){
+    protected int _deleteStoresByPrimaryKey(Collection<String> md5Collection){
         if(null == md5Collection)return 0;
         int count =0;
         for(String md5:md5Collection){
             count += _deleteStore(md5);
         }
         return count;
+    }
+    //3-5
+    protected List<String> _toPrimaryKeyListFromStores(Collection<StoreBean> beans){
+        return storeManager.toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -2615,7 +2674,7 @@ class DaoUtils implements CommonConstant {
         return storeManager.existsPrimaryKey(md5);
     }
     /** 
-     *　判断主键指定的记录是否存在
+     *　判断指定的记录是否存在
      * @see {@link IStoreManager#existsPrimaryKey(StoreBean)}
      */
     //4-2
@@ -2649,10 +2708,10 @@ class DaoUtils implements CommonConstant {
      * @see #_deleteStore(String)
      */
     //6
-    protected int _deleteStore(Collection<StoreBean> storeBeanCollection){
-        if(null == storeBeanCollection)return 0;
+    protected int _deleteStores(Collection<StoreBean> beans){
+        if(null == beans)return 0;
         int count =0;
-        for(StoreBean bean:storeBeanCollection){
+        for(StoreBean bean:beans){
             if(null != bean)
                 count += _deleteStore(bean.getMd5());
         }
@@ -2682,7 +2741,6 @@ class DaoUtils implements CommonConstant {
      */
     //12
     protected StoreBean _addStore(StoreBean storeBean)throws DuplicateReord{
-        checkArgument(null == storeBean || storeBean.isNew(),"can be add,delete,but modify record for fl_store,so the _isNew field must be true");
         return storeManager.save(_checkDuplicate(storeBean));
     }
     /**
@@ -2708,7 +2766,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link IStoreManager#Where(String)}
      */
     //17-2
-    protected int _countStoreWhere(String where){
+    protected int _countStoreByWhere(String where){
         return storeManager.countWhere(where);
     }
     /** 
@@ -2718,12 +2776,7 @@ class DaoUtils implements CommonConstant {
      */
     //18
     protected List<String> _loadStoreMd5ByWhere(String where){
-        return Lists.transform(_loadStoreByWhere(where,1,-1),
-            new Function<StoreBean,String>(){
-                @Override
-                public String apply(StoreBean input) {
-                    return input.getMd5();
-                }});
+        return _toPrimaryKeyListFromStores(_loadStoreByWhere(where,1,-1));
     }
 
 
@@ -2752,7 +2805,7 @@ class DaoUtils implements CommonConstant {
      * @see {@link ILogLightManager#Where(String)}
      */
     //17-2
-    protected int _countLogLightWhere(String where){
+    protected int _countLogLightByWhere(String where){
         return logLightManager.countWhere(where);
     }
 
@@ -2771,6 +2824,14 @@ class DaoUtils implements CommonConstant {
     //20
     protected List<LogLightBean> _loadLogLightByVerifyTime(Date timestamp){
         return _loadLogLightByVerifyTime(timestamp,1,-1);
+    }
+    /**
+     * 返回fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的记录总数
+     * @see #_countLogLightByWhere(String)
+     */
+    //20-5
+    protected int _countLogLightByVerifyTime(Date timestamp){
+        return _countLogLightByWhere(makeWhere(timestamp,"verify_time"));
     }
 
 }
