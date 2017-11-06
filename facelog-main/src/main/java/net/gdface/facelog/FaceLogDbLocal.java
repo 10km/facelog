@@ -23,8 +23,6 @@ import net.gdface.facelog.db.DeviceBean;
 import net.gdface.facelog.db.DeviceGroupBean;
 import net.gdface.facelog.db.FaceBean;
 import net.gdface.facelog.db.FeatureBean;
-import net.gdface.facelog.db.IDeviceGroupManager;
-import net.gdface.facelog.db.IPersonGroupManager;
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.LogLightBean;
