@@ -1763,14 +1763,24 @@ public  class FaceBean
         resetIsModified();
         return this;
     }
-    
+    /**
+     * Copies the passed bean into the current bean.
+     *
+     * @param bean the bean to copy into the current bean
+     * @return always {@code bean}
+     */
+    public FaceBean copy(FaceBean bean)
+    {
+        return copy(bean,new int[]{});
+    }
     /**
      * Copies the passed bean into the current bean.
      *
      * @param bean the bean to copy into the current bean
      * @param fieldList the column id list to copy into the current bean
+     * @return always {@code bean}
      */
-    public void copy(FaceBean bean, int... fieldList)
+    public FaceBean copy(FaceBean bean, int... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             for (int i = 0; i < 20; ++i) {
@@ -1782,6 +1792,7 @@ public  class FaceBean
                 if( bean.isInitialized(fieldList[i]))
                     setValue(fieldList[i], bean.getValue(fieldList[i]));
             }
+        return this;
     }
         
     /**
@@ -1789,8 +1800,9 @@ public  class FaceBean
      *
      * @param bean the bean to copy into the current bean
      * @param fieldList the column name list to copy into the current bean
+     * @return always {@code bean}
      */
-    public void copy(FaceBean bean, String... fieldList)
+    public FaceBean copy(FaceBean bean, String... fieldList)
     {
         if (null == fieldList || 0 == fieldList.length)
             copy(bean,(int[])null);
@@ -1802,6 +1814,7 @@ public  class FaceBean
                     setValue(field, bean.getValue(field));
             }
         }
+        return this;
     }
 
     /**

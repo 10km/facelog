@@ -52,13 +52,18 @@ public interface IFaceLog
             @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
         );
 
-        @ThriftMethod(value = "countLogLightWhere")
-        ListenableFuture<Integer> countLogLightWhere(
+        @ThriftMethod(value = "countLogByWhere")
+        ListenableFuture<Integer> countLogByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
-        @ThriftMethod(value = "countLogWhere")
-        ListenableFuture<Integer> countLogWhere(
+        @ThriftMethod(value = "countLogLightByVerifyTime")
+        ListenableFuture<Integer> countLogLightByVerifyTime(
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        );
+
+        @ThriftMethod(value = "countLogLightByWhere")
+        ListenableFuture<Integer> countLogLightByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
@@ -222,12 +227,6 @@ public interface IFaceLog
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "getPermitList")
-        ListenableFuture<List<Boolean>> getPermitList(
-            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-            @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
-        );
-
         @ThriftMethod(value = "getPerson")
         ListenableFuture<PersonBean> getPerson(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
@@ -252,6 +251,12 @@ public interface IFaceLog
         ListenableFuture<Boolean> getPersonPermit(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
             @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
+        );
+
+        @ThriftMethod(value = "getPersonPermitList")
+        ListenableFuture<List<Boolean>> getPersonPermitList(
+            @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+            @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
         );
 
         @ThriftMethod(value = "getPersons")
@@ -290,6 +295,13 @@ public interface IFaceLog
         @ThriftMethod(value = "loadLogByWhere")
         ListenableFuture<List<LogBean>> loadLogByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        );
+
+        @ThriftMethod(value = "loadLogLightByVerifyTime")
+        ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(
+            @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
         );
@@ -463,14 +475,20 @@ public interface IFaceLog
     );
 
 
-    @ThriftMethod(value = "countLogLightWhere")
-    int countLogLightWhere(
+    @ThriftMethod(value = "countLogByWhere")
+    int countLogByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
     );
 
 
-    @ThriftMethod(value = "countLogWhere")
-    int countLogWhere(
+    @ThriftMethod(value = "countLogLightByVerifyTime")
+    int countLogLightByVerifyTime(
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+    );
+
+
+    @ThriftMethod(value = "countLogLightByWhere")
+    int countLogLightByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
     );
 
@@ -666,13 +684,6 @@ public interface IFaceLog
     );
 
 
-    @ThriftMethod(value = "getPermitList")
-    List<Boolean> getPermitList(
-        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
-        @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
-    );
-
-
     @ThriftMethod(value = "getPerson")
     PersonBean getPerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
@@ -701,6 +712,13 @@ public interface IFaceLog
     boolean getPersonPermit(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
+    );
+
+
+    @ThriftMethod(value = "getPersonPermitList")
+    List<Boolean> getPersonPermitList(
+        @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
+        @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
     );
 
 
@@ -747,6 +765,14 @@ public interface IFaceLog
     @ThriftMethod(value = "loadLogByWhere")
     List<LogBean> loadLogByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+    );
+
+
+    @ThriftMethod(value = "loadLogLightByVerifyTime")
+    List<LogLightBean> loadLogLightByVerifyTime(
+        @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
     );
