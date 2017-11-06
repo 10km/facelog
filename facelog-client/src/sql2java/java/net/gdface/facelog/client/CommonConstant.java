@@ -20,7 +20,8 @@ import gu.simplemq.Channel;
  */
 public interface CommonConstant {
     public static final Logger logger = LoggerFactory.getLogger(CommonConstant.class);
-
+    /** 默认服务端口号 */
+    public static final int DEFAULT_PORT = 26411;
     /** 设备心跳包表 */
     public static final Channel<Date> TABLE_HEARTBEAT = new Channel<Date>("DeviceHeartbeat"){} ;
     /** 心跳包间隔(秒) */
