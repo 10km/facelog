@@ -38,7 +38,7 @@ import net.gdface.facelog.db.exception.WrapDAOException;
  * @author guyadong
  */
 @ThriftService("IFaceLog")
-public abstract class FaceLogDefinition extends DaoUtils{
+public abstract class FaceLogDefinition extends Dao{
 
 	/**
 	 * 返回personId指定的人员记录

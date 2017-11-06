@@ -2,7 +2,7 @@
 #parse( "schema.include.vm" )
 #parse( "macros.include.vm" )
 #set ( $modifier = 'protected ')
-#set ( $javaClassName = 'DaoUtils' )
+#set ( $javaClassName = 'Dao' )
 $codewriter.setCurrentJavaFilename($extensionPkg, "${javaClassName}.java")
 package $extensionPkg;
 
@@ -28,7 +28,7 @@ import ${schemaPkg}.exception.WrapDAOException;
  * @author guyadong
  *
  */
-class DaoUtils implements CommonConstant {
+class Dao implements CommonConstant {
     #join($tables '
     static final $e.asManagerInterfaceNSP() $e.asVarManager() = TableManagerInitializer.instance.${e.asVarManager()};' '')
 

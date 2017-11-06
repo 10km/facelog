@@ -3,7 +3,7 @@
 // modified by guyadong from
 // sql2java original version https://sourceforge.net/projects/sql2java/ 
 // JDBC driver used at code generation time: com.mysql.jdbc.Driver
-// template: daoutils.java.vm
+// template: dao.java.vm
 // ______________________________________________________
 package net.gdface.facelog;
 
@@ -48,7 +48,7 @@ import net.gdface.facelog.db.exception.WrapDAOException;
  * @author guyadong
  *
  */
-class DaoUtils implements CommonConstant {
+class Dao implements CommonConstant {
     
     static final IDeviceManager deviceManager = TableManagerInitializer.instance.deviceManager;
     static final IDeviceGroupManager deviceGroupManager = TableManagerInitializer.instance.deviceGroupManager;
