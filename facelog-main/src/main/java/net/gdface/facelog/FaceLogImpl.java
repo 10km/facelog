@@ -37,13 +37,18 @@ import net.gdface.utils.Assert;
 import net.gdface.utils.FaceUtilits;
 import net.gdface.utils.Judge;
 
-public class FaceLogDbLocal extends FaceLogDefinition  {
+/**
+ * IFaceLog 服务实现
+ * @author guyadong
+ *
+ */
+public class FaceLogImpl extends FaceLogDefinition  {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
 	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
-	public FaceLogDbLocal() {
+	public FaceLogImpl() {
 		init();
 	}
 	private void init(){
