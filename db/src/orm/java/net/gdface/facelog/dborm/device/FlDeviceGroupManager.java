@@ -2452,7 +2452,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
         int count;
         for(count = 0;null != parent;++count){
             parent = loadByPrimaryKey(parent.getParent());
-            if(equal(id,parent.getId())){
+            if(null != parent  && equal(id,parent.getId())){
                 return -1;
             }
         }

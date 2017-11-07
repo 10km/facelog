@@ -10,6 +10,8 @@ package net.gdface.facelog.db.mysql;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.util.concurrent.UncheckedExecutionException;
+
 import net.gdface.facelog.db.ITableCache;
 import net.gdface.facelog.db.ITableCache.UpdateStrategy;
 import net.gdface.facelog.db.exception.ObjectRetrievalException;
@@ -110,6 +112,18 @@ public class PersonCacheManager extends PersonManager
                 throw re;
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
+            }
+        }catch(UncheckedExecutionException ue){
+            try{
+                throw ue.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ue);
             }
         }
     }
