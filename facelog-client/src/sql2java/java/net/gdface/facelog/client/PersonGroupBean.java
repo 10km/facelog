@@ -728,9 +728,9 @@ public  class PersonGroupBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_person_group.id         
+         * fill the field : fl_person_group.id
          * @param id 用户组id
-         * @see {@link PersonGroupBean#getId}
+         * @see {@link PersonGroupBean#getId()}
          * @see {@link PersonGroupBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -738,9 +738,9 @@ public  class PersonGroupBean
             return this;
         }
         /** 
-         * fill the field : fl_person_group.name         
+         * fill the field : fl_person_group.name
          * @param name 用户组名
-         * @see {@link PersonGroupBean#getName}
+         * @see {@link PersonGroupBean#getName()}
          * @see {@link PersonGroupBean#setName(String)}
          */
         public Builder name(String name){
@@ -748,9 +748,9 @@ public  class PersonGroupBean
             return this;
         }
         /** 
-         * fill the field : fl_person_group.leaf         
+         * fill the field : fl_person_group.leaf
          * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
-         * @see {@link PersonGroupBean#getLeaf}
+         * @see {@link PersonGroupBean#getLeaf()}
          * @see {@link PersonGroupBean#setLeaf(Integer)}
          */
         public Builder leaf(Integer leaf){
@@ -758,9 +758,9 @@ public  class PersonGroupBean
             return this;
         }
         /** 
-         * fill the field : fl_person_group.parent         
+         * fill the field : fl_person_group.parent
          * @param parent 上一级用户组id
-         * @see {@link PersonGroupBean#getParent}
+         * @see {@link PersonGroupBean#getParent()}
          * @see {@link PersonGroupBean#setParent(Integer)}
          */
         public Builder parent(Integer parent){

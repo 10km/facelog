@@ -1091,9 +1091,9 @@ public final class DeviceBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_device.id         
+         * fill the field : fl_device.id
          * @param id 设备id
-         * @see {@link DeviceBean#getId}
+         * @see {@link DeviceBean#getId()}
          * @see {@link DeviceBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -1101,9 +1101,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.group_id         
+         * fill the field : fl_device.group_id
          * @param groupId 所属设备组id
-         * @see {@link DeviceBean#getGroupId}
+         * @see {@link DeviceBean#getGroupId()}
          * @see {@link DeviceBean#setGroupId(Integer)}
          */
         public Builder groupId(Integer groupId){
@@ -1111,9 +1111,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.name         
+         * fill the field : fl_device.name
          * @param name 设备名称
-         * @see {@link DeviceBean#getName}
+         * @see {@link DeviceBean#getName()}
          * @see {@link DeviceBean#setName(String)}
          */
         public Builder name(String name){
@@ -1121,9 +1121,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.version         
+         * fill the field : fl_device.version
          * @param version 设备版本号
-         * @see {@link DeviceBean#getVersion}
+         * @see {@link DeviceBean#getVersion()}
          * @see {@link DeviceBean#setVersion(String)}
          */
         public Builder version(String version){
@@ -1131,9 +1131,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.serial_no         
+         * fill the field : fl_device.serial_no
          * @param serialNo 设备序列号
-         * @see {@link DeviceBean#getSerialNo}
+         * @see {@link DeviceBean#getSerialNo()}
          * @see {@link DeviceBean#setSerialNo(String)}
          */
         public Builder serialNo(String serialNo){
@@ -1141,9 +1141,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.mac         
+         * fill the field : fl_device.mac
          * @param mac 6字节MAC地址(HEX)
-         * @see {@link DeviceBean#getMac}
+         * @see {@link DeviceBean#getMac()}
          * @see {@link DeviceBean#setMac(String)}
          */
         public Builder mac(String mac){
@@ -1151,9 +1151,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.create_time         
+         * fill the field : fl_device.create_time
          * @param createTime 
-         * @see {@link DeviceBean#getCreateTime}
+         * @see {@link DeviceBean#getCreateTime()}
          * @see {@link DeviceBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
@@ -1161,9 +1161,9 @@ public final class DeviceBean
             return this;
         }
         /** 
-         * fill the field : fl_device.update_time         
+         * fill the field : fl_device.update_time
          * @param updateTime 
-         * @see {@link DeviceBean#getUpdateTime}
+         * @see {@link DeviceBean#getUpdateTime()}
          * @see {@link DeviceBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){

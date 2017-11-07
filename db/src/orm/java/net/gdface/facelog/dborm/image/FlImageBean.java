@@ -1057,9 +1057,9 @@ public  class FlImageBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_image.md5         
+         * fill the field : fl_image.md5
          * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key
-         * @see {@link FlImageBean#getMd5}
+         * @see {@link FlImageBean#getMd5()}
          * @see {@link FlImageBean#setMd5(String)}
          */
         public Builder md5(String md5){
@@ -1067,9 +1067,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.format         
+         * fill the field : fl_image.format
          * @param format 图像格式
-         * @see {@link FlImageBean#getFormat}
+         * @see {@link FlImageBean#getFormat()}
          * @see {@link FlImageBean#setFormat(String)}
          */
         public Builder format(String format){
@@ -1077,9 +1077,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.width         
+         * fill the field : fl_image.width
          * @param width 图像宽度
-         * @see {@link FlImageBean#getWidth}
+         * @see {@link FlImageBean#getWidth()}
          * @see {@link FlImageBean#setWidth(Integer)}
          */
         public Builder width(Integer width){
@@ -1087,9 +1087,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.height         
+         * fill the field : fl_image.height
          * @param height 图像高度
-         * @see {@link FlImageBean#getHeight}
+         * @see {@link FlImageBean#getHeight()}
          * @see {@link FlImageBean#setHeight(Integer)}
          */
         public Builder height(Integer height){
@@ -1097,9 +1097,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.depth         
+         * fill the field : fl_image.depth
          * @param depth 通道数
-         * @see {@link FlImageBean#getDepth}
+         * @see {@link FlImageBean#getDepth()}
          * @see {@link FlImageBean#setDepth(Integer)}
          */
         public Builder depth(Integer depth){
@@ -1107,9 +1107,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.face_num         
+         * fill the field : fl_image.face_num
          * @param faceNum 图像中的人脸数目
-         * @see {@link FlImageBean#getFaceNum}
+         * @see {@link FlImageBean#getFaceNum()}
          * @see {@link FlImageBean#setFaceNum(Integer)}
          */
         public Builder faceNum(Integer faceNum){
@@ -1117,9 +1117,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.thumb_md5         
+         * fill the field : fl_image.thumb_md5
          * @param thumbMd5 缩略图md5,图像数据存储在 fl_imae_store(md5)
-         * @see {@link FlImageBean#getThumbMd5}
+         * @see {@link FlImageBean#getThumbMd5()}
          * @see {@link FlImageBean#setThumbMd5(String)}
          */
         public Builder thumbMd5(String thumbMd5){
@@ -1127,9 +1127,9 @@ public  class FlImageBean
             return this;
         }
         /** 
-         * fill the field : fl_image.device_id         
+         * fill the field : fl_image.device_id
          * @param deviceId 外键,图像来源设备
-         * @see {@link FlImageBean#getDeviceId}
+         * @see {@link FlImageBean#getDeviceId()}
          * @see {@link FlImageBean#setDeviceId(Integer)}
          */
         public Builder deviceId(Integer deviceId){

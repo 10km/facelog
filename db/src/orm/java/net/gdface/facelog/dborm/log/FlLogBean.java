@@ -1118,9 +1118,9 @@ public  class FlLogBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_log.id         
+         * fill the field : fl_log.id
          * @param id 日志id
-         * @see {@link FlLogBean#getId}
+         * @see {@link FlLogBean#getId()}
          * @see {@link FlLogBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -1128,9 +1128,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.person_id         
+         * fill the field : fl_log.person_id
          * @param personId 外键,用户id
-         * @see {@link FlLogBean#getPersonId}
+         * @see {@link FlLogBean#getPersonId()}
          * @see {@link FlLogBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
@@ -1138,9 +1138,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.device_id         
+         * fill the field : fl_log.device_id
          * @param deviceId 外键,图像来源设备id
-         * @see {@link FlLogBean#getDeviceId}
+         * @see {@link FlLogBean#getDeviceId()}
          * @see {@link FlLogBean#setDeviceId(Integer)}
          */
         public Builder deviceId(Integer deviceId){
@@ -1148,9 +1148,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.verify_feature         
+         * fill the field : fl_log.verify_feature
          * @param verifyFeature 外键,用于验证身份的人脸特征数据MD5 id
-         * @see {@link FlLogBean#getVerifyFeature}
+         * @see {@link FlLogBean#getVerifyFeature()}
          * @see {@link FlLogBean#setVerifyFeature(String)}
          */
         public Builder verifyFeature(String verifyFeature){
@@ -1158,9 +1158,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.compare_face         
+         * fill the field : fl_log.compare_face
          * @param compareFace 外键,数据库中相似度最高的人脸 id
-         * @see {@link FlLogBean#getCompareFace}
+         * @see {@link FlLogBean#getCompareFace()}
          * @see {@link FlLogBean#setCompareFace(Integer)}
          */
         public Builder compareFace(Integer compareFace){
@@ -1168,9 +1168,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.similarty         
+         * fill the field : fl_log.similarty
          * @param similarty 验证相似度
-         * @see {@link FlLogBean#getSimilarty}
+         * @see {@link FlLogBean#getSimilarty()}
          * @see {@link FlLogBean#setSimilarty(Double)}
          */
         public Builder similarty(Double similarty){
@@ -1178,9 +1178,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.verify_time         
+         * fill the field : fl_log.verify_time
          * @param verifyTime 验证时间(可能由前端设备提供时间)
-         * @see {@link FlLogBean#getVerifyTime}
+         * @see {@link FlLogBean#getVerifyTime()}
          * @see {@link FlLogBean#setVerifyTime(java.util.Date)}
          */
         public Builder verifyTime(java.util.Date verifyTime){
@@ -1188,9 +1188,9 @@ public  class FlLogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.create_time         
+         * fill the field : fl_log.create_time
          * @param createTime 
-         * @see {@link FlLogBean#getCreateTime}
+         * @see {@link FlLogBean#getCreateTime()}
          * @see {@link FlLogBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){

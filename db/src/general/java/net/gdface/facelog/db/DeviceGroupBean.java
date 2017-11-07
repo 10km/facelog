@@ -746,9 +746,9 @@ public final class DeviceGroupBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_device_group.id         
+         * fill the field : fl_device_group.id
          * @param id 设备组id
-         * @see {@link DeviceGroupBean#getId}
+         * @see {@link DeviceGroupBean#getId()}
          * @see {@link DeviceGroupBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -756,9 +756,9 @@ public final class DeviceGroupBean
             return this;
         }
         /** 
-         * fill the field : fl_device_group.name         
+         * fill the field : fl_device_group.name
          * @param name 设备组名
-         * @see {@link DeviceGroupBean#getName}
+         * @see {@link DeviceGroupBean#getName()}
          * @see {@link DeviceGroupBean#setName(String)}
          */
         public Builder name(String name){
@@ -766,9 +766,9 @@ public final class DeviceGroupBean
             return this;
         }
         /** 
-         * fill the field : fl_device_group.leaf         
+         * fill the field : fl_device_group.leaf
          * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
-         * @see {@link DeviceGroupBean#getLeaf}
+         * @see {@link DeviceGroupBean#getLeaf()}
          * @see {@link DeviceGroupBean#setLeaf(Integer)}
          */
         public Builder leaf(Integer leaf){
@@ -776,9 +776,9 @@ public final class DeviceGroupBean
             return this;
         }
         /** 
-         * fill the field : fl_device_group.parent         
+         * fill the field : fl_device_group.parent
          * @param parent 上一级设备组id
-         * @see {@link DeviceGroupBean#getParent}
+         * @see {@link DeviceGroupBean#getParent()}
          * @see {@link DeviceGroupBean#setParent(Integer)}
          */
         public Builder parent(Integer parent){

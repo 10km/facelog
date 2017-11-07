@@ -667,9 +667,9 @@ public  class PermitBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_permit.device_group_id         
+         * fill the field : fl_permit.device_group_id
          * @param deviceGroupId 外键,设备组id
-         * @see {@link PermitBean#getDeviceGroupId}
+         * @see {@link PermitBean#getDeviceGroupId()}
          * @see {@link PermitBean#setDeviceGroupId(Integer)}
          */
         public Builder deviceGroupId(Integer deviceGroupId){
@@ -677,9 +677,9 @@ public  class PermitBean
             return this;
         }
         /** 
-         * fill the field : fl_permit.person_group_id         
+         * fill the field : fl_permit.person_group_id
          * @param personGroupId 外键,人员组id
-         * @see {@link PermitBean#getPersonGroupId}
+         * @see {@link PermitBean#getPersonGroupId()}
          * @see {@link PermitBean#setPersonGroupId(Integer)}
          */
         public Builder personGroupId(Integer personGroupId){
@@ -687,9 +687,9 @@ public  class PermitBean
             return this;
         }
         /** 
-         * fill the field : fl_permit.create_time         
+         * fill the field : fl_permit.create_time
          * @param createTime 
-         * @see {@link PermitBean#getCreateTime}
+         * @see {@link PermitBean#getCreateTime()}
          * @see {@link PermitBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){

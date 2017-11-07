@@ -869,9 +869,9 @@ public  class LogLightBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_log_light.id         
+         * fill the field : fl_log_light.id
          * @param id 日志id
-         * @see {@link LogLightBean#getId}
+         * @see {@link LogLightBean#getId()}
          * @see {@link LogLightBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -879,9 +879,9 @@ public  class LogLightBean
             return this;
         }
         /** 
-         * fill the field : fl_log_light.person_id         
+         * fill the field : fl_log_light.person_id
          * @param personId 用户id
-         * @see {@link LogLightBean#getPersonId}
+         * @see {@link LogLightBean#getPersonId()}
          * @see {@link LogLightBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
@@ -889,9 +889,9 @@ public  class LogLightBean
             return this;
         }
         /** 
-         * fill the field : fl_log_light.name         
+         * fill the field : fl_log_light.name
          * @param name 姓名
-         * @see {@link LogLightBean#getName}
+         * @see {@link LogLightBean#getName()}
          * @see {@link LogLightBean#setName(String)}
          */
         public Builder name(String name){
@@ -899,9 +899,9 @@ public  class LogLightBean
             return this;
         }
         /** 
-         * fill the field : fl_log_light.papers_type         
+         * fill the field : fl_log_light.papers_type
          * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-         * @see {@link LogLightBean#getPapersType}
+         * @see {@link LogLightBean#getPapersType()}
          * @see {@link LogLightBean#setPapersType(Integer)}
          */
         public Builder papersType(Integer papersType){
@@ -909,9 +909,9 @@ public  class LogLightBean
             return this;
         }
         /** 
-         * fill the field : fl_log_light.papers_num         
+         * fill the field : fl_log_light.papers_num
          * @param papersNum 证件号码
-         * @see {@link LogLightBean#getPapersNum}
+         * @see {@link LogLightBean#getPapersNum()}
          * @see {@link LogLightBean#setPapersNum(String)}
          */
         public Builder papersNum(String papersNum){
@@ -919,9 +919,9 @@ public  class LogLightBean
             return this;
         }
         /** 
-         * fill the field : fl_log_light.verify_time         
+         * fill the field : fl_log_light.verify_time
          * @param verifyTime 验证时间(可能由前端设备提供时间)
-         * @see {@link LogLightBean#getVerifyTime}
+         * @see {@link LogLightBean#getVerifyTime()}
          * @see {@link LogLightBean#setVerifyTime(java.util.Date)}
          */
         public Builder verifyTime(java.util.Date verifyTime){

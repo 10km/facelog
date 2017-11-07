@@ -1163,9 +1163,9 @@ public final class LogBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_log.id         
+         * fill the field : fl_log.id
          * @param id 日志id
-         * @see {@link LogBean#getId}
+         * @see {@link LogBean#getId()}
          * @see {@link LogBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -1173,9 +1173,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.person_id         
+         * fill the field : fl_log.person_id
          * @param personId 外键,用户id
-         * @see {@link LogBean#getPersonId}
+         * @see {@link LogBean#getPersonId()}
          * @see {@link LogBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
@@ -1183,9 +1183,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.device_id         
+         * fill the field : fl_log.device_id
          * @param deviceId 外键,图像来源设备id
-         * @see {@link LogBean#getDeviceId}
+         * @see {@link LogBean#getDeviceId()}
          * @see {@link LogBean#setDeviceId(Integer)}
          */
         public Builder deviceId(Integer deviceId){
@@ -1193,9 +1193,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.verify_feature         
+         * fill the field : fl_log.verify_feature
          * @param verifyFeature 外键,用于验证身份的人脸特征数据MD5 id
-         * @see {@link LogBean#getVerifyFeature}
+         * @see {@link LogBean#getVerifyFeature()}
          * @see {@link LogBean#setVerifyFeature(String)}
          */
         public Builder verifyFeature(String verifyFeature){
@@ -1203,9 +1203,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.compare_face         
+         * fill the field : fl_log.compare_face
          * @param compareFace 外键,数据库中相似度最高的人脸 id
-         * @see {@link LogBean#getCompareFace}
+         * @see {@link LogBean#getCompareFace()}
          * @see {@link LogBean#setCompareFace(Integer)}
          */
         public Builder compareFace(Integer compareFace){
@@ -1213,9 +1213,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.similarty         
+         * fill the field : fl_log.similarty
          * @param similarty 验证相似度
-         * @see {@link LogBean#getSimilarty}
+         * @see {@link LogBean#getSimilarty()}
          * @see {@link LogBean#setSimilarty(Double)}
          */
         public Builder similarty(Double similarty){
@@ -1223,9 +1223,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.verify_time         
+         * fill the field : fl_log.verify_time
          * @param verifyTime 验证时间(可能由前端设备提供时间)
-         * @see {@link LogBean#getVerifyTime}
+         * @see {@link LogBean#getVerifyTime()}
          * @see {@link LogBean#setVerifyTime(java.util.Date)}
          */
         public Builder verifyTime(java.util.Date verifyTime){
@@ -1233,9 +1233,9 @@ public final class LogBean
             return this;
         }
         /** 
-         * fill the field : fl_log.create_time         
+         * fill the field : fl_log.create_time
          * @param createTime 
-         * @see {@link LogBean#getCreateTime}
+         * @see {@link LogBean#getCreateTime()}
          * @see {@link LogBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){

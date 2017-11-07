@@ -748,9 +748,9 @@ public final class FeatureBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_feature.md5         
+         * fill the field : fl_feature.md5
          * @param md5 主键,特征码md5校验码
-         * @see {@link FeatureBean#getMd5}
+         * @see {@link FeatureBean#getMd5()}
          * @see {@link FeatureBean#setMd5(String)}
          */
         public Builder md5(String md5){
@@ -758,9 +758,9 @@ public final class FeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.person_id         
+         * fill the field : fl_feature.person_id
          * @param personId 外键,所属用户id
-         * @see {@link FeatureBean#getPersonId}
+         * @see {@link FeatureBean#getPersonId()}
          * @see {@link FeatureBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
@@ -768,9 +768,9 @@ public final class FeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.feature         
+         * fill the field : fl_feature.feature
          * @param feature 二进制特征数据
-         * @see {@link FeatureBean#getFeature}
+         * @see {@link FeatureBean#getFeature()}
          * @see {@link FeatureBean#setFeature(java.nio.ByteBuffer)}
          */
         public Builder feature(java.nio.ByteBuffer feature){
@@ -778,9 +778,9 @@ public final class FeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.update_time         
+         * fill the field : fl_feature.update_time
          * @param updateTime 
-         * @see {@link FeatureBean#getUpdateTime}
+         * @see {@link FeatureBean#getUpdateTime()}
          * @see {@link FeatureBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){

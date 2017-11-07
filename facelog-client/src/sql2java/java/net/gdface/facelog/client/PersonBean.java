@@ -1318,9 +1318,9 @@ public  class PersonBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_person.id         
+         * fill the field : fl_person.id
          * @param id 用户id
-         * @see {@link PersonBean#getId}
+         * @see {@link PersonBean#getId()}
          * @see {@link PersonBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -1328,9 +1328,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.group_id         
+         * fill the field : fl_person.group_id
          * @param groupId 所属用户组id
-         * @see {@link PersonBean#getGroupId}
+         * @see {@link PersonBean#getGroupId()}
          * @see {@link PersonBean#setGroupId(Integer)}
          */
         public Builder groupId(Integer groupId){
@@ -1338,9 +1338,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.name         
+         * fill the field : fl_person.name
          * @param name 姓名
-         * @see {@link PersonBean#getName}
+         * @see {@link PersonBean#getName()}
          * @see {@link PersonBean#setName(String)}
          */
         public Builder name(String name){
@@ -1348,9 +1348,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.sex         
+         * fill the field : fl_person.sex
          * @param sex 性别,0:女,1:男
-         * @see {@link PersonBean#getSex}
+         * @see {@link PersonBean#getSex()}
          * @see {@link PersonBean#setSex(Integer)}
          */
         public Builder sex(Integer sex){
@@ -1358,9 +1358,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.birthdate         
+         * fill the field : fl_person.birthdate
          * @param birthdate 出生日期
-         * @see {@link PersonBean#getBirthdate}
+         * @see {@link PersonBean#getBirthdate()}
          * @see {@link PersonBean#setBirthdate(java.util.Date)}
          */
         public Builder birthdate(java.util.Date birthdate){
@@ -1368,9 +1368,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.papers_type         
+         * fill the field : fl_person.papers_type
          * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
-         * @see {@link PersonBean#getPapersType}
+         * @see {@link PersonBean#getPapersType()}
          * @see {@link PersonBean#setPapersType(Integer)}
          */
         public Builder papersType(Integer papersType){
@@ -1378,9 +1378,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.papers_num         
+         * fill the field : fl_person.papers_num
          * @param papersNum 证件号码
-         * @see {@link PersonBean#getPapersNum}
+         * @see {@link PersonBean#getPapersNum()}
          * @see {@link PersonBean#setPapersNum(String)}
          */
         public Builder papersNum(String papersNum){
@@ -1388,9 +1388,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.image_md5         
+         * fill the field : fl_person.image_md5
          * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
-         * @see {@link PersonBean#getImageMd5}
+         * @see {@link PersonBean#getImageMd5()}
          * @see {@link PersonBean#setImageMd5(String)}
          */
         public Builder imageMd5(String imageMd5){
@@ -1398,9 +1398,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.expiry_date         
+         * fill the field : fl_person.expiry_date
          * @param expiryDate 验证有效期限(超过期限不能通过验证),为NULL永久有效
-         * @see {@link PersonBean#getExpiryDate}
+         * @see {@link PersonBean#getExpiryDate()}
          * @see {@link PersonBean#setExpiryDate(java.util.Date)}
          */
         public Builder expiryDate(java.util.Date expiryDate){
@@ -1408,9 +1408,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.create_time         
+         * fill the field : fl_person.create_time
          * @param createTime 
-         * @see {@link PersonBean#getCreateTime}
+         * @see {@link PersonBean#getCreateTime()}
          * @see {@link PersonBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
@@ -1418,9 +1418,9 @@ public  class PersonBean
             return this;
         }
         /** 
-         * fill the field : fl_person.update_time         
+         * fill the field : fl_person.update_time
          * @param updateTime 
-         * @see {@link PersonBean#getUpdateTime}
+         * @see {@link PersonBean#getUpdateTime()}
          * @see {@link PersonBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){

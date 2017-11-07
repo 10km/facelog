@@ -722,9 +722,9 @@ public  class FlFeatureBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_feature.md5         
+         * fill the field : fl_feature.md5
          * @param md5 主键,特征码md5校验码
-         * @see {@link FlFeatureBean#getMd5}
+         * @see {@link FlFeatureBean#getMd5()}
          * @see {@link FlFeatureBean#setMd5(String)}
          */
         public Builder md5(String md5){
@@ -732,9 +732,9 @@ public  class FlFeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.person_id         
+         * fill the field : fl_feature.person_id
          * @param personId 外键,所属用户id
-         * @see {@link FlFeatureBean#getPersonId}
+         * @see {@link FlFeatureBean#getPersonId()}
          * @see {@link FlFeatureBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
@@ -742,9 +742,9 @@ public  class FlFeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.feature         
+         * fill the field : fl_feature.feature
          * @param feature 二进制特征数据
-         * @see {@link FlFeatureBean#getFeature}
+         * @see {@link FlFeatureBean#getFeature()}
          * @see {@link FlFeatureBean#setFeature(java.nio.ByteBuffer)}
          */
         public Builder feature(java.nio.ByteBuffer feature){
@@ -752,9 +752,9 @@ public  class FlFeatureBean
             return this;
         }
         /** 
-         * fill the field : fl_feature.update_time         
+         * fill the field : fl_feature.update_time
          * @param updateTime 
-         * @see {@link FlFeatureBean#getUpdateTime}
+         * @see {@link FlFeatureBean#getUpdateTime()}
          * @see {@link FlFeatureBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){

@@ -617,9 +617,9 @@ public final class StoreBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_store.md5         
+         * fill the field : fl_store.md5
          * @param md5 主键,md5检验码
-         * @see {@link StoreBean#getMd5}
+         * @see {@link StoreBean#getMd5()}
          * @see {@link StoreBean#setMd5(String)}
          */
         public Builder md5(String md5){
@@ -627,9 +627,9 @@ public final class StoreBean
             return this;
         }
         /** 
-         * fill the field : fl_store.encoding         
+         * fill the field : fl_store.encoding
          * @param encoding 编码类型,GBK,UTF8...
-         * @see {@link StoreBean#getEncoding}
+         * @see {@link StoreBean#getEncoding()}
          * @see {@link StoreBean#setEncoding(String)}
          */
         public Builder encoding(String encoding){
@@ -637,9 +637,9 @@ public final class StoreBean
             return this;
         }
         /** 
-         * fill the field : fl_store.data         
+         * fill the field : fl_store.data
          * @param data 二进制数据
-         * @see {@link StoreBean#getData}
+         * @see {@link StoreBean#getData()}
          * @see {@link StoreBean#setData(java.nio.ByteBuffer)}
          */
         public Builder data(java.nio.ByteBuffer data){

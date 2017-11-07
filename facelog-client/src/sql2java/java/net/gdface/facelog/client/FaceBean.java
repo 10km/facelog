@@ -2050,9 +2050,9 @@ public  class FaceBean
             return template.get().clone();
         }
         /** 
-         * fill the field : fl_face.id         
+         * fill the field : fl_face.id
          * @param id 主键
-         * @see {@link FaceBean#getId}
+         * @see {@link FaceBean#getId()}
          * @see {@link FaceBean#setId(Integer)}
          */
         public Builder id(Integer id){
@@ -2060,9 +2060,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.image_md5         
+         * fill the field : fl_face.image_md5
          * @param imageMd5 外键,所属图像id
-         * @see {@link FaceBean#getImageMd5}
+         * @see {@link FaceBean#getImageMd5()}
          * @see {@link FaceBean#setImageMd5(String)}
          */
         public Builder imageMd5(String imageMd5){
@@ -2070,9 +2070,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.face_left         
+         * fill the field : fl_face.face_left
          * @param faceLeft 
-         * @see {@link FaceBean#getFaceLeft}
+         * @see {@link FaceBean#getFaceLeft()}
          * @see {@link FaceBean#setFaceLeft(Integer)}
          */
         public Builder faceLeft(Integer faceLeft){
@@ -2080,9 +2080,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.face_top         
+         * fill the field : fl_face.face_top
          * @param faceTop 
-         * @see {@link FaceBean#getFaceTop}
+         * @see {@link FaceBean#getFaceTop()}
          * @see {@link FaceBean#setFaceTop(Integer)}
          */
         public Builder faceTop(Integer faceTop){
@@ -2090,9 +2090,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.face_width         
+         * fill the field : fl_face.face_width
          * @param faceWidth 
-         * @see {@link FaceBean#getFaceWidth}
+         * @see {@link FaceBean#getFaceWidth()}
          * @see {@link FaceBean#setFaceWidth(Integer)}
          */
         public Builder faceWidth(Integer faceWidth){
@@ -2100,9 +2100,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.face_height         
+         * fill the field : fl_face.face_height
          * @param faceHeight 
-         * @see {@link FaceBean#getFaceHeight}
+         * @see {@link FaceBean#getFaceHeight()}
          * @see {@link FaceBean#setFaceHeight(Integer)}
          */
         public Builder faceHeight(Integer faceHeight){
@@ -2110,9 +2110,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.eye_leftx         
+         * fill the field : fl_face.eye_leftx
          * @param eyeLeftx 
-         * @see {@link FaceBean#getEyeLeftx}
+         * @see {@link FaceBean#getEyeLeftx()}
          * @see {@link FaceBean#setEyeLeftx(Integer)}
          */
         public Builder eyeLeftx(Integer eyeLeftx){
@@ -2120,9 +2120,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.eye_lefty         
+         * fill the field : fl_face.eye_lefty
          * @param eyeLefty 
-         * @see {@link FaceBean#getEyeLefty}
+         * @see {@link FaceBean#getEyeLefty()}
          * @see {@link FaceBean#setEyeLefty(Integer)}
          */
         public Builder eyeLefty(Integer eyeLefty){
@@ -2130,9 +2130,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.eye_rightx         
+         * fill the field : fl_face.eye_rightx
          * @param eyeRightx 
-         * @see {@link FaceBean#getEyeRightx}
+         * @see {@link FaceBean#getEyeRightx()}
          * @see {@link FaceBean#setEyeRightx(Integer)}
          */
         public Builder eyeRightx(Integer eyeRightx){
@@ -2140,9 +2140,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.eye_righty         
+         * fill the field : fl_face.eye_righty
          * @param eyeRighty 
-         * @see {@link FaceBean#getEyeRighty}
+         * @see {@link FaceBean#getEyeRighty()}
          * @see {@link FaceBean#setEyeRighty(Integer)}
          */
         public Builder eyeRighty(Integer eyeRighty){
@@ -2150,9 +2150,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.mouth_x         
+         * fill the field : fl_face.mouth_x
          * @param mouthX 
-         * @see {@link FaceBean#getMouthX}
+         * @see {@link FaceBean#getMouthX()}
          * @see {@link FaceBean#setMouthX(Integer)}
          */
         public Builder mouthX(Integer mouthX){
@@ -2160,9 +2160,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.mouth_y         
+         * fill the field : fl_face.mouth_y
          * @param mouthY 
-         * @see {@link FaceBean#getMouthY}
+         * @see {@link FaceBean#getMouthY()}
          * @see {@link FaceBean#setMouthY(Integer)}
          */
         public Builder mouthY(Integer mouthY){
@@ -2170,9 +2170,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.nose_x         
+         * fill the field : fl_face.nose_x
          * @param noseX 
-         * @see {@link FaceBean#getNoseX}
+         * @see {@link FaceBean#getNoseX()}
          * @see {@link FaceBean#setNoseX(Integer)}
          */
         public Builder noseX(Integer noseX){
@@ -2180,9 +2180,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.nose_y         
+         * fill the field : fl_face.nose_y
          * @param noseY 
-         * @see {@link FaceBean#getNoseY}
+         * @see {@link FaceBean#getNoseY()}
          * @see {@link FaceBean#setNoseY(Integer)}
          */
         public Builder noseY(Integer noseY){
@@ -2190,9 +2190,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.angle_yaw         
+         * fill the field : fl_face.angle_yaw
          * @param angleYaw 
-         * @see {@link FaceBean#getAngleYaw}
+         * @see {@link FaceBean#getAngleYaw()}
          * @see {@link FaceBean#setAngleYaw(Integer)}
          */
         public Builder angleYaw(Integer angleYaw){
@@ -2200,9 +2200,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.angle_pitch         
+         * fill the field : fl_face.angle_pitch
          * @param anglePitch 
-         * @see {@link FaceBean#getAnglePitch}
+         * @see {@link FaceBean#getAnglePitch()}
          * @see {@link FaceBean#setAnglePitch(Integer)}
          */
         public Builder anglePitch(Integer anglePitch){
@@ -2210,9 +2210,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.angle_roll         
+         * fill the field : fl_face.angle_roll
          * @param angleRoll 
-         * @see {@link FaceBean#getAngleRoll}
+         * @see {@link FaceBean#getAngleRoll()}
          * @see {@link FaceBean#setAngleRoll(Integer)}
          */
         public Builder angleRoll(Integer angleRoll){
@@ -2220,9 +2220,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.ext_info         
+         * fill the field : fl_face.ext_info
          * @param extInfo 扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析
-         * @see {@link FaceBean#getExtInfo}
+         * @see {@link FaceBean#getExtInfo()}
          * @see {@link FaceBean#setExtInfo(byte[])}
          */
         public Builder extInfo(byte[] extInfo){
@@ -2230,9 +2230,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.feature_md5         
+         * fill the field : fl_face.feature_md5
          * @param featureMd5 外键,人脸特征数据MD5 id
-         * @see {@link FaceBean#getFeatureMd5}
+         * @see {@link FaceBean#getFeatureMd5()}
          * @see {@link FaceBean#setFeatureMd5(String)}
          */
         public Builder featureMd5(String featureMd5){
@@ -2240,9 +2240,9 @@ public  class FaceBean
             return this;
         }
         /** 
-         * fill the field : fl_face.create_time         
+         * fill the field : fl_face.create_time
          * @param createTime 
-         * @see {@link FaceBean#getCreateTime}
+         * @see {@link FaceBean#getCreateTime()}
          * @see {@link FaceBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
