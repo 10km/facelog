@@ -96,6 +96,12 @@ public  class FlFeatureBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public FlFeatureBean(){
         super();
         reset();
@@ -137,8 +143,7 @@ public  class FlFeatureBean
      */
     public void setMd5(String newVal)
     {
-        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && checkMd5Initialized())) {
+        if (equal(newVal, md5) && checkMd5Initialized()) {
             return;
         }
         md5 = newVal;
@@ -194,8 +199,7 @@ public  class FlFeatureBean
      */
     public void setPersonId(Integer newVal)
     {
-        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && checkPersonIdInitialized())) {
+        if (equal(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
         personId = newVal;
@@ -261,8 +265,7 @@ public  class FlFeatureBean
      */
     public void setFeature(java.nio.ByteBuffer newVal)
     {
-        if ((newVal != null && feature != null && (newVal.compareTo(feature) == 0)) ||
-            (newVal == null && feature == null && checkFeatureInitialized())) {
+        if (equal(newVal, feature) && checkFeatureInitialized()) {
             return;
         }
         feature = newVal;
@@ -318,8 +321,7 @@ public  class FlFeatureBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
-        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
+        if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
         updateTime = newVal;
@@ -517,13 +519,27 @@ public  class FlFeatureBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tmd5=").append(getMd5()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
-            .append("\tfeature=").append(getFeature()).append("\n")
-            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("md5=").append(getMd5());
+        }
+        if(checkPersonIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("person_id=").append(getPersonId());
+        }
+        if(checkFeatureInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("feature=").append(getFeature());
+        }
+        if(checkUpdateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("update_time=").append(getUpdateTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

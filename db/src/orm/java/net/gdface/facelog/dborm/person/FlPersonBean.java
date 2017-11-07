@@ -116,6 +116,12 @@ public  class FlPersonBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public FlPersonBean(){
         super();
         reset();
@@ -158,8 +164,7 @@ public  class FlPersonBean
      */
     public void setId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && checkIdInitialized())) {
+        if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -226,8 +231,7 @@ public  class FlPersonBean
      */
     public void setGroupId(Integer newVal)
     {
-        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && checkGroupIdInitialized())) {
+        if (equal(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
         groupId = newVal;
@@ -293,8 +297,7 @@ public  class FlPersonBean
      */
     public void setName(String newVal)
     {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && checkNameInitialized())) {
+        if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -349,8 +352,7 @@ public  class FlPersonBean
      */
     public void setSex(Integer newVal)
     {
-        if ((newVal != null && sex != null && (newVal.compareTo(sex) == 0)) ||
-            (newVal == null && sex == null && checkSexInitialized())) {
+        if (equal(newVal, sex) && checkSexInitialized()) {
             return;
         }
         sex = newVal;
@@ -415,8 +417,7 @@ public  class FlPersonBean
      */
     public void setBirthdate(java.util.Date newVal)
     {
-        if ((newVal != null && birthdate != null && (newVal.compareTo(birthdate) == 0)) ||
-            (newVal == null && birthdate == null && checkBirthdateInitialized())) {
+        if (equal(newVal, birthdate) && checkBirthdateInitialized()) {
             return;
         }
         birthdate = newVal;
@@ -481,8 +482,7 @@ public  class FlPersonBean
      */
     public void setPapersType(Integer newVal)
     {
-        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && checkPapersTypeInitialized())) {
+        if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
             return;
         }
         papersType = newVal;
@@ -547,8 +547,7 @@ public  class FlPersonBean
      */
     public void setPapersNum(String newVal)
     {
-        if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && checkPapersNumInitialized())) {
+        if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
             return;
         }
         papersNum = newVal;
@@ -604,8 +603,7 @@ public  class FlPersonBean
      */
     public void setImageMd5(String newVal)
     {
-        if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
-            (newVal == null && imageMd5 == null && checkImageMd5Initialized())) {
+        if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
         imageMd5 = newVal;
@@ -661,8 +659,7 @@ public  class FlPersonBean
      */
     public void setExpiryDate(java.util.Date newVal)
     {
-        if ((newVal != null && expiryDate != null && (newVal.compareTo(expiryDate) == 0)) ||
-            (newVal == null && expiryDate == null && checkExpiryDateInitialized())) {
+        if (equal(newVal, expiryDate) && checkExpiryDateInitialized()) {
             return;
         }
         expiryDate = newVal;
@@ -728,8 +725,7 @@ public  class FlPersonBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -795,8 +791,7 @@ public  class FlPersonBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
-        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
+        if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
         updateTime = newVal;
@@ -1056,20 +1051,55 @@ public  class FlPersonBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tid=").append(getId()).append("\n")
-            .append("\tgroup_id=").append(getGroupId()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
-            .append("\tsex=").append(getSex()).append("\n")
-            .append("\tbirthdate=").append(getBirthdate()).append("\n")
-            .append("\tpapers_type=").append(getPapersType()).append("\n")
-            .append("\tpapers_num=").append(getPapersNum()).append("\n")
-            .append("\timage_md5=").append(getImageMd5()).append("\n")
-            .append("\texpiry_date=").append(getExpiryDate()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("id=").append(getId());
+        }
+        if(checkGroupIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("group_id=").append(getGroupId());
+        }
+        if(checkNameInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("name=").append(getName());
+        }
+        if(checkSexInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("sex=").append(getSex());
+        }
+        if(checkBirthdateInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("birthdate=").append(getBirthdate());
+        }
+        if(checkPapersTypeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("papers_type=").append(getPapersType());
+        }
+        if(checkPapersNumInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("papers_num=").append(getPapersNum());
+        }
+        if(checkImageMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("image_md5=").append(getImageMd5());
+        }
+        if(checkExpiryDateInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("expiry_date=").append(getExpiryDate());
+        }
+        if(checkCreateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("create_time=").append(getCreateTime());
+        }
+        if(checkUpdateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("update_time=").append(getUpdateTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

@@ -87,6 +87,12 @@ public  class PermitBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public PermitBean(){
         super();
         reset();
@@ -129,8 +135,7 @@ public  class PermitBean
      */
     public void setDeviceGroupId(Integer newVal)
     {
-        if ((newVal != null && deviceGroupId != null && (newVal.compareTo(deviceGroupId) == 0)) ||
-            (newVal == null && deviceGroupId == null && checkDeviceGroupIdInitialized())) {
+        if (equal(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
             return;
         }
         deviceGroupId = newVal;
@@ -198,8 +203,7 @@ public  class PermitBean
      */
     public void setPersonGroupId(Integer newVal)
     {
-        if ((newVal != null && personGroupId != null && (newVal.compareTo(personGroupId) == 0)) ||
-            (newVal == null && personGroupId == null && checkPersonGroupIdInitialized())) {
+        if (equal(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
             return;
         }
         personGroupId = newVal;
@@ -265,8 +269,7 @@ public  class PermitBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -471,12 +474,23 @@ public  class PermitBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tdevice_group_id=").append(getDeviceGroupId()).append("\n")
-            .append("\tperson_group_id=").append(getPersonGroupId()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkDeviceGroupIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("device_group_id=").append(getDeviceGroupId());
+        }
+        if(checkPersonGroupIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("person_group_id=").append(getPersonGroupId());
+        }
+        if(checkCreateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("create_time=").append(getCreateTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
@@ -633,6 +647,7 @@ public  class PermitBean
      */
     public PermitBean fromThrift(net.gdface.facelog.client.thrift.PermitBean thriftBean){
         if(null != thriftBean){
+            reset();
             return ThriftConverter.converterPermitBean.fromRight(this,thriftBean);
         }
         return this;
@@ -645,6 +660,7 @@ public  class PermitBean
     public PermitBean(net.gdface.facelog.client.thrift.PermitBean thriftBean){
         if(null != thriftBean)
             throw new NullPointerException();
+        reset();
         ThriftConverter.converterPermitBean.fromRight(this,thriftBean);
     }
 }

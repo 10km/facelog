@@ -123,6 +123,12 @@ public  class FaceBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public FaceBean(){
         super();
         reset();
@@ -164,8 +170,7 @@ public  class FaceBean
      */
     public void setId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && checkIdInitialized())) {
+        if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -232,8 +237,7 @@ public  class FaceBean
      */
     public void setImageMd5(String newVal)
     {
-        if ((newVal != null && imageMd5 != null && (newVal.compareTo(imageMd5) == 0)) ||
-            (newVal == null && imageMd5 == null && checkImageMd5Initialized())) {
+        if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
         imageMd5 = newVal;
@@ -288,8 +292,7 @@ public  class FaceBean
      */
     public void setFaceLeft(Integer newVal)
     {
-        if ((newVal != null && faceLeft != null && (newVal.compareTo(faceLeft) == 0)) ||
-            (newVal == null && faceLeft == null && checkFaceLeftInitialized())) {
+        if (equal(newVal, faceLeft) && checkFaceLeftInitialized()) {
             return;
         }
         faceLeft = newVal;
@@ -354,8 +357,7 @@ public  class FaceBean
      */
     public void setFaceTop(Integer newVal)
     {
-        if ((newVal != null && faceTop != null && (newVal.compareTo(faceTop) == 0)) ||
-            (newVal == null && faceTop == null && checkFaceTopInitialized())) {
+        if (equal(newVal, faceTop) && checkFaceTopInitialized()) {
             return;
         }
         faceTop = newVal;
@@ -420,8 +422,7 @@ public  class FaceBean
      */
     public void setFaceWidth(Integer newVal)
     {
-        if ((newVal != null && faceWidth != null && (newVal.compareTo(faceWidth) == 0)) ||
-            (newVal == null && faceWidth == null && checkFaceWidthInitialized())) {
+        if (equal(newVal, faceWidth) && checkFaceWidthInitialized()) {
             return;
         }
         faceWidth = newVal;
@@ -486,8 +487,7 @@ public  class FaceBean
      */
     public void setFaceHeight(Integer newVal)
     {
-        if ((newVal != null && faceHeight != null && (newVal.compareTo(faceHeight) == 0)) ||
-            (newVal == null && faceHeight == null && checkFaceHeightInitialized())) {
+        if (equal(newVal, faceHeight) && checkFaceHeightInitialized()) {
             return;
         }
         faceHeight = newVal;
@@ -551,8 +551,7 @@ public  class FaceBean
      */
     public void setEyeLeftx(Integer newVal)
     {
-        if ((newVal != null && eyeLeftx != null && (newVal.compareTo(eyeLeftx) == 0)) ||
-            (newVal == null && eyeLeftx == null && checkEyeLeftxInitialized())) {
+        if (equal(newVal, eyeLeftx) && checkEyeLeftxInitialized()) {
             return;
         }
         eyeLeftx = newVal;
@@ -616,8 +615,7 @@ public  class FaceBean
      */
     public void setEyeLefty(Integer newVal)
     {
-        if ((newVal != null && eyeLefty != null && (newVal.compareTo(eyeLefty) == 0)) ||
-            (newVal == null && eyeLefty == null && checkEyeLeftyInitialized())) {
+        if (equal(newVal, eyeLefty) && checkEyeLeftyInitialized()) {
             return;
         }
         eyeLefty = newVal;
@@ -681,8 +679,7 @@ public  class FaceBean
      */
     public void setEyeRightx(Integer newVal)
     {
-        if ((newVal != null && eyeRightx != null && (newVal.compareTo(eyeRightx) == 0)) ||
-            (newVal == null && eyeRightx == null && checkEyeRightxInitialized())) {
+        if (equal(newVal, eyeRightx) && checkEyeRightxInitialized()) {
             return;
         }
         eyeRightx = newVal;
@@ -746,8 +743,7 @@ public  class FaceBean
      */
     public void setEyeRighty(Integer newVal)
     {
-        if ((newVal != null && eyeRighty != null && (newVal.compareTo(eyeRighty) == 0)) ||
-            (newVal == null && eyeRighty == null && checkEyeRightyInitialized())) {
+        if (equal(newVal, eyeRighty) && checkEyeRightyInitialized()) {
             return;
         }
         eyeRighty = newVal;
@@ -811,8 +807,7 @@ public  class FaceBean
      */
     public void setMouthX(Integer newVal)
     {
-        if ((newVal != null && mouthX != null && (newVal.compareTo(mouthX) == 0)) ||
-            (newVal == null && mouthX == null && checkMouthXInitialized())) {
+        if (equal(newVal, mouthX) && checkMouthXInitialized()) {
             return;
         }
         mouthX = newVal;
@@ -876,8 +871,7 @@ public  class FaceBean
      */
     public void setMouthY(Integer newVal)
     {
-        if ((newVal != null && mouthY != null && (newVal.compareTo(mouthY) == 0)) ||
-            (newVal == null && mouthY == null && checkMouthYInitialized())) {
+        if (equal(newVal, mouthY) && checkMouthYInitialized()) {
             return;
         }
         mouthY = newVal;
@@ -941,8 +935,7 @@ public  class FaceBean
      */
     public void setNoseX(Integer newVal)
     {
-        if ((newVal != null && noseX != null && (newVal.compareTo(noseX) == 0)) ||
-            (newVal == null && noseX == null && checkNoseXInitialized())) {
+        if (equal(newVal, noseX) && checkNoseXInitialized()) {
             return;
         }
         noseX = newVal;
@@ -1006,8 +999,7 @@ public  class FaceBean
      */
     public void setNoseY(Integer newVal)
     {
-        if ((newVal != null && noseY != null && (newVal.compareTo(noseY) == 0)) ||
-            (newVal == null && noseY == null && checkNoseYInitialized())) {
+        if (equal(newVal, noseY) && checkNoseYInitialized()) {
             return;
         }
         noseY = newVal;
@@ -1071,8 +1063,7 @@ public  class FaceBean
      */
     public void setAngleYaw(Integer newVal)
     {
-        if ((newVal != null && angleYaw != null && (newVal.compareTo(angleYaw) == 0)) ||
-            (newVal == null && angleYaw == null && checkAngleYawInitialized())) {
+        if (equal(newVal, angleYaw) && checkAngleYawInitialized()) {
             return;
         }
         angleYaw = newVal;
@@ -1136,8 +1127,7 @@ public  class FaceBean
      */
     public void setAnglePitch(Integer newVal)
     {
-        if ((newVal != null && anglePitch != null && (newVal.compareTo(anglePitch) == 0)) ||
-            (newVal == null && anglePitch == null && checkAnglePitchInitialized())) {
+        if (equal(newVal, anglePitch) && checkAnglePitchInitialized()) {
             return;
         }
         anglePitch = newVal;
@@ -1201,8 +1191,7 @@ public  class FaceBean
      */
     public void setAngleRoll(Integer newVal)
     {
-        if ((newVal != null && angleRoll != null && (newVal.compareTo(angleRoll) == 0)) ||
-            (newVal == null && angleRoll == null && checkAngleRollInitialized())) {
+        if (equal(newVal, angleRoll) && checkAngleRollInitialized()) {
             return;
         }
         angleRoll = newVal;
@@ -1319,8 +1308,7 @@ public  class FaceBean
      */
     public void setFeatureMd5(String newVal)
     {
-        if ((newVal != null && featureMd5 != null && (newVal.compareTo(featureMd5) == 0)) ||
-            (newVal == null && featureMd5 == null && checkFeatureMd5Initialized())) {
+        if (equal(newVal, featureMd5) && checkFeatureMd5Initialized()) {
             return;
         }
         featureMd5 = newVal;
@@ -1376,8 +1364,7 @@ public  class FaceBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -1700,29 +1687,91 @@ public  class FaceBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tid=").append(getId()).append("\n")
-            .append("\timage_md5=").append(getImageMd5()).append("\n")
-            .append("\tface_left=").append(getFaceLeft()).append("\n")
-            .append("\tface_top=").append(getFaceTop()).append("\n")
-            .append("\tface_width=").append(getFaceWidth()).append("\n")
-            .append("\tface_height=").append(getFaceHeight()).append("\n")
-            .append("\teye_leftx=").append(getEyeLeftx()).append("\n")
-            .append("\teye_lefty=").append(getEyeLefty()).append("\n")
-            .append("\teye_rightx=").append(getEyeRightx()).append("\n")
-            .append("\teye_righty=").append(getEyeRighty()).append("\n")
-            .append("\tmouth_x=").append(getMouthX()).append("\n")
-            .append("\tmouth_y=").append(getMouthY()).append("\n")
-            .append("\tnose_x=").append(getNoseX()).append("\n")
-            .append("\tnose_y=").append(getNoseY()).append("\n")
-            .append("\tangle_yaw=").append(getAngleYaw()).append("\n")
-            .append("\tangle_pitch=").append(getAnglePitch()).append("\n")
-            .append("\tangle_roll=").append(getAngleRoll()).append("\n")
-            .append("\text_info=").append(getExtInfo().length).append(" bytes\n")
-            .append("\tfeature_md5=").append(getFeatureMd5()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("id=").append(getId());
+        }
+        if(checkImageMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("image_md5=").append(getImageMd5());
+        }
+        if(checkFaceLeftInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("face_left=").append(getFaceLeft());
+        }
+        if(checkFaceTopInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("face_top=").append(getFaceTop());
+        }
+        if(checkFaceWidthInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("face_width=").append(getFaceWidth());
+        }
+        if(checkFaceHeightInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("face_height=").append(getFaceHeight());
+        }
+        if(checkEyeLeftxInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("eye_leftx=").append(getEyeLeftx());
+        }
+        if(checkEyeLeftyInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("eye_lefty=").append(getEyeLefty());
+        }
+        if(checkEyeRightxInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("eye_rightx=").append(getEyeRightx());
+        }
+        if(checkEyeRightyInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("eye_righty=").append(getEyeRighty());
+        }
+        if(checkMouthXInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("mouth_x=").append(getMouthX());
+        }
+        if(checkMouthYInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("mouth_y=").append(getMouthY());
+        }
+        if(checkNoseXInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("nose_x=").append(getNoseX());
+        }
+        if(checkNoseYInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("nose_y=").append(getNoseY());
+        }
+        if(checkAngleYawInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("angle_yaw=").append(getAngleYaw());
+        }
+        if(checkAnglePitchInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("angle_pitch=").append(getAnglePitch());
+        }
+        if(checkAngleRollInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("angle_roll=").append(getAngleRoll());
+        }
+        if(checkExtInfoInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("ext_info=").append(getExtInfo().length).append(" bytes");
+        }
+        if(checkFeatureMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("feature_md5=").append(getFeatureMd5());
+        }
+        if(checkCreateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("create_time=").append(getCreateTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
@@ -1981,6 +2030,7 @@ public  class FaceBean
      */
     public FaceBean fromThrift(net.gdface.facelog.client.thrift.FaceBean thriftBean){
         if(null != thriftBean){
+            reset();
             return ThriftConverter.converterFaceBean.fromRight(this,thriftBean);
         }
         return this;
@@ -1993,6 +2043,7 @@ public  class FaceBean
     public FaceBean(net.gdface.facelog.client.thrift.FaceBean thriftBean){
         if(null != thriftBean)
             throw new NullPointerException();
+        reset();
         ThriftConverter.converterFaceBean.fromRight(this,thriftBean);
     }
 }

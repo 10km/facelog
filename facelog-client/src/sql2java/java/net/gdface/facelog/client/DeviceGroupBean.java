@@ -91,6 +91,12 @@ public  class DeviceGroupBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public DeviceGroupBean(){
         super();
         reset();
@@ -134,8 +140,7 @@ public  class DeviceGroupBean
      */
     public void setId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && checkIdInitialized())) {
+        if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -201,8 +206,7 @@ public  class DeviceGroupBean
      */
     public void setName(String newVal)
     {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && checkNameInitialized())) {
+        if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -257,8 +261,7 @@ public  class DeviceGroupBean
      */
     public void setLeaf(Integer newVal)
     {
-        if ((newVal != null && leaf != null && (newVal.compareTo(leaf) == 0)) ||
-            (newVal == null && leaf == null && checkLeafInitialized())) {
+        if (equal(newVal, leaf) && checkLeafInitialized()) {
             return;
         }
         leaf = newVal;
@@ -324,8 +327,7 @@ public  class DeviceGroupBean
      */
     public void setParent(Integer newVal)
     {
-        if ((newVal != null && parent != null && (newVal.compareTo(parent) == 0)) ||
-            (newVal == null && parent == null && checkParentInitialized())) {
+        if (equal(newVal, parent) && checkParentInitialized()) {
             return;
         }
         parent = newVal;
@@ -523,13 +525,27 @@ public  class DeviceGroupBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tid=").append(getId()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
-            .append("\tleaf=").append(getLeaf()).append("\n")
-            .append("\tparent=").append(getParent()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("id=").append(getId());
+        }
+        if(checkNameInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("name=").append(getName());
+        }
+        if(checkLeafInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("leaf=").append(getLeaf());
+        }
+        if(checkParentInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("parent=").append(getParent());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
@@ -692,6 +708,7 @@ public  class DeviceGroupBean
      */
     public DeviceGroupBean fromThrift(net.gdface.facelog.client.thrift.DeviceGroupBean thriftBean){
         if(null != thriftBean){
+            reset();
             return ThriftConverter.converterDeviceGroupBean.fromRight(this,thriftBean);
         }
         return this;
@@ -704,6 +721,7 @@ public  class DeviceGroupBean
     public DeviceGroupBean(net.gdface.facelog.client.thrift.DeviceGroupBean thriftBean){
         if(null != thriftBean)
             throw new NullPointerException();
+        reset();
         ThriftConverter.converterDeviceGroupBean.fromRight(this,thriftBean);
     }
 }

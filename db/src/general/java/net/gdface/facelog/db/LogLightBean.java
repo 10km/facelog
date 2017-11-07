@@ -107,6 +107,12 @@ public final class LogLightBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public LogLightBean(){
         super();
         reset();
@@ -140,8 +146,7 @@ public final class LogLightBean
     @ThriftField()
     public void setId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && checkIdInitialized())) {
+        if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -210,8 +215,7 @@ public final class LogLightBean
     @ThriftField()
     public void setPersonId(Integer newVal)
     {
-        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && checkPersonIdInitialized())) {
+        if (equal(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
         personId = newVal;
@@ -279,8 +283,7 @@ public final class LogLightBean
     @ThriftField()
     public void setName(String newVal)
     {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && checkNameInitialized())) {
+        if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -337,8 +340,7 @@ public final class LogLightBean
     @ThriftField()
     public void setPapersType(Integer newVal)
     {
-        if ((newVal != null && papersType != null && (newVal.compareTo(papersType) == 0)) ||
-            (newVal == null && papersType == null && checkPapersTypeInitialized())) {
+        if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
             return;
         }
         papersType = newVal;
@@ -405,8 +407,7 @@ public final class LogLightBean
     @ThriftField()
     public void setPapersNum(String newVal)
     {
-        if ((newVal != null && papersNum != null && (newVal.compareTo(papersNum) == 0)) ||
-            (newVal == null && papersNum == null && checkPapersNumInitialized())) {
+        if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
             return;
         }
         papersNum = newVal;
@@ -471,8 +472,7 @@ public final class LogLightBean
      */
     public void setVerifyTime(java.util.Date newVal)
     {
-        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && checkVerifyTimeInitialized())) {
+        if (equal(newVal, verifyTime) && checkVerifyTimeInitialized()) {
             return;
         }
         verifyTime = newVal;
@@ -682,15 +682,35 @@ public final class LogLightBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tid=").append(getId()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
-            .append("\tpapers_type=").append(getPapersType()).append("\n")
-            .append("\tpapers_num=").append(getPapersNum()).append("\n")
-            .append("\tverify_time=").append(getVerifyTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("id=").append(getId());
+        }
+        if(checkPersonIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("person_id=").append(getPersonId());
+        }
+        if(checkNameInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("name=").append(getName());
+        }
+        if(checkPapersTypeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("papers_type=").append(getPapersType());
+        }
+        if(checkPapersNumInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("papers_num=").append(getPapersNum());
+        }
+        if(checkVerifyTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("verify_time=").append(getVerifyTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

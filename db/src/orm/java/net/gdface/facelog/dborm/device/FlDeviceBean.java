@@ -106,6 +106,12 @@ public  class FlDeviceBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public FlDeviceBean(){
         super();
         reset();
@@ -148,8 +154,7 @@ public  class FlDeviceBean
      */
     public void setId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && checkIdInitialized())) {
+        if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -216,8 +221,7 @@ public  class FlDeviceBean
      */
     public void setGroupId(Integer newVal)
     {
-        if ((newVal != null && groupId != null && (newVal.compareTo(groupId) == 0)) ||
-            (newVal == null && groupId == null && checkGroupIdInitialized())) {
+        if (equal(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
         groupId = newVal;
@@ -282,8 +286,7 @@ public  class FlDeviceBean
      */
     public void setName(String newVal)
     {
-        if ((newVal != null && name != null && (newVal.compareTo(name) == 0)) ||
-            (newVal == null && name == null && checkNameInitialized())) {
+        if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
         name = newVal;
@@ -338,8 +341,7 @@ public  class FlDeviceBean
      */
     public void setVersion(String newVal)
     {
-        if ((newVal != null && version != null && (newVal.compareTo(version) == 0)) ||
-            (newVal == null && version == null && checkVersionInitialized())) {
+        if (equal(newVal, version) && checkVersionInitialized()) {
             return;
         }
         version = newVal;
@@ -394,8 +396,7 @@ public  class FlDeviceBean
      */
     public void setSerialNo(String newVal)
     {
-        if ((newVal != null && serialNo != null && (newVal.compareTo(serialNo) == 0)) ||
-            (newVal == null && serialNo == null && checkSerialNoInitialized())) {
+        if (equal(newVal, serialNo) && checkSerialNoInitialized()) {
             return;
         }
         serialNo = newVal;
@@ -450,8 +451,7 @@ public  class FlDeviceBean
      */
     public void setMac(String newVal)
     {
-        if ((newVal != null && mac != null && (newVal.compareTo(mac) == 0)) ||
-            (newVal == null && mac == null && checkMacInitialized())) {
+        if (equal(newVal, mac) && checkMacInitialized()) {
             return;
         }
         mac = newVal;
@@ -507,8 +507,7 @@ public  class FlDeviceBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -574,8 +573,7 @@ public  class FlDeviceBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
-        if ((newVal != null && updateTime != null && (newVal.compareTo(updateTime) == 0)) ||
-            (newVal == null && updateTime == null && checkUpdateTimeInitialized())) {
+        if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
         updateTime = newVal;
@@ -801,17 +799,43 @@ public  class FlDeviceBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tid=").append(getId()).append("\n")
-            .append("\tgroup_id=").append(getGroupId()).append("\n")
-            .append("\tname=").append(getName()).append("\n")
-            .append("\tversion=").append(getVersion()).append("\n")
-            .append("\tserial_no=").append(getSerialNo()).append("\n")
-            .append("\tmac=").append(getMac()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("\tupdate_time=").append(getUpdateTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("id=").append(getId());
+        }
+        if(checkGroupIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("group_id=").append(getGroupId());
+        }
+        if(checkNameInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("name=").append(getName());
+        }
+        if(checkVersionInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("version=").append(getVersion());
+        }
+        if(checkSerialNoInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("serial_no=").append(getSerialNo());
+        }
+        if(checkMacInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("mac=").append(getMac());
+        }
+        if(checkCreateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("create_time=").append(getCreateTime());
+        }
+        if(checkUpdateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("update_time=").append(getUpdateTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

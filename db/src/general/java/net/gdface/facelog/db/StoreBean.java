@@ -98,6 +98,12 @@ public final class StoreBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public StoreBean(){
         super();
         reset();
@@ -139,8 +145,7 @@ public final class StoreBean
     @ThriftField()
     public void setMd5(String newVal)
     {
-        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && checkMd5Initialized())) {
+        if (equal(newVal, md5) && checkMd5Initialized()) {
             return;
         }
         md5 = newVal;
@@ -197,8 +202,7 @@ public final class StoreBean
     @ThriftField()
     public void setEncoding(String newVal)
     {
-        if ((newVal != null && encoding != null && (newVal.compareTo(encoding) == 0)) ||
-            (newVal == null && encoding == null && checkEncodingInitialized())) {
+        if (equal(newVal, encoding) && checkEncodingInitialized()) {
             return;
         }
         encoding = newVal;
@@ -255,8 +259,7 @@ public final class StoreBean
     @ThriftField()
     public void setData(java.nio.ByteBuffer newVal)
     {
-        if ((newVal != null && data != null && (newVal.compareTo(data) == 0)) ||
-            (newVal == null && data == null && checkDataInitialized())) {
+        if (equal(newVal, data) && checkDataInitialized()) {
             return;
         }
         data = newVal;
@@ -421,12 +424,23 @@ public final class StoreBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tmd5=").append(getMd5()).append("\n")
-            .append("\tencoding=").append(getEncoding()).append("\n")
-            .append("\tdata=").append(getData()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("md5=").append(getMd5());
+        }
+        if(checkEncodingInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("encoding=").append(getEncoding());
+        }
+        if(checkDataInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("data=").append(getData());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

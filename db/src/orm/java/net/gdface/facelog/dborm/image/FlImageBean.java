@@ -109,6 +109,12 @@ public  class FlImageBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public FlImageBean(){
         super();
         reset();
@@ -150,8 +156,7 @@ public  class FlImageBean
      */
     public void setMd5(String newVal)
     {
-        if ((newVal != null && md5 != null && (newVal.compareTo(md5) == 0)) ||
-            (newVal == null && md5 == null && checkMd5Initialized())) {
+        if (equal(newVal, md5) && checkMd5Initialized()) {
             return;
         }
         md5 = newVal;
@@ -206,8 +211,7 @@ public  class FlImageBean
      */
     public void setFormat(String newVal)
     {
-        if ((newVal != null && format != null && (newVal.compareTo(format) == 0)) ||
-            (newVal == null && format == null && checkFormatInitialized())) {
+        if (equal(newVal, format) && checkFormatInitialized()) {
             return;
         }
         format = newVal;
@@ -263,8 +267,7 @@ public  class FlImageBean
      */
     public void setWidth(Integer newVal)
     {
-        if ((newVal != null && width != null && (newVal.compareTo(width) == 0)) ||
-            (newVal == null && width == null && checkWidthInitialized())) {
+        if (equal(newVal, width) && checkWidthInitialized()) {
             return;
         }
         width = newVal;
@@ -330,8 +333,7 @@ public  class FlImageBean
      */
     public void setHeight(Integer newVal)
     {
-        if ((newVal != null && height != null && (newVal.compareTo(height) == 0)) ||
-            (newVal == null && height == null && checkHeightInitialized())) {
+        if (equal(newVal, height) && checkHeightInitialized()) {
             return;
         }
         height = newVal;
@@ -398,8 +400,7 @@ public  class FlImageBean
      */
     public void setDepth(Integer newVal)
     {
-        if ((newVal != null && depth != null && (newVal.compareTo(depth) == 0)) ||
-            (newVal == null && depth == null && checkDepthInitialized())) {
+        if (equal(newVal, depth) && checkDepthInitialized()) {
             return;
         }
         depth = newVal;
@@ -466,8 +467,7 @@ public  class FlImageBean
      */
     public void setFaceNum(Integer newVal)
     {
-        if ((newVal != null && faceNum != null && (newVal.compareTo(faceNum) == 0)) ||
-            (newVal == null && faceNum == null && checkFaceNumInitialized())) {
+        if (equal(newVal, faceNum) && checkFaceNumInitialized()) {
             return;
         }
         faceNum = newVal;
@@ -532,8 +532,7 @@ public  class FlImageBean
      */
     public void setThumbMd5(String newVal)
     {
-        if ((newVal != null && thumbMd5 != null && (newVal.compareTo(thumbMd5) == 0)) ||
-            (newVal == null && thumbMd5 == null && checkThumbMd5Initialized())) {
+        if (equal(newVal, thumbMd5) && checkThumbMd5Initialized()) {
             return;
         }
         thumbMd5 = newVal;
@@ -589,8 +588,7 @@ public  class FlImageBean
      */
     public void setDeviceId(Integer newVal)
     {
-        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
+        if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
             return;
         }
         deviceId = newVal;
@@ -816,17 +814,43 @@ public  class FlImageBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tmd5=").append(getMd5()).append("\n")
-            .append("\tformat=").append(getFormat()).append("\n")
-            .append("\twidth=").append(getWidth()).append("\n")
-            .append("\theight=").append(getHeight()).append("\n")
-            .append("\tdepth=").append(getDepth()).append("\n")
-            .append("\tface_num=").append(getFaceNum()).append("\n")
-            .append("\tthumb_md5=").append(getThumbMd5()).append("\n")
-            .append("\tdevice_id=").append(getDeviceId()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("md5=").append(getMd5());
+        }
+        if(checkFormatInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("format=").append(getFormat());
+        }
+        if(checkWidthInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("width=").append(getWidth());
+        }
+        if(checkHeightInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("height=").append(getHeight());
+        }
+        if(checkDepthInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("depth=").append(getDepth());
+        }
+        if(checkFaceNumInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("face_num=").append(getFaceNum());
+        }
+        if(checkThumbMd5Initialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("thumb_md5=").append(getThumbMd5());
+        }
+        if(checkDeviceIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("device_id=").append(getDeviceId());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

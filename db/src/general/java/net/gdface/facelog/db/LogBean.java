@@ -112,6 +112,12 @@ public final class LogBean
     public void setInitialized(long initialized){
         this.initialized = initialized;
     }
+    public static final boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
+    }
+    public static final <T extends Comparable<T>>boolean compare(T a, T b) {
+        return a == b || (a != null && 0==a.compareTo(b));
+    }
     public LogBean(){
         super();
         reset();
@@ -154,8 +160,7 @@ public final class LogBean
     @ThriftField()
     public void setId(Integer newVal)
     {
-        if ((newVal != null && id != null && (newVal.compareTo(id) == 0)) ||
-            (newVal == null && id == null && checkIdInitialized())) {
+        if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
         id = newVal;
@@ -224,8 +229,7 @@ public final class LogBean
     @ThriftField()
     public void setPersonId(Integer newVal)
     {
-        if ((newVal != null && personId != null && (newVal.compareTo(personId) == 0)) ||
-            (newVal == null && personId == null && checkPersonIdInitialized())) {
+        if (equal(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
         personId = newVal;
@@ -293,8 +297,7 @@ public final class LogBean
     @ThriftField()
     public void setDeviceId(Integer newVal)
     {
-        if ((newVal != null && deviceId != null && (newVal.compareTo(deviceId) == 0)) ||
-            (newVal == null && deviceId == null && checkDeviceIdInitialized())) {
+        if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
             return;
         }
         deviceId = newVal;
@@ -362,8 +365,7 @@ public final class LogBean
     @ThriftField()
     public void setVerifyFeature(String newVal)
     {
-        if ((newVal != null && verifyFeature != null && (newVal.compareTo(verifyFeature) == 0)) ||
-            (newVal == null && verifyFeature == null && checkVerifyFeatureInitialized())) {
+        if (equal(newVal, verifyFeature) && checkVerifyFeatureInitialized()) {
             return;
         }
         verifyFeature = newVal;
@@ -421,8 +423,7 @@ public final class LogBean
     @ThriftField()
     public void setCompareFace(Integer newVal)
     {
-        if ((newVal != null && compareFace != null && (newVal.compareTo(compareFace) == 0)) ||
-            (newVal == null && compareFace == null && checkCompareFaceInitialized())) {
+        if (equal(newVal, compareFace) && checkCompareFaceInitialized()) {
             return;
         }
         compareFace = newVal;
@@ -489,8 +490,7 @@ public final class LogBean
     @ThriftField()
     public void setSimilarty(Double newVal)
     {
-        if ((newVal != null && similarty != null && (newVal.compareTo(similarty) == 0)) ||
-            (newVal == null && similarty == null && checkSimilartyInitialized())) {
+        if (equal(newVal, similarty) && checkSimilartyInitialized()) {
             return;
         }
         similarty = newVal;
@@ -565,8 +565,7 @@ public final class LogBean
      */
     public void setVerifyTime(java.util.Date newVal)
     {
-        if ((newVal != null && verifyTime != null && (newVal.compareTo(verifyTime) == 0)) ||
-            (newVal == null && verifyTime == null && checkVerifyTimeInitialized())) {
+        if (equal(newVal, verifyTime) && checkVerifyTimeInitialized()) {
             return;
         }
         verifyTime = newVal;
@@ -648,8 +647,7 @@ public final class LogBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
-        if ((newVal != null && createTime != null && (newVal.compareTo(createTime) == 0)) ||
-            (newVal == null && createTime == null && checkCreateTimeInitialized())) {
+        if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
         createTime = newVal;
@@ -922,17 +920,43 @@ public final class LogBean
 
     @Override
     public String toString() {
-        return new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[\n")
-            .append("\tid=").append(getId()).append("\n")
-            .append("\tperson_id=").append(getPersonId()).append("\n")
-            .append("\tdevice_id=").append(getDeviceId()).append("\n")
-            .append("\tverify_feature=").append(getVerifyFeature()).append("\n")
-            .append("\tcompare_face=").append(getCompareFace()).append("\n")
-            .append("\tsimilarty=").append(getSimilarty()).append("\n")
-            .append("\tverify_time=").append(getVerifyTime()).append("\n")
-            .append("\tcreate_time=").append(getCreateTime()).append("\n")
-            .append("]\n")
-            .toString();
+        // only output initialized field
+        StringBuilder builder = new StringBuilder(this.getClass().getName()).append("@").append(Integer.toHexString(this.hashCode())).append("[");
+        int count = 0;        
+        if(checkIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("id=").append(getId());
+        }
+        if(checkPersonIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("person_id=").append(getPersonId());
+        }
+        if(checkDeviceIdInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("device_id=").append(getDeviceId());
+        }
+        if(checkVerifyFeatureInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("verify_feature=").append(getVerifyFeature());
+        }
+        if(checkCompareFaceInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("compare_face=").append(getCompareFace());
+        }
+        if(checkSimilartyInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("similarty=").append(getSimilarty());
+        }
+        if(checkVerifyTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("verify_time=").append(getVerifyTime());
+        }
+        if(checkCreateTimeInitialized()){
+            if(count++ >0)builder.append(",");
+            builder.append("create_time=").append(getCreateTime());
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
