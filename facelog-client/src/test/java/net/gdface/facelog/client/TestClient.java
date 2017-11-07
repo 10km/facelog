@@ -21,9 +21,8 @@ public class TestClient implements CommonConstant {
 	}
 
 	@Test
-	public void test() {
-		PersonBean newPerson = new PersonBean();
-		newPerson.setName("guyadong");
+	public void test() {		
+		PersonBean newPerson = PersonBean.builder().name("guyadong").build();
 		try {
 			facelogClient.savePerson(newPerson);
 			logger.info("person = {}", newPerson.toString());

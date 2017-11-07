@@ -693,6 +693,81 @@ public  class DeviceGroupBean
             index = FL_DEVICE_GROUP_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for DeviceGroupBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** DeviceGroupBean instance used for template to create new DeviceGroupBean instance. */
+        static final ThreadLocal<DeviceGroupBean> template = new ThreadLocal<DeviceGroupBean>(){
+            @Override
+            protected DeviceGroupBean initialValue() {
+                return new DeviceGroupBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see DeviceGroupBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(DeviceGroupBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public DeviceGroupBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_device_group.id         
+         * @param id 设备组id
+         * @see {@link DeviceGroupBean#getId}
+         * @see {@link DeviceGroupBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.name         
+         * @param name 设备组名
+         * @see {@link DeviceGroupBean#getName}
+         * @see {@link DeviceGroupBean#setName(String)}
+         */
+        public Builder name(String name){
+            template.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.leaf         
+         * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
+         * @see {@link DeviceGroupBean#getLeaf}
+         * @see {@link DeviceGroupBean#setLeaf(Integer)}
+         */
+        public Builder leaf(Integer leaf){
+            template.get().setLeaf(leaf);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.parent         
+         * @param parent 上一级设备组id
+         * @see {@link DeviceGroupBean#getParent}
+         * @see {@link DeviceGroupBean#setParent(Integer)}
+         */
+        public Builder parent(Integer parent){
+            template.get().setParent(parent);
+            return this;
+        }
+    }
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.DeviceGroupBean}

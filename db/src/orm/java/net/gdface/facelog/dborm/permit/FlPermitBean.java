@@ -639,4 +639,69 @@ public  class FlPermitBean
             index = FL_PERMIT_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlPermitBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlPermitBean instance used for template to create new FlPermitBean instance. */
+        static final ThreadLocal<FlPermitBean> template = new ThreadLocal<FlPermitBean>(){
+            @Override
+            protected FlPermitBean initialValue() {
+                return new FlPermitBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlPermitBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlPermitBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlPermitBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_permit.device_group_id         
+         * @param deviceGroupId 外键,设备组id
+         * @see {@link FlPermitBean#getDeviceGroupId}
+         * @see {@link FlPermitBean#setDeviceGroupId(Integer)}
+         */
+        public Builder deviceGroupId(Integer deviceGroupId){
+            template.get().setDeviceGroupId(deviceGroupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.person_group_id         
+         * @param personGroupId 外键,人员组id
+         * @see {@link FlPermitBean#getPersonGroupId}
+         * @see {@link FlPermitBean#setPersonGroupId(Integer)}
+         */
+        public Builder personGroupId(Integer personGroupId){
+            template.get().setPersonGroupId(personGroupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.create_time         
+         * @param createTime 
+         * @see {@link FlPermitBean#getCreateTime}
+         * @see {@link FlPermitBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            template.get().setCreateTime(createTime);
+            return this;
+        }
+    }
 }

@@ -1016,6 +1016,121 @@ public  class ImageBean
             index = FL_IMAGE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for ImageBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** ImageBean instance used for template to create new ImageBean instance. */
+        static final ThreadLocal<ImageBean> template = new ThreadLocal<ImageBean>(){
+            @Override
+            protected ImageBean initialValue() {
+                return new ImageBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see ImageBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(ImageBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public ImageBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_image.md5         
+         * @param md5 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key
+         * @see {@link ImageBean#getMd5}
+         * @see {@link ImageBean#setMd5(String)}
+         */
+        public Builder md5(String md5){
+            template.get().setMd5(md5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.format         
+         * @param format 图像格式
+         * @see {@link ImageBean#getFormat}
+         * @see {@link ImageBean#setFormat(String)}
+         */
+        public Builder format(String format){
+            template.get().setFormat(format);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.width         
+         * @param width 图像宽度
+         * @see {@link ImageBean#getWidth}
+         * @see {@link ImageBean#setWidth(Integer)}
+         */
+        public Builder width(Integer width){
+            template.get().setWidth(width);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.height         
+         * @param height 图像高度
+         * @see {@link ImageBean#getHeight}
+         * @see {@link ImageBean#setHeight(Integer)}
+         */
+        public Builder height(Integer height){
+            template.get().setHeight(height);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.depth         
+         * @param depth 通道数
+         * @see {@link ImageBean#getDepth}
+         * @see {@link ImageBean#setDepth(Integer)}
+         */
+        public Builder depth(Integer depth){
+            template.get().setDepth(depth);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.face_num         
+         * @param faceNum 图像中的人脸数目
+         * @see {@link ImageBean#getFaceNum}
+         * @see {@link ImageBean#setFaceNum(Integer)}
+         */
+        public Builder faceNum(Integer faceNum){
+            template.get().setFaceNum(faceNum);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.thumb_md5         
+         * @param thumbMd5 缩略图md5,图像数据存储在 fl_imae_store(md5)
+         * @see {@link ImageBean#getThumbMd5}
+         * @see {@link ImageBean#setThumbMd5(String)}
+         */
+        public Builder thumbMd5(String thumbMd5){
+            template.get().setThumbMd5(thumbMd5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_image.device_id         
+         * @param deviceId 外键,图像来源设备
+         * @see {@link ImageBean#getDeviceId}
+         * @see {@link ImageBean#setDeviceId(Integer)}
+         */
+        public Builder deviceId(Integer deviceId){
+            template.get().setDeviceId(deviceId);
+            return this;
+        }
+    }
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.ImageBean}

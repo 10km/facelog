@@ -1007,4 +1007,119 @@ public  class FlDeviceBean
             index = FL_DEVICE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlDeviceBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlDeviceBean instance used for template to create new FlDeviceBean instance. */
+        static final ThreadLocal<FlDeviceBean> template = new ThreadLocal<FlDeviceBean>(){
+            @Override
+            protected FlDeviceBean initialValue() {
+                return new FlDeviceBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlDeviceBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlDeviceBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlDeviceBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_device.id         
+         * @param id 设备id
+         * @see {@link FlDeviceBean#getId}
+         * @see {@link FlDeviceBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.group_id         
+         * @param groupId 所属设备组id
+         * @see {@link FlDeviceBean#getGroupId}
+         * @see {@link FlDeviceBean#setGroupId(Integer)}
+         */
+        public Builder groupId(Integer groupId){
+            template.get().setGroupId(groupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.name         
+         * @param name 设备名称
+         * @see {@link FlDeviceBean#getName}
+         * @see {@link FlDeviceBean#setName(String)}
+         */
+        public Builder name(String name){
+            template.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.version         
+         * @param version 设备版本号
+         * @see {@link FlDeviceBean#getVersion}
+         * @see {@link FlDeviceBean#setVersion(String)}
+         */
+        public Builder version(String version){
+            template.get().setVersion(version);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.serial_no         
+         * @param serialNo 设备序列号
+         * @see {@link FlDeviceBean#getSerialNo}
+         * @see {@link FlDeviceBean#setSerialNo(String)}
+         */
+        public Builder serialNo(String serialNo){
+            template.get().setSerialNo(serialNo);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.mac         
+         * @param mac 6字节MAC地址(HEX)
+         * @see {@link FlDeviceBean#getMac}
+         * @see {@link FlDeviceBean#setMac(String)}
+         */
+        public Builder mac(String mac){
+            template.get().setMac(mac);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.create_time         
+         * @param createTime 
+         * @see {@link FlDeviceBean#getCreateTime}
+         * @see {@link FlDeviceBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            template.get().setCreateTime(createTime);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device.update_time         
+         * @param updateTime 
+         * @see {@link FlDeviceBean#getUpdateTime}
+         * @see {@link FlDeviceBean#setUpdateTime(java.util.Date)}
+         */
+        public Builder updateTime(java.util.Date updateTime){
+            template.get().setUpdateTime(updateTime);
+            return this;
+        }
+    }
 }

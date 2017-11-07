@@ -870,4 +870,99 @@ public final class LogLightBean
             index = FL_LOG_LIGHT_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for LogLightBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** LogLightBean instance used for template to create new LogLightBean instance. */
+        static final ThreadLocal<LogLightBean> template = new ThreadLocal<LogLightBean>(){
+            @Override
+            protected LogLightBean initialValue() {
+                return new LogLightBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see LogLightBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(LogLightBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public LogLightBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_log_light.id         
+         * @param id 日志id
+         * @see {@link LogLightBean#getId}
+         * @see {@link LogLightBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.person_id         
+         * @param personId 用户id
+         * @see {@link LogLightBean#getPersonId}
+         * @see {@link LogLightBean#setPersonId(Integer)}
+         */
+        public Builder personId(Integer personId){
+            template.get().setPersonId(personId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.name         
+         * @param name 姓名
+         * @see {@link LogLightBean#getName}
+         * @see {@link LogLightBean#setName(String)}
+         */
+        public Builder name(String name){
+            template.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.papers_type         
+         * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
+         * @see {@link LogLightBean#getPapersType}
+         * @see {@link LogLightBean#setPapersType(Integer)}
+         */
+        public Builder papersType(Integer papersType){
+            template.get().setPapersType(papersType);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.papers_num         
+         * @param papersNum 证件号码
+         * @see {@link LogLightBean#getPapersNum}
+         * @see {@link LogLightBean#setPapersNum(String)}
+         */
+        public Builder papersNum(String papersNum){
+            template.get().setPapersNum(papersNum);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log_light.verify_time         
+         * @param verifyTime 验证时间(可能由前端设备提供时间)
+         * @see {@link LogLightBean#getVerifyTime}
+         * @see {@link LogLightBean#setVerifyTime(java.util.Date)}
+         */
+        public Builder verifyTime(java.util.Date verifyTime){
+            template.get().setVerifyTime(verifyTime);
+            return this;
+        }
+    }
 }

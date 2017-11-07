@@ -571,4 +571,69 @@ public  class FlStoreBean
             index = FL_STORE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlStoreBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlStoreBean instance used for template to create new FlStoreBean instance. */
+        static final ThreadLocal<FlStoreBean> template = new ThreadLocal<FlStoreBean>(){
+            @Override
+            protected FlStoreBean initialValue() {
+                return new FlStoreBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlStoreBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlStoreBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlStoreBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_store.md5         
+         * @param md5 主键,md5检验码
+         * @see {@link FlStoreBean#getMd5}
+         * @see {@link FlStoreBean#setMd5(String)}
+         */
+        public Builder md5(String md5){
+            template.get().setMd5(md5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_store.encoding         
+         * @param encoding 编码类型,GBK,UTF8...
+         * @see {@link FlStoreBean#getEncoding}
+         * @see {@link FlStoreBean#setEncoding(String)}
+         */
+        public Builder encoding(String encoding){
+            template.get().setEncoding(encoding);
+            return this;
+        }
+        /** 
+         * fill the field : fl_store.data         
+         * @param data 二进制数据
+         * @see {@link FlStoreBean#getData}
+         * @see {@link FlStoreBean#setData(java.nio.ByteBuffer)}
+         */
+        public Builder data(java.nio.ByteBuffer data){
+            template.get().setData(data);
+            return this;
+        }
+    }
 }

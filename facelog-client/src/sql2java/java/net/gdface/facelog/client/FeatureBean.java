@@ -677,6 +677,81 @@ public  class FeatureBean
             index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FeatureBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FeatureBean instance used for template to create new FeatureBean instance. */
+        static final ThreadLocal<FeatureBean> template = new ThreadLocal<FeatureBean>(){
+            @Override
+            protected FeatureBean initialValue() {
+                return new FeatureBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FeatureBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FeatureBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FeatureBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_feature.md5         
+         * @param md5 主键,特征码md5校验码
+         * @see {@link FeatureBean#getMd5}
+         * @see {@link FeatureBean#setMd5(String)}
+         */
+        public Builder md5(String md5){
+            template.get().setMd5(md5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.person_id         
+         * @param personId 外键,所属用户id
+         * @see {@link FeatureBean#getPersonId}
+         * @see {@link FeatureBean#setPersonId(Integer)}
+         */
+        public Builder personId(Integer personId){
+            template.get().setPersonId(personId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.feature         
+         * @param feature 二进制特征数据
+         * @see {@link FeatureBean#getFeature}
+         * @see {@link FeatureBean#setFeature(byte[])}
+         */
+        public Builder feature(byte[] feature){
+            template.get().setFeature(feature);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.update_time         
+         * @param updateTime 
+         * @see {@link FeatureBean#getUpdateTime}
+         * @see {@link FeatureBean#setUpdateTime(java.util.Date)}
+         */
+        public Builder updateTime(java.util.Date updateTime){
+            template.get().setUpdateTime(updateTime);
+            return this;
+        }
+    }
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.FeatureBean}

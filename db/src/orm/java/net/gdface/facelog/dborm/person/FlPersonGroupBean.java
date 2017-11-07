@@ -698,4 +698,79 @@ public  class FlPersonGroupBean
             index = FL_PERSON_GROUP_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlPersonGroupBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlPersonGroupBean instance used for template to create new FlPersonGroupBean instance. */
+        static final ThreadLocal<FlPersonGroupBean> template = new ThreadLocal<FlPersonGroupBean>(){
+            @Override
+            protected FlPersonGroupBean initialValue() {
+                return new FlPersonGroupBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlPersonGroupBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlPersonGroupBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlPersonGroupBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_person_group.id         
+         * @param id 用户组id
+         * @see {@link FlPersonGroupBean#getId}
+         * @see {@link FlPersonGroupBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person_group.name         
+         * @param name 用户组名
+         * @see {@link FlPersonGroupBean#getName}
+         * @see {@link FlPersonGroupBean#setName(String)}
+         */
+        public Builder name(String name){
+            template.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person_group.leaf         
+         * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
+         * @see {@link FlPersonGroupBean#getLeaf}
+         * @see {@link FlPersonGroupBean#setLeaf(Integer)}
+         */
+        public Builder leaf(Integer leaf){
+            template.get().setLeaf(leaf);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person_group.parent         
+         * @param parent 上一级用户组id
+         * @see {@link FlPersonGroupBean#getParent}
+         * @see {@link FlPersonGroupBean#setParent(Integer)}
+         */
+        public Builder parent(Integer parent){
+            template.get().setParent(parent);
+            return this;
+        }
+    }
 }

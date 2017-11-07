@@ -698,4 +698,79 @@ public  class FlDeviceGroupBean
             index = FL_DEVICE_GROUP_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlDeviceGroupBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlDeviceGroupBean instance used for template to create new FlDeviceGroupBean instance. */
+        static final ThreadLocal<FlDeviceGroupBean> template = new ThreadLocal<FlDeviceGroupBean>(){
+            @Override
+            protected FlDeviceGroupBean initialValue() {
+                return new FlDeviceGroupBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlDeviceGroupBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlDeviceGroupBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlDeviceGroupBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_device_group.id         
+         * @param id 设备组id
+         * @see {@link FlDeviceGroupBean#getId}
+         * @see {@link FlDeviceGroupBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.name         
+         * @param name 设备组名
+         * @see {@link FlDeviceGroupBean#getName}
+         * @see {@link FlDeviceGroupBean#setName(String)}
+         */
+        public Builder name(String name){
+            template.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.leaf         
+         * @param leaf 是否为叶子节点, 1:叶子节点 0:分支节点,null:两者都可
+         * @see {@link FlDeviceGroupBean#getLeaf}
+         * @see {@link FlDeviceGroupBean#setLeaf(Integer)}
+         */
+        public Builder leaf(Integer leaf){
+            template.get().setLeaf(leaf);
+            return this;
+        }
+        /** 
+         * fill the field : fl_device_group.parent         
+         * @param parent 上一级设备组id
+         * @see {@link FlDeviceGroupBean#getParent}
+         * @see {@link FlDeviceGroupBean#setParent(Integer)}
+         */
+        public Builder parent(Integer parent){
+            template.get().setParent(parent);
+            return this;
+        }
+    }
 }

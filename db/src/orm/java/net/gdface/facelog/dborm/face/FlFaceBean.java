@@ -2025,4 +2025,239 @@ public  class FlFaceBean
             index = FL_FACE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlFaceBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlFaceBean instance used for template to create new FlFaceBean instance. */
+        static final ThreadLocal<FlFaceBean> template = new ThreadLocal<FlFaceBean>(){
+            @Override
+            protected FlFaceBean initialValue() {
+                return new FlFaceBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlFaceBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlFaceBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlFaceBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_face.id         
+         * @param id 主键
+         * @see {@link FlFaceBean#getId}
+         * @see {@link FlFaceBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.image_md5         
+         * @param imageMd5 外键,所属图像id
+         * @see {@link FlFaceBean#getImageMd5}
+         * @see {@link FlFaceBean#setImageMd5(String)}
+         */
+        public Builder imageMd5(String imageMd5){
+            template.get().setImageMd5(imageMd5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.face_left         
+         * @param faceLeft 
+         * @see {@link FlFaceBean#getFaceLeft}
+         * @see {@link FlFaceBean#setFaceLeft(Integer)}
+         */
+        public Builder faceLeft(Integer faceLeft){
+            template.get().setFaceLeft(faceLeft);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.face_top         
+         * @param faceTop 
+         * @see {@link FlFaceBean#getFaceTop}
+         * @see {@link FlFaceBean#setFaceTop(Integer)}
+         */
+        public Builder faceTop(Integer faceTop){
+            template.get().setFaceTop(faceTop);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.face_width         
+         * @param faceWidth 
+         * @see {@link FlFaceBean#getFaceWidth}
+         * @see {@link FlFaceBean#setFaceWidth(Integer)}
+         */
+        public Builder faceWidth(Integer faceWidth){
+            template.get().setFaceWidth(faceWidth);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.face_height         
+         * @param faceHeight 
+         * @see {@link FlFaceBean#getFaceHeight}
+         * @see {@link FlFaceBean#setFaceHeight(Integer)}
+         */
+        public Builder faceHeight(Integer faceHeight){
+            template.get().setFaceHeight(faceHeight);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.eye_leftx         
+         * @param eyeLeftx 
+         * @see {@link FlFaceBean#getEyeLeftx}
+         * @see {@link FlFaceBean#setEyeLeftx(Integer)}
+         */
+        public Builder eyeLeftx(Integer eyeLeftx){
+            template.get().setEyeLeftx(eyeLeftx);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.eye_lefty         
+         * @param eyeLefty 
+         * @see {@link FlFaceBean#getEyeLefty}
+         * @see {@link FlFaceBean#setEyeLefty(Integer)}
+         */
+        public Builder eyeLefty(Integer eyeLefty){
+            template.get().setEyeLefty(eyeLefty);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.eye_rightx         
+         * @param eyeRightx 
+         * @see {@link FlFaceBean#getEyeRightx}
+         * @see {@link FlFaceBean#setEyeRightx(Integer)}
+         */
+        public Builder eyeRightx(Integer eyeRightx){
+            template.get().setEyeRightx(eyeRightx);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.eye_righty         
+         * @param eyeRighty 
+         * @see {@link FlFaceBean#getEyeRighty}
+         * @see {@link FlFaceBean#setEyeRighty(Integer)}
+         */
+        public Builder eyeRighty(Integer eyeRighty){
+            template.get().setEyeRighty(eyeRighty);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.mouth_x         
+         * @param mouthX 
+         * @see {@link FlFaceBean#getMouthX}
+         * @see {@link FlFaceBean#setMouthX(Integer)}
+         */
+        public Builder mouthX(Integer mouthX){
+            template.get().setMouthX(mouthX);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.mouth_y         
+         * @param mouthY 
+         * @see {@link FlFaceBean#getMouthY}
+         * @see {@link FlFaceBean#setMouthY(Integer)}
+         */
+        public Builder mouthY(Integer mouthY){
+            template.get().setMouthY(mouthY);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.nose_x         
+         * @param noseX 
+         * @see {@link FlFaceBean#getNoseX}
+         * @see {@link FlFaceBean#setNoseX(Integer)}
+         */
+        public Builder noseX(Integer noseX){
+            template.get().setNoseX(noseX);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.nose_y         
+         * @param noseY 
+         * @see {@link FlFaceBean#getNoseY}
+         * @see {@link FlFaceBean#setNoseY(Integer)}
+         */
+        public Builder noseY(Integer noseY){
+            template.get().setNoseY(noseY);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.angle_yaw         
+         * @param angleYaw 
+         * @see {@link FlFaceBean#getAngleYaw}
+         * @see {@link FlFaceBean#setAngleYaw(Integer)}
+         */
+        public Builder angleYaw(Integer angleYaw){
+            template.get().setAngleYaw(angleYaw);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.angle_pitch         
+         * @param anglePitch 
+         * @see {@link FlFaceBean#getAnglePitch}
+         * @see {@link FlFaceBean#setAnglePitch(Integer)}
+         */
+        public Builder anglePitch(Integer anglePitch){
+            template.get().setAnglePitch(anglePitch);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.angle_roll         
+         * @param angleRoll 
+         * @see {@link FlFaceBean#getAngleRoll}
+         * @see {@link FlFaceBean#setAngleRoll(Integer)}
+         */
+        public Builder angleRoll(Integer angleRoll){
+            template.get().setAngleRoll(angleRoll);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.ext_info         
+         * @param extInfo 扩展字段,保存人脸检测基本信息之外的其他数据,内容由SDK负责解析
+         * @see {@link FlFaceBean#getExtInfo}
+         * @see {@link FlFaceBean#setExtInfo(java.nio.ByteBuffer)}
+         */
+        public Builder extInfo(java.nio.ByteBuffer extInfo){
+            template.get().setExtInfo(extInfo);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.feature_md5         
+         * @param featureMd5 外键,人脸特征数据MD5 id
+         * @see {@link FlFaceBean#getFeatureMd5}
+         * @see {@link FlFaceBean#setFeatureMd5(String)}
+         */
+        public Builder featureMd5(String featureMd5){
+            template.get().setFeatureMd5(featureMd5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_face.create_time         
+         * @param createTime 
+         * @see {@link FlFaceBean#getCreateTime}
+         * @see {@link FlFaceBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            template.get().setCreateTime(createTime);
+            return this;
+        }
+    }
 }

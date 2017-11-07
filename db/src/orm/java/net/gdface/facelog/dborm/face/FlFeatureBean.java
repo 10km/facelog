@@ -687,4 +687,79 @@ public  class FlFeatureBean
             index = FL_FEATURE_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlFeatureBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlFeatureBean instance used for template to create new FlFeatureBean instance. */
+        static final ThreadLocal<FlFeatureBean> template = new ThreadLocal<FlFeatureBean>(){
+            @Override
+            protected FlFeatureBean initialValue() {
+                return new FlFeatureBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlFeatureBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlFeatureBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlFeatureBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_feature.md5         
+         * @param md5 主键,特征码md5校验码
+         * @see {@link FlFeatureBean#getMd5}
+         * @see {@link FlFeatureBean#setMd5(String)}
+         */
+        public Builder md5(String md5){
+            template.get().setMd5(md5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.person_id         
+         * @param personId 外键,所属用户id
+         * @see {@link FlFeatureBean#getPersonId}
+         * @see {@link FlFeatureBean#setPersonId(Integer)}
+         */
+        public Builder personId(Integer personId){
+            template.get().setPersonId(personId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.feature         
+         * @param feature 二进制特征数据
+         * @see {@link FlFeatureBean#getFeature}
+         * @see {@link FlFeatureBean#setFeature(java.nio.ByteBuffer)}
+         */
+        public Builder feature(java.nio.ByteBuffer feature){
+            template.get().setFeature(feature);
+            return this;
+        }
+        /** 
+         * fill the field : fl_feature.update_time         
+         * @param updateTime 
+         * @see {@link FlFeatureBean#getUpdateTime}
+         * @see {@link FlFeatureBean#setUpdateTime(java.util.Date)}
+         */
+        public Builder updateTime(java.util.Date updateTime){
+            template.get().setUpdateTime(updateTime);
+            return this;
+        }
+    }
 }

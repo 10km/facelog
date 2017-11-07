@@ -1074,6 +1074,121 @@ public  class LogBean
             index = FL_LOG_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for LogBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** LogBean instance used for template to create new LogBean instance. */
+        static final ThreadLocal<LogBean> template = new ThreadLocal<LogBean>(){
+            @Override
+            protected LogBean initialValue() {
+                return new LogBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see LogBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(LogBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public LogBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_log.id         
+         * @param id 日志id
+         * @see {@link LogBean#getId}
+         * @see {@link LogBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.person_id         
+         * @param personId 外键,用户id
+         * @see {@link LogBean#getPersonId}
+         * @see {@link LogBean#setPersonId(Integer)}
+         */
+        public Builder personId(Integer personId){
+            template.get().setPersonId(personId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.device_id         
+         * @param deviceId 外键,图像来源设备id
+         * @see {@link LogBean#getDeviceId}
+         * @see {@link LogBean#setDeviceId(Integer)}
+         */
+        public Builder deviceId(Integer deviceId){
+            template.get().setDeviceId(deviceId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.verify_feature         
+         * @param verifyFeature 外键,用于验证身份的人脸特征数据MD5 id
+         * @see {@link LogBean#getVerifyFeature}
+         * @see {@link LogBean#setVerifyFeature(String)}
+         */
+        public Builder verifyFeature(String verifyFeature){
+            template.get().setVerifyFeature(verifyFeature);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.compare_face         
+         * @param compareFace 外键,数据库中相似度最高的人脸 id
+         * @see {@link LogBean#getCompareFace}
+         * @see {@link LogBean#setCompareFace(Integer)}
+         */
+        public Builder compareFace(Integer compareFace){
+            template.get().setCompareFace(compareFace);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.similarty         
+         * @param similarty 验证相似度
+         * @see {@link LogBean#getSimilarty}
+         * @see {@link LogBean#setSimilarty(Double)}
+         */
+        public Builder similarty(Double similarty){
+            template.get().setSimilarty(similarty);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.verify_time         
+         * @param verifyTime 验证时间(可能由前端设备提供时间)
+         * @see {@link LogBean#getVerifyTime}
+         * @see {@link LogBean#setVerifyTime(java.util.Date)}
+         */
+        public Builder verifyTime(java.util.Date verifyTime){
+            template.get().setVerifyTime(verifyTime);
+            return this;
+        }
+        /** 
+         * fill the field : fl_log.create_time         
+         * @param createTime 
+         * @see {@link LogBean#getCreateTime}
+         * @see {@link LogBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            template.get().setCreateTime(createTime);
+            return this;
+        }
+    }
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.LogBean}

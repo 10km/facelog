@@ -632,6 +632,71 @@ public  class PermitBean
             index = FL_PERMIT_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for PermitBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** PermitBean instance used for template to create new PermitBean instance. */
+        static final ThreadLocal<PermitBean> template = new ThreadLocal<PermitBean>(){
+            @Override
+            protected PermitBean initialValue() {
+                return new PermitBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see PermitBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(PermitBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public PermitBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_permit.device_group_id         
+         * @param deviceGroupId 外键,设备组id
+         * @see {@link PermitBean#getDeviceGroupId}
+         * @see {@link PermitBean#setDeviceGroupId(Integer)}
+         */
+        public Builder deviceGroupId(Integer deviceGroupId){
+            template.get().setDeviceGroupId(deviceGroupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.person_group_id         
+         * @param personGroupId 外键,人员组id
+         * @see {@link PermitBean#getPersonGroupId}
+         * @see {@link PermitBean#setPersonGroupId(Integer)}
+         */
+        public Builder personGroupId(Integer personGroupId){
+            template.get().setPersonGroupId(personGroupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_permit.create_time         
+         * @param createTime 
+         * @see {@link PermitBean#getCreateTime}
+         * @see {@link PermitBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            template.get().setCreateTime(createTime);
+            return this;
+        }
+    }
     /////// FOR THRIFT //////
     /** 
      * cast {@code this} to {@link net.gdface.facelog.client.thrift.PermitBean}

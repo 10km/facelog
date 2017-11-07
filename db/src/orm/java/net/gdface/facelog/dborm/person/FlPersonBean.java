@@ -1289,4 +1289,149 @@ public  class FlPersonBean
             index = FL_PERSON_JAVA_FIELDS_LIST.indexOf(column);
         return index;    
     }
+    public static final Builder builder(){
+        return new Builder();
+    }
+    /** 
+     * a builder for FlPersonBean,the template instance is thread local variable
+     * a instance of Builder can be reused.
+     */
+    public static final class Builder{
+        /** FlPersonBean instance used for template to create new FlPersonBean instance. */
+        static final ThreadLocal<FlPersonBean> template = new ThreadLocal<FlPersonBean>(){
+            @Override
+            protected FlPersonBean initialValue() {
+                return new FlPersonBean();
+            }};
+        private Builder() {}
+        /** 
+         * reset the bean as template 
+         * @see FlPersonBean#reset()
+         */
+        public Builder reset(){
+            template.get().reset();
+            return this;
+        }
+        /** set a bean as template,must not be {@code null} */
+        public Builder asTemplate(FlPersonBean bean){
+            if(null == bean)
+                throw new NullPointerException();
+            template.set(bean);
+            return this;
+        }
+        /** return a clone instance of {@link #template}*/
+        public FlPersonBean build(){
+            return template.get().clone();
+        }
+        /** 
+         * fill the field : fl_person.id         
+         * @param id 用户id
+         * @see {@link FlPersonBean#getId}
+         * @see {@link FlPersonBean#setId(Integer)}
+         */
+        public Builder id(Integer id){
+            template.get().setId(id);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.group_id         
+         * @param groupId 所属用户组id
+         * @see {@link FlPersonBean#getGroupId}
+         * @see {@link FlPersonBean#setGroupId(Integer)}
+         */
+        public Builder groupId(Integer groupId){
+            template.get().setGroupId(groupId);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.name         
+         * @param name 姓名
+         * @see {@link FlPersonBean#getName}
+         * @see {@link FlPersonBean#setName(String)}
+         */
+        public Builder name(String name){
+            template.get().setName(name);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.sex         
+         * @param sex 性别,0:女,1:男
+         * @see {@link FlPersonBean#getSex}
+         * @see {@link FlPersonBean#setSex(Integer)}
+         */
+        public Builder sex(Integer sex){
+            template.get().setSex(sex);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.birthdate         
+         * @param birthdate 出生日期
+         * @see {@link FlPersonBean#getBirthdate}
+         * @see {@link FlPersonBean#setBirthdate(java.util.Date)}
+         */
+        public Builder birthdate(java.util.Date birthdate){
+            template.get().setBirthdate(birthdate);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.papers_type         
+         * @param papersType 证件类型,0:未知,1:身份证,2:护照,3:台胞证,4:港澳通行证,5:军官证,6:外国人居留证,7:员工卡,8:其他
+         * @see {@link FlPersonBean#getPapersType}
+         * @see {@link FlPersonBean#setPapersType(Integer)}
+         */
+        public Builder papersType(Integer papersType){
+            template.get().setPapersType(papersType);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.papers_num         
+         * @param papersNum 证件号码
+         * @see {@link FlPersonBean#getPapersNum}
+         * @see {@link FlPersonBean#setPapersNum(String)}
+         */
+        public Builder papersNum(String papersNum){
+            template.get().setPapersNum(papersNum);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.image_md5         
+         * @param imageMd5 用户默认照片(证件照,标准照)的md5校验码,外键
+         * @see {@link FlPersonBean#getImageMd5}
+         * @see {@link FlPersonBean#setImageMd5(String)}
+         */
+        public Builder imageMd5(String imageMd5){
+            template.get().setImageMd5(imageMd5);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.expiry_date         
+         * @param expiryDate 验证有效期限(超过期限不能通过验证),为NULL永久有效
+         * @see {@link FlPersonBean#getExpiryDate}
+         * @see {@link FlPersonBean#setExpiryDate(java.util.Date)}
+         */
+        public Builder expiryDate(java.util.Date expiryDate){
+            template.get().setExpiryDate(expiryDate);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.create_time         
+         * @param createTime 
+         * @see {@link FlPersonBean#getCreateTime}
+         * @see {@link FlPersonBean#setCreateTime(java.util.Date)}
+         */
+        public Builder createTime(java.util.Date createTime){
+            template.get().setCreateTime(createTime);
+            return this;
+        }
+        /** 
+         * fill the field : fl_person.update_time         
+         * @param updateTime 
+         * @see {@link FlPersonBean#getUpdateTime}
+         * @see {@link FlPersonBean#setUpdateTime(java.util.Date)}
+         */
+        public Builder updateTime(java.util.Date updateTime){
+            template.get().setUpdateTime(updateTime);
+            return this;
+        }
+    }
 }
