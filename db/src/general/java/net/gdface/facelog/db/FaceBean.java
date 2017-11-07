@@ -2107,7 +2107,7 @@ public final class FaceBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FaceBean bean){
+        public Builder template(FaceBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

@@ -1026,7 +1026,7 @@ public  class DeviceBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(DeviceBean bean){
+        public Builder template(DeviceBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

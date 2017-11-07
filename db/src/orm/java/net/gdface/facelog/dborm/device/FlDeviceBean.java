@@ -1031,7 +1031,7 @@ public  class FlDeviceBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlDeviceBean bean){
+        public Builder template(FlDeviceBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

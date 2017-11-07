@@ -735,7 +735,7 @@ public final class PersonGroupBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(PersonGroupBean bean){
+        public Builder template(PersonGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

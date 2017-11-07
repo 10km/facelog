@@ -2049,7 +2049,7 @@ public  class FlFaceBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlFaceBean bean){
+        public Builder template(FlFaceBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

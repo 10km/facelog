@@ -1098,7 +1098,7 @@ public  class LogBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(LogBean bean){
+        public Builder template(LogBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

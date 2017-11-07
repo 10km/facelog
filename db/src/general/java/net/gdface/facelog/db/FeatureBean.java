@@ -737,7 +737,7 @@ public final class FeatureBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FeatureBean bean){
+        public Builder template(FeatureBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

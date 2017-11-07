@@ -722,7 +722,7 @@ public  class FlDeviceGroupBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlDeviceGroupBean bean){
+        public Builder template(FlDeviceGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

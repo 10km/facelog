@@ -863,7 +863,7 @@ public  class FlLogLightBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlLogLightBean bean){
+        public Builder template(FlLogLightBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

@@ -656,7 +656,7 @@ public  class PermitBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(PermitBean bean){
+        public Builder template(PermitBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

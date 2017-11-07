@@ -595,7 +595,7 @@ public  class FlStoreBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlStoreBean bean){
+        public Builder template(FlStoreBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

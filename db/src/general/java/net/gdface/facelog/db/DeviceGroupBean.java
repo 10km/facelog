@@ -735,7 +735,7 @@ public final class DeviceGroupBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(DeviceGroupBean bean){
+        public Builder template(DeviceGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

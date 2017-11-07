@@ -894,7 +894,7 @@ public final class LogLightBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(LogLightBean bean){
+        public Builder template(LogLightBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

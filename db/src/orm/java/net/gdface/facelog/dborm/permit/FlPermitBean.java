@@ -663,7 +663,7 @@ public  class FlPermitBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlPermitBean bean){
+        public Builder template(FlPermitBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

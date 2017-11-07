@@ -1046,7 +1046,7 @@ public  class FlImageBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlImageBean bean){
+        public Builder template(FlImageBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);

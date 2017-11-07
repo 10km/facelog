@@ -1313,7 +1313,7 @@ public  class FlPersonBean
             return this;
         }
         /** set a bean as template,must not be {@code null} */
-        public Builder asTemplate(FlPersonBean bean){
+        public Builder template(FlPersonBean bean){
             if(null == bean)
                 throw new NullPointerException();
             template.set(bean);
