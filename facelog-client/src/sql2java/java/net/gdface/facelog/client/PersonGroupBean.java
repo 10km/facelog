@@ -33,10 +33,10 @@ public  class PersonGroupBean
     private Integer parent;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -93,13 +93,14 @@ public  class PersonGroupBean
     }
     public PersonGroupBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
      * @param id PK# 1 
      */
     public PersonGroupBean(Integer id){
-        super();
+        this();
         setId(id);
     }
     /**
@@ -485,6 +486,16 @@ public  class PersonGroupBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.id = null;
+        this.name = null;
+        this.leaf = null;
+        this.parent = null;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = 0L;
     }
     @Override
     public boolean equals(Object object)

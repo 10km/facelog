@@ -37,10 +37,10 @@ public final class ImageBean
     private Integer height;
 
     /** comments:通道数 */
-    private Integer depth = new Integer(0)/* DEFAULT:'0'*/;
+    private Integer depth;
 
     /** comments:图像中的人脸数目 */
-    private Integer faceNum = new Integer(0)/* DEFAULT:'0'*/;
+    private Integer faceNum;
 
     /** comments:缩略图md5,图像数据存储在 fl_imae_store(md5) */
     private String thumbMd5;
@@ -49,10 +49,10 @@ public final class ImageBean
     private Integer deviceId;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -115,13 +115,14 @@ public final class ImageBean
     }
     public ImageBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
      * @param md5 PK# 1 
      */
     public ImageBean(String md5){
-        super();
+        this();
         setMd5(md5);
     }
     /**
@@ -790,6 +791,20 @@ public final class ImageBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.md5 = null;
+        this.format = null;
+        this.width = null;
+        this.height = null;
+        this.depth = new Integer(0)/* DEFAULT:'0'*/;
+        this.faceNum = new Integer(0)/* DEFAULT:'0'*/;
+        this.thumbMd5 = null;
+        this.deviceId = null;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = (FL_IMAGE_ID_DEPTH_MASK | FL_IMAGE_ID_FACE_NUM_MASK);
     }
     @Override
     public boolean equals(Object object)

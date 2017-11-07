@@ -68,13 +68,13 @@ public  class FlFaceBean
     /** comments:外键,人脸特征数据MD5 id */
     private String featureMd5;
 
-    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+    private java.util.Date createTime;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -131,13 +131,14 @@ public  class FlFaceBean
     }
     public FlFaceBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
      * @param id PK# 1 
      */
     public FlFaceBean(Integer id){
-        super();
+        this();
         setId(id);
     }
     /**
@@ -1641,6 +1642,32 @@ public  class FlFaceBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.id = null;
+        this.imageMd5 = null;
+        this.faceLeft = null;
+        this.faceTop = null;
+        this.faceWidth = null;
+        this.faceHeight = null;
+        this.eyeLeftx = null;
+        this.eyeLefty = null;
+        this.eyeRightx = null;
+        this.eyeRighty = null;
+        this.mouthX = null;
+        this.mouthY = null;
+        this.noseX = null;
+        this.noseY = null;
+        this.angleYaw = null;
+        this.anglePitch = null;
+        this.angleRoll = null;
+        this.extInfo = null;
+        this.featureMd5 = null;
+        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = 0L;
     }
     @Override
     public boolean equals(Object object)

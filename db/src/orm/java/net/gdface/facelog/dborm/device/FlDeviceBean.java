@@ -29,7 +29,7 @@ public  class FlDeviceBean
     private Integer id;
 
     /** comments:所属设备组id */
-    private Integer groupId = new Integer(1)/* DEFAULT:'1'*/;
+    private Integer groupId;
 
     /** comments:设备名称 */
     private String name;
@@ -43,15 +43,15 @@ public  class FlDeviceBean
     /** comments:6字节MAC地址(HEX) */
     private String mac;
 
-    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+    private java.util.Date createTime;
 
-    private java.util.Date updateTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+    private java.util.Date updateTime;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -108,13 +108,14 @@ public  class FlDeviceBean
     }
     public FlDeviceBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
      * @param id PK# 1 
      */
     public FlDeviceBean(Integer id){
-        super();
+        this();
         setId(id);
     }
     /**
@@ -755,6 +756,20 @@ public  class FlDeviceBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.id = null;
+        this.groupId = new Integer(1)/* DEFAULT:'1'*/;
+        this.name = null;
+        this.version = null;
+        this.serialNo = null;
+        this.mac = null;
+        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        this.updateTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = (FL_DEVICE_ID_GROUP_ID_MASK);
     }
     @Override
     public boolean equals(Object object)

@@ -25,10 +25,10 @@ public final class LogLightBean
     private static final long serialVersionUID = 4419196843551738129L;
     
     /** comments:日志id */
-    private Integer id = new Integer(0)/* DEFAULT:'0'*/;
+    private Integer id;
 
     /** comments:用户id */
-    private Integer personId = new Integer(0)/* DEFAULT:'0'*/;
+    private Integer personId;
 
     /** comments:姓名 */
     private String name;
@@ -40,13 +40,13 @@ public final class LogLightBean
     private String papersNum;
 
     /** comments:验证时间(可能由前端设备提供时间) */
-    private java.util.Date verifyTime/* DEFAULT:'0000-00-00 00:00:00'*/;
+    private java.util.Date verifyTime;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -109,6 +109,7 @@ public final class LogLightBean
     }
     public LogLightBean(){
         super();
+        reset();
     }
     /**
      * Getter method for {@link #id}.<br>
@@ -635,6 +636,18 @@ public final class LogLightBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.id = new Integer(0)/* DEFAULT:'0'*/;
+        this.personId = new Integer(0)/* DEFAULT:'0'*/;
+        this.name = null;
+        this.papersType = null;
+        this.papersNum = null;
+        this.verifyTime = null/* DEFAULT:'0000-00-00 00:00:00'*/;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = (FL_LOG_LIGHT_ID_ID_MASK | FL_LOG_LIGHT_ID_PERSON_ID_MASK);
     }
     @Override
     public boolean equals(Object object)

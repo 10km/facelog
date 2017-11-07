@@ -33,13 +33,13 @@ public  class FlPermitBean
     /** comments:外键,人员组id */
     private Integer personGroupId;
 
-    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+    private java.util.Date createTime;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -96,6 +96,7 @@ public  class FlPermitBean
     }
     public FlPermitBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
@@ -103,7 +104,7 @@ public  class FlPermitBean
      @param personGroupId PK# 2 
      */
     public FlPermitBean(Integer deviceGroupId,Integer personGroupId){
-        super();
+        this();
         setDeviceGroupId(deviceGroupId);
         setPersonGroupId(personGroupId);
     }
@@ -441,6 +442,15 @@ public  class FlPermitBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.deviceGroupId = null;
+        this.personGroupId = null;
+        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = 0L;
     }
     @Override
     public boolean equals(Object object)

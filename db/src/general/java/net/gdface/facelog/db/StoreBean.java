@@ -34,10 +34,10 @@ public final class StoreBean
     private java.nio.ByteBuffer data;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -100,13 +100,14 @@ public final class StoreBean
     }
     public StoreBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
      * @param md5 PK# 1 
      */
     public StoreBean(String md5){
-        super();
+        this();
         setMd5(md5);
     }
     /**
@@ -385,6 +386,15 @@ public final class StoreBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.md5 = null;
+        this.encoding = null;
+        this.data = null;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = 0L;
     }
     @Override
     public boolean equals(Object object)

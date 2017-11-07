@@ -24,7 +24,7 @@ public  class PersonBean
     private Integer id;
 
     /** comments:所属用户组id */
-    private Integer groupId = new Integer(1)/* DEFAULT:'1'*/;
+    private Integer groupId;
 
     /** comments:姓名 */
     private String name;
@@ -45,17 +45,17 @@ public  class PersonBean
     private String imageMd5;
 
     /** comments:验证有效期限(超过期限不能通过验证),为NULL永久有效 */
-    private java.util.Date expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0))/* DEFAULT:'2050-12-31'*/;
+    private java.util.Date expiryDate;
 
-    private java.util.Date createTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+    private java.util.Date createTime;
 
-    private java.util.Date updateTime/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+    private java.util.Date updateTime;
 
     /** columns modified flag */
-    private long modified = 0L;
+    private long modified;
     /** columns initialized flag */
-    private long initialized = 0L;
-    private boolean _isNew = true;
+    private long initialized;
+    private boolean _isNew;
     /**
      * Determines if the current object is new.
      *
@@ -112,13 +112,14 @@ public  class PersonBean
     }
     public PersonBean(){
         super();
+        reset();
     }
     /**
      * construct a new instance filled with primary keys
      * @param id PK# 1 
      */
     public PersonBean(Integer id){
-        super();
+        this();
         setId(id);
     }
     /**
@@ -998,6 +999,23 @@ public  class PersonBean
     private void resetInitialized()
     {
         initialized = 0L;
+    }
+    /** reset all fields to initial value, equal to a new bean */
+    public void reset(){
+        this.id = null;
+        this.groupId = new Integer(1)/* DEFAULT:'1'*/;
+        this.name = null;
+        this.sex = null;
+        this.birthdate = null;
+        this.papersType = null;
+        this.papersNum = null;
+        this.imageMd5 = null;
+        this.expiryDate = java.text.DateFormat.getDateInstance().parse("2050-12-31",new java.text.ParsePosition(0))/* DEFAULT:'2050-12-31'*/;
+        this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        this.updateTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
+        this._isNew = true;
+        this.modified = 0L;
+        this.initialized = (FL_PERSON_ID_GROUP_ID_MASK | FL_PERSON_ID_EXPIRY_DATE_MASK);
     }
     @Override
     public boolean equals(Object object)
