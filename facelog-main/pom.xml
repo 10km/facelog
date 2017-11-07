@@ -1,65 +1,72 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>net.gdface.facelog</groupId>
-    <artifactId>facelog</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>facelog-main</artifactId>
-  <name>facelog-main</name>
-  <url>http://maven.apache.org</url>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  <dependencies>
-    <dependency>
-      <groupId>net.gdface.facelog</groupId>
-      <artifactId>facelog-db</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>gu.simplemq</groupId>
-      <artifactId>simplemq</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-  	  <groupId>net.gdface.common</groupId>
-      <artifactId>common-base</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.gdface.facelog</groupId>
+		<artifactId>facelog</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>facelog-main</artifactId>
+	<name>facelog-main</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>net.gdface.facelog</groupId>
+			<artifactId>facelog-db</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gu.simplemq</groupId>
+			<artifactId>simplemq</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.gdface.common</groupId>
+			<artifactId>common-base</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.25</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <version>1.7.25</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.facebook.swift/swift-service -->
 		<dependency>
-		    <groupId>com.facebook.swift</groupId>
-		    <artifactId>swift-service</artifactId>
-		    <version>0.14.2</version>
+			<groupId>com.facebook.swift</groupId>
+			<artifactId>swift-service</artifactId>
+			<version>0.14.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.javatuples/javatuples -->
 		<dependency>
-		    <groupId>org.javatuples</groupId>
-		    <artifactId>javatuples</artifactId>
-		    <version>1.2</version>
+			<groupId>org.javatuples</groupId>
+			<artifactId>javatuples</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava</artifactId>
-		    <version>20.0</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>20.0</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
 	<build>
 		<!-- properties 配置文件打入jar包 -->
 		<resources>
@@ -81,7 +88,6 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>3.0.0</version>
-
 				<executions>
 					<!-- 配置sql2java文件夹,用于保存sql2java生成的代码 -->
 					<execution>
@@ -115,12 +121,32 @@
 									<mainClass>net.gdface.facelog.service.Main</mainClass>
 								</transformer>
 							</transformers>
-							<minimizeJar>true</minimizeJar>
+							<minimizeJar>false</minimizeJar>
 							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<!-- 生成依赖包的源码jar包 -->
+							<createSourcesJar>true</createSourcesJar>
 							<shadedClassifierName>standalone</shadedClassifierName>
+							<!-- 强制将log4j打入jar包(log4j不在依赖树上) -->
+							<filters>
+								<filter>
+									<artifact>log4j:log4j</artifact>
+									<includes>
+										<include>**/**</include>
+									</includes>
+								</filter>
+							</filters>
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<!-- 跳过测试 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
