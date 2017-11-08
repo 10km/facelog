@@ -153,7 +153,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -165,7 +165,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_ID_MASK;
         initialized |= FL_LOG_ID_ID_MASK;
     }
-
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -220,7 +219,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to personId
+     * @param newVal the new value( NOT NULL) to be assigned to personId
      */
     public void setPersonId(Integer newVal)
     {
@@ -232,7 +231,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_PERSON_ID_MASK;
         initialized |= FL_LOG_ID_PERSON_ID_MASK;
     }
-
     /**
      * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -286,7 +284,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to deviceId
+     * @param newVal the new value to be assigned to deviceId
      */
     public void setDeviceId(Integer newVal)
     {
@@ -298,7 +296,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_DEVICE_ID_MASK;
         initialized |= FL_LOG_ID_DEVICE_ID_MASK;
     }
-
     /**
      * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -352,7 +349,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to verifyFeature
+     * @param newVal the new value to be assigned to verifyFeature
      */
     public void setVerifyFeature(String newVal)
     {
@@ -364,7 +361,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
         initialized |= FL_LOG_ID_VERIFY_FEATURE_MASK;
     }
-
     /**
      * Determines if the verifyFeature has been modified.
      *
@@ -408,7 +404,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to compareFace
+     * @param newVal the new value to be assigned to compareFace
      */
     public void setCompareFace(Integer newVal)
     {
@@ -420,7 +416,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_COMPARE_FACE_MASK;
         initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
     }
-
     /**
      * Setter method for {@link #compareFace}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -473,7 +468,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to similarty
+     * @param newVal the new value to be assigned to similarty
      */
     public void setSimilarty(Double newVal)
     {
@@ -485,7 +480,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_SIMILARTY_MASK;
         initialized |= FL_LOG_ID_SIMILARTY_MASK;
     }
-
     /**
      * Setter method for {@link #similarty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -540,7 +534,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to verifyTime
+     * @param newVal the new value( NOT NULL) to be assigned to verifyTime
      */
     public void setVerifyTime(java.util.Date newVal)
     {
@@ -552,7 +546,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_VERIFY_TIME_MASK;
         initialized |= FL_LOG_ID_VERIFY_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -606,7 +599,7 @@ public  class FlLogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -618,7 +611,6 @@ public  class FlLogBean
         modified |= FL_LOG_ID_CREATE_TIME_MASK;
         initialized |= FL_LOG_ID_CREATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

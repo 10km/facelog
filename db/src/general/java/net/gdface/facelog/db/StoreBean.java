@@ -140,9 +140,8 @@ public final class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to md5
+     * @param newVal the new value( NOT NULL) to be assigned to md5
      */
-    @ThriftField()
     public void setMd5(String newVal)
     {
         if (equal(newVal, md5) && checkMd5Initialized()) {
@@ -153,7 +152,15 @@ public final class StoreBean
         modified |= FL_STORE_ID_MD5_MASK;
         initialized |= FL_STORE_ID_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "md5")
+    public void writeMd5(String newVal){
+        md5 = newVal;
+    }
     /**
      * Determines if the md5 has been modified.
      *
@@ -197,9 +204,8 @@ public final class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to encoding
+     * @param newVal the new value to be assigned to encoding
      */
-    @ThriftField()
     public void setEncoding(String newVal)
     {
         if (equal(newVal, encoding) && checkEncodingInitialized()) {
@@ -210,7 +216,15 @@ public final class StoreBean
         modified |= FL_STORE_ID_ENCODING_MASK;
         initialized |= FL_STORE_ID_ENCODING_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "encoding")
+    public void writeEncoding(String newVal){
+        encoding = newVal;
+    }
     /**
      * Determines if the encoding has been modified.
      *
@@ -254,9 +268,8 @@ public final class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to data
+     * @param newVal the new value to be assigned to data
      */
-    @ThriftField()
     public void setData(java.nio.ByteBuffer newVal)
     {
         if (equal(newVal, data) && checkDataInitialized()) {
@@ -267,7 +280,15 @@ public final class StoreBean
         modified |= FL_STORE_ID_DATA_MASK;
         initialized |= FL_STORE_ID_DATA_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "data")
+    public void writeData(java.nio.ByteBuffer newVal){
+        data = newVal;
+    }
     /**
      * Determines if the data has been modified.
      *

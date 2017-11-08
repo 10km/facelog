@@ -154,7 +154,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -166,7 +166,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_ID_MASK;
         initialized |= FL_PERSON_ID_ID_MASK;
     }
-
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -221,7 +220,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to groupId
+     * @param newVal the new value to be assigned to groupId
      */
     public void setGroupId(Integer newVal)
     {
@@ -233,7 +232,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_GROUP_ID_MASK;
         initialized |= FL_PERSON_ID_GROUP_ID_MASK;
     }
-
     /**
      * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -287,7 +285,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to name
+     * @param newVal the new value( NOT NULL) to be assigned to name
      */
     public void setName(String newVal)
     {
@@ -299,7 +297,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_NAME_MASK;
         initialized |= FL_PERSON_ID_NAME_MASK;
     }
-
     /**
      * Determines if the name has been modified.
      *
@@ -342,7 +339,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to sex
+     * @param newVal the new value to be assigned to sex
      */
     public void setSex(Integer newVal)
     {
@@ -354,7 +351,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_SEX_MASK;
         initialized |= FL_PERSON_ID_SEX_MASK;
     }
-
     /**
      * Setter method for {@link #sex}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -407,7 +403,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to birthdate
+     * @param newVal the new value to be assigned to birthdate
      */
     public void setBirthdate(java.util.Date newVal)
     {
@@ -419,7 +415,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_BIRTHDATE_MASK;
         initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
     }
-
     /**
      * Setter method for {@link #birthdate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -472,7 +467,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to papersType
+     * @param newVal the new value to be assigned to papersType
      */
     public void setPapersType(Integer newVal)
     {
@@ -484,7 +479,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
         initialized |= FL_PERSON_ID_PAPERS_TYPE_MASK;
     }
-
     /**
      * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -537,7 +531,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to papersNum
+     * @param newVal the new value to be assigned to papersNum
      */
     public void setPapersNum(String newVal)
     {
@@ -549,7 +543,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_PAPERS_NUM_MASK;
         initialized |= FL_PERSON_ID_PAPERS_NUM_MASK;
     }
-
     /**
      * Determines if the papersNum has been modified.
      *
@@ -593,7 +586,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to imageMd5
+     * @param newVal the new value to be assigned to imageMd5
      */
     public void setImageMd5(String newVal)
     {
@@ -605,7 +598,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_IMAGE_MD5_MASK;
         initialized |= FL_PERSON_ID_IMAGE_MD5_MASK;
     }
-
     /**
      * Determines if the imageMd5 has been modified.
      *
@@ -649,7 +641,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to expiryDate
+     * @param newVal the new value to be assigned to expiryDate
      */
     public void setExpiryDate(java.util.Date newVal)
     {
@@ -661,7 +653,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
         initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
     }
-
     /**
      * Setter method for {@link #expiryDate}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -715,7 +706,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -727,7 +718,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_CREATE_TIME_MASK;
         initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -781,7 +771,7 @@ public  class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to updateTime
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -793,7 +783,6 @@ public  class PersonBean
         modified |= FL_PERSON_ID_UPDATE_TIME_MASK;
         initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

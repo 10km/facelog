@@ -150,7 +150,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -162,7 +162,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_ID_MASK;
         initialized |= FL_DEVICE_ID_ID_MASK;
     }
-
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -217,7 +216,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to groupId
+     * @param newVal the new value to be assigned to groupId
      */
     public void setGroupId(Integer newVal)
     {
@@ -229,7 +228,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_GROUP_ID_MASK;
         initialized |= FL_DEVICE_ID_GROUP_ID_MASK;
     }
-
     /**
      * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -282,7 +280,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to name
+     * @param newVal the new value to be assigned to name
      */
     public void setName(String newVal)
     {
@@ -294,7 +292,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_NAME_MASK;
         initialized |= FL_DEVICE_ID_NAME_MASK;
     }
-
     /**
      * Determines if the name has been modified.
      *
@@ -337,7 +334,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to version
+     * @param newVal the new value to be assigned to version
      */
     public void setVersion(String newVal)
     {
@@ -349,7 +346,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_VERSION_MASK;
         initialized |= FL_DEVICE_ID_VERSION_MASK;
     }
-
     /**
      * Determines if the version has been modified.
      *
@@ -392,7 +388,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to serialNo
+     * @param newVal the new value to be assigned to serialNo
      */
     public void setSerialNo(String newVal)
     {
@@ -404,7 +400,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_SERIAL_NO_MASK;
         initialized |= FL_DEVICE_ID_SERIAL_NO_MASK;
     }
-
     /**
      * Determines if the serialNo has been modified.
      *
@@ -447,7 +442,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to mac
+     * @param newVal the new value to be assigned to mac
      */
     public void setMac(String newVal)
     {
@@ -459,7 +454,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_MAC_MASK;
         initialized |= FL_DEVICE_ID_MAC_MASK;
     }
-
     /**
      * Determines if the mac has been modified.
      *
@@ -503,7 +497,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -515,7 +509,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_CREATE_TIME_MASK;
         initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -569,7 +562,7 @@ public  class FlDeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to updateTime
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -581,7 +574,6 @@ public  class FlDeviceBean
         modified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
         initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

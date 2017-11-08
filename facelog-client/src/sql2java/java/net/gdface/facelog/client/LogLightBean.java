@@ -130,7 +130,7 @@ public  class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value( NOT NULL) to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -142,7 +142,6 @@ public  class LogLightBean
         modified |= FL_LOG_LIGHT_ID_ID_MASK;
         initialized |= FL_LOG_LIGHT_ID_ID_MASK;
     }
-
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -197,7 +196,7 @@ public  class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to personId
+     * @param newVal the new value( NOT NULL) to be assigned to personId
      */
     public void setPersonId(Integer newVal)
     {
@@ -209,7 +208,6 @@ public  class LogLightBean
         modified |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
         initialized |= FL_LOG_LIGHT_ID_PERSON_ID_MASK;
     }
-
     /**
      * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -263,7 +261,7 @@ public  class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to name
+     * @param newVal the new value( NOT NULL) to be assigned to name
      */
     public void setName(String newVal)
     {
@@ -275,7 +273,6 @@ public  class LogLightBean
         modified |= FL_LOG_LIGHT_ID_NAME_MASK;
         initialized |= FL_LOG_LIGHT_ID_NAME_MASK;
     }
-
     /**
      * Determines if the name has been modified.
      *
@@ -318,7 +315,7 @@ public  class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to papersType
+     * @param newVal the new value to be assigned to papersType
      */
     public void setPapersType(Integer newVal)
     {
@@ -330,7 +327,6 @@ public  class LogLightBean
         modified |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
         initialized |= FL_LOG_LIGHT_ID_PAPERS_TYPE_MASK;
     }
-
     /**
      * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -383,7 +379,7 @@ public  class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to papersNum
+     * @param newVal the new value to be assigned to papersNum
      */
     public void setPapersNum(String newVal)
     {
@@ -395,7 +391,6 @@ public  class LogLightBean
         modified |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
         initialized |= FL_LOG_LIGHT_ID_PAPERS_NUM_MASK;
     }
-
     /**
      * Determines if the papersNum has been modified.
      *
@@ -440,7 +435,7 @@ public  class LogLightBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to verifyTime
+     * @param newVal the new value( NOT NULL) to be assigned to verifyTime
      */
     public void setVerifyTime(java.util.Date newVal)
     {
@@ -452,7 +447,6 @@ public  class LogLightBean
         modified |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
         initialized |= FL_LOG_LIGHT_ID_VERIFY_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #verifyTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

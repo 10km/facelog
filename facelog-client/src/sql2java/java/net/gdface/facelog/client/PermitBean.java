@@ -131,7 +131,7 @@ public  class PermitBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to deviceGroupId
+     * @param newVal the new value( NOT NULL) to be assigned to deviceGroupId
      */
     public void setDeviceGroupId(Integer newVal)
     {
@@ -143,7 +143,6 @@ public  class PermitBean
         modified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
         initialized |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
     }
-
     /**
      * Setter method for {@link #deviceGroupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -199,7 +198,7 @@ public  class PermitBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to personGroupId
+     * @param newVal the new value( NOT NULL) to be assigned to personGroupId
      */
     public void setPersonGroupId(Integer newVal)
     {
@@ -211,7 +210,6 @@ public  class PermitBean
         modified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
         initialized |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
     }
-
     /**
      * Setter method for {@link #personGroupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -265,7 +263,7 @@ public  class PermitBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -277,7 +275,6 @@ public  class PermitBean
         modified |= FL_PERMIT_ID_CREATE_TIME_MASK;
         initialized |= FL_PERMIT_ID_CREATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

@@ -156,9 +156,8 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if (equal(newVal, id) && checkIdInitialized()) {
@@ -169,7 +168,15 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_ID_MASK;
         initialized |= FL_DEVICE_ID_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "id")
+    public void writeId(Integer newVal){
+        id = newVal;
+    }
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -225,9 +232,8 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to groupId
+     * @param newVal the new value to be assigned to groupId
      */
-    @ThriftField()
     public void setGroupId(Integer newVal)
     {
         if (equal(newVal, groupId) && checkGroupIdInitialized()) {
@@ -238,7 +244,15 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_GROUP_ID_MASK;
         initialized |= FL_DEVICE_ID_GROUP_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "groupId")
+    public void writeGroupId(Integer newVal){
+        groupId = newVal;
+    }
     /**
      * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -292,9 +306,8 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to name
+     * @param newVal the new value to be assigned to name
      */
-    @ThriftField()
     public void setName(String newVal)
     {
         if (equal(newVal, name) && checkNameInitialized()) {
@@ -305,7 +318,15 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_NAME_MASK;
         initialized |= FL_DEVICE_ID_NAME_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "name")
+    public void writeName(String newVal){
+        name = newVal;
+    }
     /**
      * Determines if the name has been modified.
      *
@@ -349,9 +370,8 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to version
+     * @param newVal the new value to be assigned to version
      */
-    @ThriftField()
     public void setVersion(String newVal)
     {
         if (equal(newVal, version) && checkVersionInitialized()) {
@@ -362,7 +382,15 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_VERSION_MASK;
         initialized |= FL_DEVICE_ID_VERSION_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "version")
+    public void writeVersion(String newVal){
+        version = newVal;
+    }
     /**
      * Determines if the version has been modified.
      *
@@ -406,9 +434,8 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to serialNo
+     * @param newVal the new value to be assigned to serialNo
      */
-    @ThriftField()
     public void setSerialNo(String newVal)
     {
         if (equal(newVal, serialNo) && checkSerialNoInitialized()) {
@@ -419,7 +446,15 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_SERIAL_NO_MASK;
         initialized |= FL_DEVICE_ID_SERIAL_NO_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "serialNo")
+    public void writeSerialNo(String newVal){
+        serialNo = newVal;
+    }
     /**
      * Determines if the serialNo has been modified.
      *
@@ -463,9 +498,8 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to mac
+     * @param newVal the new value to be assigned to mac
      */
-    @ThriftField()
     public void setMac(String newVal)
     {
         if (equal(newVal, mac) && checkMacInitialized()) {
@@ -476,7 +510,15 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_MAC_MASK;
         initialized |= FL_DEVICE_ID_MAC_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "mac")
+    public void writeMac(String newVal){
+        mac = newVal;
+    }
     /**
      * Determines if the mac has been modified.
      *
@@ -528,7 +570,7 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -540,14 +582,14 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_CREATE_TIME_MASK;
         initialized |= FL_DEVICE_ID_CREATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setCreateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "createTime",value = 10)
+    @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
-        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+        createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -610,7 +652,7 @@ public final class DeviceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to updateTime
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -622,14 +664,14 @@ public final class DeviceBean
         modified |= FL_DEVICE_ID_UPDATE_TIME_MASK;
         initialized |= FL_DEVICE_ID_UPDATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setUpdateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "updateTime",value = 11)
+    @ThriftField(name = "updateTime")
     public void writeUpdateTime(Long newVal){
-        setUpdateTime(null == newVal?null:new java.util.Date(newVal));
+        updateTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #updateTime}.<br>

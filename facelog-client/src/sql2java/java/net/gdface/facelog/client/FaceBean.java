@@ -166,7 +166,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -178,7 +178,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_ID_MASK;
         initialized |= FL_FACE_ID_ID_MASK;
     }
-
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -233,7 +232,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to imageMd5
+     * @param newVal the new value( NOT NULL) to be assigned to imageMd5
      */
     public void setImageMd5(String newVal)
     {
@@ -245,7 +244,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_IMAGE_MD5_MASK;
         initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
     }
-
     /**
      * Determines if the imageMd5 has been modified.
      *
@@ -288,7 +286,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceLeft
+     * @param newVal the new value( NOT NULL) to be assigned to faceLeft
      */
     public void setFaceLeft(Integer newVal)
     {
@@ -300,7 +298,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_FACE_LEFT_MASK;
         initialized |= FL_FACE_ID_FACE_LEFT_MASK;
     }
-
     /**
      * Setter method for {@link #faceLeft}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -353,7 +350,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceTop
+     * @param newVal the new value( NOT NULL) to be assigned to faceTop
      */
     public void setFaceTop(Integer newVal)
     {
@@ -365,7 +362,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_FACE_TOP_MASK;
         initialized |= FL_FACE_ID_FACE_TOP_MASK;
     }
-
     /**
      * Setter method for {@link #faceTop}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -418,7 +414,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceWidth
+     * @param newVal the new value( NOT NULL) to be assigned to faceWidth
      */
     public void setFaceWidth(Integer newVal)
     {
@@ -430,7 +426,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_FACE_WIDTH_MASK;
         initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
     }
-
     /**
      * Setter method for {@link #faceWidth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -483,7 +478,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceHeight
+     * @param newVal the new value( NOT NULL) to be assigned to faceHeight
      */
     public void setFaceHeight(Integer newVal)
     {
@@ -495,7 +490,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
         initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
     }
-
     /**
      * Setter method for {@link #faceHeight}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -547,7 +541,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeLeftx
+     * @param newVal the new value to be assigned to eyeLeftx
      */
     public void setEyeLeftx(Integer newVal)
     {
@@ -559,7 +553,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_EYE_LEFTX_MASK;
         initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
     }
-
     /**
      * Setter method for {@link #eyeLeftx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -611,7 +604,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeLefty
+     * @param newVal the new value to be assigned to eyeLefty
      */
     public void setEyeLefty(Integer newVal)
     {
@@ -623,7 +616,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_EYE_LEFTY_MASK;
         initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
     }
-
     /**
      * Setter method for {@link #eyeLefty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -675,7 +667,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeRightx
+     * @param newVal the new value to be assigned to eyeRightx
      */
     public void setEyeRightx(Integer newVal)
     {
@@ -687,7 +679,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
         initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
     }
-
     /**
      * Setter method for {@link #eyeRightx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -739,7 +730,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeRighty
+     * @param newVal the new value to be assigned to eyeRighty
      */
     public void setEyeRighty(Integer newVal)
     {
@@ -751,7 +742,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
         initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
     }
-
     /**
      * Setter method for {@link #eyeRighty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -803,7 +793,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to mouthX
+     * @param newVal the new value to be assigned to mouthX
      */
     public void setMouthX(Integer newVal)
     {
@@ -815,7 +805,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_MOUTH_X_MASK;
         initialized |= FL_FACE_ID_MOUTH_X_MASK;
     }
-
     /**
      * Setter method for {@link #mouthX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -867,7 +856,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to mouthY
+     * @param newVal the new value to be assigned to mouthY
      */
     public void setMouthY(Integer newVal)
     {
@@ -879,7 +868,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_MOUTH_Y_MASK;
         initialized |= FL_FACE_ID_MOUTH_Y_MASK;
     }
-
     /**
      * Setter method for {@link #mouthY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -931,7 +919,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to noseX
+     * @param newVal the new value to be assigned to noseX
      */
     public void setNoseX(Integer newVal)
     {
@@ -943,7 +931,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_NOSE_X_MASK;
         initialized |= FL_FACE_ID_NOSE_X_MASK;
     }
-
     /**
      * Setter method for {@link #noseX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -995,7 +982,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to noseY
+     * @param newVal the new value to be assigned to noseY
      */
     public void setNoseY(Integer newVal)
     {
@@ -1007,7 +994,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_NOSE_Y_MASK;
         initialized |= FL_FACE_ID_NOSE_Y_MASK;
     }
-
     /**
      * Setter method for {@link #noseY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1059,7 +1045,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to angleYaw
+     * @param newVal the new value to be assigned to angleYaw
      */
     public void setAngleYaw(Integer newVal)
     {
@@ -1071,7 +1057,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_ANGLE_YAW_MASK;
         initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
     }
-
     /**
      * Setter method for {@link #angleYaw}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1123,7 +1108,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to anglePitch
+     * @param newVal the new value to be assigned to anglePitch
      */
     public void setAnglePitch(Integer newVal)
     {
@@ -1135,7 +1120,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
         initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
     }
-
     /**
      * Setter method for {@link #anglePitch}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1187,7 +1171,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to angleRoll
+     * @param newVal the new value to be assigned to angleRoll
      */
     public void setAngleRoll(Integer newVal)
     {
@@ -1199,7 +1183,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
         initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
     }
-
     /**
      * Setter method for {@link #angleRoll}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1251,7 +1234,7 @@ public  class FaceBean
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value  to be assigned to extInfo
+     * @param newVal the new value to be assigned to extInfo
      */
     public void setExtInfo(byte[] newVal)
     {
@@ -1260,7 +1243,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_EXT_INFO_MASK;
         initialized |= FL_FACE_ID_EXT_INFO_MASK;
     }
-
     /**
      * Determines if the extInfo has been modified.
      *
@@ -1304,7 +1286,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to featureMd5
+     * @param newVal the new value to be assigned to featureMd5
      */
     public void setFeatureMd5(String newVal)
     {
@@ -1316,7 +1298,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_FEATURE_MD5_MASK;
         initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
     }
-
     /**
      * Determines if the featureMd5 has been modified.
      *
@@ -1360,7 +1341,7 @@ public  class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -1372,7 +1353,6 @@ public  class FaceBean
         modified |= FL_FACE_ID_CREATE_TIME_MASK;
         initialized |= FL_FACE_ID_CREATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #createTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

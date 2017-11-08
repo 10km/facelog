@@ -147,9 +147,8 @@ public final class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if (equal(newVal, id) && checkIdInitialized()) {
@@ -160,7 +159,15 @@ public final class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_ID_MASK;
         initialized |= FL_DEVICE_GROUP_ID_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "id")
+    public void writeId(Integer newVal){
+        id = newVal;
+    }
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -215,9 +222,8 @@ public final class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to name
+     * @param newVal the new value( NOT NULL) to be assigned to name
      */
-    @ThriftField()
     public void setName(String newVal)
     {
         if (equal(newVal, name) && checkNameInitialized()) {
@@ -228,7 +234,15 @@ public final class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_NAME_MASK;
         initialized |= FL_DEVICE_GROUP_ID_NAME_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "name")
+    public void writeName(String newVal){
+        name = newVal;
+    }
     /**
      * Determines if the name has been modified.
      *
@@ -272,9 +286,8 @@ public final class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to leaf
+     * @param newVal the new value to be assigned to leaf
      */
-    @ThriftField()
     public void setLeaf(Integer newVal)
     {
         if (equal(newVal, leaf) && checkLeafInitialized()) {
@@ -285,7 +298,15 @@ public final class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_LEAF_MASK;
         initialized |= FL_DEVICE_GROUP_ID_LEAF_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "leaf")
+    public void writeLeaf(Integer newVal){
+        leaf = newVal;
+    }
     /**
      * Setter method for {@link #leaf}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -340,9 +361,8 @@ public final class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to parent
+     * @param newVal the new value to be assigned to parent
      */
-    @ThriftField()
     public void setParent(Integer newVal)
     {
         if (equal(newVal, parent) && checkParentInitialized()) {
@@ -353,7 +373,15 @@ public final class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
         initialized |= FL_DEVICE_GROUP_ID_PARENT_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "parent")
+    public void writeParent(Integer newVal){
+        parent = newVal;
+    }
     /**
      * Setter method for {@link #parent}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

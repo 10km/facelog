@@ -146,7 +146,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to md5
+     * @param newVal the new value( NOT NULL) to be assigned to md5
      */
     public void setMd5(String newVal)
     {
@@ -158,7 +158,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_MD5_MASK;
         initialized |= FL_IMAGE_ID_MD5_MASK;
     }
-
     /**
      * Determines if the md5 has been modified.
      *
@@ -201,7 +200,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to format
+     * @param newVal the new value to be assigned to format
      */
     public void setFormat(String newVal)
     {
@@ -213,7 +212,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_FORMAT_MASK;
         initialized |= FL_IMAGE_ID_FORMAT_MASK;
     }
-
     /**
      * Determines if the format has been modified.
      *
@@ -257,7 +255,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to width
+     * @param newVal the new value( NOT NULL) to be assigned to width
      */
     public void setWidth(Integer newVal)
     {
@@ -269,7 +267,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_WIDTH_MASK;
         initialized |= FL_IMAGE_ID_WIDTH_MASK;
     }
-
     /**
      * Setter method for {@link #width}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -323,7 +320,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to height
+     * @param newVal the new value( NOT NULL) to be assigned to height
      */
     public void setHeight(Integer newVal)
     {
@@ -335,7 +332,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_HEIGHT_MASK;
         initialized |= FL_IMAGE_ID_HEIGHT_MASK;
     }
-
     /**
      * Setter method for {@link #height}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -390,7 +386,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to depth
+     * @param newVal the new value( NOT NULL) to be assigned to depth
      */
     public void setDepth(Integer newVal)
     {
@@ -402,7 +398,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_DEPTH_MASK;
         initialized |= FL_IMAGE_ID_DEPTH_MASK;
     }
-
     /**
      * Setter method for {@link #depth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -457,7 +452,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceNum
+     * @param newVal the new value( NOT NULL) to be assigned to faceNum
      */
     public void setFaceNum(Integer newVal)
     {
@@ -469,7 +464,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_FACE_NUM_MASK;
         initialized |= FL_IMAGE_ID_FACE_NUM_MASK;
     }
-
     /**
      * Setter method for {@link #faceNum}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -522,7 +516,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to thumbMd5
+     * @param newVal the new value to be assigned to thumbMd5
      */
     public void setThumbMd5(String newVal)
     {
@@ -534,7 +528,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_THUMB_MD5_MASK;
         initialized |= FL_IMAGE_ID_THUMB_MD5_MASK;
     }
-
     /**
      * Determines if the thumbMd5 has been modified.
      *
@@ -578,7 +571,7 @@ public  class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to deviceId
+     * @param newVal the new value to be assigned to deviceId
      */
     public void setDeviceId(Integer newVal)
     {
@@ -590,7 +583,6 @@ public  class ImageBean
         modified |= FL_IMAGE_ID_DEVICE_ID_MASK;
         initialized |= FL_IMAGE_ID_DEVICE_ID_MASK;
     }
-
     /**
      * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

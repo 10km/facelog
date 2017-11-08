@@ -165,9 +165,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if (equal(newVal, id) && checkIdInitialized()) {
@@ -178,7 +177,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_ID_MASK;
         initialized |= FL_PERSON_ID_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "id")
+    public void writeId(Integer newVal){
+        id = newVal;
+    }
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -234,9 +241,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to groupId
+     * @param newVal the new value to be assigned to groupId
      */
-    @ThriftField()
     public void setGroupId(Integer newVal)
     {
         if (equal(newVal, groupId) && checkGroupIdInitialized()) {
@@ -247,7 +253,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_GROUP_ID_MASK;
         initialized |= FL_PERSON_ID_GROUP_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "groupId")
+    public void writeGroupId(Integer newVal){
+        groupId = newVal;
+    }
     /**
      * Setter method for {@link #groupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -302,9 +316,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to name
+     * @param newVal the new value( NOT NULL) to be assigned to name
      */
-    @ThriftField()
     public void setName(String newVal)
     {
         if (equal(newVal, name) && checkNameInitialized()) {
@@ -315,7 +328,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_NAME_MASK;
         initialized |= FL_PERSON_ID_NAME_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "name")
+    public void writeName(String newVal){
+        name = newVal;
+    }
     /**
      * Determines if the name has been modified.
      *
@@ -359,9 +380,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to sex
+     * @param newVal the new value to be assigned to sex
      */
-    @ThriftField()
     public void setSex(Integer newVal)
     {
         if (equal(newVal, sex) && checkSexInitialized()) {
@@ -372,7 +392,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_SEX_MASK;
         initialized |= FL_PERSON_ID_SEX_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "sex")
+    public void writeSex(Integer newVal){
+        sex = newVal;
+    }
     /**
      * Setter method for {@link #sex}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -433,7 +461,7 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to birthdate
+     * @param newVal the new value to be assigned to birthdate
      */
     public void setBirthdate(java.util.Date newVal)
     {
@@ -445,14 +473,14 @@ public final class PersonBean
         modified |= FL_PERSON_ID_BIRTHDATE_MASK;
         initialized |= FL_PERSON_ID_BIRTHDATE_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setBirthdate(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "birthdate",value = 8)
+    @ThriftField(name = "birthdate")
     public void writeBirthdate(Long newVal){
-        setBirthdate(null == newVal?null:new java.util.Date(newVal));
+        birthdate = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #birthdate}.<br>
@@ -507,9 +535,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to papersType
+     * @param newVal the new value to be assigned to papersType
      */
-    @ThriftField()
     public void setPapersType(Integer newVal)
     {
         if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
@@ -520,7 +547,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_PAPERS_TYPE_MASK;
         initialized |= FL_PERSON_ID_PAPERS_TYPE_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "papersType")
+    public void writePapersType(Integer newVal){
+        papersType = newVal;
+    }
     /**
      * Setter method for {@link #papersType}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -574,9 +609,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to papersNum
+     * @param newVal the new value to be assigned to papersNum
      */
-    @ThriftField()
     public void setPapersNum(String newVal)
     {
         if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
@@ -587,7 +621,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_PAPERS_NUM_MASK;
         initialized |= FL_PERSON_ID_PAPERS_NUM_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "papersNum")
+    public void writePapersNum(String newVal){
+        papersNum = newVal;
+    }
     /**
      * Determines if the papersNum has been modified.
      *
@@ -632,9 +674,8 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to imageMd5
+     * @param newVal the new value to be assigned to imageMd5
      */
-    @ThriftField()
     public void setImageMd5(String newVal)
     {
         if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
@@ -645,7 +686,15 @@ public final class PersonBean
         modified |= FL_PERSON_ID_IMAGE_MD5_MASK;
         initialized |= FL_PERSON_ID_IMAGE_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "imageMd5")
+    public void writeImageMd5(String newVal){
+        imageMd5 = newVal;
+    }
     /**
      * Determines if the imageMd5 has been modified.
      *
@@ -697,7 +746,7 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to expiryDate
+     * @param newVal the new value to be assigned to expiryDate
      */
     public void setExpiryDate(java.util.Date newVal)
     {
@@ -709,14 +758,14 @@ public final class PersonBean
         modified |= FL_PERSON_ID_EXPIRY_DATE_MASK;
         initialized |= FL_PERSON_ID_EXPIRY_DATE_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setExpiryDate(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "expiryDate",value = 12)
+    @ThriftField(name = "expiryDate")
     public void writeExpiryDate(Long newVal){
-        setExpiryDate(null == newVal?null:new java.util.Date(newVal));
+        expiryDate = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #expiryDate}.<br>
@@ -779,7 +828,7 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -791,14 +840,14 @@ public final class PersonBean
         modified |= FL_PERSON_ID_CREATE_TIME_MASK;
         initialized |= FL_PERSON_ID_CREATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setCreateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "createTime",value = 13)
+    @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
-        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+        createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #createTime}.<br>
@@ -861,7 +910,7 @@ public final class PersonBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to updateTime
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -873,14 +922,14 @@ public final class PersonBean
         modified |= FL_PERSON_ID_UPDATE_TIME_MASK;
         initialized |= FL_PERSON_ID_UPDATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setUpdateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "updateTime",value = 14)
+    @ThriftField(name = "updateTime")
     public void writeUpdateTime(Long newVal){
-        setUpdateTime(null == newVal?null:new java.util.Date(newVal));
+        updateTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #updateTime}.<br>

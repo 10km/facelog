@@ -133,7 +133,7 @@ public  class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to md5
+     * @param newVal the new value( NOT NULL) to be assigned to md5
      */
     public void setMd5(String newVal)
     {
@@ -145,7 +145,6 @@ public  class FeatureBean
         modified |= FL_FEATURE_ID_MD5_MASK;
         initialized |= FL_FEATURE_ID_MD5_MASK;
     }
-
     /**
      * Determines if the md5 has been modified.
      *
@@ -189,7 +188,7 @@ public  class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to personId
+     * @param newVal the new value to be assigned to personId
      */
     public void setPersonId(Integer newVal)
     {
@@ -201,7 +200,6 @@ public  class FeatureBean
         modified |= FL_FEATURE_ID_PERSON_ID_MASK;
         initialized |= FL_FEATURE_ID_PERSON_ID_MASK;
     }
-
     /**
      * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -254,7 +252,7 @@ public  class FeatureBean
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to feature
+     * @param newVal the new value( NOT NULL) to be assigned to feature
      */
     public void setFeature(byte[] newVal)
     {
@@ -263,7 +261,6 @@ public  class FeatureBean
         modified |= FL_FEATURE_ID_FEATURE_MASK;
         initialized |= FL_FEATURE_ID_FEATURE_MASK;
     }
-
     /**
      * Determines if the feature has been modified.
      *
@@ -307,7 +304,7 @@ public  class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to updateTime
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -319,7 +316,6 @@ public  class FeatureBean
         modified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
         initialized |= FL_FEATURE_ID_UPDATE_TIME_MASK;
     }
-
     /**
      * Setter method for {@link #updateTime}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

@@ -129,7 +129,7 @@ public  class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to md5
+     * @param newVal the new value( NOT NULL) to be assigned to md5
      */
     public void setMd5(String newVal)
     {
@@ -141,7 +141,6 @@ public  class StoreBean
         modified |= FL_STORE_ID_MD5_MASK;
         initialized |= FL_STORE_ID_MD5_MASK;
     }
-
     /**
      * Determines if the md5 has been modified.
      *
@@ -184,7 +183,7 @@ public  class StoreBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to encoding
+     * @param newVal the new value to be assigned to encoding
      */
     public void setEncoding(String newVal)
     {
@@ -196,7 +195,6 @@ public  class StoreBean
         modified |= FL_STORE_ID_ENCODING_MASK;
         initialized |= FL_STORE_ID_ENCODING_MASK;
     }
-
     /**
      * Determines if the encoding has been modified.
      *
@@ -238,7 +236,7 @@ public  class StoreBean
      * Attention, there will be no comparison with current value which
      * means calling this method will mark the field as 'modified' in all cases.
      *
-     * @param newVal the new value  to be assigned to data
+     * @param newVal the new value to be assigned to data
      */
     public void setData(byte[] newVal)
     {
@@ -247,7 +245,6 @@ public  class StoreBean
         modified |= FL_STORE_ID_DATA_MASK;
         initialized |= FL_STORE_ID_DATA_MASK;
     }
-
     /**
      * Determines if the data has been modified.
      *

@@ -157,9 +157,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to md5
+     * @param newVal the new value( NOT NULL) to be assigned to md5
      */
-    @ThriftField()
     public void setMd5(String newVal)
     {
         if (equal(newVal, md5) && checkMd5Initialized()) {
@@ -170,7 +169,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_MD5_MASK;
         initialized |= FL_IMAGE_ID_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "md5")
+    public void writeMd5(String newVal){
+        md5 = newVal;
+    }
     /**
      * Determines if the md5 has been modified.
      *
@@ -214,9 +221,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to format
+     * @param newVal the new value to be assigned to format
      */
-    @ThriftField()
     public void setFormat(String newVal)
     {
         if (equal(newVal, format) && checkFormatInitialized()) {
@@ -227,7 +233,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_FORMAT_MASK;
         initialized |= FL_IMAGE_ID_FORMAT_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "format")
+    public void writeFormat(String newVal){
+        format = newVal;
+    }
     /**
      * Determines if the format has been modified.
      *
@@ -272,9 +286,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to width
+     * @param newVal the new value( NOT NULL) to be assigned to width
      */
-    @ThriftField()
     public void setWidth(Integer newVal)
     {
         if (equal(newVal, width) && checkWidthInitialized()) {
@@ -285,7 +298,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_WIDTH_MASK;
         initialized |= FL_IMAGE_ID_WIDTH_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "width")
+    public void writeWidth(Integer newVal){
+        width = newVal;
+    }
     /**
      * Setter method for {@link #width}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -340,9 +361,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to height
+     * @param newVal the new value( NOT NULL) to be assigned to height
      */
-    @ThriftField()
     public void setHeight(Integer newVal)
     {
         if (equal(newVal, height) && checkHeightInitialized()) {
@@ -353,7 +373,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_HEIGHT_MASK;
         initialized |= FL_IMAGE_ID_HEIGHT_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "height")
+    public void writeHeight(Integer newVal){
+        height = newVal;
+    }
     /**
      * Setter method for {@link #height}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -409,9 +437,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to depth
+     * @param newVal the new value( NOT NULL) to be assigned to depth
      */
-    @ThriftField()
     public void setDepth(Integer newVal)
     {
         if (equal(newVal, depth) && checkDepthInitialized()) {
@@ -422,7 +449,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_DEPTH_MASK;
         initialized |= FL_IMAGE_ID_DEPTH_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "depth")
+    public void writeDepth(Integer newVal){
+        depth = newVal;
+    }
     /**
      * Setter method for {@link #depth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -478,9 +513,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceNum
+     * @param newVal the new value( NOT NULL) to be assigned to faceNum
      */
-    @ThriftField()
     public void setFaceNum(Integer newVal)
     {
         if (equal(newVal, faceNum) && checkFaceNumInitialized()) {
@@ -491,7 +525,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_FACE_NUM_MASK;
         initialized |= FL_IMAGE_ID_FACE_NUM_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "faceNum")
+    public void writeFaceNum(Integer newVal){
+        faceNum = newVal;
+    }
     /**
      * Setter method for {@link #faceNum}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -545,9 +587,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to thumbMd5
+     * @param newVal the new value to be assigned to thumbMd5
      */
-    @ThriftField()
     public void setThumbMd5(String newVal)
     {
         if (equal(newVal, thumbMd5) && checkThumbMd5Initialized()) {
@@ -558,7 +599,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_THUMB_MD5_MASK;
         initialized |= FL_IMAGE_ID_THUMB_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "thumbMd5")
+    public void writeThumbMd5(String newVal){
+        thumbMd5 = newVal;
+    }
     /**
      * Determines if the thumbMd5 has been modified.
      *
@@ -603,9 +652,8 @@ public final class ImageBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to deviceId
+     * @param newVal the new value to be assigned to deviceId
      */
-    @ThriftField()
     public void setDeviceId(Integer newVal)
     {
         if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
@@ -616,7 +664,15 @@ public final class ImageBean
         modified |= FL_IMAGE_ID_DEVICE_ID_MASK;
         initialized |= FL_IMAGE_ID_DEVICE_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "deviceId")
+    public void writeDeviceId(Integer newVal){
+        deviceId = newVal;
+    }
     /**
      * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

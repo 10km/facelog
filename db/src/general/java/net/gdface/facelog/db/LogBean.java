@@ -155,9 +155,8 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if (equal(newVal, id) && checkIdInitialized()) {
@@ -168,7 +167,15 @@ public final class LogBean
         modified |= FL_LOG_ID_ID_MASK;
         initialized |= FL_LOG_ID_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "id")
+    public void writeId(Integer newVal){
+        id = newVal;
+    }
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -224,9 +231,8 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to personId
+     * @param newVal the new value( NOT NULL) to be assigned to personId
      */
-    @ThriftField()
     public void setPersonId(Integer newVal)
     {
         if (equal(newVal, personId) && checkPersonIdInitialized()) {
@@ -237,7 +243,15 @@ public final class LogBean
         modified |= FL_LOG_ID_PERSON_ID_MASK;
         initialized |= FL_LOG_ID_PERSON_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "personId")
+    public void writePersonId(Integer newVal){
+        personId = newVal;
+    }
     /**
      * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -292,9 +306,8 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to deviceId
+     * @param newVal the new value to be assigned to deviceId
      */
-    @ThriftField()
     public void setDeviceId(Integer newVal)
     {
         if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
@@ -305,7 +318,15 @@ public final class LogBean
         modified |= FL_LOG_ID_DEVICE_ID_MASK;
         initialized |= FL_LOG_ID_DEVICE_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "deviceId")
+    public void writeDeviceId(Integer newVal){
+        deviceId = newVal;
+    }
     /**
      * Setter method for {@link #deviceId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -360,9 +381,8 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to verifyFeature
+     * @param newVal the new value to be assigned to verifyFeature
      */
-    @ThriftField()
     public void setVerifyFeature(String newVal)
     {
         if (equal(newVal, verifyFeature) && checkVerifyFeatureInitialized()) {
@@ -373,7 +393,15 @@ public final class LogBean
         modified |= FL_LOG_ID_VERIFY_FEATURE_MASK;
         initialized |= FL_LOG_ID_VERIFY_FEATURE_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "verifyFeature")
+    public void writeVerifyFeature(String newVal){
+        verifyFeature = newVal;
+    }
     /**
      * Determines if the verifyFeature has been modified.
      *
@@ -418,9 +446,8 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to compareFace
+     * @param newVal the new value to be assigned to compareFace
      */
-    @ThriftField()
     public void setCompareFace(Integer newVal)
     {
         if (equal(newVal, compareFace) && checkCompareFaceInitialized()) {
@@ -431,7 +458,15 @@ public final class LogBean
         modified |= FL_LOG_ID_COMPARE_FACE_MASK;
         initialized |= FL_LOG_ID_COMPARE_FACE_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "compareFace")
+    public void writeCompareFace(Integer newVal){
+        compareFace = newVal;
+    }
     /**
      * Setter method for {@link #compareFace}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -485,9 +520,8 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to similarty
+     * @param newVal the new value to be assigned to similarty
      */
-    @ThriftField()
     public void setSimilarty(Double newVal)
     {
         if (equal(newVal, similarty) && checkSimilartyInitialized()) {
@@ -498,7 +532,15 @@ public final class LogBean
         modified |= FL_LOG_ID_SIMILARTY_MASK;
         initialized |= FL_LOG_ID_SIMILARTY_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "similarty")
+    public void writeSimilarty(Double newVal){
+        similarty = newVal;
+    }
     /**
      * Setter method for {@link #similarty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -561,7 +603,7 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to verifyTime
+     * @param newVal the new value( NOT NULL) to be assigned to verifyTime
      */
     public void setVerifyTime(java.util.Date newVal)
     {
@@ -573,14 +615,14 @@ public final class LogBean
         modified |= FL_LOG_ID_VERIFY_TIME_MASK;
         initialized |= FL_LOG_ID_VERIFY_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setVerifyTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "verifyTime",value = 10)
+    @ThriftField(name = "verifyTime")
     public void writeVerifyTime(Long newVal){
-        setVerifyTime(null == newVal?null:new java.util.Date(newVal));
+        verifyTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #verifyTime}.<br>
@@ -643,7 +685,7 @@ public final class LogBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -655,14 +697,14 @@ public final class LogBean
         modified |= FL_LOG_ID_CREATE_TIME_MASK;
         initialized |= FL_LOG_ID_CREATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setCreateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "createTime",value = 11)
+    @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
-        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+        createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #createTime}.<br>

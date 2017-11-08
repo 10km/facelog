@@ -136,7 +136,7 @@ public  class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
     public void setId(Integer newVal)
     {
@@ -148,7 +148,6 @@ public  class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_ID_MASK;
         initialized |= FL_DEVICE_GROUP_ID_ID_MASK;
     }
-
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -202,7 +201,7 @@ public  class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to name
+     * @param newVal the new value( NOT NULL) to be assigned to name
      */
     public void setName(String newVal)
     {
@@ -214,7 +213,6 @@ public  class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_NAME_MASK;
         initialized |= FL_DEVICE_GROUP_ID_NAME_MASK;
     }
-
     /**
      * Determines if the name has been modified.
      *
@@ -257,7 +255,7 @@ public  class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to leaf
+     * @param newVal the new value to be assigned to leaf
      */
     public void setLeaf(Integer newVal)
     {
@@ -269,7 +267,6 @@ public  class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_LEAF_MASK;
         initialized |= FL_DEVICE_GROUP_ID_LEAF_MASK;
     }
-
     /**
      * Setter method for {@link #leaf}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -323,7 +320,7 @@ public  class DeviceGroupBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to parent
+     * @param newVal the new value to be assigned to parent
      */
     public void setParent(Integer newVal)
     {
@@ -335,7 +332,6 @@ public  class DeviceGroupBean
         modified |= FL_DEVICE_GROUP_ID_PARENT_MASK;
         initialized |= FL_DEVICE_GROUP_ID_PARENT_MASK;
     }
-
     /**
      * Setter method for {@link #parent}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.

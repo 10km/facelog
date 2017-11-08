@@ -142,9 +142,8 @@ public final class PermitBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to deviceGroupId
+     * @param newVal the new value( NOT NULL) to be assigned to deviceGroupId
      */
-    @ThriftField()
     public void setDeviceGroupId(Integer newVal)
     {
         if (equal(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
@@ -155,7 +154,15 @@ public final class PermitBean
         modified |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
         initialized |= FL_PERMIT_ID_DEVICE_GROUP_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "deviceGroupId")
+    public void writeDeviceGroupId(Integer newVal){
+        deviceGroupId = newVal;
+    }
     /**
      * Setter method for {@link #deviceGroupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -212,9 +219,8 @@ public final class PermitBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to personGroupId
+     * @param newVal the new value( NOT NULL) to be assigned to personGroupId
      */
-    @ThriftField()
     public void setPersonGroupId(Integer newVal)
     {
         if (equal(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
@@ -225,7 +231,15 @@ public final class PermitBean
         modified |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
         initialized |= FL_PERMIT_ID_PERSON_GROUP_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "personGroupId")
+    public void writePersonGroupId(Integer newVal){
+        personGroupId = newVal;
+    }
     /**
      * Setter method for {@link #personGroupId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -287,7 +301,7 @@ public final class PermitBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -299,14 +313,14 @@ public final class PermitBean
         modified |= FL_PERMIT_ID_CREATE_TIME_MASK;
         initialized |= FL_PERMIT_ID_CREATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setCreateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "createTime",value = 6)
+    @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
-        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+        createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #createTime}.<br>

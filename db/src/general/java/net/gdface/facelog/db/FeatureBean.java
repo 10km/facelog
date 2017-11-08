@@ -144,9 +144,8 @@ public final class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to md5
+     * @param newVal the new value( NOT NULL) to be assigned to md5
      */
-    @ThriftField()
     public void setMd5(String newVal)
     {
         if (equal(newVal, md5) && checkMd5Initialized()) {
@@ -157,7 +156,15 @@ public final class FeatureBean
         modified |= FL_FEATURE_ID_MD5_MASK;
         initialized |= FL_FEATURE_ID_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "md5")
+    public void writeMd5(String newVal){
+        md5 = newVal;
+    }
     /**
      * Determines if the md5 has been modified.
      *
@@ -202,9 +209,8 @@ public final class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to personId
+     * @param newVal the new value to be assigned to personId
      */
-    @ThriftField()
     public void setPersonId(Integer newVal)
     {
         if (equal(newVal, personId) && checkPersonIdInitialized()) {
@@ -215,7 +221,15 @@ public final class FeatureBean
         modified |= FL_FEATURE_ID_PERSON_ID_MASK;
         initialized |= FL_FEATURE_ID_PERSON_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "personId")
+    public void writePersonId(Integer newVal){
+        personId = newVal;
+    }
     /**
      * Setter method for {@link #personId}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -270,9 +284,8 @@ public final class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to feature
+     * @param newVal the new value( NOT NULL) to be assigned to feature
      */
-    @ThriftField()
     public void setFeature(java.nio.ByteBuffer newVal)
     {
         if (equal(newVal, feature) && checkFeatureInitialized()) {
@@ -283,7 +296,15 @@ public final class FeatureBean
         modified |= FL_FEATURE_ID_FEATURE_MASK;
         initialized |= FL_FEATURE_ID_FEATURE_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "feature")
+    public void writeFeature(java.nio.ByteBuffer newVal){
+        feature = newVal;
+    }
     /**
      * Determines if the feature has been modified.
      *
@@ -335,7 +356,7 @@ public final class FeatureBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to updateTime
+     * @param newVal the new value( NOT NULL) to be assigned to updateTime
      */
     public void setUpdateTime(java.util.Date newVal)
     {
@@ -347,14 +368,14 @@ public final class FeatureBean
         modified |= FL_FEATURE_ID_UPDATE_TIME_MASK;
         initialized |= FL_FEATURE_ID_UPDATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setUpdateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "updateTime",value = 7)
+    @ThriftField(name = "updateTime")
     public void writeUpdateTime(Long newVal){
-        setUpdateTime(null == newVal?null:new java.util.Date(newVal));
+        updateTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #updateTime}.<br>

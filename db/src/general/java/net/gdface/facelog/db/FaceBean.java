@@ -177,9 +177,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to id
+     * @param newVal the new value to be assigned to id
      */
-    @ThriftField()
     public void setId(Integer newVal)
     {
         if (equal(newVal, id) && checkIdInitialized()) {
@@ -190,7 +189,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_ID_MASK;
         initialized |= FL_FACE_ID_ID_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "id")
+    public void writeId(Integer newVal){
+        id = newVal;
+    }
     /**
      * Setter method for {@link #id}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -246,9 +253,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to imageMd5
+     * @param newVal the new value( NOT NULL) to be assigned to imageMd5
      */
-    @ThriftField()
     public void setImageMd5(String newVal)
     {
         if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
@@ -259,7 +265,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_IMAGE_MD5_MASK;
         initialized |= FL_FACE_ID_IMAGE_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "imageMd5")
+    public void writeImageMd5(String newVal){
+        imageMd5 = newVal;
+    }
     /**
      * Determines if the imageMd5 has been modified.
      *
@@ -303,9 +317,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceLeft
+     * @param newVal the new value( NOT NULL) to be assigned to faceLeft
      */
-    @ThriftField()
     public void setFaceLeft(Integer newVal)
     {
         if (equal(newVal, faceLeft) && checkFaceLeftInitialized()) {
@@ -316,7 +329,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_FACE_LEFT_MASK;
         initialized |= FL_FACE_ID_FACE_LEFT_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "faceLeft")
+    public void writeFaceLeft(Integer newVal){
+        faceLeft = newVal;
+    }
     /**
      * Setter method for {@link #faceLeft}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -370,9 +391,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceTop
+     * @param newVal the new value( NOT NULL) to be assigned to faceTop
      */
-    @ThriftField()
     public void setFaceTop(Integer newVal)
     {
         if (equal(newVal, faceTop) && checkFaceTopInitialized()) {
@@ -383,7 +403,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_FACE_TOP_MASK;
         initialized |= FL_FACE_ID_FACE_TOP_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "faceTop")
+    public void writeFaceTop(Integer newVal){
+        faceTop = newVal;
+    }
     /**
      * Setter method for {@link #faceTop}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -437,9 +465,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceWidth
+     * @param newVal the new value( NOT NULL) to be assigned to faceWidth
      */
-    @ThriftField()
     public void setFaceWidth(Integer newVal)
     {
         if (equal(newVal, faceWidth) && checkFaceWidthInitialized()) {
@@ -450,7 +477,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_FACE_WIDTH_MASK;
         initialized |= FL_FACE_ID_FACE_WIDTH_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "faceWidth")
+    public void writeFaceWidth(Integer newVal){
+        faceWidth = newVal;
+    }
     /**
      * Setter method for {@link #faceWidth}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -504,9 +539,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to faceHeight
+     * @param newVal the new value( NOT NULL) to be assigned to faceHeight
      */
-    @ThriftField()
     public void setFaceHeight(Integer newVal)
     {
         if (equal(newVal, faceHeight) && checkFaceHeightInitialized()) {
@@ -517,7 +551,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_FACE_HEIGHT_MASK;
         initialized |= FL_FACE_ID_FACE_HEIGHT_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "faceHeight")
+    public void writeFaceHeight(Integer newVal){
+        faceHeight = newVal;
+    }
     /**
      * Setter method for {@link #faceHeight}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -570,9 +612,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeLeftx
+     * @param newVal the new value to be assigned to eyeLeftx
      */
-    @ThriftField()
     public void setEyeLeftx(Integer newVal)
     {
         if (equal(newVal, eyeLeftx) && checkEyeLeftxInitialized()) {
@@ -583,7 +624,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_EYE_LEFTX_MASK;
         initialized |= FL_FACE_ID_EYE_LEFTX_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "eyeLeftx")
+    public void writeEyeLeftx(Integer newVal){
+        eyeLeftx = newVal;
+    }
     /**
      * Setter method for {@link #eyeLeftx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -636,9 +685,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeLefty
+     * @param newVal the new value to be assigned to eyeLefty
      */
-    @ThriftField()
     public void setEyeLefty(Integer newVal)
     {
         if (equal(newVal, eyeLefty) && checkEyeLeftyInitialized()) {
@@ -649,7 +697,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_EYE_LEFTY_MASK;
         initialized |= FL_FACE_ID_EYE_LEFTY_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "eyeLefty")
+    public void writeEyeLefty(Integer newVal){
+        eyeLefty = newVal;
+    }
     /**
      * Setter method for {@link #eyeLefty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -702,9 +758,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeRightx
+     * @param newVal the new value to be assigned to eyeRightx
      */
-    @ThriftField()
     public void setEyeRightx(Integer newVal)
     {
         if (equal(newVal, eyeRightx) && checkEyeRightxInitialized()) {
@@ -715,7 +770,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_EYE_RIGHTX_MASK;
         initialized |= FL_FACE_ID_EYE_RIGHTX_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "eyeRightx")
+    public void writeEyeRightx(Integer newVal){
+        eyeRightx = newVal;
+    }
     /**
      * Setter method for {@link #eyeRightx}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -768,9 +831,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to eyeRighty
+     * @param newVal the new value to be assigned to eyeRighty
      */
-    @ThriftField()
     public void setEyeRighty(Integer newVal)
     {
         if (equal(newVal, eyeRighty) && checkEyeRightyInitialized()) {
@@ -781,7 +843,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_EYE_RIGHTY_MASK;
         initialized |= FL_FACE_ID_EYE_RIGHTY_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "eyeRighty")
+    public void writeEyeRighty(Integer newVal){
+        eyeRighty = newVal;
+    }
     /**
      * Setter method for {@link #eyeRighty}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -834,9 +904,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to mouthX
+     * @param newVal the new value to be assigned to mouthX
      */
-    @ThriftField()
     public void setMouthX(Integer newVal)
     {
         if (equal(newVal, mouthX) && checkMouthXInitialized()) {
@@ -847,7 +916,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_MOUTH_X_MASK;
         initialized |= FL_FACE_ID_MOUTH_X_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "mouthX")
+    public void writeMouthX(Integer newVal){
+        mouthX = newVal;
+    }
     /**
      * Setter method for {@link #mouthX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -900,9 +977,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to mouthY
+     * @param newVal the new value to be assigned to mouthY
      */
-    @ThriftField()
     public void setMouthY(Integer newVal)
     {
         if (equal(newVal, mouthY) && checkMouthYInitialized()) {
@@ -913,7 +989,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_MOUTH_Y_MASK;
         initialized |= FL_FACE_ID_MOUTH_Y_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "mouthY")
+    public void writeMouthY(Integer newVal){
+        mouthY = newVal;
+    }
     /**
      * Setter method for {@link #mouthY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -966,9 +1050,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to noseX
+     * @param newVal the new value to be assigned to noseX
      */
-    @ThriftField()
     public void setNoseX(Integer newVal)
     {
         if (equal(newVal, noseX) && checkNoseXInitialized()) {
@@ -979,7 +1062,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_NOSE_X_MASK;
         initialized |= FL_FACE_ID_NOSE_X_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "noseX")
+    public void writeNoseX(Integer newVal){
+        noseX = newVal;
+    }
     /**
      * Setter method for {@link #noseX}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1032,9 +1123,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to noseY
+     * @param newVal the new value to be assigned to noseY
      */
-    @ThriftField()
     public void setNoseY(Integer newVal)
     {
         if (equal(newVal, noseY) && checkNoseYInitialized()) {
@@ -1045,7 +1135,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_NOSE_Y_MASK;
         initialized |= FL_FACE_ID_NOSE_Y_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "noseY")
+    public void writeNoseY(Integer newVal){
+        noseY = newVal;
+    }
     /**
      * Setter method for {@link #noseY}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1098,9 +1196,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to angleYaw
+     * @param newVal the new value to be assigned to angleYaw
      */
-    @ThriftField()
     public void setAngleYaw(Integer newVal)
     {
         if (equal(newVal, angleYaw) && checkAngleYawInitialized()) {
@@ -1111,7 +1208,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_ANGLE_YAW_MASK;
         initialized |= FL_FACE_ID_ANGLE_YAW_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "angleYaw")
+    public void writeAngleYaw(Integer newVal){
+        angleYaw = newVal;
+    }
     /**
      * Setter method for {@link #angleYaw}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1164,9 +1269,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to anglePitch
+     * @param newVal the new value to be assigned to anglePitch
      */
-    @ThriftField()
     public void setAnglePitch(Integer newVal)
     {
         if (equal(newVal, anglePitch) && checkAnglePitchInitialized()) {
@@ -1177,7 +1281,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_ANGLE_PITCH_MASK;
         initialized |= FL_FACE_ID_ANGLE_PITCH_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "anglePitch")
+    public void writeAnglePitch(Integer newVal){
+        anglePitch = newVal;
+    }
     /**
      * Setter method for {@link #anglePitch}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1230,9 +1342,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to angleRoll
+     * @param newVal the new value to be assigned to angleRoll
      */
-    @ThriftField()
     public void setAngleRoll(Integer newVal)
     {
         if (equal(newVal, angleRoll) && checkAngleRollInitialized()) {
@@ -1243,7 +1354,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_ANGLE_ROLL_MASK;
         initialized |= FL_FACE_ID_ANGLE_ROLL_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "angleRoll")
+    public void writeAngleRoll(Integer newVal){
+        angleRoll = newVal;
+    }
     /**
      * Setter method for {@link #angleRoll}.<br>
      * Convenient for those who do not want to deal with Objects for primary types.
@@ -1297,9 +1416,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to extInfo
+     * @param newVal the new value to be assigned to extInfo
      */
-    @ThriftField()
     public void setExtInfo(java.nio.ByteBuffer newVal)
     {
         if (equal(newVal, extInfo) && checkExtInfoInitialized()) {
@@ -1310,7 +1428,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_EXT_INFO_MASK;
         initialized |= FL_FACE_ID_EXT_INFO_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "extInfo")
+    public void writeExtInfo(java.nio.ByteBuffer newVal){
+        extInfo = newVal;
+    }
     /**
      * Determines if the extInfo has been modified.
      *
@@ -1355,9 +1481,8 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value  to be assigned to featureMd5
+     * @param newVal the new value to be assigned to featureMd5
      */
-    @ThriftField()
     public void setFeatureMd5(String newVal)
     {
         if (equal(newVal, featureMd5) && checkFeatureMd5Initialized()) {
@@ -1368,7 +1493,15 @@ public final class FaceBean
         modified |= FL_FACE_ID_FEATURE_MD5_MASK;
         initialized |= FL_FACE_ID_FEATURE_MD5_MASK;
     }
-
+    /** 
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
+     */
+    @ThriftField(name = "featureMd5")
+    public void writeFeatureMd5(String newVal){
+        featureMd5 = newVal;
+    }
     /**
      * Determines if the featureMd5 has been modified.
      *
@@ -1420,7 +1553,7 @@ public final class FaceBean
      * or if one of either the new value or the current value is null.
      * In case the new value is different, it is set and the field is marked as 'modified'.
      *
-     * @param newVal the new value (NOT NULL) to be assigned to createTime
+     * @param newVal the new value( NOT NULL) to be assigned to createTime
      */
     public void setCreateTime(java.util.Date newVal)
     {
@@ -1432,14 +1565,14 @@ public final class FaceBean
         modified |= FL_FACE_ID_CREATE_TIME_MASK;
         initialized |= FL_FACE_ID_CREATE_TIME_MASK;
     }
-
     /** 
-     * use Long to represent date type for thrift:swift support
-     * @see #setCreateTime(java.util.Date)  
+     * setter for thrift:swift support<br>
+     * without modification for {@link #modified and {@link #initialized}<br>
+     * <b>NOTE:</b>DO NOT use the method in your code
      */
-    @ThriftField(name = "createTime",value = 23)
+    @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
-        setCreateTime(null == newVal?null:new java.util.Date(newVal));
+        createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
      * Setter method for {@link #createTime}.<br>
