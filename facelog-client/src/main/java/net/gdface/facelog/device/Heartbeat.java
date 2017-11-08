@@ -3,7 +3,7 @@ package net.gdface.facelog.device;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import org.weakref.jmx.com.google.common.base.Preconditions;
+import com.google.common.base.Preconditions;
 
 import com.google.common.base.Strings;
 

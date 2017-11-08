@@ -1,6 +1,6 @@
 package net.gdface.facelog;
 
-import org.weakref.jmx.com.google.common.base.Preconditions;
+import com.google.common.base.Preconditions;
 
 import net.gdface.facelog.db.ImageBean;
 import net.gdface.facelog.db.PersonBean;
