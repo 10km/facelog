@@ -129,7 +129,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		return Pair.with(imageBean, storeBean);
 	}
 	protected ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
-	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws ServiceRuntime, DuplicateReord{
+	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateReord{
 		if(Judge.isEmpty(imageBytes))return null;
 		String md5 = FaceUtilits.getMD5String(imageBytes);
 		ImageBean imageBean = _getImage(md5);
@@ -140,7 +140,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		try {
 			pair = _makeImageBean(imageBytes,md5);
 		} catch (Exception e) {
-			throw new ServiceRuntime(e);
+			throw new RuntimeException(e);
 		}
 		_addStore(pair.getValue1());
 		return _addImage(pair.getValue0(), refFlDevicebyDeviceId, impFlFacebyImgMd5, impFlPersonbyImageMd5);
@@ -170,7 +170,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean refPersonByPersonId, Collection<FaceBean> impFaceByFeatureMd5) throws DuplicateReord{
 		return _addFeature(_makeFeature(feature), refPersonByPersonId, impFaceByFeatureMd5, null);
 	}
-	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws ServiceRuntime, DuplicateReord{
+	protected FeatureBean _addFeature(ByteBuffer feature,PersonBean personBean,Map<ByteBuffer, FaceBean> faceInfo,DeviceBean deviceBean) throws DuplicateReord{
 		if(null != faceInfo){
 			for(Entry<ByteBuffer, FaceBean> entry:faceInfo.entrySet()){
 				ByteBuffer imageBytes = entry.getKey();
@@ -222,7 +222,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		return _setRefPersonOfFeature(featureMd5,personId);
 	}
 
-	protected int _savePerson(Map<ByteBuffer,PersonBean> persons) throws ServiceRuntime, DuplicateReord {
+	protected int _savePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateReord {
 		if(null == persons )return 0;
 		int count = 0;
 		PersonBean personBean ;
@@ -239,13 +239,13 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 
 	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, FeatureBean featureBean,
-			DeviceBean deviceBean) throws ServiceRuntime, DuplicateReord {
+			DeviceBean deviceBean) throws DuplicateReord {
 		ImageBean imageBean = _addImage(idPhoto, deviceBean, null, null);
 		return _savePerson(bean, imageBean, Arrays.asList(featureBean));
 	}
 
 	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws ServiceRuntime, DuplicateReord {
+			Map<ByteBuffer, FaceBean> faceInfo, DeviceBean deviceBean) throws DuplicateReord {
 		return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceInfo, deviceBean), null);
 	}
 
@@ -258,11 +258,10 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	 * @param featureFaceBean 人脸位置对象,为null 时,不保存人脸数据
 	 * @param deviceBean featureImage来源设备对象
 	 * @return
-	 * @throws ServiceRuntime 
 	 * @throws DuplicateReord 
 	 */
 	protected PersonBean _savePerson(PersonBean bean, ByteBuffer idPhoto, ByteBuffer feature,
-			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws ServiceRuntime, DuplicateReord {
+			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateReord {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
 			if (Judge.isEmpty(featureImage))
@@ -338,7 +337,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public PersonBean getPerson(int personId)throws ServiceRuntime {
 		try{
 			return _getPerson(personId);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -346,7 +345,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<PersonBean> getPersons(List<Integer> idList)throws ServiceRuntime {
 		try{
 			return _getPersons(idList);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -355,7 +354,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		try{
 			if(Strings.isNullOrEmpty(papersNum))return null;
 			return _loadPersonByIndexPapersNum(papersNum);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -364,7 +363,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<String> getFeatureBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
 			return _toPrimaryKeyListFromFeatures(_getFeatureBeansByPersonIdOnPerson(personId));
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -377,7 +376,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public Integer call() throws Exception {
 					return _deletePerson(personId);
 				}});
-		}catch(Exception e){
+		}catch(RuntimeException e){
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -390,7 +389,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public Integer call() throws Exception {
 					return _deletePersonsByPrimaryKey(personIdList);
 				}});
-		}catch(Exception e){
+		}catch(RuntimeException e){
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -403,7 +402,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public Integer call() throws Exception {
 					return _deletePersonByPapersNum(papersNum);
 				}});
-		}catch(Exception e){
+		}catch(RuntimeException e){
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -416,7 +415,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public Integer call() throws Exception {
 					return _deletePersonByPapersNum(papersNumlist);
 				}});
-		}catch(Exception e){
+		}catch(RuntimeException e){
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -425,7 +424,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean existsPerson(int persionId)throws ServiceRuntime {
 		try{
 			return _existsPerson(persionId);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -434,7 +433,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean isDisable(int personId)throws ServiceRuntime{
 		try{
 			return _isDisable(personId);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -443,7 +442,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void disablePerson(int personId)throws ServiceRuntime{
 		try{
 			_setPersonExpiryDate(_getPerson(personId),new Date());
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -452,7 +451,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void setPersonExpiryDate(int personId,long expiryDate)throws ServiceRuntime{
 		try{
 			_setPersonExpiryDate(_getPerson(personId),new Date(expiryDate));
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -465,7 +464,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public void run() {
 					_setPersonExpiryDate(personIdList,new Date(expiryDate));
 				}});			
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -479,7 +478,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<LogBean> getLogBeansByPersonId(int personId)throws ServiceRuntime {
 		try{
 			return _getLogBeansByPersonIdOnPerson(personId);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -488,7 +487,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<Integer> loadAllPerson()throws ServiceRuntime {
 		try{
 			return _loadPersonIdByWhere(null);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -497,7 +496,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<Integer> loadPersonByWhere(String where)throws ServiceRuntime {
 		try{
 			return _loadPersonIdByWhere(where);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -507,7 +506,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		try{
 			throw new ServiceRuntime();
 			//return _savePerson(bean);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -516,7 +515,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void savePersons(List<PersonBean> beans)throws ServiceRuntime  {
 		try{
 			_savePersonsAsTransaction(beans);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -529,7 +528,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public PersonBean call() throws Exception {
 					return _savePerson(bean, idPhoto, null,null);
 				}});
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -542,7 +541,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public Integer call() throws Exception {
 					return _savePerson(persons);
 				}});
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -557,7 +556,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 					return _savePerson(bean, _getImage(idPhotoMd5), Arrays.asList(_getFeature(featureMd5)));
 				}
 			});
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -572,7 +571,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 					return _savePerson(bean, idPhoto, featureBean, _getDevice(deviceId));
 				}
 			});
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -587,7 +586,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 					return _savePerson(bean, idPhoto, _addFeature(feature, bean, faceBeans), null);
 				}
 			});
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -602,7 +601,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 					return _savePerson(bean, idPhoto, feature, faceInfo, _getDevice(deviceId));
 				}
 			});
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -616,7 +615,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 				public PersonBean call() throws Exception {
 					return _savePerson(bean,idPhoto,feature,featureImage,featureFaceBean,_getDevice(deviceId));
 				}});
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -631,7 +630,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 					_replaceFeature(personId, featureMd5, deleteOldFeatureImage);
 				}
 			});
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -640,7 +639,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<Integer> loadUpdatedPersons(long timestamp)throws ServiceRuntime {
 		try{
 			return _toPrimaryKeyListFromPersons(_loadUpdatedPersons(new Date(timestamp)));
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -649,7 +648,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<Integer> loadPersonIdByUpdateTime(long timestamp)throws ServiceRuntime {
 		try{
 			return _loadPersonIdByUpdateTime(new Date(timestamp));
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -658,7 +657,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<String> loadFeatureMd5ByUpdate(long timestamp)throws ServiceRuntime {
 		try{		
 			return _loadFeatureMd5ByUpdateTime(new Date(timestamp));
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -667,7 +666,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void addLog(LogBean bean)throws ServiceRuntime {
 		try{
 			_addLog(bean);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		} catch (DuplicateReord e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -676,7 +677,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void addLogs(List<LogBean> beans)throws ServiceRuntime {
 		try{
 			_addLogsAsTransaction(beans);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		} catch (DuplicateReord e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -685,7 +688,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<LogBean> loadLogByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		try{
 			return _loadLogByWhere(where, startRow, numRows);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -694,7 +697,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<LogLightBean> loadLogLightByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
 		try{
 			return _loadLogLightByWhere(where, startRow, numRows);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}	
@@ -703,7 +706,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int countLogLightByWhere(String where) throws ServiceRuntime {
 		try{         
 			return _countLogLightByWhere(where);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -712,7 +715,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int countLogByWhere(String where) throws ServiceRuntime {
 		try{
 			return _countLogByWhere(where);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -720,7 +723,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public List<LogLightBean> loadLogLightByVerifyTime(long timestamp,int startRow, int numRows)throws ServiceRuntime{
 		try{
 			return _loadLogLightByVerifyTime(new Date(timestamp),startRow,numRows);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -728,7 +731,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public int countLogLightByVerifyTime(long timestamp)throws ServiceRuntime{
 		try{
 			return _countLogLightByVerifyTime(new Date(timestamp));
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -736,19 +739,17 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean existsImage(String md5) throws ServiceRuntime {
 		try{
 			return _existsImage(md5);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
 
 	@Override
 	public ImageBean addImage(ByteBuffer imageData,Integer deviceId
-			, FaceBean faceBean , Integer personId) throws ServiceRuntime{
+			, FaceBean faceBean , Integer personId) throws ServiceRuntime, DuplicateReord{
 		try{
 			return _addImage(imageData,_getDevice(deviceId),Arrays.asList(faceBean),Arrays.asList(_getPerson(personId)));		
-		}catch(ServiceRuntime e){
-			throw e;
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -757,16 +758,16 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean existsFeature(String md5) throws ServiceRuntime {
 		try{
 			return _existsFeature(md5);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
 
 	@Override
-	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntime{
+	public FeatureBean addFeature(ByteBuffer feature,Integer personId,List<FaceBean> faecBeans)throws ServiceRuntime, DuplicateReord{
 		try{
 			return _addFeature(feature, _getPerson(personId), faecBeans);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -776,9 +777,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			Integer deviceId) throws ServiceRuntime {
 		try {
 			return _addFeature(feature, _getPerson(personId), faceInfo, _getDevice(deviceId));
-		} catch (ServiceRuntime e) {
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		} catch (DuplicateReord e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -787,7 +788,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<String> deleteFeature(String featureMd5,boolean deleteImage)throws ServiceRuntime{
 		try{
 			return _deleteFeature(featureMd5,deleteImage);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -796,7 +797,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int deleteAllFeaturesByPersonId(int personId,boolean deleteImage)throws ServiceRuntime{
 		try{
 			return _deleteAllFeaturesByPersonId(personId,deleteImage);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -805,7 +806,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public FeatureBean getFeature(String md5)throws ServiceRuntime{
 		try{
 			return _getFeature(md5);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -814,7 +815,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<FeatureBean> getFeatures(List<String> md5)throws ServiceRuntime{
 		try{
 			return _getFeatures(md5);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -824,7 +825,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		try{
 			FeatureBean featureBean = _getFeature(md5);
 			return null ==featureBean?null:featureBean.getFeature();
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -834,7 +835,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		try{
 			StoreBean storeBean = _getStore(imageMD5);
 			return null ==storeBean?null:storeBean.getData();
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -843,7 +844,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public ImageBean getImage(String imageMD5)throws ServiceRuntime{
 		try{
 			return _getImage(imageMD5);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -852,7 +853,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<String> getImagesAssociatedByFeature(String featureMd5)throws ServiceRuntime{
 		try{
 			return _getImageKeysImportedByFeatureMd5(featureMd5);
-		}catch (Exception e) {
+		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -861,7 +862,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int deleteImage(String imageMd5)throws ServiceRuntime{
 		try{
 			return _deleteImage(imageMd5);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -870,9 +871,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean existsDevice(int id) throws ServiceRuntime {
 		try{
 			return _existsDevice(id);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -881,9 +880,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public DeviceBean saveDevice(DeviceBean deviceBean)throws ServiceRuntime{
     	try{
     		return _saveDevice(deviceBean);
-    	} catch(RuntimeException e){
-    		throw e;
-    	} catch (Exception e) {
+    	} catch (RuntimeException e) {
     		throw new ServiceRuntime(e);
     	} 
     }
@@ -891,10 +888,8 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	@Override
 	public DeviceBean getDevice(int deviceId)throws ServiceRuntime{
     	try{
-		return _getDevice(deviceId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+    		return _getDevice(deviceId);
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -903,9 +898,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<DeviceBean> getDevices(List<Integer> idList)throws ServiceRuntime{
 		try{
 			return _getDevices(idList);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
@@ -924,9 +917,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public DeviceGroupBean getDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _getDeviceGroup(deviceGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -934,9 +925,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList)throws ServiceRuntime {
 		try{
 			return _getDeviceGroups(groupIdList); 
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -944,9 +933,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int deleteDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _deleteDeviceGroup(deviceGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -954,9 +941,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _getSubDeviceGroup(deviceGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -964,9 +949,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<DeviceBean> getDevicesOfGroup(int deviceGroupId)throws ServiceRuntime {
 		try{
 			return _getDevicesOfGroup(deviceGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -975,9 +958,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntime {
 		try{
 			return _savePersonGroup(personGroupBean);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -985,9 +966,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public PersonGroupBean getPersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return _getPersonGroup(personGroupId); 
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -995,9 +974,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<PersonGroupBean> getPersonGroups(Collection<Integer> groupIdList)throws ServiceRuntime {
 		try{
 			return _getPersonGroups(groupIdList);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1005,9 +982,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int deletePersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return _deletePersonGroup(personGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1015,9 +990,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<PersonGroupBean> getSubPersonGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return _getSubPersonGroup(personGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1025,9 +998,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<PersonBean> getPersonsOfGroup(int personGroupId)throws ServiceRuntime {
 		try{
 			return _getPersonsOfGroup(personGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1035,9 +1006,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
 		try{
 			return _loadDeviceGroupByWhere(where, startRow, numRows);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -1045,9 +1014,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public int countDeviceGroupByWhere(String where)throws ServiceRuntime{
 		try{
 			return _countDeviceGroupByWhere(where);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -1055,9 +1022,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntime{
     	try{
     		return _loadDeviceGroupIdByWhere(where);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -1066,9 +1031,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
 		try{
 			_addPermit(deviceGroup, personGroup);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1076,9 +1039,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public void addPermit(int deviceGroupId,int personGroupId)throws ServiceRuntime{
 		try{
 			_addPermit(deviceGroupId, personGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1086,9 +1047,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public int deletePermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
 		try{
 			return _deletePermit(deviceGroup, personGroup);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1096,9 +1055,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean getGroupPermit(int deviceId,int personGroupId)throws ServiceRuntime {
 		try{
 			return _getGroupPermit(deviceId,personGroupId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1106,9 +1063,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public boolean getPersonPermit(int deviceId,int personId)throws ServiceRuntime {
 		try{
 			return _getPersonPermit(deviceId,personId);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1116,9 +1071,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<Boolean> getGroupPermits(int deviceId,List<Integer> personGroupIdList)throws ServiceRuntime {
 		try{
 			return _getGroupPermit(deviceId, personGroupIdList);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1126,9 +1079,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<Boolean> getPersonPermits(int deviceId,List<Integer> personIdList)throws ServiceRuntime {
 		try{
 			return _getPermit(deviceId, personIdList);
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1136,9 +1087,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public List<PermitBean> loadPermitByUpdate(long timestamp)throws ServiceRuntime {
 		try{
 			return _loadPermitByCreateTime(new Date(timestamp));
-		} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
 	}
@@ -1146,9 +1095,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
     	try{
     		return _loadPersonGroupByWhere(where, startRow, numRows);
-    	} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+    	} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -1156,9 +1103,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public int countPersonGroupByWhere(String where)throws ServiceRuntime{
     	try{
     		return _countPersonGroupByWhere(where);
-    	} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+    	} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }
@@ -1166,9 +1111,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
     public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntime{
     	try{
     		return _loadPersonGroupIdByWhere(where);
-    	} catch(RuntimeException e){
-			throw e;
-		} catch (Exception e) {
+    	} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		}
     }

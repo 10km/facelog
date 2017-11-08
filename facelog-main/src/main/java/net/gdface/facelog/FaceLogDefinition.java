@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.facebook.swift.service.ThriftException;
 import com.facebook.swift.service.ThriftMethod;
 import com.facebook.swift.service.ThriftService;
 
@@ -495,9 +496,12 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @throws DuplicateReord 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntime
 	 */
-	@ThriftMethod
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntime.class, id=1),
+            @ThriftException(type=DuplicateReord.class, id=2)
+			})
 	public ImageBean addImage(ByteBuffer imageData, Integer deviceId, FaceBean faceBean, Integer personId)
-			throws ServiceRuntime {
+			throws ServiceRuntime, DuplicateReord {
 		return null;
 	}
 
@@ -519,9 +523,15 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntime
+	 * @throws DuplicateReord 
 	 */
-	@ThriftMethod
-	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntime {
+	@ThriftMethod(
+			exception = {
+            @ThriftException(type=ServiceRuntime.class, id=1),
+            @ThriftException(type=DuplicateReord.class, id=2)
+			}
+		)
+	public FeatureBean addFeature(ByteBuffer feature, Integer personId, List<FaceBean> faecBeans) throws ServiceRuntime, DuplicateReord {
 		return null;
 	}
 
@@ -532,7 +542,6 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
 	 * @param deviceId 图像来源设备id,可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
-	 * @throws DuplicateReord 数据库中已经存在要保存的图像数据
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod("addFeatureMulti")

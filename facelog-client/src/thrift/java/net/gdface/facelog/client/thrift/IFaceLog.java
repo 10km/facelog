@@ -15,7 +15,8 @@ public interface IFaceLog
     {
         @ThriftMethod(value = "addFeature",
                       exception = {
-                          @ThriftException(type=ServiceRuntime.class, id=1)
+                          @ThriftException(type=ServiceRuntime.class, id=1),
+                          @ThriftException(type=DuplicateReord.class, id=2)
                       })
         ListenableFuture<FeatureBean> addFeature(
             @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
@@ -36,7 +37,8 @@ public interface IFaceLog
 
         @ThriftMethod(value = "addImage",
                       exception = {
-                          @ThriftException(type=ServiceRuntime.class, id=1)
+                          @ThriftException(type=ServiceRuntime.class, id=1),
+                          @ThriftException(type=DuplicateReord.class, id=2)
                       })
         ListenableFuture<ImageBean> addImage(
             @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
@@ -666,13 +668,14 @@ public interface IFaceLog
     }
     @ThriftMethod(value = "addFeature",
                   exception = {
-                      @ThriftException(type=ServiceRuntime.class, id=1)
+                      @ThriftException(type=ServiceRuntime.class, id=1),
+                      @ThriftException(type=DuplicateReord.class, id=2)
                   })
     FeatureBean addFeature(
         @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=3, name="faecBeans", requiredness=Requiredness.NONE) final List<FaceBean> faecBeans
-    ) throws ServiceRuntime;
+    ) throws ServiceRuntime, DuplicateReord;
 
     @ThriftMethod(value = "addFeatureMulti",
                   exception = {
@@ -687,14 +690,15 @@ public interface IFaceLog
 
     @ThriftMethod(value = "addImage",
                   exception = {
-                      @ThriftException(type=ServiceRuntime.class, id=1)
+                      @ThriftException(type=ServiceRuntime.class, id=1),
+                      @ThriftException(type=DuplicateReord.class, id=2)
                   })
     ImageBean addImage(
         @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
         @ThriftField(value=2, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=3, name="faceBean", requiredness=Requiredness.NONE) final FaceBean faceBean,
         @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId
-    ) throws ServiceRuntime;
+    ) throws ServiceRuntime, DuplicateReord;
 
     @ThriftMethod(value = "addLog",
                   exception = {

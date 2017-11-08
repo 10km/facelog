@@ -65,12 +65,13 @@ class IFaceLogClient implements Constant{
      * @param faecBeans 生成特征数据的人脸信息对象(可以是多个人脸对象合成一个特征),可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      * @throws ServiceRuntime
+     * @throws DuplicateReord
      */
     // 1 SERIVCE PORT : addFeature
     public FeatureBean addFeature(
             byte[] feature,
             int personId,
-            List<FaceBean> faecBeans){
+            List<FaceBean> faecBeans)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             return converterFeatureBean.fromRight(service.addFeature(
                     feature,
@@ -90,7 +91,7 @@ class IFaceLogClient implements Constant{
     public FeatureBean addFeatureGeneric(
             Object feature,
             int personId,
-            List<FaceBean> faecBeans){
+            List<FaceBean> faecBeans)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             return converterFeatureBean.fromRight(service.addFeature(
                     GenericUtils.toBytes(feature),
@@ -107,7 +108,6 @@ class IFaceLogClient implements Constant{
      * @param faceInfo 生成特征数据的图像及人脸信息对象(每张图对应一张人脸),可为null
      * @param deviceId 图像来源设备id,可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
-     * @throws DuplicateReord 数据库中已经存在要保存的图像数据
      * @throws ServiceRuntime
      */
     // 2 SERIVCE PORT : addFeatureMulti
@@ -163,7 +163,7 @@ class IFaceLogClient implements Constant{
             byte[] imageData,
             int deviceId,
             FaceBean faceBean,
-            int personId){
+            int personId)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             return converterImageBean.fromRight(service.addImage(
                     imageData,
@@ -185,7 +185,7 @@ class IFaceLogClient implements Constant{
             Object imageData,
             int deviceId,
             FaceBean faceBean,
-            int personId){
+            int personId)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             return converterImageBean.fromRight(service.addImage(
                     GenericUtils.toBytes(imageData),
