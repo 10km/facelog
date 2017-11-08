@@ -12,5 +12,11 @@ public final class ServiceRuntime extends Exception
     public ServiceRuntime() {
     }
 
+    private String serverStackTraceMessage;
 
+    @ThriftField(value=1, name="serverStackTraceMessage", requiredness=Requiredness.NONE)
+    public String getServerStackTraceMessage() { return serverStackTraceMessage; }
+
+    @ThriftField
+    public void setServerStackTraceMessage(final String serverStackTraceMessage) { this.serverStackTraceMessage = serverStackTraceMessage; }
 }

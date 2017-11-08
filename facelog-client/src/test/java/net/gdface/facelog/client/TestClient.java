@@ -28,7 +28,9 @@ public class TestClient implements CommonConstant {
 			logger.info("person = {}", newPerson.toString());
 			PersonBean person = facelogClient.getPerson(newPerson.getId());
 			logger.info("person = {}", person.toString());
-		} catch (Exception e) {
+		} catch(ServiceRuntime e){
+			e.printServerStackTrace();
+		}catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
