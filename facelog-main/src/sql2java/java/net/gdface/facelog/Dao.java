@@ -178,6 +178,20 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param idOfDevice 设备id 
+     * @see {@link IDeviceManager#checkDuplicate(DeviceBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code idOfDevice} 
+     */
+    //7-3
+    protected Integer _checkDuplicateDevice(Integer idOfDevice)throws DuplicateReord{
+        if(deviceManager.existsPrimaryKey(idOfDevice))
+            throw new DuplicateReord();
+        return idOfDevice;
+    }
     /**
      * 返回外键(fl_image.device_id)引用指定记录(fl_device.id)的所有{@code fl_image}记录
      * 
@@ -512,6 +526,20 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param idOfDeviceGroup 设备组id 
+     * @see {@link IDeviceGroupManager#checkDuplicate(DeviceGroupBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code idOfDeviceGroup} 
+     */
+    //7-3
+    protected Integer _checkDuplicateDeviceGroup(Integer idOfDeviceGroup)throws DuplicateReord{
+        if(deviceGroupManager.existsPrimaryKey(idOfDeviceGroup))
+            throw new DuplicateReord();
+        return idOfDeviceGroup;
+    }
     /**
      * 返回属于{@code idOfDeviceGroup}指定组的所有{@code fl_device}记录
      * 
@@ -827,6 +855,20 @@ class Dao implements CommonConstant {
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
+    }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param idOfPerson 用户id 
+     * @see {@link IPersonManager#checkDuplicate(PersonBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code idOfPerson} 
+     */
+    //7-3
+    protected Integer _checkDuplicatePerson(Integer idOfPerson)throws DuplicateReord{
+        if(personManager.existsPrimaryKey(idOfPerson))
+            throw new DuplicateReord();
+        return idOfPerson;
     }
     /**
      * 返回外键(fl_feature.person_id)引用指定记录(fl_person.id)的所有{@code fl_feature}记录
@@ -1184,6 +1226,20 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param idOfPersonGroup 用户组id 
+     * @see {@link IPersonGroupManager#checkDuplicate(PersonGroupBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code idOfPersonGroup} 
+     */
+    //7-3
+    protected Integer _checkDuplicatePersonGroup(Integer idOfPersonGroup)throws DuplicateReord{
+        if(personGroupManager.existsPrimaryKey(idOfPersonGroup))
+            throw new DuplicateReord();
+        return idOfPersonGroup;
+    }
     /**
      * 返回外键(fl_permit.person_group_id)引用指定记录(fl_person_group.id)的所有{@code fl_permit}记录
      * 
@@ -1500,6 +1556,20 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param idOfFace 主键 
+     * @see {@link IFaceManager#checkDuplicate(FaceBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code idOfFace} 
+     */
+    //7-3
+    protected Integer _checkDuplicateFace(Integer idOfFace)throws DuplicateReord{
+        if(faceManager.existsPrimaryKey(idOfFace))
+            throw new DuplicateReord();
+        return idOfFace;
+    }
     /**
      * 返回外键(fl_log.compare_face)引用指定记录(fl_face.id)的所有{@code fl_log}记录
      * 
@@ -1794,6 +1864,20 @@ class Dao implements CommonConstant {
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
+    }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param md5OfFeature 主键,特征码md5校验码 
+     * @see {@link IFeatureManager#checkDuplicate(FeatureBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code md5OfFeature} 
+     */
+    //7-3
+    protected String _checkDuplicateFeature(String md5OfFeature)throws DuplicateReord{
+        if(featureManager.existsPrimaryKey(md5OfFeature))
+            throw new DuplicateReord();
+        return md5OfFeature;
     }
     /**
      * 返回外键(fl_face.feature_md5)引用指定记录(fl_feature.md5)的所有{@code fl_face}记录
@@ -2090,6 +2174,20 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param md5OfImage 主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key 
+     * @see {@link IImageManager#checkDuplicate(ImageBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code md5OfImage} 
+     */
+    //7-3
+    protected String _checkDuplicateImage(String md5OfImage)throws DuplicateReord{
+        if(imageManager.existsPrimaryKey(md5OfImage))
+            throw new DuplicateReord();
+        return md5OfImage;
+    }
     /**
      * 返回外键(fl_face.image_md5)引用指定记录(fl_image.md5)的所有{@code fl_face}记录
      * 
@@ -2351,6 +2449,20 @@ class Dao implements CommonConstant {
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
+    }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param idOfLog 日志id 
+     * @see {@link ILogManager#checkDuplicate(LogBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code idOfLog} 
+     */
+    //7-3
+    protected Integer _checkDuplicateLog(Integer idOfLog)throws DuplicateReord{
+        if(logManager.existsPrimaryKey(idOfLog))
+            throw new DuplicateReord();
+        return idOfLog;
     }
     /**
      * 返回外键(fl_log.device_id)引用的 fl_device 记录
@@ -2681,6 +2793,20 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param deviceGroupIdOfPermit 外键,设备组id 
+     * @param personGroupIdOfPermit 外键,人员组id 
+     * @see {@link IPermitManager#checkDuplicate(PermitBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * 
+     */
+    //7-3
+    protected void _checkDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)throws DuplicateReord{
+        if(permitManager.existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit))
+            throw new DuplicateReord();
+    }
     /**
      * 返回外键(fl_permit.device_group_id)引用的 fl_device_group 记录
      * @param bean
@@ -2975,6 +3101,20 @@ class Dao implements CommonConstant {
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
+    }
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * 
+     * @param md5OfStore 主键,md5检验码 
+     * @see {@link IStoreManager#checkDuplicate(StoreBean)}
+     * @throws DuplicateReord if exists duplicated row
+     * @return always {@code md5OfStore} 
+     */
+    //7-3
+    protected String _checkDuplicateStore(String md5OfStore)throws DuplicateReord{
+        if(storeManager.existsPrimaryKey(md5OfStore))
+            throw new DuplicateReord();
+        return md5OfStore;
     }
     /** 
      * 添加新记录<br>

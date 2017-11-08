@@ -138,6 +138,7 @@ class Dao implements CommonConstant {
         }
         return count;
     }
+################# CHECK DUPLICATE RECORD##########
     /** 
      * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
@@ -151,8 +152,31 @@ class Dao implements CommonConstant {
             throw new DuplicateReord();
         }
     }
+################# CHECK DUPLICATE PRIMARY KEY##########
+#if($table.countPrimaryKeys() == 1)
+#set ($checkReturnType = $table.primaryKey.javaType)
+#set ($checkReturnComment = "@return always {@code $table.primaryKey.fullVarName} ")
+#else
+#set ($checkReturnType = 'void')
+#set ($checkReturnComment = "")
 #end
-######################### IMPORTED KEYS########
+    /** 
+     * 检查数据库中是否有(主键)相同的记录,如果有则抛出异常
+     * $fullParamComments
+     * @see {@link $table.asManagerInterfaceNSP()${esc.hash}checkDuplicate($beanClass)}
+     * @throws DuplicateReord if exists duplicated row
+     * $!checkReturnComment
+     */
+    //7-3
+    $!{modifier}$checkReturnType _checkDuplicate${coreClass}($fullParams)throws DuplicateReord{
+        if(${table.asVarManager()}.existsPrimaryKey($fullVarNames))
+            throw new DuplicateReord();
+#if($table.countPrimaryKeys() == 1)
+        return $table.primaryKey.fullVarName;
+#end
+    }
+#end
+######################### IMPORTED KEYS ########
 #foreach ($importedTable in $table.importedTables)
 #set ( $importedClass = "$importedTable.asBeanClassNSP()" )
 #foreach( $fkName in $importedTable.getFkMapNames($table.name) )

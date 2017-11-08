@@ -132,10 +132,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateReord{
 		if(Judge.isEmpty(imageBytes))return null;
 		String md5 = FaceUtilits.getMD5String(imageBytes);
-		ImageBean imageBean = _getImage(md5);
-		if(null != imageBean){
-			throw new DuplicateReord();
-		}
+		_checkDuplicateImage(md5);
 		Pair<ImageBean, StoreBean> pair;
 		try {
 			pair = _makeImageBean(imageBytes,md5);
@@ -908,8 +905,6 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			return _saveDeviceGroup(deviceGroupBean);
 		} catch(RuntimeException e){
 			throw e;
-		} catch (Exception e) {
-			throw new ServiceRuntime(e);
 		}
 	}
 	@Override
