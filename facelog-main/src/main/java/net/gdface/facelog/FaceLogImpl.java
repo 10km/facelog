@@ -504,8 +504,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	@Override
 	public PersonBean savePerson(PersonBean bean)throws ServiceRuntime {
 		try{
-			throw new ServiceRuntime();
-			//return _savePerson(bean);
+			return _savePerson(bean);
 		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
