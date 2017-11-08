@@ -8,7 +8,7 @@ import com.facebook.swift.codec.ThriftStruct;
  *
  */
 @ThriftStruct
-public class DuplicateReord extends ServiceRuntime {
+public class DuplicateReord extends Exception {
 	private static final long serialVersionUID = 5368342551644905292L;
 
 	public DuplicateReord() {

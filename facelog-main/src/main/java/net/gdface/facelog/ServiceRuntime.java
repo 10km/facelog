@@ -7,7 +7,8 @@ import com.facebook.swift.codec.ThriftStruct;
  * @author guyadong
  *
  */
-public class ServiceRuntime extends RuntimeException {
+@ThriftStruct
+public final class ServiceRuntime extends Exception {
 	private static final long serialVersionUID = -4932379960883720487L;
 
 	public ServiceRuntime() {
@@ -24,9 +25,4 @@ public class ServiceRuntime extends RuntimeException {
 	public ServiceRuntime(String message, Throwable cause) {
 		super(message, cause);
 	}
-
-	public ServiceRuntime(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
 }

@@ -13,14 +13,20 @@ public interface IFaceLog
     @ThriftService("IFaceLog")
     public interface Async
     {
-        @ThriftMethod(value = "addFeature")
+        @ThriftMethod(value = "addFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<FeatureBean> addFeature(
             @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
             @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
             @ThriftField(value=3, name="faecBeans", requiredness=Requiredness.NONE) final List<FaceBean> faecBeans
         );
 
-        @ThriftMethod(value = "addFeatureMulti")
+        @ThriftMethod(value = "addFeatureMulti",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<FeatureBean> addFeatureMulti(
             @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
             @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
@@ -28,7 +34,10 @@ public interface IFaceLog
             @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
         );
 
-        @ThriftMethod(value = "addImage")
+        @ThriftMethod(value = "addImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<ImageBean> addImage(
             @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
             @ThriftField(value=2, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
@@ -36,332 +45,521 @@ public interface IFaceLog
             @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "addLog")
+        @ThriftMethod(value = "addLog",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> addLog(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean
         );
 
-        @ThriftMethod(value = "addLogs")
+        @ThriftMethod(value = "addLogs",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> addLogs(
             @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans
         );
 
-        @ThriftMethod(value = "addPermit")
+        @ThriftMethod(value = "addPermit",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> addPermit(
             @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
             @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
         );
 
-        @ThriftMethod(value = "addPermitById")
+        @ThriftMethod(value = "addPermitById",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> addPermitById(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
             @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
-        @ThriftMethod(value = "countLogByWhere")
+        @ThriftMethod(value = "countLogByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> countLogByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
-        @ThriftMethod(value = "countLogLightByVerifyTime")
+        @ThriftMethod(value = "countLogLightByVerifyTime",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> countLogLightByVerifyTime(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
-        @ThriftMethod(value = "countLogLightByWhere")
+        @ThriftMethod(value = "countLogLightByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> countLogLightByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
-        @ThriftMethod(value = "deleteAllFeaturesByPersonId")
+        @ThriftMethod(value = "deleteAllFeaturesByPersonId",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deleteAllFeaturesByPersonId(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
             @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage
         );
 
-        @ThriftMethod(value = "deleteDeviceGroup")
+        @ThriftMethod(value = "deleteDeviceGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deleteDeviceGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
         );
 
-        @ThriftMethod(value = "deleteFeature")
+        @ThriftMethod(value = "deleteFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<String>> deleteFeature(
             @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
             @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage
         );
 
-        @ThriftMethod(value = "deleteImage")
+        @ThriftMethod(value = "deleteImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deleteImage(
             @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.NONE) final String imageMd5
         );
 
-        @ThriftMethod(value = "deletePermit")
+        @ThriftMethod(value = "deletePermit",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deletePermit(
             @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
             @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
         );
 
-        @ThriftMethod(value = "deletePerson")
+        @ThriftMethod(value = "deletePerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deletePerson(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "deletePersonByPapersNum")
+        @ThriftMethod(value = "deletePersonByPapersNum",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deletePersonByPapersNum(
             @ThriftField(value=1, name="papersNum", requiredness=Requiredness.NONE) final String papersNum
         );
 
-        @ThriftMethod(value = "deletePersonGroup")
+        @ThriftMethod(value = "deletePersonGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deletePersonGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
-        @ThriftMethod(value = "deletePersons")
+        @ThriftMethod(value = "deletePersons",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deletePersons(
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
         );
 
-        @ThriftMethod(value = "deletePersonsByPapersNum")
+        @ThriftMethod(value = "deletePersonsByPapersNum",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> deletePersonsByPapersNum(
             @ThriftField(value=1, name="papersNumlist", requiredness=Requiredness.NONE) final List<String> papersNumlist
         );
 
-        @ThriftMethod(value = "disablePerson")
+        @ThriftMethod(value = "disablePerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> disablePerson(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "disablePersonList")
+        @ThriftMethod(value = "disablePersonList",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> disablePersonList(
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
         );
 
-        @ThriftMethod(value = "existsDevice")
+        @ThriftMethod(value = "existsDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> existsDevice(
             @ThriftField(value=1, name="id", requiredness=Requiredness.NONE) final int id
         );
 
-        @ThriftMethod(value = "existsFeature")
+        @ThriftMethod(value = "existsFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> existsFeature(
             @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
         );
 
-        @ThriftMethod(value = "existsImage")
+        @ThriftMethod(value = "existsImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> existsImage(
             @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
         );
 
-        @ThriftMethod(value = "existsPerson")
+        @ThriftMethod(value = "existsPerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> existsPerson(
             @ThriftField(value=1, name="persionId", requiredness=Requiredness.NONE) final int persionId
         );
 
-        @ThriftMethod(value = "getDevice")
+        @ThriftMethod(value = "getDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<DeviceBean> getDevice(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
         );
 
-        @ThriftMethod(value = "getDeviceGroup")
+        @ThriftMethod(value = "getDeviceGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<DeviceGroupBean> getDeviceGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
         );
 
-        @ThriftMethod(value = "getDeviceGroups")
+        @ThriftMethod(value = "getDeviceGroups",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<DeviceGroupBean>> getDeviceGroups(
             @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
         );
 
-        @ThriftMethod(value = "getDevices")
+        @ThriftMethod(value = "getDevices",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<DeviceBean>> getDevices(
             @ThriftField(value=1, name="idList", requiredness=Requiredness.NONE) final List<Integer> idList
         );
 
-        @ThriftMethod(value = "getDevicesOfGroup")
+        @ThriftMethod(value = "getDevicesOfGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<DeviceBean>> getDevicesOfGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
         );
 
-        @ThriftMethod(value = "getFeature")
+        @ThriftMethod(value = "getFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<FeatureBean> getFeature(
             @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
         );
 
-        @ThriftMethod(value = "getFeatureBeansByPersonId")
+        @ThriftMethod(value = "getFeatureBeansByPersonId",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<String>> getFeatureBeansByPersonId(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "getFeatureBytes")
+        @ThriftMethod(value = "getFeatureBytes",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<byte []> getFeatureBytes(
             @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
         );
 
-        @ThriftMethod(value = "getFeatures")
+        @ThriftMethod(value = "getFeatures",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<FeatureBean>> getFeatures(
             @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final List<String> md5
         );
 
-        @ThriftMethod(value = "getGroupPermit")
+        @ThriftMethod(value = "getGroupPermit",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> getGroupPermit(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
             @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
-        @ThriftMethod(value = "getGroupPermits")
+        @ThriftMethod(value = "getGroupPermits",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<Boolean>> getGroupPermits(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
             @ThriftField(value=2, name="personGroupIdList", requiredness=Requiredness.NONE) final List<Integer> personGroupIdList
         );
 
-        @ThriftMethod(value = "getImage")
+        @ThriftMethod(value = "getImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<ImageBean> getImage(
             @ThriftField(value=1, name="imageMD5", requiredness=Requiredness.NONE) final String imageMD5
         );
 
-        @ThriftMethod(value = "getImageBytes")
+        @ThriftMethod(value = "getImageBytes",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<byte []> getImageBytes(
             @ThriftField(value=1, name="imageMD5", requiredness=Requiredness.NONE) final String imageMD5
         );
 
-        @ThriftMethod(value = "getImagesAssociatedByFeature")
+        @ThriftMethod(value = "getImagesAssociatedByFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<String>> getImagesAssociatedByFeature(
             @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5
         );
 
-        @ThriftMethod(value = "getLogBeansByPersonId")
+        @ThriftMethod(value = "getLogBeansByPersonId",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<LogBean>> getLogBeansByPersonId(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "getPerson")
+        @ThriftMethod(value = "getPerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> getPerson(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "getPersonByPapersNum")
+        @ThriftMethod(value = "getPersonByPapersNum",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> getPersonByPapersNum(
             @ThriftField(value=1, name="papersNum", requiredness=Requiredness.NONE) final String papersNum
         );
 
-        @ThriftMethod(value = "getPersonGroup")
+        @ThriftMethod(value = "getPersonGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonGroupBean> getPersonGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
-        @ThriftMethod(value = "getPersonGroups")
+        @ThriftMethod(value = "getPersonGroups",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<PersonGroupBean>> getPersonGroups(
             @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
         );
 
-        @ThriftMethod(value = "getPersonPermit")
+        @ThriftMethod(value = "getPersonPermit",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> getPersonPermit(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
             @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "getPersonPermits")
+        @ThriftMethod(value = "getPersonPermits",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<Boolean>> getPersonPermits(
             @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
             @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
         );
 
-        @ThriftMethod(value = "getPersons")
+        @ThriftMethod(value = "getPersons",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<PersonBean>> getPersons(
             @ThriftField(value=1, name="idList", requiredness=Requiredness.NONE) final List<Integer> idList
         );
 
-        @ThriftMethod(value = "getPersonsOfGroup")
+        @ThriftMethod(value = "getPersonsOfGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<PersonBean>> getPersonsOfGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
-        @ThriftMethod(value = "getSubDeviceGroup")
+        @ThriftMethod(value = "getSubDeviceGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<DeviceGroupBean>> getSubDeviceGroup(
             @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
         );
 
-        @ThriftMethod(value = "getSubPersonGroup")
+        @ThriftMethod(value = "getSubPersonGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<PersonGroupBean>> getSubPersonGroup(
             @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
-        @ThriftMethod(value = "isDisable")
+        @ThriftMethod(value = "isDisable",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Boolean> isDisable(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
         );
 
-        @ThriftMethod(value = "loadAllPerson")
+        @ThriftMethod(value = "loadAllPerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<Integer>> loadAllPerson();
 
-        @ThriftMethod(value = "loadFeatureMd5ByUpdate")
+        @ThriftMethod(value = "loadFeatureMd5ByUpdate",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<String>> loadFeatureMd5ByUpdate(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
-        @ThriftMethod(value = "loadLogByWhere")
+        @ThriftMethod(value = "loadLogByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<LogBean>> loadLogByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
         );
 
-        @ThriftMethod(value = "loadLogLightByVerifyTime")
+        @ThriftMethod(value = "loadLogLightByVerifyTime",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
         );
 
-        @ThriftMethod(value = "loadLogLightByWhere")
+        @ThriftMethod(value = "loadLogLightByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<LogLightBean>> loadLogLightByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
             @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
             @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
         );
 
-        @ThriftMethod(value = "loadPermitByUpdate")
+        @ThriftMethod(value = "loadPermitByUpdate",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<PermitBean>> loadPermitByUpdate(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
-        @ThriftMethod(value = "loadPersonByWhere")
+        @ThriftMethod(value = "loadPersonByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<Integer>> loadPersonByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
-        @ThriftMethod(value = "loadPersonIdByUpdateTime")
+        @ThriftMethod(value = "loadPersonIdByUpdateTime",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
-        @ThriftMethod(value = "loadUpdatedPersons")
+        @ThriftMethod(value = "loadUpdatedPersons",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<List<Integer>> loadUpdatedPersons(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
         );
 
-        @ThriftMethod(value = "replaceFeature")
+        @ThriftMethod(value = "replaceFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> replaceFeature(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
             @ThriftField(value=2, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
             @ThriftField(value=3, name="deleteOldFeatureImage", requiredness=Requiredness.NONE) final boolean deleteOldFeatureImage
         );
 
-        @ThriftMethod(value = "saveDevice")
+        @ThriftMethod(value = "saveDevice",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<DeviceBean> saveDevice(
             @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean
         );
 
-        @ThriftMethod(value = "saveDeviceGroup")
+        @ThriftMethod(value = "saveDeviceGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<DeviceGroupBean> saveDeviceGroup(
             @ThriftField(value=1, name="deviceGroupBean", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroupBean
         );
 
-        @ThriftMethod(value = "savePerson")
+        @ThriftMethod(value = "savePerson",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePerson(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean
         );
 
-        @ThriftMethod(value = "savePersonFull")
+        @ThriftMethod(value = "savePersonFull",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePersonFull(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
@@ -371,18 +569,27 @@ public interface IFaceLog
             @ThriftField(value=6, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
         );
 
-        @ThriftMethod(value = "savePersonGroup")
+        @ThriftMethod(value = "savePersonGroup",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonGroupBean> savePersonGroup(
             @ThriftField(value=1, name="personGroupBean", requiredness=Requiredness.NONE) final PersonGroupBean personGroupBean
         );
 
-        @ThriftMethod(value = "savePersonWithPhoto")
+        @ThriftMethod(value = "savePersonWithPhoto",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePersonWithPhoto(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto
         );
 
-        @ThriftMethod(value = "savePersonWithPhotoAndFeature")
+        @ThriftMethod(value = "savePersonWithPhotoAndFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeature(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
@@ -390,7 +597,10 @@ public interface IFaceLog
             @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
         );
 
-        @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiFaces")
+        @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiFaces",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeatureMultiFaces(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
@@ -398,7 +608,10 @@ public interface IFaceLog
             @ThriftField(value=4, name="faceBeans", requiredness=Requiredness.NONE) final List<FaceBean> faceBeans
         );
 
-        @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiImage")
+        @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiImage",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeatureMultiImage(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
@@ -407,449 +620,597 @@ public interface IFaceLog
             @ThriftField(value=5, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
         );
 
-        @ThriftMethod(value = "savePersonWithPhotoAndFeatureSaved")
+        @ThriftMethod(value = "savePersonWithPhotoAndFeatureSaved",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<PersonBean> savePersonWithPhotoAndFeatureSaved(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
             @ThriftField(value=2, name="idPhotoMd5", requiredness=Requiredness.NONE) final String idPhotoMd5,
             @ThriftField(value=3, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5
         );
 
-        @ThriftMethod(value = "savePersons")
+        @ThriftMethod(value = "savePersons",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> savePersons(
             @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<PersonBean> beans
         );
 
-        @ThriftMethod(value = "savePersonsWithPhoto")
+        @ThriftMethod(value = "savePersonsWithPhoto",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Integer> savePersonsWithPhoto(
             @ThriftField(value=1, name="persons", requiredness=Requiredness.NONE) final Map<byte [], PersonBean> persons
         );
 
-        @ThriftMethod(value = "setPersonExpiryDate")
+        @ThriftMethod(value = "setPersonExpiryDate",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> setPersonExpiryDate(
             @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
             @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
         );
 
-        @ThriftMethod(value = "setPersonExpiryDateList")
+        @ThriftMethod(value = "setPersonExpiryDateList",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
         ListenableFuture<Void> setPersonExpiryDateList(
             @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
             @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
         );
     }
-    @ThriftMethod(value = "addFeature")
+    @ThriftMethod(value = "addFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     FeatureBean addFeature(
         @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=3, name="faecBeans", requiredness=Requiredness.NONE) final List<FaceBean> faecBeans
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "addFeatureMulti")
+    @ThriftMethod(value = "addFeatureMulti",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     FeatureBean addFeatureMulti(
         @ThriftField(value=1, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=3, name="faceInfo", requiredness=Requiredness.NONE) final Map<byte [], FaceBean> faceInfo,
         @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "addImage")
+    @ThriftMethod(value = "addImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     ImageBean addImage(
         @ThriftField(value=1, name="imageData", requiredness=Requiredness.NONE) final byte [] imageData,
         @ThriftField(value=2, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=3, name="faceBean", requiredness=Requiredness.NONE) final FaceBean faceBean,
         @ThriftField(value=4, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "addLog")
+    @ThriftMethod(value = "addLog",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void addLog(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "addLogs")
+    @ThriftMethod(value = "addLogs",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void addLogs(
         @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "addPermit")
+    @ThriftMethod(value = "addPermit",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void addPermit(
         @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
         @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "addPermitById")
+    @ThriftMethod(value = "addPermitById",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void addPermitById(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId,
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "countLogByWhere")
+    @ThriftMethod(value = "countLogByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int countLogByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "countLogLightByVerifyTime")
+    @ThriftMethod(value = "countLogLightByVerifyTime",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int countLogLightByVerifyTime(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "countLogLightByWhere")
+    @ThriftMethod(value = "countLogLightByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int countLogLightByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deleteAllFeaturesByPersonId")
+    @ThriftMethod(value = "deleteAllFeaturesByPersonId",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deleteAllFeaturesByPersonId(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deleteDeviceGroup")
+    @ThriftMethod(value = "deleteDeviceGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deleteDeviceGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deleteFeature")
+    @ThriftMethod(value = "deleteFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<String> deleteFeature(
         @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
         @ThriftField(value=2, name="deleteImage", requiredness=Requiredness.NONE) final boolean deleteImage
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deleteImage")
+    @ThriftMethod(value = "deleteImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deleteImage(
         @ThriftField(value=1, name="imageMd5", requiredness=Requiredness.NONE) final String imageMd5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deletePermit")
+    @ThriftMethod(value = "deletePermit",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deletePermit(
         @ThriftField(value=1, name="deviceGroup", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroup,
         @ThriftField(value=2, name="personGroup", requiredness=Requiredness.NONE) final PersonGroupBean personGroup
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deletePerson")
+    @ThriftMethod(value = "deletePerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deletePerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deletePersonByPapersNum")
+    @ThriftMethod(value = "deletePersonByPapersNum",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deletePersonByPapersNum(
         @ThriftField(value=1, name="papersNum", requiredness=Requiredness.NONE) final String papersNum
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deletePersonGroup")
+    @ThriftMethod(value = "deletePersonGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deletePersonGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deletePersons")
+    @ThriftMethod(value = "deletePersons",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deletePersons(
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "deletePersonsByPapersNum")
+    @ThriftMethod(value = "deletePersonsByPapersNum",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int deletePersonsByPapersNum(
         @ThriftField(value=1, name="papersNumlist", requiredness=Requiredness.NONE) final List<String> papersNumlist
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "disablePerson")
+    @ThriftMethod(value = "disablePerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void disablePerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "disablePersonList")
+    @ThriftMethod(value = "disablePersonList",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void disablePersonList(
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "existsDevice")
+    @ThriftMethod(value = "existsDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean existsDevice(
         @ThriftField(value=1, name="id", requiredness=Requiredness.NONE) final int id
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "existsFeature")
+    @ThriftMethod(value = "existsFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean existsFeature(
         @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "existsImage")
+    @ThriftMethod(value = "existsImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean existsImage(
         @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "existsPerson")
+    @ThriftMethod(value = "existsPerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean existsPerson(
         @ThriftField(value=1, name="persionId", requiredness=Requiredness.NONE) final int persionId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getDevice")
+    @ThriftMethod(value = "getDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     DeviceBean getDevice(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getDeviceGroup")
+    @ThriftMethod(value = "getDeviceGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     DeviceGroupBean getDeviceGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getDeviceGroups")
+    @ThriftMethod(value = "getDeviceGroups",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<DeviceGroupBean> getDeviceGroups(
         @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getDevices")
+    @ThriftMethod(value = "getDevices",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<DeviceBean> getDevices(
         @ThriftField(value=1, name="idList", requiredness=Requiredness.NONE) final List<Integer> idList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getDevicesOfGroup")
+    @ThriftMethod(value = "getDevicesOfGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<DeviceBean> getDevicesOfGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getFeature")
+    @ThriftMethod(value = "getFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     FeatureBean getFeature(
         @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getFeatureBeansByPersonId")
+    @ThriftMethod(value = "getFeatureBeansByPersonId",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<String> getFeatureBeansByPersonId(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getFeatureBytes")
+    @ThriftMethod(value = "getFeatureBytes",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     byte [] getFeatureBytes(
         @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final String md5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getFeatures")
+    @ThriftMethod(value = "getFeatures",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<FeatureBean> getFeatures(
         @ThriftField(value=1, name="md5", requiredness=Requiredness.NONE) final List<String> md5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getGroupPermit")
+    @ThriftMethod(value = "getGroupPermit",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean getGroupPermit(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getGroupPermits")
+    @ThriftMethod(value = "getGroupPermits",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<Boolean> getGroupPermits(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="personGroupIdList", requiredness=Requiredness.NONE) final List<Integer> personGroupIdList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getImage")
+    @ThriftMethod(value = "getImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     ImageBean getImage(
         @ThriftField(value=1, name="imageMD5", requiredness=Requiredness.NONE) final String imageMD5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getImageBytes")
+    @ThriftMethod(value = "getImageBytes",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     byte [] getImageBytes(
         @ThriftField(value=1, name="imageMD5", requiredness=Requiredness.NONE) final String imageMD5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getImagesAssociatedByFeature")
+    @ThriftMethod(value = "getImagesAssociatedByFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<String> getImagesAssociatedByFeature(
         @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getLogBeansByPersonId")
+    @ThriftMethod(value = "getLogBeansByPersonId",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<LogBean> getLogBeansByPersonId(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPerson")
+    @ThriftMethod(value = "getPerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean getPerson(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersonByPapersNum")
+    @ThriftMethod(value = "getPersonByPapersNum",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean getPersonByPapersNum(
         @ThriftField(value=1, name="papersNum", requiredness=Requiredness.NONE) final String papersNum
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersonGroup")
+    @ThriftMethod(value = "getPersonGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonGroupBean getPersonGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersonGroups")
+    @ThriftMethod(value = "getPersonGroups",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<PersonGroupBean> getPersonGroups(
         @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersonPermit")
+    @ThriftMethod(value = "getPersonPermit",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean getPersonPermit(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersonPermits")
+    @ThriftMethod(value = "getPersonPermits",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<Boolean> getPersonPermits(
         @ThriftField(value=1, name="deviceId", requiredness=Requiredness.NONE) final int deviceId,
         @ThriftField(value=2, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersons")
+    @ThriftMethod(value = "getPersons",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<PersonBean> getPersons(
         @ThriftField(value=1, name="idList", requiredness=Requiredness.NONE) final List<Integer> idList
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getPersonsOfGroup")
+    @ThriftMethod(value = "getPersonsOfGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<PersonBean> getPersonsOfGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getSubDeviceGroup")
+    @ThriftMethod(value = "getSubDeviceGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<DeviceGroupBean> getSubDeviceGroup(
         @ThriftField(value=1, name="deviceGroupId", requiredness=Requiredness.NONE) final int deviceGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "getSubPersonGroup")
+    @ThriftMethod(value = "getSubPersonGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<PersonGroupBean> getSubPersonGroup(
         @ThriftField(value=1, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "isDisable")
+    @ThriftMethod(value = "isDisable",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     boolean isDisable(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId
-    );
+    ) throws ServiceRuntime;
 
+    @ThriftMethod(value = "loadAllPerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    List<Integer> loadAllPerson() throws ServiceRuntime;
 
-    @ThriftMethod(value = "loadAllPerson")
-    List<Integer> loadAllPerson();
-
-
-    @ThriftMethod(value = "loadFeatureMd5ByUpdate")
+    @ThriftMethod(value = "loadFeatureMd5ByUpdate",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<String> loadFeatureMd5ByUpdate(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadLogByWhere")
+    @ThriftMethod(value = "loadLogByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<LogBean> loadLogByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadLogLightByVerifyTime")
+    @ThriftMethod(value = "loadLogLightByVerifyTime",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<LogLightBean> loadLogLightByVerifyTime(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadLogLightByWhere")
+    @ThriftMethod(value = "loadLogLightByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<LogLightBean> loadLogLightByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
         @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
         @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadPermitByUpdate")
+    @ThriftMethod(value = "loadPermitByUpdate",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<PermitBean> loadPermitByUpdate(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadPersonByWhere")
+    @ThriftMethod(value = "loadPersonByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<Integer> loadPersonByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadPersonIdByUpdateTime")
+    @ThriftMethod(value = "loadPersonIdByUpdateTime",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<Integer> loadPersonIdByUpdateTime(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "loadUpdatedPersons")
+    @ThriftMethod(value = "loadUpdatedPersons",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     List<Integer> loadUpdatedPersons(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "replaceFeature")
+    @ThriftMethod(value = "replaceFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void replaceFeature(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=2, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5,
         @ThriftField(value=3, name="deleteOldFeatureImage", requiredness=Requiredness.NONE) final boolean deleteOldFeatureImage
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "saveDevice")
+    @ThriftMethod(value = "saveDevice",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     DeviceBean saveDevice(
         @ThriftField(value=1, name="deviceBean", requiredness=Requiredness.NONE) final DeviceBean deviceBean
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "saveDeviceGroup")
+    @ThriftMethod(value = "saveDeviceGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     DeviceGroupBean saveDeviceGroup(
         @ThriftField(value=1, name="deviceGroupBean", requiredness=Requiredness.NONE) final DeviceGroupBean deviceGroupBean
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePerson")
+    @ThriftMethod(value = "savePerson",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePerson(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonFull")
+    @ThriftMethod(value = "savePersonFull",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePersonFull(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
@@ -857,81 +1218,100 @@ public interface IFaceLog
         @ThriftField(value=4, name="featureImage", requiredness=Requiredness.NONE) final byte [] featureImage,
         @ThriftField(value=5, name="featureFaceBean", requiredness=Requiredness.NONE) final FaceBean featureFaceBean,
         @ThriftField(value=6, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonGroup")
+    @ThriftMethod(value = "savePersonGroup",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonGroupBean savePersonGroup(
         @ThriftField(value=1, name="personGroupBean", requiredness=Requiredness.NONE) final PersonGroupBean personGroupBean
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonWithPhoto")
+    @ThriftMethod(value = "savePersonWithPhoto",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePersonWithPhoto(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonWithPhotoAndFeature")
+    @ThriftMethod(value = "savePersonWithPhotoAndFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePersonWithPhotoAndFeature(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
         @ThriftField(value=3, name="featureBean", requiredness=Requiredness.NONE) final FeatureBean featureBean,
         @ThriftField(value=4, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiFaces")
+    @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiFaces",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePersonWithPhotoAndFeatureMultiFaces(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
         @ThriftField(value=3, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=4, name="faceBeans", requiredness=Requiredness.NONE) final List<FaceBean> faceBeans
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiImage")
+    @ThriftMethod(value = "savePersonWithPhotoAndFeatureMultiImage",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePersonWithPhotoAndFeatureMultiImage(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhoto", requiredness=Requiredness.NONE) final byte [] idPhoto,
         @ThriftField(value=3, name="feature", requiredness=Requiredness.NONE) final byte [] feature,
         @ThriftField(value=4, name="faceInfo", requiredness=Requiredness.NONE) final Map<byte [], FaceBean> faceInfo,
         @ThriftField(value=5, name="deviceId", requiredness=Requiredness.NONE) final int deviceId
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonWithPhotoAndFeatureSaved")
+    @ThriftMethod(value = "savePersonWithPhotoAndFeatureSaved",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     PersonBean savePersonWithPhotoAndFeatureSaved(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final PersonBean bean,
         @ThriftField(value=2, name="idPhotoMd5", requiredness=Requiredness.NONE) final String idPhotoMd5,
         @ThriftField(value=3, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersons")
+    @ThriftMethod(value = "savePersons",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void savePersons(
         @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<PersonBean> beans
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "savePersonsWithPhoto")
+    @ThriftMethod(value = "savePersonsWithPhoto",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     int savePersonsWithPhoto(
         @ThriftField(value=1, name="persons", requiredness=Requiredness.NONE) final Map<byte [], PersonBean> persons
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "setPersonExpiryDate")
+    @ThriftMethod(value = "setPersonExpiryDate",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void setPersonExpiryDate(
         @ThriftField(value=1, name="personId", requiredness=Requiredness.NONE) final int personId,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
-    );
+    ) throws ServiceRuntime;
 
-
-    @ThriftMethod(value = "setPersonExpiryDateList")
+    @ThriftMethod(value = "setPersonExpiryDateList",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
     void setPersonExpiryDateList(
         @ThriftField(value=1, name="personIdList", requiredness=Requiredness.NONE) final List<Integer> personIdList,
         @ThriftField(value=2, name="expiryDate", requiredness=Requiredness.NONE) final long expiryDate
-    );
-
+    ) throws ServiceRuntime;
 }
