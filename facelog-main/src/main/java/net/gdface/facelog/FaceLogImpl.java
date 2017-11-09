@@ -676,25 +676,21 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 
 	@Override
-	public void addLog(LogBean bean)throws ServiceRuntime {
+	public void addLog(LogBean bean)throws ServiceRuntime, DuplicateReord {
 		try{
 			_addLog(bean);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
-		} catch (DuplicateReord e) {
-			throw new ServiceRuntime(e);
-		} 
+		}
 	}
 
 	@Override
-	public void addLogs(List<LogBean> beans)throws ServiceRuntime {
+	public void addLogs(List<LogBean> beans)throws ServiceRuntime, DuplicateReord {
 		try{
 			_addLogsAsTransaction(beans);
 		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
-		} catch (DuplicateReord e) {
-			throw new ServiceRuntime(e);
-		} 
+		}
 	}
 
 	@Override

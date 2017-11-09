@@ -152,8 +152,8 @@ service IFaceLog {
   FeatureBean addFeature(1:  binary feature, 2:  i32 personId, 3:  list<FaceBean> faecBeans) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
   FeatureBean addFeatureMulti(1:  binary feature, 2:  i32 personId, 3:  map<binary, FaceBean> faceInfo, 4:  i32 deviceId) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
   ImageBean addImage(1:  binary imageData, 2:  i32 deviceId, 3:  FaceBean faceBean, 4:  i32 personId) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
-  void addLog(1:  LogBean bean) throws (1: ServiceRuntime ex1);
-  void addLogs(1:  list<LogBean> beans) throws (1: ServiceRuntime ex1);
+  void addLog(1:  LogBean bean) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
+  void addLogs(1:  list<LogBean> beans) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
   void addPermit(1:  DeviceGroupBean deviceGroup, 2:  PersonGroupBean personGroup) throws (1: ServiceRuntime ex1);
   void addPermitById(1:  i32 deviceGroupId, 2:  i32 personGroupId) throws (1: ServiceRuntime ex1);
   i32 countDeviceByWhere(1:  string where) throws (1: ServiceRuntime ex1);

@@ -257,9 +257,10 @@ class IFaceLogClient implements Constant{
      * 添加一条验证日志记录
      * @param bean
      * @throws ServiceRuntime
+     * @throws DuplicateReord 数据库中存在相同记录
      */
     // 4 SERIVCE PORT : addLog
-    public void addLog(LogBean bean){
+    public void addLog(LogBean bean)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             service.addLog(converterLogBean.toRight(bean));
         }
@@ -271,9 +272,10 @@ class IFaceLogClient implements Constant{
      * 添加一组验证日志记录(事务存储)
      * @param beans
      * @throws ServiceRuntime
+     * @throws DuplicateReord 数据库中存在相同记录
      */
     // 5 SERIVCE PORT : addLogs
-    public void addLogs(List<LogBean> beans){
+    public void addLogs(List<LogBean> beans)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             service.addLogs(converterLogBean.toRight(beans));
         }

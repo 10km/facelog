@@ -416,18 +416,26 @@ public abstract class FaceLogDefinition extends Dao{
 	 * 添加一条验证日志记录
 	 * @param bean
 	 * @throws ServiceRuntime
+	 * @throws DuplicateReord 数据库中存在相同记录
 	 */
-	@ThriftMethod
-	public void addLog(LogBean bean) throws ServiceRuntime {
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntime.class, id=1),
+            @ThriftException(type=DuplicateReord.class, id=2)
+			})
+	public void addLog(LogBean bean) throws ServiceRuntime, DuplicateReord {
 	}
 
 	/**
 	 * 添加一组验证日志记录(事务存储)
 	 * @param beans
 	 * @throws ServiceRuntime
+	 * @throws DuplicateReord 数据库中存在相同记录
 	 */
-	@ThriftMethod
-	public void addLogs(List<LogBean> beans) throws ServiceRuntime {
+	@ThriftMethod(exception = {
+            @ThriftException(type=ServiceRuntime.class, id=1),
+            @ThriftException(type=DuplicateReord.class, id=2)
+			})
+	public void addLogs(List<LogBean> beans) throws ServiceRuntime, DuplicateReord {
 	}
 	/**
 	 * 日志查询<br>

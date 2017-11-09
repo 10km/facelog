@@ -50,7 +50,8 @@ public interface IFaceLog
 
         @ThriftMethod(value = "addLog",
                       exception = {
-                          @ThriftException(type=ServiceRuntime.class, id=1)
+                          @ThriftException(type=ServiceRuntime.class, id=1),
+                          @ThriftException(type=DuplicateReord.class, id=2)
                       })
         ListenableFuture<Void> addLog(
             @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean
@@ -58,7 +59,8 @@ public interface IFaceLog
 
         @ThriftMethod(value = "addLogs",
                       exception = {
-                          @ThriftException(type=ServiceRuntime.class, id=1)
+                          @ThriftException(type=ServiceRuntime.class, id=1),
+                          @ThriftException(type=DuplicateReord.class, id=2)
                       })
         ListenableFuture<Void> addLogs(
             @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans
@@ -816,19 +818,21 @@ public interface IFaceLog
 
     @ThriftMethod(value = "addLog",
                   exception = {
-                      @ThriftException(type=ServiceRuntime.class, id=1)
+                      @ThriftException(type=ServiceRuntime.class, id=1),
+                      @ThriftException(type=DuplicateReord.class, id=2)
                   })
     void addLog(
         @ThriftField(value=1, name="bean", requiredness=Requiredness.NONE) final LogBean bean
-    ) throws ServiceRuntime;
+    ) throws ServiceRuntime, DuplicateReord;
 
     @ThriftMethod(value = "addLogs",
                   exception = {
-                      @ThriftException(type=ServiceRuntime.class, id=1)
+                      @ThriftException(type=ServiceRuntime.class, id=1),
+                      @ThriftException(type=DuplicateReord.class, id=2)
                   })
     void addLogs(
         @ThriftField(value=1, name="beans", requiredness=Requiredness.NONE) final List<LogBean> beans
-    ) throws ServiceRuntime;
+    ) throws ServiceRuntime, DuplicateReord;
 
     @ThriftMethod(value = "addPermit",
                   exception = {
