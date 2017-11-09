@@ -30,7 +30,9 @@ import ${schemaPkg}.exception.WrapDAOException;
  */
 class Dao implements CommonConstant {
     #join($tables '
-    static final $e.asManagerInterfaceNSP() $e.asVarManager() = TableManagerInitializer.instance.${e.asVarManager()};' '')
+    static final $e.asManagerInterfaceNSP() $e.getGetManagerMethod()(){
+        return TableManagerInitializer.instance.${e.asVarManager()};
+    }' '')
 
 #macro(defineMethod $table $onlyAdd)
     //////////// $table.name.toUpperCase() /////////
@@ -56,7 +58,7 @@ class Dao implements CommonConstant {
      */
     //1
     $!{modifier}$beanClass _get${coreClass}($params){
-        return ${table.asVarManager()}.loadByPrimaryKey($varNames);
+        return ${table.getGetManagerMethod()}().loadByPrimaryKey($varNames);
     }
 #if($table.countPrimaryKeys() == 1)
     /** 
@@ -65,7 +67,7 @@ class Dao implements CommonConstant {
      */
     //2    
     $!{modifier}List<$beanClass> _get${coreClass}s(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
-        return ${table.asVarManager()}.loadByPrimaryKey(${table.primaryKey.varName}Collection);
+        return ${table.getGetManagerMethod()}().loadByPrimaryKey(${table.primaryKey.varName}Collection);
     }
     /** 
      * 删除主键列表({@code ${table.primaryKey.varName}Collection})指定的记录
@@ -83,7 +85,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     $!{modifier}List<$table.primaryKey.javaType> _toPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
-        return ${table.asVarManager()}.toPrimaryKeyList(beans);
+        return ${table.getGetManagerMethod()}().toPrimaryKeyList(beans);
     }
 #end
     /** 
@@ -93,7 +95,7 @@ class Dao implements CommonConstant {
      */
     //4
     $!{modifier}boolean _exists${coreClass}($params){
-        return ${table.asVarManager()}.existsPrimaryKey($varNames);
+        return ${table.getGetManagerMethod()}().existsPrimaryKey($varNames);
     }
     /** 
      *　判断指定的记录是否存在
@@ -101,7 +103,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     $!{modifier}boolean _exists${coreClass}($beanClass bean){
-        return ${table.asVarManager()}.existsPrimaryKey(bean);
+        return ${table.getGetManagerMethod()}().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -111,7 +113,7 @@ class Dao implements CommonConstant {
      */
     //5
     $!{modifier}int _delete${coreClass}($params){
-        return ${table.asVarManager()}.deleteByPrimaryKey($varNames);
+        return ${table.getGetManagerMethod()}().deleteByPrimaryKey($varNames);
     }
     /**
      * 删除指定的记录
@@ -147,7 +149,7 @@ class Dao implements CommonConstant {
     //7
     $!{modifier}$beanClass _checkDuplicate($beanClass $table.asVarBean())throws DuplicateReord{
         try{
-            return ${table.asVarManager()}.checkDuplicate($table.asVarBean());
+            return ${table.getGetManagerMethod()}().checkDuplicate($table.asVarBean());
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -169,7 +171,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     $!{modifier}$checkReturnType _checkDuplicate${coreClass}($fullParams)throws DuplicateReord{
-        if(${table.asVarManager()}.existsPrimaryKey($fullVarNames))
+        if(${table.getGetManagerMethod()}().existsPrimaryKey($fullVarNames))
             throw new DuplicateReord();
 #if($table.countPrimaryKeys() == 1)
         return $table.primaryKey.fullVarName;
@@ -206,7 +208,7 @@ class Dao implements CommonConstant {
 #end
     //8
     $!{modifier}List<$importedClass> ${methodName}($fullParams){
-        return ${table.asVarManager()}.${importedTable.getImportedBeansGetMethod($fkName)}AsList($fullVarNames);
+        return ${table.getGetManagerMethod()}().${importedTable.getImportedBeansGetMethod($fkName)}AsList($fullVarNames);
     }
     /**
      * 删除外键($fullVarNames))引用指定记录(#join($primaryKeys '$e.fullName' ','))的所有{@code $importedTable.name}记录
@@ -215,7 +217,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     $!{modifier}int _${importedTable.getImportedBeansDelMethod($fkName)}On${coreClass}($fullParams){
-        return ${table.asVarManager()}.${importedTable.getImportedBeansDelMethod($fkName)}($fullVarNames);
+        return ${table.getGetManagerMethod()}().${importedTable.getImportedBeansDelMethod($fkName)}($fullVarNames);
     }
 #end###foreach( $fkName in $importedTable.getFkMapNames($table.name) )
 #end###foreach ($importedTable in $importedTables)
@@ -231,7 +233,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     $!{modifier}$foreignClass _$table.getReferencedVarGetMethod($fkName)On${coreClass}($beanClass bean){
-        return ${table.asVarManager()}.$table.getReferencedVarGetMethod($fkName)(bean);
+        return ${table.getGetManagerMethod()}().$table.getReferencedVarGetMethod($fkName)(bean);
     }
     /**
      * 设置外键${table.name}(#join($fkObj.columns '$e.name' ','))引用为{@code beanToSet}指定的记录,
@@ -242,7 +244,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     $!{modifier}$foreignClass _$table.getReferencedVarSetMethod($fkName)On${coreClass}($beanClass bean,$foreignClass beanToSet){
-        return ${table.asVarManager()}.$table.getReferencedVarSetMethod($fkName)(bean,beanToSet);
+        return ${table.getGetManagerMethod()}().$table.getReferencedVarSetMethod($fkName)(bean,beanToSet);
     }
 #end###foreach( $fkName in $table.getFkMapNames($foreignTable.name) )
 #end###foreach ($foreignTable in $foreignTables)
@@ -255,7 +257,7 @@ class Dao implements CommonConstant {
      */
     //9
     $!{modifier}java.util.List<$beanClass> _$table.getListMethod($selfFk)For${coreClass}($fullParams){
-        return ${table.asVarManager()}.$table.getListMethod($selfFk)($fullVarNames);
+        return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($fullVarNames);
     }
     /**
      * 返回{@code $selfFk.foreignTable.asVarBean()}指定的${table.name}记录的所有的父节点(包括自己)<br>
@@ -264,7 +266,7 @@ class Dao implements CommonConstant {
      */
     //9-2
     $!{modifier}java.util.List<$beanClass> _$table.getListMethod($selfFk)For${coreClass}($selfFk.foreignTable.asBeanClassNSP() $selfFk.foreignTable.asVarBean()){
-        return ${table.asVarManager()}.$table.getListMethod($selfFk)($selfFk.foreignTable.asVarBean());
+        return ${table.getGetManagerMethod()}().$table.getListMethod($selfFk)($selfFk.foreignTable.asVarBean());
     }
 #end###foreach($selfFk in $table.selfRefKeys)
 ######################## SAVE #################
@@ -317,7 +319,7 @@ class Dao implements CommonConstant {
      */
     //12
     $!{modifier}$beanClass _add${coreClass}($beanClass $table.asVarBean())throws DuplicateReord{
-        return ${table.asVarManager()}.save(_checkDuplicate($table.asVarBean()));
+        return ${table.getGetManagerMethod()}().save(_checkDuplicate($table.asVarBean()));
     }
 #####  连接表方法 ######
 #if($table.isSampleJunctionTable())
@@ -393,7 +395,7 @@ class Dao implements CommonConstant {
         ' ''))throws DuplicateReord{
         checkArgument(null == ${table.asVarBean()} || ${table.asVarBean()}.isNew(),"can be add,delete,but modify record for $table.name,so the _isNew field must be true");
         _checkDuplicate($table.asVarBean());
-        return ${table.asVarManager()}.save($table.asVarBean()
+        return ${table.getGetManagerMethod()}().save($table.asVarBean()
             #foreachForeignTables('native' $table  ", $table.asRefArg($m_fkName) " '
             ' '')
 
@@ -410,7 +412,7 @@ class Dao implements CommonConstant {
 #if($table.getColumn('group_id'))
         _checkGroup($table.asVarBean());
 #end
-        return ${table.asVarManager()}.save($table.asVarBean());
+        return ${table.getGetManagerMethod()}().save($table.asVarBean());
     }
 #if( $table.hasForeignTables() || $table.hasImportedTables() )
     /** 同步保存 */
@@ -424,7 +426,7 @@ class Dao implements CommonConstant {
 #if($table.getColumn('group_id'))
         _checkGroup($table.asVarBean());
 #end
-        return ${table.asVarManager()}.save($table.asVarBean()
+        return ${table.getGetManagerMethod()}().save($table.asVarBean()
             #foreachForeignTables('native' $table  ", $table.asRefArg($m_fkName) " '
             ' '')
 
@@ -476,7 +478,7 @@ class Dao implements CommonConstant {
      */
     //16
     $!{modifier}List<$beanClass> _load${coreClass}ByWhere(String where,int startRow, int numRows){
-        return ${table.asVarManager()}.loadByWhereAsList(where,null,startRow,numRows);
+        return ${table.getGetManagerMethod()}().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 $table.name 表的所有记录
@@ -484,7 +486,7 @@ class Dao implements CommonConstant {
      */
     //17
     $!{modifier}List<$beanClass> _load${coreClass}All(){
-        return ${table.asVarManager()}.loadAllAsList();
+        return ${table.getGetManagerMethod()}().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 $table.name 记录总数
@@ -492,7 +494,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     $!{modifier}int _count${coreClass}ByWhere(String where){
-        return ${table.asVarManager()}.countWhere(where);
+        return ${table.getGetManagerMethod()}().countWhere(where);
     }
 #if($table.countPrimaryKeys() == 1)
 #set ($pkName = $strUtil.convertName($table.primaryKey.name,false))
@@ -516,8 +518,8 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.javaType' ','))}
      */
     //18-5
-    $!{modifier}$beanClass _load${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ',')){
-        return ${table.asVarManager()}.loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.varName' ','));
+    $!{modifier}$beanClass _get${coreClass}By${index.asCamelCaseName()}(#join($indexColumns '$e.javaType $e.varName' ',')){
+        return ${table.getGetManagerMethod()}().loadBy${index.asCamelCaseName()}(#join($indexColumns '$e.varName' ','));
     }
 #end
 #### 生成 loadByTimestamp方法
@@ -576,11 +578,11 @@ $defineLoadByTimestamp
     }
     /** 事务执行 */
     protected static <T> T _runAsTransaction(Callable<T> fun){
-        return personManager.runAsTransaction(checkNotNull(fun));
+        return getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     /** 事务执行 */
     protected static void _runAsTransaction(Runnable fun){
-        personManager.runAsTransaction(checkNotNull(fun));
+        getPersonManager().runAsTransaction(checkNotNull(fun));
     }
 ##join($tables '#defineMethod($e false)' '')
 #foreach($tname in ['fl_device','fl_device_group','fl_person','fl_person_group'])

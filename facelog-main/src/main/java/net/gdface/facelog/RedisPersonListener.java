@@ -12,7 +12,7 @@ import net.gdface.facelog.db.TableListener;
  * @author guyadong
  *
  */
-public class RedisPersonListener extends TableListener.Adapter<PersonBean> implements CommonConstant{
+class RedisPersonListener extends TableListener.Adapter<PersonBean> implements CommonConstant{
 
 	private final RedisPublisher publisher;
 	

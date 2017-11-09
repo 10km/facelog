@@ -50,17 +50,39 @@ import net.gdface.facelog.db.exception.WrapDAOException;
  */
 class Dao implements CommonConstant {
     
-    static final IDeviceManager deviceManager = TableManagerInitializer.instance.deviceManager;
-    static final IDeviceGroupManager deviceGroupManager = TableManagerInitializer.instance.deviceGroupManager;
-    static final IFaceManager faceManager = TableManagerInitializer.instance.faceManager;
-    static final IFeatureManager featureManager = TableManagerInitializer.instance.featureManager;
-    static final IImageManager imageManager = TableManagerInitializer.instance.imageManager;
-    static final ILogManager logManager = TableManagerInitializer.instance.logManager;
-    static final IPermitManager permitManager = TableManagerInitializer.instance.permitManager;
-    static final IPersonManager personManager = TableManagerInitializer.instance.personManager;
-    static final IPersonGroupManager personGroupManager = TableManagerInitializer.instance.personGroupManager;
-    static final IStoreManager storeManager = TableManagerInitializer.instance.storeManager;
-    static final ILogLightManager logLightManager = TableManagerInitializer.instance.logLightManager;
+    static final IDeviceManager getDeviceManager(){
+        return TableManagerInitializer.instance.deviceManager;
+    }
+    static final IDeviceGroupManager getDeviceGroupManager(){
+        return TableManagerInitializer.instance.deviceGroupManager;
+    }
+    static final IFaceManager getFaceManager(){
+        return TableManagerInitializer.instance.faceManager;
+    }
+    static final IFeatureManager getFeatureManager(){
+        return TableManagerInitializer.instance.featureManager;
+    }
+    static final IImageManager getImageManager(){
+        return TableManagerInitializer.instance.imageManager;
+    }
+    static final ILogManager getLogManager(){
+        return TableManagerInitializer.instance.logManager;
+    }
+    static final IPermitManager getPermitManager(){
+        return TableManagerInitializer.instance.permitManager;
+    }
+    static final IPersonManager getPersonManager(){
+        return TableManagerInitializer.instance.personManager;
+    }
+    static final IPersonGroupManager getPersonGroupManager(){
+        return TableManagerInitializer.instance.personGroupManager;
+    }
+    static final IStoreManager getStoreManager(){
+        return TableManagerInitializer.instance.storeManager;
+    }
+    static final ILogLightManager getLogLightManager(){
+        return TableManagerInitializer.instance.logLightManager;
+    }
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){
         checkNotNull(timestamp);
@@ -68,11 +90,11 @@ class Dao implements CommonConstant {
     }
     /** 事务执行 */
     protected static <T> T _runAsTransaction(Callable<T> fun){
-        return personManager.runAsTransaction(checkNotNull(fun));
+        return getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     /** 事务执行 */
     protected static void _runAsTransaction(Runnable fun){
-        personManager.runAsTransaction(checkNotNull(fun));
+        getPersonManager().runAsTransaction(checkNotNull(fun));
     }
     //////////// FL_DEVICE /////////
     /** 
@@ -83,7 +105,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected DeviceBean _getDevice(Integer id){
-        return deviceManager.loadByPrimaryKey(id);
+        return getDeviceManager().loadByPrimaryKey(id);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -91,7 +113,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<DeviceBean> _getDevices(Collection<Integer> idCollection){
-        return deviceManager.loadByPrimaryKey(idCollection);
+        return getDeviceManager().loadByPrimaryKey(idCollection);
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -109,7 +131,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<Integer> _toPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
-        return deviceManager.toPrimaryKeyList(beans);
+        return getDeviceManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -119,7 +141,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsDevice(Integer id){
-        return deviceManager.existsPrimaryKey(id);
+        return getDeviceManager().existsPrimaryKey(id);
     }
     /** 
      *　判断指定的记录是否存在
@@ -127,7 +149,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsDevice(DeviceBean bean){
-        return deviceManager.existsPrimaryKey(bean);
+        return getDeviceManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -138,7 +160,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteDevice(Integer id){
-        return deviceManager.deleteByPrimaryKey(id);
+        return getDeviceManager().deleteByPrimaryKey(id);
     }
     /**
      * 删除指定的记录
@@ -173,7 +195,7 @@ class Dao implements CommonConstant {
     //7
     protected DeviceBean _checkDuplicate(DeviceBean deviceBean)throws DuplicateReord{
         try{
-            return deviceManager.checkDuplicate(deviceBean);
+            return getDeviceManager().checkDuplicate(deviceBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -188,7 +210,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected Integer _checkDuplicateDevice(Integer idOfDevice)throws DuplicateReord{
-        if(deviceManager.existsPrimaryKey(idOfDevice))
+        if(getDeviceManager().existsPrimaryKey(idOfDevice))
             throw new DuplicateReord();
         return idOfDevice;
     }
@@ -200,7 +222,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<ImageBean> _getImageBeansByDeviceIdOnDevice(Integer idOfDevice){
-        return deviceManager.getImageBeansByDeviceIdAsList(idOfDevice);
+        return getDeviceManager().getImageBeansByDeviceIdAsList(idOfDevice);
     }
     /**
      * 删除外键(idOfDevice))引用指定记录(fl_device.id)的所有{@code fl_image}记录
@@ -210,7 +232,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteImageBeansByDeviceIdOnDevice(Integer idOfDevice){
-        return deviceManager.deleteImageBeansByDeviceId(idOfDevice);
+        return getDeviceManager().deleteImageBeansByDeviceId(idOfDevice);
     }
     /**
      * 返回外键(fl_log.device_id)引用指定记录(fl_device.id)的所有{@code fl_log}记录
@@ -220,7 +242,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<LogBean> _getLogBeansByDeviceIdOnDevice(Integer idOfDevice){
-        return deviceManager.getLogBeansByDeviceIdAsList(idOfDevice);
+        return getDeviceManager().getLogBeansByDeviceIdAsList(idOfDevice);
     }
     /**
      * 删除外键(idOfDevice))引用指定记录(fl_device.id)的所有{@code fl_log}记录
@@ -230,7 +252,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteLogBeansByDeviceIdOnDevice(Integer idOfDevice){
-        return deviceManager.deleteLogBeansByDeviceId(idOfDevice);
+        return getDeviceManager().deleteLogBeansByDeviceId(idOfDevice);
     }
     /**
      * 返回外键(fl_device.group_id)引用的 fl_device_group 记录
@@ -239,7 +261,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected DeviceGroupBean _getReferencedByGroupIdOnDevice(DeviceBean bean){
-        return deviceManager.getReferencedByGroupId(bean);
+        return getDeviceManager().getReferencedByGroupId(bean);
     }
     /**
      * 设置外键fl_device(group_id)引用为{@code beanToSet}指定的记录,
@@ -250,7 +272,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected DeviceGroupBean _setReferencedByGroupIdOnDevice(DeviceBean bean,DeviceGroupBean beanToSet){
-        return deviceManager.setReferencedByGroupId(bean,beanToSet);
+        return getDeviceManager().setReferencedByGroupId(bean,beanToSet);
     }
     /** 
      * 参见 {@link IDeviceManager#save(DeviceBean)}
@@ -258,7 +280,7 @@ class Dao implements CommonConstant {
     //14
     protected DeviceBean _saveDevice(DeviceBean deviceBean){
         _checkGroup(deviceBean);
-        return deviceManager.save(deviceBean);
+        return getDeviceManager().save(deviceBean);
     }
     /** 同步保存 */
     //15
@@ -267,7 +289,7 @@ class Dao implements CommonConstant {
         , Collection<ImageBean> impImageByDeviceId 
         , Collection<LogBean> impLogByDeviceId ){
         _checkGroup(deviceBean);
-        return deviceManager.save(deviceBean
+        return getDeviceManager().save(deviceBean
             , refDevicegroupByGroupId 
             , impImageByDeviceId 
             , impLogByDeviceId );
@@ -306,7 +328,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<DeviceBean> _loadDeviceByWhere(String where,int startRow, int numRows){
-        return deviceManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getDeviceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_device 表的所有记录
@@ -314,7 +336,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<DeviceBean> _loadDeviceAll(){
-        return deviceManager.loadAllAsList();
+        return getDeviceManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_device 记录总数
@@ -322,7 +344,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countDeviceByWhere(String where){
-        return deviceManager.countWhere(where);
+        return getDeviceManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -340,8 +362,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#loadByIndexMac(String)}
      */
     //18-5
-    protected DeviceBean _loadDeviceByIndexMac(String mac){
-        return deviceManager.loadByIndexMac(mac);
+    protected DeviceBean _getDeviceByIndexMac(String mac){
+        return getDeviceManager().loadByIndexMac(mac);
     }
     /** 
      * 索引(fl_device.serial_no)查询<br>
@@ -350,8 +372,8 @@ class Dao implements CommonConstant {
      * @see {@link IDeviceManager#loadByIndexSerialNo(String)}
      */
     //18-5
-    protected DeviceBean _loadDeviceByIndexSerialNo(String serialNo){
-        return deviceManager.loadByIndexSerialNo(serialNo);
+    protected DeviceBean _getDeviceByIndexSerialNo(String serialNo){
+        return getDeviceManager().loadByIndexSerialNo(serialNo);
     }
     /**
      * (主动更新机制实现)<br>
@@ -431,7 +453,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected DeviceGroupBean _getDeviceGroup(Integer id){
-        return deviceGroupManager.loadByPrimaryKey(id);
+        return getDeviceGroupManager().loadByPrimaryKey(id);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -439,7 +461,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<DeviceGroupBean> _getDeviceGroups(Collection<Integer> idCollection){
-        return deviceGroupManager.loadByPrimaryKey(idCollection);
+        return getDeviceGroupManager().loadByPrimaryKey(idCollection);
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -457,7 +479,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<Integer> _toPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
-        return deviceGroupManager.toPrimaryKeyList(beans);
+        return getDeviceGroupManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -467,7 +489,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsDeviceGroup(Integer id){
-        return deviceGroupManager.existsPrimaryKey(id);
+        return getDeviceGroupManager().existsPrimaryKey(id);
     }
     /** 
      *　判断指定的记录是否存在
@@ -475,7 +497,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsDeviceGroup(DeviceGroupBean bean){
-        return deviceGroupManager.existsPrimaryKey(bean);
+        return getDeviceGroupManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -486,7 +508,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteDeviceGroup(Integer id){
-        return deviceGroupManager.deleteByPrimaryKey(id);
+        return getDeviceGroupManager().deleteByPrimaryKey(id);
     }
     /**
      * 删除指定的记录
@@ -521,7 +543,7 @@ class Dao implements CommonConstant {
     //7
     protected DeviceGroupBean _checkDuplicate(DeviceGroupBean deviceGroupBean)throws DuplicateReord{
         try{
-            return deviceGroupManager.checkDuplicate(deviceGroupBean);
+            return getDeviceGroupManager().checkDuplicate(deviceGroupBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -536,7 +558,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected Integer _checkDuplicateDeviceGroup(Integer idOfDeviceGroup)throws DuplicateReord{
-        if(deviceGroupManager.existsPrimaryKey(idOfDeviceGroup))
+        if(getDeviceGroupManager().existsPrimaryKey(idOfDeviceGroup))
             throw new DuplicateReord();
         return idOfDeviceGroup;
     }
@@ -548,7 +570,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<DeviceBean> _getDevicesOfGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.getDeviceBeansByGroupIdAsList(idOfDeviceGroup);
+        return getDeviceGroupManager().getDeviceBeansByGroupIdAsList(idOfDeviceGroup);
     }
     /**
      * 删除外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_device}记录
@@ -558,7 +580,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteDeviceBeansByGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.deleteDeviceBeansByGroupId(idOfDeviceGroup);
+        return getDeviceGroupManager().deleteDeviceBeansByGroupId(idOfDeviceGroup);
     }
     /**
      * 返回{@code idOfDeviceGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
@@ -568,7 +590,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<DeviceGroupBean> _getSubDeviceGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.getDeviceGroupBeansByParentAsList(idOfDeviceGroup);
+        return getDeviceGroupManager().getDeviceGroupBeansByParentAsList(idOfDeviceGroup);
     }
     /**
      * 删除外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_device_group}记录
@@ -578,7 +600,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteDeviceGroupBeansByParentOnDeviceGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.deleteDeviceGroupBeansByParent(idOfDeviceGroup);
+        return getDeviceGroupManager().deleteDeviceGroupBeansByParent(idOfDeviceGroup);
     }
     /**
      * 返回外键(fl_permit.device_group_id)引用指定记录(fl_device_group.id)的所有{@code fl_permit}记录
@@ -588,7 +610,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<PermitBean> _getPermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.getPermitBeansByDeviceGroupIdAsList(idOfDeviceGroup);
+        return getDeviceGroupManager().getPermitBeansByDeviceGroupIdAsList(idOfDeviceGroup);
     }
     /**
      * 删除外键(idOfDeviceGroup))引用指定记录(fl_device_group.id)的所有{@code fl_permit}记录
@@ -598,7 +620,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deletePermitBeansByDeviceGroupIdOnDeviceGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.deletePermitBeansByDeviceGroupId(idOfDeviceGroup);
+        return getDeviceGroupManager().deletePermitBeansByDeviceGroupId(idOfDeviceGroup);
     }
     /**
      * 返回外键(fl_device_group.parent)引用的 fl_device_group 记录
@@ -607,7 +629,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected DeviceGroupBean _getReferencedByParentOnDeviceGroup(DeviceGroupBean bean){
-        return deviceGroupManager.getReferencedByParent(bean);
+        return getDeviceGroupManager().getReferencedByParent(bean);
     }
     /**
      * 设置外键fl_device_group(parent)引用为{@code beanToSet}指定的记录,
@@ -618,7 +640,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected DeviceGroupBean _setReferencedByParentOnDeviceGroup(DeviceGroupBean bean,DeviceGroupBean beanToSet){
-        return deviceGroupManager.setReferencedByParent(bean,beanToSet);
+        return getDeviceGroupManager().setReferencedByParent(bean,beanToSet);
     }
     /**
      * 返回(idOfDeviceGroup))指定的fl_device_group记录的所有的父节点(包括自己)<br>
@@ -627,7 +649,7 @@ class Dao implements CommonConstant {
      */
     //9
     protected java.util.List<DeviceGroupBean> _listOfParentForDeviceGroup(Integer idOfDeviceGroup){
-        return deviceGroupManager.listOfParent(idOfDeviceGroup);
+        return getDeviceGroupManager().listOfParent(idOfDeviceGroup);
     }
     /**
      * 返回{@code deviceGroupBean}指定的fl_device_group记录的所有的父节点(包括自己)<br>
@@ -636,7 +658,7 @@ class Dao implements CommonConstant {
      */
     //9-2
     protected java.util.List<DeviceGroupBean> _listOfParentForDeviceGroup(DeviceGroupBean deviceGroupBean){
-        return deviceGroupManager.listOfParent(deviceGroupBean);
+        return getDeviceGroupManager().listOfParent(deviceGroupBean);
     }
     /** 
      * 如果没有默认组则向 fl_device_group 表中增加默认组,失败则抛出异常 
@@ -673,7 +695,7 @@ class Dao implements CommonConstant {
      */
     //14
     protected DeviceGroupBean _saveDeviceGroup(DeviceGroupBean deviceGroupBean){
-        return deviceGroupManager.save(deviceGroupBean);
+        return getDeviceGroupManager().save(deviceGroupBean);
     }
     /** 同步保存 */
     //15
@@ -682,7 +704,7 @@ class Dao implements CommonConstant {
         , Collection<DeviceBean> impDeviceByGroupId 
         , Collection<DeviceGroupBean> impDevicegroupByParent 
         , Collection<PermitBean> impPermitByDeviceGroupId ){
-        return deviceGroupManager.save(deviceGroupBean
+        return getDeviceGroupManager().save(deviceGroupBean
             , refDevicegroupByParent 
             , impDeviceByGroupId 
             , impDevicegroupByParent 
@@ -722,7 +744,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<DeviceGroupBean> _loadDeviceGroupByWhere(String where,int startRow, int numRows){
-        return deviceGroupManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getDeviceGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_device_group 表的所有记录
@@ -730,7 +752,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<DeviceGroupBean> _loadDeviceGroupAll(){
-        return deviceGroupManager.loadAllAsList();
+        return getDeviceGroupManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_device_group 记录总数
@@ -738,7 +760,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countDeviceGroupByWhere(String where){
-        return deviceGroupManager.countWhere(where);
+        return getDeviceGroupManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -761,7 +783,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected PersonBean _getPerson(Integer id){
-        return personManager.loadByPrimaryKey(id);
+        return getPersonManager().loadByPrimaryKey(id);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -769,7 +791,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<PersonBean> _getPersons(Collection<Integer> idCollection){
-        return personManager.loadByPrimaryKey(idCollection);
+        return getPersonManager().loadByPrimaryKey(idCollection);
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -787,7 +809,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<Integer> _toPrimaryKeyListFromPersons(Collection<PersonBean> beans){
-        return personManager.toPrimaryKeyList(beans);
+        return getPersonManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -797,7 +819,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsPerson(Integer id){
-        return personManager.existsPrimaryKey(id);
+        return getPersonManager().existsPrimaryKey(id);
     }
     /** 
      *　判断指定的记录是否存在
@@ -805,7 +827,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsPerson(PersonBean bean){
-        return personManager.existsPrimaryKey(bean);
+        return getPersonManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -816,7 +838,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deletePerson(Integer id){
-        return personManager.deleteByPrimaryKey(id);
+        return getPersonManager().deleteByPrimaryKey(id);
     }
     /**
      * 删除指定的记录
@@ -851,7 +873,7 @@ class Dao implements CommonConstant {
     //7
     protected PersonBean _checkDuplicate(PersonBean personBean)throws DuplicateReord{
         try{
-            return personManager.checkDuplicate(personBean);
+            return getPersonManager().checkDuplicate(personBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -866,7 +888,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected Integer _checkDuplicatePerson(Integer idOfPerson)throws DuplicateReord{
-        if(personManager.existsPrimaryKey(idOfPerson))
+        if(getPersonManager().existsPrimaryKey(idOfPerson))
             throw new DuplicateReord();
         return idOfPerson;
     }
@@ -878,7 +900,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<FeatureBean> _getFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
-        return personManager.getFeatureBeansByPersonIdAsList(idOfPerson);
+        return getPersonManager().getFeatureBeansByPersonIdAsList(idOfPerson);
     }
     /**
      * 删除外键(idOfPerson))引用指定记录(fl_person.id)的所有{@code fl_feature}记录
@@ -888,7 +910,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteFeatureBeansByPersonIdOnPerson(Integer idOfPerson){
-        return personManager.deleteFeatureBeansByPersonId(idOfPerson);
+        return getPersonManager().deleteFeatureBeansByPersonId(idOfPerson);
     }
     /**
      * 返回外键(fl_log.person_id)引用指定记录(fl_person.id)的所有{@code fl_log}记录
@@ -898,7 +920,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<LogBean> _getLogBeansByPersonIdOnPerson(Integer idOfPerson){
-        return personManager.getLogBeansByPersonIdAsList(idOfPerson);
+        return getPersonManager().getLogBeansByPersonIdAsList(idOfPerson);
     }
     /**
      * 删除外键(idOfPerson))引用指定记录(fl_person.id)的所有{@code fl_log}记录
@@ -908,7 +930,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteLogBeansByPersonIdOnPerson(Integer idOfPerson){
-        return personManager.deleteLogBeansByPersonId(idOfPerson);
+        return getPersonManager().deleteLogBeansByPersonId(idOfPerson);
     }
     /**
      * 返回外键(fl_person.image_md5)引用的 fl_image 记录
@@ -917,7 +939,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected ImageBean _getReferencedByImageMd5OnPerson(PersonBean bean){
-        return personManager.getReferencedByImageMd5(bean);
+        return getPersonManager().getReferencedByImageMd5(bean);
     }
     /**
      * 设置外键fl_person(image_md5)引用为{@code beanToSet}指定的记录,
@@ -928,7 +950,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected ImageBean _setReferencedByImageMd5OnPerson(PersonBean bean,ImageBean beanToSet){
-        return personManager.setReferencedByImageMd5(bean,beanToSet);
+        return getPersonManager().setReferencedByImageMd5(bean,beanToSet);
     }
     /**
      * 返回外键(fl_person.group_id)引用的 fl_person_group 记录
@@ -937,7 +959,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected PersonGroupBean _getReferencedByGroupIdOnPerson(PersonBean bean){
-        return personManager.getReferencedByGroupId(bean);
+        return getPersonManager().getReferencedByGroupId(bean);
     }
     /**
      * 设置外键fl_person(group_id)引用为{@code beanToSet}指定的记录,
@@ -948,7 +970,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected PersonGroupBean _setReferencedByGroupIdOnPerson(PersonBean bean,PersonGroupBean beanToSet){
-        return personManager.setReferencedByGroupId(bean,beanToSet);
+        return getPersonManager().setReferencedByGroupId(bean,beanToSet);
     }
     /** 
      * 参见 {@link IPersonManager#save(PersonBean)}
@@ -956,7 +978,7 @@ class Dao implements CommonConstant {
     //14
     protected PersonBean _savePerson(PersonBean personBean){
         _checkGroup(personBean);
-        return personManager.save(personBean);
+        return getPersonManager().save(personBean);
     }
     /** 同步保存 */
     //15
@@ -966,7 +988,7 @@ class Dao implements CommonConstant {
         , Collection<FeatureBean> impFeatureByPersonId 
         , Collection<LogBean> impLogByPersonId ){
         _checkGroup(personBean);
-        return personManager.save(personBean
+        return getPersonManager().save(personBean
             , refImageByImageMd5 
             , refPersongroupByGroupId 
             , impFeatureByPersonId 
@@ -1006,7 +1028,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<PersonBean> _loadPersonByWhere(String where,int startRow, int numRows){
-        return personManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getPersonManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_person 表的所有记录
@@ -1014,7 +1036,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<PersonBean> _loadPersonAll(){
-        return personManager.loadAllAsList();
+        return getPersonManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person 记录总数
@@ -1022,7 +1044,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countPersonByWhere(String where){
-        return personManager.countWhere(where);
+        return getPersonManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -1040,8 +1062,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#loadByIndexImageMd5(String)}
      */
     //18-5
-    protected PersonBean _loadPersonByIndexImageMd5(String imageMd5){
-        return personManager.loadByIndexImageMd5(imageMd5);
+    protected PersonBean _getPersonByIndexImageMd5(String imageMd5){
+        return getPersonManager().loadByIndexImageMd5(imageMd5);
     }
     /** 
      * 索引(fl_person.papers_num)查询<br>
@@ -1050,8 +1072,8 @@ class Dao implements CommonConstant {
      * @see {@link IPersonManager#loadByIndexPapersNum(String)}
      */
     //18-5
-    protected PersonBean _loadPersonByIndexPapersNum(String papersNum){
-        return personManager.loadByIndexPapersNum(papersNum);
+    protected PersonBean _getPersonByIndexPapersNum(String papersNum){
+        return getPersonManager().loadByIndexPapersNum(papersNum);
     }
     /**
      * (主动更新机制实现)<br>
@@ -1131,7 +1153,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected PersonGroupBean _getPersonGroup(Integer id){
-        return personGroupManager.loadByPrimaryKey(id);
+        return getPersonGroupManager().loadByPrimaryKey(id);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -1139,7 +1161,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<PersonGroupBean> _getPersonGroups(Collection<Integer> idCollection){
-        return personGroupManager.loadByPrimaryKey(idCollection);
+        return getPersonGroupManager().loadByPrimaryKey(idCollection);
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -1157,7 +1179,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<Integer> _toPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
-        return personGroupManager.toPrimaryKeyList(beans);
+        return getPersonGroupManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1167,7 +1189,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsPersonGroup(Integer id){
-        return personGroupManager.existsPrimaryKey(id);
+        return getPersonGroupManager().existsPrimaryKey(id);
     }
     /** 
      *　判断指定的记录是否存在
@@ -1175,7 +1197,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsPersonGroup(PersonGroupBean bean){
-        return personGroupManager.existsPrimaryKey(bean);
+        return getPersonGroupManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -1186,7 +1208,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deletePersonGroup(Integer id){
-        return personGroupManager.deleteByPrimaryKey(id);
+        return getPersonGroupManager().deleteByPrimaryKey(id);
     }
     /**
      * 删除指定的记录
@@ -1221,7 +1243,7 @@ class Dao implements CommonConstant {
     //7
     protected PersonGroupBean _checkDuplicate(PersonGroupBean personGroupBean)throws DuplicateReord{
         try{
-            return personGroupManager.checkDuplicate(personGroupBean);
+            return getPersonGroupManager().checkDuplicate(personGroupBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -1236,7 +1258,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected Integer _checkDuplicatePersonGroup(Integer idOfPersonGroup)throws DuplicateReord{
-        if(personGroupManager.existsPrimaryKey(idOfPersonGroup))
+        if(getPersonGroupManager().existsPrimaryKey(idOfPersonGroup))
             throw new DuplicateReord();
         return idOfPersonGroup;
     }
@@ -1248,7 +1270,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<PermitBean> _getPermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
-        return personGroupManager.getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
+        return getPersonGroupManager().getPermitBeansByPersonGroupIdAsList(idOfPersonGroup);
     }
     /**
      * 删除外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_permit}记录
@@ -1258,7 +1280,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deletePermitBeansByPersonGroupIdOnPersonGroup(Integer idOfPersonGroup){
-        return personGroupManager.deletePermitBeansByPersonGroupId(idOfPersonGroup);
+        return getPersonGroupManager().deletePermitBeansByPersonGroupId(idOfPersonGroup);
     }
     /**
      * 返回属于{@code idOfPersonGroup}指定组的所有{@code fl_person}记录
@@ -1268,7 +1290,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<PersonBean> _getPersonsOfGroup(Integer idOfPersonGroup){
-        return personGroupManager.getPersonBeansByGroupIdAsList(idOfPersonGroup);
+        return getPersonGroupManager().getPersonBeansByGroupIdAsList(idOfPersonGroup);
     }
     /**
      * 删除外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_person}记录
@@ -1278,7 +1300,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deletePersonBeansByGroupIdOnPersonGroup(Integer idOfPersonGroup){
-        return personGroupManager.deletePersonBeansByGroupId(idOfPersonGroup);
+        return getPersonGroupManager().deletePersonBeansByGroupId(idOfPersonGroup);
     }
     /**
      * 返回{@code idOfPersonGroup)}指定的组下的所有子节点,如果没有子节点则返回空表
@@ -1288,7 +1310,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<PersonGroupBean> _getSubPersonGroup(Integer idOfPersonGroup){
-        return personGroupManager.getPersonGroupBeansByParentAsList(idOfPersonGroup);
+        return getPersonGroupManager().getPersonGroupBeansByParentAsList(idOfPersonGroup);
     }
     /**
      * 删除外键(idOfPersonGroup))引用指定记录(fl_person_group.id)的所有{@code fl_person_group}记录
@@ -1298,7 +1320,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deletePersonGroupBeansByParentOnPersonGroup(Integer idOfPersonGroup){
-        return personGroupManager.deletePersonGroupBeansByParent(idOfPersonGroup);
+        return getPersonGroupManager().deletePersonGroupBeansByParent(idOfPersonGroup);
     }
     /**
      * 返回外键(fl_person_group.parent)引用的 fl_person_group 记录
@@ -1307,7 +1329,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected PersonGroupBean _getReferencedByParentOnPersonGroup(PersonGroupBean bean){
-        return personGroupManager.getReferencedByParent(bean);
+        return getPersonGroupManager().getReferencedByParent(bean);
     }
     /**
      * 设置外键fl_person_group(parent)引用为{@code beanToSet}指定的记录,
@@ -1318,7 +1340,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected PersonGroupBean _setReferencedByParentOnPersonGroup(PersonGroupBean bean,PersonGroupBean beanToSet){
-        return personGroupManager.setReferencedByParent(bean,beanToSet);
+        return getPersonGroupManager().setReferencedByParent(bean,beanToSet);
     }
     /**
      * 返回(idOfPersonGroup))指定的fl_person_group记录的所有的父节点(包括自己)<br>
@@ -1327,7 +1349,7 @@ class Dao implements CommonConstant {
      */
     //9
     protected java.util.List<PersonGroupBean> _listOfParentForPersonGroup(Integer idOfPersonGroup){
-        return personGroupManager.listOfParent(idOfPersonGroup);
+        return getPersonGroupManager().listOfParent(idOfPersonGroup);
     }
     /**
      * 返回{@code personGroupBean}指定的fl_person_group记录的所有的父节点(包括自己)<br>
@@ -1336,7 +1358,7 @@ class Dao implements CommonConstant {
      */
     //9-2
     protected java.util.List<PersonGroupBean> _listOfParentForPersonGroup(PersonGroupBean personGroupBean){
-        return personGroupManager.listOfParent(personGroupBean);
+        return getPersonGroupManager().listOfParent(personGroupBean);
     }
     /** 
      * 如果没有默认组则向 fl_person_group 表中增加默认组,失败则抛出异常 
@@ -1373,7 +1395,7 @@ class Dao implements CommonConstant {
      */
     //14
     protected PersonGroupBean _savePersonGroup(PersonGroupBean personGroupBean){
-        return personGroupManager.save(personGroupBean);
+        return getPersonGroupManager().save(personGroupBean);
     }
     /** 同步保存 */
     //15
@@ -1382,7 +1404,7 @@ class Dao implements CommonConstant {
         , Collection<PermitBean> impPermitByPersonGroupId 
         , Collection<PersonBean> impPersonByGroupId 
         , Collection<PersonGroupBean> impPersongroupByParent ){
-        return personGroupManager.save(personGroupBean
+        return getPersonGroupManager().save(personGroupBean
             , refPersongroupByParent 
             , impPermitByPersonGroupId 
             , impPersonByGroupId 
@@ -1422,7 +1444,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<PersonGroupBean> _loadPersonGroupByWhere(String where,int startRow, int numRows){
-        return personGroupManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getPersonGroupManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_person_group 表的所有记录
@@ -1430,7 +1452,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<PersonGroupBean> _loadPersonGroupAll(){
-        return personGroupManager.loadAllAsList();
+        return getPersonGroupManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
@@ -1438,7 +1460,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countPersonGroupByWhere(String where){
-        return personGroupManager.countWhere(where);
+        return getPersonGroupManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -1461,7 +1483,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected FaceBean _getFace(Integer id){
-        return faceManager.loadByPrimaryKey(id);
+        return getFaceManager().loadByPrimaryKey(id);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -1469,7 +1491,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<FaceBean> _getFaces(Collection<Integer> idCollection){
-        return faceManager.loadByPrimaryKey(idCollection);
+        return getFaceManager().loadByPrimaryKey(idCollection);
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -1487,7 +1509,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<Integer> _toPrimaryKeyListFromFaces(Collection<FaceBean> beans){
-        return faceManager.toPrimaryKeyList(beans);
+        return getFaceManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1497,7 +1519,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsFace(Integer id){
-        return faceManager.existsPrimaryKey(id);
+        return getFaceManager().existsPrimaryKey(id);
     }
     /** 
      *　判断指定的记录是否存在
@@ -1505,7 +1527,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsFace(FaceBean bean){
-        return faceManager.existsPrimaryKey(bean);
+        return getFaceManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -1516,7 +1538,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteFace(Integer id){
-        return faceManager.deleteByPrimaryKey(id);
+        return getFaceManager().deleteByPrimaryKey(id);
     }
     /**
      * 删除指定的记录
@@ -1551,7 +1573,7 @@ class Dao implements CommonConstant {
     //7
     protected FaceBean _checkDuplicate(FaceBean faceBean)throws DuplicateReord{
         try{
-            return faceManager.checkDuplicate(faceBean);
+            return getFaceManager().checkDuplicate(faceBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -1566,7 +1588,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected Integer _checkDuplicateFace(Integer idOfFace)throws DuplicateReord{
-        if(faceManager.existsPrimaryKey(idOfFace))
+        if(getFaceManager().existsPrimaryKey(idOfFace))
             throw new DuplicateReord();
         return idOfFace;
     }
@@ -1578,7 +1600,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<LogBean> _getLogBeansByCompareFaceOnFace(Integer idOfFace){
-        return faceManager.getLogBeansByCompareFaceAsList(idOfFace);
+        return getFaceManager().getLogBeansByCompareFaceAsList(idOfFace);
     }
     /**
      * 删除外键(idOfFace))引用指定记录(fl_face.id)的所有{@code fl_log}记录
@@ -1588,7 +1610,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteLogBeansByCompareFaceOnFace(Integer idOfFace){
-        return faceManager.deleteLogBeansByCompareFace(idOfFace);
+        return getFaceManager().deleteLogBeansByCompareFace(idOfFace);
     }
     /**
      * 返回外键(fl_face.feature_md5)引用的 fl_feature 记录
@@ -1597,7 +1619,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected FeatureBean _getReferencedByFeatureMd5OnFace(FaceBean bean){
-        return faceManager.getReferencedByFeatureMd5(bean);
+        return getFaceManager().getReferencedByFeatureMd5(bean);
     }
     /**
      * 设置外键fl_face(feature_md5)引用为{@code beanToSet}指定的记录,
@@ -1608,7 +1630,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected FeatureBean _setReferencedByFeatureMd5OnFace(FaceBean bean,FeatureBean beanToSet){
-        return faceManager.setReferencedByFeatureMd5(bean,beanToSet);
+        return getFaceManager().setReferencedByFeatureMd5(bean,beanToSet);
     }
     /**
      * 返回外键(fl_face.image_md5)引用的 fl_image 记录
@@ -1617,7 +1639,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected ImageBean _getReferencedByImageMd5OnFace(FaceBean bean){
-        return faceManager.getReferencedByImageMd5(bean);
+        return getFaceManager().getReferencedByImageMd5(bean);
     }
     /**
      * 设置外键fl_face(image_md5)引用为{@code beanToSet}指定的记录,
@@ -1628,7 +1650,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected ImageBean _setReferencedByImageMd5OnFace(FaceBean bean,ImageBean beanToSet){
-        return faceManager.setReferencedByImageMd5(bean,beanToSet);
+        return getFaceManager().setReferencedByImageMd5(bean,beanToSet);
     }
     /** 
      * 添加新记录<br>
@@ -1641,7 +1663,7 @@ class Dao implements CommonConstant {
      */
     //12
     protected FaceBean _addFace(FaceBean faceBean)throws DuplicateReord{
-        return faceManager.save(_checkDuplicate(faceBean));
+        return getFaceManager().save(_checkDuplicate(faceBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
@@ -1659,7 +1681,7 @@ class Dao implements CommonConstant {
         , Collection<LogBean> impLogByCompareFace )throws DuplicateReord{
         checkArgument(null == faceBean || faceBean.isNew(),"can be add,delete,but modify record for fl_face,so the _isNew field must be true");
         _checkDuplicate(faceBean);
-        return faceManager.save(faceBean
+        return getFaceManager().save(faceBean
             , refFeatureByFeatureMd5 
             , refImageByImageMd5 
             , impLogByCompareFace );
@@ -1698,7 +1720,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<FaceBean> _loadFaceByWhere(String where,int startRow, int numRows){
-        return faceManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getFaceManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_face 表的所有记录
@@ -1706,7 +1728,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<FaceBean> _loadFaceAll(){
-        return faceManager.loadAllAsList();
+        return getFaceManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_face 记录总数
@@ -1714,7 +1736,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countFaceByWhere(String where){
-        return faceManager.countWhere(where);
+        return getFaceManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -1770,7 +1792,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected FeatureBean _getFeature(String md5){
-        return featureManager.loadByPrimaryKey(md5);
+        return getFeatureManager().loadByPrimaryKey(md5);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -1778,7 +1800,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<FeatureBean> _getFeatures(Collection<String> md5Collection){
-        return featureManager.loadByPrimaryKey(md5Collection);
+        return getFeatureManager().loadByPrimaryKey(md5Collection);
     }
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
@@ -1796,7 +1818,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<String> _toPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
-        return featureManager.toPrimaryKeyList(beans);
+        return getFeatureManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -1806,7 +1828,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsFeature(String md5){
-        return featureManager.existsPrimaryKey(md5);
+        return getFeatureManager().existsPrimaryKey(md5);
     }
     /** 
      *　判断指定的记录是否存在
@@ -1814,7 +1836,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsFeature(FeatureBean bean){
-        return featureManager.existsPrimaryKey(bean);
+        return getFeatureManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -1825,7 +1847,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteFeature(String md5){
-        return featureManager.deleteByPrimaryKey(md5);
+        return getFeatureManager().deleteByPrimaryKey(md5);
     }
     /**
      * 删除指定的记录
@@ -1860,7 +1882,7 @@ class Dao implements CommonConstant {
     //7
     protected FeatureBean _checkDuplicate(FeatureBean featureBean)throws DuplicateReord{
         try{
-            return featureManager.checkDuplicate(featureBean);
+            return getFeatureManager().checkDuplicate(featureBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -1875,7 +1897,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected String _checkDuplicateFeature(String md5OfFeature)throws DuplicateReord{
-        if(featureManager.existsPrimaryKey(md5OfFeature))
+        if(getFeatureManager().existsPrimaryKey(md5OfFeature))
             throw new DuplicateReord();
         return md5OfFeature;
     }
@@ -1887,7 +1909,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<FaceBean> _getFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
-        return featureManager.getFaceBeansByFeatureMd5AsList(md5OfFeature);
+        return getFeatureManager().getFaceBeansByFeatureMd5AsList(md5OfFeature);
     }
     /**
      * 删除外键(md5OfFeature))引用指定记录(fl_feature.md5)的所有{@code fl_face}记录
@@ -1897,7 +1919,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteFaceBeansByFeatureMd5OnFeature(String md5OfFeature){
-        return featureManager.deleteFaceBeansByFeatureMd5(md5OfFeature);
+        return getFeatureManager().deleteFaceBeansByFeatureMd5(md5OfFeature);
     }
     /**
      * 返回外键(fl_log.verify_feature)引用指定记录(fl_feature.md5)的所有{@code fl_log}记录
@@ -1907,7 +1929,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<LogBean> _getLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
-        return featureManager.getLogBeansByVerifyFeatureAsList(md5OfFeature);
+        return getFeatureManager().getLogBeansByVerifyFeatureAsList(md5OfFeature);
     }
     /**
      * 删除外键(md5OfFeature))引用指定记录(fl_feature.md5)的所有{@code fl_log}记录
@@ -1917,7 +1939,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteLogBeansByVerifyFeatureOnFeature(String md5OfFeature){
-        return featureManager.deleteLogBeansByVerifyFeature(md5OfFeature);
+        return getFeatureManager().deleteLogBeansByVerifyFeature(md5OfFeature);
     }
     /**
      * 返回外键(fl_feature.person_id)引用的 fl_person 记录
@@ -1926,7 +1948,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected PersonBean _getReferencedByPersonIdOnFeature(FeatureBean bean){
-        return featureManager.getReferencedByPersonId(bean);
+        return getFeatureManager().getReferencedByPersonId(bean);
     }
     /**
      * 设置外键fl_feature(person_id)引用为{@code beanToSet}指定的记录,
@@ -1937,7 +1959,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected PersonBean _setReferencedByPersonIdOnFeature(FeatureBean bean,PersonBean beanToSet){
-        return featureManager.setReferencedByPersonId(bean,beanToSet);
+        return getFeatureManager().setReferencedByPersonId(bean,beanToSet);
     }
     /** 
      * 添加新记录<br>
@@ -1950,7 +1972,7 @@ class Dao implements CommonConstant {
      */
     //12
     protected FeatureBean _addFeature(FeatureBean featureBean)throws DuplicateReord{
-        return featureManager.save(_checkDuplicate(featureBean));
+        return getFeatureManager().save(_checkDuplicate(featureBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
@@ -1968,7 +1990,7 @@ class Dao implements CommonConstant {
         , Collection<LogBean> impLogByVerifyFeature )throws DuplicateReord{
         checkArgument(null == featureBean || featureBean.isNew(),"can be add,delete,but modify record for fl_feature,so the _isNew field must be true");
         _checkDuplicate(featureBean);
-        return featureManager.save(featureBean
+        return getFeatureManager().save(featureBean
             , refPersonByPersonId 
             , impFaceByFeatureMd5 
             , impLogByVerifyFeature );
@@ -2007,7 +2029,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<FeatureBean> _loadFeatureByWhere(String where,int startRow, int numRows){
-        return featureManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getFeatureManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_feature 表的所有记录
@@ -2015,7 +2037,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<FeatureBean> _loadFeatureAll(){
-        return featureManager.loadAllAsList();
+        return getFeatureManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_feature 记录总数
@@ -2023,7 +2045,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countFeatureByWhere(String where){
-        return featureManager.countWhere(where);
+        return getFeatureManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -2079,7 +2101,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected ImageBean _getImage(String md5){
-        return imageManager.loadByPrimaryKey(md5);
+        return getImageManager().loadByPrimaryKey(md5);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -2087,7 +2109,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<ImageBean> _getImages(Collection<String> md5Collection){
-        return imageManager.loadByPrimaryKey(md5Collection);
+        return getImageManager().loadByPrimaryKey(md5Collection);
     }
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
@@ -2105,7 +2127,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<String> _toPrimaryKeyListFromImages(Collection<ImageBean> beans){
-        return imageManager.toPrimaryKeyList(beans);
+        return getImageManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -2115,7 +2137,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsImage(String md5){
-        return imageManager.existsPrimaryKey(md5);
+        return getImageManager().existsPrimaryKey(md5);
     }
     /** 
      *　判断指定的记录是否存在
@@ -2123,7 +2145,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsImage(ImageBean bean){
-        return imageManager.existsPrimaryKey(bean);
+        return getImageManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -2134,7 +2156,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteImage(String md5){
-        return imageManager.deleteByPrimaryKey(md5);
+        return getImageManager().deleteByPrimaryKey(md5);
     }
     /**
      * 删除指定的记录
@@ -2169,7 +2191,7 @@ class Dao implements CommonConstant {
     //7
     protected ImageBean _checkDuplicate(ImageBean imageBean)throws DuplicateReord{
         try{
-            return imageManager.checkDuplicate(imageBean);
+            return getImageManager().checkDuplicate(imageBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -2184,7 +2206,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected String _checkDuplicateImage(String md5OfImage)throws DuplicateReord{
-        if(imageManager.existsPrimaryKey(md5OfImage))
+        if(getImageManager().existsPrimaryKey(md5OfImage))
             throw new DuplicateReord();
         return md5OfImage;
     }
@@ -2196,7 +2218,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<FaceBean> _getFaceBeansByImageMd5OnImage(String md5OfImage){
-        return imageManager.getFaceBeansByImageMd5AsList(md5OfImage);
+        return getImageManager().getFaceBeansByImageMd5AsList(md5OfImage);
     }
     /**
      * 删除外键(md5OfImage))引用指定记录(fl_image.md5)的所有{@code fl_face}记录
@@ -2206,7 +2228,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deleteFaceBeansByImageMd5OnImage(String md5OfImage){
-        return imageManager.deleteFaceBeansByImageMd5(md5OfImage);
+        return getImageManager().deleteFaceBeansByImageMd5(md5OfImage);
     }
     /**
      * 返回外键(fl_person.image_md5)引用指定记录(fl_image.md5)的所有{@code fl_person}记录
@@ -2216,7 +2238,7 @@ class Dao implements CommonConstant {
      */
     //8
     protected List<PersonBean> _getPersonBeansByImageMd5OnImage(String md5OfImage){
-        return imageManager.getPersonBeansByImageMd5AsList(md5OfImage);
+        return getImageManager().getPersonBeansByImageMd5AsList(md5OfImage);
     }
     /**
      * 删除外键(md5OfImage))引用指定记录(fl_image.md5)的所有{@code fl_person}记录
@@ -2226,7 +2248,7 @@ class Dao implements CommonConstant {
      */
     //8-2
     protected int _deletePersonBeansByImageMd5OnImage(String md5OfImage){
-        return imageManager.deletePersonBeansByImageMd5(md5OfImage);
+        return getImageManager().deletePersonBeansByImageMd5(md5OfImage);
     }
     /**
      * 返回外键(fl_image.device_id)引用的 fl_device 记录
@@ -2235,7 +2257,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected DeviceBean _getReferencedByDeviceIdOnImage(ImageBean bean){
-        return imageManager.getReferencedByDeviceId(bean);
+        return getImageManager().getReferencedByDeviceId(bean);
     }
     /**
      * 设置外键fl_image(device_id)引用为{@code beanToSet}指定的记录,
@@ -2246,7 +2268,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected DeviceBean _setReferencedByDeviceIdOnImage(ImageBean bean,DeviceBean beanToSet){
-        return imageManager.setReferencedByDeviceId(bean,beanToSet);
+        return getImageManager().setReferencedByDeviceId(bean,beanToSet);
     }
     /** 
      * 添加新记录<br>
@@ -2259,7 +2281,7 @@ class Dao implements CommonConstant {
      */
     //12
     protected ImageBean _addImage(ImageBean imageBean)throws DuplicateReord{
-        return imageManager.save(_checkDuplicate(imageBean));
+        return getImageManager().save(_checkDuplicate(imageBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
@@ -2277,7 +2299,7 @@ class Dao implements CommonConstant {
         , Collection<PersonBean> impPersonByImageMd5 )throws DuplicateReord{
         checkArgument(null == imageBean || imageBean.isNew(),"can be add,delete,but modify record for fl_image,so the _isNew field must be true");
         _checkDuplicate(imageBean);
-        return imageManager.save(imageBean
+        return getImageManager().save(imageBean
             , refDeviceByDeviceId 
             , impFaceByImageMd5 
             , impPersonByImageMd5 );
@@ -2316,7 +2338,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<ImageBean> _loadImageByWhere(String where,int startRow, int numRows){
-        return imageManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getImageManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_image 表的所有记录
@@ -2324,7 +2346,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<ImageBean> _loadImageAll(){
-        return imageManager.loadAllAsList();
+        return getImageManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_image 记录总数
@@ -2332,7 +2354,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countImageByWhere(String where){
-        return imageManager.countWhere(where);
+        return getImageManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -2355,7 +2377,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected LogBean _getLog(Integer id){
-        return logManager.loadByPrimaryKey(id);
+        return getLogManager().loadByPrimaryKey(id);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -2363,7 +2385,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<LogBean> _getLogs(Collection<Integer> idCollection){
-        return logManager.loadByPrimaryKey(idCollection);
+        return getLogManager().loadByPrimaryKey(idCollection);
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -2381,7 +2403,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<Integer> _toPrimaryKeyListFromLogs(Collection<LogBean> beans){
-        return logManager.toPrimaryKeyList(beans);
+        return getLogManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -2391,7 +2413,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsLog(Integer id){
-        return logManager.existsPrimaryKey(id);
+        return getLogManager().existsPrimaryKey(id);
     }
     /** 
      *　判断指定的记录是否存在
@@ -2399,7 +2421,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsLog(LogBean bean){
-        return logManager.existsPrimaryKey(bean);
+        return getLogManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -2410,7 +2432,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteLog(Integer id){
-        return logManager.deleteByPrimaryKey(id);
+        return getLogManager().deleteByPrimaryKey(id);
     }
     /**
      * 删除指定的记录
@@ -2445,7 +2467,7 @@ class Dao implements CommonConstant {
     //7
     protected LogBean _checkDuplicate(LogBean logBean)throws DuplicateReord{
         try{
-            return logManager.checkDuplicate(logBean);
+            return getLogManager().checkDuplicate(logBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -2460,7 +2482,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected Integer _checkDuplicateLog(Integer idOfLog)throws DuplicateReord{
-        if(logManager.existsPrimaryKey(idOfLog))
+        if(getLogManager().existsPrimaryKey(idOfLog))
             throw new DuplicateReord();
         return idOfLog;
     }
@@ -2471,7 +2493,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected DeviceBean _getReferencedByDeviceIdOnLog(LogBean bean){
-        return logManager.getReferencedByDeviceId(bean);
+        return getLogManager().getReferencedByDeviceId(bean);
     }
     /**
      * 设置外键fl_log(device_id)引用为{@code beanToSet}指定的记录,
@@ -2482,7 +2504,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected DeviceBean _setReferencedByDeviceIdOnLog(LogBean bean,DeviceBean beanToSet){
-        return logManager.setReferencedByDeviceId(bean,beanToSet);
+        return getLogManager().setReferencedByDeviceId(bean,beanToSet);
     }
     /**
      * 返回外键(fl_log.compare_face)引用的 fl_face 记录
@@ -2491,7 +2513,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected FaceBean _getReferencedByCompareFaceOnLog(LogBean bean){
-        return logManager.getReferencedByCompareFace(bean);
+        return getLogManager().getReferencedByCompareFace(bean);
     }
     /**
      * 设置外键fl_log(compare_face)引用为{@code beanToSet}指定的记录,
@@ -2502,7 +2524,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected FaceBean _setReferencedByCompareFaceOnLog(LogBean bean,FaceBean beanToSet){
-        return logManager.setReferencedByCompareFace(bean,beanToSet);
+        return getLogManager().setReferencedByCompareFace(bean,beanToSet);
     }
     /**
      * 返回外键(fl_log.verify_feature)引用的 fl_feature 记录
@@ -2511,7 +2533,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected FeatureBean _getReferencedByVerifyFeatureOnLog(LogBean bean){
-        return logManager.getReferencedByVerifyFeature(bean);
+        return getLogManager().getReferencedByVerifyFeature(bean);
     }
     /**
      * 设置外键fl_log(verify_feature)引用为{@code beanToSet}指定的记录,
@@ -2522,7 +2544,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected FeatureBean _setReferencedByVerifyFeatureOnLog(LogBean bean,FeatureBean beanToSet){
-        return logManager.setReferencedByVerifyFeature(bean,beanToSet);
+        return getLogManager().setReferencedByVerifyFeature(bean,beanToSet);
     }
     /**
      * 返回外键(fl_log.person_id)引用的 fl_person 记录
@@ -2531,7 +2553,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected PersonBean _getReferencedByPersonIdOnLog(LogBean bean){
-        return logManager.getReferencedByPersonId(bean);
+        return getLogManager().getReferencedByPersonId(bean);
     }
     /**
      * 设置外键fl_log(person_id)引用为{@code beanToSet}指定的记录,
@@ -2542,7 +2564,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected PersonBean _setReferencedByPersonIdOnLog(LogBean bean,PersonBean beanToSet){
-        return logManager.setReferencedByPersonId(bean,beanToSet);
+        return getLogManager().setReferencedByPersonId(bean,beanToSet);
     }
     /** 
      * 添加新记录<br>
@@ -2555,7 +2577,7 @@ class Dao implements CommonConstant {
      */
     //12
     protected LogBean _addLog(LogBean logBean)throws DuplicateReord{
-        return logManager.save(_checkDuplicate(logBean));
+        return getLogManager().save(_checkDuplicate(logBean));
     }
     /** 
      * 添加新记录(同步保存)<br>
@@ -2575,7 +2597,7 @@ class Dao implements CommonConstant {
         )throws DuplicateReord{
         checkArgument(null == logBean || logBean.isNew(),"can be add,delete,but modify record for fl_log,so the _isNew field must be true");
         _checkDuplicate(logBean);
-        return logManager.save(logBean
+        return getLogManager().save(logBean
             , refDeviceByDeviceId 
             , refFaceByCompareFace 
             , refFeatureByVerifyFeature 
@@ -2616,7 +2638,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<LogBean> _loadLogByWhere(String where,int startRow, int numRows){
-        return logManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getLogManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_log 表的所有记录
@@ -2624,7 +2646,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<LogBean> _loadLogAll(){
-        return logManager.loadAllAsList();
+        return getLogManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_log 记录总数
@@ -2632,7 +2654,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countLogByWhere(String where){
-        return logManager.countWhere(where);
+        return getLogManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -2722,7 +2744,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected PermitBean _getPermit(Integer deviceGroupId,Integer personGroupId){
-        return permitManager.loadByPrimaryKey(deviceGroupId,personGroupId);
+        return getPermitManager().loadByPrimaryKey(deviceGroupId,personGroupId);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -2733,7 +2755,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsPermit(Integer deviceGroupId,Integer personGroupId){
-        return permitManager.existsPrimaryKey(deviceGroupId,personGroupId);
+        return getPermitManager().existsPrimaryKey(deviceGroupId,personGroupId);
     }
     /** 
      *　判断指定的记录是否存在
@@ -2741,7 +2763,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsPermit(PermitBean bean){
-        return permitManager.existsPrimaryKey(bean);
+        return getPermitManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -2753,7 +2775,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deletePermit(Integer deviceGroupId,Integer personGroupId){
-        return permitManager.deleteByPrimaryKey(deviceGroupId,personGroupId);
+        return getPermitManager().deleteByPrimaryKey(deviceGroupId,personGroupId);
     }
     /**
      * 删除指定的记录
@@ -2788,7 +2810,7 @@ class Dao implements CommonConstant {
     //7
     protected PermitBean _checkDuplicate(PermitBean permitBean)throws DuplicateReord{
         try{
-            return permitManager.checkDuplicate(permitBean);
+            return getPermitManager().checkDuplicate(permitBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -2804,7 +2826,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected void _checkDuplicatePermit(Integer deviceGroupIdOfPermit,Integer personGroupIdOfPermit)throws DuplicateReord{
-        if(permitManager.existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit))
+        if(getPermitManager().existsPrimaryKey(deviceGroupIdOfPermit,personGroupIdOfPermit))
             throw new DuplicateReord();
     }
     /**
@@ -2814,7 +2836,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected DeviceGroupBean _getReferencedByDeviceGroupIdOnPermit(PermitBean bean){
-        return permitManager.getReferencedByDeviceGroupId(bean);
+        return getPermitManager().getReferencedByDeviceGroupId(bean);
     }
     /**
      * 设置外键fl_permit(device_group_id)引用为{@code beanToSet}指定的记录,
@@ -2825,7 +2847,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected DeviceGroupBean _setReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet){
-        return permitManager.setReferencedByDeviceGroupId(bean,beanToSet);
+        return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
     }
     /**
      * 返回外键(fl_permit.person_group_id)引用的 fl_person_group 记录
@@ -2834,7 +2856,7 @@ class Dao implements CommonConstant {
      */
     //8-3
     protected PersonGroupBean _getReferencedByPersonGroupIdOnPermit(PermitBean bean){
-        return permitManager.getReferencedByPersonGroupId(bean);
+        return getPermitManager().getReferencedByPersonGroupId(bean);
     }
     /**
      * 设置外键fl_permit(person_group_id)引用为{@code beanToSet}指定的记录,
@@ -2845,7 +2867,7 @@ class Dao implements CommonConstant {
      */
     //8-4
     protected PersonGroupBean _setReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet){
-        return permitManager.setReferencedByPersonGroupId(bean,beanToSet);
+        return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
     }
     /** 
      * 添加新记录<br>
@@ -2858,7 +2880,7 @@ class Dao implements CommonConstant {
      */
     //12
     protected PermitBean _addPermit(PermitBean permitBean)throws DuplicateReord{
-        return permitManager.save(_checkDuplicate(permitBean));
+        return getPermitManager().save(_checkDuplicate(permitBean));
     }
     /**
      * 创建fl_device_group和fl_person_group之间的MANY TO MANY 联接表(fl_permit)记录<br>
@@ -2915,7 +2937,7 @@ class Dao implements CommonConstant {
         )throws DuplicateReord{
         checkArgument(null == permitBean || permitBean.isNew(),"can be add,delete,but modify record for fl_permit,so the _isNew field must be true");
         _checkDuplicate(permitBean);
-        return permitManager.save(permitBean
+        return getPermitManager().save(permitBean
             , refDevicegroupByDeviceGroupId 
             , refPersongroupByPersonGroupId 
             );
@@ -2954,7 +2976,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<PermitBean> _loadPermitByWhere(String where,int startRow, int numRows){
-        return permitManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getPermitManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_permit 表的所有记录
@@ -2962,7 +2984,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<PermitBean> _loadPermitAll(){
-        return permitManager.loadAllAsList();
+        return getPermitManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_permit 记录总数
@@ -2970,7 +2992,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countPermitByWhere(String where){
-        return permitManager.countWhere(where);
+        return getPermitManager().countWhere(where);
     }
     /**
      * (主动更新机制实现)<br>
@@ -3007,7 +3029,7 @@ class Dao implements CommonConstant {
      */
     //1
     protected StoreBean _getStore(String md5){
-        return storeManager.loadByPrimaryKey(md5);
+        return getStoreManager().loadByPrimaryKey(md5);
     }
     /** 
      * 根据主键从数据库读取记录
@@ -3015,7 +3037,7 @@ class Dao implements CommonConstant {
      */
     //2    
     protected List<StoreBean> _getStores(Collection<String> md5Collection){
-        return storeManager.loadByPrimaryKey(md5Collection);
+        return getStoreManager().loadByPrimaryKey(md5Collection);
     }
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
@@ -3033,7 +3055,7 @@ class Dao implements CommonConstant {
     }
     //3-5
     protected List<String> _toPrimaryKeyListFromStores(Collection<StoreBean> beans){
-        return storeManager.toPrimaryKeyList(beans);
+        return getStoreManager().toPrimaryKeyList(beans);
     }
     /** 
      *　判断主键指定的记录是否存在
@@ -3043,7 +3065,7 @@ class Dao implements CommonConstant {
      */
     //4
     protected boolean _existsStore(String md5){
-        return storeManager.existsPrimaryKey(md5);
+        return getStoreManager().existsPrimaryKey(md5);
     }
     /** 
      *　判断指定的记录是否存在
@@ -3051,7 +3073,7 @@ class Dao implements CommonConstant {
      */
     //4-2
     protected boolean _existsStore(StoreBean bean){
-        return storeManager.existsPrimaryKey(bean);
+        return getStoreManager().existsPrimaryKey(bean);
     }
     /**
      * 删除主键指定的记录
@@ -3062,7 +3084,7 @@ class Dao implements CommonConstant {
      */
     //5
     protected int _deleteStore(String md5){
-        return storeManager.deleteByPrimaryKey(md5);
+        return getStoreManager().deleteByPrimaryKey(md5);
     }
     /**
      * 删除指定的记录
@@ -3097,7 +3119,7 @@ class Dao implements CommonConstant {
     //7
     protected StoreBean _checkDuplicate(StoreBean storeBean)throws DuplicateReord{
         try{
-            return storeManager.checkDuplicate(storeBean);
+            return getStoreManager().checkDuplicate(storeBean);
         }catch(ObjectRetrievalException e){
             throw new DuplicateReord();
         }
@@ -3112,7 +3134,7 @@ class Dao implements CommonConstant {
      */
     //7-3
     protected String _checkDuplicateStore(String md5OfStore)throws DuplicateReord{
-        if(storeManager.existsPrimaryKey(md5OfStore))
+        if(getStoreManager().existsPrimaryKey(md5OfStore))
             throw new DuplicateReord();
         return md5OfStore;
     }
@@ -3127,7 +3149,7 @@ class Dao implements CommonConstant {
      */
     //12
     protected StoreBean _addStore(StoreBean storeBean)throws DuplicateReord{
-        return storeManager.save(_checkDuplicate(storeBean));
+        return getStoreManager().save(_checkDuplicate(storeBean));
     }
     /** 
      * 添加新记录<br>
@@ -3163,7 +3185,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<StoreBean> _loadStoreByWhere(String where,int startRow, int numRows){
-        return storeManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getStoreManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_store 表的所有记录
@@ -3171,7 +3193,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<StoreBean> _loadStoreAll(){
-        return storeManager.loadAllAsList();
+        return getStoreManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_store 记录总数
@@ -3179,7 +3201,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countStoreByWhere(String where){
-        return storeManager.countWhere(where);
+        return getStoreManager().countWhere(where);
     }
     /** 
      * 查询{@code where}条件指定的记录
@@ -3203,7 +3225,7 @@ class Dao implements CommonConstant {
      */
     //16
     protected List<LogLightBean> _loadLogLightByWhere(String where,int startRow, int numRows){
-        return logLightManager.loadByWhereAsList(where,null,startRow,numRows);
+        return getLogLightManager().loadByWhereAsList(where,null,startRow,numRows);
     }
     /**
      * 返回 fl_log_light 表的所有记录
@@ -3211,7 +3233,7 @@ class Dao implements CommonConstant {
      */
     //17
     protected List<LogLightBean> _loadLogLightAll(){
-        return logLightManager.loadAllAsList();
+        return getLogLightManager().loadAllAsList();
     }
     /**
      * 返回满足{@code where} SQL条件语句的 fl_log_light 记录总数
@@ -3219,7 +3241,7 @@ class Dao implements CommonConstant {
      */
     //17-2
     protected int _countLogLightByWhere(String where){
-        return logLightManager.countWhere(where);
+        return getLogLightManager().countWhere(where);
     }
 
 

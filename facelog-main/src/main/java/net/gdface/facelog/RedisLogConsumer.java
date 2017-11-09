@@ -9,7 +9,7 @@ import net.gdface.facelog.db.ILogManager;
 import net.gdface.facelog.db.LogBean;
 import net.gdface.facelog.db.mysql.TableInstance;
 
-public class RedisLogConsumer implements CommonConstant {
+class RedisLogConsumer implements CommonConstant {
 	private static final ILogManager logManager = (ILogManager) TableInstance.getInstance(LogBean.class);
 	private final RedisConsumer consumer;
 	public RedisLogConsumer() {

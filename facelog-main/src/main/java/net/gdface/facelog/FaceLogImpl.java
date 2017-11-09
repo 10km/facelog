@@ -44,7 +44,7 @@ import net.gdface.utils.Judge;
  */
 public class FaceLogImpl extends FaceLogDefinition  {
 	private final RedisPersonListener redisPersonListener = new RedisPersonListener();
-	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener);
+	private final RedisImageListener redisImageListener = new RedisImageListener(redisPersonListener,this);
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
@@ -52,10 +52,10 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		init();
 	}
 	private void init(){
-		personManager.registerListener(redisPersonListener);
-		imageManager.registerListener(redisImageListener);
-		featureManager.registerListener(redisFeatureListener);
-		permitManager.registerListener(redisPermitListener);
+		getPersonManager().registerListener(redisPersonListener);
+		getImageManager().registerListener(redisImageListener);
+		getFeatureManager().registerListener(redisFeatureListener);
+		getPermitManager().registerListener(redisPermitListener);
 	}
 	protected StoreBean _makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
 		if(Judge.isEmpty(imageBytes))return null;
@@ -285,7 +285,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		return super._deletePerson(personId);
 	}
 	protected int _deletePersonByPapersNum(String papersNum) {
-		PersonBean personBean = _loadPersonByIndexPapersNum(papersNum);
+		PersonBean personBean = _getPersonByIndexPapersNum(papersNum);
 		return null == personBean ? 0 : _deletePerson(personBean.getId());
 	}
 	protected int _deletePersonByPapersNum(Collection<String> collection) {
@@ -350,7 +350,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
 		try{
 			if(Strings.isNullOrEmpty(papersNum))return null;
-			return _loadPersonByIndexPapersNum(papersNum);
+			return _getPersonByIndexPapersNum(papersNum);
 		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 

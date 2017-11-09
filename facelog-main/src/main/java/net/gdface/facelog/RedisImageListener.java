@@ -10,14 +10,15 @@ import net.gdface.facelog.db.TableListener;
  * @author guyadong
  *
  */
-public class RedisImageListener extends TableListener.Adapter<ImageBean> implements ServiceConstant{
-	private final TableListener<PersonBean> personListner;
-	
+class RedisImageListener extends TableListener.Adapter<ImageBean> implements CommonConstant{
+	private final TableListener<PersonBean> personListener;
+	private final Dao dao;
 	public RedisImageListener() {
-		this(null);
+		this(null, null);
 	}
-	public RedisImageListener(TableListener<PersonBean> personListener) {
-		personListner = Preconditions.checkNotNull(personListener);
+	public RedisImageListener(TableListener<PersonBean> personListener, Dao dao) {
+		this.personListener = Preconditions.checkNotNull(personListener);
+		this.dao = Preconditions.checkNotNull(dao);
 	}
 	/** 
 	 * 删除图像数据记录{@link ImageBean}时,如果图像被{@link PersonBean#getImageMd5()}引用则需要发送{@link PersonBean}更新通知
@@ -26,9 +27,9 @@ public class RedisImageListener extends TableListener.Adapter<ImageBean> impleme
 	@Override
 	public void afterDelete(ImageBean bean) {
 		try{
-			PersonBean personBean = personManager.loadByIndexImageMd5(bean.getMd5());
+			PersonBean personBean = dao._getPersonByIndexImageMd5(bean.getMd5());
 			if(null != personBean)
-				personListner.afterDelete(personBean);
+				personListener.afterDelete(personBean);
 		}catch (Exception e){
 			logger.error(e.getMessage(),e);
 		}
