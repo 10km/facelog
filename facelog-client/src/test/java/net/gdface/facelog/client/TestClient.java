@@ -2,9 +2,12 @@ package net.gdface.facelog.client;
 
 import static org.junit.Assert.*;
 
+import org.apache.thrift.TApplicationException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.facebook.swift.service.RuntimeTApplicationException;
 
 public class TestClient implements CommonConstant {
 
@@ -34,5 +37,19 @@ public class TestClient implements CommonConstant {
 			logger.error(e.getMessage(), e);
 		}
 	}
-
+	@Test
+	public void testGetDeviceIdOfFeature(){
+		try{
+			facelogClient.getDeviceIdOfFeature("hello");
+		}catch(RuntimeTApplicationException e){
+			Throwable cause = e.getCause();
+			if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+				System.out.println("return null");
+			}
+		}catch(ServiceRuntime e){
+			e.printServerStackTrace();
+		}catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
 }

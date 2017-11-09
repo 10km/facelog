@@ -642,7 +642,16 @@ public abstract class FaceLogDefinition extends Dao{
 	public List<String> getImagesAssociatedByFeature(String featureMd5) throws ServiceRuntime {
 		return null;
 	}
-
+	/**
+	 * 返回featureMd5的人脸特征记录关联的设备id<br>
+	 * @param featureMd5
+	 * @return 如果没有关联的设备则返回{@code null}
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntime{
+		return null;
+	}
 	/**
 	 * 删除imageMd5指定图像及其缩略图
 	 * @param imageMd5

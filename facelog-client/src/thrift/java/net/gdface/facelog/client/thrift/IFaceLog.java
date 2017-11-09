@@ -260,6 +260,14 @@ public interface IFaceLog
             @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
         );
 
+        @ThriftMethod(value = "getDeviceIdOfFeature",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
+        ListenableFuture<Integer> getDeviceIdOfFeature(
+            @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5
+        );
+
         @ThriftMethod(value = "getDevices",
                       exception = {
                           @ThriftException(type=ServiceRuntime.class, id=1)
@@ -911,6 +919,14 @@ public interface IFaceLog
                   })
     List<DeviceGroupBean> getDeviceGroups(
         @ThriftField(value=1, name="groupIdList", requiredness=Requiredness.NONE) final List<Integer> groupIdList
+    ) throws ServiceRuntime;
+
+    @ThriftMethod(value = "getDeviceIdOfFeature",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    int getDeviceIdOfFeature(
+        @ThriftField(value=1, name="featureMd5", requiredness=Requiredness.NONE) final String featureMd5
     ) throws ServiceRuntime;
 
     @ThriftMethod(value = "getDevices",

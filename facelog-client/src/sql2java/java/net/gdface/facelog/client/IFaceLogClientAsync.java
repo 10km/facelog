@@ -488,11 +488,20 @@ class IFaceLogClientAsync implements Constant{
                 });
     }
     /**
+     * 返回featureMd5的人脸特征记录关联的设备id<br>
+     * @param featureMd5
+     * @return 如果没有关联的设备则返回{@code null}
+     */
+    // 30 SERIVCE PORT : getDeviceIdOfFeature
+    public ListenableFuture<Integer> getDeviceIdOfFeature(String featureMd5){
+        return service.getDeviceIdOfFeature(featureMd5);
+    }
+    /**
      * 返回 {@code idList} 指定的设备记录
      * @param idList
      * @return 
      */
-    // 30 SERIVCE PORT : getDevices
+    // 31 SERIVCE PORT : getDevices
     public ListenableFuture<List<DeviceBean>> getDevices(List<Integer> idList){
         return Futures.transform(
                 service.getDevices(idList), 
@@ -509,7 +518,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 31 SERIVCE PORT : getDevicesOfGroup
+    // 32 SERIVCE PORT : getDevicesOfGroup
     public ListenableFuture<List<DeviceBean>> getDevicesOfGroup(int deviceGroupId){
         return Futures.transform(
                 service.getDevicesOfGroup(deviceGroupId), 
@@ -525,7 +534,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 如果数据库中没有对应的数据则返回null
      */
-    // 32 SERIVCE PORT : getFeature
+    // 33 SERIVCE PORT : getFeature
     public ListenableFuture<FeatureBean> getFeature(String md5){
         return Futures.transform(
                 service.getFeature(md5), 
@@ -541,7 +550,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId fl_person.id
      * @return 返回 fl_feature.md5  列表
      */
-    // 33 SERIVCE PORT : getFeatureBeansByPersonId
+    // 34 SERIVCE PORT : getFeatureBeansByPersonId
     public ListenableFuture<List<String>> getFeatureBeansByPersonId(int personId){
         return service.getFeatureBeansByPersonId(personId);
     }
@@ -550,7 +559,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      */
-    // 34 SERIVCE PORT : getFeatureBytes
+    // 35 SERIVCE PORT : getFeatureBytes
     public ListenableFuture<byte[]> getFeatureBytes(String md5){
         return service.getFeatureBytes(md5);
     }
@@ -559,7 +568,7 @@ class IFaceLogClientAsync implements Constant{
      * @param md5 md5列表
      * @return {@link FeatureBean}列表
      */
-    // 35 SERIVCE PORT : getFeatures
+    // 36 SERIVCE PORT : getFeatures
     public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5){
         return Futures.transform(
                 service.getFeatures(md5), 
@@ -577,7 +586,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 
      */
-    // 36 SERIVCE PORT : getGroupPermit
+    // 37 SERIVCE PORT : getGroupPermit
     public ListenableFuture<Boolean> getGroupPermit(
             int deviceId,
             int personGroupId){
@@ -588,7 +597,7 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
-    // 37 SERIVCE PORT : getGroupPermits
+    // 38 SERIVCE PORT : getGroupPermits
     public ListenableFuture<List<Boolean>> getGroupPermits(
             int deviceId,
             List<Integer> personGroupIdList){
@@ -601,7 +610,7 @@ class IFaceLogClientAsync implements Constant{
      * @param imageMD5
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      */
-    // 38 SERIVCE PORT : getImage
+    // 39 SERIVCE PORT : getImage
     public ListenableFuture<ImageBean> getImage(String imageMD5){
         return Futures.transform(
                 service.getImage(imageMD5), 
@@ -618,7 +627,7 @@ class IFaceLogClientAsync implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @see {@link #getBinary(String)}
      */
-    // 39 SERIVCE PORT : getImageBytes
+    // 40 SERIVCE PORT : getImageBytes
     public ListenableFuture<byte[]> getImageBytes(String imageMD5){
         return service.getImageBytes(imageMD5);
     }
@@ -627,7 +636,7 @@ class IFaceLogClientAsync implements Constant{
      * @param featureMd5 人脸特征id(MD5)
      * @return 
      */
-    // 40 SERIVCE PORT : getImagesAssociatedByFeature
+    // 41 SERIVCE PORT : getImagesAssociatedByFeature
     public ListenableFuture<List<String>> getImagesAssociatedByFeature(String featureMd5){
         return service.getImagesAssociatedByFeature(featureMd5);
     }
@@ -636,7 +645,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId fl_person.id
      * @return 
      */
-    // 41 SERIVCE PORT : getLogBeansByPersonId
+    // 42 SERIVCE PORT : getLogBeansByPersonId
     public ListenableFuture<List<LogBean>> getLogBeansByPersonId(int personId){
         return Futures.transform(
                 service.getLogBeansByPersonId(personId), 
@@ -652,7 +661,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    // 42 SERIVCE PORT : getPerson
+    // 43 SERIVCE PORT : getPerson
     public ListenableFuture<PersonBean> getPerson(int personId){
         return Futures.transform(
                 service.getPerson(personId), 
@@ -668,7 +677,7 @@ class IFaceLogClientAsync implements Constant{
      * @param papersNum
      * @return 
      */
-    // 43 SERIVCE PORT : getPersonByPapersNum
+    // 44 SERIVCE PORT : getPersonByPapersNum
     public ListenableFuture<PersonBean> getPersonByPapersNum(String papersNum){
         return Futures.transform(
                 service.getPersonByPapersNum(papersNum), 
@@ -684,7 +693,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 
      */
-    // 44 SERIVCE PORT : getPersonGroup
+    // 45 SERIVCE PORT : getPersonGroup
     public ListenableFuture<PersonGroupBean> getPersonGroup(int personGroupId){
         return Futures.transform(
                 service.getPersonGroup(personGroupId), 
@@ -700,7 +709,7 @@ class IFaceLogClientAsync implements Constant{
      * @param groupIdList
      * @return 
      */
-    // 45 SERIVCE PORT : getPersonGroups
+    // 46 SERIVCE PORT : getPersonGroups
     public ListenableFuture<List<PersonGroupBean>> getPersonGroups(List<Integer> groupIdList){
         return Futures.transform(
                 service.getPersonGroups(groupIdList), 
@@ -718,7 +727,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    // 46 SERIVCE PORT : getPersonPermit
+    // 47 SERIVCE PORT : getPersonPermit
     public ListenableFuture<Boolean> getPersonPermit(
             int deviceId,
             int personId){
@@ -729,7 +738,7 @@ class IFaceLogClientAsync implements Constant{
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
-    // 47 SERIVCE PORT : getPersonPermits
+    // 48 SERIVCE PORT : getPersonPermits
     public ListenableFuture<List<Boolean>> getPersonPermits(
             int deviceId,
             List<Integer> personIdList){
@@ -742,7 +751,7 @@ class IFaceLogClientAsync implements Constant{
      * @param idList 人员id列表
      * @return 
      */
-    // 48 SERIVCE PORT : getPersons
+    // 49 SERIVCE PORT : getPersons
     public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){
         return Futures.transform(
                 service.getPersons(idList), 
@@ -759,7 +768,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 49 SERIVCE PORT : getPersonsOfGroup
+    // 50 SERIVCE PORT : getPersonsOfGroup
     public ListenableFuture<List<PersonBean>> getPersonsOfGroup(int personGroupId){
         return Futures.transform(
                 service.getPersonsOfGroup(personGroupId), 
@@ -776,7 +785,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceGroupId
      * @return 
      */
-    // 50 SERIVCE PORT : getSubDeviceGroup
+    // 51 SERIVCE PORT : getSubDeviceGroup
     public ListenableFuture<List<DeviceGroupBean>> getSubDeviceGroup(int deviceGroupId){
         return Futures.transform(
                 service.getSubDeviceGroup(deviceGroupId), 
@@ -793,7 +802,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personGroupId
      * @return 
      */
-    // 51 SERIVCE PORT : getSubPersonGroup
+    // 52 SERIVCE PORT : getSubPersonGroup
     public ListenableFuture<List<PersonGroupBean>> getSubPersonGroup(int personGroupId){
         return Futures.transform(
                 service.getSubPersonGroup(personGroupId), 
@@ -809,7 +818,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @return 
      */
-    // 52 SERIVCE PORT : isDisable
+    // 53 SERIVCE PORT : isDisable
     public ListenableFuture<Boolean> isDisable(int personId){
         return service.isDisable(personId);
     }
@@ -817,7 +826,7 @@ class IFaceLogClientAsync implements Constant{
      * 返回所有人员记录
      * @return 
      */
-    // 53 SERIVCE PORT : loadAllPerson
+    // 54 SERIVCE PORT : loadAllPerson
     public ListenableFuture<List<Integer>> loadAllPerson(){
         return service.loadAllPerson();
     }
@@ -827,7 +836,7 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回 fl_feature.md5 列表
      */
-    // 54 SERIVCE PORT : loadFeatureMd5ByUpdate
+    // 55 SERIVCE PORT : loadFeatureMd5ByUpdate
     public ListenableFuture<List<String>> loadFeatureMd5ByUpdate(Date timestamp){
         return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
     }
@@ -839,7 +848,7 @@ class IFaceLogClientAsync implements Constant{
      * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
      * @return 
      */
-    // 55 SERIVCE PORT : loadLogByWhere
+    // 56 SERIVCE PORT : loadLogByWhere
     public ListenableFuture<List<LogBean>> loadLogByWhere(
             String where,
             int startRow,
@@ -861,7 +870,7 @@ class IFaceLogClientAsync implements Constant{
      * 返回 fl_log_light.verify_time 字段大于指定时间戳({@code timestamp})的所有记录
      * @see #loadLogLightByWhere(String,int,int)
      */
-    // 56 SERIVCE PORT : loadLogLightByVerifyTime
+    // 57 SERIVCE PORT : loadLogLightByVerifyTime
     public ListenableFuture<List<LogLightBean>> loadLogLightByVerifyTime(
             Date timestamp,
             int startRow,
@@ -886,7 +895,7 @@ class IFaceLogClientAsync implements Constant{
      * @param numRows
      * @return 
      */
-    // 57 SERIVCE PORT : loadLogLightByWhere
+    // 58 SERIVCE PORT : loadLogLightByWhere
     public ListenableFuture<List<LogLightBean>> loadLogLightByWhere(
             String where,
             int startRow,
@@ -909,7 +918,7 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 
      */
-    // 58 SERIVCE PORT : loadPermitByUpdate
+    // 59 SERIVCE PORT : loadPermitByUpdate
     public ListenableFuture<List<PermitBean>> loadPermitByUpdate(Date timestamp){
         return Futures.transform(
                 service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)), 
@@ -925,7 +934,7 @@ class IFaceLogClientAsync implements Constant{
      * @param where SQL条件语句
      * @return 返回 fl_person.id 列表
      */
-    // 59 SERIVCE PORT : loadPersonByWhere
+    // 60 SERIVCE PORT : loadPersonByWhere
     public ListenableFuture<List<Integer>> loadPersonByWhere(String where){
         return service.loadPersonByWhere(where);
     }
@@ -935,7 +944,7 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 60 SERIVCE PORT : loadPersonIdByUpdateTime
+    // 61 SERIVCE PORT : loadPersonIdByUpdateTime
     public ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(Date timestamp){
         return service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class));
     }
@@ -946,7 +955,7 @@ class IFaceLogClientAsync implements Constant{
      * @param timestamp
      * @return 返回fl_person.id 列表
      */
-    // 61 SERIVCE PORT : loadUpdatedPersons
+    // 62 SERIVCE PORT : loadUpdatedPersons
     public ListenableFuture<List<Integer>> loadUpdatedPersons(Date timestamp){
         return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
     }
@@ -956,7 +965,7 @@ class IFaceLogClientAsync implements Constant{
      * @param featureMd5 人脸特征数据记录id (已经保存在数据库中)
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      */
-    // 62 SERIVCE PORT : replaceFeature
+    // 63 SERIVCE PORT : replaceFeature
     public ListenableFuture<Void> replaceFeature(
             int personId,
             String featureMd5,
@@ -971,7 +980,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceBean
      * @return 
      */
-    // 63 SERIVCE PORT : saveDevice
+    // 64 SERIVCE PORT : saveDevice
     public ListenableFuture<DeviceBean> saveDevice(DeviceBean deviceBean){
         return Futures.transform(
                 service.saveDevice(converterDeviceBean.toRight(deviceBean)), 
@@ -987,7 +996,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceGroupBean
      * @return 
      */
-    // 64 SERIVCE PORT : saveDeviceGroup
+    // 65 SERIVCE PORT : saveDeviceGroup
     public ListenableFuture<DeviceGroupBean> saveDeviceGroup(DeviceGroupBean deviceGroupBean){
         return Futures.transform(
                 service.saveDeviceGroup(converterDeviceGroupBean.toRight(deviceGroupBean)), 
@@ -1003,7 +1012,7 @@ class IFaceLogClientAsync implements Constant{
      * @param bean
      * @return 
      */
-    // 65 SERIVCE PORT : savePerson
+    // 66 SERIVCE PORT : savePerson
     public ListenableFuture<PersonBean> savePerson(PersonBean bean){
         return Futures.transform(
                 service.savePerson(converterPersonBean.toRight(bean)), 
@@ -1023,7 +1032,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    // 66 SERIVCE PORT : savePersonFull
+    // 67 SERIVCE PORT : savePersonFull
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1052,7 +1061,7 @@ class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 66 GENERIC
+    // 67 GENERIC
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1080,7 +1089,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personGroupBean
      * @return 
      */
-    // 67 SERIVCE PORT : savePersonGroup
+    // 68 SERIVCE PORT : savePersonGroup
     public ListenableFuture<PersonGroupBean> savePersonGroup(PersonGroupBean personGroupBean){
         return Futures.transform(
                 service.savePersonGroup(converterPersonGroupBean.toRight(personGroupBean)), 
@@ -1095,7 +1104,7 @@ class IFaceLogClientAsync implements Constant{
      * 保存人员(person)记录
      * @param beans
      */
-    // 68 SERIVCE PORT : savePersons
+    // 69 SERIVCE PORT : savePersons
     public ListenableFuture<Void> savePersons(List<PersonBean> beans){
         return service.savePersons(converterPersonBean.toRight(beans));
     }
@@ -1104,7 +1113,7 @@ class IFaceLogClientAsync implements Constant{
      * @param persons
      * @return 
      */
-    // 69 SERIVCE PORT : savePersonsWithPhoto
+    // 70 SERIVCE PORT : savePersonsWithPhoto
     public ListenableFuture<Integer> savePerson(Map<ByteBuffer, PersonBean> persons){
         return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
     }
@@ -1114,7 +1123,7 @@ class IFaceLogClientAsync implements Constant{
      * @param idPhoto 标准照图像对象,可为null
      * @return 
      */
-    // 70 SERIVCE PORT : savePersonWithPhoto
+    // 71 SERIVCE PORT : savePersonWithPhoto
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto){
@@ -1135,7 +1144,7 @@ class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 70 GENERIC
+    // 71 GENERIC
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
             Object idPhoto){
@@ -1158,7 +1167,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceId 标准照图像来源设备id,可为null
      * @return 
      */
-    // 71 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 72 SERIVCE PORT : savePersonWithPhotoAndFeature
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1183,7 +1192,7 @@ class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 71 GENERIC
+    // 72 GENERIC
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1210,7 +1219,7 @@ class IFaceLogClientAsync implements Constant{
      * @param faceBeans 参见 {@link #addFeature(ByteBuffer, Integer, List)}
      * @return 
      */
-    // 72 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 73 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1235,7 +1244,7 @@ class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 72 GENERIC
+    // 73 GENERIC
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1263,7 +1272,7 @@ class IFaceLogClientAsync implements Constant{
      * @param deviceId faceInfo 图像来源设备id,可为null
      * @return bean 保存的{@link PersonBean}对象
      */
-    // 73 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 74 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1290,7 +1299,7 @@ class IFaceLogClientAsync implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 73 GENERIC
+    // 74 GENERIC
     public ListenableFuture<PersonBean> savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1318,7 +1327,7 @@ class IFaceLogClientAsync implements Constant{
      * @param featureMd5 用于验证的人脸特征数据对象,可为null
      * @return 
      */
-    // 74 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 75 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     public ListenableFuture<PersonBean> savePerson(
             PersonBean bean,
             String idPhotoMd5,
@@ -1340,7 +1349,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personId
      * @param expiryDate 失效日期
      */
-    // 75 SERIVCE PORT : setPersonExpiryDate
+    // 76 SERIVCE PORT : setPersonExpiryDate
     public ListenableFuture<Void> setPersonExpiryDate(
             int personId,
             Date expiryDate){
@@ -1353,7 +1362,7 @@ class IFaceLogClientAsync implements Constant{
      * @param personIdList 人员id列表
      * @param expiryDate 失效日期
      */
-    // 76 SERIVCE PORT : setPersonExpiryDateList
+    // 77 SERIVCE PORT : setPersonExpiryDateList
     public ListenableFuture<Void> setPersonExpiryDate(
             List<Integer> personIdList,
             Date expiryDate){

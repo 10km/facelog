@@ -6,6 +6,8 @@
 // template: service.client.java.vm
 // ______________________________________________________
 package net.gdface.facelog.client;
+import org.apache.thrift.TApplicationException;
+import com.facebook.swift.service.RuntimeTApplicationException;
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -77,7 +79,15 @@ class IFaceLogClient implements Constant{
                     feature,
                     personId,
                     converterFaceBean.toRight(faecBeans)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -97,7 +107,15 @@ class IFaceLogClient implements Constant{
                     GenericUtils.toBytes(feature),
                     personId,
                     converterFaceBean.toRight(faecBeans)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -122,7 +140,15 @@ class IFaceLogClient implements Constant{
                     personId,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -144,7 +170,15 @@ class IFaceLogClient implements Constant{
                     personId,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -170,7 +204,15 @@ class IFaceLogClient implements Constant{
                     deviceId,
                     converterFaceBean.toRight(faceBean),
                     personId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -192,7 +234,15 @@ class IFaceLogClient implements Constant{
                     deviceId,
                     converterFaceBean.toRight(faceBean),
                     personId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -205,7 +255,8 @@ class IFaceLogClient implements Constant{
     public void addLog(LogBean bean){
         try{
             service.addLog(converterLogBean.toRight(bean));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -218,7 +269,8 @@ class IFaceLogClient implements Constant{
     public void addLogs(List<LogBean> beans){
         try{
             service.addLogs(converterLogBean.toRight(beans));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -238,7 +290,8 @@ class IFaceLogClient implements Constant{
             service.addPermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -251,7 +304,8 @@ class IFaceLogClient implements Constant{
             service.addPermitById(
                     deviceGroupId,
                     personGroupId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -265,7 +319,8 @@ class IFaceLogClient implements Constant{
     public int countLogByWhere(String where){
         try{
             return service.countLogByWhere(where);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -278,7 +333,8 @@ class IFaceLogClient implements Constant{
     public int countLogLightByVerifyTime(Date timestamp){
         try{
             return service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -292,7 +348,8 @@ class IFaceLogClient implements Constant{
     public int countLogLightByWhere(String where){
         try{
             return service.countLogLightByWhere(where);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -312,7 +369,8 @@ class IFaceLogClient implements Constant{
             return service.deleteAllFeaturesByPersonId(
                     personId,
                     deleteImage);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -328,7 +386,8 @@ class IFaceLogClient implements Constant{
     public int deleteDeviceGroup(int deviceGroupId){
         try{
             return service.deleteDeviceGroup(deviceGroupId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -348,7 +407,15 @@ class IFaceLogClient implements Constant{
             return service.deleteFeature(
                     featureMd5,
                     deleteImage);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -362,7 +429,8 @@ class IFaceLogClient implements Constant{
     public int deleteImage(String imageMd5){
         try{
             return service.deleteImage(imageMd5);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -382,7 +450,8 @@ class IFaceLogClient implements Constant{
             return service.deletePermit(
                     converterDeviceGroupBean.toRight(deviceGroup),
                     converterPersonGroupBean.toRight(personGroup));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -396,7 +465,8 @@ class IFaceLogClient implements Constant{
     public int deletePerson(int personId){
         try{
             return service.deletePerson(personId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -411,7 +481,8 @@ class IFaceLogClient implements Constant{
     public int deletePersonByPapersNum(String papersNum){
         try{
             return service.deletePersonByPapersNum(papersNum);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -427,7 +498,8 @@ class IFaceLogClient implements Constant{
     public int deletePersonGroup(int personGroupId){
         try{
             return service.deletePersonGroup(personGroupId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -441,7 +513,8 @@ class IFaceLogClient implements Constant{
     public int deletePersons(List<Integer> personIdList){
         try{
             return service.deletePersons(personIdList);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -455,7 +528,8 @@ class IFaceLogClient implements Constant{
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         try{
             return service.deletePersonsByPapersNum(papersNumlist);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -469,7 +543,8 @@ class IFaceLogClient implements Constant{
     public void disablePerson(int personId){
         try{
             service.disablePerson(personId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -482,7 +557,8 @@ class IFaceLogClient implements Constant{
     public void disablePerson(List<Integer> personIdList){
         try{
             service.disablePersonList(personIdList);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -496,7 +572,8 @@ class IFaceLogClient implements Constant{
     public boolean existsDevice(int id){
         try{
             return service.existsDevice(id);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -510,7 +587,8 @@ class IFaceLogClient implements Constant{
     public boolean existsFeature(String md5){
         try{
             return service.existsFeature(md5);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -524,7 +602,8 @@ class IFaceLogClient implements Constant{
     public boolean existsImage(String md5){
         try{
             return service.existsImage(md5);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -538,7 +617,8 @@ class IFaceLogClient implements Constant{
     public boolean existsPerson(int persionId){
         try{
             return service.existsPerson(persionId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -552,7 +632,15 @@ class IFaceLogClient implements Constant{
     public DeviceBean getDevice(int deviceId){
         try{
             return converterDeviceBean.fromRight(service.getDevice(deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -567,7 +655,15 @@ class IFaceLogClient implements Constant{
     public DeviceGroupBean getDeviceGroup(int deviceGroupId){
         try{
             return converterDeviceGroupBean.fromRight(service.getDeviceGroup(deviceGroupId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -582,7 +678,37 @@ class IFaceLogClient implements Constant{
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
         try{
             return converterDeviceGroupBean.fromRight(service.getDeviceGroups(groupIdList));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 返回featureMd5的人脸特征记录关联的设备id<br>
+     * @param featureMd5
+     * @return 如果没有关联的设备则返回{@code null}
+     * @throws ServiceRuntime
+     */
+    // 30 SERIVCE PORT : getDeviceIdOfFeature
+    public Integer getDeviceIdOfFeature(String featureMd5){
+        try{
+            return service.getDeviceIdOfFeature(featureMd5);
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -592,11 +718,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 30 SERIVCE PORT : getDevices
+    // 31 SERIVCE PORT : getDevices
     public List<DeviceBean> getDevices(List<Integer> idList){
         try{
             return converterDeviceBean.fromRight(service.getDevices(idList));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -608,11 +742,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 31 SERIVCE PORT : getDevicesOfGroup
+    // 32 SERIVCE PORT : getDevicesOfGroup
     public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
         try{
             return converterDeviceBean.fromRight(service.getDevicesOfGroup(deviceGroupId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -622,11 +764,19 @@ class IFaceLogClient implements Constant{
      * @return 如果数据库中没有对应的数据则返回null
      * @throws ServiceRuntime
      */
-    // 32 SERIVCE PORT : getFeature
+    // 33 SERIVCE PORT : getFeature
     public FeatureBean getFeature(String md5){
         try{
             return converterFeatureBean.fromRight(service.getFeature(md5));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -636,11 +786,19 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_feature.md5  列表
      * @throws ServiceRuntime
      */
-    // 33 SERIVCE PORT : getFeatureBeansByPersonId
+    // 34 SERIVCE PORT : getFeatureBeansByPersonId
     public List<String> getFeatureBeansByPersonId(int personId){
         try{
             return service.getFeatureBeansByPersonId(personId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -650,11 +808,19 @@ class IFaceLogClient implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @throws ServiceRuntime
      */
-    // 34 SERIVCE PORT : getFeatureBytes
+    // 35 SERIVCE PORT : getFeatureBytes
     public byte[] getFeatureBytes(String md5){
         try{
             return service.getFeatureBytes(md5);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -664,11 +830,19 @@ class IFaceLogClient implements Constant{
      * @return {@link FeatureBean}列表
      * @throws ServiceRuntime
      */
-    // 35 SERIVCE PORT : getFeatures
+    // 36 SERIVCE PORT : getFeatures
     public List<FeatureBean> getFeatures(List<String> md5){
         try{
             return converterFeatureBean.fromRight(service.getFeatures(md5));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -681,7 +855,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 36 SERIVCE PORT : getGroupPermit
+    // 37 SERIVCE PORT : getGroupPermit
     public boolean getGroupPermit(
             int deviceId,
             int personGroupId){
@@ -689,14 +863,15 @@ class IFaceLogClient implements Constant{
             return service.getGroupPermit(
                     deviceId,
                     personGroupId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
-    // 37 SERIVCE PORT : getGroupPermits
+    // 38 SERIVCE PORT : getGroupPermits
     public List<Boolean> getGroupPermits(
             int deviceId,
             List<Integer> personGroupIdList){
@@ -704,7 +879,15 @@ class IFaceLogClient implements Constant{
             return service.getGroupPermits(
                     deviceId,
                     personGroupIdList);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -714,11 +897,19 @@ class IFaceLogClient implements Constant{
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      * @throws ServiceRuntime
      */
-    // 38 SERIVCE PORT : getImage
+    // 39 SERIVCE PORT : getImage
     public ImageBean getImage(String imageMD5){
         try{
             return converterImageBean.fromRight(service.getImage(imageMD5));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -729,11 +920,19 @@ class IFaceLogClient implements Constant{
      * @throws ServiceRuntime
      * @see {@link #getBinary(String)}
      */
-    // 39 SERIVCE PORT : getImageBytes
+    // 40 SERIVCE PORT : getImageBytes
     public byte[] getImageBytes(String imageMD5){
         try{
             return service.getImageBytes(imageMD5);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -743,11 +942,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 40 SERIVCE PORT : getImagesAssociatedByFeature
+    // 41 SERIVCE PORT : getImagesAssociatedByFeature
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         try{
             return service.getImagesAssociatedByFeature(featureMd5);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -757,11 +964,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 41 SERIVCE PORT : getLogBeansByPersonId
+    // 42 SERIVCE PORT : getLogBeansByPersonId
     public List<LogBean> getLogBeansByPersonId(int personId){
         try{
             return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -771,11 +986,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 42 SERIVCE PORT : getPerson
+    // 43 SERIVCE PORT : getPerson
     public PersonBean getPerson(int personId){
         try{
             return converterPersonBean.fromRight(service.getPerson(personId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -785,11 +1008,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 43 SERIVCE PORT : getPersonByPapersNum
+    // 44 SERIVCE PORT : getPersonByPapersNum
     public PersonBean getPersonByPapersNum(String papersNum){
         try{
             return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -800,11 +1031,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 44 SERIVCE PORT : getPersonGroup
+    // 45 SERIVCE PORT : getPersonGroup
     public PersonGroupBean getPersonGroup(int personGroupId){
         try{
             return converterPersonGroupBean.fromRight(service.getPersonGroup(personGroupId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -815,11 +1054,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 45 SERIVCE PORT : getPersonGroups
+    // 46 SERIVCE PORT : getPersonGroups
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
         try{
             return converterPersonGroupBean.fromRight(service.getPersonGroups(groupIdList));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -832,7 +1079,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 46 SERIVCE PORT : getPersonPermit
+    // 47 SERIVCE PORT : getPersonPermit
     public boolean getPersonPermit(
             int deviceId,
             int personId){
@@ -840,14 +1087,15 @@ class IFaceLogClient implements Constant{
             return service.getPersonPermit(
                     deviceId,
                     personId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
-    // 47 SERIVCE PORT : getPersonPermits
+    // 48 SERIVCE PORT : getPersonPermits
     public List<Boolean> getPersonPermits(
             int deviceId,
             List<Integer> personIdList){
@@ -855,7 +1103,15 @@ class IFaceLogClient implements Constant{
             return service.getPersonPermits(
                     deviceId,
                     personIdList);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -865,11 +1121,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 48 SERIVCE PORT : getPersons
+    // 49 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         try{
             return converterPersonBean.fromRight(service.getPersons(idList));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -881,11 +1145,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 49 SERIVCE PORT : getPersonsOfGroup
+    // 50 SERIVCE PORT : getPersonsOfGroup
     public List<PersonBean> getPersonsOfGroup(int personGroupId){
         try{
             return converterPersonBean.fromRight(service.getPersonsOfGroup(personGroupId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -897,11 +1169,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 50 SERIVCE PORT : getSubDeviceGroup
+    // 51 SERIVCE PORT : getSubDeviceGroup
     public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
         try{
             return converterDeviceGroupBean.fromRight(service.getSubDeviceGroup(deviceGroupId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -913,11 +1193,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 51 SERIVCE PORT : getSubPersonGroup
+    // 52 SERIVCE PORT : getSubPersonGroup
     public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
         try{
             return converterPersonGroupBean.fromRight(service.getSubPersonGroup(personGroupId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -927,11 +1215,12 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 52 SERIVCE PORT : isDisable
+    // 53 SERIVCE PORT : isDisable
     public boolean isDisable(int personId){
         try{
             return service.isDisable(personId);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -940,11 +1229,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 53 SERIVCE PORT : loadAllPerson
+    // 54 SERIVCE PORT : loadAllPerson
     public List<Integer> loadAllPerson(){
         try{
             return service.loadAllPerson();
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -955,11 +1252,19 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_feature.md5 列表
      * @throws ServiceRuntime
      */
-    // 54 SERIVCE PORT : loadFeatureMd5ByUpdate
+    // 55 SERIVCE PORT : loadFeatureMd5ByUpdate
     public List<String> loadFeatureMd5ByUpdate(Date timestamp){
         try{
             return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -972,7 +1277,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 55 SERIVCE PORT : loadLogByWhere
+    // 56 SERIVCE PORT : loadLogByWhere
     public List<LogBean> loadLogByWhere(
             String where,
             int startRow,
@@ -982,7 +1287,15 @@ class IFaceLogClient implements Constant{
                     where,
                     startRow,
                     numRows));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -993,7 +1306,7 @@ class IFaceLogClient implements Constant{
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      * @throws ServiceRuntime
      */
-    // 56 SERIVCE PORT : loadLogLightByVerifyTime
+    // 57 SERIVCE PORT : loadLogLightByVerifyTime
     public List<LogLightBean> loadLogLightByVerifyTime(
             Date timestamp,
             int startRow,
@@ -1003,7 +1316,15 @@ class IFaceLogClient implements Constant{
                     GenericUtils.toLong(timestamp,Date.class),
                     startRow,
                     numRows));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1016,7 +1337,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 57 SERIVCE PORT : loadLogLightByWhere
+    // 58 SERIVCE PORT : loadLogLightByWhere
     public List<LogLightBean> loadLogLightByWhere(
             String where,
             int startRow,
@@ -1026,7 +1347,15 @@ class IFaceLogClient implements Constant{
                     where,
                     startRow,
                     numRows));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1038,11 +1367,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 58 SERIVCE PORT : loadPermitByUpdate
+    // 59 SERIVCE PORT : loadPermitByUpdate
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
         try{
             return converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1052,11 +1389,19 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_person.id 列表
      * @throws ServiceRuntime
      */
-    // 59 SERIVCE PORT : loadPersonByWhere
+    // 60 SERIVCE PORT : loadPersonByWhere
     public List<Integer> loadPersonByWhere(String where){
         try{
             return service.loadPersonByWhere(where);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1067,11 +1412,19 @@ class IFaceLogClient implements Constant{
      * @return 返回fl_person.id 列表
      * @throws ServiceRuntime
      */
-    // 60 SERIVCE PORT : loadPersonIdByUpdateTime
+    // 61 SERIVCE PORT : loadPersonIdByUpdateTime
     public List<Integer> loadPersonIdByUpdateTime(Date timestamp){
         try{
             return service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1083,11 +1436,19 @@ class IFaceLogClient implements Constant{
      * @return 返回fl_person.id 列表
      * @throws ServiceRuntime
      */
-    // 61 SERIVCE PORT : loadUpdatedPersons
+    // 62 SERIVCE PORT : loadUpdatedPersons
     public List<Integer> loadUpdatedPersons(Date timestamp){
         try{
             return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1098,7 +1459,7 @@ class IFaceLogClient implements Constant{
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      * @throws ServiceRuntime
      */
-    // 62 SERIVCE PORT : replaceFeature
+    // 63 SERIVCE PORT : replaceFeature
     public void replaceFeature(
             int personId,
             String featureMd5,
@@ -1108,7 +1469,8 @@ class IFaceLogClient implements Constant{
                     personId,
                     featureMd5,
                     deleteOldFeatureImage);
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1118,11 +1480,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 63 SERIVCE PORT : saveDevice
+    // 64 SERIVCE PORT : saveDevice
     public DeviceBean saveDevice(DeviceBean deviceBean){
         try{
             return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1133,11 +1503,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 64 SERIVCE PORT : saveDeviceGroup
+    // 65 SERIVCE PORT : saveDeviceGroup
     public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
         try{
             return converterDeviceGroupBean.fromRight(service.saveDeviceGroup(converterDeviceGroupBean.toRight(deviceGroupBean)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1147,11 +1525,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 65 SERIVCE PORT : savePerson
+    // 66 SERIVCE PORT : savePerson
     public PersonBean savePerson(PersonBean bean){
         try{
             return converterPersonBean.fromRight(service.savePerson(converterPersonBean.toRight(bean)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1164,7 +1550,7 @@ class IFaceLogClient implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    // 66 SERIVCE PORT : savePersonFull
+    // 67 SERIVCE PORT : savePersonFull
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1180,7 +1566,15 @@ class IFaceLogClient implements Constant{
                     featureImage,
                     converterFaceBean.toRight(featureFaceBean),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1190,7 +1584,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 66 GENERIC
+    // 67 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1206,7 +1600,15 @@ class IFaceLogClient implements Constant{
                     GenericUtils.toBytes(featureImage),
                     converterFaceBean.toRight(featureFaceBean),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1217,11 +1619,19 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 67 SERIVCE PORT : savePersonGroup
+    // 68 SERIVCE PORT : savePersonGroup
     public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
         try{
             return converterPersonGroupBean.fromRight(service.savePersonGroup(converterPersonGroupBean.toRight(personGroupBean)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1230,11 +1640,12 @@ class IFaceLogClient implements Constant{
      * @param beans
      * @throws ServiceRuntime
      */
-    // 68 SERIVCE PORT : savePersons
+    // 69 SERIVCE PORT : savePersons
     public void savePersons(List<PersonBean> beans){
         try{
             service.savePersons(converterPersonBean.toRight(beans));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1244,11 +1655,19 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 69 SERIVCE PORT : savePersonsWithPhoto
-    public int savePerson(Map<ByteBuffer, PersonBean> persons){
+    // 70 SERIVCE PORT : savePersonsWithPhoto
+    public Integer savePerson(Map<ByteBuffer, PersonBean> persons){
         try{
             return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1259,7 +1678,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 70 SERIVCE PORT : savePersonWithPhoto
+    // 71 SERIVCE PORT : savePersonWithPhoto
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto){
@@ -1267,7 +1686,15 @@ class IFaceLogClient implements Constant{
             return converterPersonBean.fromRight(service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
                     idPhoto));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1277,7 +1704,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 70 GENERIC
+    // 71 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto){
@@ -1285,7 +1712,15 @@ class IFaceLogClient implements Constant{
             return converterPersonBean.fromRight(service.savePersonWithPhoto(
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1298,7 +1733,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 71 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 72 SERIVCE PORT : savePersonWithPhotoAndFeature
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1310,7 +1745,15 @@ class IFaceLogClient implements Constant{
                     idPhoto,
                     converterFeatureBean.toRight(featureBean),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1320,7 +1763,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 71 GENERIC
+    // 72 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1332,7 +1775,15 @@ class IFaceLogClient implements Constant{
                     GenericUtils.toBytes(idPhoto),
                     converterFeatureBean.toRight(featureBean),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1345,7 +1796,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 72 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 73 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1357,7 +1808,15 @@ class IFaceLogClient implements Constant{
                     idPhoto,
                     feature,
                     converterFaceBean.toRight(faceBeans)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1367,7 +1826,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 72 GENERIC
+    // 73 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1379,7 +1838,15 @@ class IFaceLogClient implements Constant{
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
                     converterFaceBean.toRight(faceBeans)));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1393,7 +1860,7 @@ class IFaceLogClient implements Constant{
      * @return bean 保存的{@link PersonBean}对象
      * @throws ServiceRuntime
      */
-    // 73 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 74 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1407,7 +1874,15 @@ class IFaceLogClient implements Constant{
                     feature,
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1417,7 +1892,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 73 GENERIC
+    // 74 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1431,7 +1906,15 @@ class IFaceLogClient implements Constant{
                     GenericUtils.toBytes(feature),
                     GenericUtils.toBytesKey(converterFaceBean.toRightValue(faceInfo)),
                     deviceId));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1443,7 +1926,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 74 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 75 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     public PersonBean savePerson(
             PersonBean bean,
             String idPhotoMd5,
@@ -1453,7 +1936,15 @@ class IFaceLogClient implements Constant{
                     converterPersonBean.toRight(bean),
                     idPhotoMd5,
                     featureMd5));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1463,7 +1954,7 @@ class IFaceLogClient implements Constant{
      * @param expiryDate 失效日期
      * @throws ServiceRuntime
      */
-    // 75 SERIVCE PORT : setPersonExpiryDate
+    // 76 SERIVCE PORT : setPersonExpiryDate
     public void setPersonExpiryDate(
             int personId,
             Date expiryDate){
@@ -1471,7 +1962,8 @@ class IFaceLogClient implements Constant{
             service.setPersonExpiryDate(
                     personId,
                     GenericUtils.toLong(expiryDate,Date.class));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }
@@ -1481,7 +1973,7 @@ class IFaceLogClient implements Constant{
      * @param expiryDate 失效日期
      * @throws ServiceRuntime
      */
-    // 76 SERIVCE PORT : setPersonExpiryDateList
+    // 77 SERIVCE PORT : setPersonExpiryDateList
     public void setPersonExpiryDate(
             List<Integer> personIdList,
             Date expiryDate){
@@ -1489,7 +1981,8 @@ class IFaceLogClient implements Constant{
             service.setPersonExpiryDateList(
                     personIdList,
                     GenericUtils.toLong(expiryDate,Date.class));
-        }catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
         }
     }

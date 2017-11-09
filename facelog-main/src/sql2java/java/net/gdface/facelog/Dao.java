@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Function;
 
 
 import net.gdface.facelog.db.IDeviceManager;
@@ -133,6 +134,20 @@ class Dao implements CommonConstant {
     protected List<Integer> _toPrimaryKeyListFromDevices(Collection<DeviceBean> beans){
         return getDeviceManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : DeviceBean to fl_device.id */ 
+    //3-7
+    protected final Function<DeviceBean,Integer> _castDeviceToPk = new Function<DeviceBean,Integer>(){
+            @Override
+            public Integer apply(DeviceBean input) {
+                return null == input ? null : input.getId();
+            }};
+    //3-8
+    /** tranformer : fl_device.id to DeviceBean */ 
+    protected final Function<Integer,DeviceBean> _castDeviceFromPk = new Function<Integer,DeviceBean>(){
+            @Override
+            public DeviceBean apply(Integer input) {
+                return _getDevice(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -274,6 +289,13 @@ class Dao implements CommonConstant {
     protected DeviceGroupBean _setReferencedByGroupIdOnDevice(DeviceBean bean,DeviceGroupBean beanToSet){
         return getDeviceManager().setReferencedByGroupId(bean,beanToSet);
     }
+    /** tranformer : DeviceBean to fl_device.group_id */
+    //8-6
+    protected final Function<DeviceBean,Integer> _castDeviceToGroupId = new Function<DeviceBean,Integer>(){
+            @Override
+            public Integer apply(DeviceBean input) {
+                return null == input ? null : input.getGroupId();
+            }};
     /** 
      * 参见 {@link IDeviceManager#save(DeviceBean)}
      */
@@ -481,6 +503,20 @@ class Dao implements CommonConstant {
     protected List<Integer> _toPrimaryKeyListFromDeviceGroups(Collection<DeviceGroupBean> beans){
         return getDeviceGroupManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : DeviceGroupBean to fl_device_group.id */ 
+    //3-7
+    protected final Function<DeviceGroupBean,Integer> _castDeviceGroupToPk = new Function<DeviceGroupBean,Integer>(){
+            @Override
+            public Integer apply(DeviceGroupBean input) {
+                return null == input ? null : input.getId();
+            }};
+    //3-8
+    /** tranformer : fl_device_group.id to DeviceGroupBean */ 
+    protected final Function<Integer,DeviceGroupBean> _castDeviceGroupFromPk = new Function<Integer,DeviceGroupBean>(){
+            @Override
+            public DeviceGroupBean apply(Integer input) {
+                return _getDeviceGroup(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -811,6 +847,20 @@ class Dao implements CommonConstant {
     protected List<Integer> _toPrimaryKeyListFromPersons(Collection<PersonBean> beans){
         return getPersonManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : PersonBean to fl_person.id */ 
+    //3-7
+    protected final Function<PersonBean,Integer> _castPersonToPk = new Function<PersonBean,Integer>(){
+            @Override
+            public Integer apply(PersonBean input) {
+                return null == input ? null : input.getId();
+            }};
+    //3-8
+    /** tranformer : fl_person.id to PersonBean */ 
+    protected final Function<Integer,PersonBean> _castPersonFromPk = new Function<Integer,PersonBean>(){
+            @Override
+            public PersonBean apply(Integer input) {
+                return _getPerson(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -952,6 +1002,13 @@ class Dao implements CommonConstant {
     protected ImageBean _setReferencedByImageMd5OnPerson(PersonBean bean,ImageBean beanToSet){
         return getPersonManager().setReferencedByImageMd5(bean,beanToSet);
     }
+    /** tranformer : PersonBean to fl_person.image_md5 */
+    //8-6
+    protected final Function<PersonBean,String> _castPersonToImageMd5 = new Function<PersonBean,String>(){
+            @Override
+            public String apply(PersonBean input) {
+                return null == input ? null : input.getImageMd5();
+            }};
     /**
      * 返回外键(fl_person.group_id)引用的 fl_person_group 记录
      * @param bean
@@ -972,6 +1029,13 @@ class Dao implements CommonConstant {
     protected PersonGroupBean _setReferencedByGroupIdOnPerson(PersonBean bean,PersonGroupBean beanToSet){
         return getPersonManager().setReferencedByGroupId(bean,beanToSet);
     }
+    /** tranformer : PersonBean to fl_person.group_id */
+    //8-6
+    protected final Function<PersonBean,Integer> _castPersonToGroupId = new Function<PersonBean,Integer>(){
+            @Override
+            public Integer apply(PersonBean input) {
+                return null == input ? null : input.getGroupId();
+            }};
     /** 
      * 参见 {@link IPersonManager#save(PersonBean)}
      */
@@ -1181,6 +1245,20 @@ class Dao implements CommonConstant {
     protected List<Integer> _toPrimaryKeyListFromPersonGroups(Collection<PersonGroupBean> beans){
         return getPersonGroupManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : PersonGroupBean to fl_person_group.id */ 
+    //3-7
+    protected final Function<PersonGroupBean,Integer> _castPersonGroupToPk = new Function<PersonGroupBean,Integer>(){
+            @Override
+            public Integer apply(PersonGroupBean input) {
+                return null == input ? null : input.getId();
+            }};
+    //3-8
+    /** tranformer : fl_person_group.id to PersonGroupBean */ 
+    protected final Function<Integer,PersonGroupBean> _castPersonGroupFromPk = new Function<Integer,PersonGroupBean>(){
+            @Override
+            public PersonGroupBean apply(Integer input) {
+                return _getPersonGroup(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -1511,6 +1589,20 @@ class Dao implements CommonConstant {
     protected List<Integer> _toPrimaryKeyListFromFaces(Collection<FaceBean> beans){
         return getFaceManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : FaceBean to fl_face.id */ 
+    //3-7
+    protected final Function<FaceBean,Integer> _castFaceToPk = new Function<FaceBean,Integer>(){
+            @Override
+            public Integer apply(FaceBean input) {
+                return null == input ? null : input.getId();
+            }};
+    //3-8
+    /** tranformer : fl_face.id to FaceBean */ 
+    protected final Function<Integer,FaceBean> _castFaceFromPk = new Function<Integer,FaceBean>(){
+            @Override
+            public FaceBean apply(Integer input) {
+                return _getFace(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -1632,6 +1724,13 @@ class Dao implements CommonConstant {
     protected FeatureBean _setReferencedByFeatureMd5OnFace(FaceBean bean,FeatureBean beanToSet){
         return getFaceManager().setReferencedByFeatureMd5(bean,beanToSet);
     }
+    /** tranformer : FaceBean to fl_face.feature_md5 */
+    //8-6
+    protected final Function<FaceBean,String> _castFaceToFeatureMd5 = new Function<FaceBean,String>(){
+            @Override
+            public String apply(FaceBean input) {
+                return null == input ? null : input.getFeatureMd5();
+            }};
     /**
      * 返回外键(fl_face.image_md5)引用的 fl_image 记录
      * @param bean
@@ -1652,6 +1751,13 @@ class Dao implements CommonConstant {
     protected ImageBean _setReferencedByImageMd5OnFace(FaceBean bean,ImageBean beanToSet){
         return getFaceManager().setReferencedByImageMd5(bean,beanToSet);
     }
+    /** tranformer : FaceBean to fl_face.image_md5 */
+    //8-6
+    protected final Function<FaceBean,String> _castFaceToImageMd5 = new Function<FaceBean,String>(){
+            @Override
+            public String apply(FaceBean input) {
+                return null == input ? null : input.getImageMd5();
+            }};
     /** 
      * 添加新记录<br>
      * fl_face 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FaceBean#isNew()}返回{@code false},则抛出异常
@@ -1820,6 +1926,20 @@ class Dao implements CommonConstant {
     protected List<String> _toPrimaryKeyListFromFeatures(Collection<FeatureBean> beans){
         return getFeatureManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : FeatureBean to fl_feature.md5 */ 
+    //3-7
+    protected final Function<FeatureBean,String> _castFeatureToPk = new Function<FeatureBean,String>(){
+            @Override
+            public String apply(FeatureBean input) {
+                return null == input ? null : input.getMd5();
+            }};
+    //3-8
+    /** tranformer : fl_feature.md5 to FeatureBean */ 
+    protected final Function<String,FeatureBean> _castFeatureFromPk = new Function<String,FeatureBean>(){
+            @Override
+            public FeatureBean apply(String input) {
+                return _getFeature(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -1961,6 +2081,13 @@ class Dao implements CommonConstant {
     protected PersonBean _setReferencedByPersonIdOnFeature(FeatureBean bean,PersonBean beanToSet){
         return getFeatureManager().setReferencedByPersonId(bean,beanToSet);
     }
+    /** tranformer : FeatureBean to fl_feature.person_id */
+    //8-6
+    protected final Function<FeatureBean,Integer> _castFeatureToPersonId = new Function<FeatureBean,Integer>(){
+            @Override
+            public Integer apply(FeatureBean input) {
+                return null == input ? null : input.getPersonId();
+            }};
     /** 
      * 添加新记录<br>
      * fl_feature 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link FeatureBean#isNew()}返回{@code false},则抛出异常
@@ -2129,6 +2256,20 @@ class Dao implements CommonConstant {
     protected List<String> _toPrimaryKeyListFromImages(Collection<ImageBean> beans){
         return getImageManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : ImageBean to fl_image.md5 */ 
+    //3-7
+    protected final Function<ImageBean,String> _castImageToPk = new Function<ImageBean,String>(){
+            @Override
+            public String apply(ImageBean input) {
+                return null == input ? null : input.getMd5();
+            }};
+    //3-8
+    /** tranformer : fl_image.md5 to ImageBean */ 
+    protected final Function<String,ImageBean> _castImageFromPk = new Function<String,ImageBean>(){
+            @Override
+            public ImageBean apply(String input) {
+                return _getImage(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -2270,6 +2411,13 @@ class Dao implements CommonConstant {
     protected DeviceBean _setReferencedByDeviceIdOnImage(ImageBean bean,DeviceBean beanToSet){
         return getImageManager().setReferencedByDeviceId(bean,beanToSet);
     }
+    /** tranformer : ImageBean to fl_image.device_id */
+    //8-6
+    protected final Function<ImageBean,Integer> _castImageToDeviceId = new Function<ImageBean,Integer>(){
+            @Override
+            public Integer apply(ImageBean input) {
+                return null == input ? null : input.getDeviceId();
+            }};
     /** 
      * 添加新记录<br>
      * fl_image 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link ImageBean#isNew()}返回{@code false},则抛出异常
@@ -2405,6 +2553,20 @@ class Dao implements CommonConstant {
     protected List<Integer> _toPrimaryKeyListFromLogs(Collection<LogBean> beans){
         return getLogManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : LogBean to fl_log.id */ 
+    //3-7
+    protected final Function<LogBean,Integer> _castLogToPk = new Function<LogBean,Integer>(){
+            @Override
+            public Integer apply(LogBean input) {
+                return null == input ? null : input.getId();
+            }};
+    //3-8
+    /** tranformer : fl_log.id to LogBean */ 
+    protected final Function<Integer,LogBean> _castLogFromPk = new Function<Integer,LogBean>(){
+            @Override
+            public LogBean apply(Integer input) {
+                return _getLog(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 
@@ -2506,6 +2668,13 @@ class Dao implements CommonConstant {
     protected DeviceBean _setReferencedByDeviceIdOnLog(LogBean bean,DeviceBean beanToSet){
         return getLogManager().setReferencedByDeviceId(bean,beanToSet);
     }
+    /** tranformer : LogBean to fl_log.device_id */
+    //8-6
+    protected final Function<LogBean,Integer> _castLogToDeviceId = new Function<LogBean,Integer>(){
+            @Override
+            public Integer apply(LogBean input) {
+                return null == input ? null : input.getDeviceId();
+            }};
     /**
      * 返回外键(fl_log.compare_face)引用的 fl_face 记录
      * @param bean
@@ -2526,6 +2695,13 @@ class Dao implements CommonConstant {
     protected FaceBean _setReferencedByCompareFaceOnLog(LogBean bean,FaceBean beanToSet){
         return getLogManager().setReferencedByCompareFace(bean,beanToSet);
     }
+    /** tranformer : LogBean to fl_log.compare_face */
+    //8-6
+    protected final Function<LogBean,Integer> _castLogToCompareFace = new Function<LogBean,Integer>(){
+            @Override
+            public Integer apply(LogBean input) {
+                return null == input ? null : input.getCompareFace();
+            }};
     /**
      * 返回外键(fl_log.verify_feature)引用的 fl_feature 记录
      * @param bean
@@ -2546,6 +2722,13 @@ class Dao implements CommonConstant {
     protected FeatureBean _setReferencedByVerifyFeatureOnLog(LogBean bean,FeatureBean beanToSet){
         return getLogManager().setReferencedByVerifyFeature(bean,beanToSet);
     }
+    /** tranformer : LogBean to fl_log.verify_feature */
+    //8-6
+    protected final Function<LogBean,String> _castLogToVerifyFeature = new Function<LogBean,String>(){
+            @Override
+            public String apply(LogBean input) {
+                return null == input ? null : input.getVerifyFeature();
+            }};
     /**
      * 返回外键(fl_log.person_id)引用的 fl_person 记录
      * @param bean
@@ -2566,6 +2749,13 @@ class Dao implements CommonConstant {
     protected PersonBean _setReferencedByPersonIdOnLog(LogBean bean,PersonBean beanToSet){
         return getLogManager().setReferencedByPersonId(bean,beanToSet);
     }
+    /** tranformer : LogBean to fl_log.person_id */
+    //8-6
+    protected final Function<LogBean,Integer> _castLogToPersonId = new Function<LogBean,Integer>(){
+            @Override
+            public Integer apply(LogBean input) {
+                return null == input ? null : input.getPersonId();
+            }};
     /** 
      * 添加新记录<br>
      * fl_log 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link LogBean#isNew()}返回{@code false},则抛出异常
@@ -2849,6 +3039,13 @@ class Dao implements CommonConstant {
     protected DeviceGroupBean _setReferencedByDeviceGroupIdOnPermit(PermitBean bean,DeviceGroupBean beanToSet){
         return getPermitManager().setReferencedByDeviceGroupId(bean,beanToSet);
     }
+    /** tranformer : PermitBean to fl_permit.device_group_id */
+    //8-6
+    protected final Function<PermitBean,Integer> _castPermitToDeviceGroupId = new Function<PermitBean,Integer>(){
+            @Override
+            public Integer apply(PermitBean input) {
+                return null == input ? null : input.getDeviceGroupId();
+            }};
     /**
      * 返回外键(fl_permit.person_group_id)引用的 fl_person_group 记录
      * @param bean
@@ -2869,6 +3066,13 @@ class Dao implements CommonConstant {
     protected PersonGroupBean _setReferencedByPersonGroupIdOnPermit(PermitBean bean,PersonGroupBean beanToSet){
         return getPermitManager().setReferencedByPersonGroupId(bean,beanToSet);
     }
+    /** tranformer : PermitBean to fl_permit.person_group_id */
+    //8-6
+    protected final Function<PermitBean,Integer> _castPermitToPersonGroupId = new Function<PermitBean,Integer>(){
+            @Override
+            public Integer apply(PermitBean input) {
+                return null == input ? null : input.getPersonGroupId();
+            }};
     /** 
      * 添加新记录<br>
      * fl_permit 表只支持添加删除,不支持修改,所以如果数据库中已经存在相同记录或{@link PermitBean#isNew()}返回{@code false},则抛出异常
@@ -3057,6 +3261,20 @@ class Dao implements CommonConstant {
     protected List<String> _toPrimaryKeyListFromStores(Collection<StoreBean> beans){
         return getStoreManager().toPrimaryKeyList(beans);
     }
+    /** tranformer : StoreBean to fl_store.md5 */ 
+    //3-7
+    protected final Function<StoreBean,String> _castStoreToPk = new Function<StoreBean,String>(){
+            @Override
+            public String apply(StoreBean input) {
+                return null == input ? null : input.getMd5();
+            }};
+    //3-8
+    /** tranformer : fl_store.md5 to StoreBean */ 
+    protected final Function<String,StoreBean> _castStoreFromPk = new Function<String,StoreBean>(){
+            @Override
+            public StoreBean apply(String input) {
+                return _getStore(input);
+            }};
     /** 
      *　判断主键指定的记录是否存在
      * 

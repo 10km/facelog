@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Function;
 
 #join($tables '
 import ${schemaPkg}.${e.asManagerInterfaceNSP()};
@@ -39,6 +40,11 @@ class Dao implements CommonConstant {
 #set ($beanClass = $table.asBeanClassNSP())
 #set ($coreClass = $table.asCoreClassNSP())
 #set ($primaryKeys = $table.primaryKeys)
+#if($table.countPrimaryKeys() == 1)
+#set ( $primaryKey = $table.primaryKey)
+#else
+#set ( $primaryKey = $null)
+#end
 #define($fullVarNames)#join($primaryKeys '$e.fullVarName' ',')#end
 #define($fullParams)#join($primaryKeys '$e.javaType $e.fullVarName' ',')#end
 #define($fullParamComments)#join($primaryKeys '
@@ -66,27 +72,42 @@ class Dao implements CommonConstant {
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)}
      */
     //2    
-    $!{modifier}List<$beanClass> _get${coreClass}s(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
-        return ${table.getGetManagerMethod()}().loadByPrimaryKey(${table.primaryKey.varName}Collection);
+    $!{modifier}List<$beanClass> _get${coreClass}s(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection){
+        return ${table.getGetManagerMethod()}().loadByPrimaryKey(${primaryKey.varName}Collection);
     }
     /** 
-     * 删除主键列表({@code ${table.primaryKey.varName}Collection})指定的记录
+     * 删除主键列表({@code ${primaryKey.varName}Collection})指定的记录
      * @return 返回删除的记录条数
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}deleteByPrimaryKey(Collection)}
      */
     //3  
-    $!{modifier}int _delete${coreClass}sByPrimaryKey(Collection<$table.primaryKey.javaType> ${table.primaryKey.varName}Collection){
-        if(null == ${table.primaryKey.varName}Collection)return 0;
+    $!{modifier}int _delete${coreClass}sByPrimaryKey(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection){
+        if(null == ${primaryKey.varName}Collection)return 0;
         int count =0;
-        for($table.primaryKey.javaType $table.primaryKey.varName:${table.primaryKey.varName}Collection){
-            count += _delete${coreClass}($table.primaryKey.varName);
+        for($primaryKey.javaType $primaryKey.varName:${primaryKey.varName}Collection){
+            count += _delete${coreClass}($primaryKey.varName);
         }
         return count;
     }
     //3-5
-    $!{modifier}List<$table.primaryKey.javaType> _toPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
+    $!{modifier}List<$primaryKey.javaType> _toPrimaryKeyListFrom${coreClass}s(Collection<$beanClass> beans){
         return ${table.getGetManagerMethod()}().toPrimaryKeyList(beans);
     }
+###### CONVERTER BETWEEN BEAN AND PRIMARY KEY########
+    /** tranformer : $beanClass to $primaryKey.fullName */ 
+    //3-7
+    $!{modifier}final Function<$beanClass,$primaryKey.javaType> _cast${coreClass}ToPk = new Function<$beanClass,$primaryKey.javaType>(){
+            @Override
+            public $primaryKey.javaType apply($beanClass input) {
+                return null == input ? null : input.$primaryKey.getGetMethod()();
+            }};
+    //3-8
+    /** tranformer : $primaryKey.fullName to $beanClass */ 
+    $!{modifier}final Function<$primaryKey.javaType,$beanClass> _cast${coreClass}FromPk = new Function<$primaryKey.javaType,$beanClass>(){
+            @Override
+            public $beanClass apply($primaryKey.javaType input) {
+                return _get${coreClass}(input);
+            }};
 #end
     /** 
      *　判断主键指定的记录是否存在
@@ -156,8 +177,8 @@ class Dao implements CommonConstant {
     }
 ################# CHECK DUPLICATE PRIMARY KEY##########
 #if($table.countPrimaryKeys() == 1)
-#set ($checkReturnType = $table.primaryKey.javaType)
-#set ($checkReturnComment = "@return always {@code $table.primaryKey.fullVarName} ")
+#set ($checkReturnType = $primaryKey.javaType)
+#set ($checkReturnComment = "@return always {@code $primaryKey.fullVarName} ")
 #else
 #set ($checkReturnType = 'void')
 #set ($checkReturnComment = "")
@@ -174,7 +195,7 @@ class Dao implements CommonConstant {
         if(${table.getGetManagerMethod()}().existsPrimaryKey($fullVarNames))
             throw new DuplicateReord();
 #if($table.countPrimaryKeys() == 1)
-        return $table.primaryKey.fullVarName;
+        return $primaryKey.fullVarName;
 #end
     }
 #end
@@ -246,6 +267,17 @@ class Dao implements CommonConstant {
     $!{modifier}$foreignClass _$table.getReferencedVarSetMethod($fkName)On${coreClass}($beanClass bean,$foreignClass beanToSet){
         return ${table.getGetManagerMethod()}().$table.getReferencedVarSetMethod($fkName)(bean,beanToSet);
     }
+###### CONVERTER BETWEEN BEAN AND FOREIGN KEY########    
+#if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
+#set ($fkCol = $fkObj.columns[0])
+    /** tranformer : $beanClass to $fkCol.fullName */
+    //8-6
+    $!{modifier}final Function<$beanClass,$fkCol.javaType> _cast${coreClass}To${strUtil.convertName($fkCol.name,false)} = new Function<$beanClass,$fkCol.javaType>(){
+            @Override
+            public $fkCol.javaType apply($beanClass input) {
+                return null == input ? null : input.$fkCol.getGetMethod()();
+            }};
+#end###if(!$table.isSelfRef($fkObj) && $fkObj.columns.size() == 1)
 #end###foreach( $fkName in $table.getFkMapNames($foreignTable.name) )
 #end###foreach ($foreignTable in $foreignTables)
 ################### METHOD FOR SELF-REFERENCE FIELD#################
@@ -497,14 +529,14 @@ class Dao implements CommonConstant {
         return ${table.getGetManagerMethod()}().countWhere(where);
     }
 #if($table.countPrimaryKeys() == 1)
-#set ($pkName = $strUtil.convertName($table.primaryKey.name,false))
+#set ($pkName = $strUtil.convertName($primaryKey.name,false))
     /** 
      * 查询{@code where}条件指定的记录
      * @return 返回查询结果记录的主键
      * @see ${esc.hash}_load${coreClass}ByWhere(String,int,int)
      */
     //18
-    $!{modifier}List<$table.primaryKey.javaType> _load${coreClass}${pkName}ByWhere(String where){
+    $!{modifier}List<$primaryKey.javaType> _load${coreClass}${pkName}ByWhere(String where){
         return _toPrimaryKeyListFrom${coreClass}s(_load${coreClass}ByWhere(where,1,-1));
     }
 #end
@@ -550,7 +582,7 @@ class Dao implements CommonConstant {
         return _count${coreClass}ByWhere(makeWhere(timestamp,"$timestampColumn"));
     }
 #if($table.countPrimaryKeys() == 1)
-#set ($pkName = $strUtil.convertName($table.primaryKey.name,false))
+#set ($pkName = $strUtil.convertName($primaryKey.name,false))
     /** 
      * (主动更新机制实现)<br>
      * 返回 ${table.name}.$timestampColumn 字段大于指定时间戳({@code timestamp})的所有记录
@@ -558,7 +590,7 @@ class Dao implements CommonConstant {
      * @see {@link ${esc.hash}_load${coreClass}${pkName}ByWhere(String)} 
      */
     //21
-    $!{modifier}List<$table.primaryKey.javaType> _load${coreClass}${pkName}By${m_suffix}(Date timestamp){
+    $!{modifier}List<$primaryKey.javaType> _load${coreClass}${pkName}By${m_suffix}(Date timestamp){
         return _load${coreClass}${pkName}ByWhere(makeWhere(timestamp,"$timestampColumn"));
     }
 #end

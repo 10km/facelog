@@ -200,6 +200,14 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		}
 		return count;
 	}
+	protected Integer _getDeviceIdOfFeature(String featureMd5){
+		for(String imageMd5: _getImageKeysImportedByFeatureMd5(featureMd5)){
+			ImageBean imageBean = _getImage(imageMd5);
+			if(null !=imageBean)
+				return imageBean.getDeviceId();
+		}
+		return null;
+	}
 	protected PersonBean _setRefPersonOfFeature(String featureMd5,Integer personId){
 		PersonBean personBean = _getPerson(personId);
 		FeatureBean featureBean = _getFeature(featureMd5);
@@ -208,11 +216,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 
 	protected List<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
-		ArrayList<String> imageBeans = new ArrayList<String>();
-		for(FaceBean faceBean:_getFaceBeansByFeatureMd5OnFeature(featureMd5)){
-			imageBeans.add(faceBean.getImageMd5());
-		}
-		return imageBeans;
+		return Lists.transform(_getFaceBeansByFeatureMd5OnFeature(featureMd5), this._castFaceToImageMd5);
 	}
 	protected PersonBean _replaceFeature(Integer personId,String featureMd5,boolean deleteImage){		
 		_deleteAllFeaturesByPersonId(personId, deleteImage);
@@ -317,11 +321,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 	protected List<PersonBean> _loadUpdatedPersons(Date timestamp) {
 		List<PersonBean> persons =_loadPersonByUpdateTime(timestamp);		
-		Map<Integer,PersonBean>m = Maps.uniqueIndex(persons,new Function<PersonBean,Integer>(){
-			@Override
-			public Integer apply(PersonBean input) {
-				return input.getId();
-			}});
+		Map<Integer,PersonBean>m = Maps.uniqueIndex(persons,this._castPersonToPk);
 		Integer refPerson;
 		for(FeatureBean feature:_loadFeatureByUpdateTime(timestamp)){
 			refPerson = feature.getPersonId();
@@ -853,7 +853,14 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			throw new ServiceRuntime(e);
 		}
 	}
-
+	@Override
+	public Integer getDeviceIdOfFeature(String featureMd5) throws ServiceRuntime{
+		try{
+			return _getDeviceIdOfFeature(featureMd5);
+		}catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		}
+	}
 	@Override
 	public int deleteImage(String imageMd5)throws ServiceRuntime{
 		try{
