@@ -543,10 +543,15 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @param deviceId 图像来源设备id,可为null
 	 * @return 保存的人脸特征记录{@link FeatureBean}
 	 * @throws ServiceRuntime
+	 * @throws DuplicateReord 
 	 */
-	@ThriftMethod("addFeatureMulti")
+	@ThriftMethod(value = "addFeatureMulti",
+			exception = {
+            @ThriftException(type=ServiceRuntime.class, id=1),
+            @ThriftException(type=DuplicateReord.class, id=2)
+			})
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo, Integer deviceId)
-			throws ServiceRuntime {
+			throws ServiceRuntime, DuplicateReord {
 		return null;
 	}
 
@@ -597,7 +602,16 @@ public abstract class FaceLogDefinition extends Dao{
 	public List<FeatureBean> getFeatures(List<String> md5) throws ServiceRuntime {
 		return null;
 	}
-
+	/**
+	 * 返回指定人员{@code personId}关联的所有特征<br>
+	 * @param personId
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public List<String> getFeaturesOfPerson(int personId)throws ServiceRuntime{
+		return null;
+	}
 	/**
 	 * 根据MD5校验码返回人脸特征数据
 	 * @param md5
@@ -655,7 +669,7 @@ public abstract class FaceLogDefinition extends Dao{
 	/**
 	 * 删除imageMd5指定图像及其缩略图
 	 * @param imageMd5
-	 * @return
+	 * @return 删除成功返回1,否则返回0
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
@@ -849,12 +863,14 @@ public abstract class FaceLogDefinition extends Dao{
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      */
+	@ThriftMethod
     public List<DeviceGroupBean> loadDeviceGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
 		return null;
     }
     /**
      * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
      */
+    @ThriftMethod
     public int countDeviceGroupByWhere(String where)throws ServiceRuntime{
 		return 0;
     }
@@ -863,6 +879,7 @@ public abstract class FaceLogDefinition extends Dao{
      * @return 返回查询结果记录的主键
      * @see #loadDeviceGroupByWhere(String,int,int)
      */
+    @ThriftMethod
     public List<Integer> loadDeviceGroupIdByWhere(String where)throws ServiceRuntime{
 		return null;
     }
@@ -952,6 +969,7 @@ public abstract class FaceLogDefinition extends Dao{
      * @param startRow 返回记录的起始行(首行=1,尾行=-1)
      * @param numRows 返回记录条数(<0时返回所有记录)
      */
+	@ThriftMethod
     public List<PersonGroupBean> loadPersonGroupByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
 		return null;    	
     }
@@ -959,6 +977,7 @@ public abstract class FaceLogDefinition extends Dao{
      * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
      * @see {@link IPersonGroupManager#Where(String)}
      */
+	@ThriftMethod
     public int countPersonGroupByWhere(String where)throws ServiceRuntime{
 		return 0;
     }
@@ -968,6 +987,7 @@ public abstract class FaceLogDefinition extends Dao{
      * @see #loadPersonGroupByWhere(String,int,int)
      * @throws ServiceRuntime
      */
+	@ThriftMethod
     public List<Integer> loadPersonGroupIdByWhere(String where)throws ServiceRuntime{
 		return null;
     }

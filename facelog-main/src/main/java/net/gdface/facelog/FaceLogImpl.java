@@ -153,7 +153,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		_deleteStore(imageMd5);
 		ImageBean imageBean = _getImage(imageMd5);
 		if(null == imageBean)return 0;
-		_deleteImage(imageBean.getThumbMd5());
+		String thumbMd5 = imageBean.getThumbMd5();
+		if( !Strings.isNullOrEmpty(thumbMd5)&& !imageBean.getMd5().equals(thumbMd5))
+			_deleteImage(thumbMd5);
 		return super._deleteImage(imageMd5);
 	}
 
@@ -770,14 +772,12 @@ public class FaceLogImpl extends FaceLogDefinition  {
 
 	@Override
 	public FeatureBean addFeature(ByteBuffer feature, Integer personId, Map<ByteBuffer, FaceBean> faceInfo,
-			Integer deviceId) throws ServiceRuntime {
+			Integer deviceId) throws ServiceRuntime, DuplicateReord {
 		try {
 			return _addFeature(feature, _getPerson(personId), faceInfo, _getDevice(deviceId));
 		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
-		} catch (DuplicateReord e) {
-			throw new ServiceRuntime(e);
-		}
+		} 
 	}
 
 	@Override
@@ -815,7 +815,16 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			throw new ServiceRuntime(e);
 		}
 	}
-
+	@Override
+	public List<String> getFeaturesOfPerson(int personId)throws ServiceRuntime{
+		try{			
+			return Lists.transform(
+					_getFeatureBeansByPersonIdOnPerson(personId),
+					_castFeatureToPk); 
+		}catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		}
+	}
 	@Override
 	public ByteBuffer getFeatureBytes(String md5)throws ServiceRuntime{
 		try{

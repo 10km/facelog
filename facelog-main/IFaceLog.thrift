@@ -150,15 +150,17 @@ struct PermitBean {
 
 service IFaceLog {
   FeatureBean addFeature(1:  binary feature, 2:  i32 personId, 3:  list<FaceBean> faecBeans) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
-  FeatureBean addFeatureMulti(1:  binary feature, 2:  i32 personId, 3:  map<binary, FaceBean> faceInfo, 4:  i32 deviceId) throws (1: ServiceRuntime ex1);
+  FeatureBean addFeatureMulti(1:  binary feature, 2:  i32 personId, 3:  map<binary, FaceBean> faceInfo, 4:  i32 deviceId) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
   ImageBean addImage(1:  binary imageData, 2:  i32 deviceId, 3:  FaceBean faceBean, 4:  i32 personId) throws (1: ServiceRuntime ex1, 2: DuplicateReord ex2);
   void addLog(1:  LogBean bean) throws (1: ServiceRuntime ex1);
   void addLogs(1:  list<LogBean> beans) throws (1: ServiceRuntime ex1);
   void addPermit(1:  DeviceGroupBean deviceGroup, 2:  PersonGroupBean personGroup) throws (1: ServiceRuntime ex1);
   void addPermitById(1:  i32 deviceGroupId, 2:  i32 personGroupId) throws (1: ServiceRuntime ex1);
+  i32 countDeviceGroupByWhere(1:  string where) throws (1: ServiceRuntime ex1);
   i32 countLogByWhere(1:  string where) throws (1: ServiceRuntime ex1);
   i32 countLogLightByVerifyTime(1:  i64 timestamp) throws (1: ServiceRuntime ex1);
   i32 countLogLightByWhere(1:  string where) throws (1: ServiceRuntime ex1);
+  i32 countPersonGroupByWhere(1:  string where) throws (1: ServiceRuntime ex1);
   i32 deleteAllFeaturesByPersonId(1:  i32 personId, 2:  bool deleteImage) throws (1: ServiceRuntime ex1);
   i32 deleteDeviceGroup(1:  i32 deviceGroupId) throws (1: ServiceRuntime ex1);
   list<string> deleteFeature(1:  string featureMd5, 2:  bool deleteImage) throws (1: ServiceRuntime ex1);
@@ -185,6 +187,7 @@ service IFaceLog {
   list<string> getFeatureBeansByPersonId(1:  i32 personId) throws (1: ServiceRuntime ex1);
   binary getFeatureBytes(1:  string md5) throws (1: ServiceRuntime ex1);
   list<FeatureBean> getFeatures(1:  list<string> md5) throws (1: ServiceRuntime ex1);
+  list<string> getFeaturesOfPerson(1:  i32 personId) throws (1: ServiceRuntime ex1);
   bool getGroupPermit(1:  i32 deviceId, 2:  i32 personGroupId) throws (1: ServiceRuntime ex1);
   list<bool> getGroupPermits(1:  i32 deviceId, 2:  list<i32> personGroupIdList) throws (1: ServiceRuntime ex1);
   ImageBean getImage(1:  string imageMD5) throws (1: ServiceRuntime ex1);
@@ -203,12 +206,16 @@ service IFaceLog {
   list<PersonGroupBean> getSubPersonGroup(1:  i32 personGroupId) throws (1: ServiceRuntime ex1);
   bool isDisable(1:  i32 personId) throws (1: ServiceRuntime ex1);
   list<i32> loadAllPerson() throws (1: ServiceRuntime ex1);
+  list<DeviceGroupBean> loadDeviceGroupByWhere(1:  string where, 2:  i32 startRow, 3:  i32 numRows) throws (1: ServiceRuntime ex1);
+  list<i32> loadDeviceGroupIdByWhere(1:  string where) throws (1: ServiceRuntime ex1);
   list<string> loadFeatureMd5ByUpdate(1:  i64 timestamp) throws (1: ServiceRuntime ex1);
   list<LogBean> loadLogByWhere(1:  string where, 2:  i32 startRow, 3:  i32 numRows) throws (1: ServiceRuntime ex1);
   list<LogLightBean> loadLogLightByVerifyTime(1:  i64 timestamp, 2:  i32 startRow, 3:  i32 numRows) throws (1: ServiceRuntime ex1);
   list<LogLightBean> loadLogLightByWhere(1:  string where, 2:  i32 startRow, 3:  i32 numRows) throws (1: ServiceRuntime ex1);
   list<PermitBean> loadPermitByUpdate(1:  i64 timestamp) throws (1: ServiceRuntime ex1);
   list<i32> loadPersonByWhere(1:  string where) throws (1: ServiceRuntime ex1);
+  list<PersonGroupBean> loadPersonGroupByWhere(1:  string where, 2:  i32 startRow, 3:  i32 numRows) throws (1: ServiceRuntime ex1);
+  list<i32> loadPersonGroupIdByWhere(1:  string where) throws (1: ServiceRuntime ex1);
   list<i32> loadPersonIdByUpdateTime(1:  i64 timestamp) throws (1: ServiceRuntime ex1);
   list<i32> loadUpdatedPersons(1:  i64 timestamp) throws (1: ServiceRuntime ex1);
   void replaceFeature(1:  i32 personId, 2:  string featureMd5, 3:  bool deleteOldFeatureImage) throws (1: ServiceRuntime ex1);

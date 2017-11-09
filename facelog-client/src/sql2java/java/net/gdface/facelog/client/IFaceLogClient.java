@@ -129,13 +129,14 @@ class IFaceLogClient implements Constant{
      * @param deviceId 图像来源设备id,可为null
      * @return 保存的人脸特征记录{@link FeatureBean}
      * @throws ServiceRuntime
+     * @throws DuplicateReord
      */
     // 2 SERIVCE PORT : addFeatureMulti
     public FeatureBean addFeature(
             byte[] feature,
             int personId,
             Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId){
+            int deviceId)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
                     feature,
@@ -166,7 +167,7 @@ class IFaceLogClient implements Constant{
             Object feature,
             int personId,
             Map<ByteBuffer, FaceBean> faceInfo,
-            int deviceId){
+            int deviceId)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
             return converterFeatureBean.fromRight(service.addFeatureMulti(
                     GenericUtils.toBytes(feature),
@@ -316,12 +317,24 @@ class IFaceLogClient implements Constant{
         }
     }
     /**
+     * 返回满足{@code where} SQL条件语句的fl_device_group记录总数
+     */
+    // 8 SERIVCE PORT : countDeviceGroupByWhere
+    public int countDeviceGroupByWhere(String where){
+        try{
+            return service.countDeviceGroupByWhere(where);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
      * 返回满足{@code where}条件的日志记录(fl_log)数目
      * @param where 为{@code null}时返回所有记录
      * @return 
      * @throws ServiceRuntime
      */
-    // 8 SERIVCE PORT : countLogByWhere
+    // 9 SERIVCE PORT : countLogByWhere
     public int countLogByWhere(String where){
         try{
             return service.countLogByWhere(where);
@@ -335,7 +348,7 @@ class IFaceLogClient implements Constant{
      * @see #countLogLightByWhere(String)
      * @throws ServiceRuntime
      */
-    // 9 SERIVCE PORT : countLogLightByVerifyTime
+    // 10 SERIVCE PORT : countLogLightByVerifyTime
     public int countLogLightByVerifyTime(Date timestamp){
         try{
             return service.countLogLightByVerifyTime(GenericUtils.toLong(timestamp,Date.class));
@@ -350,10 +363,23 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 10 SERIVCE PORT : countLogLightByWhere
+    // 11 SERIVCE PORT : countLogLightByWhere
     public int countLogLightByWhere(String where){
         try{
             return service.countLogLightByWhere(where);
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 返回满足{@code where} SQL条件语句的 fl_person_group 记录总数
+     * @see {@link IPersonGroupManager#Where(String)}
+     */
+    // 12 SERIVCE PORT : countPersonGroupByWhere
+    public int countPersonGroupByWhere(String where){
+        try{
+            return service.countPersonGroupByWhere(where);
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
@@ -367,7 +393,7 @@ class IFaceLogClient implements Constant{
      * @see #deleteFeature(String, boolean)
      * @throws ServiceRuntime
      */
-    // 11 SERIVCE PORT : deleteAllFeaturesByPersonId
+    // 13 SERIVCE PORT : deleteAllFeaturesByPersonId
     public int deleteAllFeaturesByPersonId(
             int personId,
             boolean deleteImage){
@@ -388,7 +414,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 12 SERIVCE PORT : deleteDeviceGroup
+    // 14 SERIVCE PORT : deleteDeviceGroup
     public int deleteDeviceGroup(int deviceGroupId){
         try{
             return service.deleteDeviceGroup(deviceGroupId);
@@ -405,7 +431,7 @@ class IFaceLogClient implements Constant{
      * {@code deleteImage}为{@code true}时返回空表
      * @throws ServiceRuntime
      */
-    // 13 SERIVCE PORT : deleteFeature
+    // 15 SERIVCE PORT : deleteFeature
     public List<String> deleteFeature(
             String featureMd5,
             boolean deleteImage){
@@ -429,10 +455,10 @@ class IFaceLogClient implements Constant{
     /**
      * 删除imageMd5指定图像及其缩略图
      * @param imageMd5
-     * @return 
+     * @return 删除成功返回1,否则返回0
      * @throws ServiceRuntime
      */
-    // 14 SERIVCE PORT : deleteImage
+    // 16 SERIVCE PORT : deleteImage
     public int deleteImage(String imageMd5){
         try{
             return service.deleteImage(imageMd5);
@@ -449,7 +475,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 15 SERIVCE PORT : deletePermit
+    // 17 SERIVCE PORT : deletePermit
     public int deletePermit(
             DeviceGroupBean deviceGroup,
             PersonGroupBean personGroup){
@@ -468,7 +494,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 16 SERIVCE PORT : deletePerson
+    // 18 SERIVCE PORT : deletePerson
     public int deletePerson(int personId){
         try{
             return service.deletePerson(personId);
@@ -484,7 +510,7 @@ class IFaceLogClient implements Constant{
      * @throws ServiceRuntime
      * @see {@link #deletePerson(int)}
      */
-    // 17 SERIVCE PORT : deletePersonByPapersNum
+    // 19 SERIVCE PORT : deletePersonByPapersNum
     public int deletePersonByPapersNum(String papersNum){
         try{
             return service.deletePersonByPapersNum(papersNum);
@@ -501,7 +527,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 18 SERIVCE PORT : deletePersonGroup
+    // 20 SERIVCE PORT : deletePersonGroup
     public int deletePersonGroup(int personGroupId){
         try{
             return service.deletePersonGroup(personGroupId);
@@ -516,7 +542,7 @@ class IFaceLogClient implements Constant{
      * @return 返回删除的 person 记录数量
      * @throws ServiceRuntime
      */
-    // 19 SERIVCE PORT : deletePersons
+    // 21 SERIVCE PORT : deletePersons
     public int deletePersons(List<Integer> personIdList){
         try{
             return service.deletePersons(personIdList);
@@ -531,7 +557,7 @@ class IFaceLogClient implements Constant{
      * @return 返回删除的 person 记录数量
      * @throws ServiceRuntime
      */
-    // 20 SERIVCE PORT : deletePersonsByPapersNum
+    // 22 SERIVCE PORT : deletePersonsByPapersNum
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         try{
             return service.deletePersonsByPapersNum(papersNumlist);
@@ -546,7 +572,7 @@ class IFaceLogClient implements Constant{
      * @throws ServiceRuntime
      * @see #setPersonExpiryDate(int, long)
      */
-    // 21 SERIVCE PORT : disablePerson
+    // 23 SERIVCE PORT : disablePerson
     public void disablePerson(int personId){
         try{
             service.disablePerson(personId);
@@ -560,7 +586,7 @@ class IFaceLogClient implements Constant{
      * @param personIdList 人员id列表
      * @throws ServiceRuntime
      */
-    // 22 SERIVCE PORT : disablePersonList
+    // 24 SERIVCE PORT : disablePersonList
     public void disablePerson(List<Integer> personIdList){
         try{
             service.disablePersonList(personIdList);
@@ -575,7 +601,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 23 SERIVCE PORT : existsDevice
+    // 25 SERIVCE PORT : existsDevice
     public boolean existsDevice(int id){
         try{
             return service.existsDevice(id);
@@ -590,7 +616,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 24 SERIVCE PORT : existsFeature
+    // 26 SERIVCE PORT : existsFeature
     public boolean existsFeature(String md5){
         try{
             return service.existsFeature(md5);
@@ -605,7 +631,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 25 SERIVCE PORT : existsImage
+    // 27 SERIVCE PORT : existsImage
     public boolean existsImage(String md5){
         try{
             return service.existsImage(md5);
@@ -620,7 +646,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 26 SERIVCE PORT : existsPerson
+    // 28 SERIVCE PORT : existsPerson
     public boolean existsPerson(int persionId){
         try{
             return service.existsPerson(persionId);
@@ -635,7 +661,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 27 SERIVCE PORT : getDevice
+    // 29 SERIVCE PORT : getDevice
     public DeviceBean getDevice(int deviceId){
         try{
             return converterDeviceBean.fromRight(service.getDevice(deviceId));
@@ -659,7 +685,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 28 SERIVCE PORT : getDeviceGroup
+    // 30 SERIVCE PORT : getDeviceGroup
     public DeviceGroupBean getDeviceGroup(int deviceGroupId){
         try{
             return converterDeviceGroupBean.fromRight(service.getDeviceGroup(deviceGroupId));
@@ -683,7 +709,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 29 SERIVCE PORT : getDeviceGroups
+    // 31 SERIVCE PORT : getDeviceGroups
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
         try{
             return converterDeviceGroupBean.fromRight(service.getDeviceGroups(groupIdList));
@@ -706,7 +732,7 @@ class IFaceLogClient implements Constant{
      * @return 如果没有关联的设备则返回{@code null}
      * @throws ServiceRuntime
      */
-    // 30 SERIVCE PORT : getDeviceIdOfFeature
+    // 32 SERIVCE PORT : getDeviceIdOfFeature
     public Integer getDeviceIdOfFeature(String featureMd5){
         try{
             return service.getDeviceIdOfFeature(featureMd5);
@@ -729,7 +755,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 31 SERIVCE PORT : getDevices
+    // 33 SERIVCE PORT : getDevices
     public List<DeviceBean> getDevices(List<Integer> idList){
         try{
             return converterDeviceBean.fromRight(service.getDevices(idList));
@@ -754,7 +780,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 32 SERIVCE PORT : getDevicesOfGroup
+    // 34 SERIVCE PORT : getDevicesOfGroup
     public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
         try{
             return converterDeviceBean.fromRight(service.getDevicesOfGroup(deviceGroupId));
@@ -777,7 +803,7 @@ class IFaceLogClient implements Constant{
      * @return 如果数据库中没有对应的数据则返回null
      * @throws ServiceRuntime
      */
-    // 33 SERIVCE PORT : getFeature
+    // 35 SERIVCE PORT : getFeature
     public FeatureBean getFeature(String md5){
         try{
             return converterFeatureBean.fromRight(service.getFeature(md5));
@@ -800,7 +826,7 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_feature.md5  列表
      * @throws ServiceRuntime
      */
-    // 34 SERIVCE PORT : getFeatureBeansByPersonId
+    // 36 SERIVCE PORT : getFeatureBeansByPersonId
     public List<String> getFeatureBeansByPersonId(int personId){
         try{
             return service.getFeatureBeansByPersonId(personId);
@@ -823,7 +849,7 @@ class IFaceLogClient implements Constant{
      * @return 二进制数据字节数组,如果数据库中没有对应的数据则返回null
      * @throws ServiceRuntime
      */
-    // 35 SERIVCE PORT : getFeatureBytes
+    // 37 SERIVCE PORT : getFeatureBytes
     public byte[] getFeatureBytes(String md5){
         try{
             return service.getFeatureBytes(md5);
@@ -846,10 +872,33 @@ class IFaceLogClient implements Constant{
      * @return {@link FeatureBean}列表
      * @throws ServiceRuntime
      */
-    // 36 SERIVCE PORT : getFeatures
+    // 38 SERIVCE PORT : getFeatures
     public List<FeatureBean> getFeatures(List<String> md5){
         try{
             return converterFeatureBean.fromRight(service.getFeatures(md5));
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 返回指定人员{@code personId}关联的所有特征<br>
+     * @param personId
+     * @return 
+     * @throws ServiceRuntime
+     */
+    // 39 SERIVCE PORT : getFeaturesOfPerson
+    public List<String> getFeaturesOfPerson(int personId){
+        try{
+            return service.getFeaturesOfPerson(personId);
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -872,7 +921,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 37 SERIVCE PORT : getGroupPermit
+    // 40 SERIVCE PORT : getGroupPermit
     public boolean getGroupPermit(
             int deviceId,
             int personGroupId){
@@ -888,7 +937,7 @@ class IFaceLogClient implements Constant{
     /**
      * 参见 {@link #getGroupPermit(Integer, Integer) }
      */
-    // 38 SERIVCE PORT : getGroupPermits
+    // 41 SERIVCE PORT : getGroupPermits
     public List<Boolean> getGroupPermits(
             int deviceId,
             List<Integer> personGroupIdList){
@@ -915,7 +964,7 @@ class IFaceLogClient implements Constant{
      * @return {@link ImageBean} ,如果没有对应记录则返回null
      * @throws ServiceRuntime
      */
-    // 39 SERIVCE PORT : getImage
+    // 42 SERIVCE PORT : getImage
     public ImageBean getImage(String imageMD5){
         try{
             return converterImageBean.fromRight(service.getImage(imageMD5));
@@ -939,7 +988,7 @@ class IFaceLogClient implements Constant{
      * @throws ServiceRuntime
      * @see {@link #getBinary(String)}
      */
-    // 40 SERIVCE PORT : getImageBytes
+    // 43 SERIVCE PORT : getImageBytes
     public byte[] getImageBytes(String imageMD5){
         try{
             return service.getImageBytes(imageMD5);
@@ -962,7 +1011,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 41 SERIVCE PORT : getImagesAssociatedByFeature
+    // 44 SERIVCE PORT : getImagesAssociatedByFeature
     public List<String> getImagesAssociatedByFeature(String featureMd5){
         try{
             return service.getImagesAssociatedByFeature(featureMd5);
@@ -985,7 +1034,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 42 SERIVCE PORT : getLogBeansByPersonId
+    // 45 SERIVCE PORT : getLogBeansByPersonId
     public List<LogBean> getLogBeansByPersonId(int personId){
         try{
             return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
@@ -1008,7 +1057,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 43 SERIVCE PORT : getPerson
+    // 46 SERIVCE PORT : getPerson
     public PersonBean getPerson(int personId){
         try{
             return converterPersonBean.fromRight(service.getPerson(personId));
@@ -1031,7 +1080,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 44 SERIVCE PORT : getPersonByPapersNum
+    // 47 SERIVCE PORT : getPersonByPapersNum
     public PersonBean getPersonByPapersNum(String papersNum){
         try{
             return converterPersonBean.fromRight(service.getPersonByPapersNum(papersNum));
@@ -1055,7 +1104,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 45 SERIVCE PORT : getPersonGroup
+    // 48 SERIVCE PORT : getPersonGroup
     public PersonGroupBean getPersonGroup(int personGroupId){
         try{
             return converterPersonGroupBean.fromRight(service.getPersonGroup(personGroupId));
@@ -1079,7 +1128,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 46 SERIVCE PORT : getPersonGroups
+    // 49 SERIVCE PORT : getPersonGroups
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
         try{
             return converterPersonGroupBean.fromRight(service.getPersonGroups(groupIdList));
@@ -1105,7 +1154,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 47 SERIVCE PORT : getPersonPermit
+    // 50 SERIVCE PORT : getPersonPermit
     public boolean getPersonPermit(
             int deviceId,
             int personId){
@@ -1121,7 +1170,7 @@ class IFaceLogClient implements Constant{
     /**
      * 参见 {@link #getPersonPermit(Integer, Integer) }
      */
-    // 48 SERIVCE PORT : getPersonPermits
+    // 51 SERIVCE PORT : getPersonPermits
     public List<Boolean> getPersonPermits(
             int deviceId,
             List<Integer> personIdList){
@@ -1148,7 +1197,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 49 SERIVCE PORT : getPersons
+    // 52 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         try{
             return converterPersonBean.fromRight(service.getPersons(idList));
@@ -1173,7 +1222,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 50 SERIVCE PORT : getPersonsOfGroup
+    // 53 SERIVCE PORT : getPersonsOfGroup
     public List<PersonBean> getPersonsOfGroup(int personGroupId){
         try{
             return converterPersonBean.fromRight(service.getPersonsOfGroup(personGroupId));
@@ -1198,7 +1247,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 51 SERIVCE PORT : getSubDeviceGroup
+    // 54 SERIVCE PORT : getSubDeviceGroup
     public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
         try{
             return converterDeviceGroupBean.fromRight(service.getSubDeviceGroup(deviceGroupId));
@@ -1223,7 +1272,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 52 SERIVCE PORT : getSubPersonGroup
+    // 55 SERIVCE PORT : getSubPersonGroup
     public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
         try{
             return converterPersonGroupBean.fromRight(service.getSubPersonGroup(personGroupId));
@@ -1246,7 +1295,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 53 SERIVCE PORT : isDisable
+    // 56 SERIVCE PORT : isDisable
     public boolean isDisable(int personId){
         try{
             return service.isDisable(personId);
@@ -1260,10 +1309,61 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 54 SERIVCE PORT : loadAllPerson
+    // 57 SERIVCE PORT : loadAllPerson
     public List<Integer> loadAllPerson(){
         try{
             return service.loadAllPerson();
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
+     */
+    // 58 SERIVCE PORT : loadDeviceGroupByWhere
+    public List<DeviceGroupBean> loadDeviceGroupByWhere(
+            String where,
+            int startRow,
+            int numRows){
+        try{
+            return converterDeviceGroupBean.fromRight(service.loadDeviceGroupByWhere(
+                    where,
+                    startRow,
+                    numRows));
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 查询{@code where}条件指定的记录
+     * @return 返回查询结果记录的主键
+     * @see #loadDeviceGroupByWhere(String,int,int)
+     */
+    // 59 SERIVCE PORT : loadDeviceGroupIdByWhere
+    public List<Integer> loadDeviceGroupIdByWhere(String where){
+        try{
+            return service.loadDeviceGroupIdByWhere(where);
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1284,7 +1384,7 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_feature.md5 列表
      * @throws ServiceRuntime
      */
-    // 55 SERIVCE PORT : loadFeatureMd5ByUpdate
+    // 60 SERIVCE PORT : loadFeatureMd5ByUpdate
     public List<String> loadFeatureMd5ByUpdate(Date timestamp){
         try{
             return service.loadFeatureMd5ByUpdate(GenericUtils.toLong(timestamp,Date.class));
@@ -1310,7 +1410,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 56 SERIVCE PORT : loadLogByWhere
+    // 61 SERIVCE PORT : loadLogByWhere
     public List<LogBean> loadLogByWhere(
             String where,
             int startRow,
@@ -1340,7 +1440,7 @@ class IFaceLogClient implements Constant{
      * @throws IllegalArgumentException {@code timestamp}为{@code null}时
      * @throws ServiceRuntime
      */
-    // 57 SERIVCE PORT : loadLogLightByVerifyTime
+    // 62 SERIVCE PORT : loadLogLightByVerifyTime
     public List<LogLightBean> loadLogLightByVerifyTime(
             Date timestamp,
             int startRow,
@@ -1372,7 +1472,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 58 SERIVCE PORT : loadLogLightByWhere
+    // 63 SERIVCE PORT : loadLogLightByWhere
     public List<LogLightBean> loadLogLightByWhere(
             String where,
             int startRow,
@@ -1403,7 +1503,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 59 SERIVCE PORT : loadPermitByUpdate
+    // 64 SERIVCE PORT : loadPermitByUpdate
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
         try{
             return converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)));
@@ -1426,10 +1526,62 @@ class IFaceLogClient implements Constant{
      * @return 返回 fl_person.id 列表
      * @throws ServiceRuntime
      */
-    // 60 SERIVCE PORT : loadPersonByWhere
+    // 65 SERIVCE PORT : loadPersonByWhere
     public List<Integer> loadPersonByWhere(String where){
         try{
             return service.loadPersonByWhere(where);
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 查询{@code where} SQL条件语句指定的记录
+     * @param where SQL 条件语句,为{@code null}或空时加载所有记录
+     * @param startRow 返回记录的起始行(首行=1,尾行=-1)
+     * @param numRows 返回记录条数(<0时返回所有记录)
+     */
+    // 66 SERIVCE PORT : loadPersonGroupByWhere
+    public List<PersonGroupBean> loadPersonGroupByWhere(
+            String where,
+            int startRow,
+            int numRows){
+        try{
+            return converterPersonGroupBean.fromRight(service.loadPersonGroupByWhere(
+                    where,
+                    startRow,
+                    numRows));
+        }
+        catch(RuntimeTApplicationException e){
+            Throwable cause = e.getCause();
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
+                return null;
+            }
+            throw e;
+        }
+        catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
+            throw new ServiceRuntime(e);
+        }
+    }
+    /**
+     * 查询{@code where}条件指定的记录
+     * @return 返回查询结果记录的主键
+     * @see #loadPersonGroupByWhere(String,int,int)
+     * @throws ServiceRuntime
+     */
+    // 67 SERIVCE PORT : loadPersonGroupIdByWhere
+    public List<Integer> loadPersonGroupIdByWhere(String where){
+        try{
+            return service.loadPersonGroupIdByWhere(where);
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1450,7 +1602,7 @@ class IFaceLogClient implements Constant{
      * @return 返回fl_person.id 列表
      * @throws ServiceRuntime
      */
-    // 61 SERIVCE PORT : loadPersonIdByUpdateTime
+    // 68 SERIVCE PORT : loadPersonIdByUpdateTime
     public List<Integer> loadPersonIdByUpdateTime(Date timestamp){
         try{
             return service.loadPersonIdByUpdateTime(GenericUtils.toLong(timestamp,Date.class));
@@ -1475,7 +1627,7 @@ class IFaceLogClient implements Constant{
      * @return 返回fl_person.id 列表
      * @throws ServiceRuntime
      */
-    // 62 SERIVCE PORT : loadUpdatedPersons
+    // 69 SERIVCE PORT : loadUpdatedPersons
     public List<Integer> loadUpdatedPersons(Date timestamp){
         try{
             return service.loadUpdatedPersons(GenericUtils.toLong(timestamp,Date.class));
@@ -1499,7 +1651,7 @@ class IFaceLogClient implements Constant{
      * @param deleteOldFeatureImage 是否删除原特征数据记录间接关联的原始图像记录(fl_image)
      * @throws ServiceRuntime
      */
-    // 63 SERIVCE PORT : replaceFeature
+    // 70 SERIVCE PORT : replaceFeature
     public void replaceFeature(
             int personId,
             String featureMd5,
@@ -1520,7 +1672,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 64 SERIVCE PORT : saveDevice
+    // 71 SERIVCE PORT : saveDevice
     public DeviceBean saveDevice(DeviceBean deviceBean){
         try{
             return converterDeviceBean.fromRight(service.saveDevice(converterDeviceBean.toRight(deviceBean)));
@@ -1544,7 +1696,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 65 SERIVCE PORT : saveDeviceGroup
+    // 72 SERIVCE PORT : saveDeviceGroup
     public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean){
         try{
             return converterDeviceGroupBean.fromRight(service.saveDeviceGroup(converterDeviceGroupBean.toRight(deviceGroupBean)));
@@ -1567,7 +1719,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 66 SERIVCE PORT : savePerson
+    // 73 SERIVCE PORT : savePerson
     public PersonBean savePerson(PersonBean bean){
         try{
             return converterPersonBean.fromRight(service.savePerson(converterPersonBean.toRight(bean)));
@@ -1593,7 +1745,7 @@ class IFaceLogClient implements Constant{
      * @param deviceBean featureImage来源设备对象
      * @return 
      */
-    // 67 SERIVCE PORT : savePersonFull
+    // 74 SERIVCE PORT : savePersonFull
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1628,7 +1780,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 67 GENERIC
+    // 74 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1664,7 +1816,7 @@ class IFaceLogClient implements Constant{
      * @throws WrapDAOException
      * @throws ServiceRuntime
      */
-    // 68 SERIVCE PORT : savePersonGroup
+    // 75 SERIVCE PORT : savePersonGroup
     public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean){
         try{
             return converterPersonGroupBean.fromRight(service.savePersonGroup(converterPersonGroupBean.toRight(personGroupBean)));
@@ -1686,7 +1838,7 @@ class IFaceLogClient implements Constant{
      * @param beans
      * @throws ServiceRuntime
      */
-    // 69 SERIVCE PORT : savePersons
+    // 76 SERIVCE PORT : savePersons
     public void savePersons(List<PersonBean> beans){
         try{
             service.savePersons(converterPersonBean.toRight(beans));
@@ -1701,7 +1853,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 70 SERIVCE PORT : savePersonsWithPhoto
+    // 77 SERIVCE PORT : savePersonsWithPhoto
     public Integer savePerson(Map<ByteBuffer, PersonBean> persons){
         try{
             return service.savePersonsWithPhoto(GenericUtils.toBytesKey(converterPersonBean.toRightValue(persons)));
@@ -1725,7 +1877,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 71 SERIVCE PORT : savePersonWithPhoto
+    // 78 SERIVCE PORT : savePersonWithPhoto
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto){
@@ -1752,7 +1904,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 71 GENERIC
+    // 78 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto){
@@ -1782,7 +1934,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 72 SERIVCE PORT : savePersonWithPhotoAndFeature
+    // 79 SERIVCE PORT : savePersonWithPhotoAndFeature
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1813,7 +1965,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 72 GENERIC
+    // 79 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1847,7 +1999,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 73 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
+    // 80 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiFaces
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1878,7 +2030,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 73 GENERIC
+    // 80 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1913,7 +2065,7 @@ class IFaceLogClient implements Constant{
      * @return bean 保存的{@link PersonBean}对象
      * @throws ServiceRuntime
      */
-    // 74 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
+    // 81 SERIVCE PORT : savePersonWithPhotoAndFeatureMultiImage
     public PersonBean savePerson(
             PersonBean bean,
             byte[] idPhoto,
@@ -1946,7 +2098,7 @@ class IFaceLogClient implements Constant{
      * such as {@code InputStream,URL,URI,File,ByteBuffer},supported type depend on {@link GenericUtils#toBytes(Object)} <br>
      * @see {@link GenericUtils#toBytes(Object)}
      */
-    // 74 GENERIC
+    // 81 GENERIC
     public PersonBean savePersonGeneric(
             PersonBean bean,
             Object idPhoto,
@@ -1981,7 +2133,7 @@ class IFaceLogClient implements Constant{
      * @return 
      * @throws ServiceRuntime
      */
-    // 75 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
+    // 82 SERIVCE PORT : savePersonWithPhotoAndFeatureSaved
     public PersonBean savePerson(
             PersonBean bean,
             String idPhotoMd5,
@@ -2010,7 +2162,7 @@ class IFaceLogClient implements Constant{
      * @param expiryDate 失效日期
      * @throws ServiceRuntime
      */
-    // 76 SERIVCE PORT : setPersonExpiryDate
+    // 83 SERIVCE PORT : setPersonExpiryDate
     public void setPersonExpiryDate(
             int personId,
             Date expiryDate){
@@ -2029,7 +2181,7 @@ class IFaceLogClient implements Constant{
      * @param expiryDate 失效日期
      * @throws ServiceRuntime
      */
-    // 77 SERIVCE PORT : setPersonExpiryDateList
+    // 84 SERIVCE PORT : setPersonExpiryDateList
     public void setPersonExpiryDate(
             List<Integer> personIdList,
             Date expiryDate){
