@@ -492,14 +492,29 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 
 	@Override
-	public List<Integer> loadPersonByWhere(String where)throws ServiceRuntime {
+	public List<Integer> loadPersonIdByWhere(String where)throws ServiceRuntime {
 		try{
 			return _loadPersonIdByWhere(where);
 		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
 	}
-
+	@Override
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+		try{
+			return _loadPersonByWhere(where, startRow, numRows);
+		} catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
+	@Override
+	public int countPersonByWhere(String where)throws ServiceRuntime {
+		try{
+			return _countPersonByWhere(where);
+		}catch (RuntimeException e) {
+			throw new ServiceRuntime(e);
+		} 
+	}
 	@Override
 	public PersonBean savePerson(PersonBean bean)throws ServiceRuntime {
 		try{
@@ -698,7 +713,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		} catch (RuntimeException e) {
 			throw new ServiceRuntime(e);
 		} 
-	}	
+	}
 
 	@Override
 	public int countLogLightByWhere(String where) throws ServiceRuntime {
@@ -914,13 +929,37 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			throw new ServiceRuntime(e);
 		} 
 	}
+	@Override
+	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+		try{
+			return this._loadDeviceByWhere(where, startRow, numRows);
+		}catch(RuntimeException e){
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public int countDeviceByWhere(String where)throws ServiceRuntime{
+		try{
+			return this._countDeviceByWhere(where);
+		}catch(RuntimeException e){
+			throw new ServiceRuntime(e);
+		}
+	}
+	@Override
+	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntime{
+		try{
+			return this._loadDeviceIdByWhere(where);
+		}catch(RuntimeException e){
+			throw new ServiceRuntime(e);
+		}
+	}
 	////////////////////////////////DeviceGroupBean/////////////
 	@Override
 	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntime {
 		try{
 			return _saveDeviceGroup(deviceGroupBean);
 		} catch(RuntimeException e){
-			throw e;
+			throw new ServiceRuntime(e);
 		}
 	}
 	@Override

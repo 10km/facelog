@@ -1162,7 +1162,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
 
             ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             ps.executeUpdate();
 
@@ -1266,7 +1266,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             if (_dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
@@ -1333,13 +1333,12 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
             connection = this.getConnection();
             ps = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
         } catch (DAOException e) {
             throw e;
@@ -1384,7 +1383,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
             int _rows = ps.executeUpdate();
             return _rows;
@@ -1733,7 +1732,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
 
             return this.countByPreparedStatement(ps);
         }
@@ -1750,7 +1749,6 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         }
     }
 
-    //
 
 
     /**
@@ -1766,10 +1764,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             return 0;
         }
         int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
+        String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkIdModified()) {
@@ -1820,7 +1815,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
      * @return the number of clauses returned
      * @throws DAOException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlPersonGroupBean bean, int searchType) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlPersonGroupBean bean, int searchType,boolean fillNull) throws DAOException
     {
         if (bean == null) {
             return 0;
@@ -1830,25 +1825,25 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
         {
             if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+                if (bean.getId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
             if (bean.checkNameModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "]");
-                        if (bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
+                        if (bean.getName() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "%]");
-                        if ( bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
+                        if ( bean.getName()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getName() + "]");
-                        if ( bean.getName() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
+                        if ( bean.getName() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getName()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getName() + "%]");
-                        if (bean.getName()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
+                        if (bean.getName()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getName() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1856,11 +1851,11 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
             }
             if (bean.checkLeafModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getLeaf() + "]");
-                if (bean.getLeaf() == null) { ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getLeaf()); }
+                if (bean.getLeaf() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TINYINT); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getLeaf()); }
             }
             if (bean.checkParentModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getParent() + "]");
-                if (bean.getParent() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getParent()); }
+                if (bean.getParent() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getParent()); }
             }
         }
         catch(SQLException e)

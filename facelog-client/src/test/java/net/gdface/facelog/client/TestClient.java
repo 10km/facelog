@@ -1,5 +1,7 @@
 package net.gdface.facelog.client;
 
+import java.util.List;
+
 import org.apache.thrift.TApplicationException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -38,12 +40,11 @@ public class TestClient implements CommonConstant {
 	@Test
 	public void testGetDeviceIdOfFeature(){
 		try{
-			Integer deviceId = facelogClient.getDeviceIdOfFeature("hello");
+			Integer deviceId = facelogClient.getDeviceIdOfFeature(null);
 			System.out.println(deviceId);
-		}catch(RuntimeTApplicationException e){
-			Throwable cause = e.getCause();
-			if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
-				System.out.println("return null");
+			List<Integer> devices = facelogClient.loadDeviceIdByWhere(null);
+			for(Integer id:devices){
+				System.out.println(id);
 			}
 		}catch(ServiceRuntime e){
 			e.printServerStackTrace();

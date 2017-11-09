@@ -1063,7 +1063,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
 
             ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             ps.executeUpdate();
 
@@ -1186,7 +1186,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             if (_dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
@@ -1253,13 +1253,12 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
             connection = this.getConnection();
             ps = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
         } catch (DAOException e) {
             throw e;
@@ -1304,7 +1303,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
             int _rows = ps.executeUpdate();
             return _rows;
@@ -1529,7 +1528,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
 
             return this.countByPreparedStatement(ps);
         }
@@ -1546,7 +1545,6 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
         }
     }
 
-    //
 
 
     /**
@@ -1562,10 +1560,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             return 0;
         }
         int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
+        String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkMd5Modified()) {
@@ -1648,7 +1643,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
      * @return the number of clauses returned
      * @throws DAOException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlImageBean bean, int searchType) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlImageBean bean, int searchType,boolean fillNull) throws DAOException
     {
         if (bean == null) {
             return 0;
@@ -1660,19 +1655,19 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "]");
-                        if (bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
+                        if (bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "%]");
-                        if ( bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
+                        if ( bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getMd5() + "]");
-                        if ( bean.getMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
+                        if ( bean.getMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMd5() + "%]");
-                        if (bean.getMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
+                        if (bean.getMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1682,19 +1677,19 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFormat() + "]");
-                        if (bean.getFormat() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat()); }
+                        if (bean.getFormat() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFormat() + "%]");
-                        if ( bean.getFormat()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFormat() + "%"); }
+                        if ( bean.getFormat()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFormat() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFormat() + "]");
-                        if ( bean.getFormat() == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFormat()); }
+                        if ( bean.getFormat() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFormat()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFormat() + "%]");
-                        if (bean.getFormat()  == null) { ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat() + "%"); }
+                        if (bean.getFormat()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.VARCHAR); } else { ps.setString(++_dirtyCount, bean.getFormat() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1702,37 +1697,37 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             }
             if (bean.checkWidthModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getWidth() + "]");
-                if (bean.getWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getWidth()); }
+                if (bean.getWidth() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getWidth()); }
             }
             if (bean.checkHeightModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getHeight() + "]");
-                if (bean.getHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getHeight()); }
+                if (bean.getHeight() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getHeight()); }
             }
             if (bean.checkDepthModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDepth() + "]");
-                if (bean.getDepth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDepth()); }
+                if (bean.getDepth() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDepth()); }
             }
             if (bean.checkFaceNumModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceNum() + "]");
-                if (bean.getFaceNum() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceNum()); }
+                if (bean.getFaceNum() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceNum()); }
             }
             if (bean.checkThumbMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "]");
-                        if (bean.getThumbMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5()); }
+                        if (bean.getThumbMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "%]");
-                        if ( bean.getThumbMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5() + "%"); }
+                        if ( bean.getThumbMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getThumbMd5() + "]");
-                        if ( bean.getThumbMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5()); }
+                        if ( bean.getThumbMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getThumbMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getThumbMd5() + "%]");
-                        if (bean.getThumbMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5() + "%"); }
+                        if (bean.getThumbMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getThumbMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1740,7 +1735,7 @@ public class FlImageManager extends TableManager.Adapter<FlImageBean>
             }
             if (bean.checkDeviceIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
-                if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
+                if (bean.getDeviceId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
             }
         }
         catch(SQLException e)

@@ -710,7 +710,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
 
             ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             ps.executeUpdate();
 
@@ -788,7 +788,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             if (_dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
@@ -856,13 +856,12 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
             connection = this.getConnection();
             ps = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
         } catch (DAOException e) {
             throw e;
@@ -907,7 +906,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
             int _rows = ps.executeUpdate();
             return _rows;
@@ -1033,7 +1032,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
 
             return this.countByPreparedStatement(ps);
         }
@@ -1050,7 +1049,6 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         }
     }
 
-    //
 
 
     /**
@@ -1066,10 +1064,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
             return 0;
         }
         int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
+        String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkDeviceGroupIdModified()) {
@@ -1112,7 +1107,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
      * @return the number of clauses returned
      * @throws DAOException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlPermitBean bean, int searchType) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlPermitBean bean, int searchType,boolean fillNull) throws DAOException
     {
         if (bean == null) {
             return 0;
@@ -1122,15 +1117,15 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
         {
             if (bean.checkDeviceGroupIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceGroupId() + "]");
-                if (bean.getDeviceGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceGroupId()); }
+                if (bean.getDeviceGroupId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceGroupId()); }
             }
             if (bean.checkPersonGroupIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonGroupId() + "]");
-                if (bean.getPersonGroupId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonGroupId()); }
+                if (bean.getPersonGroupId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonGroupId()); }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)

@@ -82,6 +82,14 @@ public interface IFaceLog
             @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
         );
 
+        @ThriftMethod(value = "countDeviceByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
+        ListenableFuture<Integer> countDeviceByWhere(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+        );
+
         @ThriftMethod(value = "countDeviceGroupByWhere",
                       exception = {
                           @ThriftException(type=ServiceRuntime.class, id=1)
@@ -111,6 +119,14 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntime.class, id=1)
                       })
         ListenableFuture<Integer> countLogLightByWhere(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+        );
+
+        @ThriftMethod(value = "countPersonByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
+        ListenableFuture<Integer> countPersonByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
@@ -487,6 +503,16 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> loadAllPerson();
 
+        @ThriftMethod(value = "loadDeviceByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
+        ListenableFuture<List<DeviceBean>> loadDeviceByWhere(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+        );
+
         @ThriftMethod(value = "loadDeviceGroupByWhere",
                       exception = {
                           @ThriftException(type=ServiceRuntime.class, id=1)
@@ -502,6 +528,14 @@ public interface IFaceLog
                           @ThriftException(type=ServiceRuntime.class, id=1)
                       })
         ListenableFuture<List<Integer>> loadDeviceGroupIdByWhere(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+        );
+
+        @ThriftMethod(value = "loadDeviceIdByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> loadDeviceIdByWhere(
             @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
@@ -555,8 +589,10 @@ public interface IFaceLog
                       exception = {
                           @ThriftException(type=ServiceRuntime.class, id=1)
                       })
-        ListenableFuture<List<Integer>> loadPersonByWhere(
-            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+        ListenableFuture<List<PersonBean>> loadPersonByWhere(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
+            @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+            @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
         );
 
         @ThriftMethod(value = "loadPersonGroupByWhere",
@@ -583,6 +619,14 @@ public interface IFaceLog
                       })
         ListenableFuture<List<Integer>> loadPersonIdByUpdateTime(
             @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+        );
+
+        @ThriftMethod(value = "loadPersonIdByWhere",
+                      exception = {
+                          @ThriftException(type=ServiceRuntime.class, id=1)
+                      })
+        ListenableFuture<List<Integer>> loadPersonIdByWhere(
+            @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
         );
 
         @ThriftMethod(value = "loadUpdatedPersons",
@@ -804,6 +848,14 @@ public interface IFaceLog
         @ThriftField(value=2, name="personGroupId", requiredness=Requiredness.NONE) final int personGroupId
     ) throws ServiceRuntime;
 
+    @ThriftMethod(value = "countDeviceByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    int countDeviceByWhere(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+    ) throws ServiceRuntime;
+
     @ThriftMethod(value = "countDeviceGroupByWhere",
                   exception = {
                       @ThriftException(type=ServiceRuntime.class, id=1)
@@ -833,6 +885,14 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntime.class, id=1)
                   })
     int countLogLightByWhere(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+    ) throws ServiceRuntime;
+
+    @ThriftMethod(value = "countPersonByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    int countPersonByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
     ) throws ServiceRuntime;
 
@@ -1209,6 +1269,16 @@ public interface IFaceLog
                   })
     List<Integer> loadAllPerson() throws ServiceRuntime;
 
+    @ThriftMethod(value = "loadDeviceByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    List<DeviceBean> loadDeviceByWhere(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
+    ) throws ServiceRuntime;
+
     @ThriftMethod(value = "loadDeviceGroupByWhere",
                   exception = {
                       @ThriftException(type=ServiceRuntime.class, id=1)
@@ -1224,6 +1294,14 @@ public interface IFaceLog
                       @ThriftException(type=ServiceRuntime.class, id=1)
                   })
     List<Integer> loadDeviceGroupIdByWhere(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+    ) throws ServiceRuntime;
+
+    @ThriftMethod(value = "loadDeviceIdByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    List<Integer> loadDeviceIdByWhere(
         @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
     ) throws ServiceRuntime;
 
@@ -1277,8 +1355,10 @@ public interface IFaceLog
                   exception = {
                       @ThriftException(type=ServiceRuntime.class, id=1)
                   })
-    List<Integer> loadPersonByWhere(
-        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
+    List<PersonBean> loadPersonByWhere(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where,
+        @ThriftField(value=2, name="startRow", requiredness=Requiredness.NONE) final int startRow,
+        @ThriftField(value=3, name="numRows", requiredness=Requiredness.NONE) final int numRows
     ) throws ServiceRuntime;
 
     @ThriftMethod(value = "loadPersonGroupByWhere",
@@ -1305,6 +1385,14 @@ public interface IFaceLog
                   })
     List<Integer> loadPersonIdByUpdateTime(
         @ThriftField(value=1, name="timestamp", requiredness=Requiredness.NONE) final long timestamp
+    ) throws ServiceRuntime;
+
+    @ThriftMethod(value = "loadPersonIdByWhere",
+                  exception = {
+                      @ThriftException(type=ServiceRuntime.class, id=1)
+                  })
+    List<Integer> loadPersonIdByWhere(
+        @ThriftField(value=1, name="where", requiredness=Requiredness.NONE) final String where
     ) throws ServiceRuntime;
 
     @ThriftMethod(value = "loadUpdatedPersons",

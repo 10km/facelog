@@ -860,7 +860,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
 
             ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             ps.executeUpdate();
 
@@ -1000,7 +1000,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             if (_dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
@@ -1067,13 +1067,12 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
             connection = this.getConnection();
             ps = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
         } catch (DAOException e) {
             throw e;
@@ -1118,7 +1117,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
             int _rows = ps.executeUpdate();
             return _rows;
@@ -1514,7 +1513,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
 
             return this.countByPreparedStatement(ps);
         }
@@ -1531,7 +1530,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         }
     }
 
-    //
 
 
     /**
@@ -1547,10 +1545,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             return 0;
         }
         int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
+        String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkIdModified()) {
@@ -1633,7 +1628,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
      * @return the number of clauses returned
      * @throws DAOException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlLogBean bean, int searchType) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlLogBean bean, int searchType,boolean fillNull) throws DAOException
     {
         if (bean == null) {
             return 0;
@@ -1643,33 +1638,33 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
         {
             if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+                if (bean.getId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
             if (bean.checkPersonIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getPersonId() + "]");
-                if (bean.getPersonId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
+                if (bean.getPersonId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getPersonId()); }
             }
             if (bean.checkDeviceIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getDeviceId() + "]");
-                if (bean.getDeviceId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
+                if (bean.getDeviceId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getDeviceId()); }
             }
             if (bean.checkVerifyFeatureModified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFeature() + "]");
-                        if (bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature()); }
+                        if (bean.getVerifyFeature() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFeature() + "%]");
-                        if ( bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature() + "%"); }
+                        if ( bean.getVerifyFeature()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getVerifyFeature() + "]");
-                        if ( bean.getVerifyFeature() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature()); }
+                        if ( bean.getVerifyFeature() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getVerifyFeature()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyFeature() + "%]");
-                        if (bean.getVerifyFeature()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature() + "%"); }
+                        if (bean.getVerifyFeature()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getVerifyFeature() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1677,19 +1672,19 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
             }
             if (bean.checkCompareFaceModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCompareFace() + "]");
-                if (bean.getCompareFace() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getCompareFace()); }
+                if (bean.getCompareFace() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getCompareFace()); }
             }
             if (bean.checkSimilartyModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getSimilarty() + "]");
-                if (bean.getSimilarty() == null) { ps.setNull(++_dirtyCount, Types.DOUBLE); } else { Manager.setDouble(ps, ++_dirtyCount, bean.getSimilarty()); }
+                if (bean.getSimilarty() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.DOUBLE); } else { Manager.setDouble(ps, ++_dirtyCount, bean.getSimilarty()); }
             }
             if (bean.checkVerifyTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getVerifyTime() + "]");
-                if (bean.getVerifyTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getVerifyTime().getTime())); }
+                if (bean.getVerifyTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getVerifyTime().getTime())); }
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)

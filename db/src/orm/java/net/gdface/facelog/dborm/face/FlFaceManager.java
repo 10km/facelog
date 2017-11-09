@@ -1081,7 +1081,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
 
             ps = c.prepareStatement(sql.toString(), ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             ps.executeUpdate();
 
@@ -1329,7 +1329,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
 
-            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            int _dirtyCount = this.fillPreparedStatement(ps, bean, SEARCH_EXACT,true);
 
             if (_dirtyCount == 0) {
                 // System.out.println("The bean to look is not initialized... do not update.");
@@ -1396,13 +1396,12 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         String sql=createSelectSql(fieldList,this.fillWhere(sqlWhere, bean, searchType) > 0?" WHERE "+sqlWhere.toString():null);
         PreparedStatement ps = null;
         Connection connection = null;
-        // logger.debug("sql string:\n" + sql + "\n");
         try {
             connection = this.getConnection();
             ps = connection.prepareStatement(sql,
                     ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
             return this.loadByPreparedStatement(ps, fieldList, startRow, numRows, action);
         } catch (DAOException e) {
             throw e;
@@ -1447,7 +1446,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, SEARCH_EXACT);
+            this.fillPreparedStatement(ps, bean, SEARCH_EXACT, false);
 
             int _rows = ps.executeUpdate();
             return _rows;
@@ -1729,7 +1728,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             ps = c.prepareStatement(sql.toString(),
                                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                                     ResultSet.CONCUR_READ_ONLY);
-            this.fillPreparedStatement(ps, bean, searchType);
+            this.fillPreparedStatement(ps, bean, searchType,false);
 
             return this.countByPreparedStatement(ps);
         }
@@ -1746,7 +1745,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         }
     }
 
-    //
 
 
     /**
@@ -1762,10 +1760,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             return 0;
         }
         int _dirtyCount = 0;
-        String sqlEqualsOperation = "=";
-        if (searchType != SEARCH_EXACT) {
-            sqlEqualsOperation = " like ";
-        }
+        String sqlEqualsOperation = searchType == SEARCH_EXACT ? "=" : " like ";
         try
         {
             if (bean.checkIdModified()) {
@@ -1944,7 +1939,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
      * @return the number of clauses returned
      * @throws DAOException
      */
-    protected int fillPreparedStatement(PreparedStatement ps, FlFaceBean bean, int searchType) throws DAOException
+    protected int fillPreparedStatement(PreparedStatement ps, FlFaceBean bean, int searchType,boolean fillNull) throws DAOException
     {
         if (bean == null) {
             return 0;
@@ -1954,25 +1949,25 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
         {
             if (bean.checkIdModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getId() + "]");
-                if (bean.getId() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
+                if (bean.getId() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getId()); }
             }
             if (bean.checkImageMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "]");
-                        if (bean.getImageMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5()); }
+                        if (bean.getImageMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "%]");
-                        if ( bean.getImageMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5() + "%"); }
+                        if ( bean.getImageMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getImageMd5() + "]");
-                        if ( bean.getImageMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5()); }
+                        if ( bean.getImageMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getImageMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getImageMd5() + "%]");
-                        if (bean.getImageMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5() + "%"); }
+                        if (bean.getImageMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getImageMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -1980,85 +1975,85 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             }
             if (bean.checkFaceLeftModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceLeft() + "]");
-                if (bean.getFaceLeft() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
+                if (bean.getFaceLeft() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceLeft()); }
             }
             if (bean.checkFaceTopModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceTop() + "]");
-                if (bean.getFaceTop() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
+                if (bean.getFaceTop() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceTop()); }
             }
             if (bean.checkFaceWidthModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceWidth() + "]");
-                if (bean.getFaceWidth() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
+                if (bean.getFaceWidth() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceWidth()); }
             }
             if (bean.checkFaceHeightModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFaceHeight() + "]");
-                if (bean.getFaceHeight() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
+                if (bean.getFaceHeight() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getFaceHeight()); }
             }
             if (bean.checkEyeLeftxModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLeftx() + "]");
-                if (bean.getEyeLeftx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
+                if (bean.getEyeLeftx() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLeftx()); }
             }
             if (bean.checkEyeLeftyModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeLefty() + "]");
-                if (bean.getEyeLefty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
+                if (bean.getEyeLefty() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeLefty()); }
             }
             if (bean.checkEyeRightxModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRightx() + "]");
-                if (bean.getEyeRightx() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
+                if (bean.getEyeRightx() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRightx()); }
             }
             if (bean.checkEyeRightyModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getEyeRighty() + "]");
-                if (bean.getEyeRighty() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
+                if (bean.getEyeRighty() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getEyeRighty()); }
             }
             if (bean.checkMouthXModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthX() + "]");
-                if (bean.getMouthX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
+                if (bean.getMouthX() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthX()); }
             }
             if (bean.checkMouthYModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getMouthY() + "]");
-                if (bean.getMouthY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
+                if (bean.getMouthY() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getMouthY()); }
             }
             if (bean.checkNoseXModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseX() + "]");
-                if (bean.getNoseX() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
+                if (bean.getNoseX() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseX()); }
             }
             if (bean.checkNoseYModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getNoseY() + "]");
-                if (bean.getNoseY() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
+                if (bean.getNoseY() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getNoseY()); }
             }
             if (bean.checkAngleYawModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleYaw() + "]");
-                if (bean.getAngleYaw() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
+                if (bean.getAngleYaw() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleYaw()); }
             }
             if (bean.checkAnglePitchModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAnglePitch() + "]");
-                if (bean.getAnglePitch() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
+                if (bean.getAnglePitch() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAnglePitch()); }
             }
             if (bean.checkAngleRollModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getAngleRoll() + "]");
-                if (bean.getAngleRoll() == null) { ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
+                if (bean.getAngleRoll() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.INTEGER); } else { Manager.setInteger(ps, ++_dirtyCount, bean.getAngleRoll()); }
             }
             if (bean.checkExtInfoModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getExtInfo() + "]");
-                if (bean.getExtInfo() == null) { ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getExtInfo()); }
+                if (bean.getExtInfo() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.LONGVARBINARY); } else { Manager.setBytes(Types.LONGVARBINARY,ps, ++_dirtyCount, bean.getExtInfo()); }
             }
             if (bean.checkFeatureMd5Modified()) {
                 switch (searchType) {
                     case SEARCH_EXACT:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "]");
-                        if (bean.getFeatureMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5()); }
+                        if (bean.getFeatureMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5()); }
                         break;
                     case SEARCH_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "%]");
-                        if ( bean.getFeatureMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
+                        if ( bean.getFeatureMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5() + "%"); }
                         break;
                     case SEARCH_STARTING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [%" + bean.getFeatureMd5() + "]");
-                        if ( bean.getFeatureMd5() == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5()); }
+                        if ( bean.getFeatureMd5() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, "%" + bean.getFeatureMd5()); }
                         break;
                     case SEARCH_ENDING_LIKE:
                         // System.out.println("Setting for " + _dirtyCount + " [" + bean.getFeatureMd5() + "%]");
-                        if (bean.getFeatureMd5()  == null) { ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5() + "%"); }
+                        if (bean.getFeatureMd5()  == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.CHAR); } else { ps.setString(++_dirtyCount, bean.getFeatureMd5() + "%"); }
                         break;
                     default:
                         throw new DAOException("Unknown search type " + searchType);
@@ -2066,7 +2061,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
             }
             if (bean.checkCreateTimeModified()) {
                 // System.out.println("Setting for " + _dirtyCount + " [" + bean.getCreateTime() + "]");
-                if (bean.getCreateTime() == null) { ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
+                if (bean.getCreateTime() == null) {if(fillNull) ps.setNull(++_dirtyCount, Types.TIMESTAMP); } else { ps.setTimestamp(++_dirtyCount, new java.sql.Timestamp(bean.getCreateTime().getTime())); }
             }
         }
         catch(SQLException e)

@@ -220,10 +220,32 @@ public abstract class FaceLogDefinition extends Dao{
 	 * @throws ServiceRuntime
 	 */
 	@ThriftMethod
-	public List<Integer> loadPersonByWhere(String where) throws ServiceRuntime {
+	public List<Integer> loadPersonIdByWhere(String where) throws ServiceRuntime {
 		return null;
 	}
-
+	/**
+	 * 返回 where 指定的所有人员记录
+	 * @param where SQL条件语句
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public List<PersonBean> loadPersonByWhere(String where, int startRow, int numRows) throws ServiceRuntime {
+		return null;
+	}
+	/**
+	 * 返回满足{@code where}条件的日志记录(fl_person)数目
+	 * @param where 为{@code null}时返回所有记录
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public int countPersonByWhere(String where)throws ServiceRuntime{
+		return 0;
+	}
+	
 	/**
 	 * 保存人员(person)记录
 	 * @param bean
@@ -716,6 +738,39 @@ public abstract class FaceLogDefinition extends Dao{
 	@ThriftMethod
 	public List<DeviceBean> getDevices(List<Integer> idList) throws ServiceRuntime {
 		return null;
+	}
+	/**
+	 * 根据{@code where}指定的查询条件查询设备记录
+	 * @param where SQL 条件语句
+	 * @param startRow 记录起始行号 (first row = 1, last row = -1)
+	 * @param numRows 返回记录条数 为负值是返回{@code startRow}开始的所有行
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public List<DeviceBean> loadDeviceByWhere(String where,int startRow, int numRows)throws ServiceRuntime{
+		return null;
+	}
+	/**
+	 * 返回满足{@code where} SQL条件语句的fl_device记录总数
+	 * @param where
+	 * @return
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public int countDeviceByWhere(String where)throws ServiceRuntime{
+		return 0;
+	}
+	/**
+	 * 根据{@code where}指定的查询条件查询设备记录
+	 * @param where
+	 * @return 返回设备ID列表
+	 * @throws ServiceRuntime
+	 */
+	@ThriftMethod
+	public List<Integer> loadDeviceIdByWhere(String where)throws ServiceRuntime{
+		return null;
+		
 	}
 	////////////////////////////////DeviceGroupBean/////////////
 	/**
