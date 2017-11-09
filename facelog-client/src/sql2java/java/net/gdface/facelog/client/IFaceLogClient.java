@@ -82,7 +82,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -110,7 +111,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -143,7 +145,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -173,7 +176,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -207,7 +211,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -237,7 +242,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -410,7 +416,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -635,7 +642,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -658,7 +666,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -681,7 +690,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -703,7 +713,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -725,7 +736,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -749,7 +761,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -771,7 +784,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -793,7 +807,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -815,7 +830,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -837,7 +853,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -882,7 +899,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -904,7 +922,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -927,7 +946,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -949,7 +969,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -971,7 +992,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -993,7 +1015,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1015,7 +1038,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1038,7 +1062,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1061,7 +1086,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1106,7 +1132,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1128,7 +1155,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1152,7 +1180,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1176,7 +1205,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1200,7 +1230,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1236,7 +1267,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1259,7 +1291,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1290,7 +1323,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1319,7 +1353,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1350,7 +1385,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1374,7 +1410,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1396,7 +1433,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1419,7 +1457,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1443,7 +1482,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1487,7 +1527,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1510,7 +1551,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1532,7 +1574,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1569,7 +1612,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1603,7 +1647,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1626,7 +1671,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1662,7 +1708,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1689,7 +1736,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1715,7 +1763,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1748,7 +1797,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1778,7 +1828,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1811,7 +1862,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1841,7 +1893,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1877,7 +1930,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1909,7 +1963,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;
@@ -1939,7 +1994,8 @@ class IFaceLogClient implements Constant{
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
-            if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
+            if (cause instanceof TApplicationException  
+                && ((TApplicationException) cause).getType() == TApplicationException.MISSING_RESULT){
                 return null;
             }
             throw e;

@@ -1,7 +1,5 @@
 package net.gdface.facelog.client;
 
-import static org.junit.Assert.*;
-
 import org.apache.thrift.TApplicationException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -40,7 +38,8 @@ public class TestClient implements CommonConstant {
 	@Test
 	public void testGetDeviceIdOfFeature(){
 		try{
-			facelogClient.getDeviceIdOfFeature("hello");
+			Integer deviceId = facelogClient.getDeviceIdOfFeature("hello");
+			System.out.println(deviceId);
 		}catch(RuntimeTApplicationException e){
 			Throwable cause = e.getCause();
 			if (cause instanceof TApplicationException  && ((TApplicationException) cause).getType() ==   TApplicationException.MISSING_RESULT){
