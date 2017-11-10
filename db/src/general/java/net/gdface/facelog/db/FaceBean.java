@@ -2120,7 +2120,7 @@ public final class FaceBean
      * @return {@code true} if {@link {@link #initialized} be set to zero
      * @see #asNULL()
      */
-    public boolean beNULL(){
+    public boolean checkNULL(){
         return 0L == getInitialized();
     }
     /** 
@@ -2136,12 +2136,12 @@ public final class FaceBean
     }
     /** 
      * @return replace null instance element with {@code null}
-     * @see {@link #beNULL()} 
+     * @see {@link #checkNULL()} 
      */
     public static final List<FaceBean> replaceNullInstance(List<FaceBean> source){
         if(null != source){
             for(int i = 0,end_i = source.size();i<end_i;++i){
-                if(source.get(i).beNULL())source.set(i, null);
+                if(source.get(i).checkNULL())source.set(i, null);
             }
         }
         return source;

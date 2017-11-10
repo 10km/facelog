@@ -145,9 +145,8 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     @SuppressWarnings("unused")
     public FlDeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id){
+        if(null == id)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try

@@ -149,9 +149,8 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     @SuppressWarnings("unused")
     public FlLogBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id){
+        if(null == id)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try

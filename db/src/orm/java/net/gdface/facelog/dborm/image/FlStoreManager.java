@@ -129,9 +129,8 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     @SuppressWarnings("unused")
     public FlStoreBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
-        if(null == md5){
+        if(null == md5)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try

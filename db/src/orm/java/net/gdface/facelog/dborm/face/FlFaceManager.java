@@ -142,9 +142,8 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     @SuppressWarnings("unused")
     public FlFaceBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id){
+        if(null == id)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try

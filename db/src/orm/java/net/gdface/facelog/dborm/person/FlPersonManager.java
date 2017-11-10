@@ -147,9 +147,8 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     @SuppressWarnings("unused")
     public FlPersonBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
-        if(null == id){
+        if(null == id)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try

@@ -142,9 +142,8 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     @SuppressWarnings("unused")
     public FlPermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        if(null == deviceGroupId || null == personGroupId){
+        if(null == deviceGroupId || null == personGroupId)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try

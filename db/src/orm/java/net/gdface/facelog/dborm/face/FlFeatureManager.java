@@ -142,9 +142,8 @@ public class FlFeatureManager extends TableManager.Adapter<FlFeatureBean>
     @SuppressWarnings("unused")
     public FlFeatureBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
-        if(null == md5){
+        if(null == md5)
             throw new ObjectRetrievalException(new NullPointerException());
-        }
         Connection c = null;
         PreparedStatement ps = null;
         try
