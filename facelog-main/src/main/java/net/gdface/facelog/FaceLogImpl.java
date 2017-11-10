@@ -48,6 +48,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	private final RedisFeatureListener redisFeatureListener = new RedisFeatureListener();
 	private final RedisPermitListener redisPermitListener = new RedisPermitListener();
 	//private final RedisLogConsumer redisLogConsumer  = new RedisLogConsumer();
+	
 	public FaceLogImpl() {
 		init();
 	}
@@ -58,14 +59,18 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		getPermitManager().registerListener(redisPermitListener);
 	}
 	protected StoreBean _makeStoreBean(ByteBuffer imageBytes,String md5,String encodeing){
-		if(Judge.isEmpty(imageBytes))return null;
-		if(null == md5)
+		if(Judge.isEmpty(imageBytes)){
+			return null;
+		}
+		if(null == md5){
 			md5 = FaceUtilits.getMD5String(imageBytes);
+		}
 		StoreBean storeBean = new StoreBean();
 		storeBean.setData(imageBytes);
 		storeBean.setMd5(md5);
-		if(!Strings.isNullOrEmpty(encodeing))
+		if(!Strings.isNullOrEmpty(encodeing)){
 			storeBean.setEncoding(encodeing);
+		}
 		return storeBean;
 	}
 
@@ -76,29 +81,34 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		if(null == deviceId
 			|| null == personGroupId 
 			|| null ==(device = _getDevice(deviceId))
-			|| null == (personGroup = _getPersonGroup(personGroupId)))
+			|| null == (personGroup = _getPersonGroup(personGroupId))){
 			return false;
+		}
 		DeviceGroupBean deviceGroup = _getDeviceGroup(device.getGroupId());
 		List<PersonGroupBean> personGroupList = _listOfParentForPersonGroup(personGroup);
 		
-		if(null == deviceGroup || personGroupList.isEmpty())
+		if(null == deviceGroup || personGroupList.isEmpty()){
 			return false;
+		}
 		// person group 及其parent,任何一个在permit表中就返回true
 		for(PersonGroupBean group:personGroupList){
-			if(_existsPermit(deviceGroup.getId(), group.getId()))
+			if(_existsPermit(deviceGroup.getId(), group.getId())){
 				return true;
+			}
 		}
 		return false;
 	}
 	protected boolean _getPersonPermit(Integer deviceId,Integer personId){
 		PersonBean person;
-		if( null == personId || null == (person = _getPerson(personId)))
+		if( null == personId || null == (person = _getPerson(personId))){
 			return false;
+		}
 		return _getGroupPermit(deviceId,person.getGroupId());
 	}
 	protected List<Boolean> _getGroupPermit(final Integer deviceId,List<Integer> personGroupIdList){
-		if(null == deviceId || null == personGroupIdList)
+		if(null == deviceId || null == personGroupIdList){
 			return ImmutableList.<Boolean>of();
+		}
 		return Lists.newArrayList(Lists.transform(personGroupIdList, new Function<Integer,Boolean>(){
 			@Override
 			public Boolean apply(Integer input) {
@@ -106,8 +116,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			}}));
 	}
 	protected List<Boolean> _getPermit(final Integer deviceId,List<Integer> personIdList){
-		if(null == deviceId || null == personIdList)
+		if(null == deviceId || null == personIdList){
 			return ImmutableList.<Boolean>of();
+		}
 		return Lists.newArrayList(Lists.transform(personIdList, new Function<Integer,Boolean>(){
 			@Override
 			public Boolean apply(Integer input) {
@@ -116,10 +127,11 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 	////////////////////////////////////////////
 	protected Pair<ImageBean, StoreBean> _makeImageBean(ByteBuffer imageBytes,String md5) throws NotImage, UnsupportedFormat{
-		if(Judge.isEmpty(imageBytes))return null;
+		if(Judge.isEmpty(imageBytes)){return null;}
 		LazyImage image = LazyImage.create(imageBytes);
-		if(null == md5)
+		if(null == md5){
 			md5 = FaceUtilits.getMD5String(imageBytes);
+		}
 		ImageBean imageBean = new ImageBean();
 		imageBean.setMd5(md5);
 		imageBean.setWidth(image.getWidth());
@@ -130,7 +142,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 	protected ImageBean _addImage(ByteBuffer imageBytes,DeviceBean refFlDevicebyDeviceId
 	        , Collection<FaceBean> impFlFacebyImgMd5 , Collection<PersonBean> impFlPersonbyImageMd5) throws DuplicateReord{
-		if(Judge.isEmpty(imageBytes))return null;
+		if(Judge.isEmpty(imageBytes)){
+			return null;
+		}
 		String md5 = FaceUtilits.getMD5String(imageBytes);
 		_checkDuplicateImage(md5);
 		Pair<ImageBean, StoreBean> pair;
@@ -149,13 +163,16 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	 */
 	@Override
 	protected int _deleteImage(String imageMd5){
-		if(Strings.isNullOrEmpty(imageMd5))return 0;
+		if(Strings.isNullOrEmpty(imageMd5)){
+			return 0;
+		}
 		_deleteStore(imageMd5);
 		ImageBean imageBean = _getImage(imageMd5);
-		if(null == imageBean)return 0;
+		if(null == imageBean){return 0;}
 		String thumbMd5 = imageBean.getThumbMd5();
-		if( !Strings.isNullOrEmpty(thumbMd5)&& !imageBean.getMd5().equals(thumbMd5))
+		if( !Strings.isNullOrEmpty(thumbMd5)&& !imageBean.getMd5().equals(thumbMd5)){
 			_deleteImage(thumbMd5);
+		}
 		return super._deleteImage(imageMd5);
 	}
 
@@ -205,16 +222,18 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	protected Integer _getDeviceIdOfFeature(String featureMd5){
 		for(String imageMd5: _getImageKeysImportedByFeatureMd5(featureMd5)){
 			ImageBean imageBean = _getImage(imageMd5);
-			if(null !=imageBean)
+			if(null !=imageBean){
 				return imageBean.getDeviceId();
+			}
 		}
 		return null;
 	}
 	protected PersonBean _setRefPersonOfFeature(String featureMd5,Integer personId){
 		PersonBean personBean = _getPerson(personId);
 		FeatureBean featureBean = _getFeature(featureMd5);
-		if(null == personBean || null == featureBean)return null;
-		return _setReferencedByPersonIdOnFeature(featureBean, personBean);
+		return (null == personBean || null == featureBean)
+				? null
+				: _setReferencedByPersonIdOnFeature(featureBean, personBean);
 	}
 
 	protected List<String> _getImageKeysImportedByFeatureMd5(String featureMd5){
@@ -226,18 +245,18 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	}
 
 	protected int _savePerson(Map<ByteBuffer,PersonBean> persons) throws DuplicateReord {
-		if(null == persons )return 0;
+		if(null == persons ){return 0;}
 		int count = 0;
 		PersonBean personBean ;
 		for(Entry<ByteBuffer, PersonBean> entry:persons.entrySet()){
 			personBean = _savePerson(entry.getValue(),_addImage(entry.getKey(),null,null,null),null);
-			if(null != personBean)++count;
+			if(null != personBean){++count;}
 		}
 		return count;
 	}
 	protected PersonBean _savePerson(PersonBean personBean, ImageBean idPhotoBean,
 			Collection<FeatureBean> featureBean) {
-		_deleteImage(_getReferencedByImageMd5OnPerson(personBean));// delete old photo if exists
+		_deleteImage(_getReferencedByImageMd5OnPerson(personBean)); // delete old photo if exists
 		return _savePerson(personBean, idPhotoBean, null, featureBean, null);
 	}
 
@@ -267,10 +286,11 @@ public class FaceLogImpl extends FaceLogDefinition  {
 			ByteBuffer featureImage, FaceBean featureFaceBean, DeviceBean deviceBean) throws DuplicateReord {
 		Map<ByteBuffer, FaceBean> faceInfo = null;
 		if (null != featureFaceBean) {
-			if (Judge.isEmpty(featureImage))
+			if (Judge.isEmpty(featureImage)){
 				featureImage = idPhoto;
+			}
 			if (!Judge.isEmpty(featureImage)) {
-				faceInfo = new HashMap<ByteBuffer, FaceBean>();
+				faceInfo = new HashMap<ByteBuffer, FaceBean>(16);
 				faceInfo.put(featureImage, featureFaceBean);
 			}
 		}
@@ -284,7 +304,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	@Override
 	protected int _deletePerson(Integer personId) {
 		PersonBean personBean = _getPerson(personId);
-		if(null == personBean)return 0;
+		if(null == personBean){
+			return 0;
+		}
 		// 删除标准照
 		_deleteImage(personBean.getImageMd5());
 		_deleteAllFeaturesByPersonId(personId,true);
@@ -295,30 +317,33 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		return null == personBean ? 0 : _deletePerson(personBean.getId());
 	}
 	protected int _deletePersonByPapersNum(Collection<String> collection) {
-		if(null == collection)return 0;
 		int count =0;
-		for(String papersNum:collection){
-			count += _deletePersonByPapersNum(papersNum);
+		if(null != collection){
+			for(String papersNum:collection){
+				count += _deletePersonByPapersNum(papersNum);
+			}
 		}
 		return count;
 	}
 	protected boolean _isDisable(int personId){
 		PersonBean personBean = _getPerson(personId);
-		if(null == personBean)
+		if(null == personBean){
 			return true;
+		}
 		Date expiryDate = personBean.getExpiryDate();
 		return null== expiryDate?false:expiryDate.before(new Date());
 	}
 	protected  void _setPersonExpiryDate(PersonBean personBean,Date expiryDate){
-		if(null == personBean)
-			return ;
-		personBean.setExpiryDate(expiryDate);
-		_savePerson(personBean);
+		if(null != personBean){
+			personBean.setExpiryDate(expiryDate);
+			_savePerson(personBean);
+		}
 	}
 	protected  void _setPersonExpiryDate(Collection<Integer> personIdList,Date expiryDate){
-		if(null == personIdList)return;
-		for(Integer personId : personIdList){
-			_setPersonExpiryDate(_getPerson(personId),expiryDate);
+		if(null != personIdList){
+			for(Integer personId : personIdList){
+				_setPersonExpiryDate(_getPerson(personId),expiryDate);
+			}
 		}
 	}
 	protected List<PersonBean> _loadUpdatedPersons(Date timestamp) {
@@ -327,8 +352,9 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		Integer refPerson;
 		for(FeatureBean feature:_loadFeatureByUpdateTime(timestamp)){
 			refPerson = feature.getPersonId();
-			if(null != refPerson && m.containsKey(refPerson))
+			if(null != refPerson && m.containsKey(refPerson)){
 				m.put(refPerson, _getPerson(refPerson));
+			}
 		}
 		return new ArrayList<PersonBean>(m.values());
 	}
@@ -469,7 +495,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 
 	@Override
 	public  void disablePerson(final List<Integer> personIdList)throws ServiceRuntime{
-		setPersonExpiryDate(personIdList,new Date().getTime());
+		setPersonExpiryDate(personIdList,System.currentTimeMillis());
 	}
 
 	@Override
@@ -949,6 +975,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		}
 	}
 	////////////////////////////////DeviceGroupBean/////////////
+	
 	@Override
 	public DeviceGroupBean saveDeviceGroup(DeviceGroupBean deviceGroupBean)throws ServiceRuntime {
 		try{
@@ -998,6 +1025,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		}
 	}
 	////////////////////////////////PersonGroupBean/////////////
+	
 	@Override
 	public PersonGroupBean savePersonGroup(PersonGroupBean personGroupBean)throws ServiceRuntime {
 		try{
@@ -1071,6 +1099,7 @@ public class FaceLogImpl extends FaceLogDefinition  {
 		}
     }
 	/////////////////////PERMIT/////
+    
 	@Override
 	public void addPermit(DeviceGroupBean deviceGroup,PersonGroupBean personGroup)throws ServiceRuntime {
 		try{
