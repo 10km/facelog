@@ -373,8 +373,9 @@ public final class StoreBean
             return checkEncodingModified();
         case FL_STORE_ID_DATA:
             return checkDataModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -549,7 +550,7 @@ public final class StoreBean
      */
     public static final List<StoreBean> replaceNull(List<StoreBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -561,7 +562,7 @@ public final class StoreBean
      */
     public static final List<StoreBean> replaceNullInstance(List<StoreBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -684,7 +685,7 @@ public final class StoreBean
      */
     public static final class Builder{
         /** StoreBean instance used for template to create new StoreBean instance. */
-        static final ThreadLocal<StoreBean> template = new ThreadLocal<StoreBean>(){
+        static final ThreadLocal<StoreBean> TEMPLATE = new ThreadLocal<StoreBean>(){
             @Override
             protected StoreBean initialValue() {
                 return new StoreBean();
@@ -695,7 +696,7 @@ public final class StoreBean
          * @see StoreBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -703,19 +704,19 @@ public final class StoreBean
          * @see StoreBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(StoreBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public StoreBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_store.md5
@@ -724,7 +725,7 @@ public final class StoreBean
          * @see {@link StoreBean#setMd5(String)}
          */
         public Builder md5(String md5){
-            template.get().setMd5(md5);
+            TEMPLATE.get().setMd5(md5);
             return this;
         }
         /** 
@@ -734,7 +735,7 @@ public final class StoreBean
          * @see {@link StoreBean#setEncoding(String)}
          */
         public Builder encoding(String encoding){
-            template.get().setEncoding(encoding);
+            TEMPLATE.get().setEncoding(encoding);
             return this;
         }
         /** 
@@ -744,7 +745,7 @@ public final class StoreBean
          * @see {@link StoreBean#setData(java.nio.ByteBuffer)}
          */
         public Builder data(java.nio.ByteBuffer data){
-            template.get().setData(data);
+            TEMPLATE.get().setData(data);
             return this;
         }
     }

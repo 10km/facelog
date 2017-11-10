@@ -630,8 +630,9 @@ public final class LogLightBean
             return checkPapersNumModified();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -845,7 +846,7 @@ public final class LogLightBean
      */
     public static final List<LogLightBean> replaceNull(List<LogLightBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -857,7 +858,7 @@ public final class LogLightBean
      */
     public static final List<LogLightBean> replaceNullInstance(List<LogLightBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -992,7 +993,7 @@ public final class LogLightBean
      */
     public static final class Builder{
         /** LogLightBean instance used for template to create new LogLightBean instance. */
-        static final ThreadLocal<LogLightBean> template = new ThreadLocal<LogLightBean>(){
+        static final ThreadLocal<LogLightBean> TEMPLATE = new ThreadLocal<LogLightBean>(){
             @Override
             protected LogLightBean initialValue() {
                 return new LogLightBean();
@@ -1003,7 +1004,7 @@ public final class LogLightBean
          * @see LogLightBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -1011,19 +1012,19 @@ public final class LogLightBean
          * @see LogLightBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(LogLightBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public LogLightBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_log_light.id
@@ -1032,7 +1033,7 @@ public final class LogLightBean
          * @see {@link LogLightBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -1042,7 +1043,7 @@ public final class LogLightBean
          * @see {@link LogLightBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
-            template.get().setPersonId(personId);
+            TEMPLATE.get().setPersonId(personId);
             return this;
         }
         /** 
@@ -1052,7 +1053,7 @@ public final class LogLightBean
          * @see {@link LogLightBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -1062,7 +1063,7 @@ public final class LogLightBean
          * @see {@link LogLightBean#setPapersType(Integer)}
          */
         public Builder papersType(Integer papersType){
-            template.get().setPapersType(papersType);
+            TEMPLATE.get().setPapersType(papersType);
             return this;
         }
         /** 
@@ -1072,7 +1073,7 @@ public final class LogLightBean
          * @see {@link LogLightBean#setPapersNum(String)}
          */
         public Builder papersNum(String papersNum){
-            template.get().setPapersNum(papersNum);
+            TEMPLATE.get().setPapersNum(papersNum);
             return this;
         }
         /** 
@@ -1082,7 +1083,7 @@ public final class LogLightBean
          * @see {@link LogLightBean#setVerifyTime(java.util.Date)}
          */
         public Builder verifyTime(java.util.Date verifyTime){
-            template.get().setVerifyTime(verifyTime);
+            TEMPLATE.get().setVerifyTime(verifyTime);
             return this;
         }
     }

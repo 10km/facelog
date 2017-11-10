@@ -803,8 +803,9 @@ public final class DeviceBean
             return checkCreateTimeModified();
         case FL_DEVICE_ID_UPDATE_TIME:
             return checkUpdateTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -1034,7 +1035,7 @@ public final class DeviceBean
      */
     public static final List<DeviceBean> replaceNull(List<DeviceBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -1046,7 +1047,7 @@ public final class DeviceBean
      */
     public static final List<DeviceBean> replaceNullInstance(List<DeviceBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -1189,7 +1190,7 @@ public final class DeviceBean
      */
     public static final class Builder{
         /** DeviceBean instance used for template to create new DeviceBean instance. */
-        static final ThreadLocal<DeviceBean> template = new ThreadLocal<DeviceBean>(){
+        static final ThreadLocal<DeviceBean> TEMPLATE = new ThreadLocal<DeviceBean>(){
             @Override
             protected DeviceBean initialValue() {
                 return new DeviceBean();
@@ -1200,7 +1201,7 @@ public final class DeviceBean
          * @see DeviceBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -1208,19 +1209,19 @@ public final class DeviceBean
          * @see DeviceBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(DeviceBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public DeviceBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_device.id
@@ -1229,7 +1230,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -1239,7 +1240,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setGroupId(Integer)}
          */
         public Builder groupId(Integer groupId){
-            template.get().setGroupId(groupId);
+            TEMPLATE.get().setGroupId(groupId);
             return this;
         }
         /** 
@@ -1249,7 +1250,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -1259,7 +1260,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setVersion(String)}
          */
         public Builder version(String version){
-            template.get().setVersion(version);
+            TEMPLATE.get().setVersion(version);
             return this;
         }
         /** 
@@ -1269,7 +1270,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setSerialNo(String)}
          */
         public Builder serialNo(String serialNo){
-            template.get().setSerialNo(serialNo);
+            TEMPLATE.get().setSerialNo(serialNo);
             return this;
         }
         /** 
@@ -1279,7 +1280,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setMac(String)}
          */
         public Builder mac(String mac){
-            template.get().setMac(mac);
+            TEMPLATE.get().setMac(mac);
             return this;
         }
         /** 
@@ -1289,7 +1290,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
-            template.get().setCreateTime(createTime);
+            TEMPLATE.get().setCreateTime(createTime);
             return this;
         }
         /** 
@@ -1299,7 +1300,7 @@ public final class DeviceBean
          * @see {@link DeviceBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){
-            template.get().setUpdateTime(updateTime);
+            TEMPLATE.get().setUpdateTime(updateTime);
             return this;
         }
     }

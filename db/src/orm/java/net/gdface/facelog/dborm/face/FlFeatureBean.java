@@ -436,8 +436,9 @@ public  class FlFeatureBean
             return checkFeatureModified();
         case FL_FEATURE_ID_UPDATE_TIME:
             return checkUpdateTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -623,7 +624,7 @@ public  class FlFeatureBean
      */
     public static final List<FlFeatureBean> replaceNull(List<FlFeatureBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -635,7 +636,7 @@ public  class FlFeatureBean
      */
     public static final List<FlFeatureBean> replaceNullInstance(List<FlFeatureBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -762,7 +763,7 @@ public  class FlFeatureBean
      */
     public static final class Builder{
         /** FlFeatureBean instance used for template to create new FlFeatureBean instance. */
-        static final ThreadLocal<FlFeatureBean> template = new ThreadLocal<FlFeatureBean>(){
+        static final ThreadLocal<FlFeatureBean> TEMPLATE = new ThreadLocal<FlFeatureBean>(){
             @Override
             protected FlFeatureBean initialValue() {
                 return new FlFeatureBean();
@@ -773,7 +774,7 @@ public  class FlFeatureBean
          * @see FlFeatureBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -781,19 +782,19 @@ public  class FlFeatureBean
          * @see FlFeatureBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlFeatureBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlFeatureBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_feature.md5
@@ -802,7 +803,7 @@ public  class FlFeatureBean
          * @see {@link FlFeatureBean#setMd5(String)}
          */
         public Builder md5(String md5){
-            template.get().setMd5(md5);
+            TEMPLATE.get().setMd5(md5);
             return this;
         }
         /** 
@@ -812,7 +813,7 @@ public  class FlFeatureBean
          * @see {@link FlFeatureBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
-            template.get().setPersonId(personId);
+            TEMPLATE.get().setPersonId(personId);
             return this;
         }
         /** 
@@ -822,7 +823,7 @@ public  class FlFeatureBean
          * @see {@link FlFeatureBean#setFeature(java.nio.ByteBuffer)}
          */
         public Builder feature(java.nio.ByteBuffer feature){
-            template.get().setFeature(feature);
+            TEMPLATE.get().setFeature(feature);
             return this;
         }
         /** 
@@ -832,7 +833,7 @@ public  class FlFeatureBean
          * @see {@link FlFeatureBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){
-            template.get().setUpdateTime(updateTime);
+            TEMPLATE.get().setUpdateTime(updateTime);
             return this;
         }
     }

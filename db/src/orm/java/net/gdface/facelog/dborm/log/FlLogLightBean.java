@@ -552,8 +552,9 @@ public  class FlLogLightBean
             return checkPapersNumModified();
         case FL_LOG_LIGHT_ID_VERIFY_TIME:
             return checkVerifyTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -767,7 +768,7 @@ public  class FlLogLightBean
      */
     public static final List<FlLogLightBean> replaceNull(List<FlLogLightBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -779,7 +780,7 @@ public  class FlLogLightBean
      */
     public static final List<FlLogLightBean> replaceNullInstance(List<FlLogLightBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -914,7 +915,7 @@ public  class FlLogLightBean
      */
     public static final class Builder{
         /** FlLogLightBean instance used for template to create new FlLogLightBean instance. */
-        static final ThreadLocal<FlLogLightBean> template = new ThreadLocal<FlLogLightBean>(){
+        static final ThreadLocal<FlLogLightBean> TEMPLATE = new ThreadLocal<FlLogLightBean>(){
             @Override
             protected FlLogLightBean initialValue() {
                 return new FlLogLightBean();
@@ -925,7 +926,7 @@ public  class FlLogLightBean
          * @see FlLogLightBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -933,19 +934,19 @@ public  class FlLogLightBean
          * @see FlLogLightBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlLogLightBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlLogLightBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_log_light.id
@@ -954,7 +955,7 @@ public  class FlLogLightBean
          * @see {@link FlLogLightBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -964,7 +965,7 @@ public  class FlLogLightBean
          * @see {@link FlLogLightBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
-            template.get().setPersonId(personId);
+            TEMPLATE.get().setPersonId(personId);
             return this;
         }
         /** 
@@ -974,7 +975,7 @@ public  class FlLogLightBean
          * @see {@link FlLogLightBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -984,7 +985,7 @@ public  class FlLogLightBean
          * @see {@link FlLogLightBean#setPapersType(Integer)}
          */
         public Builder papersType(Integer papersType){
-            template.get().setPapersType(papersType);
+            TEMPLATE.get().setPapersType(papersType);
             return this;
         }
         /** 
@@ -994,7 +995,7 @@ public  class FlLogLightBean
          * @see {@link FlLogLightBean#setPapersNum(String)}
          */
         public Builder papersNum(String papersNum){
-            template.get().setPapersNum(papersNum);
+            TEMPLATE.get().setPapersNum(papersNum);
             return this;
         }
         /** 
@@ -1004,7 +1005,7 @@ public  class FlLogLightBean
          * @see {@link FlLogLightBean#setVerifyTime(java.util.Date)}
          */
         public Builder verifyTime(java.util.Date verifyTime){
-            template.get().setVerifyTime(verifyTime);
+            TEMPLATE.get().setVerifyTime(verifyTime);
             return this;
         }
     }

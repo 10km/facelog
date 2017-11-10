@@ -711,8 +711,9 @@ public  class FlImageBean
             return checkThumbMd5Modified();
         case FL_IMAGE_ID_DEVICE_ID:
             return checkDeviceIdModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -942,7 +943,7 @@ public  class FlImageBean
      */
     public static final List<FlImageBean> replaceNull(List<FlImageBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -954,7 +955,7 @@ public  class FlImageBean
      */
     public static final List<FlImageBean> replaceNullInstance(List<FlImageBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -1097,7 +1098,7 @@ public  class FlImageBean
      */
     public static final class Builder{
         /** FlImageBean instance used for template to create new FlImageBean instance. */
-        static final ThreadLocal<FlImageBean> template = new ThreadLocal<FlImageBean>(){
+        static final ThreadLocal<FlImageBean> TEMPLATE = new ThreadLocal<FlImageBean>(){
             @Override
             protected FlImageBean initialValue() {
                 return new FlImageBean();
@@ -1108,7 +1109,7 @@ public  class FlImageBean
          * @see FlImageBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -1116,19 +1117,19 @@ public  class FlImageBean
          * @see FlImageBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlImageBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlImageBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_image.md5
@@ -1137,7 +1138,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setMd5(String)}
          */
         public Builder md5(String md5){
-            template.get().setMd5(md5);
+            TEMPLATE.get().setMd5(md5);
             return this;
         }
         /** 
@@ -1147,7 +1148,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setFormat(String)}
          */
         public Builder format(String format){
-            template.get().setFormat(format);
+            TEMPLATE.get().setFormat(format);
             return this;
         }
         /** 
@@ -1157,7 +1158,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setWidth(Integer)}
          */
         public Builder width(Integer width){
-            template.get().setWidth(width);
+            TEMPLATE.get().setWidth(width);
             return this;
         }
         /** 
@@ -1167,7 +1168,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setHeight(Integer)}
          */
         public Builder height(Integer height){
-            template.get().setHeight(height);
+            TEMPLATE.get().setHeight(height);
             return this;
         }
         /** 
@@ -1177,7 +1178,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setDepth(Integer)}
          */
         public Builder depth(Integer depth){
-            template.get().setDepth(depth);
+            TEMPLATE.get().setDepth(depth);
             return this;
         }
         /** 
@@ -1187,7 +1188,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setFaceNum(Integer)}
          */
         public Builder faceNum(Integer faceNum){
-            template.get().setFaceNum(faceNum);
+            TEMPLATE.get().setFaceNum(faceNum);
             return this;
         }
         /** 
@@ -1197,7 +1198,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setThumbMd5(String)}
          */
         public Builder thumbMd5(String thumbMd5){
-            template.get().setThumbMd5(thumbMd5);
+            TEMPLATE.get().setThumbMd5(thumbMd5);
             return this;
         }
         /** 
@@ -1207,7 +1208,7 @@ public  class FlImageBean
          * @see {@link FlImageBean#setDeviceId(Integer)}
          */
         public Builder deviceId(Integer deviceId){
-            template.get().setDeviceId(deviceId);
+            TEMPLATE.get().setDeviceId(deviceId);
             return this;
         }
     }

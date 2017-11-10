@@ -496,8 +496,9 @@ public final class PersonGroupBean
             return checkLeafModified();
         case FL_PERSON_GROUP_ID_PARENT:
             return checkParentModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -683,7 +684,7 @@ public final class PersonGroupBean
      */
     public static final List<PersonGroupBean> replaceNull(List<PersonGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -695,7 +696,7 @@ public final class PersonGroupBean
      */
     public static final List<PersonGroupBean> replaceNullInstance(List<PersonGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -822,7 +823,7 @@ public final class PersonGroupBean
      */
     public static final class Builder{
         /** PersonGroupBean instance used for template to create new PersonGroupBean instance. */
-        static final ThreadLocal<PersonGroupBean> template = new ThreadLocal<PersonGroupBean>(){
+        static final ThreadLocal<PersonGroupBean> TEMPLATE = new ThreadLocal<PersonGroupBean>(){
             @Override
             protected PersonGroupBean initialValue() {
                 return new PersonGroupBean();
@@ -833,7 +834,7 @@ public final class PersonGroupBean
          * @see PersonGroupBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -841,19 +842,19 @@ public final class PersonGroupBean
          * @see PersonGroupBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(PersonGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public PersonGroupBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_person_group.id
@@ -862,7 +863,7 @@ public final class PersonGroupBean
          * @see {@link PersonGroupBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -872,7 +873,7 @@ public final class PersonGroupBean
          * @see {@link PersonGroupBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -882,7 +883,7 @@ public final class PersonGroupBean
          * @see {@link PersonGroupBean#setLeaf(Integer)}
          */
         public Builder leaf(Integer leaf){
-            template.get().setLeaf(leaf);
+            TEMPLATE.get().setLeaf(leaf);
             return this;
         }
         /** 
@@ -892,7 +893,7 @@ public final class PersonGroupBean
          * @see {@link PersonGroupBean#setParent(Integer)}
          */
         public Builder parent(Integer parent){
-            template.get().setParent(parent);
+            TEMPLATE.get().setParent(parent);
             return this;
         }
     }

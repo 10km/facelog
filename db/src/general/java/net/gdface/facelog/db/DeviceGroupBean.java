@@ -496,8 +496,9 @@ public final class DeviceGroupBean
             return checkLeafModified();
         case FL_DEVICE_GROUP_ID_PARENT:
             return checkParentModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -683,7 +684,7 @@ public final class DeviceGroupBean
      */
     public static final List<DeviceGroupBean> replaceNull(List<DeviceGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -695,7 +696,7 @@ public final class DeviceGroupBean
      */
     public static final List<DeviceGroupBean> replaceNullInstance(List<DeviceGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -822,7 +823,7 @@ public final class DeviceGroupBean
      */
     public static final class Builder{
         /** DeviceGroupBean instance used for template to create new DeviceGroupBean instance. */
-        static final ThreadLocal<DeviceGroupBean> template = new ThreadLocal<DeviceGroupBean>(){
+        static final ThreadLocal<DeviceGroupBean> TEMPLATE = new ThreadLocal<DeviceGroupBean>(){
             @Override
             protected DeviceGroupBean initialValue() {
                 return new DeviceGroupBean();
@@ -833,7 +834,7 @@ public final class DeviceGroupBean
          * @see DeviceGroupBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -841,19 +842,19 @@ public final class DeviceGroupBean
          * @see DeviceGroupBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(DeviceGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public DeviceGroupBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_device_group.id
@@ -862,7 +863,7 @@ public final class DeviceGroupBean
          * @see {@link DeviceGroupBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -872,7 +873,7 @@ public final class DeviceGroupBean
          * @see {@link DeviceGroupBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -882,7 +883,7 @@ public final class DeviceGroupBean
          * @see {@link DeviceGroupBean#setLeaf(Integer)}
          */
         public Builder leaf(Integer leaf){
-            template.get().setLeaf(leaf);
+            TEMPLATE.get().setLeaf(leaf);
             return this;
         }
         /** 
@@ -892,7 +893,7 @@ public final class DeviceGroupBean
          * @see {@link DeviceGroupBean#setParent(Integer)}
          */
         public Builder parent(Integer parent){
-            template.get().setParent(parent);
+            TEMPLATE.get().setParent(parent);
             return this;
         }
     }

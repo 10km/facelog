@@ -933,8 +933,9 @@ public  class FlPersonBean
             return checkCreateTimeModified();
         case FL_PERSON_ID_UPDATE_TIME:
             return checkUpdateTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -1197,7 +1198,7 @@ public  class FlPersonBean
      */
     public static final List<FlPersonBean> replaceNull(List<FlPersonBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -1209,7 +1210,7 @@ public  class FlPersonBean
      */
     public static final List<FlPersonBean> replaceNullInstance(List<FlPersonBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -1364,7 +1365,7 @@ public  class FlPersonBean
      */
     public static final class Builder{
         /** FlPersonBean instance used for template to create new FlPersonBean instance. */
-        static final ThreadLocal<FlPersonBean> template = new ThreadLocal<FlPersonBean>(){
+        static final ThreadLocal<FlPersonBean> TEMPLATE = new ThreadLocal<FlPersonBean>(){
             @Override
             protected FlPersonBean initialValue() {
                 return new FlPersonBean();
@@ -1375,7 +1376,7 @@ public  class FlPersonBean
          * @see FlPersonBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -1383,19 +1384,19 @@ public  class FlPersonBean
          * @see FlPersonBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlPersonBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlPersonBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_person.id
@@ -1404,7 +1405,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -1414,7 +1415,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setGroupId(Integer)}
          */
         public Builder groupId(Integer groupId){
-            template.get().setGroupId(groupId);
+            TEMPLATE.get().setGroupId(groupId);
             return this;
         }
         /** 
@@ -1424,7 +1425,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -1434,7 +1435,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setSex(Integer)}
          */
         public Builder sex(Integer sex){
-            template.get().setSex(sex);
+            TEMPLATE.get().setSex(sex);
             return this;
         }
         /** 
@@ -1444,7 +1445,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setBirthdate(java.util.Date)}
          */
         public Builder birthdate(java.util.Date birthdate){
-            template.get().setBirthdate(birthdate);
+            TEMPLATE.get().setBirthdate(birthdate);
             return this;
         }
         /** 
@@ -1454,7 +1455,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setPapersType(Integer)}
          */
         public Builder papersType(Integer papersType){
-            template.get().setPapersType(papersType);
+            TEMPLATE.get().setPapersType(papersType);
             return this;
         }
         /** 
@@ -1464,7 +1465,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setPapersNum(String)}
          */
         public Builder papersNum(String papersNum){
-            template.get().setPapersNum(papersNum);
+            TEMPLATE.get().setPapersNum(papersNum);
             return this;
         }
         /** 
@@ -1474,7 +1475,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setImageMd5(String)}
          */
         public Builder imageMd5(String imageMd5){
-            template.get().setImageMd5(imageMd5);
+            TEMPLATE.get().setImageMd5(imageMd5);
             return this;
         }
         /** 
@@ -1484,7 +1485,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setExpiryDate(java.util.Date)}
          */
         public Builder expiryDate(java.util.Date expiryDate){
-            template.get().setExpiryDate(expiryDate);
+            TEMPLATE.get().setExpiryDate(expiryDate);
             return this;
         }
         /** 
@@ -1494,7 +1495,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
-            template.get().setCreateTime(createTime);
+            TEMPLATE.get().setCreateTime(createTime);
             return this;
         }
         /** 
@@ -1504,7 +1505,7 @@ public  class FlPersonBean
          * @see {@link FlPersonBean#setUpdateTime(java.util.Date)}
          */
         public Builder updateTime(java.util.Date updateTime){
-            template.get().setUpdateTime(updateTime);
+            TEMPLATE.get().setUpdateTime(updateTime);
             return this;
         }
     }

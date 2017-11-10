@@ -447,8 +447,9 @@ public  class FlDeviceGroupBean
             return checkLeafModified();
         case FL_DEVICE_GROUP_ID_PARENT:
             return checkParentModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -634,7 +635,7 @@ public  class FlDeviceGroupBean
      */
     public static final List<FlDeviceGroupBean> replaceNull(List<FlDeviceGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -646,7 +647,7 @@ public  class FlDeviceGroupBean
      */
     public static final List<FlDeviceGroupBean> replaceNullInstance(List<FlDeviceGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -773,7 +774,7 @@ public  class FlDeviceGroupBean
      */
     public static final class Builder{
         /** FlDeviceGroupBean instance used for template to create new FlDeviceGroupBean instance. */
-        static final ThreadLocal<FlDeviceGroupBean> template = new ThreadLocal<FlDeviceGroupBean>(){
+        static final ThreadLocal<FlDeviceGroupBean> TEMPLATE = new ThreadLocal<FlDeviceGroupBean>(){
             @Override
             protected FlDeviceGroupBean initialValue() {
                 return new FlDeviceGroupBean();
@@ -784,7 +785,7 @@ public  class FlDeviceGroupBean
          * @see FlDeviceGroupBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -792,19 +793,19 @@ public  class FlDeviceGroupBean
          * @see FlDeviceGroupBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlDeviceGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlDeviceGroupBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_device_group.id
@@ -813,7 +814,7 @@ public  class FlDeviceGroupBean
          * @see {@link FlDeviceGroupBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -823,7 +824,7 @@ public  class FlDeviceGroupBean
          * @see {@link FlDeviceGroupBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -833,7 +834,7 @@ public  class FlDeviceGroupBean
          * @see {@link FlDeviceGroupBean#setLeaf(Integer)}
          */
         public Builder leaf(Integer leaf){
-            template.get().setLeaf(leaf);
+            TEMPLATE.get().setLeaf(leaf);
             return this;
         }
         /** 
@@ -843,7 +844,7 @@ public  class FlDeviceGroupBean
          * @see {@link FlDeviceGroupBean#setParent(Integer)}
          */
         public Builder parent(Integer parent){
-            template.get().setParent(parent);
+            TEMPLATE.get().setParent(parent);
             return this;
         }
     }

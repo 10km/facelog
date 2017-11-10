@@ -1524,8 +1524,9 @@ public  class FaceBean
             return checkFeatureMd5Modified();
         case FL_FACE_ID_CREATE_TIME:
             return checkCreateTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -1887,7 +1888,7 @@ public  class FaceBean
      */
     public static final List<FaceBean> replaceNull(List<FaceBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -1899,7 +1900,7 @@ public  class FaceBean
      */
     public static final List<FaceBean> replaceNullInstance(List<FaceBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -2090,7 +2091,7 @@ public  class FaceBean
      */
     public static final class Builder{
         /** FaceBean instance used for template to create new FaceBean instance. */
-        static final ThreadLocal<FaceBean> template = new ThreadLocal<FaceBean>(){
+        static final ThreadLocal<FaceBean> TEMPLATE = new ThreadLocal<FaceBean>(){
             @Override
             protected FaceBean initialValue() {
                 return new FaceBean();
@@ -2101,7 +2102,7 @@ public  class FaceBean
          * @see FaceBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -2109,19 +2110,19 @@ public  class FaceBean
          * @see FaceBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FaceBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FaceBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_face.id
@@ -2130,7 +2131,7 @@ public  class FaceBean
          * @see {@link FaceBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -2140,7 +2141,7 @@ public  class FaceBean
          * @see {@link FaceBean#setImageMd5(String)}
          */
         public Builder imageMd5(String imageMd5){
-            template.get().setImageMd5(imageMd5);
+            TEMPLATE.get().setImageMd5(imageMd5);
             return this;
         }
         /** 
@@ -2150,7 +2151,7 @@ public  class FaceBean
          * @see {@link FaceBean#setFaceLeft(Integer)}
          */
         public Builder faceLeft(Integer faceLeft){
-            template.get().setFaceLeft(faceLeft);
+            TEMPLATE.get().setFaceLeft(faceLeft);
             return this;
         }
         /** 
@@ -2160,7 +2161,7 @@ public  class FaceBean
          * @see {@link FaceBean#setFaceTop(Integer)}
          */
         public Builder faceTop(Integer faceTop){
-            template.get().setFaceTop(faceTop);
+            TEMPLATE.get().setFaceTop(faceTop);
             return this;
         }
         /** 
@@ -2170,7 +2171,7 @@ public  class FaceBean
          * @see {@link FaceBean#setFaceWidth(Integer)}
          */
         public Builder faceWidth(Integer faceWidth){
-            template.get().setFaceWidth(faceWidth);
+            TEMPLATE.get().setFaceWidth(faceWidth);
             return this;
         }
         /** 
@@ -2180,7 +2181,7 @@ public  class FaceBean
          * @see {@link FaceBean#setFaceHeight(Integer)}
          */
         public Builder faceHeight(Integer faceHeight){
-            template.get().setFaceHeight(faceHeight);
+            TEMPLATE.get().setFaceHeight(faceHeight);
             return this;
         }
         /** 
@@ -2190,7 +2191,7 @@ public  class FaceBean
          * @see {@link FaceBean#setEyeLeftx(Integer)}
          */
         public Builder eyeLeftx(Integer eyeLeftx){
-            template.get().setEyeLeftx(eyeLeftx);
+            TEMPLATE.get().setEyeLeftx(eyeLeftx);
             return this;
         }
         /** 
@@ -2200,7 +2201,7 @@ public  class FaceBean
          * @see {@link FaceBean#setEyeLefty(Integer)}
          */
         public Builder eyeLefty(Integer eyeLefty){
-            template.get().setEyeLefty(eyeLefty);
+            TEMPLATE.get().setEyeLefty(eyeLefty);
             return this;
         }
         /** 
@@ -2210,7 +2211,7 @@ public  class FaceBean
          * @see {@link FaceBean#setEyeRightx(Integer)}
          */
         public Builder eyeRightx(Integer eyeRightx){
-            template.get().setEyeRightx(eyeRightx);
+            TEMPLATE.get().setEyeRightx(eyeRightx);
             return this;
         }
         /** 
@@ -2220,7 +2221,7 @@ public  class FaceBean
          * @see {@link FaceBean#setEyeRighty(Integer)}
          */
         public Builder eyeRighty(Integer eyeRighty){
-            template.get().setEyeRighty(eyeRighty);
+            TEMPLATE.get().setEyeRighty(eyeRighty);
             return this;
         }
         /** 
@@ -2230,7 +2231,7 @@ public  class FaceBean
          * @see {@link FaceBean#setMouthX(Integer)}
          */
         public Builder mouthX(Integer mouthX){
-            template.get().setMouthX(mouthX);
+            TEMPLATE.get().setMouthX(mouthX);
             return this;
         }
         /** 
@@ -2240,7 +2241,7 @@ public  class FaceBean
          * @see {@link FaceBean#setMouthY(Integer)}
          */
         public Builder mouthY(Integer mouthY){
-            template.get().setMouthY(mouthY);
+            TEMPLATE.get().setMouthY(mouthY);
             return this;
         }
         /** 
@@ -2250,7 +2251,7 @@ public  class FaceBean
          * @see {@link FaceBean#setNoseX(Integer)}
          */
         public Builder noseX(Integer noseX){
-            template.get().setNoseX(noseX);
+            TEMPLATE.get().setNoseX(noseX);
             return this;
         }
         /** 
@@ -2260,7 +2261,7 @@ public  class FaceBean
          * @see {@link FaceBean#setNoseY(Integer)}
          */
         public Builder noseY(Integer noseY){
-            template.get().setNoseY(noseY);
+            TEMPLATE.get().setNoseY(noseY);
             return this;
         }
         /** 
@@ -2270,7 +2271,7 @@ public  class FaceBean
          * @see {@link FaceBean#setAngleYaw(Integer)}
          */
         public Builder angleYaw(Integer angleYaw){
-            template.get().setAngleYaw(angleYaw);
+            TEMPLATE.get().setAngleYaw(angleYaw);
             return this;
         }
         /** 
@@ -2280,7 +2281,7 @@ public  class FaceBean
          * @see {@link FaceBean#setAnglePitch(Integer)}
          */
         public Builder anglePitch(Integer anglePitch){
-            template.get().setAnglePitch(anglePitch);
+            TEMPLATE.get().setAnglePitch(anglePitch);
             return this;
         }
         /** 
@@ -2290,7 +2291,7 @@ public  class FaceBean
          * @see {@link FaceBean#setAngleRoll(Integer)}
          */
         public Builder angleRoll(Integer angleRoll){
-            template.get().setAngleRoll(angleRoll);
+            TEMPLATE.get().setAngleRoll(angleRoll);
             return this;
         }
         /** 
@@ -2300,7 +2301,7 @@ public  class FaceBean
          * @see {@link FaceBean#setExtInfo(byte[])}
          */
         public Builder extInfo(byte[] extInfo){
-            template.get().setExtInfo(extInfo);
+            TEMPLATE.get().setExtInfo(extInfo);
             return this;
         }
         /** 
@@ -2310,7 +2311,7 @@ public  class FaceBean
          * @see {@link FaceBean#setFeatureMd5(String)}
          */
         public Builder featureMd5(String featureMd5){
-            template.get().setFeatureMd5(featureMd5);
+            TEMPLATE.get().setFeatureMd5(featureMd5);
             return this;
         }
         /** 
@@ -2320,7 +2321,7 @@ public  class FaceBean
          * @see {@link FaceBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
-            template.get().setCreateTime(createTime);
+            TEMPLATE.get().setCreateTime(createTime);
             return this;
         }
     }

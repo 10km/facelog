@@ -335,8 +335,9 @@ public  class FlStoreBean
             return checkEncodingModified();
         case FL_STORE_ID_DATA:
             return checkDataModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -511,7 +512,7 @@ public  class FlStoreBean
      */
     public static final List<FlStoreBean> replaceNull(List<FlStoreBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -523,7 +524,7 @@ public  class FlStoreBean
      */
     public static final List<FlStoreBean> replaceNullInstance(List<FlStoreBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -646,7 +647,7 @@ public  class FlStoreBean
      */
     public static final class Builder{
         /** FlStoreBean instance used for template to create new FlStoreBean instance. */
-        static final ThreadLocal<FlStoreBean> template = new ThreadLocal<FlStoreBean>(){
+        static final ThreadLocal<FlStoreBean> TEMPLATE = new ThreadLocal<FlStoreBean>(){
             @Override
             protected FlStoreBean initialValue() {
                 return new FlStoreBean();
@@ -657,7 +658,7 @@ public  class FlStoreBean
          * @see FlStoreBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -665,19 +666,19 @@ public  class FlStoreBean
          * @see FlStoreBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlStoreBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlStoreBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_store.md5
@@ -686,7 +687,7 @@ public  class FlStoreBean
          * @see {@link FlStoreBean#setMd5(String)}
          */
         public Builder md5(String md5){
-            template.get().setMd5(md5);
+            TEMPLATE.get().setMd5(md5);
             return this;
         }
         /** 
@@ -696,7 +697,7 @@ public  class FlStoreBean
          * @see {@link FlStoreBean#setEncoding(String)}
          */
         public Builder encoding(String encoding){
-            template.get().setEncoding(encoding);
+            TEMPLATE.get().setEncoding(encoding);
             return this;
         }
         /** 
@@ -706,7 +707,7 @@ public  class FlStoreBean
          * @see {@link FlStoreBean#setData(java.nio.ByteBuffer)}
          */
         public Builder data(java.nio.ByteBuffer data){
-            template.get().setData(data);
+            TEMPLATE.get().setData(data);
             return this;
         }
     }

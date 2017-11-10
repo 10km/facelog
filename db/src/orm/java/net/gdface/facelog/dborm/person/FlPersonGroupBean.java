@@ -447,8 +447,9 @@ public  class FlPersonGroupBean
             return checkLeafModified();
         case FL_PERSON_GROUP_ID_PARENT:
             return checkParentModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -634,7 +635,7 @@ public  class FlPersonGroupBean
      */
     public static final List<FlPersonGroupBean> replaceNull(List<FlPersonGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -646,7 +647,7 @@ public  class FlPersonGroupBean
      */
     public static final List<FlPersonGroupBean> replaceNullInstance(List<FlPersonGroupBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -773,7 +774,7 @@ public  class FlPersonGroupBean
      */
     public static final class Builder{
         /** FlPersonGroupBean instance used for template to create new FlPersonGroupBean instance. */
-        static final ThreadLocal<FlPersonGroupBean> template = new ThreadLocal<FlPersonGroupBean>(){
+        static final ThreadLocal<FlPersonGroupBean> TEMPLATE = new ThreadLocal<FlPersonGroupBean>(){
             @Override
             protected FlPersonGroupBean initialValue() {
                 return new FlPersonGroupBean();
@@ -784,7 +785,7 @@ public  class FlPersonGroupBean
          * @see FlPersonGroupBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -792,19 +793,19 @@ public  class FlPersonGroupBean
          * @see FlPersonGroupBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlPersonGroupBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlPersonGroupBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_person_group.id
@@ -813,7 +814,7 @@ public  class FlPersonGroupBean
          * @see {@link FlPersonGroupBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -823,7 +824,7 @@ public  class FlPersonGroupBean
          * @see {@link FlPersonGroupBean#setName(String)}
          */
         public Builder name(String name){
-            template.get().setName(name);
+            TEMPLATE.get().setName(name);
             return this;
         }
         /** 
@@ -833,7 +834,7 @@ public  class FlPersonGroupBean
          * @see {@link FlPersonGroupBean#setLeaf(Integer)}
          */
         public Builder leaf(Integer leaf){
-            template.get().setLeaf(leaf);
+            TEMPLATE.get().setLeaf(leaf);
             return this;
         }
         /** 
@@ -843,7 +844,7 @@ public  class FlPersonGroupBean
          * @see {@link FlPersonGroupBean#setParent(Integer)}
          */
         public Builder parent(Integer parent){
-            template.get().setParent(parent);
+            TEMPLATE.get().setParent(parent);
             return this;
         }
     }

@@ -875,8 +875,9 @@ public final class LogBean
             return checkVerifyTimeModified();
         case FL_LOG_ID_CREATE_TIME:
             return checkCreateTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -1106,7 +1107,7 @@ public final class LogBean
      */
     public static final List<LogBean> replaceNull(List<LogBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -1118,7 +1119,7 @@ public final class LogBean
      */
     public static final List<LogBean> replaceNullInstance(List<LogBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -1261,7 +1262,7 @@ public final class LogBean
      */
     public static final class Builder{
         /** LogBean instance used for template to create new LogBean instance. */
-        static final ThreadLocal<LogBean> template = new ThreadLocal<LogBean>(){
+        static final ThreadLocal<LogBean> TEMPLATE = new ThreadLocal<LogBean>(){
             @Override
             protected LogBean initialValue() {
                 return new LogBean();
@@ -1272,7 +1273,7 @@ public final class LogBean
          * @see LogBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -1280,19 +1281,19 @@ public final class LogBean
          * @see LogBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(LogBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public LogBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_log.id
@@ -1301,7 +1302,7 @@ public final class LogBean
          * @see {@link LogBean#setId(Integer)}
          */
         public Builder id(Integer id){
-            template.get().setId(id);
+            TEMPLATE.get().setId(id);
             return this;
         }
         /** 
@@ -1311,7 +1312,7 @@ public final class LogBean
          * @see {@link LogBean#setPersonId(Integer)}
          */
         public Builder personId(Integer personId){
-            template.get().setPersonId(personId);
+            TEMPLATE.get().setPersonId(personId);
             return this;
         }
         /** 
@@ -1321,7 +1322,7 @@ public final class LogBean
          * @see {@link LogBean#setDeviceId(Integer)}
          */
         public Builder deviceId(Integer deviceId){
-            template.get().setDeviceId(deviceId);
+            TEMPLATE.get().setDeviceId(deviceId);
             return this;
         }
         /** 
@@ -1331,7 +1332,7 @@ public final class LogBean
          * @see {@link LogBean#setVerifyFeature(String)}
          */
         public Builder verifyFeature(String verifyFeature){
-            template.get().setVerifyFeature(verifyFeature);
+            TEMPLATE.get().setVerifyFeature(verifyFeature);
             return this;
         }
         /** 
@@ -1341,7 +1342,7 @@ public final class LogBean
          * @see {@link LogBean#setCompareFace(Integer)}
          */
         public Builder compareFace(Integer compareFace){
-            template.get().setCompareFace(compareFace);
+            TEMPLATE.get().setCompareFace(compareFace);
             return this;
         }
         /** 
@@ -1351,7 +1352,7 @@ public final class LogBean
          * @see {@link LogBean#setSimilarty(Double)}
          */
         public Builder similarty(Double similarty){
-            template.get().setSimilarty(similarty);
+            TEMPLATE.get().setSimilarty(similarty);
             return this;
         }
         /** 
@@ -1361,7 +1362,7 @@ public final class LogBean
          * @see {@link LogBean#setVerifyTime(java.util.Date)}
          */
         public Builder verifyTime(java.util.Date verifyTime){
-            template.get().setVerifyTime(verifyTime);
+            TEMPLATE.get().setVerifyTime(verifyTime);
             return this;
         }
         /** 
@@ -1371,7 +1372,7 @@ public final class LogBean
          * @see {@link LogBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
-            template.get().setCreateTime(createTime);
+            TEMPLATE.get().setCreateTime(createTime);
             return this;
         }
     }

@@ -402,8 +402,9 @@ public  class FlPermitBean
             return checkPersonGroupIdModified();
         case FL_PERMIT_ID_CREATE_TIME:
             return checkCreateTimeModified();
-        }
-        return false;
+        default:
+            return false;
+        }        
     }
     /**
      * Determines if the {@code column} has been initialized.
@@ -579,7 +580,7 @@ public  class FlPermitBean
      */
     public static final List<FlPermitBean> replaceNull(List<FlPermitBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(null == source.get(i))source.set(i, NULL);
             }
         }
@@ -591,7 +592,7 @@ public  class FlPermitBean
      */
     public static final List<FlPermitBean> replaceNullInstance(List<FlPermitBean> source){
         if(null != source){
-            for(int i = 0,end_i = source.size();i<end_i;++i){
+            for(int i = 0,endIndex = source.size();i<endIndex;++i){
                 if(source.get(i).checkNULL())source.set(i, null);
             }
         }
@@ -714,7 +715,7 @@ public  class FlPermitBean
      */
     public static final class Builder{
         /** FlPermitBean instance used for template to create new FlPermitBean instance. */
-        static final ThreadLocal<FlPermitBean> template = new ThreadLocal<FlPermitBean>(){
+        static final ThreadLocal<FlPermitBean> TEMPLATE = new ThreadLocal<FlPermitBean>(){
             @Override
             protected FlPermitBean initialValue() {
                 return new FlPermitBean();
@@ -725,7 +726,7 @@ public  class FlPermitBean
          * @see FlPermitBean#reset()
          */
         public Builder reset(){
-            template.get().reset();
+            TEMPLATE.get().reset();
             return this;
         }
         /** 
@@ -733,19 +734,19 @@ public  class FlPermitBean
          * @see FlPermitBean#immutable(Boolean)
          */
         public Builder immutable(){
-            template.get().immutable(Boolean.TRUE);
+            TEMPLATE.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
         public Builder template(FlPermitBean bean){
             if(null == bean)
                 throw new NullPointerException();
-            template.set(bean);
+            TEMPLATE.set(bean);
             return this;
         }
-        /** return a clone instance of {@link #template}*/
+        /** return a clone instance of {@link #TEMPLATE}*/
         public FlPermitBean build(){
-            return template.get().clone();
+            return TEMPLATE.get().clone();
         }
         /** 
          * fill the field : fl_permit.device_group_id
@@ -754,7 +755,7 @@ public  class FlPermitBean
          * @see {@link FlPermitBean#setDeviceGroupId(Integer)}
          */
         public Builder deviceGroupId(Integer deviceGroupId){
-            template.get().setDeviceGroupId(deviceGroupId);
+            TEMPLATE.get().setDeviceGroupId(deviceGroupId);
             return this;
         }
         /** 
@@ -764,7 +765,7 @@ public  class FlPermitBean
          * @see {@link FlPermitBean#setPersonGroupId(Integer)}
          */
         public Builder personGroupId(Integer personGroupId){
-            template.get().setPersonGroupId(personGroupId);
+            TEMPLATE.get().setPersonGroupId(personGroupId);
             return this;
         }
         /** 
@@ -774,7 +775,7 @@ public  class FlPermitBean
          * @see {@link FlPermitBean#setCreateTime(java.util.Date)}
          */
         public Builder createTime(java.util.Date createTime){
-            template.get().setCreateTime(createTime);
+            TEMPLATE.get().setCreateTime(createTime);
             return this;
         }
     }
