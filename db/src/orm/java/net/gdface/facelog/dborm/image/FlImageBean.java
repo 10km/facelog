@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm.image;
 import java.io.Serializable;
+import java.util.List;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
@@ -25,7 +26,8 @@ public  class FlImageBean
     implements Serializable,BaseBean<FlImageBean>,Comparable<FlImageBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 646979810912117585L;
-    
+    /** NULL {@link FlImageBean} bean , IMMUTABLE instance */
+    public static final FlImageBean NULL = new FlImageBean().asNULL().immutable(Boolean.TRUE);
     /** comments:主键,图像md5检验码,同时也是从 fl_store 获取图像数据的key */
     private String md5;
 
@@ -50,11 +52,39 @@ public  class FlImageBean
     /** comments:外键,图像来源设备 */
     private Integer deviceId;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FlImageBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FlImageBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -156,6 +186,7 @@ public  class FlImageBean
      */
     public void setMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, md5) && checkMd5Initialized()) {
             return;
         }
@@ -210,6 +241,7 @@ public  class FlImageBean
      */
     public void setFormat(String newVal)
     {
+        checkMutable();
         if (equal(newVal, format) && checkFormatInitialized()) {
             return;
         }
@@ -265,6 +297,7 @@ public  class FlImageBean
      */
     public void setWidth(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, width) && checkWidthInitialized()) {
             return;
         }
@@ -330,6 +363,7 @@ public  class FlImageBean
      */
     public void setHeight(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, height) && checkHeightInitialized()) {
             return;
         }
@@ -396,6 +430,7 @@ public  class FlImageBean
      */
     public void setDepth(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, depth) && checkDepthInitialized()) {
             return;
         }
@@ -462,6 +497,7 @@ public  class FlImageBean
      */
     public void setFaceNum(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, faceNum) && checkFaceNumInitialized()) {
             return;
         }
@@ -526,6 +562,7 @@ public  class FlImageBean
      */
     public void setThumbMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, thumbMd5) && checkThumbMd5Initialized()) {
             return;
         }
@@ -581,6 +618,7 @@ public  class FlImageBean
      */
     public void setDeviceId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
             return;
         }
@@ -733,6 +771,7 @@ public  class FlImageBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -764,6 +803,7 @@ public  class FlImageBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.md5 = null;
         this.format = null;
         this.width = null;
@@ -867,12 +907,15 @@ public  class FlImageBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FlImageBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FlImageBean asNULL()
+    {   
+        checkMutable();
+        
         setMd5(null);
         setFormat(null);
         setWidth(null);
@@ -885,6 +928,37 @@ public  class FlImageBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FlImageBean> replaceNull(List<FlImageBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FlImageBean> replaceNullInstance(List<FlImageBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1035,6 +1109,14 @@ public  class FlImageBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FlImageBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

@@ -517,7 +517,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
                     @Override
                     public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        return converterDeviceGroupBean.fromRight(input);
+                        return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
                     }
                 });
     }
@@ -542,7 +542,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return converterDeviceBean.fromRight(input);
+                        return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
                 });
     }
@@ -559,7 +559,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return converterDeviceBean.fromRight(input);
+                        return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
                 });
     }
@@ -609,7 +609,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
                     @Override
                     public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
-                        return converterFeatureBean.fromRight(input);
+                        return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(input));
                     }
                 });
     }
@@ -695,7 +695,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        return converterLogBean.fromRight(input);
+                        return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
                     }
                 });
     }
@@ -759,7 +759,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
                     @Override
                     public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        return converterPersonGroupBean.fromRight(input);
+                        return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
                     }
                 });
     }
@@ -801,7 +801,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return converterPersonBean.fromRight(input);
+                        return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
                 });
     }
@@ -818,7 +818,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return converterPersonBean.fromRight(input);
+                        return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
                 });
     }
@@ -835,7 +835,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
                     @Override
                     public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        return converterDeviceGroupBean.fromRight(input);
+                        return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
                     }
                 });
     }
@@ -852,7 +852,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
                     @Override
                     public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        return converterPersonGroupBean.fromRight(input);
+                        return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
                     }
                 });
     }
@@ -893,7 +893,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
-                        return converterDeviceBean.fromRight(input);
+                        return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(input));
                     }
                 });
     }
@@ -916,7 +916,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
                     @Override
                     public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
-                        return converterDeviceGroupBean.fromRight(input);
+                        return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(input));
                     }
                 });
     }
@@ -969,7 +969,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogBean>,List<LogBean>>(){
                     @Override
                     public List<LogBean> apply(List<net.gdface.facelog.client.thrift.LogBean> input) {
-                        return converterLogBean.fromRight(input);
+                        return LogBean.replaceNullInstance(converterLogBean.fromRight(input));
                     }
                 });
     }
@@ -991,7 +991,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        return converterLogLightBean.fromRight(input);
+                        return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
                     }
                 });
     }
@@ -1016,7 +1016,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.LogLightBean>,List<LogLightBean>>(){
                     @Override
                     public List<LogLightBean> apply(List<net.gdface.facelog.client.thrift.LogLightBean> input) {
-                        return converterLogLightBean.fromRight(input);
+                        return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(input));
                     }
                 });
     }
@@ -1033,7 +1033,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PermitBean>,List<PermitBean>>(){
                     @Override
                     public List<PermitBean> apply(List<net.gdface.facelog.client.thrift.PermitBean> input) {
-                        return converterPermitBean.fromRight(input);
+                        return PermitBean.replaceNullInstance(converterPermitBean.fromRight(input));
                     }
                 });
     }
@@ -1057,7 +1057,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
-                        return converterPersonBean.fromRight(input);
+                        return PersonBean.replaceNullInstance(converterPersonBean.fromRight(input));
                     }
                 });
     }
@@ -1080,7 +1080,7 @@ class IFaceLogClientAsync implements Constant{
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
                     @Override
                     public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
-                        return converterPersonGroupBean.fromRight(input);
+                        return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(input));
                     }
                 });
     }

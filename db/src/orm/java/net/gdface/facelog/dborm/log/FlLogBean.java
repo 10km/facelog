@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm.log;
 import java.io.Serializable;
+import java.util.List;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceBean;
@@ -28,7 +29,8 @@ public  class FlLogBean
     implements Serializable,BaseBean<FlLogBean>,Comparable<FlLogBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 7869683986300606649L;
-    
+    /** NULL {@link FlLogBean} bean , IMMUTABLE instance */
+    public static final FlLogBean NULL = new FlLogBean().asNULL().immutable(Boolean.TRUE);
     /** comments:日志id */
     private Integer id;
 
@@ -52,11 +54,39 @@ public  class FlLogBean
 
     private java.util.Date createTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FlLogBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FlLogBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -157,6 +187,7 @@ public  class FlLogBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -223,6 +254,7 @@ public  class FlLogBean
      */
     public void setPersonId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
@@ -288,6 +320,7 @@ public  class FlLogBean
      */
     public void setDeviceId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
             return;
         }
@@ -353,6 +386,7 @@ public  class FlLogBean
      */
     public void setVerifyFeature(String newVal)
     {
+        checkMutable();
         if (equal(newVal, verifyFeature) && checkVerifyFeatureInitialized()) {
             return;
         }
@@ -408,6 +442,7 @@ public  class FlLogBean
      */
     public void setCompareFace(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, compareFace) && checkCompareFaceInitialized()) {
             return;
         }
@@ -472,6 +507,7 @@ public  class FlLogBean
      */
     public void setSimilarty(Double newVal)
     {
+        checkMutable();
         if (equal(newVal, similarty) && checkSimilartyInitialized()) {
             return;
         }
@@ -538,6 +574,7 @@ public  class FlLogBean
      */
     public void setVerifyTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, verifyTime) && checkVerifyTimeInitialized()) {
             return;
         }
@@ -603,6 +640,7 @@ public  class FlLogBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -794,6 +832,7 @@ public  class FlLogBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -825,6 +864,7 @@ public  class FlLogBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.personId = null;
         this.deviceId = null;
@@ -928,12 +968,15 @@ public  class FlLogBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FlLogBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FlLogBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setPersonId(null);
         setDeviceId(null);
@@ -946,6 +989,37 @@ public  class FlLogBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FlLogBean> replaceNull(List<FlLogBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FlLogBean> replaceNullInstance(List<FlLogBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1096,6 +1170,14 @@ public  class FlLogBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FlLogBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

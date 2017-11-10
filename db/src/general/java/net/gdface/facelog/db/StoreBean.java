@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import java.util.List;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -23,7 +24,8 @@ public final class StoreBean
     implements Serializable,BaseBean<StoreBean>,Comparable<StoreBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1684185165668832146L;
-    
+    /** NULL {@link StoreBean} bean , IMMUTABLE instance */
+    public static final StoreBean NULL = new StoreBean().asNULL().immutable(Boolean.TRUE);
     /** comments:主键,md5检验码 */
     private String md5;
 
@@ -33,11 +35,39 @@ public final class StoreBean
     /** comments:二进制数据 */
     private java.nio.ByteBuffer data;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized StoreBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private StoreBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -144,6 +174,7 @@ public final class StoreBean
      */
     public void setMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, md5) && checkMd5Initialized()) {
             return;
         }
@@ -159,6 +190,7 @@ public final class StoreBean
      */
     @ThriftField(name = "md5")
     public void writeMd5(String newVal){
+        checkMutable();
         md5 = newVal;
     }
     /**
@@ -208,6 +240,7 @@ public final class StoreBean
      */
     public void setEncoding(String newVal)
     {
+        checkMutable();
         if (equal(newVal, encoding) && checkEncodingInitialized()) {
             return;
         }
@@ -223,6 +256,7 @@ public final class StoreBean
      */
     @ThriftField(name = "encoding")
     public void writeEncoding(String newVal){
+        checkMutable();
         encoding = newVal;
     }
     /**
@@ -272,6 +306,7 @@ public final class StoreBean
      */
     public void setData(java.nio.ByteBuffer newVal)
     {
+        checkMutable();
         if (equal(newVal, data) && checkDataInitialized()) {
             return;
         }
@@ -287,6 +322,7 @@ public final class StoreBean
      */
     @ThriftField(name = "data")
     public void writeData(java.nio.ByteBuffer newVal){
+        checkMutable();
         data = newVal;
     }
     /**
@@ -387,6 +423,7 @@ public final class StoreBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -413,6 +450,7 @@ public final class StoreBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.md5 = null;
         this.encoding = null;
         this.data = null;
@@ -481,12 +519,15 @@ public final class StoreBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public StoreBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public StoreBean asNULL()
+    {   
+        checkMutable();
+        
         setMd5(null);
         setEncoding(null);
         setData(null);
@@ -494,6 +535,37 @@ public final class StoreBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<StoreBean> replaceNull(List<StoreBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<StoreBean> replaceNullInstance(List<StoreBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -624,6 +696,14 @@ public final class StoreBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see StoreBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

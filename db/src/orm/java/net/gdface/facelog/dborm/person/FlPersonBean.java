@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm.person;
 import java.io.Serializable;
+import java.util.List;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.image.FlImageBean;
@@ -25,7 +26,8 @@ public  class FlPersonBean
     implements Serializable,BaseBean<FlPersonBean>,Comparable<FlPersonBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -4314407042657759584L;
-    
+    /** NULL {@link FlPersonBean} bean , IMMUTABLE instance */
+    public static final FlPersonBean NULL = new FlPersonBean().asNULL().immutable(Boolean.TRUE);
     /** comments:用户id */
     private Integer id;
 
@@ -57,11 +59,39 @@ public  class FlPersonBean
 
     private java.util.Date updateTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FlPersonBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FlPersonBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -164,6 +194,7 @@ public  class FlPersonBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -230,6 +261,7 @@ public  class FlPersonBean
      */
     public void setGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
@@ -295,6 +327,7 @@ public  class FlPersonBean
      */
     public void setName(String newVal)
     {
+        checkMutable();
         if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
@@ -349,6 +382,7 @@ public  class FlPersonBean
      */
     public void setSex(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, sex) && checkSexInitialized()) {
             return;
         }
@@ -413,6 +447,7 @@ public  class FlPersonBean
      */
     public void setBirthdate(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, birthdate) && checkBirthdateInitialized()) {
             return;
         }
@@ -477,6 +512,7 @@ public  class FlPersonBean
      */
     public void setPapersType(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
             return;
         }
@@ -541,6 +577,7 @@ public  class FlPersonBean
      */
     public void setPapersNum(String newVal)
     {
+        checkMutable();
         if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
             return;
         }
@@ -596,6 +633,7 @@ public  class FlPersonBean
      */
     public void setImageMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
@@ -651,6 +689,7 @@ public  class FlPersonBean
      */
     public void setExpiryDate(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, expiryDate) && checkExpiryDateInitialized()) {
             return;
         }
@@ -716,6 +755,7 @@ public  class FlPersonBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -781,6 +821,7 @@ public  class FlPersonBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
@@ -958,6 +999,7 @@ public  class FlPersonBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -992,6 +1034,7 @@ public  class FlPersonBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.groupId = new Integer(1)/* DEFAULT:'1'*/;
         this.name = null;
@@ -1116,12 +1159,15 @@ public  class FlPersonBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FlPersonBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FlPersonBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setGroupId(null);
         setName(null);
@@ -1137,6 +1183,37 @@ public  class FlPersonBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FlPersonBean> replaceNull(List<FlPersonBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FlPersonBean> replaceNullInstance(List<FlPersonBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1299,6 +1376,14 @@ public  class FlPersonBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FlPersonBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

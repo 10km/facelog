@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm.permit;
 import java.io.Serializable;
+import java.util.List;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.device.FlDeviceGroupBean;
@@ -26,7 +27,8 @@ public  class FlPermitBean
     implements Serializable,BaseBean<FlPermitBean>,Comparable<FlPermitBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 6130251228058473821L;
-    
+    /** NULL {@link FlPermitBean} bean , IMMUTABLE instance */
+    public static final FlPermitBean NULL = new FlPermitBean().asNULL().immutable(Boolean.TRUE);
     /** comments:外键,设备组id */
     private Integer deviceGroupId;
 
@@ -35,11 +37,39 @@ public  class FlPermitBean
 
     private java.util.Date createTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FlPermitBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FlPermitBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -142,6 +172,7 @@ public  class FlPermitBean
      */
     public void setDeviceGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
             return;
         }
@@ -209,6 +240,7 @@ public  class FlPermitBean
      */
     public void setPersonGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
             return;
         }
@@ -274,6 +306,7 @@ public  class FlPermitBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -419,6 +452,7 @@ public  class FlPermitBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -445,6 +479,7 @@ public  class FlPermitBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.deviceGroupId = null;
         this.personGroupId = null;
         this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
@@ -514,12 +549,15 @@ public  class FlPermitBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FlPermitBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FlPermitBean asNULL()
+    {   
+        checkMutable();
+        
         setDeviceGroupId(null);
         setPersonGroupId(null);
         setCreateTime(null);
@@ -527,6 +565,37 @@ public  class FlPermitBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FlPermitBean> replaceNull(List<FlPermitBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FlPermitBean> replaceNullInstance(List<FlPermitBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -657,6 +726,14 @@ public  class FlPermitBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FlPermitBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

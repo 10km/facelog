@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import java.util.List;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -23,7 +24,8 @@ public final class PermitBean
     implements Serializable,BaseBean<PermitBean>,Comparable<PermitBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 1996786947221016855L;
-    
+    /** NULL {@link PermitBean} bean , IMMUTABLE instance */
+    public static final PermitBean NULL = new PermitBean().asNULL().immutable(Boolean.TRUE);
     /** comments:外键,设备组id */
     private Integer deviceGroupId;
 
@@ -32,11 +34,39 @@ public final class PermitBean
 
     private java.util.Date createTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized PermitBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private PermitBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -146,6 +176,7 @@ public final class PermitBean
      */
     public void setDeviceGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, deviceGroupId) && checkDeviceGroupIdInitialized()) {
             return;
         }
@@ -161,6 +192,7 @@ public final class PermitBean
      */
     @ThriftField(name = "deviceGroupId")
     public void writeDeviceGroupId(Integer newVal){
+        checkMutable();
         deviceGroupId = newVal;
     }
     /**
@@ -223,6 +255,7 @@ public final class PermitBean
      */
     public void setPersonGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, personGroupId) && checkPersonGroupIdInitialized()) {
             return;
         }
@@ -238,6 +271,7 @@ public final class PermitBean
      */
     @ThriftField(name = "personGroupId")
     public void writePersonGroupId(Integer newVal){
+        checkMutable();
         personGroupId = newVal;
     }
     /**
@@ -305,6 +339,7 @@ public final class PermitBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -320,6 +355,7 @@ public final class PermitBean
      */
     @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
+        checkMutable();
         createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
@@ -459,6 +495,7 @@ public final class PermitBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -485,6 +522,7 @@ public final class PermitBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.deviceGroupId = null;
         this.personGroupId = null;
         this.createTime = null/* DEFAULT:'CURRENT_TIMESTAMP'*/;
@@ -554,12 +592,15 @@ public final class PermitBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public PermitBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public PermitBean asNULL()
+    {   
+        checkMutable();
+        
         setDeviceGroupId(null);
         setPersonGroupId(null);
         setCreateTime(null);
@@ -567,6 +608,37 @@ public final class PermitBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<PermitBean> replaceNull(List<PermitBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<PermitBean> replaceNullInstance(List<PermitBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -697,6 +769,14 @@ public final class PermitBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see PermitBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

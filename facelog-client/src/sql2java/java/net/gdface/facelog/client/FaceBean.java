@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 import java.io.Serializable;
+import java.util.List;
 /**
  * FaceBean is a mapping of fl_face Table.
  * <br>Meta Data Information (in progress):
@@ -19,7 +20,8 @@ public  class FaceBean
     implements Serializable,BaseBean<FaceBean>,Comparable<FaceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -4422988976191298916L;
-    
+    /** NULL {@link FaceBean} bean , IMMUTABLE instance */
+    public static final FaceBean NULL = new FaceBean().asNULL().immutable(Boolean.TRUE);
     /** comments:主键 */
     private Integer id;
 
@@ -64,11 +66,39 @@ public  class FaceBean
 
     private java.util.Date createTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FaceBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FaceBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -170,6 +200,7 @@ public  class FaceBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -236,6 +267,7 @@ public  class FaceBean
      */
     public void setImageMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
@@ -290,6 +322,7 @@ public  class FaceBean
      */
     public void setFaceLeft(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, faceLeft) && checkFaceLeftInitialized()) {
             return;
         }
@@ -354,6 +387,7 @@ public  class FaceBean
      */
     public void setFaceTop(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, faceTop) && checkFaceTopInitialized()) {
             return;
         }
@@ -418,6 +452,7 @@ public  class FaceBean
      */
     public void setFaceWidth(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, faceWidth) && checkFaceWidthInitialized()) {
             return;
         }
@@ -482,6 +517,7 @@ public  class FaceBean
      */
     public void setFaceHeight(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, faceHeight) && checkFaceHeightInitialized()) {
             return;
         }
@@ -545,6 +581,7 @@ public  class FaceBean
      */
     public void setEyeLeftx(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, eyeLeftx) && checkEyeLeftxInitialized()) {
             return;
         }
@@ -608,6 +645,7 @@ public  class FaceBean
      */
     public void setEyeLefty(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, eyeLefty) && checkEyeLeftyInitialized()) {
             return;
         }
@@ -671,6 +709,7 @@ public  class FaceBean
      */
     public void setEyeRightx(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, eyeRightx) && checkEyeRightxInitialized()) {
             return;
         }
@@ -734,6 +773,7 @@ public  class FaceBean
      */
     public void setEyeRighty(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, eyeRighty) && checkEyeRightyInitialized()) {
             return;
         }
@@ -797,6 +837,7 @@ public  class FaceBean
      */
     public void setMouthX(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, mouthX) && checkMouthXInitialized()) {
             return;
         }
@@ -860,6 +901,7 @@ public  class FaceBean
      */
     public void setMouthY(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, mouthY) && checkMouthYInitialized()) {
             return;
         }
@@ -923,6 +965,7 @@ public  class FaceBean
      */
     public void setNoseX(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, noseX) && checkNoseXInitialized()) {
             return;
         }
@@ -986,6 +1029,7 @@ public  class FaceBean
      */
     public void setNoseY(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, noseY) && checkNoseYInitialized()) {
             return;
         }
@@ -1049,6 +1093,7 @@ public  class FaceBean
      */
     public void setAngleYaw(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, angleYaw) && checkAngleYawInitialized()) {
             return;
         }
@@ -1112,6 +1157,7 @@ public  class FaceBean
      */
     public void setAnglePitch(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, anglePitch) && checkAnglePitchInitialized()) {
             return;
         }
@@ -1175,6 +1221,7 @@ public  class FaceBean
      */
     public void setAngleRoll(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, angleRoll) && checkAngleRollInitialized()) {
             return;
         }
@@ -1238,6 +1285,7 @@ public  class FaceBean
      */
     public void setExtInfo(byte[] newVal)
     {
+        checkMutable();
         extInfo = newVal;
 
         modified |= FL_FACE_ID_EXT_INFO_MASK;
@@ -1290,6 +1338,7 @@ public  class FaceBean
      */
     public void setFeatureMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, featureMd5) && checkFeatureMd5Initialized()) {
             return;
         }
@@ -1345,6 +1394,7 @@ public  class FaceBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -1558,6 +1608,7 @@ public  class FaceBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -1601,6 +1652,7 @@ public  class FaceBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.imageMd5 = null;
         this.faceLeft = null;
@@ -1788,12 +1840,15 @@ public  class FaceBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FaceBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FaceBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setImageMd5(null);
         setFaceLeft(null);
@@ -1818,6 +1873,37 @@ public  class FaceBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FaceBean> replaceNull(List<FaceBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FaceBean> replaceNullInstance(List<FaceBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -2016,6 +2102,14 @@ public  class FaceBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FaceBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm.image;
 import java.io.Serializable;
+import java.util.List;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
@@ -24,7 +25,8 @@ public  class FlStoreBean
     implements Serializable,BaseBean<FlStoreBean>,Comparable<FlStoreBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -5705582857978645940L;
-    
+    /** NULL {@link FlStoreBean} bean , IMMUTABLE instance */
+    public static final FlStoreBean NULL = new FlStoreBean().asNULL().immutable(Boolean.TRUE);
     /** comments:主键,md5检验码 */
     private String md5;
 
@@ -34,11 +36,39 @@ public  class FlStoreBean
     /** comments:二进制数据 */
     private java.nio.ByteBuffer data;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FlStoreBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FlStoreBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -138,6 +168,7 @@ public  class FlStoreBean
      */
     public void setMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, md5) && checkMd5Initialized()) {
             return;
         }
@@ -192,6 +223,7 @@ public  class FlStoreBean
      */
     public void setEncoding(String newVal)
     {
+        checkMutable();
         if (equal(newVal, encoding) && checkEncodingInitialized()) {
             return;
         }
@@ -246,6 +278,7 @@ public  class FlStoreBean
      */
     public void setData(java.nio.ByteBuffer newVal)
     {
+        checkMutable();
         if (equal(newVal, data) && checkDataInitialized()) {
             return;
         }
@@ -352,6 +385,7 @@ public  class FlStoreBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -378,6 +412,7 @@ public  class FlStoreBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.md5 = null;
         this.encoding = null;
         this.data = null;
@@ -446,12 +481,15 @@ public  class FlStoreBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FlStoreBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FlStoreBean asNULL()
+    {   
+        checkMutable();
+        
         setMd5(null);
         setEncoding(null);
         setData(null);
@@ -459,6 +497,37 @@ public  class FlStoreBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FlStoreBean> replaceNull(List<FlStoreBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FlStoreBean> replaceNullInstance(List<FlStoreBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -589,6 +658,14 @@ public  class FlStoreBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FlStoreBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

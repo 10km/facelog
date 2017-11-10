@@ -110,11 +110,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 DeviceBean 列表,没有查到记录的返回{@link DeviceBean#NULL}
      * @see {@link IDeviceManager#loadByPrimaryKey(Collection)}
+     * @see DeviceBean#replaceNull(List)
      */
     //2    
     protected List<DeviceBean> _getDevices(Collection<Integer> idCollection){
-        return getDeviceManager().loadByPrimaryKey(idCollection);
+        return DeviceBean.replaceNull((getDeviceManager().loadByPrimaryKey(idCollection)));
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -479,11 +481,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 DeviceGroupBean 列表,没有查到记录的返回{@link DeviceGroupBean#NULL}
      * @see {@link IDeviceGroupManager#loadByPrimaryKey(Collection)}
+     * @see DeviceGroupBean#replaceNull(List)
      */
     //2    
     protected List<DeviceGroupBean> _getDeviceGroups(Collection<Integer> idCollection){
-        return getDeviceGroupManager().loadByPrimaryKey(idCollection);
+        return DeviceGroupBean.replaceNull((getDeviceGroupManager().loadByPrimaryKey(idCollection)));
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -823,11 +827,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 PersonBean 列表,没有查到记录的返回{@link PersonBean#NULL}
      * @see {@link IPersonManager#loadByPrimaryKey(Collection)}
+     * @see PersonBean#replaceNull(List)
      */
     //2    
     protected List<PersonBean> _getPersons(Collection<Integer> idCollection){
-        return getPersonManager().loadByPrimaryKey(idCollection);
+        return PersonBean.replaceNull((getPersonManager().loadByPrimaryKey(idCollection)));
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -1221,11 +1227,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 PersonGroupBean 列表,没有查到记录的返回{@link PersonGroupBean#NULL}
      * @see {@link IPersonGroupManager#loadByPrimaryKey(Collection)}
+     * @see PersonGroupBean#replaceNull(List)
      */
     //2    
     protected List<PersonGroupBean> _getPersonGroups(Collection<Integer> idCollection){
-        return getPersonGroupManager().loadByPrimaryKey(idCollection);
+        return PersonGroupBean.replaceNull((getPersonGroupManager().loadByPrimaryKey(idCollection)));
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -1565,11 +1573,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 FaceBean 列表,没有查到记录的返回{@link FaceBean#NULL}
      * @see {@link IFaceManager#loadByPrimaryKey(Collection)}
+     * @see FaceBean#replaceNull(List)
      */
     //2    
     protected List<FaceBean> _getFaces(Collection<Integer> idCollection){
-        return getFaceManager().loadByPrimaryKey(idCollection);
+        return FaceBean.replaceNull((getFaceManager().loadByPrimaryKey(idCollection)));
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -1902,11 +1912,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 FeatureBean 列表,没有查到记录的返回{@link FeatureBean#NULL}
      * @see {@link IFeatureManager#loadByPrimaryKey(Collection)}
+     * @see FeatureBean#replaceNull(List)
      */
     //2    
     protected List<FeatureBean> _getFeatures(Collection<String> md5Collection){
-        return getFeatureManager().loadByPrimaryKey(md5Collection);
+        return FeatureBean.replaceNull((getFeatureManager().loadByPrimaryKey(md5Collection)));
     }
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
@@ -2232,11 +2244,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 ImageBean 列表,没有查到记录的返回{@link ImageBean#NULL}
      * @see {@link IImageManager#loadByPrimaryKey(Collection)}
+     * @see ImageBean#replaceNull(List)
      */
     //2    
     protected List<ImageBean> _getImages(Collection<String> md5Collection){
-        return getImageManager().loadByPrimaryKey(md5Collection);
+        return ImageBean.replaceNull((getImageManager().loadByPrimaryKey(md5Collection)));
     }
     /** 
      * 删除主键列表({@code md5Collection})指定的记录
@@ -2529,11 +2543,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 LogBean 列表,没有查到记录的返回{@link LogBean#NULL}
      * @see {@link ILogManager#loadByPrimaryKey(Collection)}
+     * @see LogBean#replaceNull(List)
      */
     //2    
     protected List<LogBean> _getLogs(Collection<Integer> idCollection){
-        return getLogManager().loadByPrimaryKey(idCollection);
+        return LogBean.replaceNull((getLogManager().loadByPrimaryKey(idCollection)));
     }
     /** 
      * 删除主键列表({@code idCollection})指定的记录
@@ -3237,11 +3253,13 @@ class Dao implements CommonConstant {
     }
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 StoreBean 列表,没有查到记录的返回{@link StoreBean#NULL}
      * @see {@link IStoreManager#loadByPrimaryKey(Collection)}
+     * @see StoreBean#replaceNull(List)
      */
     //2    
     protected List<StoreBean> _getStores(Collection<String> md5Collection){
-        return getStoreManager().loadByPrimaryKey(md5Collection);
+        return StoreBean.replaceNull((getStoreManager().loadByPrimaryKey(md5Collection)));
     }
     /** 
      * 删除主键列表({@code md5Collection})指定的记录

@@ -69,11 +69,13 @@ class Dao implements CommonConstant {
 #if($table.countPrimaryKeys() == 1)
     /** 
      * 根据主键从数据库读取记录
+     * @return 返回与输入参数下标对应的 ${beanClass} 列表,没有查到记录的返回{@link ${beanClass}${esc.hash}NULL}
      * @see {@link $table.asManagerInterfaceNSP()${esc.hash}loadByPrimaryKey(Collection)}
+     * @see ${beanClass}${esc.hash}replaceNull(List)
      */
     //2    
     $!{modifier}List<$beanClass> _get${coreClass}s(Collection<$primaryKey.javaType> ${primaryKey.varName}Collection){
-        return ${table.getGetManagerMethod()}().loadByPrimaryKey(${primaryKey.varName}Collection);
+        return ${beanClass}.replaceNull((${table.getGetManagerMethod()}().loadByPrimaryKey(${primaryKey.varName}Collection)));
     }
     /** 
      * 删除主键列表({@code ${primaryKey.varName}Collection})指定的记录

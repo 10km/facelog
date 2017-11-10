@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 import java.io.Serializable;
+import java.util.List;
 /**
  * LogBean is a mapping of fl_log Table.
  * <br>Meta Data Information (in progress):
@@ -19,7 +20,8 @@ public  class LogBean
     implements Serializable,BaseBean<LogBean>,Comparable<LogBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -5786282018130876146L;
-    
+    /** NULL {@link LogBean} bean , IMMUTABLE instance */
+    public static final LogBean NULL = new LogBean().asNULL().immutable(Boolean.TRUE);
     /** comments:日志id */
     private Integer id;
 
@@ -43,11 +45,39 @@ public  class LogBean
 
     private java.util.Date createTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized LogBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private LogBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -148,6 +178,7 @@ public  class LogBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -214,6 +245,7 @@ public  class LogBean
      */
     public void setPersonId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, personId) && checkPersonIdInitialized()) {
             return;
         }
@@ -279,6 +311,7 @@ public  class LogBean
      */
     public void setDeviceId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, deviceId) && checkDeviceIdInitialized()) {
             return;
         }
@@ -344,6 +377,7 @@ public  class LogBean
      */
     public void setVerifyFeature(String newVal)
     {
+        checkMutable();
         if (equal(newVal, verifyFeature) && checkVerifyFeatureInitialized()) {
             return;
         }
@@ -399,6 +433,7 @@ public  class LogBean
      */
     public void setCompareFace(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, compareFace) && checkCompareFaceInitialized()) {
             return;
         }
@@ -463,6 +498,7 @@ public  class LogBean
      */
     public void setSimilarty(Double newVal)
     {
+        checkMutable();
         if (equal(newVal, similarty) && checkSimilartyInitialized()) {
             return;
         }
@@ -529,6 +565,7 @@ public  class LogBean
      */
     public void setVerifyTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, verifyTime) && checkVerifyTimeInitialized()) {
             return;
         }
@@ -594,6 +631,7 @@ public  class LogBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -785,6 +823,7 @@ public  class LogBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -816,6 +855,7 @@ public  class LogBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.personId = null;
         this.deviceId = null;
@@ -919,12 +959,15 @@ public  class LogBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public LogBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public LogBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setPersonId(null);
         setDeviceId(null);
@@ -937,6 +980,37 @@ public  class LogBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<LogBean> replaceNull(List<LogBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<LogBean> replaceNullInstance(List<LogBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1087,6 +1161,14 @@ public  class LogBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see LogBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

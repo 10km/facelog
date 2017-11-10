@@ -22,6 +22,10 @@ import net.gdface.facelog.db.LogBean;
  */
 public interface CommonConstant {
     public static final Logger logger = LoggerFactory.getLogger(CommonConstant.class);
+    /** 整数型主键的{@code null} 替代值 */
+    public static final int NULL_ID_Integer = -1;
+    /** 字符串型主键的{@code null} 替代值 */
+    public static final String NULL_ID_String = "";
     /** 默认服务端口号 */
     public static final int DEFAULT_PORT = 26411;
     /** 设备心跳包表 */

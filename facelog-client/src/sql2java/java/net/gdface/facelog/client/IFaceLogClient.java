@@ -745,7 +745,7 @@ class IFaceLogClient implements Constant{
     // 33 SERIVCE PORT : getDeviceGroups
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
         try{
-            return converterDeviceGroupBean.fromRight(service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList)));
+            return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -791,7 +791,7 @@ class IFaceLogClient implements Constant{
     // 35 SERIVCE PORT : getDevices
     public List<DeviceBean> getDevices(List<Integer> idList){
         try{
-            return converterDeviceBean.fromRight(service.getDevices(CollectionUtils.checkNotNullElement(idList)));
+            return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.getDevices(CollectionUtils.checkNotNullElement(idList))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -816,7 +816,7 @@ class IFaceLogClient implements Constant{
     // 36 SERIVCE PORT : getDevicesOfGroup
     public List<DeviceBean> getDevicesOfGroup(int deviceGroupId){
         try{
-            return converterDeviceBean.fromRight(service.getDevicesOfGroup(deviceGroupId));
+            return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.getDevicesOfGroup(deviceGroupId)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -908,7 +908,7 @@ class IFaceLogClient implements Constant{
     // 40 SERIVCE PORT : getFeatures
     public List<FeatureBean> getFeatures(List<String> md5){
         try{
-            return converterFeatureBean.fromRight(service.getFeatures(CollectionUtils.checkNotNullElement(md5)));
+            return FeatureBean.replaceNullInstance(converterFeatureBean.fromRight(service.getFeatures(CollectionUtils.checkNotNullElement(md5))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1070,7 +1070,7 @@ class IFaceLogClient implements Constant{
     // 47 SERIVCE PORT : getLogBeansByPersonId
     public List<LogBean> getLogBeansByPersonId(int personId){
         try{
-            return converterLogBean.fromRight(service.getLogBeansByPersonId(personId));
+            return LogBean.replaceNullInstance(converterLogBean.fromRight(service.getLogBeansByPersonId(personId)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1164,7 +1164,7 @@ class IFaceLogClient implements Constant{
     // 51 SERIVCE PORT : getPersonGroups
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
         try{
-            return converterPersonGroupBean.fromRight(service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList)));
+            return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1233,7 +1233,7 @@ class IFaceLogClient implements Constant{
     // 54 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         try{
-            return converterPersonBean.fromRight(service.getPersons(CollectionUtils.checkNotNullElement(idList)));
+            return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.getPersons(CollectionUtils.checkNotNullElement(idList))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1258,7 +1258,7 @@ class IFaceLogClient implements Constant{
     // 55 SERIVCE PORT : getPersonsOfGroup
     public List<PersonBean> getPersonsOfGroup(int personGroupId){
         try{
-            return converterPersonBean.fromRight(service.getPersonsOfGroup(personGroupId));
+            return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.getPersonsOfGroup(personGroupId)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1283,7 +1283,7 @@ class IFaceLogClient implements Constant{
     // 56 SERIVCE PORT : getSubDeviceGroup
     public List<DeviceGroupBean> getSubDeviceGroup(int deviceGroupId){
         try{
-            return converterDeviceGroupBean.fromRight(service.getSubDeviceGroup(deviceGroupId));
+            return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(service.getSubDeviceGroup(deviceGroupId)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1308,7 +1308,7 @@ class IFaceLogClient implements Constant{
     // 57 SERIVCE PORT : getSubPersonGroup
     public List<PersonGroupBean> getSubPersonGroup(int personGroupId){
         try{
-            return converterPersonGroupBean.fromRight(service.getSubPersonGroup(personGroupId));
+            return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(service.getSubPersonGroup(personGroupId)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1373,10 +1373,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterDeviceBean.fromRight(service.loadDeviceByWhere(
+            return DeviceBean.replaceNullInstance(converterDeviceBean.fromRight(service.loadDeviceByWhere(
                     where,
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1402,10 +1402,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterDeviceGroupBean.fromRight(service.loadDeviceGroupByWhere(
+            return DeviceGroupBean.replaceNullInstance(converterDeviceGroupBean.fromRight(service.loadDeviceGroupByWhere(
                     where,
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1503,10 +1503,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterLogBean.fromRight(service.loadLogByWhere(
+            return LogBean.replaceNullInstance(converterLogBean.fromRight(service.loadLogByWhere(
                     where,
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1533,10 +1533,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterLogLightBean.fromRight(service.loadLogLightByVerifyTime(
+            return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(service.loadLogLightByVerifyTime(
                     GenericUtils.toLong(timestamp,Date.class),
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1565,10 +1565,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterLogLightBean.fromRight(service.loadLogLightByWhere(
+            return LogLightBean.replaceNullInstance(converterLogLightBean.fromRight(service.loadLogLightByWhere(
                     where,
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1593,7 +1593,7 @@ class IFaceLogClient implements Constant{
     // 68 SERIVCE PORT : loadPermitByUpdate
     public List<PermitBean> loadPermitByUpdate(Date timestamp){
         try{
-            return converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class)));
+            return PermitBean.replaceNullInstance(converterPermitBean.fromRight(service.loadPermitByUpdate(GenericUtils.toLong(timestamp,Date.class))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1621,10 +1621,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterPersonBean.fromRight(service.loadPersonByWhere(
+            return PersonBean.replaceNullInstance(converterPersonBean.fromRight(service.loadPersonByWhere(
                     where,
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1650,10 +1650,10 @@ class IFaceLogClient implements Constant{
             int startRow,
             int numRows){
         try{
-            return converterPersonGroupBean.fromRight(service.loadPersonGroupByWhere(
+            return PersonGroupBean.replaceNullInstance(converterPersonGroupBean.fromRight(service.loadPersonGroupByWhere(
                     where,
                     startRow,
-                    numRows));
+                    numRows)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();

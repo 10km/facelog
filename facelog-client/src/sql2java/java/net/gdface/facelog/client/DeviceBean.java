@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.client;
 import java.io.Serializable;
+import java.util.List;
 /**
  * DeviceBean is a mapping of fl_device Table.
  * <br>Meta Data Information (in progress):
@@ -19,7 +20,8 @@ public  class DeviceBean
     implements Serializable,BaseBean<DeviceBean>,Comparable<DeviceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -7628993481274775109L;
-    
+    /** NULL {@link DeviceBean} bean , IMMUTABLE instance */
+    public static final DeviceBean NULL = new DeviceBean().asNULL().immutable(Boolean.TRUE);
     /** comments:设备id */
     private Integer id;
 
@@ -42,11 +44,39 @@ public  class DeviceBean
 
     private java.util.Date updateTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized DeviceBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private DeviceBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -149,6 +179,7 @@ public  class DeviceBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -215,6 +246,7 @@ public  class DeviceBean
      */
     public void setGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
@@ -279,6 +311,7 @@ public  class DeviceBean
      */
     public void setName(String newVal)
     {
+        checkMutable();
         if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
@@ -333,6 +366,7 @@ public  class DeviceBean
      */
     public void setVersion(String newVal)
     {
+        checkMutable();
         if (equal(newVal, version) && checkVersionInitialized()) {
             return;
         }
@@ -387,6 +421,7 @@ public  class DeviceBean
      */
     public void setSerialNo(String newVal)
     {
+        checkMutable();
         if (equal(newVal, serialNo) && checkSerialNoInitialized()) {
             return;
         }
@@ -441,6 +476,7 @@ public  class DeviceBean
      */
     public void setMac(String newVal)
     {
+        checkMutable();
         if (equal(newVal, mac) && checkMacInitialized()) {
             return;
         }
@@ -496,6 +532,7 @@ public  class DeviceBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -561,6 +598,7 @@ public  class DeviceBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
@@ -713,6 +751,7 @@ public  class DeviceBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -744,6 +783,7 @@ public  class DeviceBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.groupId = new Integer(1)/* DEFAULT:'1'*/;
         this.name = null;
@@ -847,12 +887,15 @@ public  class DeviceBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public DeviceBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public DeviceBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setGroupId(null);
         setName(null);
@@ -865,6 +908,37 @@ public  class DeviceBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<DeviceBean> replaceNull(List<DeviceBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<DeviceBean> replaceNullInstance(List<DeviceBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1015,6 +1089,14 @@ public  class DeviceBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see DeviceBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

@@ -2,12 +2,9 @@ package net.gdface.facelog.client;
 
 import java.util.List;
 
-import org.apache.thrift.TApplicationException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.facebook.swift.service.RuntimeTApplicationException;
 
 public class TestClient implements CommonConstant {
 

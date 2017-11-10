@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.dborm.device;
 import java.io.Serializable;
+import java.util.List;
 import net.gdface.facelog.dborm.Constant;
 import net.gdface.facelog.dborm.BaseBean;
 import net.gdface.facelog.dborm.CompareToBuilder;
@@ -24,7 +25,8 @@ public  class FlDeviceBean
     implements Serializable,BaseBean<FlDeviceBean>,Comparable<FlDeviceBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = -1873511050244238973L;
-    
+    /** NULL {@link FlDeviceBean} bean , IMMUTABLE instance */
+    public static final FlDeviceBean NULL = new FlDeviceBean().asNULL().immutable(Boolean.TRUE);
     /** comments:设备id */
     private Integer id;
 
@@ -47,11 +49,39 @@ public  class FlDeviceBean
 
     private java.util.Date updateTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized FlDeviceBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private FlDeviceBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -154,6 +184,7 @@ public  class FlDeviceBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -220,6 +251,7 @@ public  class FlDeviceBean
      */
     public void setGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
@@ -284,6 +316,7 @@ public  class FlDeviceBean
      */
     public void setName(String newVal)
     {
+        checkMutable();
         if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
@@ -338,6 +371,7 @@ public  class FlDeviceBean
      */
     public void setVersion(String newVal)
     {
+        checkMutable();
         if (equal(newVal, version) && checkVersionInitialized()) {
             return;
         }
@@ -392,6 +426,7 @@ public  class FlDeviceBean
      */
     public void setSerialNo(String newVal)
     {
+        checkMutable();
         if (equal(newVal, serialNo) && checkSerialNoInitialized()) {
             return;
         }
@@ -446,6 +481,7 @@ public  class FlDeviceBean
      */
     public void setMac(String newVal)
     {
+        checkMutable();
         if (equal(newVal, mac) && checkMacInitialized()) {
             return;
         }
@@ -501,6 +537,7 @@ public  class FlDeviceBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -566,6 +603,7 @@ public  class FlDeviceBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
@@ -718,6 +756,7 @@ public  class FlDeviceBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -749,6 +788,7 @@ public  class FlDeviceBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.groupId = new Integer(1)/* DEFAULT:'1'*/;
         this.name = null;
@@ -852,12 +892,15 @@ public  class FlDeviceBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public FlDeviceBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public FlDeviceBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setGroupId(null);
         setName(null);
@@ -870,6 +913,37 @@ public  class FlDeviceBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<FlDeviceBean> replaceNull(List<FlDeviceBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<FlDeviceBean> replaceNullInstance(List<FlDeviceBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1020,6 +1094,14 @@ public  class FlDeviceBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see FlDeviceBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */

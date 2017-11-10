@@ -7,6 +7,7 @@
 // ______________________________________________________
 package net.gdface.facelog.db;
 import java.io.Serializable;
+import java.util.List;
 import com.facebook.swift.codec.ThriftStruct;
 import com.facebook.swift.codec.ThriftField;
 import com.facebook.swift.codec.ThriftField.Requiredness;
@@ -23,7 +24,8 @@ public final class PersonBean
     implements Serializable,BaseBean<PersonBean>,Comparable<PersonBean>,Constant,Cloneable
 {
     private static final long serialVersionUID = 7741617836285025804L;
-    
+    /** NULL {@link PersonBean} bean , IMMUTABLE instance */
+    public static final PersonBean NULL = new PersonBean().asNULL().immutable(Boolean.TRUE);
     /** comments:用户id */
     private Integer id;
 
@@ -55,11 +57,39 @@ public final class PersonBean
 
     private java.util.Date updateTime;
 
+    /** flag whether {@code this} can be modified */
+    private Boolean _immutable;
     /** columns modified flag */
     private long modified;
     /** columns initialized flag */
     private long initialized;
-    private boolean _isNew;
+    private boolean _isNew;        
+    /** 
+     * set {@code this} as immutable object
+     * @return {@code this} 
+     */
+    public synchronized PersonBean immutable(Boolean immutable) {
+        if(this._immutable != immutable){
+            checkMutable();
+            this._immutable = immutable;
+        }
+        return this;
+    }
+    /**
+     * @return {@code true} if {@code this} is a mutable object  
+     */
+    public boolean mutable(){
+        return Boolean.TRUE != this._immutable;
+    }
+    /**
+     * @return {@code this}
+     * @throws IllegalStateException if {@code this} is a immutable object 
+     */
+    private PersonBean checkMutable(){
+        if(Boolean.TRUE == this._immutable)
+            throw new IllegalStateException("this is a immutable object");
+        return this;
+    }
     /**
      * Determines if the current object is new.
      *
@@ -169,6 +199,7 @@ public final class PersonBean
      */
     public void setId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, id) && checkIdInitialized()) {
             return;
         }
@@ -184,6 +215,7 @@ public final class PersonBean
      */
     @ThriftField(name = "id")
     public void writeId(Integer newVal){
+        checkMutable();
         id = newVal;
     }
     /**
@@ -245,6 +277,7 @@ public final class PersonBean
      */
     public void setGroupId(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, groupId) && checkGroupIdInitialized()) {
             return;
         }
@@ -260,6 +293,7 @@ public final class PersonBean
      */
     @ThriftField(name = "groupId")
     public void writeGroupId(Integer newVal){
+        checkMutable();
         groupId = newVal;
     }
     /**
@@ -320,6 +354,7 @@ public final class PersonBean
      */
     public void setName(String newVal)
     {
+        checkMutable();
         if (equal(newVal, name) && checkNameInitialized()) {
             return;
         }
@@ -335,6 +370,7 @@ public final class PersonBean
      */
     @ThriftField(name = "name")
     public void writeName(String newVal){
+        checkMutable();
         name = newVal;
     }
     /**
@@ -384,6 +420,7 @@ public final class PersonBean
      */
     public void setSex(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, sex) && checkSexInitialized()) {
             return;
         }
@@ -399,6 +436,7 @@ public final class PersonBean
      */
     @ThriftField(name = "sex")
     public void writeSex(Integer newVal){
+        checkMutable();
         sex = newVal;
     }
     /**
@@ -465,6 +503,7 @@ public final class PersonBean
      */
     public void setBirthdate(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, birthdate) && checkBirthdateInitialized()) {
             return;
         }
@@ -480,6 +519,7 @@ public final class PersonBean
      */
     @ThriftField(name = "birthdate")
     public void writeBirthdate(Long newVal){
+        checkMutable();
         birthdate = null == newVal?null:new java.util.Date(newVal);
     }
     /**
@@ -539,6 +579,7 @@ public final class PersonBean
      */
     public void setPapersType(Integer newVal)
     {
+        checkMutable();
         if (equal(newVal, papersType) && checkPapersTypeInitialized()) {
             return;
         }
@@ -554,6 +595,7 @@ public final class PersonBean
      */
     @ThriftField(name = "papersType")
     public void writePapersType(Integer newVal){
+        checkMutable();
         papersType = newVal;
     }
     /**
@@ -613,6 +655,7 @@ public final class PersonBean
      */
     public void setPapersNum(String newVal)
     {
+        checkMutable();
         if (equal(newVal, papersNum) && checkPapersNumInitialized()) {
             return;
         }
@@ -628,6 +671,7 @@ public final class PersonBean
      */
     @ThriftField(name = "papersNum")
     public void writePapersNum(String newVal){
+        checkMutable();
         papersNum = newVal;
     }
     /**
@@ -678,6 +722,7 @@ public final class PersonBean
      */
     public void setImageMd5(String newVal)
     {
+        checkMutable();
         if (equal(newVal, imageMd5) && checkImageMd5Initialized()) {
             return;
         }
@@ -693,6 +738,7 @@ public final class PersonBean
      */
     @ThriftField(name = "imageMd5")
     public void writeImageMd5(String newVal){
+        checkMutable();
         imageMd5 = newVal;
     }
     /**
@@ -750,6 +796,7 @@ public final class PersonBean
      */
     public void setExpiryDate(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, expiryDate) && checkExpiryDateInitialized()) {
             return;
         }
@@ -765,6 +812,7 @@ public final class PersonBean
      */
     @ThriftField(name = "expiryDate")
     public void writeExpiryDate(Long newVal){
+        checkMutable();
         expiryDate = null == newVal?null:new java.util.Date(newVal);
     }
     /**
@@ -832,6 +880,7 @@ public final class PersonBean
      */
     public void setCreateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, createTime) && checkCreateTimeInitialized()) {
             return;
         }
@@ -847,6 +896,7 @@ public final class PersonBean
      */
     @ThriftField(name = "createTime")
     public void writeCreateTime(Long newVal){
+        checkMutable();
         createTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
@@ -914,6 +964,7 @@ public final class PersonBean
      */
     public void setUpdateTime(java.util.Date newVal)
     {
+        checkMutable();
         if (equal(newVal, updateTime) && checkUpdateTimeInitialized()) {
             return;
         }
@@ -929,6 +980,7 @@ public final class PersonBean
      */
     @ThriftField(name = "updateTime")
     public void writeUpdateTime(Long newVal){
+        checkMutable();
         updateTime = null == newVal?null:new java.util.Date(newVal);
     }
     /**
@@ -1100,6 +1152,7 @@ public final class PersonBean
      */
     public void resetIsModified()
     {
+        checkMutable();
         modified = 0L;
     }
     /**
@@ -1134,6 +1187,7 @@ public final class PersonBean
     }
     /** reset all fields to initial value, equal to a new bean */
     public void reset(){
+        checkMutable();
         this.id = null;
         this.groupId = new Integer(1)/* DEFAULT:'1'*/;
         this.name = null;
@@ -1258,12 +1312,15 @@ public final class PersonBean
         }
     }
     /**
-    * set all field to null
-    *
-    * @author guyadong
-    */
-    public PersonBean clean()
-    {
+     * Make {@code this} to a NULL bean<br>
+     * set all fields to null, {@link #modified} and {@link #initialized} be set to 0
+     * @return {@code this} bean
+     * @author guyadong
+     */
+    public PersonBean asNULL()
+    {   
+        checkMutable();
+        
         setId(null);
         setGroupId(null);
         setName(null);
@@ -1279,6 +1336,37 @@ public final class PersonBean
         resetInitialized();
         resetIsModified();
         return this;
+    }
+    /**
+     * check whether this bean is a NULL bean 
+     * @return {@code true} if {@link {@link #initialized} be set to zero
+     * @see #asNULL()
+     */
+    public boolean beNULL(){
+        return 0L == getInitialized();
+    }
+    /** 
+     * @return {@code source} replace {@code null} element with null instance({@link #NULL})
+     */
+    public static final List<PersonBean> replaceNull(List<PersonBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(null == source.get(i))source.set(i, NULL);
+            }
+        }
+        return source;
+    }
+    /** 
+     * @return replace null instance element with {@code null}
+     * @see {@link #beNULL()} 
+     */
+    public static final List<PersonBean> replaceNullInstance(List<PersonBean> source){
+        if(null != source){
+            for(int i = 0,end_i = source.size();i<end_i;++i){
+                if(source.get(i).beNULL())source.set(i, null);
+            }
+        }
+        return source;
     }
     /**
      * Copies the passed bean into the current bean.
@@ -1441,6 +1529,14 @@ public final class PersonBean
          */
         public Builder reset(){
             template.get().reset();
+            return this;
+        }
+        /** 
+         * set as a immutable object
+         * @see PersonBean#immutable(Boolean)
+         */
+        public Builder immutable(){
+            template.get().immutable(Boolean.TRUE);
             return this;
         }
         /** set a bean as template,must not be {@code null} */
