@@ -126,9 +126,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     @Override 
     public PersonBean loadByPrimaryKey(Integer id)
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -864,7 +861,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public PersonBean loadUniqueUsingTemplateChecked(PersonBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {
@@ -910,8 +907,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexImageMd5(String imageMd5){
-        if(null == imageMd5)
-            return null;
         try{
             return loadByIndexImageMd5Checked(imageMd5);
         }catch(ObjectRetrievalException e){
@@ -923,7 +918,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public PersonBean loadByIndexImageMd5Checked(String imageMd5)throws ObjectRetrievalException{
         PersonBean bean = new PersonBean();
         if(null == imageMd5)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setImageMd5(imageMd5);
         
@@ -998,8 +993,6 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     // override IPersonManager
     @Override 
     public PersonBean loadByIndexPapersNum(String papersNum){
-        if(null == papersNum)
-            return null;
         try{
             return loadByIndexPapersNumChecked(papersNum);
         }catch(ObjectRetrievalException e){
@@ -1011,7 +1004,7 @@ public class PersonManager extends TableManager.Adapter<PersonBean> implements I
     public PersonBean loadByIndexPapersNumChecked(String papersNum)throws ObjectRetrievalException{
         PersonBean bean = new PersonBean();
         if(null == papersNum)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setPapersNum(papersNum);
         

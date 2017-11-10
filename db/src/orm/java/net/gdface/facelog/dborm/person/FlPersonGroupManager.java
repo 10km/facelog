@@ -125,9 +125,6 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     //1
     public FlPersonGroupBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -149,7 +146,7 @@ public class FlPersonGroupManager extends TableManager.Adapter<FlPersonGroupBean
     public FlPersonGroupBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
         if(null == id){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;

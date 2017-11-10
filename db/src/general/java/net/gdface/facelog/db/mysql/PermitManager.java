@@ -118,9 +118,6 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     @Override 
     public PermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId)
     {
-        if(null == deviceGroupId || null == personGroupId){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(deviceGroupId,personGroupId);
         }catch(ObjectRetrievalException e){
@@ -529,7 +526,7 @@ public class PermitManager extends TableManager.Adapter<PermitBean> implements I
     public PermitBean loadUniqueUsingTemplateChecked(PermitBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {

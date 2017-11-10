@@ -94,6 +94,8 @@ public class FeatureCacheManager extends FeatureManager
     @Override 
     public FeatureBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
+       if(null == md5)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(md5);
         }catch(ExecutionException ee){

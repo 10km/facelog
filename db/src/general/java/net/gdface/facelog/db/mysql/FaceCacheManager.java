@@ -94,6 +94,8 @@ public class FaceCacheManager extends FaceManager
     @Override 
     public FaceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
+       if(null == id)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){

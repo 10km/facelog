@@ -98,6 +98,8 @@ public class DeviceGroupCacheManager extends DeviceGroupManager
     @Override 
     public DeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
+       if(null == id)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){

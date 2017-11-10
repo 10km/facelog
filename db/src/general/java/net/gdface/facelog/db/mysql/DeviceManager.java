@@ -122,9 +122,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     @Override 
     public DeviceBean loadByPrimaryKey(Integer id)
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -818,7 +815,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public DeviceBean loadUniqueUsingTemplateChecked(DeviceBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {
@@ -864,8 +861,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // override IDeviceManager
     @Override 
     public DeviceBean loadByIndexMac(String mac){
-        if(null == mac)
-            return null;
         try{
             return loadByIndexMacChecked(mac);
         }catch(ObjectRetrievalException e){
@@ -877,7 +872,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public DeviceBean loadByIndexMacChecked(String mac)throws ObjectRetrievalException{
         DeviceBean bean = new DeviceBean();
         if(null == mac)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setMac(mac);
         
@@ -952,8 +947,6 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     // override IDeviceManager
     @Override 
     public DeviceBean loadByIndexSerialNo(String serialNo){
-        if(null == serialNo)
-            return null;
         try{
             return loadByIndexSerialNoChecked(serialNo);
         }catch(ObjectRetrievalException e){
@@ -965,7 +958,7 @@ public class DeviceManager extends TableManager.Adapter<DeviceBean> implements I
     public DeviceBean loadByIndexSerialNoChecked(String serialNo)throws ObjectRetrievalException{
         DeviceBean bean = new DeviceBean();
         if(null == serialNo)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setSerialNo(serialNo);
         

@@ -122,9 +122,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     //1
     public FlDeviceBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -146,7 +143,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     public FlDeviceBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
         if(null == id){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;
@@ -1352,8 +1349,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public FlDeviceBean loadByIndexMac(String mac) throws DAOException
     {
-        if(null == mac)
-            return null;
         try{
             return loadByIndexMacChecked(mac);
         }catch(ObjectRetrievalException e){
@@ -1373,7 +1368,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         FlDeviceBean bean = new FlDeviceBean();
         if(null == mac)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setMac(mac);
         
@@ -1475,8 +1470,6 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
      */
     public FlDeviceBean loadByIndexSerialNo(String serialNo) throws DAOException
     {
-        if(null == serialNo)
-            return null;
         try{
             return loadByIndexSerialNoChecked(serialNo);
         }catch(ObjectRetrievalException e){
@@ -1496,7 +1489,7 @@ public class FlDeviceManager extends TableManager.Adapter<FlDeviceBean>
     {
         FlDeviceBean bean = new FlDeviceBean();
         if(null == serialNo)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setSerialNo(serialNo);
         

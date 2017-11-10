@@ -109,9 +109,6 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     //1
     public FlStoreBean loadByPrimaryKey(String md5) throws DAOException
     {
-        if(null == md5){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(md5);
         }catch(ObjectRetrievalException e){
@@ -133,7 +130,7 @@ public class FlStoreManager extends TableManager.Adapter<FlStoreBean>
     public FlStoreBean loadByPrimaryKeyChecked(String md5) throws DAOException
     {
         if(null == md5){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;

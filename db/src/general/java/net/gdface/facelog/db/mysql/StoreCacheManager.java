@@ -79,6 +79,8 @@ public class StoreCacheManager extends StoreManager
     @Override 
     public StoreBean loadByPrimaryKeyChecked(String md5) throws ObjectRetrievalException
     {
+       if(null == md5)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(md5);
         }catch(ExecutionException ee){

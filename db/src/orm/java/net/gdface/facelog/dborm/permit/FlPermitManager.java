@@ -121,9 +121,6 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     //1
     public FlPermitBean loadByPrimaryKey(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
-        if(null == deviceGroupId || null == personGroupId){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(deviceGroupId,personGroupId);
         }catch(ObjectRetrievalException e){
@@ -146,7 +143,7 @@ public class FlPermitManager extends TableManager.Adapter<FlPermitBean>
     public FlPermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws DAOException
     {
         if(null == deviceGroupId || null == personGroupId){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;

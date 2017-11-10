@@ -99,6 +99,8 @@ public class LogCacheManager extends LogManager
     @Override 
     public LogBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
+       if(null == id)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){

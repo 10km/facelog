@@ -89,6 +89,8 @@ public class PermitCacheManager extends PermitManager
     @Override 
     public PermitBean loadByPrimaryKeyChecked(Integer deviceGroupId,Integer personGroupId) throws ObjectRetrievalException
     {
+       if(null == deviceGroupId || null == personGroupId)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(deviceGroupId,personGroupId);
         }catch(ExecutionException ee){

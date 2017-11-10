@@ -122,9 +122,6 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     @Override 
     public FaceBean loadByPrimaryKey(Integer id)
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -770,7 +767,7 @@ public class FaceManager extends TableManager.Adapter<FaceBean> implements IFace
     public FaceBean loadUniqueUsingTemplateChecked(FaceBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {

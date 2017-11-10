@@ -122,9 +122,6 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     //1
     public FlFaceBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -146,7 +143,7 @@ public class FlFaceManager extends TableManager.Adapter<FlFaceBean>
     public FlFaceBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
         if(null == id){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;

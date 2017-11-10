@@ -94,6 +94,8 @@ public class DeviceCacheManager extends DeviceManager
     @Override 
     public DeviceBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
+       if(null == id)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){
@@ -159,6 +161,8 @@ public class DeviceCacheManager extends DeviceManager
     // override DeviceManager
     @Override 
     public DeviceBean loadByIndexMacChecked(String mac) throws ObjectRetrievalException{
+        if(null == mac)
+            throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBeanByMac(mac);
         }catch(ExecutionException ee){
@@ -173,11 +177,25 @@ public class DeviceCacheManager extends DeviceManager
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
             }
+        }catch(UncheckedExecutionException ue){
+            try{
+                throw ue.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ue);
+            }
         }
     }
     // override DeviceManager
     @Override 
     public DeviceBean loadByIndexSerialNoChecked(String serialNo) throws ObjectRetrievalException{
+        if(null == serialNo)
+            throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBeanBySerialNo(serialNo);
         }catch(ExecutionException ee){
@@ -191,6 +209,18 @@ public class DeviceCacheManager extends DeviceManager
                 throw re;
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
+            }
+        }catch(UncheckedExecutionException ue){
+            try{
+                throw ue.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ue);
             }
         }
     }

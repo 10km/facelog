@@ -99,6 +99,8 @@ public class PersonCacheManager extends PersonManager
     @Override 
     public PersonBean loadByPrimaryKeyChecked(Integer id) throws ObjectRetrievalException
     {
+       if(null == id)
+           throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBean(id);
         }catch(ExecutionException ee){
@@ -164,6 +166,8 @@ public class PersonCacheManager extends PersonManager
     // override PersonManager
     @Override 
     public PersonBean loadByIndexImageMd5Checked(String imageMd5) throws ObjectRetrievalException{
+        if(null == imageMd5)
+            throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBeanByImageMd5(imageMd5);
         }catch(ExecutionException ee){
@@ -178,11 +182,25 @@ public class PersonCacheManager extends PersonManager
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
             }
+        }catch(UncheckedExecutionException ue){
+            try{
+                throw ue.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ue);
+            }
         }
     }
     // override PersonManager
     @Override 
     public PersonBean loadByIndexPapersNumChecked(String papersNum) throws ObjectRetrievalException{
+        if(null == papersNum)
+            throw new ObjectRetrievalException(new NullPointerException());
         try{
             return cache.getBeanByPapersNum(papersNum);
         }catch(ExecutionException ee){
@@ -196,6 +214,18 @@ public class PersonCacheManager extends PersonManager
                 throw re;
             }catch (Throwable e) {
                 throw new RuntimeException(ee);
+            }
+        }catch(UncheckedExecutionException ue){
+            try{
+                throw ue.getCause();
+            }catch(ObjectRetrievalException oe){
+                throw oe;
+            } catch (WrapDAOException we) {
+                throw we;
+            } catch (RuntimeException re) {
+                throw re;
+            }catch (Throwable e) {
+                throw new RuntimeException(ue);
             }
         }
     }

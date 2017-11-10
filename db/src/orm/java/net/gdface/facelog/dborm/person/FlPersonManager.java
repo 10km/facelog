@@ -127,9 +127,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     //1
     public FlPersonBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -151,7 +148,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     public FlPersonBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
         if(null == id){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;
@@ -1462,8 +1459,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public FlPersonBean loadByIndexImageMd5(String imageMd5) throws DAOException
     {
-        if(null == imageMd5)
-            return null;
         try{
             return loadByIndexImageMd5Checked(imageMd5);
         }catch(ObjectRetrievalException e){
@@ -1483,7 +1478,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         FlPersonBean bean = new FlPersonBean();
         if(null == imageMd5)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setImageMd5(imageMd5);
         
@@ -1585,8 +1580,6 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
      */
     public FlPersonBean loadByIndexPapersNum(String papersNum) throws DAOException
     {
-        if(null == papersNum)
-            return null;
         try{
             return loadByIndexPapersNumChecked(papersNum);
         }catch(ObjectRetrievalException e){
@@ -1606,7 +1599,7 @@ public class FlPersonManager extends TableManager.Adapter<FlPersonBean>
     {
         FlPersonBean bean = new FlPersonBean();
         if(null == papersNum)
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         
         bean.setPapersNum(papersNum);
         

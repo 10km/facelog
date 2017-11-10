@@ -125,9 +125,6 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     @Override 
     public PersonGroupBean loadByPrimaryKey(Integer id)
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -911,7 +908,7 @@ public class PersonGroupManager extends TableManager.Adapter<PersonGroupBean> im
     public PersonGroupBean loadUniqueUsingTemplateChecked(PersonGroupBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {

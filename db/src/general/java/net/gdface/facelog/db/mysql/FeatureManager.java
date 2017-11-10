@@ -122,9 +122,6 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     @Override 
     public FeatureBean loadByPrimaryKey(String md5)
     {
-        if(null == md5){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(md5);
         }catch(ObjectRetrievalException e){
@@ -818,7 +815,7 @@ public class FeatureManager extends TableManager.Adapter<FeatureBean> implements
     public FeatureBean loadUniqueUsingTemplateChecked(FeatureBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {

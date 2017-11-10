@@ -125,9 +125,6 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     @Override 
     public DeviceGroupBean loadByPrimaryKey(Integer id)
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -911,7 +908,7 @@ public class DeviceGroupManager extends TableManager.Adapter<DeviceGroupBean> im
     public DeviceGroupBean loadUniqueUsingTemplateChecked(DeviceGroupBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {

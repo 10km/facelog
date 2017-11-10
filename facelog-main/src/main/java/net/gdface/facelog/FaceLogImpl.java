@@ -351,7 +351,6 @@ public class FaceLogImpl extends FaceLogDefinition  {
 	@Override
 	public PersonBean getPersonByPapersNum(String papersNum)throws ServiceRuntime  {
 		try{
-			if(Strings.isNullOrEmpty(papersNum))return null;
 			return _getPersonByIndexPapersNum(papersNum);
 		}catch (RuntimeException e) {
 			throw new ServiceRuntime(e);

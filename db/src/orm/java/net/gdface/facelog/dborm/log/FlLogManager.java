@@ -129,9 +129,6 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     //1
     public FlLogBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -153,7 +150,7 @@ public class FlLogManager extends TableManager.Adapter<FlLogBean>
     public FlLogBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
         if(null == id){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;

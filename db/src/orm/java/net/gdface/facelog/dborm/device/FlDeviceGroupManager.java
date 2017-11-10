@@ -125,9 +125,6 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     //1
     public FlDeviceGroupBean loadByPrimaryKey(Integer id) throws DAOException
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -149,7 +146,7 @@ public class FlDeviceGroupManager extends TableManager.Adapter<FlDeviceGroupBean
     public FlDeviceGroupBean loadByPrimaryKeyChecked(Integer id) throws DAOException
     {
         if(null == id){
-            throw new NullPointerException();
+            throw new ObjectRetrievalException(new NullPointerException());
         }
         Connection c = null;
         PreparedStatement ps = null;

@@ -126,9 +126,6 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     @Override 
     public LogBean loadByPrimaryKey(Integer id)
     {
-        if(null == id){
-            return null;
-        }
         try{
             return loadByPrimaryKeyChecked(id);
         }catch(ObjectRetrievalException e){
@@ -671,7 +668,7 @@ public class LogManager extends TableManager.Adapter<LogBean> implements ILogMan
     public LogBean loadUniqueUsingTemplateChecked(LogBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {

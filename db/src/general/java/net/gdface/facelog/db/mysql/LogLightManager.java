@@ -177,7 +177,7 @@ public class LogLightManager extends TableManager.Adapter<LogLightBean> implemen
     public LogLightBean loadUniqueUsingTemplateChecked(LogLightBean bean) throws ObjectRetrievalException
     {
         try{
-            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplate(this.beanConverter.toRight(bean)));
+            return this.beanConverter.fromRight(this.nativeManager.loadUniqueUsingTemplateChecked(this.beanConverter.toRight(bean)));
         }
         catch(net.gdface.facelog.dborm.exception.ObjectRetrievalException e)
         {
