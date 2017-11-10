@@ -25,7 +25,8 @@ import java.util.*;
  * </ul>
  * remote implementation of the service IFaceLog(asynchronous implementation)<br>
  * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
- * <b>NOTE:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.<br>
+ * <b>NOTE 1:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.See also {@link GenericUtils#toBytes(Object)}<br>
+ * <b>NOTE 2:</b>for each method,{@link List} type input argument must not have {@code null} element.<br>
  * @author guyadong
  */
 class IFaceLogClientAsync implements Constant{
@@ -76,7 +77,7 @@ class IFaceLogClientAsync implements Constant{
                 service.addFeature(
                     feature,
                     personId,
-                    converterFaceBean.toRight(faecBeans)), 
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans))), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -99,7 +100,7 @@ class IFaceLogClientAsync implements Constant{
                 service.addFeature(
                     GenericUtils.toBytes(feature),
                     personId,
-                    converterFaceBean.toRight(faecBeans)), 
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans))), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.FeatureBean,FeatureBean>(){
                     @Override
                     public FeatureBean apply(net.gdface.facelog.client.thrift.FeatureBean input) {
@@ -225,7 +226,7 @@ class IFaceLogClientAsync implements Constant{
      */
     // 5 SERIVCE PORT : addLogs
     public ListenableFuture<Void> addLogs(List<LogBean> beans){
-        return service.addLogs(converterLogBean.toRight(beans));
+        return service.addLogs(converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)));
     }
     /**
      * 添加一个(允许)通行关联记录:允许{@code personGroup}指定的人员组在
@@ -408,7 +409,7 @@ class IFaceLogClientAsync implements Constant{
      */
     // 23 SERIVCE PORT : deletePersons
     public ListenableFuture<Integer> deletePersons(List<Integer> personIdList){
-        return service.deletePersons(personIdList);
+        return service.deletePersons(CollectionUtils.checkNotNullElement(personIdList));
     }
     /**
      * 删除papersNum指定的人员(person)记录及关联的所有记录
@@ -417,7 +418,7 @@ class IFaceLogClientAsync implements Constant{
      */
     // 24 SERIVCE PORT : deletePersonsByPapersNum
     public ListenableFuture<Integer> deletePersonsByPapersNum(List<String> papersNumlist){
-        return service.deletePersonsByPapersNum(papersNumlist);
+        return service.deletePersonsByPapersNum(CollectionUtils.checkNotNullElement(papersNumlist));
     }
     /**
      * 设置 personId 指定的人员为禁止状态
@@ -434,7 +435,7 @@ class IFaceLogClientAsync implements Constant{
      */
     // 26 SERIVCE PORT : disablePersonList
     public ListenableFuture<Void> disablePerson(List<Integer> personIdList){
-        return service.disablePersonList(personIdList);
+        return service.disablePersonList(CollectionUtils.checkNotNullElement(personIdList));
     }
     /**
      * 判断id指定的设备记录是否存在
@@ -512,7 +513,7 @@ class IFaceLogClientAsync implements Constant{
     // 33 SERIVCE PORT : getDeviceGroups
     public ListenableFuture<List<DeviceGroupBean>> getDeviceGroups(List<Integer> groupIdList){
         return Futures.transform(
-                service.getDeviceGroups(groupIdList), 
+                service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceGroupBean>,List<DeviceGroupBean>>(){
                     @Override
                     public List<DeviceGroupBean> apply(List<net.gdface.facelog.client.thrift.DeviceGroupBean> input) {
@@ -537,7 +538,7 @@ class IFaceLogClientAsync implements Constant{
     // 35 SERIVCE PORT : getDevices
     public ListenableFuture<List<DeviceBean>> getDevices(List<Integer> idList){
         return Futures.transform(
-                service.getDevices(idList), 
+                service.getDevices(CollectionUtils.checkNotNullElement(idList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.DeviceBean>,List<DeviceBean>>(){
                     @Override
                     public List<DeviceBean> apply(List<net.gdface.facelog.client.thrift.DeviceBean> input) {
@@ -604,7 +605,7 @@ class IFaceLogClientAsync implements Constant{
     // 40 SERIVCE PORT : getFeatures
     public ListenableFuture<List<FeatureBean>> getFeatures(List<String> md5){
         return Futures.transform(
-                service.getFeatures(md5), 
+                service.getFeatures(CollectionUtils.checkNotNullElement(md5)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.FeatureBean>,List<FeatureBean>>(){
                     @Override
                     public List<FeatureBean> apply(List<net.gdface.facelog.client.thrift.FeatureBean> input) {
@@ -645,7 +646,7 @@ class IFaceLogClientAsync implements Constant{
             List<Integer> personGroupIdList){
         return service.getGroupPermits(
                     deviceId,
-                    personGroupIdList);
+                    CollectionUtils.checkNotNullElement(personGroupIdList));
     }
     /**
      * 根据图像的MD5校验码返回图像记录
@@ -754,7 +755,7 @@ class IFaceLogClientAsync implements Constant{
     // 51 SERIVCE PORT : getPersonGroups
     public ListenableFuture<List<PersonGroupBean>> getPersonGroups(List<Integer> groupIdList){
         return Futures.transform(
-                service.getPersonGroups(groupIdList), 
+                service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonGroupBean>,List<PersonGroupBean>>(){
                     @Override
                     public List<PersonGroupBean> apply(List<net.gdface.facelog.client.thrift.PersonGroupBean> input) {
@@ -786,7 +787,7 @@ class IFaceLogClientAsync implements Constant{
             List<Integer> personIdList){
         return service.getPersonPermits(
                     deviceId,
-                    personIdList);
+                    CollectionUtils.checkNotNullElement(personIdList));
     }
     /**
      * 返回 list 指定的人员记录
@@ -796,7 +797,7 @@ class IFaceLogClientAsync implements Constant{
     // 54 SERIVCE PORT : getPersons
     public ListenableFuture<List<PersonBean>> getPersons(List<Integer> idList){
         return Futures.transform(
-                service.getPersons(idList), 
+                service.getPersons(CollectionUtils.checkNotNullElement(idList)), 
                 new com.google.common.base.Function<List<net.gdface.facelog.client.thrift.PersonBean>,List<PersonBean>>(){
                     @Override
                     public List<PersonBean> apply(List<net.gdface.facelog.client.thrift.PersonBean> input) {
@@ -1269,7 +1270,7 @@ class IFaceLogClientAsync implements Constant{
      */
     // 81 SERIVCE PORT : savePersons
     public ListenableFuture<Void> savePersons(List<PersonBean> beans){
-        return service.savePersons(converterPersonBean.toRight(beans));
+        return service.savePersons(converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)));
     }
     /**
      * 保存人员信息记录(包含标准照)
@@ -1393,7 +1394,7 @@ class IFaceLogClientAsync implements Constant{
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     feature,
-                    converterFaceBean.toRight(faceBeans)), 
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans))), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -1418,7 +1419,7 @@ class IFaceLogClientAsync implements Constant{
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
-                    converterFaceBean.toRight(faceBeans)), 
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans))), 
                 new com.google.common.base.Function<net.gdface.facelog.client.thrift.PersonBean,PersonBean>(){
                     @Override
                     public PersonBean apply(net.gdface.facelog.client.thrift.PersonBean input) {
@@ -1530,7 +1531,7 @@ class IFaceLogClientAsync implements Constant{
             List<Integer> personIdList,
             Date expiryDate){
         return service.setPersonExpiryDateList(
-                    personIdList,
+                    CollectionUtils.checkNotNullElement(personIdList),
                     GenericUtils.toLong(expiryDate,Date.class));
     }
 }

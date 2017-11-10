@@ -25,7 +25,8 @@ import java.util.*;
  * </ul>
  * remote implementation of the service IFaceLog<br>
  * all method comments be copied from {@code net.gdface.facelog.FaceLogDefinition.java}<br>
- * <b>NOTE:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.<br>
+ * <b>NOTE 1:</b>methods with 'Generic' suffix support generic type argument for {@code byte[]}.See also {@link GenericUtils#toBytes(Object)}<br>
+ * <b>NOTE 2:</b>for each method,{@link List} type input argument must not have {@code null} element.<br>
  * @author guyadong
  */
 class IFaceLogClient implements Constant{
@@ -78,7 +79,7 @@ class IFaceLogClient implements Constant{
             return converterFeatureBean.fromRight(service.addFeature(
                     feature,
                     personId,
-                    converterFaceBean.toRight(faecBeans)));
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -107,7 +108,7 @@ class IFaceLogClient implements Constant{
             return converterFeatureBean.fromRight(service.addFeature(
                     GenericUtils.toBytes(feature),
                     personId,
-                    converterFaceBean.toRight(faecBeans)));
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faecBeans))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -277,7 +278,7 @@ class IFaceLogClient implements Constant{
     // 5 SERIVCE PORT : addLogs
     public void addLogs(List<LogBean> beans)throws net.gdface.facelog.client.thrift.DuplicateReord{
         try{
-            service.addLogs(converterLogBean.toRight(beans));
+            service.addLogs(converterLogBean.toRight(CollectionUtils.checkNotNullElement(beans)));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
@@ -577,7 +578,7 @@ class IFaceLogClient implements Constant{
     // 23 SERIVCE PORT : deletePersons
     public int deletePersons(List<Integer> personIdList){
         try{
-            return service.deletePersons(personIdList);
+            return service.deletePersons(CollectionUtils.checkNotNullElement(personIdList));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
@@ -592,7 +593,7 @@ class IFaceLogClient implements Constant{
     // 24 SERIVCE PORT : deletePersonsByPapersNum
     public int deletePersonsByPapersNum(List<String> papersNumlist){
         try{
-            return service.deletePersonsByPapersNum(papersNumlist);
+            return service.deletePersonsByPapersNum(CollectionUtils.checkNotNullElement(papersNumlist));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
@@ -621,7 +622,7 @@ class IFaceLogClient implements Constant{
     // 26 SERIVCE PORT : disablePersonList
     public void disablePerson(List<Integer> personIdList){
         try{
-            service.disablePersonList(personIdList);
+            service.disablePersonList(CollectionUtils.checkNotNullElement(personIdList));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
@@ -744,7 +745,7 @@ class IFaceLogClient implements Constant{
     // 33 SERIVCE PORT : getDeviceGroups
     public List<DeviceGroupBean> getDeviceGroups(List<Integer> groupIdList){
         try{
-            return converterDeviceGroupBean.fromRight(service.getDeviceGroups(groupIdList));
+            return converterDeviceGroupBean.fromRight(service.getDeviceGroups(CollectionUtils.checkNotNullElement(groupIdList)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -790,7 +791,7 @@ class IFaceLogClient implements Constant{
     // 35 SERIVCE PORT : getDevices
     public List<DeviceBean> getDevices(List<Integer> idList){
         try{
-            return converterDeviceBean.fromRight(service.getDevices(idList));
+            return converterDeviceBean.fromRight(service.getDevices(CollectionUtils.checkNotNullElement(idList)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -907,7 +908,7 @@ class IFaceLogClient implements Constant{
     // 40 SERIVCE PORT : getFeatures
     public List<FeatureBean> getFeatures(List<String> md5){
         try{
-            return converterFeatureBean.fromRight(service.getFeatures(md5));
+            return converterFeatureBean.fromRight(service.getFeatures(CollectionUtils.checkNotNullElement(md5)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -976,7 +977,7 @@ class IFaceLogClient implements Constant{
         try{
             return service.getGroupPermits(
                     deviceId,
-                    personGroupIdList);
+                    CollectionUtils.checkNotNullElement(personGroupIdList));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1163,7 +1164,7 @@ class IFaceLogClient implements Constant{
     // 51 SERIVCE PORT : getPersonGroups
     public List<PersonGroupBean> getPersonGroups(List<Integer> groupIdList){
         try{
-            return converterPersonGroupBean.fromRight(service.getPersonGroups(groupIdList));
+            return converterPersonGroupBean.fromRight(service.getPersonGroups(CollectionUtils.checkNotNullElement(groupIdList)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1209,7 +1210,7 @@ class IFaceLogClient implements Constant{
         try{
             return service.getPersonPermits(
                     deviceId,
-                    personIdList);
+                    CollectionUtils.checkNotNullElement(personIdList));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1232,7 +1233,7 @@ class IFaceLogClient implements Constant{
     // 54 SERIVCE PORT : getPersons
     public List<PersonBean> getPersons(List<Integer> idList){
         try{
-            return converterPersonBean.fromRight(service.getPersons(idList));
+            return converterPersonBean.fromRight(service.getPersons(CollectionUtils.checkNotNullElement(idList)));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -1958,7 +1959,7 @@ class IFaceLogClient implements Constant{
     // 81 SERIVCE PORT : savePersons
     public void savePersons(List<PersonBean> beans){
         try{
-            service.savePersons(converterPersonBean.toRight(beans));
+            service.savePersons(converterPersonBean.toRight(CollectionUtils.checkNotNullElement(beans)));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
             throw new ServiceRuntime(e);
@@ -2127,7 +2128,7 @@ class IFaceLogClient implements Constant{
                     converterPersonBean.toRight(bean),
                     idPhoto,
                     feature,
-                    converterFaceBean.toRight(faceBeans)));
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -2158,7 +2159,7 @@ class IFaceLogClient implements Constant{
                     converterPersonBean.toRight(bean),
                     GenericUtils.toBytes(idPhoto),
                     GenericUtils.toBytes(feature),
-                    converterFaceBean.toRight(faceBeans)));
+                    converterFaceBean.toRight(CollectionUtils.checkNotNullElement(faceBeans))));
         }
         catch(RuntimeTApplicationException e){
             Throwable cause = e.getCause();
@@ -2304,7 +2305,7 @@ class IFaceLogClient implements Constant{
             Date expiryDate){
         try{
             service.setPersonExpiryDateList(
-                    personIdList,
+                    CollectionUtils.checkNotNullElement(personIdList),
                     GenericUtils.toLong(expiryDate,Date.class));
         }
         catch(net.gdface.facelog.client.thrift.ServiceRuntime e){
