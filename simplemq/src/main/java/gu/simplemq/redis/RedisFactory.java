@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import gu.simplemq.Channel;
-import gu.simplemq.exceptions.SmqExcepiton;
+import gu.simplemq.exceptions.SmqException;
 
 /**
  * redis对象工厂类用于获取producer/consumer,publisher/subscriber,table对象
@@ -65,7 +65,7 @@ public class RedisFactory {
 			try {
 				constructor = clazz.getDeclaredConstructor(JedisPoolLazy.class);
 			} catch (Exception e) {
-				throw new SmqExcepiton(e);
+				throw new SmqException(e);
 			}
 		}
 		void beforeDelete(R r){}
@@ -90,7 +90,7 @@ public class RedisFactory {
 				try {
 					r = constructor.newInstance(jedisPoolLazy);
 				} catch (Exception e) {
-					throw new SmqExcepiton(e);
+					throw new SmqException(e);
 				}
 				instances.putIfAbsent(jedisPoolLazy, r);
 				r = instances.get(jedisPoolLazy);

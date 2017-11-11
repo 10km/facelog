@@ -1,6 +1,10 @@
 package gu.simplemq.exceptions;
 
-public  class SmqNotBeanException extends SmqExcepiton{
+/**
+ * @author guyadong
+ *
+ */
+public  class SmqNotBeanException extends SmqException{
 	public SmqNotBeanException(String string) {
 	}
 	private static final long serialVersionUID = 1L;

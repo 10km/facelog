@@ -47,9 +47,12 @@ class FastjsonEncoder extends JsonEncoder {
 
 	@Override
 	public Map<String, String> toJsonMap(Object bean)throws SmqNotBeanException {
-		if(null ==bean )return null;
-		if(!TypeUtils.isJavaBean(bean.getClass()))
-			throw new SmqNotBeanException("invalid type,not a java bean object");		
+		if(null ==bean ){
+			return null;
+		}
+		if(!TypeUtils.isJavaBean(bean.getClass())){
+			throw new SmqNotBeanException("invalid type,not a java bean object");
+		}
 
 		JSONObject jsonObject =_toJSONObject(bean);
 		Map<String, String> fields = new LinkedHashMap<String, String>();
@@ -63,18 +66,21 @@ class FastjsonEncoder extends JsonEncoder {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T>T fromJson(String json, Type type) {		
-		if(type instanceof Class<?>)
+		if(type instanceof Class<?>){
 			return JSON.parseObject(json, (Class<T>)type);		
-		else
+		}else{
 			return JSON.parseObject(json, type);
+		}
 	}
 	
 	@Override
 	public <T> T fromJson(Map<String, String> fieldHash, Type type)throws SmqNotBeanException {
-		if(!TypeUtils.isJavaBean(type))
+		if(!TypeUtils.isJavaBean(type)){
 			throw new SmqNotBeanException("invalid type,not a java bean");
-		if(null == fieldHash || fieldHash.isEmpty())
+		}
+		if(null == fieldHash || fieldHash.isEmpty()){
 			throw new IllegalArgumentException("the argument 'json' must not be null or empty");
+		}
 		Map<String, Object> fields = new LinkedHashMap<String,Object>(); 
 		for(Entry<String, String> entry:fieldHash.entrySet()){
 			fields.put(entry.getKey(), JSON.parse(entry.getValue()));

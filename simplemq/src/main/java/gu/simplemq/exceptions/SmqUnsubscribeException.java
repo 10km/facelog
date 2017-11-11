@@ -10,5 +10,5 @@ import gu.simplemq.IMessageDispatcher;
  * @author guyadong
  *
  */
-public class SmqUnsubscribeException extends SmqExcepiton{
+public class SmqUnsubscribeException extends SmqException{
 	private static final long serialVersionUID = 1L;}

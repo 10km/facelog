@@ -1,6 +1,10 @@
 package gu.simplemq.exceptions;
 
-public class SmqTableException extends SmqExcepiton{
+/**
+ * @author guyadong
+ *
+ */
+public class SmqTableException extends SmqException{
 	private static final long serialVersionUID = 1L;
 
 	public SmqTableException(String message, Throwable cause) {
