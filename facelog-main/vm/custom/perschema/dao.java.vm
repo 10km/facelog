@@ -148,11 +148,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see ${esc.hash}daoDelete${coreClass}($varTypes)
      */
     $!{modifier}int daoDelete${coreClass}($beanClass bean){
-        return null == bean ? null : daoDelete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
+        return null == bean ? 0 : daoDelete${coreClass}(#join($primaryKeys 'bean.$e.getGetMethod()()' ','));
     }
     //6
     /**
@@ -618,8 +618,10 @@ $defineLoadByTimestamp
 #end###macro(defineMethod $table $onlyAdd)
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){
-        checkNotNull(timestamp);
-        return String.format("WHERE %s > '%s'", field,TIMESTAMP_FORMATTER.format(timestamp));    
+        return String.format(
+                "WHERE %s > '%s'", 
+                field,
+                TIMESTAMP_FORMATTER.get().format(checkNotNull(timestamp)));    
     }
     /** 事务执行 */
     protected static <T> T daoRunAsTransaction(Callable<T> fun){

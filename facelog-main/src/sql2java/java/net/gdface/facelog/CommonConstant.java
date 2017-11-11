@@ -53,7 +53,11 @@ public interface CommonConstant {
 
     public static final Channel<LogBean> QUEUE_LOG = new Channel<LogBean>("queueLog"){};
 
-   
-    public static final SimpleDateFormat TIMESTAMP_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+    
+    /** 用于SQL语句的时间戳格式转换对象 */
+    public static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<SimpleDateFormat>(){
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		}};
 }

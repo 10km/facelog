@@ -86,8 +86,10 @@ class Dao implements CommonConstant {
     }
     /** 生成 SQL where 语句,example: {@code WHERE create_time >'2017-09-02 12:12:12'} */
     static private String makeWhere(Date timestamp,String field){
-        checkNotNull(timestamp);
-        return String.format("WHERE %s > '%s'", field,TIMESTAMP_FORMATTER.format(timestamp));    
+        return String.format(
+                "WHERE %s > '%s'", 
+                field,
+                TIMESTAMP_FORMATTER.get().format(checkNotNull(timestamp)));    
     }
     /** 事务执行 */
     protected static <T> T daoRunAsTransaction(Callable<T> fun){
@@ -189,11 +191,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteDevice(Integer)
      */
     protected int daoDeleteDevice(DeviceBean bean){
-        return null == bean ? null : daoDeleteDevice(bean.getId());
+        return null == bean ? 0 : daoDeleteDevice(bean.getId());
     }
     //6
     /**
@@ -570,11 +572,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteDeviceGroup(Integer)
      */
     protected int daoDeleteDeviceGroup(DeviceGroupBean bean){
-        return null == bean ? null : daoDeleteDeviceGroup(bean.getId());
+        return null == bean ? 0 : daoDeleteDeviceGroup(bean.getId());
     }
     //6
     /**
@@ -927,11 +929,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeletePerson(Integer)
      */
     protected int daoDeletePerson(PersonBean bean){
-        return null == bean ? null : daoDeletePerson(bean.getId());
+        return null == bean ? 0 : daoDeletePerson(bean.getId());
     }
     //6
     /**
@@ -1337,11 +1339,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeletePersonGroup(Integer)
      */
     protected int daoDeletePersonGroup(PersonGroupBean bean){
-        return null == bean ? null : daoDeletePersonGroup(bean.getId());
+        return null == bean ? 0 : daoDeletePersonGroup(bean.getId());
     }
     //6
     /**
@@ -1694,11 +1696,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteFace(Integer)
      */
     protected int daoDeleteFace(FaceBean bean){
-        return null == bean ? null : daoDeleteFace(bean.getId());
+        return null == bean ? 0 : daoDeleteFace(bean.getId());
     }
     //6
     /**
@@ -2043,11 +2045,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteFeature(String)
      */
     protected int daoDeleteFeature(FeatureBean bean){
-        return null == bean ? null : daoDeleteFeature(bean.getMd5());
+        return null == bean ? 0 : daoDeleteFeature(bean.getMd5());
     }
     //6
     /**
@@ -2385,11 +2387,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteImage(String)
      */
     protected int daoDeleteImage(ImageBean bean){
-        return null == bean ? null : daoDeleteImage(bean.getMd5());
+        return null == bean ? 0 : daoDeleteImage(bean.getMd5());
     }
     //6
     /**
@@ -2694,11 +2696,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteLog(Integer)
      */
     protected int daoDeleteLog(LogBean bean){
-        return null == bean ? null : daoDeleteLog(bean.getId());
+        return null == bean ? 0 : daoDeleteLog(bean.getId());
     }
     //6
     /**
@@ -3069,11 +3071,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeletePermit(Integer,Integer)
      */
     protected int daoDeletePermit(PermitBean bean){
-        return null == bean ? null : daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
+        return null == bean ? 0 : daoDeletePermit(bean.getDeviceGroupId(),bean.getPersonGroupId());
     }
     //6
     /**
@@ -3418,11 +3420,11 @@ class Dao implements CommonConstant {
     /**
      * 删除指定的记录
      * @param bean 要删除的记录
-     * @return 返回删除的记录条数(1),如果记录不存在返回0
+     * @return 返回删除的记录条数(1),如果{@code bean}为{@code null}或记录不存在返回0
      * @see #daoDeleteStore(String)
      */
     protected int daoDeleteStore(StoreBean bean){
-        return null == bean ? null : daoDeleteStore(bean.getMd5());
+        return null == bean ? 0 : daoDeleteStore(bean.getMd5());
     }
     //6
     /**
